@@ -1261,7 +1261,12 @@ int ubi_eba_init_scan(struct ubi_device *ubi, struct ubi_scan_info *si)
 				 * during re-size.
 				 */
 				ubi_scan_move_to_list(sv, seb, &si->erase);
+<<<<<<< HEAD
 			vol->eba_tbl[seb->lnum] = seb->pnum;
+=======
+			else
+				vol->eba_tbl[seb->lnum] = seb->pnum;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 

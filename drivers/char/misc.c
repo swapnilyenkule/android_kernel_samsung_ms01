@@ -59,7 +59,11 @@ static DEFINE_MUTEX(misc_mtx);
 /*
  * Assigned numbers, used for dynamic minors
  */
+<<<<<<< HEAD
 #define DYNAMIC_MINORS 96 /* like dynamic majors */
+=======
+#define DYNAMIC_MINORS 64 /* like dynamic majors */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static DECLARE_BITMAP(misc_minors, DYNAMIC_MINORS);
 
 #ifdef CONFIG_PROC_FS

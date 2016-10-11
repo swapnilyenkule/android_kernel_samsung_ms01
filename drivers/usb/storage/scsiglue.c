@@ -78,6 +78,11 @@ static const char* host_info(struct Scsi_Host *host)
 
 static int slave_alloc (struct scsi_device *sdev)
 {
+<<<<<<< HEAD
+=======
+	struct us_data *us = host_to_us(sdev->host);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Set the INQUIRY transfer length to 36.  We don't use any of
 	 * the extra data and many devices choke if asked for more or
@@ -102,6 +107,13 @@ static int slave_alloc (struct scsi_device *sdev)
 	 */
 	blk_queue_update_dma_alignment(sdev->request_queue, (512 - 1));
 
+<<<<<<< HEAD
+=======
+	/* Tell the SCSI layer if we know there is more than one LUN */
+	if (us->protocol == USB_PR_BULK && us->max_lun > 0)
+		sdev->sdev_bflags |= BLIST_FORCELUN;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -236,6 +248,13 @@ static int slave_configure(struct scsi_device *sdev)
 					US_FL_SCM_MULT_TARG)) &&
 				us->protocol == USB_PR_BULK)
 			us->use_last_sector_hacks = 1;
+<<<<<<< HEAD
+=======
+
+		/* A few buggy USB-ATA bridges don't understand FUA */
+		if (us->fflags & US_FL_BROKEN_FUA)
+			sdev->broken_fua = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 
 		/* Non-disk-type devices don't need to blacklist any pages

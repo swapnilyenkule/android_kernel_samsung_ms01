@@ -5,7 +5,10 @@ header-y += ch11.h
 header-y += functionfs.h
 header-y += gadgetfs.h
 header-y += midi.h
+<<<<<<< HEAD
 header-y += msm_ext_chg.h
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 header-y += g_printer.h
 header-y += tmc.h
 header-y += video.h

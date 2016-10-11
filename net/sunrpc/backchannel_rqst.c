@@ -60,7 +60,11 @@ static void xprt_free_allocation(struct rpc_rqst *req)
 
 	dprintk("RPC:        free allocations for req= %p\n", req);
 	BUG_ON(test_bit(RPC_BC_PA_IN_USE, &req->rq_bc_pa_state));
+<<<<<<< HEAD
 	xbufp = &req->rq_private_buf;
+=======
+	xbufp = &req->rq_rcv_buf;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	free_page((unsigned long)xbufp->head[0].iov_base);
 	xbufp = &req->rq_snd_buf;
 	free_page((unsigned long)xbufp->head[0].iov_base);

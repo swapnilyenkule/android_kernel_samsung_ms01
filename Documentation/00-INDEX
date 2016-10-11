@@ -72,8 +72,11 @@ auxdisplay/
 	- misc. LCD driver documentation (cfag12864b, ks0108).
 basic_profiling.txt
 	- basic instructions for those who wants to profile Linux kernel.
+<<<<<<< HEAD
 bif-framework.txt
 	- information about MIPI-BIF support in the Linux kernel.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 binfmt_misc.txt
 	- info on the kernel support for extra binary formats.
 blackfin/

@@ -40,6 +40,10 @@ struct nsm_args {
 	u32			proc;
 
 	char			*mon_name;
+<<<<<<< HEAD
+=======
+	char			*nodename;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 struct nsm_res {
@@ -94,6 +98,10 @@ static int nsm_mon_unmon(struct nsm_handle *nsm, u32 proc, struct nsm_res *res,
 		.vers		= 3,
 		.proc		= NLMPROC_NSM_NOTIFY,
 		.mon_name	= nsm->sm_mon_name,
+<<<<<<< HEAD
+=======
+		.nodename	= utsname()->nodename,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	};
 	struct rpc_message msg = {
 		.rpc_argp	= &args,
@@ -112,6 +120,15 @@ static int nsm_mon_unmon(struct nsm_handle *nsm, u32 proc, struct nsm_res *res,
 
 	msg.rpc_proc = &clnt->cl_procinfo[proc];
 	status = rpc_call_sync(clnt, &msg, 0);
+<<<<<<< HEAD
+=======
+	if (status == -ECONNREFUSED) {
+		dprintk("lockd:	NSM upcall RPC failed, status=%d, forcing rebind\n",
+				status);
+		rpc_force_rebind(clnt);
+		status = rpc_call_sync(clnt, &msg, RPC_TASK_SOFTCONN);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (status < 0)
 		dprintk("lockd: NSM upcall RPC failed, status=%d\n",
 				status);
@@ -430,7 +447,11 @@ static void encode_my_id(struct xdr_stream *xdr, const struct nsm_args *argp)
 {
 	__be32 *p;
 
+<<<<<<< HEAD
 	encode_nsm_string(xdr, utsname()->nodename);
+=======
+	encode_nsm_string(xdr, argp->nodename);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	p = xdr_reserve_space(xdr, 4 + 4 + 4);
 	*p++ = cpu_to_be32(argp->prog);
 	*p++ = cpu_to_be32(argp->vers);

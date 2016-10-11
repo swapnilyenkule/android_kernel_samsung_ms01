@@ -691,7 +691,11 @@ int omap_mcbsp_6pin_src_mux(struct omap_mcbsp *mcbsp, u8 mux)
 {
 	const char *signal, *src;
 
+<<<<<<< HEAD
 	if (mcbsp->pdata->mux_signal)
+=======
+	if (!mcbsp->pdata->mux_signal)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EINVAL;
 
 	switch (mux) {

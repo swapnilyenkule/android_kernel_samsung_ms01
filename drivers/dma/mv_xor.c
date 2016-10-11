@@ -390,7 +390,12 @@ static void __mv_xor_slot_cleanup(struct mv_xor_chan *mv_chan)
 	dma_cookie_t cookie = 0;
 	int busy = mv_chan_is_busy(mv_chan);
 	u32 current_desc = mv_chan_get_current_desc(mv_chan);
+<<<<<<< HEAD
 	int seen_current = 0;
+=======
+	int current_cleaned = 0;
+	struct mv_xor_desc *hw_desc;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	dev_dbg(mv_chan->device->common.dev, "%s %d\n", __func__, __LINE__);
 	dev_dbg(mv_chan->device->common.dev, "current_desc %x\n", current_desc);
@@ -402,6 +407,7 @@ static void __mv_xor_slot_cleanup(struct mv_xor_chan *mv_chan)
 
 	list_for_each_entry_safe(iter, _iter, &mv_chan->chain,
 					chain_node) {
+<<<<<<< HEAD
 		prefetch(_iter);
 		prefetch(&_iter->async_tx);
 
@@ -434,6 +440,59 @@ static void __mv_xor_slot_cleanup(struct mv_xor_chan *mv_chan)
 					chain_node);
 
 		mv_xor_start_new_chain(mv_chan, chain_head);
+=======
+
+		/* clean finished descriptors */
+		hw_desc = iter->hw_desc;
+		if (hw_desc->status & XOR_DESC_SUCCESS) {
+			cookie = mv_xor_run_tx_complete_actions(iter, mv_chan,
+								cookie);
+
+			/* done processing desc, clean slot */
+			mv_xor_clean_slot(iter, mv_chan);
+
+			/* break if we did cleaned the current */
+			if (iter->async_tx.phys == current_desc) {
+				current_cleaned = 1;
+				break;
+			}
+		} else {
+			if (iter->async_tx.phys == current_desc) {
+				current_cleaned = 0;
+				break;
+			}
+		}
+	}
+
+	if ((busy == 0) && !list_empty(&mv_chan->chain)) {
+		if (current_cleaned) {
+			/*
+			 * current descriptor cleaned and removed, run
+			 * from list head
+			 */
+			iter = list_entry(mv_chan->chain.next,
+					  struct mv_xor_desc_slot,
+					  chain_node);
+			mv_xor_start_new_chain(mv_chan, iter);
+		} else {
+			if (!list_is_last(&iter->chain_node, &mv_chan->chain)) {
+				/*
+				 * descriptors are still waiting after
+				 * current, trigger them
+				 */
+				iter = list_entry(iter->chain_node.next,
+						  struct mv_xor_desc_slot,
+						  chain_node);
+				mv_xor_start_new_chain(mv_chan, iter);
+			} else {
+				/*
+				 * some descriptors are still waiting
+				 * to be cleaned
+				 */
+				tasklet_schedule(&mv_chan->irq_tasklet);
+			}
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (cookie > 0)

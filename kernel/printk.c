@@ -43,6 +43,7 @@
 #include <linux/rculist.h>
 
 #include <asm/uaccess.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #include <linux/io.h>
@@ -57,6 +58,11 @@
 #else
 #define EXTRA_BUF_SIZE 0
 #endif
+=======
+
+#define CREATE_TRACE_POINTS
+#include <trace/events/printk.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Architectures can override it:
@@ -137,7 +143,11 @@ static struct console *exclusive_console;
  */
 struct console_cmdline
 {
+<<<<<<< HEAD
 	char	name[8];			/* Name of the driver	    */
+=======
+	char	name[16];			/* Name of the driver	    */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int	index;				/* Minor dev. to use	    */
 	char	*options;			/* Options for the driver   */
 #ifdef CONFIG_A11Y_BRAILLE_CONSOLE
@@ -199,6 +209,7 @@ static int __init log_buf_len_setup(char *str)
 }
 early_param("log_buf_len", log_buf_len_setup);
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #define CONFIG_PRINTK_NOCACHE
 /*
@@ -447,6 +458,8 @@ static inline void emit_sec_log_char(char c)
 
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void __init setup_log_buf(int early)
 {
 	unsigned long flags;
@@ -552,6 +565,7 @@ static inline void boot_delay_msec(void)
 }
 #endif
 
+<<<<<<< HEAD
 /*
  * Return the number of unread characters in the log buffer.
  */
@@ -599,6 +613,8 @@ int log_buf_copy(char *dest, int idx, int len)
 	return ret;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SECURITY_DMESG_RESTRICT
 int dmesg_restrict = 1;
 #else
@@ -944,8 +960,24 @@ static void call_console_drivers(unsigned start, unsigned end)
 	start_print = start;
 	while (cur_index != end) {
 		if (msg_level < 0 && ((end - cur_index) > 2)) {
+<<<<<<< HEAD
 			/* strip log prefix */
 			cur_index += log_prefix(&LOG_BUF(cur_index), &msg_level, NULL);
+=======
+			/*
+			 * prepare buf_prefix, as a contiguous array,
+			 * to be processed by log_prefix function
+			 */
+			char buf_prefix[SYSLOG_PRI_MAX_LENGTH+1];
+			unsigned i;
+			for (i = 0; i < ((end - cur_index)) && (i < SYSLOG_PRI_MAX_LENGTH); i++) {
+				buf_prefix[i] = LOG_BUF(cur_index + i);
+			}
+			buf_prefix[i] = '\0'; /* force '\0' as last string character */
+
+			/* strip log prefix */
+			cur_index += log_prefix((const char *)&buf_prefix, &msg_level, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			start_print = cur_index;
 		}
 		while (cur_index != end) {
@@ -982,9 +1014,12 @@ static void emit_log_char(char c)
 		con_start = log_end - log_buf_len;
 	if (logged_chars < log_buf_len)
 		logged_chars++;
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 	emit_sec_log_char(c);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -1057,11 +1092,14 @@ asmlinkage int printk(const char *fmt, ...)
 {
 	va_list args;
 	int r;
+<<<<<<< HEAD
 #ifdef CONFIG_MSM_RTB
 	void *caller = __builtin_return_address(0);
 
 	uncached_logk_pc(LOGK_LOGBUF, caller, (void *)log_end);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_KGDB_KDB
 	if (unlikely(kdb_trap_printk)) {
@@ -1125,9 +1163,15 @@ static int console_trylock_for_printk(unsigned int cpu)
 		}
 	}
 	printk_cpu = UINT_MAX;
+<<<<<<< HEAD
 	if (wake)
 		up(&console_sem);
 	raw_spin_unlock(&logbuf_lock);
+=======
+	raw_spin_unlock(&logbuf_lock);
+	if (wake)
+		up(&console_sem);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return retval;
 }
 static const char recursion_bug_msg [] =
@@ -1198,7 +1242,10 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 	printed_len += vscnprintf(printk_buf + printed_len,
 				  sizeof(printk_buf) - printed_len, fmt, args);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	p = printk_buf;
 
 	/* Read log level and handle special printk prefix */
@@ -1245,17 +1292,22 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 
 			if (printk_time) {
 				/* Add the current time stamp */
+<<<<<<< HEAD
 #ifdef LOCAL_CONFIG_PRINT_EXTRA_INFO
 				char tbuf[50+EXTRA_BUF_SIZE], *tp;
 #else
 				char tbuf[50], *tp;
 #endif
+=======
+				char tbuf[50], *tp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				unsigned tlen;
 				unsigned long long t;
 				unsigned long nanosec_rem;
 
 				t = cpu_clock(printk_cpu);
 				nanosec_rem = do_div(t, 1000000000);
+<<<<<<< HEAD
 #ifdef LOCAL_CONFIG_PRINT_EXTRA_INFO
 				if (console_loglevel >= 9)
 					tlen = snprintf(tbuf, sizeof(tbuf),
@@ -1268,6 +1320,8 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 						task_pid_nr(current));
 				else
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				tlen = sprintf(tbuf, "[%5lu.%06lu] ",
 						(unsigned long) t,
 						nanosec_rem / 1000);
@@ -1475,6 +1529,7 @@ void resume_console(void)
 	console_unlock();
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_GSM_MODEM_SPRD6500)
 int get_console_suspended(void)
 {
@@ -1490,6 +1545,8 @@ static void __cpuinit console_flush(struct work_struct *work)
 
 static __cpuinitdata DECLARE_WORK(console_cpu_notify_work, console_flush);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * console_cpu_notify - print deferred console messages after CPU hotplug
  * @self: notifier struct
@@ -1500,19 +1557,27 @@ static __cpuinitdata DECLARE_WORK(console_cpu_notify_work, console_flush);
  * will be spooled but will not show up on the console.  This function is
  * called when a new CPU comes online (or fails to come up), and ensures
  * that any such output gets printed.
+<<<<<<< HEAD
  *
  * Special handling must be done for cases invoked from an atomic context,
  * as we can't be taking the console semaphore here.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 static int __cpuinit console_cpu_notify(struct notifier_block *self,
 	unsigned long action, void *hcpu)
 {
 	switch (action) {
+<<<<<<< HEAD
+=======
+	case CPU_ONLINE:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case CPU_DEAD:
 	case CPU_DOWN_FAILED:
 	case CPU_UP_CANCELED:
 		console_lock();
 		console_unlock();
+<<<<<<< HEAD
 		break;
 	case CPU_ONLINE:
 	case CPU_DYING:
@@ -1521,6 +1586,8 @@ static int __cpuinit console_cpu_notify(struct notifier_block *self,
 			schedule_work(&console_cpu_notify_work);
 		else
 			console_unlock();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return NOTIFY_OK;
 }
@@ -1669,9 +1736,12 @@ again:
 	raw_spin_lock(&logbuf_lock);
 	if (con_start != log_end)
 		retry = 1;
+<<<<<<< HEAD
 	else
 		retry = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	raw_spin_unlock_irqrestore(&logbuf_lock, flags);
 
 	if (retry && console_trylock())
@@ -1846,6 +1916,10 @@ void register_console(struct console *newcon)
 	 */
 	for (i = 0; i < MAX_CMDLINECONSOLES && console_cmdline[i].name[0];
 			i++) {
+<<<<<<< HEAD
+=======
+		BUILD_BUG_ON(sizeof(console_cmdline[i].name) != sizeof(newcon->name));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (strcmp(console_cmdline[i].name, newcon->name) != 0)
 			continue;
 		if (newcon->index >= 0 &&
@@ -2001,7 +2075,11 @@ late_initcall(printk_late_init);
 
 #if defined CONFIG_PRINTK
 
+<<<<<<< HEAD
 int printk_sched(const char *fmt, ...)
+=======
+int printk_deferred(const char *fmt, ...)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long flags;
 	va_list args;
@@ -2162,9 +2240,12 @@ void kmsg_dump(enum kmsg_dump_reason reason)
 		dumper->dump(dumper, reason, s1, l1, s2, l2);
 	rcu_read_unlock();
 }
+<<<<<<< HEAD
 
 #ifdef CONFIG_PRINTK_NOCACHE
 module_init(printk_remap_nocache);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

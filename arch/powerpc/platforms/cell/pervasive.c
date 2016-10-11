@@ -42,11 +42,17 @@ static void cbe_power_save(void)
 {
 	unsigned long ctrl, thread_switch_control;
 
+<<<<<<< HEAD
 	/*
 	 * We need to hard disable interrupts, the local_irq_enable() done by
 	 * our caller upon return will hard re-enable.
 	 */
 	hard_irq_disable();
+=======
+	/* Ensure our interrupt state is properly tracked */
+	if (!prep_irq_for_idle())
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ctrl = mfspr(SPRN_CTRLF);
 
@@ -81,6 +87,12 @@ static void cbe_power_save(void)
 	 */
 	ctrl &= ~(CTRL_RUNLATCH | CTRL_TE);
 	mtspr(SPRN_CTRLT, ctrl);
+<<<<<<< HEAD
+=======
+
+	/* Re-enable interrupts in MSR */
+	__hard_irq_enable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int cbe_system_reset_exception(struct pt_regs *regs)

@@ -94,10 +94,18 @@ extern void __iomem *efi_ioremap(unsigned long addr, unsigned long size,
 #endif /* CONFIG_X86_32 */
 
 extern int add_efi_memmap;
+<<<<<<< HEAD
+=======
+extern unsigned long x86_efi_facility;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void efi_set_executable(efi_memory_desc_t *md, bool executable);
 extern int efi_memblock_x86_reserve_range(void);
 extern void efi_call_phys_prelog(void);
 extern void efi_call_phys_epilog(void);
+<<<<<<< HEAD
+=======
+extern void efi_unmap_memmap(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifndef CONFIG_EFI
 /*

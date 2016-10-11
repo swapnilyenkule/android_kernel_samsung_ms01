@@ -19,6 +19,10 @@
 #include <linux/threads.h>
 #include <linux/errno.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/serial_reg.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/processor.h>
 #include <asm/page.h>
 #include <asm/mmu.h>

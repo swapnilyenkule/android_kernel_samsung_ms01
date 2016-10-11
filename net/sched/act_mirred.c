@@ -73,7 +73,11 @@ static int tcf_mirred_init(struct nlattr *nla, struct nlattr *est,
 	int ret, ok_push = 0;
 
 	if (nla == NULL)
+<<<<<<< HEAD
                 return -EINVAL;
+=======
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = nla_parse_nested(tb, TCA_MIRRED_MAX, nla, mirred_policy);
 	if (ret < 0)
 		return ret;
@@ -83,7 +87,10 @@ static int tcf_mirred_init(struct nlattr *nla, struct nlattr *est,
 	switch (parm->eaction) {
 	case TCA_EGRESS_MIRROR:
 	case TCA_EGRESS_REDIR:
+<<<<<<< HEAD
         case TCA_INGRESS_REDIR:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	default:
 		return -EINVAL;
@@ -173,6 +180,10 @@ static int tcf_mirred(struct sk_buff *skb, const struct tc_action *a,
 		printk_once(KERN_NOTICE "tc mirred: target device is gone\n");
 		goto out;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!(dev->flags & IFF_UP)) {
 		if (net_ratelimit())
 			pr_notice("tc mirred to Houston: device %s is down\n",
@@ -180,6 +191,7 @@ static int tcf_mirred(struct sk_buff *skb, const struct tc_action *a,
 		goto out;
 	}
 
+<<<<<<< HEAD
 
 	skb2 = skb_act_clone(skb, GFP_ATOMIC, m->tcf_action);
 	if (skb2 == NULL)
@@ -210,10 +222,30 @@ static int tcf_mirred(struct sk_buff *skb, const struct tc_action *a,
 	skb2->dev = dev;
 	err = dev_queue_xmit(skb2);
 }
+=======
+	at = G_TC_AT(skb->tc_verd);
+	skb2 = skb_act_clone(skb, GFP_ATOMIC, m->tcf_action);
+	if (skb2 == NULL)
+		goto out;
+
+	if (!(at & AT_EGRESS)) {
+		if (m->tcfm_ok_push)
+			skb_push(skb2, skb2->dev->hard_header_len);
+	}
+
+	/* mirror is always swallowed */
+	if (m->tcfm_eaction != TCA_EGRESS_MIRROR)
+		skb2->tc_verd = SET_TC_FROM(skb2->tc_verd, at);
+
+	skb2->skb_iif = skb->dev->ifindex;
+	skb2->dev = dev;
+	err = dev_queue_xmit(skb2);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 out:
 	if (err) {
 		m->tcf_qstats.overlimits++;
+<<<<<<< HEAD
 		/* should we be asking for packet to be dropped?
 		 * may make sense for redirect case only
 		 */
@@ -221,6 +253,14 @@ out:
 	} else {
 		retval = m->tcf_action;
 	}
+=======
+		if (m->tcfm_eaction != TCA_EGRESS_MIRROR)
+			retval = TC_ACT_SHOT;
+		else
+			retval = m->tcf_action;
+	} else
+		retval = m->tcf_action;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock(&m->tcf_lock);
 
 	return retval;

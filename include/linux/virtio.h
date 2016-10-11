@@ -15,7 +15,10 @@
  * @callback: the function to call when buffers are consumed (can be NULL).
  * @name: the name of this virtqueue (mainly for debugging)
  * @vdev: the virtio device this queue was created for.
+<<<<<<< HEAD
  * @vq_ops: the operations for this virtqueue (see below).
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @priv: a pointer for the virtqueue implementation to use.
  */
 struct virtqueue {
@@ -23,6 +26,7 @@ struct virtqueue {
 	void (*callback)(struct virtqueue *vq);
 	const char *name;
 	struct virtio_device *vdev;
+<<<<<<< HEAD
 	struct virtqueue_ops *vq_ops;
 	void *priv;
 };
@@ -252,6 +256,39 @@ static inline unsigned int virtqueue_get_impl_size(struct virtqueue *vq)
 {
 	return vq->vq_ops->get_impl_size(vq);
 }
+=======
+	void *priv;
+};
+
+int virtqueue_add_buf(struct virtqueue *vq,
+		      struct scatterlist sg[],
+		      unsigned int out_num,
+		      unsigned int in_num,
+		      void *data,
+		      gfp_t gfp);
+
+void virtqueue_kick(struct virtqueue *vq);
+
+bool virtqueue_kick_prepare(struct virtqueue *vq);
+
+void virtqueue_notify(struct virtqueue *vq);
+
+void *virtqueue_get_buf(struct virtqueue *vq, unsigned int *len);
+
+void virtqueue_disable_cb(struct virtqueue *vq);
+
+bool virtqueue_enable_cb(struct virtqueue *vq);
+
+unsigned virtqueue_enable_cb_prepare(struct virtqueue *vq);
+
+bool virtqueue_poll(struct virtqueue *vq, unsigned);
+
+bool virtqueue_enable_cb_delayed(struct virtqueue *vq);
+
+void *virtqueue_detach_unused_buf(struct virtqueue *vq);
+
+unsigned int virtqueue_get_vring_size(struct virtqueue *vq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * virtio_device - representation of a device using virtio
@@ -274,7 +311,15 @@ struct virtio_device {
 	void *priv;
 };
 
+<<<<<<< HEAD
 #define dev_to_virtio(dev) container_of(dev, struct virtio_device, dev)
+=======
+static inline struct virtio_device *dev_to_virtio(struct device *_dev)
+{
+	return container_of(_dev, struct virtio_device, dev);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int register_virtio_device(struct virtio_device *dev);
 void unregister_virtio_device(struct virtio_device *dev);
 

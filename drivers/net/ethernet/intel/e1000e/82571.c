@@ -1553,6 +1553,12 @@ static s32 e1000_check_for_serdes_link_82571(struct e1000_hw *hw)
 	ctrl = er32(CTRL);
 	status = er32(STATUS);
 	rxcw = er32(RXCW);
+<<<<<<< HEAD
+=======
+	/* SYNCH bit and IV bit are sticky */
+	udelay(10);
+	rxcw = er32(RXCW);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if ((rxcw & E1000_RXCW_SYNCH) && !(rxcw & E1000_RXCW_IV)) {
 
@@ -1579,10 +1585,15 @@ static s32 e1000_check_for_serdes_link_82571(struct e1000_hw *hw)
 			 * auto-negotiation in the TXCW register and disable
 			 * forced link in the Device Control register in an
 			 * attempt to auto-negotiate with our link partner.
+<<<<<<< HEAD
 			 * If the partner code word is null, stop forcing
 			 * and restart auto negotiation.
 			 */
 			if ((rxcw & E1000_RXCW_C) || !(rxcw & E1000_RXCW_CW))  {
+=======
+			 */
+			if (rxcw & E1000_RXCW_C) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				/* Enable autoneg, and unforce link up */
 				ew32(TXCW, mac->txcw);
 				ew32(CTRL, (ctrl & ~E1000_CTRL_SLU));
@@ -2061,8 +2072,14 @@ const struct e1000_info e1000_82574_info = {
 				  | FLAG_HAS_SMART_POWER_DOWN
 				  | FLAG_HAS_AMT
 				  | FLAG_HAS_CTRLEXT_ON_LOAD,
+<<<<<<< HEAD
 	.flags2			  = FLAG2_CHECK_PHY_HANG
 				  | FLAG2_DISABLE_ASPM_L0S
+=======
+	.flags2			= FLAG2_CHECK_PHY_HANG
+				  | FLAG2_DISABLE_ASPM_L0S
+				  | FLAG2_DISABLE_ASPM_L1
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				  | FLAG2_NO_DISABLE_RX,
 	.pba			= 32,
 	.max_hw_frame_size	= DEFAULT_JUMBO,

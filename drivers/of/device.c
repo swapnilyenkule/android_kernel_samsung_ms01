@@ -8,7 +8,10 @@
 #include <linux/slab.h>
 
 #include <asm/errno.h>
+<<<<<<< HEAD
 #include "of_private.h"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * of_match_device - Tell if a struct device matches an of_device_id list
@@ -132,7 +135,10 @@ ssize_t of_device_get_modalias(struct device *dev, char *str, ssize_t len)
 void of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	const char *compat;
+<<<<<<< HEAD
 	struct alias_prop *app;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int seen = 0, cplen, sl;
 
 	if ((!dev) || (!dev->of_node))
@@ -155,6 +161,7 @@ void of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
 		seen++;
 	}
 	add_uevent_var(env, "OF_COMPATIBLE_N=%d", seen);
+<<<<<<< HEAD
 
 	seen = 0;
 	mutex_lock(&of_aliases_mutex);
@@ -170,6 +177,8 @@ void of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
 		add_uevent_var(env, "OF_ALIAS_N=%d", seen);
 
 	mutex_unlock(&of_aliases_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int of_device_uevent_modalias(struct device *dev, struct kobj_uevent_env *env)

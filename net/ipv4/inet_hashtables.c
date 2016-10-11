@@ -268,7 +268,11 @@ begintw:
 			}
 			if (unlikely(!INET_TW_MATCH(sk, net, hash, acookie,
 				 saddr, daddr, ports, dif))) {
+<<<<<<< HEAD
 				sock_put(sk);
+=======
+				inet_twsk_put(inet_twsk(sk));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				goto begintw;
 			}
 			goto out;

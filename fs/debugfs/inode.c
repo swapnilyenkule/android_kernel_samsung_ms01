@@ -238,10 +238,25 @@ static int debugfs_show_options(struct seq_file *m, struct dentry *root)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static void debugfs_evict_inode(struct inode *inode)
+{
+	truncate_inode_pages(&inode->i_data, 0);
+	end_writeback(inode);
+	if (S_ISLNK(inode->i_mode))
+		kfree(inode->i_private);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static const struct super_operations debugfs_super_operations = {
 	.statfs		= simple_statfs,
 	.remount_fs	= debugfs_remount,
 	.show_options	= debugfs_show_options,
+<<<<<<< HEAD
+=======
+	.evict_inode	= debugfs_evict_inode,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int debug_fill_super(struct super_block *sb, void *data, int silent)
@@ -459,6 +474,7 @@ static int __debugfs_remove(struct dentry *dentry, struct dentry *parent)
 	int ret = 0;
 
 	if (debugfs_positive(dentry)) {
+<<<<<<< HEAD
 		if (dentry->d_inode) {
 			dget(dentry);
 			switch (dentry->d_inode->i_mode & S_IFMT) {
@@ -476,6 +492,16 @@ static int __debugfs_remove(struct dentry *dentry, struct dentry *parent)
 				d_delete(dentry);
 			dput(dentry);
 		}
+=======
+		dget(dentry);
+		if (S_ISDIR(dentry->d_inode->i_mode))
+			ret = simple_rmdir(parent->d_inode, dentry);
+		else
+			simple_unlink(parent->d_inode, dentry);
+		if (!ret)
+			d_delete(dentry);
+		dput(dentry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return ret;
 }
@@ -527,8 +553,12 @@ EXPORT_SYMBOL_GPL(debugfs_remove);
  */
 void debugfs_remove_recursive(struct dentry *dentry)
 {
+<<<<<<< HEAD
 	struct dentry *child;
 	struct dentry *parent;
+=======
+	struct dentry *child, *next, *parent;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!dentry)
 		return;
@@ -538,6 +568,7 @@ void debugfs_remove_recursive(struct dentry *dentry)
 		return;
 
 	parent = dentry;
+<<<<<<< HEAD
 	mutex_lock(&parent->d_inode->i_mutex);
 
 	while (1) {
@@ -593,6 +624,39 @@ void debugfs_remove_recursive(struct dentry *dentry)
 	__debugfs_remove(dentry, parent);
 	mutex_unlock(&parent->d_inode->i_mutex);
 	simple_release_fs(&debugfs_mount, &debugfs_mount_count);
+=======
+ down:
+	mutex_lock(&parent->d_inode->i_mutex);
+	list_for_each_entry_safe(child, next, &parent->d_subdirs, d_child) {
+		if (!debugfs_positive(child))
+			continue;
+
+		/* perhaps simple_empty(child) makes more sense */
+		if (!list_empty(&child->d_subdirs)) {
+			mutex_unlock(&parent->d_inode->i_mutex);
+			parent = child;
+			goto down;
+		}
+ up:
+		if (!__debugfs_remove(child, parent))
+			simple_release_fs(&debugfs_mount, &debugfs_mount_count);
+	}
+
+	mutex_unlock(&parent->d_inode->i_mutex);
+	child = parent;
+	parent = parent->d_parent;
+	mutex_lock(&parent->d_inode->i_mutex);
+
+	if (child != dentry) {
+		next = list_entry(child->d_child.next, struct dentry,
+					d_child);
+		goto up;
+	}
+
+	if (!__debugfs_remove(child, parent))
+		simple_release_fs(&debugfs_mount, &debugfs_mount_count);
+	mutex_unlock(&parent->d_inode->i_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(debugfs_remove_recursive);
 

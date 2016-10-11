@@ -1047,7 +1047,17 @@ static int __devinit compal_probe(struct platform_device *pdev)
 
 	/* Power supply */
 	initialize_power_supply_data(data);
+<<<<<<< HEAD
 	power_supply_register(&compal_device->dev, &data->psy);
+=======
+	err = power_supply_register(&compal_device->dev, &data->psy);
+	if (err < 0) {
+		hwmon_device_unregister(data->hwmon_dev);
+		sysfs_remove_group(&pdev->dev.kobj,
+				&compal_attribute_group);
+		kfree(data);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	platform_set_drvdata(pdev, data);
 

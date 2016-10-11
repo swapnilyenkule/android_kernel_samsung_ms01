@@ -160,6 +160,7 @@ config LIB80211_DEBUG
 	  from lib80211.
 
 	  If unsure, say N.
+<<<<<<< HEAD
 
 config CFG80211_ALLOW_RECONNECT
 	bool "Allow reconnect while already connected"
@@ -180,3 +181,5 @@ config CFG80211_REG_NOT_UPDATED
 	  Regulation should not updated even if device found other country
 	  Access Point Beacon once since device should find around other
 	  Access Points.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

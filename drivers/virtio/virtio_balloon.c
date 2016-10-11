@@ -305,6 +305,15 @@ static int balloon(void *_vballoon)
 		else if (diff < 0)
 			leak_balloon(vb, -diff);
 		update_balloon_size(vb);
+<<<<<<< HEAD
+=======
+
+		/*
+		 * For large balloon changes, we could spend a lot of time
+		 * and always have work to do.  Be nice if preempt disabled.
+		 */
+		cond_resched();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return 0;
 }

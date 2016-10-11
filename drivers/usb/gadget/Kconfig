@@ -83,7 +83,11 @@ config USB_GADGET_DEBUG_FS
 config USB_GADGET_VBUS_DRAW
 	int "Maximum VBUS Power usage (2-500 mA)"
 	range 2 500
+<<<<<<< HEAD
 	default 500
+=======
+	default 2
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   Some devices need to draw power from USB when they are
 	   configured, perhaps to operate circuitry or to recharge
@@ -123,7 +127,17 @@ config USB_GADGET_STORAGE_NUM_BUFFERS
 #   - discrete ones (including all PCI-only controllers)
 #   - debug/dummy gadget+hcd is last.
 #
+<<<<<<< HEAD
 menu "USB Peripheral Controller"
+=======
+choice
+	prompt "USB Peripheral Controller"
+	help
+	   A USB device uses a controller to talk to its host.
+	   Systems should have only one such upstream link.
+	   Many controller drivers are platform-specific; these
+	   often need board-specific hooks.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #
 # Integrated controllers
@@ -143,6 +157,10 @@ config USB_AT91
 
 config USB_ATMEL_USBA
 	tristate "Atmel USBA"
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	depends on AVR32 || ARCH_AT91SAM9RL || ARCH_AT91SAM9G45
 	help
 	  USBA is the integrated high-speed USB Device controller on
@@ -151,6 +169,10 @@ config USB_ATMEL_USBA
 config USB_FSL_USB2
 	tristate "Freescale Highspeed USB DR Peripheral Controller"
 	depends on FSL_SOC || ARCH_MXC
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select USB_FSL_MPH_DR_OF if OF
 	help
 	   Some of Freescale PowerPC processors have a High Speed
@@ -166,6 +188,10 @@ config USB_FSL_USB2
 config USB_FUSB300
 	tristate "Faraday FUSB300 USB Peripheral Controller"
 	depends on !PHYS_ADDR_T_64BIT
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   Faraday usb device controller FUSB300 driver
 
@@ -213,6 +239,10 @@ config USB_PXA25X_SMALL
 
 config USB_R8A66597
 	tristate "Renesas R8A66597 USB Peripheral Controller"
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   R8A66597 is a discrete USB host and peripheral controller chip that
 	   supports both full and high speed USB 2.0 data transfers.
@@ -225,6 +255,10 @@ config USB_R8A66597
 config USB_RENESAS_USBHS_UDC
 	tristate 'Renesas USBHS controller'
 	depends on USB_RENESAS_USBHS
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   Renesas USBHS is a discrete USB host and peripheral controller chip
 	   that supports both full and high speed USB 2.0 data transfers.
@@ -252,6 +286,10 @@ config USB_PXA27X
 config USB_S3C_HSOTG
 	tristate "S3C HS/OtG USB Device controller"
 	depends on S3C_DEV_USB_HSOTG
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  The Samsung S3C64XX USB2.0 high-speed gadget controller
 	  integrated into the S3C64XX series SoC.
@@ -288,6 +326,10 @@ config USB_S3C2410_DEBUG
 config USB_S3C_HSUDC
 	tristate "S3C2416, S3C2443 and S3C2450 USB Device Controller"
 	depends on ARCH_S3C24XX
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Samsung's S3C2416, S3C2443 and S3C2450 is an ARM9 based SoC
 	  integrated with dual speed USB 2.0 device controller. It has
@@ -297,6 +339,10 @@ config USB_S3C_HSUDC
 
 config USB_MV_UDC
 	tristate "Marvell USB2.0 Device Controller"
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Marvell Socs (including PXA and MMP series) include a high speed
 	  USB2.0 OTG controller, which can be configured as high speed or
@@ -310,12 +356,20 @@ config USB_MV_UDC
 config USB_GADGET_MUSB_HDRC
 	tristate "Inventra HDRC USB Peripheral (TI, ADI, ...)"
 	depends on USB_MUSB_HDRC
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This OTG-capable silicon IP is used in dual designs including
 	  the TI DaVinci, OMAP 243x, OMAP 343x, TUSB 6010, and ADI Blackfin
 
 config USB_M66592
 	tristate "Renesas M66592 USB Peripheral Controller"
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   M66592 is a discrete USB peripheral controller chip that
 	   supports both full and high speed USB 2.0 data transfers.
@@ -332,6 +386,10 @@ config USB_M66592
 config USB_AMD5536UDC
 	tristate "AMD5536 UDC"
 	depends on PCI
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   The AMD5536 UDC is part of the AMD Geode CS5536, an x86 southbridge.
 	   It is a USB Highspeed DMA capable USB device controller. Beside ep0
@@ -359,6 +417,10 @@ config USB_FSL_QE
 config USB_CI13XXX_PCI
 	tristate "MIPS USB CI13xxx PCI UDC"
 	depends on PCI
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  MIPS USB IP core family device controller
 	  Currently it only supports IP part number CI13412
@@ -369,6 +431,10 @@ config USB_CI13XXX_PCI
 
 config USB_NET2272
 	tristate "PLX NET2272"
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  PLX NET2272 is a USB peripheral controller which supports
 	  both full and high speed USB 2.0 data transfers.
@@ -392,6 +458,10 @@ config USB_NET2272_DMA
 config USB_NET2280
 	tristate "NetChip 228x"
 	depends on PCI
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   NetChip 2280 / 2282 is a PCI based USB peripheral controller which
 	   supports both full and high speed USB 2.0 data transfers.
@@ -422,6 +492,10 @@ config USB_LANGWELL
 	tristate "Intel Langwell USB Device Controller"
 	depends on PCI
 	depends on !PHYS_ADDR_T_64BIT
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	   Intel Langwell USB Device Controller is a High-Speed USB
 	   On-The-Go device controller.
@@ -436,6 +510,10 @@ config USB_LANGWELL
 config USB_EG20T
 	tristate "Intel EG20T PCH/LAPIS Semiconductor IOH(ML7213/ML7831) UDC"
 	depends on PCI
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This is a USB device driver for EG20T PCH.
 	  EG20T PCH is the platform controller hub that is used in Intel's
@@ -458,6 +536,10 @@ config USB_EG20T
 config USB_CI13XXX_MSM
 	tristate "MIPS USB CI13xxx for MSM"
 	depends on ARCH_MSM
+<<<<<<< HEAD
+=======
+	select USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select USB_MSM_OTG
 	help
 	  MSM SoC has chipidea USB controller.  This driver uses
@@ -471,6 +553,7 @@ config USB_CI13XXX_MSM
 	  dynamically linked module called "ci13xxx_msm" and force all
 	  gadget drivers to also be dynamically linked.
 
+<<<<<<< HEAD
 config USB_CI13XXX_MSM_HSIC
 	tristate "MIPS HSIC CI13xxx for MSM"
 	depends on ARCH_MSM
@@ -505,10 +588,13 @@ config USB_DWC3_OMAP
 	  the OMAP5 series of processors. More information about the OMAP5
 	  version of this controller, refer to http://www.ti.com/omap5.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #
 # LAST -- dummy/emulated controller
 #
 
+<<<<<<< HEAD
 config USB_MSM_72K
 	tristate "MSM 72K Device Controller"
 	depends on ARCH_MSM
@@ -522,6 +608,13 @@ config USB_MSM_72K
 config USB_DUMMY_HCD
 	tristate "Dummy HCD (DEVELOPMENT)"
 	depends on USB=y || (USB=m && USB_GADGET=m)
+=======
+config USB_DUMMY_HCD
+	tristate "Dummy HCD (DEVELOPMENT)"
+	depends on USB=y || (USB=m && USB_GADGET=m)
+	select USB_GADGET_DUALSPEED
+	select USB_GADGET_SUPERSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This host controller driver emulates USB, looping all data transfer
 	  requests back to a USB "gadget driver" in the same host.  The host
@@ -544,7 +637,20 @@ config USB_DUMMY_HCD
 # NOTE:  Please keep dummy_hcd LAST so that "real hardware" appears
 # first and will be selected by default.
 
+<<<<<<< HEAD
 endmenu
+=======
+endchoice
+
+# Selected by UDC drivers that support high-speed operation.
+config USB_GADGET_DUALSPEED
+	bool
+
+# Selected by UDC drivers that support super-speed opperation
+config USB_GADGET_SUPERSPEED
+	bool
+	depends on USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #
 # USB Gadget Drivers
@@ -808,6 +914,7 @@ config USB_MASS_STORAGE
 	  Say "y" to link the driver statically, or "m" to build
 	  a dynamically linked module called "g_mass_storage".
 
+<<<<<<< HEAD
 config USB_GADGET_TARGET
 	tristate "USB Gadget Target Fabric Module"
 	depends on TARGET_CORE
@@ -818,6 +925,8 @@ config USB_GADGET_TARGET
 	  alternative interface 1. Both protocols can work on USB2.0 and USB3.0.
 	  UAS utilizes the USB 3.0 feature called streams support.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config USB_G_SERIAL
 	tristate "Serial Gadget (with CDC ACM and CDC OBEX support)"
 	help
@@ -866,6 +975,7 @@ config USB_G_PRINTER
 	  For more information, see Documentation/usb/gadget_printer.txt
 	  which includes sample code for accessing the device file.
 
+<<<<<<< HEAD
 config USB_G_ANDROID
 	boolean "Android Composite Gadget"
 	help
@@ -929,6 +1039,8 @@ config USB_NCM_SUPPORT_MTU_CHANGE
 	   If you enable this option,
 	   NCM MTU Change will be able to be used.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config USB_CDC_COMPOSITE
 	tristate "CDC Composite Device (Ethernet and ACM)"
 	depends on NET
@@ -1060,6 +1172,7 @@ config USB_G_WEBCAM
 
 endchoice
 
+<<<<<<< HEAD
 config USB_CSW_HACK
 	boolean "USB Mass storage csw hack Feature"
 	default y
@@ -1135,4 +1248,6 @@ config RMNET_SDIO_SMD_DATA_CHANNEL
        help
 	  Data SMD channel for transferring network data
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # USB_GADGET

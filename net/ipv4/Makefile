@@ -14,7 +14,10 @@ obj-y     := route.o inetpeer.o protocol.o \
 	     inet_fragment.o ping.o
 
 obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
+<<<<<<< HEAD
 obj-$(CONFIG_SYSFS) += sysfs_net_ipv4.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_PROC_FS) += proc.o
 obj-$(CONFIG_IP_MULTIPLE_TABLES) += fib_rules.o
 obj-$(CONFIG_IP_MROUTE) += ipmr.o

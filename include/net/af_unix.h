@@ -60,6 +60,10 @@ struct unix_sock {
 	unsigned int		gc_maybe_cycle : 1;
 	unsigned char		recursion_level;
 	struct socket_wq	peer_wq;
+<<<<<<< HEAD
+=======
+	wait_queue_t		peer_wake;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #define unix_sk(__sk) ((struct unix_sock *)__sk)
 

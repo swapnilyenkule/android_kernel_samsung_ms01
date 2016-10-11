@@ -1005,7 +1005,11 @@ static int set_pkeys(struct qib_devdata *dd, u8 port, u16 *pkeys)
 
 		event.event = IB_EVENT_PKEY_CHANGE;
 		event.device = &dd->verbs_dev.ibdev;
+<<<<<<< HEAD
 		event.element.port_num = 1;
+=======
+		event.element.port_num = port;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ib_dispatch_event(&event);
 	}
 	return 0;

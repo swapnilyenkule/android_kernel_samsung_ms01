@@ -8,10 +8,14 @@
 #include <asm/thread_info.h>
 #include <asm/memory.h>
 #include <asm/page.h>
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 #include <asm/pgtable.h>
 #endif
 
+=======
+	
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define PROC_INFO							\
 	. = ALIGN(4);							\
 	VMLINUX_SYMBOL(__proc_info_begin) = .;				\
@@ -93,10 +97,13 @@ SECTIONS
 		_text = .;
 		HEAD_TEXT
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 	. = ALIGN(1<<SECTION_SHIFT);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.text : {			/* Real text segment		*/
 		_stext = .;		/* Text and read-only data	*/
 			__exception_text_start = .;
@@ -119,9 +126,12 @@ SECTIONS
 			ARM_CPU_KEEP(PROC_INFO)
 	}
 
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 	. = ALIGN(1<<SECTION_SHIFT);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	RO_DATA(PAGE_SIZE)
 
 #ifdef CONFIG_ARM_UNWIND
@@ -144,6 +154,7 @@ SECTIONS
 	_etext = .;			/* End of text and rodata section */
 
 #ifndef CONFIG_XIP_KERNEL
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 	. = ALIGN(1<<SECTION_SHIFT);
 #else
@@ -168,6 +179,11 @@ SECTIONS
 	}
 	. = __stubs_start + SIZEOF(.stubs);
 	__stubs_end = .;
+=======
+	. = ALIGN(PAGE_SIZE);
+	__init_begin = .;
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	INIT_TEXT_SECTION(8)
 	.exit.text : {
@@ -176,9 +192,12 @@ SECTIONS
 	.init.proc.info : {
 		ARM_CPU_DISCARD(PROC_INFO)
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_STRICT_MEMORY_RWX
 	. = ALIGN(1<<SECTION_SHIFT);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.init.arch.info : {
 		__arch_info_begin = .;
 		*(.arch.info.init)
@@ -208,7 +227,10 @@ SECTIONS
 		INIT_SETUP(16)
 		INIT_CALLS
 		CON_INITCALL
+<<<<<<< HEAD
 		COMPAT_EXPORTS
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		SECURITY_INITCALL
 		INIT_RAM_FS
 	}
@@ -218,9 +240,12 @@ SECTIONS
 	}
 #endif
 
+<<<<<<< HEAD
 #if !defined(CONFIG_SMP) && !defined(CONFIG_XIP_KERNEL)
 	. = ALIGN(THREAD_SIZE);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	PERCPU_SECTION(L1_CACHE_BYTES)
 
 #ifdef CONFIG_XIP_KERNEL

@@ -93,6 +93,7 @@ extern void platform_cpu_enable(unsigned int cpu);
 extern void arch_send_call_function_single_ipi(int cpu);
 extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
 
+<<<<<<< HEAD
 extern void smp_send_all_cpu_backtrace(void);
 
 struct smp_operations {
@@ -128,4 +129,6 @@ int  (*cpu_disable)(unsigned int cpu);
  */
 extern void smp_set_ops(struct smp_operations *);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* ifndef __ASM_ARM_SMP_H */

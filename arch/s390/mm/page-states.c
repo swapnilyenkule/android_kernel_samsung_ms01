@@ -12,6 +12,11 @@
 #include <linux/mm.h>
 #include <linux/gfp.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <asm/setup.h>
+#include <asm/ipl.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define ESSA_SET_STABLE		1
 #define ESSA_SET_UNUSED		2
@@ -41,6 +46,17 @@ void __init cmma_init(void)
 
 	if (!cmma_flag)
 		return;
+<<<<<<< HEAD
+=======
+	/*
+	 * Disable CMM for dump, otherwise  the tprot based memory
+	 * detection can fail because of unstable pages.
+	 */
+	if (OLDMEM_BASE || ipl_info.type == IPL_TYPE_FCP_DUMP) {
+		cmma_flag = 0;
+		return;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	asm volatile(
 		"       .insn rrf,0xb9ab0000,%1,%1,0,0\n"
 		"0:     la      %0,0\n"

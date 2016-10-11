@@ -67,7 +67,10 @@
 #include <linux/syscalls.h>
 #include <linux/capability.h>
 #include <linux/fs_struct.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "audit.h"
 
@@ -88,7 +91,11 @@
 #define MAX_EXECVE_AUDIT_LEN 7500
 
 /* number of audit rules */
+<<<<<<< HEAD
 int audit_n_rules = 1;
+=======
+int audit_n_rules;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* determines whether we collect data for signals sent */
 int audit_signals;
@@ -869,6 +876,25 @@ static enum audit_state audit_filter_task(struct task_struct *tsk, char **key)
 	return AUDIT_BUILD_CONTEXT;
 }
 
+<<<<<<< HEAD
+=======
+static int audit_in_mask(const struct audit_krule *rule, unsigned long val)
+{
+	int word, bit;
+
+	if (val > 0xffffffff)
+		return false;
+
+	word = AUDIT_WORD(val);
+	if (word >= AUDIT_BITMASK_SIZE)
+		return false;
+
+	bit = AUDIT_BIT(val);
+
+	return rule->mask[word] & bit;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* At syscall entry and exit time, this filter is called if the
  * audit_state is not low enough that auditing cannot take place, but is
  * also not high enough that we already know we have to write an audit
@@ -886,11 +912,16 @@ static enum audit_state audit_filter_syscall(struct task_struct *tsk,
 
 	rcu_read_lock();
 	if (!list_empty(list)) {
+<<<<<<< HEAD
 		int word = AUDIT_WORD(ctx->major);
 		int bit  = AUDIT_BIT(ctx->major);
 
 		list_for_each_entry_rcu(e, list, list) {
 			if ((e->rule.mask[word] & bit) == bit &&
+=======
+		list_for_each_entry_rcu(e, list, list) {
+			if (audit_in_mask(&e->rule, ctx->major) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			    audit_filter_rules(tsk, &e->rule, ctx, NULL,
 					       &state, false)) {
 				rcu_read_unlock();
@@ -910,20 +941,30 @@ static enum audit_state audit_filter_syscall(struct task_struct *tsk,
 static int audit_filter_inode_name(struct task_struct *tsk,
 				   struct audit_names *n,
 				   struct audit_context *ctx) {
+<<<<<<< HEAD
 	int word, bit;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int h = audit_hash_ino((u32)n->ino);
 	struct list_head *list = &audit_inode_hash[h];
 	struct audit_entry *e;
 	enum audit_state state;
 
+<<<<<<< HEAD
 	word = AUDIT_WORD(ctx->major);
 	bit  = AUDIT_BIT(ctx->major);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (list_empty(list))
 		return 0;
 
 	list_for_each_entry_rcu(e, list, list) {
+<<<<<<< HEAD
 		if ((e->rule.mask[word] & bit) == bit &&
+=======
+		if (audit_in_mask(&e->rule, ctx->major) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		    audit_filter_rules(tsk, &e->rule, ctx, n, &state, false)) {
 			ctx->current_state = state;
 			return 1;
@@ -2711,16 +2752,25 @@ void audit_core_dumps(long signr)
 	audit_log_end(ab);
 }
 
+<<<<<<< HEAD
 void __audit_seccomp(unsigned long syscall, long signr, int code)
+=======
+void __audit_seccomp(unsigned long syscall)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct audit_buffer *ab;
 
 	ab = audit_log_start(NULL, GFP_KERNEL, AUDIT_ANOM_ABEND);
+<<<<<<< HEAD
 	audit_log_abend(ab, "seccomp", signr);
 	audit_log_format(ab, " syscall=%ld", syscall);
 	audit_log_format(ab, " compat=%d", is_compat_task());
 	audit_log_format(ab, " ip=0x%lx", KSTK_EIP(current));
 	audit_log_format(ab, " code=0x%x", code);
+=======
+	audit_log_abend(ab, "seccomp", SIGKILL);
+	audit_log_format(ab, " syscall=%ld", syscall);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	audit_log_end(ab);
 }
 

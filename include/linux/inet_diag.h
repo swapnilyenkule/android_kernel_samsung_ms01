@@ -133,7 +133,10 @@ struct tcpvegas_info {
 };
 
 #ifdef __KERNEL__
+<<<<<<< HEAD
 struct net;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct sock;
 struct inet_hashinfo;
 struct nlattr;
@@ -154,10 +157,13 @@ struct inet_diag_handler {
 	void			(*idiag_get_info)(struct sock *sk,
 						  struct inet_diag_msg *r,
 						  void *info);
+<<<<<<< HEAD
 
 	int			(*destroy)(struct sk_buff *in_skb,
 					   struct inet_diag_req_v2 *req);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__u16                   idiag_type;
 };
 
@@ -173,10 +179,13 @@ int inet_diag_dump_one_icsk(struct inet_hashinfo *hashinfo,
 		struct sk_buff *in_skb, const struct nlmsghdr *nlh,
 		struct inet_diag_req_v2 *req);
 
+<<<<<<< HEAD
 struct sock *inet_diag_find_one_icsk(struct net *net,
 				     struct inet_hashinfo *hashinfo,
 				     struct inet_diag_req_v2 *req);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int inet_diag_bc_sk(const struct nlattr *_bc, struct sock *sk);
 
 extern int  inet_diag_register(const struct inet_diag_handler *handler);

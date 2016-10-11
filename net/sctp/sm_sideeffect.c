@@ -682,7 +682,11 @@ static void sctp_cmd_transport_on(sctp_cmd_seq_t *cmds,
 	 * outstanding data and rely on the retransmission limit be reached
 	 * to shutdown the association.
 	 */
+<<<<<<< HEAD
 	if (t->asoc->state != SCTP_STATE_SHUTDOWN_PENDING)
+=======
+	if (t->asoc->state < SCTP_STATE_SHUTDOWN_PENDING)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		t->asoc->overall_error_count = 0;
 
 	/* Clear the hb_sent flag to signal that we had a good

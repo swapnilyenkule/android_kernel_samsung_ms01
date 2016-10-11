@@ -523,9 +523,15 @@ xfs_showargs(
 		seq_printf(m, "," MNTOPT_LOGBSIZE "=%dk", mp->m_logbsize >> 10);
 
 	if (mp->m_logname)
+<<<<<<< HEAD
 		seq_printf(m, "," MNTOPT_LOGDEV "=%s", mp->m_logname);
 	if (mp->m_rtname)
 		seq_printf(m, "," MNTOPT_RTDEV "=%s", mp->m_rtname);
+=======
+		seq_show_option(m, MNTOPT_LOGDEV, mp->m_logname);
+	if (mp->m_rtname)
+		seq_show_option(m, MNTOPT_RTDEV, mp->m_rtname);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (mp->m_dalign > 0)
 		seq_printf(m, "," MNTOPT_SUNIT "=%d",

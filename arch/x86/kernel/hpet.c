@@ -431,7 +431,11 @@ void hpet_msi_unmask(struct irq_data *data)
 
 	/* unmask it */
 	cfg = hpet_readl(HPET_Tn_CFG(hdev->num));
+<<<<<<< HEAD
 	cfg |= HPET_TN_FSB;
+=======
+	cfg |= HPET_TN_ENABLE | HPET_TN_FSB;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hpet_writel(cfg, HPET_Tn_CFG(hdev->num));
 }
 
@@ -442,7 +446,11 @@ void hpet_msi_mask(struct irq_data *data)
 
 	/* mask it */
 	cfg = hpet_readl(HPET_Tn_CFG(hdev->num));
+<<<<<<< HEAD
 	cfg &= ~HPET_TN_FSB;
+=======
+	cfg &= ~(HPET_TN_ENABLE | HPET_TN_FSB);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hpet_writel(cfg, HPET_Tn_CFG(hdev->num));
 }
 

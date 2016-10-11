@@ -924,7 +924,11 @@ void initialize_secondary(void)
  * __cpu_up - Set smp_commenced_mask for the nominated CPU
  * @cpu: The target CPU.
  */
+<<<<<<< HEAD
 int __devinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __devinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int timeout;
 

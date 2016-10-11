@@ -33,6 +33,7 @@
  *
  * @total_time: Total time this wakeup source has been active.
  * @max_time: Maximum time this wakeup source has been continuously active.
+<<<<<<< HEAD
  * @last_time: Monotonic clock when the wakeup source's was touched last time.
  * @prevent_sleep_time: Total time this source has been preventing autosleep.
  * @event_count: Number of signaled wakeup events.
@@ -42,6 +43,14 @@
  * @wakeup_count: Number of times the wakeup source might abort suspend.
  * @active: Status of the wakeup source.
  * @has_timeout: The wakeup source has been activated with a timeout.
+=======
+ * @last_time: Monotonic clock when the wakeup source's was activated last time.
+ * @event_count: Number of signaled wakeup events.
+ * @active_count: Number of times the wakeup sorce was activated.
+ * @relax_count: Number of times the wakeup sorce was deactivated.
+ * @hit_count: Number of times the wakeup sorce might abort system suspend.
+ * @active: Status of the wakeup source.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct wakeup_source {
 	const char 		*name;
@@ -52,6 +61,7 @@ struct wakeup_source {
 	ktime_t total_time;
 	ktime_t max_time;
 	ktime_t last_time;
+<<<<<<< HEAD
 	ktime_t start_prevent_time;
 	ktime_t prevent_sleep_time;
 	unsigned long		event_count;
@@ -61,6 +71,13 @@ struct wakeup_source {
 	unsigned long		wakeup_count;
 	bool			active:1;
 	bool			autosleep_enabled:1;
+=======
+	unsigned long		event_count;
+	unsigned long		active_count;
+	unsigned long		relax_count;
+	unsigned long		hit_count;
+	unsigned int		active:1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #ifdef CONFIG_PM_SLEEP

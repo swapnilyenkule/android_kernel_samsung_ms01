@@ -88,6 +88,10 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 	char b[BDEVNAME_SIZE];
 	char b2[BDEVNAME_SIZE];
 	struct r0conf *conf = kzalloc(sizeof(*conf), GFP_KERNEL);
+<<<<<<< HEAD
+=======
+	unsigned short blksize = 512;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!conf)
 		return -ENOMEM;
@@ -102,6 +106,12 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 		sector_div(sectors, mddev->chunk_sectors);
 		rdev1->sectors = sectors * mddev->chunk_sectors;
 
+<<<<<<< HEAD
+=======
+		blksize = max(blksize, queue_logical_block_size(
+				      rdev1->bdev->bd_disk->queue));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rdev_for_each(rdev2, mddev) {
 			pr_debug("md/raid0:%s:   comparing %s(%llu)"
 				 " with %s(%llu)\n",
@@ -138,6 +148,21 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 	}
 	pr_debug("md/raid0:%s: FINAL %d zones\n",
 		 mdname(mddev), conf->nr_strip_zones);
+<<<<<<< HEAD
+=======
+	/*
+	 * now since we have the hard sector sizes, we can make sure
+	 * chunk size is a multiple of that sector size
+	 */
+	if ((mddev->chunk_sectors << 9) % blksize) {
+		printk(KERN_ERR "md/raid0:%s: chunk_size of %d not multiple of block size %d\n",
+		       mdname(mddev),
+		       mddev->chunk_sectors << 9, blksize);
+		err = -EINVAL;
+		goto abort;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = -ENOMEM;
 	conf->strip_zone = kzalloc(sizeof(struct strip_zone)*
 				conf->nr_strip_zones, GFP_KERNEL);
@@ -186,9 +211,12 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 		}
 		dev[j] = rdev1;
 
+<<<<<<< HEAD
 		disk_stack_limits(mddev->gendisk, rdev1->bdev,
 				  rdev1->data_offset << 9);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rdev1->bdev->bd_disk->queue->merge_bvec_fn)
 			conf->has_merge_bvec = 1;
 
@@ -257,6 +285,7 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 	mddev->queue->backing_dev_info.congested_fn = raid0_congested;
 	mddev->queue->backing_dev_info.congested_data = mddev;
 
+<<<<<<< HEAD
 	/*
 	 * now since we have the hard sector sizes, we can make sure
 	 * chunk size is a multiple of that sector size
@@ -272,6 +301,8 @@ static int create_strip_zones(struct mddev *mddev, struct r0conf **private_conf)
 	blk_queue_io_opt(mddev->queue,
 			 (mddev->chunk_sectors << 9) * mddev->raid_disks);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pr_debug("md/raid0:%s: done.\n", mdname(mddev));
 	*private_conf = conf;
 
@@ -280,7 +311,11 @@ abort:
 	kfree(conf->strip_zone);
 	kfree(conf->devlist);
 	kfree(conf);
+<<<<<<< HEAD
 	*private_conf = NULL;
+=======
+	*private_conf = ERR_PTR(err);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -402,7 +437,12 @@ static sector_t raid0_size(struct mddev *mddev, sector_t sectors, int raid_disks
 		  "%s does not support generic reshape\n", __func__);
 
 	rdev_for_each(rdev, mddev)
+<<<<<<< HEAD
 		array_sectors += rdev->sectors;
+=======
+		array_sectors += (rdev->sectors &
+				  ~(sector_t)(mddev->chunk_sectors-1));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return array_sectors;
 }
@@ -431,6 +471,30 @@ static int raid0_run(struct mddev *mddev)
 		mddev->private = conf;
 	}
 	conf = mddev->private;
+<<<<<<< HEAD
+=======
+	if (mddev->queue) {
+		struct md_rdev *rdev;
+		bool discard_supported = false;
+
+		blk_queue_max_hw_sectors(mddev->queue, mddev->chunk_sectors);
+
+		blk_queue_io_min(mddev->queue, mddev->chunk_sectors << 9);
+		blk_queue_io_opt(mddev->queue,
+				 (mddev->chunk_sectors << 9) * mddev->raid_disks);
+
+		rdev_for_each(rdev, mddev) {
+			disk_stack_limits(mddev->gendisk, rdev->bdev,
+					  rdev->data_offset << 9);
+			if (blk_queue_discard(bdev_get_queue(rdev->bdev)))
+				discard_supported = true;
+		}
+		if (!discard_supported)
+			queue_flag_clear_unlocked(QUEUE_FLAG_DISCARD, mddev->queue);
+		else
+			queue_flag_set_unlocked(QUEUE_FLAG_DISCARD, mddev->queue);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* calculate array device size */
 	md_set_array_sectors(mddev, raid0_size(mddev, 0, 0));

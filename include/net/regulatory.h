@@ -97,7 +97,11 @@ struct ieee80211_reg_rule {
 
 struct ieee80211_regdomain {
 	u32 n_reg_rules;
+<<<<<<< HEAD
 	char alpha2[2];
+=======
+	char alpha2[3];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u8 dfs_region;
 	struct ieee80211_reg_rule reg_rules[];
 };

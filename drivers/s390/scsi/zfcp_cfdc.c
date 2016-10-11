@@ -293,7 +293,11 @@ void zfcp_cfdc_adapter_access_changed(struct zfcp_adapter *adapter)
 	}
 	read_unlock_irqrestore(&adapter->port_list_lock, flags);
 
+<<<<<<< HEAD
 	shost_for_each_device(sdev, port->adapter->scsi_host) {
+=======
+	shost_for_each_device(sdev, adapter->scsi_host) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		zfcp_sdev = sdev_to_zfcp(sdev);
 		status = atomic_read(&zfcp_sdev->status);
 		if ((status & ZFCP_STATUS_COMMON_ACCESS_DENIED) ||

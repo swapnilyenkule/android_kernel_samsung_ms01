@@ -119,7 +119,15 @@ NESTED(_mcount, PT_SIZE, ra)
 	 nop
 #endif
 	b	ftrace_stub
+<<<<<<< HEAD
 	 nop
+=======
+#ifdef CONFIG_32BIT
+	 addiu sp, sp, 8
+#else
+	 nop
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static_trace:
 	MCOUNT_SAVE_REGS
@@ -129,6 +137,12 @@ static_trace:
 	 move	a1, AT		/* arg2: parent's return address */
 
 	MCOUNT_RESTORE_REGS
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_32BIT
+	addiu sp, sp, 8
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.globl ftrace_stub
 ftrace_stub:
 	RETURN_BACK
@@ -177,6 +191,14 @@ NESTED(ftrace_graph_caller, PT_SIZE, ra)
 	jal	prepare_ftrace_return
 	 nop
 	MCOUNT_RESTORE_REGS
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_DYNAMIC_FTRACE
+#ifdef CONFIG_32BIT
+	addiu sp, sp, 8
+#endif
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	RETURN_BACK
 	END(ftrace_graph_caller)
 

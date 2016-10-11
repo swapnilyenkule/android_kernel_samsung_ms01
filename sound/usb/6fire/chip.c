@@ -101,7 +101,11 @@ static int __devinit usb6fire_chip_probe(struct usb_interface *intf,
 			usb_set_intfdata(intf, chips[i]);
 			mutex_unlock(&register_mutex);
 			return 0;
+<<<<<<< HEAD
 		} else if (regidx < 0)
+=======
+		} else if (!devices[i] && regidx < 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			regidx = i;
 	}
 	if (regidx < 0) {

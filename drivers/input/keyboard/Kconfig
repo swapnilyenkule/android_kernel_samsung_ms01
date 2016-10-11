@@ -2,7 +2,11 @@
 # Input core configuration
 #
 menuconfig INPUT_KEYBOARD
+<<<<<<< HEAD
 	bool "Keyboards" if EXPERT || !X86
+=======
+	bool "Keyboards"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default y
 	help
 	  Say Y here, and a list of supported keyboards will be displayed.
@@ -12,12 +16,15 @@ menuconfig INPUT_KEYBOARD
 
 if INPUT_KEYBOARD
 
+<<<<<<< HEAD
 config KEYBOARD_ABOV_TOUCH
 	tristate "Abov FT16XX touchkey"
 	depends on I2C
 	help
 	  Say Y here if you want to use ABOV MC96FT16XX chip as touchkey.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config KEYBOARD_ADP5520
 	tristate "Keypad Support for ADP5520 PMIC"
 	depends on PMIC_ADP5520
@@ -73,7 +80,11 @@ config KEYBOARD_ATARI
 	  module will be called atakbd.
 
 config KEYBOARD_ATKBD
+<<<<<<< HEAD
 	tristate "AT keyboard" if EXPERT || !X86
+=======
+	tristate "AT keyboard"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default y
 	select SERIO
 	select SERIO_LIBPS2
@@ -446,6 +457,7 @@ config KEYBOARD_PMIC8XXX
 	  To compile this driver as a module, choose M here: the module will
 	  be called pmic8xxx-keypad.
 
+<<<<<<< HEAD
 config KEYBOARD_QPNP
 	tristate "Qualcomm QPNP PMIC keypad support"
 	depends on OF_SPMI && SPMI && MSM_QPNP_INT
@@ -457,6 +469,8 @@ config KEYBOARD_QPNP
 	  To compile this driver as a module, choose M here: the module will
 	  be called qpnp-keypad.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config KEYBOARD_SAMSUNG
 	tristate "Samsung keypad support"
 	depends on HAVE_CLK
@@ -587,6 +601,7 @@ config KEYBOARD_XTKBD
 	  To compile this driver as a module, choose M here: the
 	  module will be called xtkbd.
 
+<<<<<<< HEAD
 config KEYBOARD_QCIKBD
    tristate "Quanta Computer Inc. keyboard"
    depends on I2C
@@ -611,6 +626,8 @@ config KEYBOARD_QCIKBD_LID
 	  Say Y here if you want to register lid event in Quanta keyboard
 	  driver.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config KEYBOARD_W90P910
 	tristate "W90P910 Matrix Keypad support"
 	depends on ARCH_W90X900
@@ -622,6 +639,7 @@ config KEYBOARD_W90P910
 	  module will be called w90p910_keypad.
 
 endif
+<<<<<<< HEAD
 
 config SENSORS_HALL_DEBOUNCE
 	bool "HALL"
@@ -657,3 +675,5 @@ source "drivers/input/keyboard/cypress_touchkey_c/Kconfig"
 source "drivers/input/keyboard/cypress_touchkey_ks01/Kconfig"
 source "drivers/input/keyboard/cypress_touchkey_hl/Kconfig"
 source "drivers/input/keyboard/cypress_touchkey_s3/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

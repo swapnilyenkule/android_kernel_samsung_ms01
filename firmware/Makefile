@@ -30,7 +30,10 @@ fw-shipped-$(CONFIG_3C359) += 3com/3C359.bin
 fw-shipped-$(CONFIG_ACENIC) += $(acenic-objs)
 fw-shipped-$(CONFIG_ADAPTEC_STARFIRE) += adaptec/starfire_rx.bin \
 					 adaptec/starfire_tx.bin
+<<<<<<< HEAD
 fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH) += abov/abov_tk.fw
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 fw-shipped-$(CONFIG_ATARI_DSP56K) += dsp56k/bootstrap.bin
 fw-shipped-$(CONFIG_ATM_AMBASSADOR) += atmsar11.fw
 fw-shipped-$(CONFIG_BNX2X) += bnx2x/bnx2x-e1-6.2.9.0.fw \
@@ -142,6 +145,7 @@ fw-shipped-$(CONFIG_USB_VICAM) += vicam/firmware.fw
 fw-shipped-$(CONFIG_VIDEO_CPIA2) += cpia2/stv0672_vp4.bin
 fw-shipped-$(CONFIG_YAM) += yam/1200.bin yam/9600.bin
 
+<<<<<<< HEAD
 # for IR LED FPGA
 fw-shipped-$(CONFIG_SEC_FPGA_ICE40XX) += ice40xx/i2c_top_bitmap_1.fw
 fw-shipped-$(CONFIG_SEC_FPGA_ICE40XX) += ice40xx/i2c_top_bitmap_2.fw
@@ -220,6 +224,10 @@ endif
 fw-shipped-$(CONFIG_SENSORS_SSP_BOUNCE_FIRMWARE) += ssp_stm_bf.fw
 fw-shipped-$(CONFIG_SENSORS_SSP) += ssp_crashed.fw
 
+=======
+fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # Directories which we _might_ need to create, so we have a rule for them.
 firmware-dirs := $(sort $(addprefix $(objtree)/$(obj)/,$(dir $(fw-external-y) $(fw-shipped-all))))
 

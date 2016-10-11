@@ -518,6 +518,13 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 
 	/* Save original vc_unipagdir_loc in case we allocate a new one */
 	p = (struct uni_pagedir *)*vc->vc_uni_pagedir_loc;
+<<<<<<< HEAD
+=======
+
+	if (!p)
+		return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (p->readonly) return -EIO;
 	
 	if (!ct) return 0;

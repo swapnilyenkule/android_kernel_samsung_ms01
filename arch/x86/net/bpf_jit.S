@@ -140,7 +140,11 @@ bpf_slow_path_byte_msh:
 	push	%r9;						\
 	push	SKBDATA;					\
 /* rsi already has offset */					\
+<<<<<<< HEAD
 	mov	$SIZE,%ecx;	/* size */			\
+=======
+	mov	$SIZE,%edx;	/* size */			\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	call	bpf_internal_load_pointer_neg_helper;		\
 	test	%rax,%rax;					\
 	pop	SKBDATA;					\

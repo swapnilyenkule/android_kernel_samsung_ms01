@@ -844,7 +844,11 @@ long arch_ptrace(struct task_struct *child, long request,
 #endif
 
 		case PTRACE_GET_THREAD_AREA:
+<<<<<<< HEAD
 			ret = put_user(task_thread_info(child)->tp_value[0],
+=======
+			ret = put_user(task_thread_info(child)->tp_value,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				       datap);
 			break;
 
@@ -909,6 +913,7 @@ long arch_ptrace(struct task_struct *child, long request,
 asmlinkage int syscall_trace(int why, struct pt_regs *regs, int scno)
 {
 	unsigned long ip;
+<<<<<<< HEAD
 	current_thread_info()->syscall = scno;
 
 	if (why)
@@ -919,12 +924,25 @@ asmlinkage int syscall_trace(int why, struct pt_regs *regs, int scno)
 		audit_syscall_entry(AUDIT_ARCH_ARM, scno, regs->ARM_r0,
 				    regs->ARM_r1, regs->ARM_r2, regs->ARM_r3);
 	}
+=======
+
+	if (why)
+		audit_syscall_exit(regs);
+	else
+		audit_syscall_entry(AUDIT_ARCH_ARM, scno, regs->ARM_r0,
+				    regs->ARM_r1, regs->ARM_r2, regs->ARM_r3);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!test_thread_flag(TIF_SYSCALL_TRACE))
 		return scno;
 	if (!(current->ptrace & PT_PTRACED))
 		return scno;
 
+<<<<<<< HEAD
+=======
+	current_thread_info()->syscall = scno;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * IP is used to denote syscall entry/exit:
 	 * IP = 0 -> entry, =1 -> exit

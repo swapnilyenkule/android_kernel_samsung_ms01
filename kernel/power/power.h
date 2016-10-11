@@ -264,6 +264,7 @@ static inline void suspend_thaw_processes(void)
 {
 }
 #endif
+<<<<<<< HEAD
 
 #ifdef CONFIG_PM_AUTOSLEEP
 
@@ -291,3 +292,5 @@ extern int pm_wake_lock(const char *buf);
 extern int pm_wake_unlock(const char *buf);
 
 #endif /* !CONFIG_PM_WAKELOCKS */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

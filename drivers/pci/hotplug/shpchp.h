@@ -46,8 +46,11 @@
 extern bool shpchp_poll_mode;
 extern int shpchp_poll_time;
 extern bool shpchp_debug;
+<<<<<<< HEAD
 extern struct workqueue_struct *shpchp_wq;
 extern struct workqueue_struct *shpchp_ordered_wq;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define dbg(format, arg...)						\
 do {									\
@@ -91,6 +94,10 @@ struct slot {
 	struct list_head	slot_list;
 	struct delayed_work work;	/* work for button event */
 	struct mutex lock;
+<<<<<<< HEAD
+=======
+	struct workqueue_struct *wq;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u8 hp_slot;
 };
 

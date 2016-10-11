@@ -687,7 +687,11 @@ static long uvc_v4l2_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 					break;
 			}
 			pin = iterm->id;
+<<<<<<< HEAD
 		} else if (pin < selector->bNrInPins) {
+=======
+		} else if (index < selector->bNrInPins) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			pin = selector->baSourceID[index];
 			list_for_each_entry(iterm, &chain->entities, chain) {
 				if (!UVC_ENTITY_IS_ITERM(iterm))

@@ -120,7 +120,13 @@
 #define MST_PCMCIA_PWR_VCC_50   0x4	   /* voltage VCC = 5.0V */
 
 /* board specific IRQs */
+<<<<<<< HEAD
 #define MAINSTONE_IRQ(x)	(IRQ_BOARD_START + (x))
+=======
+#define MAINSTONE_NR_IRQS	IRQ_BOARD_START
+
+#define MAINSTONE_IRQ(x)	(MAINSTONE_NR_IRQS + (x))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define MAINSTONE_MMC_IRQ	MAINSTONE_IRQ(0)
 #define MAINSTONE_USIM_IRQ	MAINSTONE_IRQ(1)
 #define MAINSTONE_USBC_IRQ	MAINSTONE_IRQ(2)
@@ -136,6 +142,9 @@
 #define MAINSTONE_S1_STSCHG_IRQ	MAINSTONE_IRQ(14)
 #define MAINSTONE_S1_IRQ	MAINSTONE_IRQ(15)
 
+<<<<<<< HEAD
 #define MAINSTONE_NR_IRQS	(IRQ_BOARD_START + 16)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

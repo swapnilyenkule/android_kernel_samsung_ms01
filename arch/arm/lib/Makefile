@@ -6,8 +6,13 @@
 
 lib-y		:= backtrace.o changebit.o csumipv6.o csumpartial.o   \
 		   csumpartialcopy.o csumpartialcopyuser.o clearbit.o \
+<<<<<<< HEAD
 		   delay.o delay-loop.o findbit.o memchr.o            \
 		   memset.o memzero.o setbit.o                        \
+=======
+		   delay.o findbit.o memchr.o memcpy.o		      \
+		   memmove.o memset.o memzero.o setbit.o              \
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		   strncpy_from_user.o strnlen_user.o                 \
 		   strchr.o strrchr.o                                 \
 		   testchangebit.o testclearbit.o testsetbit.o        \
@@ -16,6 +21,7 @@ lib-y		:= backtrace.o changebit.o csumipv6.o csumpartial.o   \
 		   io-readsb.o io-writesb.o io-readsl.o io-writesl.o  \
 		   call_with_stack.o
 
+<<<<<<< HEAD
 mmu-y	:= clear_user.o getuser.o putuser.o
 
 # the code in uaccess.S is not preemption safe and
@@ -23,6 +29,12 @@ mmu-y	:= clear_user.o getuser.o putuser.o
 ifneq ($(CONFIG_HAS_MACH_MEMUTILS),y)
   mmu-y += copy_page.o
   lib-y += memmove.o memcpy.o
+=======
+mmu-y	:= clear_user.o copy_page.o getuser.o putuser.o
+
+# the code in uaccess.S is not preemption safe and
+# probably faster on ARMv3 only
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ifeq ($(CONFIG_PREEMPT),y)
   mmu-y	+= copy_from_user.o copy_to_user.o
 else
@@ -32,7 +44,10 @@ else
   mmu-y	+= uaccess.o
 endif
 endif
+<<<<<<< HEAD
 endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # using lib_ here won't override already available weak symbols
 obj-$(CONFIG_UACCESS_WITH_MEMCPY) += uaccess_with_memcpy.o

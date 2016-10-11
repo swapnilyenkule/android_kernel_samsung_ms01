@@ -172,11 +172,20 @@ nouveau_gem_info(struct drm_file *file_priv, struct drm_gem_object *gem,
 	struct nouveau_bo *nvbo = nouveau_gem_object(gem);
 	struct nouveau_vma *vma;
 
+<<<<<<< HEAD
 	if (nvbo->bo.mem.mem_type == TTM_PL_TT)
 		rep->domain = NOUVEAU_GEM_DOMAIN_GART;
 	else
 		rep->domain = NOUVEAU_GEM_DOMAIN_VRAM;
 
+=======
+	if (is_power_of_2(nvbo->valid_domains))
+		rep->domain = nvbo->valid_domains;
+	else if (nvbo->bo.mem.mem_type == TTM_PL_TT)
+		rep->domain = NOUVEAU_GEM_DOMAIN_GART;
+	else
+		rep->domain = NOUVEAU_GEM_DOMAIN_VRAM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rep->offset = nvbo->bo.offset;
 	if (fpriv->vm) {
 		vma = nouveau_bo_vma_find(nvbo, fpriv->vm);
@@ -281,7 +290,12 @@ validate_fini_list(struct list_head *list, struct nouveau_fence *fence)
 	list_for_each_safe(entry, tmp, list) {
 		nvbo = list_entry(entry, struct nouveau_bo, entry);
 
+<<<<<<< HEAD
 		nouveau_bo_fence(nvbo, fence);
+=======
+		if (likely(fence))
+			nouveau_bo_fence(nvbo, fence);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (unlikely(nvbo->validate_mapped)) {
 			ttm_bo_kunmap(&nvbo->kmap);

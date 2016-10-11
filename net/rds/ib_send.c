@@ -552,9 +552,14 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 	    && rm->m_inc.i_hdr.h_flags & RDS_FLAG_CONG_BITMAP) {
 		rds_cong_map_updated(conn->c_fcong, ~(u64) 0);
 		scat = &rm->data.op_sg[sg];
+<<<<<<< HEAD
 		ret = sizeof(struct rds_header) + RDS_CONG_MAP_BYTES;
 		ret = min_t(int, ret, scat->length - conn->c_xmit_data_off);
 		return ret;
+=======
+		ret = max_t(int, RDS_CONG_MAP_BYTES, scat->length);
+		return sizeof(struct rds_header) + ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* FIXME we may overallocate here */

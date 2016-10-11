@@ -18,10 +18,13 @@
 
 #include <trace/events/irq.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "internals.h"
 
 /**
@@ -137,6 +140,7 @@ irqreturn_t
 handle_irq_event_percpu(struct irq_desc *desc, struct irqaction *action)
 {
 	irqreturn_t retval = IRQ_NONE;
+<<<<<<< HEAD
 	unsigned int random = 0, irq = desc->irq_data.irq;
 
 	do {
@@ -145,15 +149,24 @@ handle_irq_event_percpu(struct irq_desc *desc, struct irqaction *action)
 		sec_debug_timer_log(4444, (int)irqs_disabled(),
 						(void *)action->handler);
 #endif
+=======
+	unsigned int flags = 0, irq = desc->irq_data.irq;
+
+	do {
+		irqreturn_t res;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		trace_irq_handler_entry(irq, action);
 		res = action->handler(irq, action->dev_id);
 		trace_irq_handler_exit(irq, action, res);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 		sec_debug_timer_log(5555, (int)irqs_disabled(),
 						(void *)action->handler);
 		/* sec_debug_irq_sched_log(irq, (void *)action->handler, 2); */
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (WARN_ONCE(!irqs_disabled(),"irq %u handler %pF enabled interrupts\n",
 			      irq, action->handler))
@@ -174,7 +187,11 @@ handle_irq_event_percpu(struct irq_desc *desc, struct irqaction *action)
 
 			/* Fall through to add to randomness */
 		case IRQ_HANDLED:
+<<<<<<< HEAD
 			random |= action->flags;
+=======
+			flags |= action->flags;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 
 		default:
@@ -185,8 +202,12 @@ handle_irq_event_percpu(struct irq_desc *desc, struct irqaction *action)
 		action = action->next;
 	} while (action);
 
+<<<<<<< HEAD
 	if (random & IRQF_SAMPLE_RANDOM)
 		add_interrupt_randomness(irq);
+=======
+	add_interrupt_randomness(irq, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!noirqdebug)
 		note_interrupt(irq, desc, retval);

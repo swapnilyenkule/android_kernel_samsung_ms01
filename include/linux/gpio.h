@@ -172,6 +172,7 @@ static inline int irq_to_gpio(unsigned irq)
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PINCTRL
 
 static inline int
@@ -188,5 +189,8 @@ gpiochip_remove_pin_ranges(struct gpio_chip *chip)
 #endif /* CONFIG_PINCTRL */
 
 #endif /* ! CONFIG_GENERIC_GPIO */
+=======
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif /* __LINUX_GPIO_H */

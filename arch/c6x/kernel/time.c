@@ -49,7 +49,11 @@ u64 sched_clock(void)
 	return (tsc * sched_clock_multiplier) >> SCHED_CLOCK_SHIFT;
 }
 
+<<<<<<< HEAD
 void time_init(void)
+=======
+void __init time_init(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	u64 tmp = (u64)NSEC_PER_SEC << SCHED_CLOCK_SHIFT;
 

@@ -14,11 +14,14 @@ struct task_struct *kthread_create_on_node(int (*threadfn)(void *data),
 	kthread_create_on_node(threadfn, data, -1, namefmt, ##arg)
 
 
+<<<<<<< HEAD
 struct task_struct *kthread_create_on_cpu(int (*threadfn)(void *data),
 					  void *data,
 					  unsigned int cpu,
 					  const char *namefmt);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * kthread_run - create and wake a thread.
  * @threadfn: the function to run until signal_pending(current).
@@ -39,6 +42,7 @@ struct task_struct *kthread_create_on_cpu(int (*threadfn)(void *data),
 
 void kthread_bind(struct task_struct *k, unsigned int cpu);
 int kthread_stop(struct task_struct *k);
+<<<<<<< HEAD
 bool kthread_should_stop(void);
 bool kthread_should_park(void);
 bool kthread_freezable_should_stop(bool *was_frozen);
@@ -46,6 +50,11 @@ void *kthread_data(struct task_struct *k);
 int kthread_park(struct task_struct *k);
 void kthread_unpark(struct task_struct *k);
 void kthread_parkme(void);
+=======
+int kthread_should_stop(void);
+bool kthread_freezable_should_stop(bool *was_frozen);
+void *kthread_data(struct task_struct *k);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int kthreadd(void *unused);
 extern struct task_struct *kthreadd_task;

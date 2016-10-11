@@ -162,9 +162,12 @@ struct interrupt_data {
 /* Length of a SCSI Command Data Block */
 #define MAX_COMMAND_SIZE	16
 
+<<<<<<< HEAD
 /* SCSI commands that we recognize */
 #define READ_CD				0xbe
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* SCSI Sense Key/Additional Sense Code/ASC Qualifier values */
 #define SS_NO_SENSE				0
 #define SS_COMMUNICATION_FAILURE		0x040800
@@ -210,6 +213,7 @@ struct fsg_lun {
 	unsigned int	blkbits;	/* Bits of logical block size of bound block device */
 	unsigned int	blksize;	/* logical block size of bound block device */
 	struct device	dev;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_MSC_PROFILING
 	spinlock_t	lock;
 	struct {
@@ -221,6 +225,8 @@ struct fsg_lun {
 	} perf;
 
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #define fsg_lun_is_open(curlun)	((curlun)->filp != NULL)
@@ -235,9 +241,12 @@ static struct fsg_lun *fsg_lun_from_dev(struct device *dev)
 #define EP0_BUFSIZE	256
 #define DELAYED_STATUS	(EP0_BUFSIZE + 999)	/* An impossibly large value */
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_CSW_HACK
 #define fsg_num_buffers		4
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_USB_GADGET_DEBUG_FILES
 
 static unsigned int fsg_num_buffers = CONFIG_USB_GADGET_STORAGE_NUM_BUFFERS;
@@ -253,7 +262,10 @@ MODULE_PARM_DESC(num_buffers, "Number of pipeline buffers");
 #define fsg_num_buffers	CONFIG_USB_GADGET_STORAGE_NUM_BUFFERS
 
 #endif /* CONFIG_USB_DEBUG */
+<<<<<<< HEAD
 #endif /* CONFIG_USB_CSW_HACK */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* check if fsg_num_buffers is within a valid range */
 static inline int fsg_num_buffers_validate(void)
@@ -804,6 +816,7 @@ static ssize_t fsg_show_nofua(struct device *dev, struct device_attribute *attr,
 	return sprintf(buf, "%u\n", curlun->nofua);
 }
 
+<<<<<<< HEAD
 static ssize_t fsg_show_cdrom (struct device *dev, struct device_attribute *attr,
 			   char *buf)
 {
@@ -849,6 +862,8 @@ static ssize_t fsg_store_perf(struct device *dev, struct device_attribute *attr,
 	return count;
 }
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static ssize_t fsg_show_file(struct device *dev, struct device_attribute *attr,
 			     char *buf)
 {
@@ -935,16 +950,22 @@ static ssize_t fsg_store_file(struct device *dev, struct device_attribute *attr,
 	struct rw_semaphore	*filesem = dev_get_drvdata(dev);
 	int		rc = 0;
 
+<<<<<<< HEAD
 
 #ifndef CONFIG_USB_ANDROID_MASS_STORAGE
 	/* disabled in android because we need to allow closing the backing file
 	 * if the media was removed
 	 */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (curlun->prevent_medium_removal && fsg_lun_is_open(curlun)) {
 		LDBG(curlun, "eject attempt prevented\n");
 		return -EBUSY;				/* "Door is locked" */
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Remove a trailing newline */
 	if (count > 0 && buf[count-1] == '\n')
@@ -967,6 +988,7 @@ static ssize_t fsg_store_file(struct device *dev, struct device_attribute *attr,
 	up_write(filesem);
 	return (rc < 0 ? rc : count);
 }
+<<<<<<< HEAD
 
 static ssize_t fsg_store_cdrom(struct device *dev, struct device_attribute *attr,
 				  const char *buf, size_t count)
@@ -996,3 +1018,5 @@ static ssize_t fsg_store_cdrom(struct device *dev, struct device_attribute *attr
 	up_read(filesem);
 	return rc;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

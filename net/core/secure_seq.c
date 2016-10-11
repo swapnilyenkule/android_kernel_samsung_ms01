@@ -79,6 +79,7 @@ u32 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
 #endif
 
 #ifdef CONFIG_INET
+<<<<<<< HEAD
 __u32 secure_ip_id(__be32 daddr)
 {
 	u32 hash[MD5_DIGEST_WORDS];
@@ -102,6 +103,8 @@ __u32 secure_ipv6_id(const __be32 daddr[4])
 
 	return hash[0];
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 __u32 secure_tcp_sequence_number(__be32 saddr, __be32 daddr,
 				 __be16 sport, __be16 dport)

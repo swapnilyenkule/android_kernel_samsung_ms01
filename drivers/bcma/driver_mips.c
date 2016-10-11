@@ -115,7 +115,11 @@ static void bcma_core_mips_set_irq(struct bcma_device *dev, unsigned int irq)
 			    bcma_read32(mdev, BCMA_MIPS_MIPS74K_INTMASK(0)) &
 			    ~(1 << irqflag));
 	else
+<<<<<<< HEAD
 		bcma_write32(mdev, BCMA_MIPS_MIPS74K_INTMASK(irq), 0);
+=======
+		bcma_write32(mdev, BCMA_MIPS_MIPS74K_INTMASK(oldirq), 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* assign the new one */
 	if (irq == 0) {

@@ -35,7 +35,10 @@
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/partitions.h>
 #include <linux/mtd/map.h>
+<<<<<<< HEAD
 #include <linux/mtd/partitions.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/uaccess.h>
 
@@ -969,9 +972,12 @@ static int mtdchar_ioctl(struct file *file, u_int cmd, u_long arg)
 
 	case ECCGETSTATS:
 	{
+<<<<<<< HEAD
 #ifdef CONFIG_MTD_LAZYECCSTATS
 		part_fill_badblockstats(mtd);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (copy_to_user(argp, &mtd->ecc_stats,
 				 sizeof(struct mtd_ecc_stats)))
 			return -EFAULT;
@@ -1163,6 +1169,7 @@ static int mtdchar_mmap(struct file *file, struct vm_area_struct *vma)
 	struct mtd_file_info *mfi = file->private_data;
 	struct mtd_info *mtd = mfi->mtd;
 	struct map_info *map = mtd->priv;
+<<<<<<< HEAD
 	resource_size_t start, off;
 	unsigned long len, vma_len;
 
@@ -1198,6 +1205,19 @@ static int mtdchar_mmap(struct file *file, struct vm_area_struct *vma)
 			return -EAGAIN;
 
 		return 0;
+=======
+
+        /* This is broken because it assumes the MTD device is map-based
+	   and that mtd->priv is a valid struct map_info.  It should be
+	   replaced with something that uses the mtd_get_unmapped_area()
+	   operation properly. */
+	if (0 /*mtd->type == MTD_RAM || mtd->type == MTD_ROM*/) {
+#ifdef pgprot_noncached
+		if (file->f_flags & O_DSYNC || map->phys >= __pa(high_memory))
+			vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+#endif
+		return vm_iomap_memory(vma, map->phys, map->size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return -ENOSYS;
 #else

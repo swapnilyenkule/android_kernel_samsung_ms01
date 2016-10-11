@@ -198,6 +198,18 @@ static int newque(struct ipc_namespace *ns, struct ipc_params *params)
 		return retval;
 	}
 
+<<<<<<< HEAD
+=======
+	msq->q_stime = msq->q_rtime = 0;
+	msq->q_ctime = get_seconds();
+	msq->q_cbytes = msq->q_qnum = 0;
+	msq->q_qbytes = ns->msg_ctlmnb;
+	msq->q_lspid = msq->q_lrpid = 0;
+	INIT_LIST_HEAD(&msq->q_messages);
+	INIT_LIST_HEAD(&msq->q_receivers);
+	INIT_LIST_HEAD(&msq->q_senders);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * ipc_addid() locks msq
 	 */
@@ -208,6 +220,7 @@ static int newque(struct ipc_namespace *ns, struct ipc_params *params)
 		return id;
 	}
 
+<<<<<<< HEAD
 	msq->q_stime = msq->q_rtime = 0;
 	msq->q_ctime = get_seconds();
 	msq->q_cbytes = msq->q_qnum = 0;
@@ -217,6 +230,8 @@ static int newque(struct ipc_namespace *ns, struct ipc_params *params)
 	INIT_LIST_HEAD(&msq->q_receivers);
 	INIT_LIST_HEAD(&msq->q_senders);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	msg_unlock(msq);
 
 	return msq->q_perm.id;
@@ -296,7 +311,13 @@ static void freeque(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp)
 	}
 	atomic_sub(msq->q_cbytes, &ns->msg_bytes);
 	security_msg_queue_free(msq);
+<<<<<<< HEAD
 	ipc_rcu_putref(msq);
+=======
+	ipc_lock_by_ptr(&msq->q_perm);
+	ipc_rcu_putref(msq);
+	ipc_unlock(&msq->q_perm);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*

@@ -369,7 +369,11 @@ find_domain_name(struct cifs_ses *ses, const struct nls_table *nls_cp)
 		if (blobptr + attrsize > blobend)
 			break;
 		if (type == NTLMSSP_AV_NB_DOMAIN_NAME) {
+<<<<<<< HEAD
 			if (!attrsize)
+=======
+			if (!attrsize || attrsize >= CIFS_MAX_DOMAINNAME_LEN)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				break;
 			if (!ses->domainName) {
 				ses->domainName =
@@ -388,13 +392,62 @@ find_domain_name(struct cifs_ses *ses, const struct nls_table *nls_cp)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+/* Server has provided av pairs/target info in the type 2 challenge
+ * packet and we have plucked it and stored within smb session.
+ * We parse that blob here to find the server given timestamp
+ * as part of ntlmv2 authentication (or local current time as
+ * default in case of failure)
+ */
+static __le64
+find_timestamp(struct cifs_ses *ses)
+{
+	unsigned int attrsize;
+	unsigned int type;
+	unsigned int onesize = sizeof(struct ntlmssp2_name);
+	unsigned char *blobptr;
+	unsigned char *blobend;
+	struct ntlmssp2_name *attrptr;
+
+	if (!ses->auth_key.len || !ses->auth_key.response)
+		return 0;
+
+	blobptr = ses->auth_key.response;
+	blobend = blobptr + ses->auth_key.len;
+
+	while (blobptr + onesize < blobend) {
+		attrptr = (struct ntlmssp2_name *) blobptr;
+		type = le16_to_cpu(attrptr->type);
+		if (type == NTLMSSP_AV_EOL)
+			break;
+		blobptr += 2; /* advance attr type */
+		attrsize = le16_to_cpu(attrptr->length);
+		blobptr += 2; /* advance attr size */
+		if (blobptr + attrsize > blobend)
+			break;
+		if (type == NTLMSSP_AV_TIMESTAMP) {
+			if (attrsize == sizeof(u64))
+				return *((__le64 *)blobptr);
+		}
+		blobptr += attrsize; /* advance attr value */
+	}
+
+	return cpu_to_le64(cifs_UnixTimeToNT(CURRENT_TIME));
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
 			    const struct nls_table *nls_cp)
 {
 	int rc = 0;
 	int len;
 	char nt_hash[CIFS_NTHASH_SIZE];
+<<<<<<< HEAD
 	wchar_t *user;
+=======
+	__le16 *user;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	wchar_t *domain;
 	wchar_t *server;
 
@@ -419,7 +472,11 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
 		return rc;
 	}
 
+<<<<<<< HEAD
 	/* convert ses->user_name to unicode and uppercase */
+=======
+	/* convert ses->user_name to unicode */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	len = ses->user_name ? strlen(ses->user_name) : 0;
 	user = kmalloc(2 + (len * 2), GFP_KERNEL);
 	if (user == NULL) {
@@ -429,7 +486,11 @@ static int calc_ntlmv2_hash(struct cifs_ses *ses, char *ntlmv2_hash,
 	}
 
 	if (len) {
+<<<<<<< HEAD
 		len = cifs_strtoUTF16((__le16 *)user, ses->user_name, len, nls_cp);
+=======
+		len = cifs_strtoUTF16(user, ses->user_name, len, nls_cp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		UniStrupr(user);
 	} else {
 		memset(user, '\0', 2);
@@ -549,6 +610,10 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
 	struct ntlmv2_resp *buf;
 	char ntlmv2_hash[16];
 	unsigned char *tiblob = NULL; /* target info blob */
+<<<<<<< HEAD
+=======
+	__le64 rsp_timestamp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (ses->server->secType == RawNTLMSSP) {
 		if (!ses->domainName) {
@@ -566,6 +631,15 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/* Must be within 5 minutes of the server (or in range +/-2h
+	 * in case of Mac OS X), so simply carry over server timestamp
+	 * (as Windows 7 does)
+	 */
+	rsp_timestamp = find_timestamp(ses);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	baselen = CIFS_SESS_KEY_SIZE + sizeof(struct ntlmv2_resp);
 	tilen = ses->auth_key.len;
 	tiblob = ses->auth_key.response;
@@ -583,7 +657,11 @@ setup_ntlmv2_rsp(struct cifs_ses *ses, const struct nls_table *nls_cp)
 			(ses->auth_key.response + CIFS_SESS_KEY_SIZE);
 	buf->blob_signature = cpu_to_le32(0x00000101);
 	buf->reserved = 0;
+<<<<<<< HEAD
 	buf->time = cpu_to_le64(cifs_UnixTimeToNT(CURRENT_TIME));
+=======
+	buf->time = rsp_timestamp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	get_random_bytes(&buf->client_chal, sizeof(buf->client_chal));
 	buf->reserved2 = 0;
 

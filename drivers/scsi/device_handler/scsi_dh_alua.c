@@ -583,8 +583,12 @@ static int alua_rtpg(struct scsi_device *sdev, struct alua_dh_data *h)
 		h->state = TPGS_STATE_STANDBY;
 		break;
 	case TPGS_STATE_OFFLINE:
+<<<<<<< HEAD
 	case TPGS_STATE_UNAVAILABLE:
 		/* Path unusable for unavailable/offline */
+=======
+		/* Path unusable */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		err = SCSI_DH_DEV_OFFLINED;
 		break;
 	default:

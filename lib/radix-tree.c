@@ -673,6 +673,12 @@ void **radix_tree_next_chunk(struct radix_tree_root *root,
 	 * during iterating; it can be zero only at the beginning.
 	 * And we cannot overflow iter->next_index in a single step,
 	 * because RADIX_TREE_MAP_SHIFT < BITS_PER_LONG.
+<<<<<<< HEAD
+=======
+	 *
+	 * This condition also used by radix_tree_next_slot() to stop
+	 * contiguous iterating, and forbid swithing to the next chunk.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 */
 	index = iter->next_index;
 	if (!index && iter->index)

@@ -106,6 +106,10 @@ extern const struct iwl_cfg iwl2000_2bgn_cfg;
 extern const struct iwl_cfg iwl2000_2bgn_d_cfg;
 extern const struct iwl_cfg iwl2030_2bgn_cfg;
 extern const struct iwl_cfg iwl6035_2agn_cfg;
+<<<<<<< HEAD
+=======
+extern const struct iwl_cfg iwl6035_2agn_sff_cfg;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern const struct iwl_cfg iwl105_bgn_cfg;
 extern const struct iwl_cfg iwl105_bgn_d_cfg;
 extern const struct iwl_cfg iwl135_bgn_cfg;

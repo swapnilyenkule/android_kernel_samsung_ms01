@@ -33,17 +33,25 @@ static loff_t hpfs_dir_lseek(struct file *filp, loff_t off, int whence)
 	if (whence == SEEK_DATA || whence == SEEK_HOLE)
 		return -EINVAL;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&i->i_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hpfs_lock(s);
 
 	/*printk("dir lseek\n");*/
 	if (new_off == 0 || new_off == 1 || new_off == 11 || new_off == 12 || new_off == 13) goto ok;
+<<<<<<< HEAD
 	mutex_lock(&i->i_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pos = ((loff_t) hpfs_de_as_down_as_possible(s, hpfs_inode->i_dno) << 4) + 1;
 	while (pos != new_off) {
 		if (map_pos_dirent(i, &pos, &qbh)) hpfs_brelse4(&qbh);
 		else goto fail;
 		if (pos == 12) goto fail;
 	}
+<<<<<<< HEAD
 	mutex_unlock(&i->i_mutex);
 ok:
 	hpfs_unlock(s);
@@ -52,6 +60,18 @@ fail:
 	mutex_unlock(&i->i_mutex);
 	/*printk("illegal lseek: %016llx\n", new_off);*/
 	hpfs_unlock(s);
+=======
+	hpfs_add_pos(i, &filp->f_pos);
+ok:
+	filp->f_pos = new_off;
+	hpfs_unlock(s);
+	mutex_unlock(&i->i_mutex);
+	return new_off;
+fail:
+	/*printk("illegal lseek: %016llx\n", new_off);*/
+	hpfs_unlock(s);
+	mutex_unlock(&i->i_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return -ESPIPE;
 }
 

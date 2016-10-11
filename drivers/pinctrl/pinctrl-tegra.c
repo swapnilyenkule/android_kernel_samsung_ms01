@@ -53,11 +53,23 @@ static inline void pmx_writel(struct tegra_pmx *pmx, u32 val, u32 bank, u32 reg)
 	writel(val, pmx->regs[bank] + reg);
 }
 
+<<<<<<< HEAD
 static int tegra_pinctrl_get_groups_count(struct pinctrl_dev *pctldev)
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
 	return pmx->soc->ngroups;
+=======
+static int tegra_pinctrl_list_groups(struct pinctrl_dev *pctldev,
+				     unsigned group)
+{
+	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
+
+	if (group >= pmx->soc->ngroups)
+		return -EINVAL;
+
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *tegra_pinctrl_get_group_name(struct pinctrl_dev *pctldev,
@@ -65,6 +77,12 @@ static const char *tegra_pinctrl_get_group_name(struct pinctrl_dev *pctldev,
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return NULL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return pmx->soc->groups[group].name;
 }
 
@@ -75,6 +93,12 @@ static int tegra_pinctrl_get_group_pins(struct pinctrl_dev *pctldev,
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*pins = pmx->soc->groups[group].pins;
 	*num_pins = pmx->soc->groups[group].npins;
 
@@ -89,17 +113,33 @@ static void tegra_pinctrl_pin_dbg_show(struct pinctrl_dev *pctldev,
 }
 
 static struct pinctrl_ops tegra_pinctrl_ops = {
+<<<<<<< HEAD
 	.get_groups_count = tegra_pinctrl_get_groups_count,
+=======
+	.list_groups = tegra_pinctrl_list_groups,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_group_name = tegra_pinctrl_get_group_name,
 	.get_group_pins = tegra_pinctrl_get_group_pins,
 	.pin_dbg_show = tegra_pinctrl_pin_dbg_show,
 };
 
+<<<<<<< HEAD
 static int tegra_pinctrl_get_funcs_count(struct pinctrl_dev *pctldev)
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
 	return pmx->soc->nfunctions;
+=======
+static int tegra_pinctrl_list_funcs(struct pinctrl_dev *pctldev,
+				    unsigned function)
+{
+	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
+
+	if (function >= pmx->soc->nfunctions)
+		return -EINVAL;
+
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *tegra_pinctrl_get_func_name(struct pinctrl_dev *pctldev,
@@ -107,6 +147,12 @@ static const char *tegra_pinctrl_get_func_name(struct pinctrl_dev *pctldev,
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
+<<<<<<< HEAD
+=======
+	if (function >= pmx->soc->nfunctions)
+		return NULL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return pmx->soc->functions[function].name;
 }
 
@@ -117,6 +163,12 @@ static int tegra_pinctrl_get_func_groups(struct pinctrl_dev *pctldev,
 {
 	struct tegra_pmx *pmx = pinctrl_dev_get_drvdata(pctldev);
 
+<<<<<<< HEAD
+=======
+	if (function >= pmx->soc->nfunctions)
+		return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*groups = pmx->soc->functions[function].groups;
 	*num_groups = pmx->soc->functions[function].ngroups;
 
@@ -131,6 +183,11 @@ static int tegra_pinctrl_enable(struct pinctrl_dev *pctldev, unsigned function,
 	int i;
 	u32 val;
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	g = &pmx->soc->groups[group];
 
 	if (g->mux_reg < 0)
@@ -158,6 +215,11 @@ static void tegra_pinctrl_disable(struct pinctrl_dev *pctldev,
 	const struct tegra_pingroup *g;
 	u32 val;
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	g = &pmx->soc->groups[group];
 
 	if (g->mux_reg < 0)
@@ -170,7 +232,11 @@ static void tegra_pinctrl_disable(struct pinctrl_dev *pctldev,
 }
 
 static struct pinmux_ops tegra_pinmux_ops = {
+<<<<<<< HEAD
 	.get_functions_count = tegra_pinctrl_get_funcs_count,
+=======
+	.list_functions = tegra_pinctrl_list_funcs,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_function_name = tegra_pinctrl_get_func_name,
 	.get_function_groups = tegra_pinctrl_get_func_groups,
 	.enable = tegra_pinctrl_enable,
@@ -235,7 +301,11 @@ static int tegra_pinconf_reg(struct tegra_pmx *pmx,
 		*bank = g->drv_bank;
 		*reg = g->drv_reg;
 		*bit = g->lpmd_bit;
+<<<<<<< HEAD
 		*width = 1;
+=======
+		*width = 2;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case TEGRA_PINCONF_PARAM_DRIVE_DOWN_STRENGTH:
 		*bank = g->drv_bank;
@@ -300,6 +370,11 @@ static int tegra_pinconf_group_get(struct pinctrl_dev *pctldev,
 	s16 reg;
 	u32 val, mask;
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	g = &pmx->soc->groups[group];
 
 	ret = tegra_pinconf_reg(pmx, g, param, &bank, &reg, &bit, &width);
@@ -327,6 +402,11 @@ static int tegra_pinconf_group_set(struct pinctrl_dev *pctldev,
 	s16 reg;
 	u32 val, mask;
 
+<<<<<<< HEAD
+=======
+	if (group >= pmx->soc->ngroups)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	g = &pmx->soc->groups[group];
 
 	ret = tegra_pinconf_reg(pmx, g, param, &bank, &reg, &bit, &width);
@@ -497,6 +577,10 @@ static int __devexit tegra_pinctrl_remove(struct platform_device *pdev)
 {
 	struct tegra_pmx *pmx = platform_get_drvdata(pdev);
 
+<<<<<<< HEAD
+=======
+	pinctrl_remove_gpio_range(pmx->pctl, &tegra_pinctrl_gpio_range);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pinctrl_unregister(pmx->pctl);
 
 	return 0;

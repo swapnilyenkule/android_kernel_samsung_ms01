@@ -467,7 +467,10 @@ static int ipcaif_newlink(struct net *src_net, struct net_device *dev,
 	ASSERT_RTNL();
 	caifdev = netdev_priv(dev);
 	caif_netlink_parms(data, &caifdev->conn_req);
+<<<<<<< HEAD
 	dev_net_set(caifdev->netdev, src_net);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ret = register_netdevice(dev);
 	if (ret)

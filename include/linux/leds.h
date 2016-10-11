@@ -17,7 +17,10 @@
 #include <linux/rwsem.h>
 #include <linux/timer.h>
 
+<<<<<<< HEAD
 extern struct class *sec_class;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct device;
 /*
  * LED Core

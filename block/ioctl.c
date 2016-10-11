@@ -8,7 +8,10 @@
 #include <linux/fs.h>
 #include <linux/blktrace_api.h>
 #include <asm/uaccess.h>
+<<<<<<< HEAD
 #include <linux/stlog.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int blkpg_ioctl(struct block_device *bdev, struct blkpg_ioctl_arg __user *arg)
 {
@@ -130,6 +133,7 @@ static int blk_ioctl_discard(struct block_device *bdev, uint64_t start,
 		return -EINVAL;
 	if (secure)
 		flags |= BLKDEV_DISCARD_SECURE;
+<<<<<<< HEAD
 
 	ST_LOG("%s %d:%d %lu %lu",secure?"SECDIS":"DIS",MAJOR(bdev->bd_dev),MINOR(bdev->bd_dev),start,len);
 	
@@ -141,6 +145,11 @@ static int blk_ioctl_sanitize(struct block_device *bdev)
 	return blkdev_issue_sanitize(bdev, GFP_KERNEL);
 }
 
+=======
+	return blkdev_issue_discard(bdev, start, len, GFP_KERNEL, flags);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int put_ushort(unsigned long arg, unsigned short val)
 {
 	return put_user(val, (unsigned short __user *)arg);
@@ -243,10 +252,13 @@ int blkdev_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
 		set_device_ro(bdev, n);
 		return 0;
 
+<<<<<<< HEAD
 	case BLKSANITIZE:
 		ret = blk_ioctl_sanitize(bdev);
 		break;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case BLKDISCARD:
 	case BLKSECDISCARD: {
 		uint64_t range[2];

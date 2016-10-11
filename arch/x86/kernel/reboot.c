@@ -439,6 +439,20 @@ static struct dmi_system_id __initdata pci_reboot_dmi_table[] = {
 			DMI_MATCH(DMI_PRODUCT_NAME, "iMac9,1"),
 		},
 	},
+<<<<<<< HEAD
+=======
+
+	/* ASRock */
+	{	/* Handle problems with rebooting on ASRock Q1900DC-ITX */
+		.callback = set_pci_reboot,
+		.ident = "ASRock Q1900DC-ITX",
+		.matches = {
+			DMI_MATCH(DMI_BOARD_VENDOR, "ASRock"),
+			DMI_MATCH(DMI_BOARD_NAME, "Q1900DC-ITX"),
+		},
+	},
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{	/* Handle problems with rebooting on the Latitude E6320. */
 		.callback = set_pci_reboot,
 		.ident = "Dell Latitude E6320",
@@ -471,6 +485,33 @@ static struct dmi_system_id __initdata pci_reboot_dmi_table[] = {
 			DMI_MATCH(DMI_PRODUCT_NAME, "OptiPlex 990"),
 		},
 	},
+<<<<<<< HEAD
+=======
+	{	/* Handle problems with rebooting on the Precision M6600. */
+		.callback = set_pci_reboot,
+		.ident = "Dell OptiPlex 990",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+			DMI_MATCH(DMI_PRODUCT_NAME, "Precision M6600"),
+		},
+	},
+	{	/* Handle problems with rebooting on the Dell PowerEdge C6100. */
+		.callback = set_pci_reboot,
+		.ident = "Dell PowerEdge C6100",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+			DMI_MATCH(DMI_PRODUCT_NAME, "C6100"),
+		},
+	},
+	{	/* Some C6100 machines were shipped with vendor being 'Dell'. */
+		.callback = set_pci_reboot,
+		.ident = "Dell PowerEdge C6100",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "C6100"),
+		},
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 
@@ -611,7 +652,11 @@ static void native_machine_emergency_restart(void)
 			break;
 
 		case BOOT_EFI:
+<<<<<<< HEAD
 			if (efi_enabled)
+=======
+			if (efi_enabled(EFI_RUNTIME_SERVICES))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				efi.reset_system(reboot_mode ?
 						 EFI_RESET_WARM :
 						 EFI_RESET_COLD,
@@ -644,6 +689,16 @@ void native_machine_shutdown(void)
 
 	/* The boot cpu is always logical cpu 0 */
 	int reboot_cpu_id = 0;
+<<<<<<< HEAD
+=======
+#endif
+
+#ifdef CONFIG_X86_IO_APIC
+	disable_IO_APIC();
+#endif
+
+#ifdef CONFIG_SMP
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_X86_32
 	/* See if there has been given a command line override */
@@ -659,18 +714,30 @@ void native_machine_shutdown(void)
 	/* Make certain I only run on the appropriate processor */
 	set_cpus_allowed_ptr(current, cpumask_of(reboot_cpu_id));
 
+<<<<<<< HEAD
 	/* O.K Now that I'm on the appropriate processor,
 	 * stop all of the others.
 	 */
+=======
+	/*
+	 * O.K Now that I'm on the appropriate processor, stop all of the
+	 * others. Also disable the local irq to not receive the per-cpu
+	 * timer interrupt which may trigger scheduler's load balance.
+	 */
+	local_irq_disable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	stop_other_cpus();
 #endif
 
 	lapic_shutdown();
 
+<<<<<<< HEAD
 #ifdef CONFIG_X86_IO_APIC
 	disable_IO_APIC();
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_HPET_TIMER
 	hpet_disable();
 #endif

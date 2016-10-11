@@ -821,6 +821,12 @@ int kern_addr_valid(unsigned long addr)
 	if (pud_none(*pud))
 		return 0;
 
+<<<<<<< HEAD
+=======
+	if (pud_large(*pud))
+		return pfn_valid(pud_pfn(*pud));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pmd = pmd_offset(pud, addr);
 	if (pmd_none(*pmd))
 		return 0;

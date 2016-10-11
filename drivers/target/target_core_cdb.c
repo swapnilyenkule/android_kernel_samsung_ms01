@@ -97,9 +97,18 @@ target_emulate_inquiry_std(struct se_cmd *cmd, char *buf)
 
 	buf[7] = 0x2; /* CmdQue=1 */
 
+<<<<<<< HEAD
 	snprintf(&buf[8], 8, "LIO-ORG");
 	snprintf(&buf[16], 16, "%s", dev->se_sub_dev->t10_wwn.model);
 	snprintf(&buf[32], 4, "%s", dev->se_sub_dev->t10_wwn.revision);
+=======
+	memcpy(&buf[8], "LIO-ORG ", 8);
+	memset(&buf[16], 0x20, 16);
+	memcpy(&buf[16], dev->se_sub_dev->t10_wwn.model,
+	       min_t(size_t, strlen(dev->se_sub_dev->t10_wwn.model), 16));
+	memcpy(&buf[32], dev->se_sub_dev->t10_wwn.revision,
+	       min_t(size_t, strlen(dev->se_sub_dev->t10_wwn.revision), 4));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	buf[4] = 31; /* Set additional length to 31 */
 
 	return 0;
@@ -1022,11 +1031,19 @@ int target_emulate_unmap(struct se_task *task)
 	struct se_cmd *cmd = task->task_se_cmd;
 	struct se_device *dev = cmd->se_dev;
 	unsigned char *buf, *ptr = NULL;
+<<<<<<< HEAD
 	unsigned char *cdb = &cmd->t_task_cdb[0];
 	sector_t lba;
 	unsigned int size = cmd->data_length, range;
 	int ret = 0, offset;
 	unsigned short dl, bd_dl;
+=======
+	sector_t lba;
+	int size = cmd->data_length;
+	u32 range;
+	int ret = 0;
+	int dl, bd_dl;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!dev->transport->do_discard) {
 		pr_err("UNMAP emulation not supported for: %s\n",
@@ -1035,6 +1052,7 @@ int target_emulate_unmap(struct se_task *task)
 		return -ENOSYS;
 	}
 
+<<<<<<< HEAD
 	/* First UNMAP block descriptor starts at 8 byte offset */
 	offset = 8;
 	size -= 8;
@@ -1048,11 +1066,46 @@ int target_emulate_unmap(struct se_task *task)
 		" ptr: %p\n", dev->transport->name, dl, bd_dl, size, ptr);
 
 	while (size) {
+=======
+	buf = transport_kmap_data_sg(cmd);
+
+	dl = get_unaligned_be16(&buf[0]);
+	bd_dl = get_unaligned_be16(&buf[2]);
+
+	size = min(size - 8, bd_dl);
+	if (size / 16 > dev->se_sub_dev->se_dev_attrib.max_unmap_block_desc_count) {
+		cmd->scsi_sense_reason = TCM_INVALID_PARAMETER_LIST;
+		ret = -EINVAL;
+		goto err;
+	}
+
+	/* First UNMAP block descriptor starts at 8 byte offset */
+	ptr = &buf[8];
+	pr_debug("UNMAP: Sub: %s Using dl: %u bd_dl: %u size: %u"
+		" ptr: %p\n", dev->transport->name, dl, bd_dl, size, ptr);
+
+	while (size >= 16) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		lba = get_unaligned_be64(&ptr[0]);
 		range = get_unaligned_be32(&ptr[8]);
 		pr_debug("UNMAP: Using lba: %llu and range: %u\n",
 				 (unsigned long long)lba, range);
 
+<<<<<<< HEAD
+=======
+		if (range > dev->se_sub_dev->se_dev_attrib.max_unmap_lba_count) {
+			cmd->scsi_sense_reason = TCM_INVALID_PARAMETER_LIST;
+			ret = -EINVAL;
+			goto err;
+		}
+
+		if (lba + range > dev->transport->get_blocks(dev) + 1) {
+			cmd->scsi_sense_reason = TCM_ADDRESS_OUT_OF_RANGE;
+			ret = -EINVAL;
+			goto err;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ret = dev->transport->do_discard(dev, lba, range);
 		if (ret < 0) {
 			pr_err("blkdev_issue_discard() failed: %d\n",
@@ -1107,7 +1160,11 @@ int target_emulate_write_same(struct se_task *task)
 	if (num_blocks != 0)
 		range = num_blocks;
 	else
+<<<<<<< HEAD
 		range = (dev->transport->get_blocks(dev) - lba);
+=======
+		range = (dev->transport->get_blocks(dev) - lba) + 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pr_debug("WRITE_SAME UNMAP: LBA: %llu Range: %llu\n",
 		 (unsigned long long)lba, (unsigned long long)range);

@@ -1803,7 +1803,11 @@ static int tid_fd_revalidate(struct dentry *dentry, struct nameidata *nd)
 			rcu_read_lock();
 			file = fcheck_files(files, fd);
 			if (file) {
+<<<<<<< HEAD
 				unsigned i_mode, f_mode = file->f_mode;
+=======
+				unsigned f_mode = file->f_mode;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 				rcu_read_unlock();
 				put_files_struct(files);
@@ -1819,12 +1823,23 @@ static int tid_fd_revalidate(struct dentry *dentry, struct nameidata *nd)
 					inode->i_gid = 0;
 				}
 
+<<<<<<< HEAD
 				i_mode = S_IFLNK;
 				if (f_mode & FMODE_READ)
 					i_mode |= S_IRUSR | S_IXUSR;
 				if (f_mode & FMODE_WRITE)
 					i_mode |= S_IWUSR | S_IXUSR;
 				inode->i_mode = i_mode;
+=======
+				if (S_ISLNK(inode->i_mode)) {
+					unsigned i_mode = S_IFLNK;
+					if (f_mode & FMODE_READ)
+						i_mode |= S_IRUSR | S_IXUSR;
+					if (f_mode & FMODE_WRITE)
+						i_mode |= S_IWUSR | S_IXUSR;
+					inode->i_mode = i_mode;
+				}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 				security_task_to_inode(task, inode);
 				put_task_struct(task);
@@ -1859,6 +1874,10 @@ static struct dentry *proc_fd_instantiate(struct inode *dir,
 	ei = PROC_I(inode);
 	ei->fd = fd;
 
+<<<<<<< HEAD
+=======
+	inode->i_mode = S_IFLNK;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	inode->i_op = &proc_pid_link_inode_operations;
 	inode->i_size = 64;
 	ei->op.proc_get_link = proc_fd_link;
@@ -2089,6 +2108,10 @@ static int proc_map_files_get_link(struct dentry *dentry, struct path *path)
 	if (rc)
 		goto out_mmput;
 
+<<<<<<< HEAD
+=======
+	rc = -ENOENT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	down_read(&mm->mmap_sem);
 	vma = find_exact_vma(mm, vm_start, vm_end);
 	if (vma && vma->vm_file) {
@@ -2335,6 +2358,7 @@ static const struct file_operations proc_map_files_operations = {
  */
 static int proc_fd_permission(struct inode *inode, int mask)
 {
+<<<<<<< HEAD
 	struct task_struct *p;
 	int rv;
 
@@ -2348,6 +2372,13 @@ static int proc_fd_permission(struct inode *inode, int mask)
 		rv = 0;
 	rcu_read_unlock();
 
+=======
+	int rv = generic_permission(inode, mask);
+	if (rv == 0)
+		return 0;
+	if (task_pid(current) == proc_pid(inode))
+		rv = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return rv;
 }
 
@@ -3016,8 +3047,13 @@ static const struct pid_entry tgid_base_stuff[] = {
 	REG("cgroup",  S_IRUGO, proc_cgroup_operations),
 #endif
 	INF("oom_score",  S_IRUGO, proc_oom_score),
+<<<<<<< HEAD
 	REG("oom_adj",    S_IRUSR, proc_oom_adjust_operations),
 	REG("oom_score_adj", S_IRUSR, proc_oom_score_adj_operations),
+=======
+	REG("oom_adj",    S_IRUGO|S_IWUSR, proc_oom_adjust_operations),
+	REG("oom_score_adj", S_IRUGO|S_IWUSR, proc_oom_score_adj_operations),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_AUDITSYSCALL
 	REG("loginuid",   S_IWUSR|S_IRUGO, proc_loginuid_operations),
 	REG("sessionid",  S_IRUGO, proc_sessionid_operations),
@@ -3374,8 +3410,13 @@ static const struct pid_entry tid_base_stuff[] = {
 	REG("cgroup",  S_IRUGO, proc_cgroup_operations),
 #endif
 	INF("oom_score", S_IRUGO, proc_oom_score),
+<<<<<<< HEAD
 	REG("oom_adj",   S_IRUSR, proc_oom_adjust_operations),
 	REG("oom_score_adj", S_IRUSR, proc_oom_score_adj_operations),
+=======
+	REG("oom_adj",   S_IRUGO|S_IWUSR, proc_oom_adjust_operations),
+	REG("oom_score_adj", S_IRUGO|S_IWUSR, proc_oom_score_adj_operations),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_AUDITSYSCALL
 	REG("loginuid",  S_IWUSR|S_IRUGO, proc_loginuid_operations),
 	REG("sessionid",  S_IRUGO, proc_sessionid_operations),

@@ -474,7 +474,11 @@ config RCU_FANOUT_EXACT
 
 config RCU_FAST_NO_HZ
 	bool "Accelerate last non-dyntick-idle CPU's grace periods"
+<<<<<<< HEAD
 	depends on NO_HZ && SMP && !SEC_FACTORY
+=======
+	depends on NO_HZ && SMP
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default n
 	help
 	  This option causes RCU to attempt to accelerate grace periods
@@ -560,6 +564,10 @@ config LOG_BUF_SHIFT
 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
 	range 12 21
 	default 17
+<<<<<<< HEAD
+=======
+	depends on PRINTK
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Select kernel log buffer size as a power of 2.
 	  Examples:
@@ -953,12 +961,15 @@ config SYSCTL
 config ANON_INODES
 	bool
 
+<<<<<<< HEAD
 config PANIC_TIMEOUT
 	int "Default panic timeout"
 	default 0
 	help
 	  Set default panic timeout.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 menuconfig EXPERT
 	bool "Configure standard kernel features (expert users)"
 	# Unhide debug options, to make the on-by-default options visible
@@ -1270,7 +1281,10 @@ config SLAB
 	  per cpu and per node queues.
 
 config SLUB
+<<<<<<< HEAD
 	depends on BROKEN || NUMA || !DISCONTIGMEM
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bool "SLUB (Unqueued Allocator)"
 	help
 	   SLUB is a slab allocator that minimizes cache line usage
@@ -1312,12 +1326,15 @@ config MMAP_ALLOW_UNINITIALIZED
 
 	  See Documentation/nommu-mmap.txt for more information.
 
+<<<<<<< HEAD
 config DEFERRED_INITCALLS
 	bool "Deferred initcalls support"
 	default n
 	help
 	  Say 'y' here to include support for deferred initcalls
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config PROFILING
 	bool "Profiling support"
 	help
@@ -1355,7 +1372,10 @@ config BASE_SMALL
 
 menuconfig MODULES
 	bool "Enable loadable module support"
+<<<<<<< HEAD
 	select TIMA_LKMAUTH
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Kernel modules are small pieces of compiled code which can
 	  be inserted in the running kernel, rather than being

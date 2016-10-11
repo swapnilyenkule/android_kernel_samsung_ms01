@@ -59,6 +59,7 @@
 #include <linux/pfn.h>
 #include <linux/bsearch.h>
 
+<<<<<<< HEAD
 #ifndef CONFIG_TIMA
 #undef CONFIG_TIMA_LKMAUTH
 #undef CONFIG_TIMA_LKMAUTH_CODE_PROT
@@ -139,6 +140,10 @@ typedef struct lkmauth_rsp_s
   }  __attribute__ ((packed)) result;
 } __attribute__ ((packed)) lkmauth_rsp_t;
 #endif
+=======
+#define CREATE_TRACE_POINTS
+#include <trace/events/module.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifndef ARCH_SHF_SMALL
 #define ARCH_SHF_SMALL 0
@@ -149,15 +154,21 @@ typedef struct lkmauth_rsp_s
  * to ensure complete separation of code and data, but
  * only when CONFIG_DEBUG_SET_MODULE_RONX=y
  */
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 # define debug_align(X) ALIGN(X, PAGE_SIZE)
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_DEBUG_SET_MODULE_RONX
 # define debug_align(X) ALIGN(X, PAGE_SIZE)
 #else
 # define debug_align(X) (X)
 #endif
+<<<<<<< HEAD
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Given BASE and SIZE this macro calculates the number of pages the
@@ -969,11 +980,23 @@ void symbol_put_addr(void *addr)
 	if (core_kernel_text(a))
 		return;
 
+<<<<<<< HEAD
 	/* module_text_address is safe here: we're supposed to have reference
 	 * to module from symbol_get, so it can't go away. */
 	modaddr = __module_text_address(a);
 	BUG_ON(!modaddr);
 	module_put(modaddr);
+=======
+	/*
+	 * Even though we hold a reference on the module; we still need to
+	 * disable preemption in order to safely traverse the data structure.
+	 */
+	preempt_disable();
+	modaddr = __module_text_address(a);
+	BUG_ON(!modaddr);
+	module_put(modaddr);
+	preempt_enable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(symbol_put_addr);
 
@@ -2355,12 +2378,26 @@ static void layout_symtab(struct module *mod, struct load_info *info)
 	src = (void *)info->hdr + symsect->sh_offset;
 	nsrc = symsect->sh_size / sizeof(*src);
 
+<<<<<<< HEAD
 	/* Compute total space required for the core symbols' strtab. */
 	for (ndst = i = strtab_size = 1; i < nsrc; ++i, ++src)
 		if (is_core_symbol(src, info->sechdrs, info->hdr->e_shnum)) {
 			strtab_size += strlen(&info->strtab[src->st_name]) + 1;
 			ndst++;
 		}
+=======
+	/* strtab always starts with a nul, so offset 0 is the empty string. */
+	strtab_size = 1;
+
+	/* Compute total space required for the core symbols' strtab. */
+	for (ndst = i = 0; i < nsrc; i++) {
+		if (i == 0 ||
+		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum)) {
+			strtab_size += strlen(&info->strtab[src[i].st_name])+1;
+			ndst++;
+		}
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Append room for core symbols at end of core part. */
 	info->symoffs = ALIGN(mod->core_size, symsect->sh_addralign ?: 1);
@@ -2394,6 +2431,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 	mod->core_symtab = dst = mod->module_core + info->symoffs;
 	mod->core_strtab = s = mod->module_core + info->stroffs;
 	src = mod->symtab;
+<<<<<<< HEAD
 	*dst = *src;
 	*s++ = 0;
 	for (ndst = i = 1; i < mod->num_symtab; ++i, ++src) {
@@ -2403,6 +2441,17 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 		dst[ndst] = *src;
 		dst[ndst++].st_name = s - mod->core_strtab;
 		s += strlcpy(s, &mod->strtab[src->st_name], KSYM_NAME_LEN) + 1;
+=======
+	*s++ = 0;
+	for (ndst = i = 0; i < mod->num_symtab; i++) {
+		if (i == 0 ||
+		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum)) {
+			dst[ndst] = src[i];
+			dst[ndst++].st_name = s - mod->core_strtab;
+			s += strlcpy(s, &mod->strtab[src[i].st_name],
+				     KSYM_NAME_LEN) + 1;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	mod->core_num_syms = ndst;
 }
@@ -2416,6 +2465,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 }
 #endif /* CONFIG_KALLSYMS */
 
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH
 int qseecom_set_bandwidth(struct qseecom_handle *handle, bool high);
 static int lkmauth(Elf_Ehdr *hdr, int len)
@@ -2542,6 +2592,8 @@ static int lkmauth(Elf_Ehdr *hdr, int len)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void dynamic_debug_setup(struct _ddebug *debug, unsigned int num)
 {
 	if (!debug)
@@ -2642,6 +2694,7 @@ static int copy_and_check(struct load_info *info,
 		goto free_hdr;
 	}
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_LKMAUTH
 	if (lkmauth(hdr, len) != 0) {
 		err = -ENOEXEC;
@@ -2649,6 +2702,8 @@ static int copy_and_check(struct load_info *info,
 	}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	info->hdr = hdr;
 	info->len = len;
 	return 0;
@@ -2944,6 +2999,13 @@ static int check_module_license_and_versions(struct module *mod)
 	if (strcmp(mod->name, "driverloader") == 0)
 		add_taint_module(mod, TAINT_PROPRIETARY_MODULE);
 
+<<<<<<< HEAD
+=======
+	/* lve claims to be GPL but upstream won't provide source */
+	if (strcmp(mod->name, "lve") == 0)
+		add_taint_module(mod, TAINT_PROPRIETARY_MODULE);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MODVERSIONS
 	if ((mod->num_syms && !mod->crcs)
 	    || (mod->num_gpl_syms && !mod->gpl_crcs)
@@ -3157,6 +3219,12 @@ static struct module *load_module(void __user *umod,
 	/* This has to be done once we're sure module name is unique. */
 	dynamic_debug_setup(info.debug, info.num_debug);
 
+<<<<<<< HEAD
+=======
+	/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
+	ftrace_module_init(mod);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Find duplicate symbols */
 	err = verify_export_symbols(mod);
 	if (err < 0)
@@ -3219,6 +3287,7 @@ static void do_mod_ctors(struct module *mod)
 		mod->ctors[i]();
 #endif
 }
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
 
 #ifndef TIMA_KERNEL_L1_MANAGE
@@ -3345,6 +3414,8 @@ void tima_mod_page_change_access(struct module *mod)
 }
 
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* This is where the real work happens */
 SYSCALL_DEFINE3(init_module, void __user *, umod,
@@ -3364,9 +3435,12 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
 
 	blocking_notifier_call_chain(&module_notify_list,
 			MODULE_STATE_COMING, mod);
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_LKMAUTH_CODE_PROT
     tima_mod_page_change_access(mod);
 #endif/*CONFIG_TIMA_LKMAUTH_CODE_PROT*/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Set RO and NX regions for core */
 	set_section_ro_nx(mod->module_core,

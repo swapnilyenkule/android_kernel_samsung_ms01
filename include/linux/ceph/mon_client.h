@@ -70,7 +70,11 @@ struct ceph_mon_client {
 	bool hunting;
 	int cur_mon;                       /* last monitor i contacted */
 	unsigned long sub_sent, sub_renew_after;
+<<<<<<< HEAD
 	struct ceph_connection *con;
+=======
+	struct ceph_connection con;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bool have_fsid;
 
 	/* pending generic requests */

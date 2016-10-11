@@ -22,7 +22,10 @@
 #define CL_COPY_ALL 		0x04
 #define CL_MAKE_SHARED 		0x08
 #define CL_PRIVATE 		0x10
+<<<<<<< HEAD
 #define CL_SHARED_TO_SLAVE	0x20
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline void set_mnt_shared(struct mount *mnt)
 {

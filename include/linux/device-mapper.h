@@ -72,8 +72,13 @@ typedef void (*dm_postsuspend_fn) (struct dm_target *ti);
 typedef int (*dm_preresume_fn) (struct dm_target *ti);
 typedef void (*dm_resume_fn) (struct dm_target *ti);
 
+<<<<<<< HEAD
 typedef int (*dm_status_fn) (struct dm_target *ti, status_type_t status_type,
 			     char *result, unsigned int maxlen);
+=======
+typedef void (*dm_status_fn) (struct dm_target *ti, status_type_t status_type,
+			      char *result, unsigned int maxlen);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef int (*dm_message_fn) (struct dm_target *ti, unsigned argc, char **argv);
 

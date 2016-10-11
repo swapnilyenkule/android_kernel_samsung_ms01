@@ -695,6 +695,10 @@ static struct ib_cq *mthca_create_cq(struct ib_device *ibdev, int entries,
 
 	if (context && ib_copy_to_udata(udata, &cq->cqn, sizeof (__u32))) {
 		mthca_free_cq(to_mdev(ibdev), cq);
+<<<<<<< HEAD
+=======
+		err = -EFAULT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto err_free;
 	}
 

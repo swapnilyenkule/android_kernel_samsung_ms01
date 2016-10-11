@@ -190,6 +190,10 @@ struct reply_t gigaset_tab_nocid[] =
 								  ACT_INIT} },
 	{RSP_OK,	121, 121, -1,			  0,  0, {ACT_GOTVER,
 								  ACT_INIT} },
+<<<<<<< HEAD
+=======
+	{RSP_NONE,	121, 121, -1,			120,  0, {ACT_GETSTRING} },
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* leave dle mode */
 	{RSP_INIT,	  0,   0, SEQ_DLE0,		201,  5, {0},	"^SDLE=0\r"},
@@ -1314,8 +1318,14 @@ static void do_action(int action, struct cardstate *cs,
 		s = ev->ptr;
 
 		if (!strcmp(s, "OK")) {
+<<<<<<< HEAD
 			*p_genresp = 1;
 			*p_resp_code = RSP_ERROR;
+=======
+			/* OK without version string: assume old response */
+			*p_genresp = 1;
+			*p_resp_code = RSP_NONE;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 

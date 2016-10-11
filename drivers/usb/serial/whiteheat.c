@@ -91,6 +91,11 @@ static int  whiteheat_firmware_download(struct usb_serial *serial,
 static int  whiteheat_firmware_attach(struct usb_serial *serial);
 
 /* function prototypes for the Connect Tech WhiteHEAT serial converter */
+<<<<<<< HEAD
+=======
+static int whiteheat_probe(struct usb_serial *serial,
+				const struct usb_device_id *id);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int  whiteheat_attach(struct usb_serial *serial);
 static void whiteheat_release(struct usb_serial *serial);
 static int  whiteheat_open(struct tty_struct *tty,
@@ -134,6 +139,10 @@ static struct usb_serial_driver whiteheat_device = {
 	.description =		"Connect Tech - WhiteHEAT",
 	.id_table =		id_table_std,
 	.num_ports =		4,
+<<<<<<< HEAD
+=======
+	.probe =		whiteheat_probe,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.attach =		whiteheat_attach,
 	.release =		whiteheat_release,
 	.open =			whiteheat_open,
@@ -336,6 +345,37 @@ static int whiteheat_firmware_attach(struct usb_serial *serial)
 /*****************************************************************************
  * Connect Tech's White Heat serial driver functions
  *****************************************************************************/
+<<<<<<< HEAD
+=======
+
+static int whiteheat_probe(struct usb_serial *serial,
+				const struct usb_device_id *id)
+{
+	struct usb_host_interface *iface_desc;
+	struct usb_endpoint_descriptor *endpoint;
+	size_t num_bulk_in = 0;
+	size_t num_bulk_out = 0;
+	size_t min_num_bulk;
+	unsigned int i;
+
+	iface_desc = serial->interface->cur_altsetting;
+
+	for (i = 0; i < iface_desc->desc.bNumEndpoints; i++) {
+		endpoint = &iface_desc->endpoint[i].desc;
+		if (usb_endpoint_is_bulk_in(endpoint))
+			++num_bulk_in;
+		if (usb_endpoint_is_bulk_out(endpoint))
+			++num_bulk_out;
+	}
+
+	min_num_bulk = COMMAND_PORT + 1;
+	if (num_bulk_in < min_num_bulk || num_bulk_out < min_num_bulk)
+		return -ENODEV;
+
+	return 0;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int whiteheat_attach(struct usb_serial *serial)
 {
 	struct usb_serial_port *command_port;
@@ -525,6 +565,10 @@ no_firmware:
 		"%s: please contact support@connecttech.com\n",
 		serial->type->description);
 	kfree(result);
+<<<<<<< HEAD
+=======
+	kfree(command);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return -ENODEV;
 
 no_command_private:
@@ -952,6 +996,13 @@ static void command_port_read_callback(struct urb *urb)
 		dbg("%s - command_info is NULL, exiting.", __func__);
 		return;
 	}
+<<<<<<< HEAD
+=======
+	if (!urb->actual_length) {
+		dev_dbg(&urb->dev->dev, "%s - empty response, exiting.\n", __func__);
+		return;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (status) {
 		dbg("%s - nonzero urb status: %d", __func__, status);
 		if (status != -ENOENT)
@@ -973,7 +1024,12 @@ static void command_port_read_callback(struct urb *urb)
 		/* These are unsolicited reports from the firmware, hence no
 		   waiting command to wakeup */
 		dbg("%s - event received", __func__);
+<<<<<<< HEAD
 	} else if (data[0] == WHITEHEAT_GET_DTR_RTS) {
+=======
+	} else if ((data[0] == WHITEHEAT_GET_DTR_RTS) &&
+		(urb->actual_length - 1 <= sizeof(command_info->result_buffer))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		memcpy(command_info->result_buffer, &data[1],
 						urb->actual_length - 1);
 		command_info->command_finished = WHITEHEAT_CMD_COMPLETE;
@@ -1153,7 +1209,11 @@ static void firm_setup_port(struct tty_struct *tty)
 	struct whiteheat_port_settings port_settings;
 	unsigned int cflag = tty->termios->c_cflag;
 
+<<<<<<< HEAD
 	port_settings.port = port->number + 1;
+=======
+	port_settings.port = port->number - port->serial->minor + 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* get the byte size */
 	switch (cflag & CSIZE) {

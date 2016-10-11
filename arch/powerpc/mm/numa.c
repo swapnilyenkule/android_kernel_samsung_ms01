@@ -201,7 +201,11 @@ int __node_distance(int a, int b)
 	int distance = LOCAL_DISTANCE;
 
 	if (!form1_affinity)
+<<<<<<< HEAD
 		return distance;
+=======
+		return ((a == b) ? LOCAL_DISTANCE : REMOTE_DISTANCE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	for (i = 0; i < distance_ref_points_depth; i++) {
 		if (distance_lookup_table[a][i] == distance_lookup_table[b][i])
@@ -635,11 +639,19 @@ static inline int __init read_usm_ranges(const u32 **usm)
  */
 static void __init parse_drconf_memory(struct device_node *memory)
 {
+<<<<<<< HEAD
 	const u32 *dm, *usm;
 	unsigned int n, rc, ranges, is_kexec_kdump = 0;
 	unsigned long lmb_size, base, size, sz;
 	int nid;
 	struct assoc_arrays aa;
+=======
+	const u32 *uninitialized_var(dm), *usm;
+	unsigned int n, rc, ranges, is_kexec_kdump = 0;
+	unsigned long lmb_size, base, size, sz;
+	int nid;
+	struct assoc_arrays aa = { .arrays = NULL };
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	n = of_get_drconf_memory(memory, &dm);
 	if (!n)

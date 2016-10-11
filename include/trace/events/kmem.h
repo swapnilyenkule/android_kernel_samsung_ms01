@@ -214,7 +214,11 @@ TRACE_EVENT(mm_page_alloc,
 
 	TP_printk("page=%p pfn=%lu order=%d migratetype=%d gfp_flags=%s",
 		__entry->page,
+<<<<<<< HEAD
 		page_to_pfn(__entry->page),
+=======
+		__entry->page ? page_to_pfn(__entry->page) : 0,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__entry->order,
 		__entry->migratetype,
 		show_gfp_flags(__entry->gfp_flags))
@@ -240,7 +244,11 @@ DECLARE_EVENT_CLASS(mm_page,
 
 	TP_printk("page=%p pfn=%lu order=%u migratetype=%d percpu_refill=%d",
 		__entry->page,
+<<<<<<< HEAD
 		page_to_pfn(__entry->page),
+=======
+		__entry->page ? page_to_pfn(__entry->page) : 0,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__entry->order,
 		__entry->migratetype,
 		__entry->order == 0)
@@ -302,6 +310,7 @@ TRACE_EVENT(mm_page_alloc_extfrag,
 		__entry->alloc_migratetype == __entry->fallback_migratetype)
 );
 
+<<<<<<< HEAD
 
 DECLARE_EVENT_CLASS(ion_alloc,
 
@@ -599,6 +608,8 @@ DEFINE_EVENT(smmu_map, iommu_map_range,
 	TP_ARGS(va, pa, chunk_size, len)
 	);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _TRACE_KMEM_H */
 
 /* This part must be outside protection */

@@ -49,7 +49,11 @@ static bool debug;
 #define DRIVER_NAME "ark3116"
 
 /* usb timeout of 1 second */
+<<<<<<< HEAD
 #define ARK_TIMEOUT (1*HZ)
+=======
+#define ARK_TIMEOUT 1000
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static const struct usb_device_id id_table[] = {
 	{ USB_DEVICE(0x6547, 0x0232) },
@@ -68,7 +72,10 @@ static int is_irda(struct usb_serial *serial)
 }
 
 struct ark3116_private {
+<<<<<<< HEAD
 	wait_queue_head_t       delta_msr_wait;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct async_icount	icount;
 	int			irda;	/* 1 for irda device */
 
@@ -148,7 +155,10 @@ static int ark3116_attach(struct usb_serial *serial)
 	if (!priv)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	init_waitqueue_head(&priv->delta_msr_wait);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_init(&priv->hw_lock);
 	spin_lock_init(&priv->status_lock);
 
@@ -460,10 +470,21 @@ static int ark3116_ioctl(struct tty_struct *tty,
 	case TIOCMIWAIT:
 		for (;;) {
 			struct async_icount prev = priv->icount;
+<<<<<<< HEAD
 			interruptible_sleep_on(&priv->delta_msr_wait);
 			/* see if a signal did it */
 			if (signal_pending(current))
 				return -ERESTARTSYS;
+=======
+			interruptible_sleep_on(&port->delta_msr_wait);
+			/* see if a signal did it */
+			if (signal_pending(current))
+				return -ERESTARTSYS;
+
+			if (port->serial->disconnected)
+				return -EIO;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if ((prev.rng == priv->icount.rng) &&
 			    (prev.dsr == priv->icount.dsr) &&
 			    (prev.dcd == priv->icount.dcd) &&
@@ -584,7 +605,11 @@ static void ark3116_update_msr(struct usb_serial_port *port, __u8 msr)
 			priv->icount.dcd++;
 		if (msr & UART_MSR_TERI)
 			priv->icount.rng++;
+<<<<<<< HEAD
 		wake_up_interruptible(&priv->delta_msr_wait);
+=======
+		wake_up_interruptible(&port->delta_msr_wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 

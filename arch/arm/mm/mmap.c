@@ -90,6 +90,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
 		return addr;
 	}
 
+<<<<<<< HEAD
 	if (len > TASK_SIZE){
 		printk(KERN_ERR "arch_get_unmapped_area (len>TASK_SIZE) len=%lu\
 		 	task size=%lu pid=%d do_align=%d addr=%lu \
@@ -98,6 +99,10 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
 			do_align,addr,mm->mmap_base);
 		return -ENOMEM;
 	}
+=======
+	if (len > TASK_SIZE)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (addr) {
 		if (do_align)
@@ -135,6 +140,7 @@ full_search:
 				mm->cached_hole_size = 0;
 				goto full_search;
 			}
+<<<<<<< HEAD
 			printk(KERN_ERR "arch_get_unmapped_area\
 			 	(TASK_SIZE - len < addr)\
 			 	len=%lu task size=%lu pid=%d do_align=%d \
@@ -144,6 +150,8 @@ full_search:
 #ifndef CONFIG_SAMSUNG_PRODUCT_SHIP
 			//panic("!!!! Panic for mmap!!!!");
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return -ENOMEM;
 		}
 		if (!vma || addr + len <= vma->vm_start) {
@@ -180,6 +188,7 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
 		do_align = filp || (flags & MAP_SHARED);
 
 	/* requested length too big for entire address space */
+<<<<<<< HEAD
 	if (len > TASK_SIZE) {
 		printk(KERN_ERR "arch_get_unmapped_area_topdown\
 			 (len > TASK_SIZE)len=%lu task size=%lu\
@@ -188,6 +197,10 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
 			addr,mm->mmap_base);
 		return -ENOMEM;
 	}
+=======
+	if (len > TASK_SIZE)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (flags & MAP_FIXED) {
 		if (aliasing && flags & MAP_SHARED &&
@@ -280,9 +293,16 @@ void arch_pick_mmap_layout(struct mm_struct *mm)
 {
 	unsigned long random_factor = 0UL;
 
+<<<<<<< HEAD
 	if ((current->flags & PF_RANDOMIZE) &&
 	    !(current->personality & ADDR_NO_RANDOMIZE))
 		random_factor = (get_random_int() & ((1 << mmap_rnd_bits) - 1)) << PAGE_SHIFT;
+=======
+	/* 8 bits of randomness in 20 address space bits */
+	if ((current->flags & PF_RANDOMIZE) &&
+	    !(current->personality & ADDR_NO_RANDOMIZE))
+		random_factor = (get_random_int() % (1 << 8)) << PAGE_SHIFT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (mmap_is_legacy()) {
 		mm->mmap_base = TASK_UNMAPPED_BASE + random_factor;

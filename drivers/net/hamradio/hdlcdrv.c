@@ -571,6 +571,11 @@ static int hdlcdrv_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 	case HDLCDRVCTL_CALIBRATE:
 		if(!capable(CAP_SYS_RAWIO))
 			return -EPERM;
+<<<<<<< HEAD
+=======
+		if (bi.data.calibrate > INT_MAX / s->par.bitrate)
+			return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		s->hdlctx.calibrate = bi.data.calibrate * s->par.bitrate / 16;
 		return 0;
 

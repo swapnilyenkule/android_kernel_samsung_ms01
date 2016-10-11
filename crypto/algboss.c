@@ -65,6 +65,7 @@ static int cryptomgr_probe(void *data)
 	int err;
 
 	tmpl = crypto_lookup_template(param->template);
+<<<<<<< HEAD
 
 #ifndef CONFIG_CRYPTO_FIPS
 	if (!tmpl)
@@ -79,6 +80,10 @@ static int cryptomgr_probe(void *data)
 	if (!tmpl || IS_ERR(tmpl))
 		goto err;
 #endif
+=======
+	if (!tmpl)
+		goto err;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	do {
 		if (tmpl->create) {

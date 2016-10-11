@@ -31,14 +31,23 @@
 #include <linux/random.h>
 #include <linux/hw_breakpoint.h>
 #include <linux/cpuidle.h>
+<<<<<<< HEAD
 #include <linux/console.h>
 
 #include <asm/cacheflush.h>
+=======
+
+#include <asm/cacheflush.h>
+#include <asm/leds.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/processor.h>
 #include <asm/thread_notify.h>
 #include <asm/stacktrace.h>
 #include <asm/mach/time.h>
+<<<<<<< HEAD
 #include <asm/tls.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_CC_STACKPROTECTOR
 #include <linux/stackprotector.h>
@@ -61,6 +70,7 @@ extern void setup_mm_for_reboot(void);
 
 static volatile int hlt_counter;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
 void arch_trigger_all_cpu_backtrace(void)
 {
@@ -73,6 +83,8 @@ void arch_trigger_all_cpu_backtrace(void)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void disable_hlt(void)
 {
 	hlt_counter++;
@@ -87,12 +99,15 @@ void enable_hlt(void)
 
 EXPORT_SYMBOL(enable_hlt);
 
+<<<<<<< HEAD
 int get_hlt(void)
 {
 	return hlt_counter;
 }
 EXPORT_SYMBOL(get_hlt);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __init nohlt_setup(char *__unused)
 {
 	hlt_counter = 1;
@@ -111,6 +126,7 @@ __setup("hlt", hlt_setup);
 extern void call_with_stack(void (*fn)(void *), void *arg, void *sp);
 typedef void (*phys_reset_t)(unsigned long);
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARM_FLUSH_CONSOLE_ON_RESTART
 void arm_machine_flush_console(void)
 {
@@ -136,6 +152,8 @@ void arm_machine_flush_console(void)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * A temporary stack to use for CPU reset. This is static so that we
  * don't clobber it with the identity mapping. When running with this
@@ -161,9 +179,12 @@ static void __soft_restart(void *addr)
 	/* Push out any further dirty data, and ensure cache is empty */
 	flush_cache_all();
 
+<<<<<<< HEAD
 	/* Push out the dirty data from external caches */
 	outer_disable();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Switch to the identity mapping. */
 	phys_reset = (phys_reset_t)(unsigned long)virt_to_phys(cpu_reset);
 	phys_reset((unsigned long)addr);
@@ -228,8 +249,12 @@ EXPORT_SYMBOL_GPL(cpu_idle_wait);
  * This is our default idle handler.
  */
 
+<<<<<<< HEAD
 extern void arch_idle(void);
 void (*arm_pm_idle)(void) = arch_idle;
+=======
+void (*arm_pm_idle)(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static void default_idle(void)
 {
@@ -255,10 +280,22 @@ void cpu_idle(void)
 
 	/* endless idle loop with no priority at all */
 	while (1) {
+<<<<<<< HEAD
 		idle_notifier_call_chain(IDLE_START);
 		tick_nohz_idle_enter();
 		rcu_idle_enter();
 		while (!need_resched()) {
+=======
+		tick_nohz_idle_enter();
+		rcu_idle_enter();
+		leds_event(led_idle_start);
+		while (!need_resched()) {
+#ifdef CONFIG_HOTPLUG_CPU
+			if (cpu_is_offline(smp_processor_id()))
+				cpu_die();
+#endif
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/*
 			 * We need to disable interrupts here
 			 * to ensure we don't miss a wakeup call.
@@ -283,6 +320,7 @@ void cpu_idle(void)
 			} else
 				local_irq_enable();
 		}
+<<<<<<< HEAD
 		rcu_idle_exit();
 		tick_nohz_idle_exit();
 		idle_notifier_call_chain(IDLE_END);
@@ -291,6 +329,12 @@ void cpu_idle(void)
 		if (cpu_is_offline(smp_processor_id()))
 			cpu_die();
 #endif
+=======
+		leds_event(led_idle_end);
+		rcu_idle_exit();
+		tick_nohz_idle_exit();
+		schedule_preempt_disabled();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 
@@ -306,7 +350,10 @@ __setup("reboot=", reboot_setup);
 
 void machine_shutdown(void)
 {
+<<<<<<< HEAD
 	preempt_disable();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SMP
 	smp_send_stop();
 #endif
@@ -315,6 +362,10 @@ void machine_shutdown(void)
 void machine_halt(void)
 {
 	machine_shutdown();
+<<<<<<< HEAD
+=======
+	local_irq_disable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (1);
 }
 
@@ -329,10 +380,13 @@ void machine_restart(char *cmd)
 {
 	machine_shutdown();
 
+<<<<<<< HEAD
 	/* Flush the console to make sure all the relevant messages make it
 	 * out to the console drivers */
 	arm_machine_flush_console();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	arm_pm_restart(reboot_mode, cmd);
 
 	/* Give a grace period for failure to restart of 1s */
@@ -340,6 +394,7 @@ void machine_restart(char *cmd)
 
 	/* Whoops - the platform was unable to reboot. Tell the user! */
 	printk("Reboot failed -- System halted\n");
+<<<<<<< HEAD
 	while (1);
 }
 
@@ -433,6 +488,12 @@ static void show_extra_register_data(struct pt_regs *regs, int nbytes)
 	set_fs(fs);
 }
 
+=======
+	local_irq_disable();
+	while (1);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void __show_regs(struct pt_regs *regs)
 {
 	unsigned long flags;
@@ -492,8 +553,11 @@ void __show_regs(struct pt_regs *regs)
 		printk("Control: %08x%s\n", ctrl, buf);
 	}
 #endif
+<<<<<<< HEAD
 
 	show_extra_register_data(regs, 128);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void show_regs(struct pt_regs * regs)
@@ -554,8 +618,12 @@ copy_thread(unsigned long clone_flags, unsigned long stack_start,
 	clear_ptrace_hw_breakpoint(p);
 
 	if (clone_flags & CLONE_SETTLS)
+<<<<<<< HEAD
 		thread->tp_value[0] = childregs->ARM_r3;
 	thread->tp_value[1] = get_tpuser();
+=======
+		thread->tp_value = regs->ARM_r3;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	thread_notify(THREAD_NOTIFY_COPY, thread);
 
@@ -646,6 +714,10 @@ EXPORT_SYMBOL(kernel_thread);
 unsigned long get_wchan(struct task_struct *p)
 {
 	struct stackframe frame;
+<<<<<<< HEAD
+=======
+	unsigned long stack_page;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int count = 0;
 	if (!p || p == current || p->state == TASK_RUNNING)
 		return 0;
@@ -654,9 +726,17 @@ unsigned long get_wchan(struct task_struct *p)
 	frame.sp = thread_saved_sp(p);
 	frame.lr = 0;			/* recovered from the stack */
 	frame.pc = thread_saved_pc(p);
+<<<<<<< HEAD
 	do {
 		int ret = unwind_frame(&frame);
 		if (ret < 0)
+=======
+	stack_page = (unsigned long)task_stack_page(p);
+	do {
+		if (frame.sp < stack_page ||
+		    frame.sp >= stack_page + THREAD_SIZE ||
+		    unwind_frame(&frame) < 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return 0;
 		if (!in_sched_functions(frame.pc))
 			return frame.pc;
@@ -671,11 +751,18 @@ unsigned long arch_randomize_brk(struct mm_struct *mm)
 }
 
 #ifdef CONFIG_MMU
+<<<<<<< HEAD
 #ifdef CONFIG_KUSER_HELPERS
 /*
  * The vectors page is always readable from user space for the
  * atomic helpers. Insert it into the gate_vma so that it is visible
  * through ptrace and /proc/<pid>/mem.
+=======
+/*
+ * The vectors page is always readable from user space for the
+ * atomic helpers and the signal restart code. Insert it into the
+ * gate_vma so that it is visible through ptrace and /proc/<pid>/mem.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 static struct vm_area_struct gate_vma;
 
@@ -704,6 +791,7 @@ int in_gate_area_no_mm(unsigned long addr)
 {
 	return in_gate_area(NULL, addr);
 }
+<<<<<<< HEAD
 #define is_gate_vma(vma)	((vma) == &gate_vma)
 #else
 #define is_gate_vma(vma)	0
@@ -752,5 +840,11 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
  up_fail:
 	up_write(&mm->mmap_sem);
 	return ret;
+=======
+
+const char *arch_vma_name(struct vm_area_struct *vma)
+{
+	return (vma == &gate_vma) ? "[vectors]" : NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #endif

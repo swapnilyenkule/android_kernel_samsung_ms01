@@ -317,6 +317,12 @@ static int clip_constructor(struct neighbour *neigh)
 
 static int clip_encap(struct atm_vcc *vcc, int mode)
 {
+<<<<<<< HEAD
+=======
+	if (!CLIP_VCC(vcc))
+		return -EBADFD;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	CLIP_VCC(vcc)->encap = mode;
 	return 0;
 }

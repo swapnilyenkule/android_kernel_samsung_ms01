@@ -14,7 +14,10 @@
 #define pr_fmt(fmt) "pinctrl core: " fmt
 
 #include <linux/kernel.h>
+<<<<<<< HEAD
 #include <linux/kref.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/export.h>
 #include <linux/init.h>
 #include <linux/device.h>
@@ -24,6 +27,7 @@
 #include <linux/sysfs.h>
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/pinctrl/consumer.h>
 #include <linux/pinctrl/pinctrl.h>
 #include <linux/pinctrl/machine.h>
@@ -34,17 +38,41 @@
 
 
 static bool pinctrl_dummy_state;
+=======
+#include <linux/pinctrl/pinctrl.h>
+#include <linux/pinctrl/machine.h>
+#include "core.h"
+#include "pinmux.h"
+#include "pinconf.h"
+
+/**
+ * struct pinctrl_maps - a list item containing part of the mapping table
+ * @node: mapping table list node
+ * @maps: array of mapping table entries
+ * @num_maps: the number of entries in @maps
+ */
+struct pinctrl_maps {
+	struct list_head node;
+	struct pinctrl_map const *maps;
+	unsigned num_maps;
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Mutex taken by all entry points */
 DEFINE_MUTEX(pinctrl_mutex);
 
 /* Global list of pin control devices (struct pinctrl_dev) */
+<<<<<<< HEAD
 LIST_HEAD(pinctrldev_list);
+=======
+static LIST_HEAD(pinctrldev_list);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* List of pin controller handles (struct pinctrl) */
 static LIST_HEAD(pinctrl_list);
 
 /* List of pinctrl maps (struct pinctrl_maps) */
+<<<<<<< HEAD
 LIST_HEAD(pinctrl_maps);
 
 
@@ -60,6 +88,15 @@ void pinctrl_provide_dummies(void)
 {
 	pinctrl_dummy_state = true;
 }
+=======
+static LIST_HEAD(pinctrl_maps);
+
+#define for_each_maps(_maps_node_, _i_, _map_) \
+	list_for_each_entry(_maps_node_, &pinctrl_maps, node) \
+		for (_i_ = 0, _map_ = &_maps_node_->maps[_i_]; \
+			_i_ < _maps_node_->num_maps; \
+			i++, _map_ = &_maps_node_->maps[_i_])
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 const char *pinctrl_dev_get_name(struct pinctrl_dev *pctldev)
 {
@@ -68,12 +105,15 @@ const char *pinctrl_dev_get_name(struct pinctrl_dev *pctldev)
 }
 EXPORT_SYMBOL_GPL(pinctrl_dev_get_name);
 
+<<<<<<< HEAD
 const char *pinctrl_dev_get_devname(struct pinctrl_dev *pctldev)
 {
 	return dev_name(pctldev->dev);
 }
 EXPORT_SYMBOL_GPL(pinctrl_dev_get_devname);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void *pinctrl_dev_get_drvdata(struct pinctrl_dev *pctldev)
 {
 	return pctldev->driver_data;
@@ -132,6 +172,7 @@ int pin_get_from_name(struct pinctrl_dev *pctldev, const char *name)
 }
 
 /**
+<<<<<<< HEAD
  * pin_get_name_from_id() - look up a pin name from a pin id
  * @pctldev: the pin control device to lookup the pin on
  * @name: the name of the pin to look up
@@ -151,6 +192,8 @@ const char *pin_get_name(struct pinctrl_dev *pctldev, const unsigned pin)
 }
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * pin_is_valid() - check if pin exists on controller
  * @pctldev: the pin control device to check the pin on
  * @pin: pin to check, use the local pin controller index number
@@ -221,10 +264,15 @@ static int pinctrl_register_one_pin(struct pinctrl_dev *pctldev,
 		pindesc->name = name;
 	} else {
 		pindesc->name = kasprintf(GFP_KERNEL, "PIN%u", number);
+<<<<<<< HEAD
 		if (pindesc->name == NULL) {
 			kfree(pindesc);
 			return -ENOMEM;
 		}
+=======
+		if (pindesc->name == NULL)
+			return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pindesc->dynamic_name = true;
 	}
 
@@ -284,8 +332,12 @@ pinctrl_match_gpio_range(struct pinctrl_dev *pctldev, unsigned gpio)
  *
  * Find the pin controller handling a certain GPIO pin from the pinspace of
  * the GPIO subsystem, return the device and the matching GPIO range. Returns
+<<<<<<< HEAD
  * -EPROBE_DEFER if the GPIO range could not be found in any device since it
  * may still have not been registered.
+=======
+ * negative if the GPIO range could not be found in any device.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 static int pinctrl_get_device_gpio_range(unsigned gpio,
 					 struct pinctrl_dev **outdev,
@@ -305,7 +357,11 @@ static int pinctrl_get_device_gpio_range(unsigned gpio,
 		}
 	}
 
+<<<<<<< HEAD
 	return -EPROBE_DEFER;
+=======
+	return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -325,6 +381,7 @@ void pinctrl_add_gpio_range(struct pinctrl_dev *pctldev,
 }
 EXPORT_SYMBOL_GPL(pinctrl_add_gpio_range);
 
+<<<<<<< HEAD
 void pinctrl_add_gpio_ranges(struct pinctrl_dev *pctldev,
 			     struct pinctrl_gpio_range *ranges,
 			     unsigned nranges)
@@ -378,6 +435,8 @@ pinctrl_find_gpio_range_from_pin(struct pinctrl_dev *pctldev,
 }
 EXPORT_SYMBOL_GPL(pinctrl_find_gpio_range_from_pin);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * pinctrl_remove_gpio_range() - remove a range of GPIOs fro a pin controller
  * @pctldev: pin controller device to remove the range from
@@ -401,10 +460,16 @@ int pinctrl_get_group_selector(struct pinctrl_dev *pctldev,
 			       const char *pin_group)
 {
 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+<<<<<<< HEAD
 	unsigned ngroups = pctlops->get_groups_count(pctldev);
 	unsigned group_selector = 0;
 
 	while (group_selector < ngroups) {
+=======
+	unsigned group_selector = 0;
+
+	while (pctlops->list_groups(pctldev, group_selector) >= 0) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		const char *gname = pctlops->get_group_name(pctldev,
 							    group_selector);
 		if (!strcmp(gname, pin_group)) {
@@ -444,7 +509,11 @@ int pinctrl_request_gpio(unsigned gpio)
 	ret = pinctrl_get_device_gpio_range(gpio, &pctldev, &range);
 	if (ret) {
 		mutex_unlock(&pinctrl_mutex);
+<<<<<<< HEAD
 		return ret;
+=======
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* Convert to the pin controllers number space */
@@ -600,6 +669,7 @@ static int add_setting(struct pinctrl *p, struct pinctrl_map const *map)
 
 	setting->pctldev = get_pinctrl_dev_from_devname(map->ctrl_dev_name);
 	if (setting->pctldev == NULL) {
+<<<<<<< HEAD
 		kfree(setting);
 		/* Do not defer probing of hogs (circular loop) */
 		if (!strcmp(map->ctrl_dev_name, map->dev_name))
@@ -615,6 +685,15 @@ static int add_setting(struct pinctrl *p, struct pinctrl_map const *map)
 
 	setting->dev_name = map->dev_name;
 
+=======
+		dev_err(p->dev, "unknown pinctrl device %s in map entry",
+			map->ctrl_dev_name);
+		kfree(setting);
+		/* Eventually, this should trigger deferred probe */
+		return -ENODEV;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (map->type) {
 	case PIN_MAP_TYPE_MUX_GROUP:
 		ret = pinmux_map_to_setting(map, setting);
@@ -671,6 +750,7 @@ static struct pinctrl *create_pinctrl(struct device *dev)
 	}
 	p->dev = dev;
 	INIT_LIST_HEAD(&p->states);
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&p->dt_maps);
 
 	ret = pinctrl_dt_to_map(p);
@@ -678,6 +758,8 @@ static struct pinctrl *create_pinctrl(struct device *dev)
 		kfree(p);
 		return ERR_PTR(ret);
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	devname = dev_name(dev);
 
@@ -688,6 +770,7 @@ static struct pinctrl *create_pinctrl(struct device *dev)
 			continue;
 
 		ret = add_setting(p, map);
+<<<<<<< HEAD
 		/*
 		 * At this point the adding of a setting may:
 		 *
@@ -702,10 +785,14 @@ static struct pinctrl *create_pinctrl(struct device *dev)
 		 * an -EPROBE_DEFER later, as that is the worst case.
 		 */
 		if (ret == -EPROBE_DEFER) {
+=======
+		if (ret < 0) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			pinctrl_put_locked(p, false);
 			return ERR_PTR(ret);
 		}
 	}
+<<<<<<< HEAD
 	if (ret < 0) {
 		/* If some other error than deferral occured, return here */
 		pinctrl_put_locked(p, false);
@@ -715,6 +802,10 @@ static struct pinctrl *create_pinctrl(struct device *dev)
 	kref_init(&p->users);
 
 	/* Add the pinctrl handle to the global list */
+=======
+
+	/* Add the pinmux to the global list */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	list_add_tail(&p->node, &pinctrl_list);
 
 	return p;
@@ -727,6 +818,7 @@ static struct pinctrl *pinctrl_get_locked(struct device *dev)
 	if (WARN_ON(!dev))
 		return ERR_PTR(-EINVAL);
 
+<<<<<<< HEAD
 	/*
 	 * See if somebody else (such as the device core) has already
 	 * obtained a handle to the pinctrl for this device. In that case,
@@ -740,6 +832,17 @@ static struct pinctrl *pinctrl_get_locked(struct device *dev)
 	}
 
 	return create_pinctrl(dev);
+=======
+	p = find_pinctrl(dev);
+	if (p != NULL)
+		return ERR_PTR(-EBUSY);
+
+	p = create_pinctrl(dev);
+	if (IS_ERR(p))
+		return p;
+
+	return p;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -785,14 +888,18 @@ static void pinctrl_put_locked(struct pinctrl *p, bool inlist)
 		kfree(state);
 	}
 
+<<<<<<< HEAD
 	pinctrl_dt_free_maps(p);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (inlist)
 		list_del(&p->node);
 	kfree(p);
 }
 
 /**
+<<<<<<< HEAD
  * pinctrl_release() - release the pinctrl handle
  * @kref: the kref in the pinctrl being released
  */
@@ -805,12 +912,19 @@ static void pinctrl_release(struct kref *kref)
 
 /**
  * pinctrl_put() - decrease use count on a previously claimed pinctrl handle
+=======
+ * pinctrl_put() - release a previously claimed pinctrl handle
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @p: the pinctrl handle to release
  */
 void pinctrl_put(struct pinctrl *p)
 {
 	mutex_lock(&pinctrl_mutex);
+<<<<<<< HEAD
 	kref_put(&p->users, pinctrl_release);
+=======
+	pinctrl_put_locked(p, true);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&pinctrl_mutex);
 }
 EXPORT_SYMBOL_GPL(pinctrl_put);
@@ -821,6 +935,7 @@ static struct pinctrl_state *pinctrl_lookup_state_locked(struct pinctrl *p,
 	struct pinctrl_state *state;
 
 	state = find_state(p, name);
+<<<<<<< HEAD
 	if (!state) {
 		if (pinctrl_dummy_state) {
 			/* create dummy state */
@@ -830,6 +945,10 @@ static struct pinctrl_state *pinctrl_lookup_state_locked(struct pinctrl *p,
 		} else
 			state = ERR_PTR(-ENODEV);
 	}
+=======
+	if (!state)
+		return ERR_PTR(-ENODEV);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return state;
 }
@@ -930,6 +1049,7 @@ int pinctrl_select_state(struct pinctrl *p, struct pinctrl_state *state)
 }
 EXPORT_SYMBOL_GPL(pinctrl_select_state);
 
+<<<<<<< HEAD
 static void devm_pinctrl_release(struct device *dev, void *res)
 {
 	pinctrl_put(*(struct pinctrl **)res);
@@ -987,6 +1107,17 @@ EXPORT_SYMBOL_GPL(devm_pinctrl_put);
 
 int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 			 bool dup, bool locked)
+=======
+/**
+ * pinctrl_register_mappings() - register a set of pin controller mappings
+ * @maps: the pincontrol mappings table to register. This should probably be
+ *	marked with __initdata so it can be discarded after boot. This
+ *	function will perform a shallow copy for the mapping entries.
+ * @num_maps: the number of maps in the mapping table
+ */
+int pinctrl_register_mappings(struct pinctrl_map const *maps,
+			      unsigned num_maps)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int i, ret;
 	struct pinctrl_maps *maps_node;
@@ -1020,13 +1151,21 @@ int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 		case PIN_MAP_TYPE_MUX_GROUP:
 			ret = pinmux_validate_map(&maps[i], i);
 			if (ret < 0)
+<<<<<<< HEAD
 				return ret;
+=======
+				return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		case PIN_MAP_TYPE_CONFIGS_PIN:
 		case PIN_MAP_TYPE_CONFIGS_GROUP:
 			ret = pinconf_validate_map(&maps[i], i);
 			if (ret < 0)
+<<<<<<< HEAD
 				return ret;
+=======
+				return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		default:
 			pr_err("failed to register map %s (%d): invalid type given\n",
@@ -1042,6 +1181,7 @@ int pinctrl_register_map(struct pinctrl_map const *maps, unsigned num_maps,
 	}
 
 	maps_node->num_maps = num_maps;
+<<<<<<< HEAD
 	if (dup) {
 		maps_node->maps = kmemdup(maps, sizeof(*maps) * num_maps,
 					  GFP_KERNEL);
@@ -1111,6 +1251,21 @@ int pinctrl_force_default(struct pinctrl_dev *pctldev)
 	return 0;
 }
 EXPORT_SYMBOL_GPL(pinctrl_force_default);
+=======
+	maps_node->maps = kmemdup(maps, sizeof(*maps) * num_maps, GFP_KERNEL);
+	if (!maps_node->maps) {
+		pr_err("failed to duplicate mapping table\n");
+		kfree(maps_node);
+		return -ENOMEM;
+	}
+
+	mutex_lock(&pinctrl_mutex);
+	list_add_tail(&maps_node->node, &pinctrl_maps);
+	mutex_unlock(&pinctrl_mutex);
+
+	return 0;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_DEBUG_FS
 
@@ -1153,6 +1308,7 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
 {
 	struct pinctrl_dev *pctldev = s->private;
 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
+<<<<<<< HEAD
 	unsigned ngroups, selector = 0;
 
 	ngroups = ops->get_groups_count(pctldev);
@@ -1164,6 +1320,17 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
 		unsigned num_pins;
 		const char *gname = ops->get_group_name(pctldev, selector);
 		const char *pname;
+=======
+	unsigned selector = 0;
+
+	mutex_lock(&pinctrl_mutex);
+
+	seq_puts(s, "registered pin groups:\n");
+	while (ops->list_groups(pctldev, selector) >= 0) {
+		const unsigned *pins;
+		unsigned num_pins;
+		const char *gname = ops->get_group_name(pctldev, selector);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		int ret;
 		int i;
 
@@ -1173,6 +1340,7 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
 			seq_printf(s, "%s [ERROR GETTING PINS]\n",
 				   gname);
 		else {
+<<<<<<< HEAD
 			seq_printf(s, "group: %s\n", gname);
 			for (i = 0; i < num_pins; i++) {
 				pname = pin_get_name(pctldev, pins[i]);
@@ -1183,6 +1351,12 @@ static int pinctrl_groups_show(struct seq_file *s, void *what)
 				seq_printf(s, "pin %d (%s)\n", pins[i], pname);
 			}
 			seq_puts(s, "\n");
+=======
+			seq_printf(s, "group: %s, pins = [ ", gname);
+			for (i = 0; i < num_pins; i++)
+				seq_printf(s, "%d ", pins[i]);
+			seq_puts(s, "]\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		selector++;
 	}
@@ -1481,14 +1655,21 @@ static int pinctrl_check_ops(struct pinctrl_dev *pctldev)
 	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
 
 	if (!ops ||
+<<<<<<< HEAD
 	    !ops->get_groups_count ||
+=======
+	    !ops->list_groups ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    !ops->get_group_name ||
 	    !ops->get_group_pins)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (ops->dt_node_to_map && !ops->dt_free_map)
 		return -EINVAL;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -1504,9 +1685,15 @@ struct pinctrl_dev *pinctrl_register(struct pinctrl_desc *pctldesc,
 	struct pinctrl_dev *pctldev;
 	int ret;
 
+<<<<<<< HEAD
 	if (!pctldesc)
 		return NULL;
 	if (!pctldesc->name)
+=======
+	if (pctldesc == NULL)
+		return NULL;
+	if (pctldesc->name == NULL)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return NULL;
 
 	pctldev = kzalloc(sizeof(*pctldev), GFP_KERNEL);
@@ -1524,19 +1711,36 @@ struct pinctrl_dev *pinctrl_register(struct pinctrl_desc *pctldesc,
 	pctldev->dev = dev;
 
 	/* check core ops for sanity */
+<<<<<<< HEAD
 	if (pinctrl_check_ops(pctldev)) {
 		dev_err(dev, "pinctrl ops lacks necessary functions\n");
+=======
+	ret = pinctrl_check_ops(pctldev);
+	if (ret) {
+		pr_err("%s pinctrl ops lacks necessary functions\n",
+			pctldesc->name);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out_err;
 	}
 
 	/* If we're implementing pinmuxing, check the ops for sanity */
 	if (pctldesc->pmxops) {
+<<<<<<< HEAD
 		if (pinmux_check_ops(pctldev))
 			goto out_err;
+=======
+		ret = pinmux_check_ops(pctldev);
+		if (ret) {
+			pr_err("%s pinmux ops lacks necessary functions\n",
+			       pctldesc->name);
+			goto out_err;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* If we're implementing pinconfig, check the ops for sanity */
 	if (pctldesc->confops) {
+<<<<<<< HEAD
 		if (pinconf_check_ops(pctldev))
 			goto out_err;
 	}
@@ -1546,6 +1750,22 @@ struct pinctrl_dev *pinctrl_register(struct pinctrl_desc *pctldesc,
 	ret = pinctrl_register_pins(pctldev, pctldesc->pins, pctldesc->npins);
 	if (ret) {
 		dev_err(dev, "error during pin registration\n");
+=======
+		ret = pinconf_check_ops(pctldev);
+		if (ret) {
+			pr_err("%s pin config ops lacks necessary functions\n",
+			       pctldesc->name);
+			goto out_err;
+		}
+	}
+
+	/* Register all the pins */
+	pr_debug("try to register %d pins on %s...\n",
+		 pctldesc->npins, pctldesc->name);
+	ret = pinctrl_register_pins(pctldev, pctldesc->pins, pctldesc->npins);
+	if (ret) {
+		pr_err("error during pin registration\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pinctrl_free_pindescs(pctldev, pctldesc->pins,
 				      pctldesc->npins);
 		goto out_err;
@@ -1557,6 +1777,7 @@ struct pinctrl_dev *pinctrl_register(struct pinctrl_desc *pctldesc,
 
 	pctldev->p = pinctrl_get_locked(pctldev->dev);
 	if (!IS_ERR(pctldev->p)) {
+<<<<<<< HEAD
 		pctldev->hog_default =
 			pinctrl_lookup_state_locked(pctldev->p,
 						    PINCTRL_STATE_DEFAULT);
@@ -1574,6 +1795,13 @@ struct pinctrl_dev *pinctrl_register(struct pinctrl_desc *pctldesc,
 						    PINCTRL_STATE_SLEEP);
 		if (IS_ERR(pctldev->hog_sleep))
 			dev_dbg(dev, "failed to lookup the sleep state\n");
+=======
+		struct pinctrl_state *s =
+			pinctrl_lookup_state_locked(pctldev->p,
+						    PINCTRL_STATE_DEFAULT);
+		if (!IS_ERR(s))
+			pinctrl_select_state_locked(pctldev->p, s);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	mutex_unlock(&pinctrl_mutex);
@@ -1596,7 +1824,10 @@ EXPORT_SYMBOL_GPL(pinctrl_register);
  */
 void pinctrl_unregister(struct pinctrl_dev *pctldev)
 {
+<<<<<<< HEAD
 	struct pinctrl_gpio_range *range, *n;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (pctldev == NULL)
 		return;
 
@@ -1612,10 +1843,13 @@ void pinctrl_unregister(struct pinctrl_dev *pctldev)
 	/* Destroy descriptor tree */
 	pinctrl_free_pindescs(pctldev, pctldev->desc->pins,
 			      pctldev->desc->npins);
+<<<<<<< HEAD
 	/* remove gpio ranges map */
 	list_for_each_entry_safe(range, n, &pctldev->gpio_ranges, node)
 		list_del(&range->node);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(pctldev);
 
 	mutex_unlock(&pinctrl_mutex);

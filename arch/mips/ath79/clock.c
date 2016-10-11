@@ -159,7 +159,11 @@ static void __init ar933x_clocks_init(void)
 		ath79_ahb_clk.rate = freq / t;
 	}
 
+<<<<<<< HEAD
 	ath79_wdt_clk.rate = ath79_ref_clk.rate;
+=======
+	ath79_wdt_clk.rate = ath79_ahb_clk.rate;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ath79_uart_clk.rate = ath79_ref_clk.rate;
 }
 

@@ -1058,6 +1058,10 @@ static int yam_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 		break;
 
 	case SIOCYAMGCFG:
+<<<<<<< HEAD
+=======
+		memset(&yi, 0, sizeof(yi));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		yi.cfg.mask = 0xffffffff;
 		yi.cfg.iobase = yp->iobase;
 		yi.cfg.irq = yp->irq;

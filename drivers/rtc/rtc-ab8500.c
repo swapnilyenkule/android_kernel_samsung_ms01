@@ -422,7 +422,11 @@ static int __devinit ab8500_rtc_probe(struct platform_device *pdev)
 	}
 
 	err = request_threaded_irq(irq, NULL, rtc_alarm_handler,
+<<<<<<< HEAD
 		IRQF_NO_SUSPEND, "ab8500-rtc", rtc);
+=======
+		IRQF_NO_SUSPEND | IRQF_ONESHOT, "ab8500-rtc", rtc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err < 0) {
 		rtc_device_unregister(rtc);
 		return err;

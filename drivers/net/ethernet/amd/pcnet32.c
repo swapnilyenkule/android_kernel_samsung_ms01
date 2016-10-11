@@ -1526,7 +1526,11 @@ pcnet32_probe1(unsigned long ioaddr, int shared, struct pci_dev *pdev)
 {
 	struct pcnet32_private *lp;
 	int i, media;
+<<<<<<< HEAD
 	int fdx, mii, fset, dxsuflo;
+=======
+	int fdx, mii, fset, dxsuflo, sram;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int chip_version;
 	char *chipname;
 	struct net_device *dev;
@@ -1563,7 +1567,11 @@ pcnet32_probe1(unsigned long ioaddr, int shared, struct pci_dev *pdev)
 	}
 
 	/* initialize variables */
+<<<<<<< HEAD
 	fdx = mii = fset = dxsuflo = 0;
+=======
+	fdx = mii = fset = dxsuflo = sram = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	chip_version = (chip_version >> 12) & 0xffff;
 
 	switch (chip_version) {
@@ -1596,6 +1604,10 @@ pcnet32_probe1(unsigned long ioaddr, int shared, struct pci_dev *pdev)
 		chipname = "PCnet/FAST III 79C973";	/* PCI */
 		fdx = 1;
 		mii = 1;
+<<<<<<< HEAD
+=======
+		sram = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case 0x2626:
 		chipname = "PCnet/Home 79C978";	/* PCI */
@@ -1619,6 +1631,10 @@ pcnet32_probe1(unsigned long ioaddr, int shared, struct pci_dev *pdev)
 		chipname = "PCnet/FAST III 79C975";	/* PCI */
 		fdx = 1;
 		mii = 1;
+<<<<<<< HEAD
+=======
+		sram = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case 0x2628:
 		chipname = "PCnet/PRO 79C976";
@@ -1647,6 +1663,34 @@ pcnet32_probe1(unsigned long ioaddr, int shared, struct pci_dev *pdev)
 		dxsuflo = 1;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * The Am79C973/Am79C975 controllers come with 12K of SRAM
+	 * which we can use for the Tx/Rx buffers but most importantly,
+	 * the use of SRAM allow us to use the BCR18:NOUFLO bit to avoid
+	 * Tx fifo underflows.
+	 */
+	if (sram) {
+		/*
+		 * The SRAM is being configured in two steps. First we
+		 * set the SRAM size in the BCR25:SRAM_SIZE bits. According
+		 * to the datasheet, each bit corresponds to a 512-byte
+		 * page so we can have at most 24 pages. The SRAM_SIZE
+		 * holds the value of the upper 8 bits of the 16-bit SRAM size.
+		 * The low 8-bits start at 0x00 and end at 0xff. So the
+		 * address range is from 0x0000 up to 0x17ff. Therefore,
+		 * the SRAM_SIZE is set to 0x17. The next step is to set
+		 * the BCR26:SRAM_BND midway through so the Tx and Rx
+		 * buffers can share the SRAM equally.
+		 */
+		a->write_bcr(ioaddr, 25, 0x17);
+		a->write_bcr(ioaddr, 26, 0xc);
+		/* And finally enable the NOUFLO bit */
+		a->write_bcr(ioaddr, 18, a->read_bcr(ioaddr, 18) | (1 << 11));
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev = alloc_etherdev(sizeof(*lp));
 	if (!dev) {
 		ret = -ENOMEM;

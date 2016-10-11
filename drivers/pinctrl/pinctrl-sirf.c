@@ -853,14 +853,27 @@ static const struct sirfsoc_pin_group sirfsoc_pin_groups[] = {
 	SIRFSOC_PIN_GROUP("gpsgrp", gps_pins),
 };
 
+<<<<<<< HEAD
 static int sirfsoc_get_groups_count(struct pinctrl_dev *pctldev)
 {
 	return ARRAY_SIZE(sirfsoc_pin_groups);
+=======
+static int sirfsoc_list_groups(struct pinctrl_dev *pctldev, unsigned selector)
+{
+	if (selector >= ARRAY_SIZE(sirfsoc_pin_groups))
+		return -EINVAL;
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *sirfsoc_get_group_name(struct pinctrl_dev *pctldev,
 				       unsigned selector)
 {
+<<<<<<< HEAD
+=======
+	if (selector >= ARRAY_SIZE(sirfsoc_pin_groups))
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return sirfsoc_pin_groups[selector].name;
 }
 
@@ -868,6 +881,11 @@ static int sirfsoc_get_group_pins(struct pinctrl_dev *pctldev, unsigned selector
 			       const unsigned **pins,
 			       unsigned *num_pins)
 {
+<<<<<<< HEAD
+=======
+	if (selector >= ARRAY_SIZE(sirfsoc_pin_groups))
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*pins = sirfsoc_pin_groups[selector].pins;
 	*num_pins = sirfsoc_pin_groups[selector].num_pins;
 	return 0;
@@ -880,7 +898,11 @@ static void sirfsoc_pin_dbg_show(struct pinctrl_dev *pctldev, struct seq_file *s
 }
 
 static struct pinctrl_ops sirfsoc_pctrl_ops = {
+<<<<<<< HEAD
 	.get_groups_count = sirfsoc_get_groups_count,
+=======
+	.list_groups = sirfsoc_list_groups,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_group_name = sirfsoc_get_group_name,
 	.get_group_pins = sirfsoc_get_group_pins,
 	.pin_dbg_show = sirfsoc_pin_dbg_show,
@@ -1027,9 +1049,17 @@ static void sirfsoc_pinmux_disable(struct pinctrl_dev *pmxdev, unsigned selector
 	sirfsoc_pinmux_endisable(spmx, selector, false);
 }
 
+<<<<<<< HEAD
 static int sirfsoc_pinmux_get_funcs_count(struct pinctrl_dev *pmxdev)
 {
 	return ARRAY_SIZE(sirfsoc_pmx_functions);
+=======
+static int sirfsoc_pinmux_list_funcs(struct pinctrl_dev *pmxdev, unsigned selector)
+{
+	if (selector >= ARRAY_SIZE(sirfsoc_pmx_functions))
+		return -EINVAL;
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *sirfsoc_pinmux_get_func_name(struct pinctrl_dev *pctldev,
@@ -1066,9 +1096,15 @@ static int sirfsoc_pinmux_request_gpio(struct pinctrl_dev *pmxdev,
 }
 
 static struct pinmux_ops sirfsoc_pinmux_ops = {
+<<<<<<< HEAD
 	.enable = sirfsoc_pinmux_enable,
 	.disable = sirfsoc_pinmux_disable,
 	.get_functions_count = sirfsoc_pinmux_get_funcs_count,
+=======
+	.list_functions = sirfsoc_pinmux_list_funcs,
+	.enable = sirfsoc_pinmux_enable,
+	.disable = sirfsoc_pinmux_disable,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_function_name = sirfsoc_pinmux_get_func_name,
 	.get_function_groups = sirfsoc_pinmux_get_groups,
 	.gpio_request_enable = sirfsoc_pinmux_request_gpio,

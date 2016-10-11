@@ -124,6 +124,7 @@ config GPIO_MSM_V2
 	  Qualcomm MSM chips.  Most of the pins on the MSM can be
 	  selected for GPIO, and are controlled by this driver.
 
+<<<<<<< HEAD
 config GPIO_MSM_V3
 	tristate "Qualcomm MSM GPIO v3"
 	depends on GPIOLIB && ARCH_MSM
@@ -141,6 +142,8 @@ config GPIO_FSM9XXX
 	  Most of the pins on the MSM can be selected for GPIO, and are
 	  controlled by this driver.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config GPIO_MXC
 	def_bool y
 	depends on ARCH_MXC
@@ -220,6 +223,7 @@ config GPIO_GE_FPGA
 
 comment "I2C GPIO expanders:"
 
+<<<<<<< HEAD
 config GPIO_MC5587
 	bool "MC5587 GPIO expander"
 	depends on I2C
@@ -245,6 +249,8 @@ config GPIO_PCAL6416A
 	help
 	  GPIO driver for PCAL6416A I2C-based GPIO expander.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config GPIO_MAX7300
 	tristate "Maxim MAX7300 GPIO expander"
 	depends on I2C
@@ -556,6 +562,7 @@ config GPIO_TPS65910
 	help
 	  Select this option to enable GPIO driver for the TPS65910
 	  chip family.
+<<<<<<< HEAD
 
 config GPIO_PM8XXX
 	tristate "Qualcomm PM8xxx GPIO support"
@@ -602,4 +609,6 @@ config GPIO_QPNP_PIN_DEBUG
 
 config SEC_GPIO_DVS
 	tristate "setting Samsung GPIO debugging and verification system"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif

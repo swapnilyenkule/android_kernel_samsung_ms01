@@ -401,7 +401,23 @@ static void txstate(struct musb *musb, struct musb_request *req)
 					csr |= (MUSB_TXCSR_DMAENAB
 							| MUSB_TXCSR_DMAMODE
 							| MUSB_TXCSR_MODE);
+<<<<<<< HEAD
 					if (!musb_ep->hb_mult)
+=======
+					/*
+					 * Enable Autoset according to table
+					 * below
+					 * bulk_split hb_mult	Autoset_Enable
+					 *	0	0	Yes(Normal)
+					 *	0	>0	No(High BW ISO)
+					 *	1	0	Yes(HS bulk)
+					 *	1	>0	Yes(FS bulk)
+					 */
+					if (!musb_ep->hb_mult ||
+						(musb_ep->hb_mult &&
+						 can_bulk_split(musb,
+						    musb_ep->type)))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 						csr |= MUSB_TXCSR_AUTOSET;
 				}
 				csr &= ~MUSB_TXCSR_P_UNDERRUN;
@@ -1100,11 +1116,23 @@ static int musb_gadget_enable(struct usb_ep *ep,
 		/* Set TXMAXP with the FIFO size of the endpoint
 		 * to disable double buffering mode.
 		 */
+<<<<<<< HEAD
 		if (musb->double_buffer_not_ok)
 			musb_writew(regs, MUSB_TXMAXP, hw_ep->max_packet_sz_tx);
 		else
 			musb_writew(regs, MUSB_TXMAXP, musb_ep->packet_sz
 					| (musb_ep->hb_mult << 11));
+=======
+		if (musb->double_buffer_not_ok) {
+			musb_writew(regs, MUSB_TXMAXP, hw_ep->max_packet_sz_tx);
+		} else {
+			if (can_bulk_split(musb, musb_ep->type))
+				musb_ep->hb_mult = (hw_ep->max_packet_sz_tx /
+							musb_ep->packet_sz) - 1;
+			musb_writew(regs, MUSB_TXMAXP, musb_ep->packet_sz
+					| (musb_ep->hb_mult << 11));
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		csr = MUSB_TXCSR_MODE | MUSB_TXCSR_CLRDATATOG;
 		if (musb_readw(regs, MUSB_TXCSR)
@@ -1232,6 +1260,10 @@ static int musb_gadget_disable(struct usb_ep *ep)
 	}
 
 	musb_ep->desc = NULL;
+<<<<<<< HEAD
+=======
+	musb_ep->end_point.desc = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* abort all pending DMA and requests */
 	nuke(musb_ep, -ESHUTDOWN);

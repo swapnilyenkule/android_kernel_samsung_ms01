@@ -342,8 +342,13 @@ static int camelot_pcm_new(struct snd_soc_pcm_runtime *rtd)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct snd_soc_platform sh7760_soc_platform = {
 	.pcm_ops 	= &camelot_pcm_ops,
+=======
+static struct snd_soc_platform_driver sh7760_soc_platform = {
+	.ops		= &camelot_pcm_ops,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.pcm_new	= camelot_pcm_new,
 	.pcm_free	= camelot_pcm_free,
 };

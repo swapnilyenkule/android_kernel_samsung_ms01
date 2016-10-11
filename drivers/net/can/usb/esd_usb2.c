@@ -1094,6 +1094,10 @@ static void esd_usb2_disconnect(struct usb_interface *intf)
 			}
 		}
 		unlink_all_urbs(dev);
+<<<<<<< HEAD
+=======
+		kfree(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 

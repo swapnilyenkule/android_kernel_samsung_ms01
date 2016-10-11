@@ -8,7 +8,10 @@
  * published by the Free Software Foundation.
  */
 #include <linux/errno.h>
+<<<<<<< HEAD
 #include <linux/random.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/signal.h>
 #include <linux/personality.h>
 #include <linux/freezer.h>
@@ -17,10 +20,17 @@
 
 #include <asm/elf.h>
 #include <asm/cacheflush.h>
+<<<<<<< HEAD
 #include <asm/traps.h>
 #include <asm/ucontext.h>
 #include <asm/unistd.h>
 #include <asm/vfp.h>
+=======
+#include <asm/ucontext.h>
+#include <asm/unistd.h>
+#include <asm/vfp.h>
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "signal.h"
 
 #define _BLOCKABLE (~(sigmask(SIGKILL) | sigmask(SIGSTOP)))
@@ -113,8 +123,11 @@ sys_sigaction(int sig, const struct old_sigaction __user *act,
 	return ret;
 }
 
+<<<<<<< HEAD
 static unsigned long signal_return_offset;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_CRUNCH
 static int preserve_crunch_context(struct crunch_sigframe __user *frame)
 {
@@ -440,12 +453,26 @@ setup_return(struct pt_regs *regs, struct k_sigaction *ka,
 		 */
 		thumb = handler & 1;
 
+<<<<<<< HEAD
 #if __LINUX_ARM_ARCH__ >= 7
 		/*
 		 * Clear the If-Then Thumb-2 execution state
 		 * ARM spec requires this to be all 000s in ARM mode
 		 * Snapdragon S4/Krait misbehaves on a Thumb=>ARM
 		 * signal transition without this.
+=======
+#if __LINUX_ARM_ARCH__ >= 6
+		/*
+		 * Clear the If-Then Thumb-2 execution state.  ARM spec
+		 * requires this to be all 000s in ARM mode.  Snapdragon
+		 * S4/Krait misbehaves on a Thumb=>ARM signal transition
+		 * without this.
+		 *
+		 * We must do this whenever we are running on a Thumb-2
+		 * capable CPU, which includes ARMv6T2.  However, we elect
+		 * to do this whenever we're on an ARMv6 or later CPU for
+		 * simplicity.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		 */
 		cpsr &= ~PSR_IT_MASK;
 #endif
@@ -469,6 +496,7 @@ setup_return(struct pt_regs *regs, struct k_sigaction *ka,
 		    __put_user(sigreturn_codes[idx+1], rc+1))
 			return 1;
 
+<<<<<<< HEAD
 #ifdef CONFIG_MMU
 		if (cpsr & MODE32_BIT) {
 			struct mm_struct *mm = current->mm;
@@ -483,6 +511,15 @@ setup_return(struct pt_regs *regs, struct k_sigaction *ka,
 		} else
 #endif
 		{
+=======
+		if (cpsr & MODE32_BIT) {
+			/*
+			 * 32-bit code can use the new high-page
+			 * signal return code support.
+			 */
+			retcode = KERN_SIGRETURN_CODE + (idx << 2) + thumb;
+		} else {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/*
 			 * Ensure that the instruction cache sees
 			 * the return code written onto the stack.
@@ -755,6 +792,7 @@ do_notify_resume(struct pt_regs *regs, unsigned int thread_flags, int syscall)
 			key_replace_session_keyring();
 	}
 }
+<<<<<<< HEAD
 
 struct page *get_signal_page(void)
 {
@@ -785,3 +823,5 @@ struct page *get_signal_page(void)
 
 	return page;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -18,7 +18,10 @@
 #include <linux/irq.h>
 #include <linux/io.h>
 #include <linux/spinlock.h>
+<<<<<<< HEAD
 #include <video/vga.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/irq.h>
 #include <asm/mach/pci.h>
@@ -298,7 +301,10 @@ void __init dc21285_preinit(void)
 	int cfn_mode;
 
 	pcibios_min_mem = 0x81000000;
+<<<<<<< HEAD
 	vga_base = PCIMEM_BASE;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mem_size = (unsigned int)high_memory - PAGE_OFFSET;
 	for (mem_mask = 0x00100000; mem_mask < 0x10000000; mem_mask <<= 1)

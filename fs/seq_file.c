@@ -12,10 +12,13 @@
 
 #include <asm/uaccess.h>
 #include <asm/page.h>
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 #include <linux/mm.h>
 #include <linux/vmalloc.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 /*
@@ -135,6 +138,7 @@ static int traverse(struct seq_file *m, loff_t offset)
 
 Eoverflow:
 	m->op->stop(m, p);
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 	is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 	m->size <<= 1;
@@ -146,6 +150,10 @@ Eoverflow:
 	kfree(m->buf);
 	m->buf = kmalloc(m->size <<= 1, GFP_KERNEL);
 #endif
+=======
+	kfree(m->buf);
+	m->buf = kmalloc(m->size <<= 1, GFP_KERNEL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return !m->buf ? -ENOMEM : -EAGAIN;
 }
 
@@ -240,6 +248,7 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 		if (m->count < m->size)
 			goto Fill;
 		m->op->stop(m, p);
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 		is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 		m->size <<= 1;
@@ -251,6 +260,10 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
 		kfree(m->buf);
 		m->buf = kmalloc(m->size <<= 1, GFP_KERNEL);
 #endif
+=======
+		kfree(m->buf);
+		m->buf = kmalloc(m->size <<= 1, GFP_KERNEL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!m->buf)
 			goto Enomem;
 		m->count = 0;
@@ -365,11 +378,15 @@ EXPORT_SYMBOL(seq_lseek);
 int seq_release(struct inode *inode, struct file *file)
 {
 	struct seq_file *m = file->private_data;
+<<<<<<< HEAD
 #ifdef CONFIG_LOW_ORDER_SEQ_MALLOC
 	is_vmalloc_addr(m->buf) ? vfree(m->buf) : kfree(m->buf);
 #else
 	kfree(m->buf);
 #endif
+=======
+	kfree(m->buf);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(m);
 	return 0;
 }

@@ -44,12 +44,22 @@ static ssize_t madc_read(struct device *dev,
 			 struct device_attribute *devattr, char *buf)
 {
 	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
+<<<<<<< HEAD
 	struct twl4030_madc_request req;
 	long val;
 
 	req.channels = (1 << attr->index);
 	req.method = TWL4030_MADC_SW2;
 	req.func_cb = NULL;
+=======
+	struct twl4030_madc_request req = {
+		.channels = 1 << attr->index,
+		.method = TWL4030_MADC_SW2,
+		.type = TWL4030_MADC_WAIT,
+	};
+	long val;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	val = twl4030_madc_conversion(&req);
 	if (val < 0)
 		return val;

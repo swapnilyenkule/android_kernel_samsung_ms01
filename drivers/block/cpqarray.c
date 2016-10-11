@@ -1195,6 +1195,10 @@ out_passthru:
 		ida_pci_info_struct pciinfo;
 
 		if (!arg) return -EINVAL;
+<<<<<<< HEAD
+=======
+		memset(&pciinfo, 0, sizeof(pciinfo));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pciinfo.bus = host->pci_dev->bus->number;
 		pciinfo.dev_fn = host->pci_dev->devfn;
 		pciinfo.board_id = host->board_id;

@@ -1468,7 +1468,11 @@ static int sip_help_tcp(struct sk_buff *skb, unsigned int protoff,
 
 		msglen = origlen = end - dptr;
 		if (msglen > datalen)
+<<<<<<< HEAD
 			return NF_DROP;
+=======
+			return NF_ACCEPT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		ret = process_sip_msg(skb, ct, dataoff, &dptr, &msglen);
 		if (ret != NF_ACCEPT)

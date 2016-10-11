@@ -831,11 +831,19 @@ extern int iscsit_stop_time2retain_timer(struct iscsi_session *sess)
 		return 0;
 
 	sess->time2retain_timer_flags |= ISCSI_TF_STOP;
+<<<<<<< HEAD
 	spin_unlock_bh(&se_tpg->session_lock);
 
 	del_timer_sync(&sess->time2retain_timer);
 
 	spin_lock_bh(&se_tpg->session_lock);
+=======
+	spin_unlock(&se_tpg->session_lock);
+
+	del_timer_sync(&sess->time2retain_timer);
+
+	spin_lock(&se_tpg->session_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sess->time2retain_timer_flags &= ~ISCSI_TF_RUNNING;
 	pr_debug("Stopped Time2Retain Timer for SID: %u\n",
 			sess->sid);

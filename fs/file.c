@@ -32,10 +32,13 @@ int sysctl_nr_open __read_mostly = 1024*1024;
 int sysctl_nr_open_min = BITS_PER_LONG;
 int sysctl_nr_open_max = 1024 * 1024; /* raised later */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 extern void	sec_debug_EMFILE_error_proc(unsigned long files_addr);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * We use this list to defer free fdtables that have vmalloced
  * sets/arrays. By keeping a per-cpu list, we avoid having to embed
@@ -51,7 +54,11 @@ static void *alloc_fdmem(size_t size)
 	 * vmalloc() if the allocation size will be considered "large" by the VM.
 	 */
 	if (size <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)) {
+<<<<<<< HEAD
 		void *data = kmalloc(size, GFP_KERNEL|__GFP_NOWARN);
+=======
+		void *data = kmalloc(size, GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (data != NULL)
 			return data;
 	}
@@ -220,10 +227,13 @@ static int expand_fdtable(struct files_struct *files, int nr)
 	 * caller and alloc_fdtable().  Cheaper to catch it here...
 	 */
 	if (unlikely(new_fdt->max_fds <= nr)) {
+<<<<<<< HEAD
 
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 		sec_debug_EMFILE_error_proc((unsigned long)files);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__free_fdtable(new_fdt);
 		return -EMFILE;
 	}
@@ -259,11 +269,22 @@ int expand_files(struct files_struct *files, int nr)
 
 	fdt = files_fdtable(files);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * N.B. For clone tasks sharing a files structure, this test
+	 * will limit the total number of files that can be opened.
+	 */
+	if (nr >= rlimit(RLIMIT_NOFILE))
+		return -EMFILE;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Do we need to expand? */
 	if (nr < fdt->max_fds)
 		return 0;
 
 	/* Can we expand? */
+<<<<<<< HEAD
 	if (nr >= sysctl_nr_open) {
 
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
@@ -271,6 +292,10 @@ int expand_files(struct files_struct *files, int nr)
 #endif
 		return -EMFILE;
 	}
+=======
+	if (nr >= sysctl_nr_open)
+		return -EMFILE;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* All good, so we try */
 	return expand_fdtable(files, nr);
@@ -339,10 +364,13 @@ struct files_struct *dup_fd(struct files_struct *oldf, int *errorp)
 
 		/* beyond sysctl_nr_open; nothing to do */
 		if (unlikely(new_fdt->max_fds < open_files)) {
+<<<<<<< HEAD
 
 #ifdef CONFIG_SEC_FILE_LEAK_DEBUG
 			sec_debug_EMFILE_error_proc((unsigned long)oldf);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			__free_fdtable(new_fdt);
 			*errorp = -EMFILE;
 			goto out_release;
@@ -441,7 +469,10 @@ int alloc_fd(unsigned start, unsigned flags)
 {
 	struct files_struct *files = current->files;
 	unsigned int fd;
+<<<<<<< HEAD
 	unsigned end = rlimit(RLIMIT_NOFILE);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int error;
 	struct fdtable *fdt;
 
@@ -455,6 +486,7 @@ repeat:
 	if (fd < fdt->max_fds)
 		fd = find_next_zero_bit(fdt->open_fds, fdt->max_fds, fd);
 
+<<<<<<< HEAD
 	/*
 	 * N.B. For clone tasks sharing a files structure, this test
 	 * will limit the total number of files that can be opened.
@@ -467,6 +499,8 @@ repeat:
 		goto out;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	error = expand_files(files, fd);
 	if (error < 0)
 		goto out;
@@ -499,7 +533,10 @@ out:
 	spin_unlock(&files->file_lock);
 	return error;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(alloc_fd);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int get_unused_fd(void)
 {

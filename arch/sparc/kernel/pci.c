@@ -409,7 +409,11 @@ static void __devinit pci_cfg_fake_ranges(struct pci_dev *dev,
 		res2.flags = res->flags;
 		region.start = base;
 		region.end = limit + 0xfff;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, &res2, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, &res2, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!res->start)
 			res->start = res2.start;
 		if (!res->end)
@@ -427,7 +431,11 @@ static void __devinit pci_cfg_fake_ranges(struct pci_dev *dev,
 			      IORESOURCE_MEM);
 		region.start = base;
 		region.end = limit + 0xfffff;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	pci_read_config_word(dev, PCI_PREF_MEMORY_BASE, &mem_base_lo);
@@ -458,7 +466,11 @@ static void __devinit pci_cfg_fake_ranges(struct pci_dev *dev,
 			      IORESOURCE_MEM | IORESOURCE_PREFETCH);
 		region.start = base;
 		region.end = limit + 0xfffff;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 
@@ -480,15 +492,25 @@ static void __devinit apb_fake_ranges(struct pci_dev *dev,
 	res->flags = IORESOURCE_IO;
 	region.start = (first << 21);
 	region.end = (last << 21) + ((1 << 21) - 1);
+<<<<<<< HEAD
 	pcibios_bus_to_resource(dev, res, &region);
+=======
+	pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pci_read_config_byte(dev, APB_MEM_ADDRESS_MAP, &map);
 	apb_calc_first_last(map, &first, &last);
 	res = bus->resource[1];
 	res->flags = IORESOURCE_MEM;
+<<<<<<< HEAD
 	region.start = (first << 21);
 	region.end = (last << 21) + ((1 << 21) - 1);
 	pcibios_bus_to_resource(dev, res, &region);
+=======
+	region.start = (first << 29);
+	region.end = (last << 29) + ((1 << 29) - 1);
+	pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void __devinit pci_of_scan_bus(struct pci_pbm_info *pbm,
@@ -579,7 +601,11 @@ static void __devinit of_scan_pci_bridge(struct pci_pbm_info *pbm,
 		res->flags = flags;
 		region.start = GET_64BIT(ranges, 1);
 		region.end = region.start + size - 1;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 after_ranges:
 	sprintf(bus->name, "PCI Bus %04x:%02x", pci_domain_nr(bus),

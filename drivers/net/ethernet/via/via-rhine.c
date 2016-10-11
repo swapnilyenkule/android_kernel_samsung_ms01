@@ -32,7 +32,11 @@
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 #define DRV_NAME	"via-rhine"
+<<<<<<< HEAD
 #define DRV_VERSION	"1.5.0"
+=======
+#define DRV_VERSION	"1.5.1"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DRV_RELDATE	"2010-10-09"
 
 #include <linux/types.h>
@@ -1601,6 +1605,10 @@ static void rhine_reset_task(struct work_struct *work)
 		goto out_unlock;
 
 	napi_disable(&rp->napi);
+<<<<<<< HEAD
+=======
+	netif_tx_disable(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock_bh(&rp->lock);
 
 	/* clear all descriptors */
@@ -1684,7 +1692,16 @@ static netdev_tx_t rhine_start_tx(struct sk_buff *skb,
 		cpu_to_le32(TXDESC | (skb->len >= ETH_ZLEN ? skb->len : ETH_ZLEN));
 
 	if (unlikely(vlan_tx_tag_present(skb))) {
+<<<<<<< HEAD
 		rp->tx_ring[entry].tx_status = cpu_to_le32((vlan_tx_tag_get(skb)) << 16);
+=======
+		u16 vid_pcp = vlan_tx_tag_get(skb);
+
+		/* drop CFI/DEI bit, register needs VID and PCP */
+		vid_pcp = (vid_pcp & VLAN_VID_MASK) |
+			  ((vid_pcp & VLAN_PRIO_MASK) >> 1);
+		rp->tx_ring[entry].tx_status = cpu_to_le32((vid_pcp) << 16);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* request tagging */
 		rp->tx_ring[entry].desc_length |= cpu_to_le32(0x020000);
 	}
@@ -1802,7 +1819,11 @@ static void rhine_tx(struct net_device *dev)
 					 rp->tx_skbuff[entry]->len,
 					 PCI_DMA_TODEVICE);
 		}
+<<<<<<< HEAD
 		dev_kfree_skb_irq(rp->tx_skbuff[entry]);
+=======
+		dev_kfree_skb(rp->tx_skbuff[entry]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rp->tx_skbuff[entry] = NULL;
 		entry = (++rp->dirty_tx) % TX_RING_SIZE;
 	}
@@ -2011,11 +2032,15 @@ static void rhine_slow_event_task(struct work_struct *work)
 	if (intr_status & IntrPCIErr)
 		netif_warn(rp, hw, dev, "PCI error\n");
 
+<<<<<<< HEAD
 	napi_disable(&rp->napi);
 	rhine_irq_disable(rp);
 	/* Slow and safe. Consider __napi_schedule as a replacement ? */
 	napi_enable(&rp->napi);
 	napi_schedule(&rp->napi);
+=======
+	iowrite16(RHINE_EVENT & 0xffff, rp->base + IntrEnable);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 out_unlock:
 	mutex_unlock(&rp->task_lock);

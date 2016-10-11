@@ -38,13 +38,28 @@
 #include <linux/platform_device.h>
 
 #include "core.h"
+<<<<<<< HEAD
 #include "xhci.h"
+=======
+
+static struct resource generic_resources[] = {
+	{
+		.flags = IORESOURCE_IRQ,
+	},
+	{
+		.flags = IORESOURCE_MEM,
+	},
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int dwc3_host_init(struct dwc3 *dwc)
 {
 	struct platform_device	*xhci;
 	int			ret;
+<<<<<<< HEAD
 	struct xhci_plat_data	pdata;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	xhci = platform_device_alloc("xhci-hcd", -1);
 	if (!xhci) {
@@ -55,10 +70,15 @@ int dwc3_host_init(struct dwc3 *dwc)
 
 	dma_set_coherent_mask(&xhci->dev, dwc->dev->coherent_dma_mask);
 
+<<<<<<< HEAD
+=======
+	xhci->dev.parent	= dwc->dev;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	xhci->dev.dma_mask	= dwc->dev->dma_mask;
 	xhci->dev.dma_parms	= dwc->dev->dma_parms;
 
 	dwc->xhci = xhci;
+<<<<<<< HEAD
 	pdata.vendor = ((dwc->revision & DWC3_GSNPSID_MASK) >>
 			__ffs(DWC3_GSNPSID_MASK) & DWC3_GSNPSREV_MASK);
 	pdata.revision = dwc->revision & DWC3_GSNPSREV_MASK;
@@ -72,11 +92,23 @@ int dwc3_host_init(struct dwc3 *dwc)
 
 	ret = platform_device_add_resources(xhci, dwc->xhci_resources,
 						DWC3_XHCI_RESOURCES_NUM);
+=======
+
+	/* setup resources */
+	generic_resources[0].start = dwc->irq;
+
+	generic_resources[1].start = dwc->res->start;
+	generic_resources[1].end = dwc->res->start + 0x7fff;
+
+	ret = platform_device_add_resources(xhci, generic_resources,
+			ARRAY_SIZE(generic_resources));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ret) {
 		dev_err(dwc->dev, "couldn't add resources to xHCI device\n");
 		goto err1;
 	}
 
+<<<<<<< HEAD
 	/* Add XHCI device if !OTG, otherwise OTG takes care of this */
 	if (!dwc->dotg) {
 		xhci->dev.parent = dwc->dev;
@@ -85,6 +117,12 @@ int dwc3_host_init(struct dwc3 *dwc)
 			dev_err(dwc->dev, "failed to register xHCI device\n");
 			goto err1;
 		}
+=======
+	ret = platform_device_add(xhci);
+	if (ret) {
+		dev_err(dwc->dev, "failed to register xHCI device\n");
+		goto err1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return 0;
@@ -98,6 +136,10 @@ err0:
 
 void dwc3_host_exit(struct dwc3 *dwc)
 {
+<<<<<<< HEAD
 	if (!dwc->dotg)
 		platform_device_unregister(dwc->xhci);
+=======
+	platform_device_unregister(dwc->xhci);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }

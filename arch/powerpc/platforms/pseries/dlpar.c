@@ -416,6 +416,15 @@ static ssize_t dlpar_cpu_probe(const char *buf, size_t count)
 		goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	rc = dlpar_acquire_drc(drc_index);
+	if (rc) {
+		rc = -EINVAL;
+		goto out;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dn = dlpar_configure_connector(drc_index);
 	if (!dn) {
 		rc = -EINVAL;
@@ -436,6 +445,7 @@ static ssize_t dlpar_cpu_probe(const char *buf, size_t count)
 	kfree(dn->full_name);
 	dn->full_name = cpu_name;
 
+<<<<<<< HEAD
 	rc = dlpar_acquire_drc(drc_index);
 	if (rc) {
 		dlpar_free_cc_nodes(dn);
@@ -443,6 +453,8 @@ static ssize_t dlpar_cpu_probe(const char *buf, size_t count)
 		goto out;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rc = dlpar_attach_node(dn);
 	if (rc) {
 		dlpar_release_drc(drc_index);

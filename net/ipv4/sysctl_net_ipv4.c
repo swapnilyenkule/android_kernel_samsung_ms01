@@ -27,6 +27,10 @@
 #include <net/tcp_memcontrol.h>
 
 static int zero;
+<<<<<<< HEAD
+=======
+static int one = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int tcp_retr1_max = 255;
 static int ip_local_port_range_min[] = { 1, 1 };
 static int ip_local_port_range_max[] = { 65535, 65535 };
@@ -34,12 +38,19 @@ static int tcp_adv_win_scale_min = -31;
 static int tcp_adv_win_scale_max = 31;
 static int ip_ttl_min = 1;
 static int ip_ttl_max = 255;
+<<<<<<< HEAD
 static int ip_ping_group_range_min[] = { 0, 0 };
 static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
 static int tcp_delack_seg_min = TCP_DELACK_MIN;
 static int tcp_delack_seg_max = 60;
 static int tcp_use_userconfig_min;
 static int tcp_use_userconfig_max = 1;
+=======
+static int tcp_syn_retries_min = 1;
+static int tcp_syn_retries_max = MAX_TCP_SYNCNT;
+static int ip_ping_group_range_min[] = { 0, 0 };
+static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Update system visible IP port range */
 static void set_local_port_range(int range[2])
@@ -125,6 +136,7 @@ static int ipv4_ping_group_range(ctl_table *table, int write,
 	return ret;
 }
 
+<<<<<<< HEAD
 /* Validate changes from /proc interface. */
 static int proc_tcp_default_init_rwnd(ctl_table *ctl, int write,
 				      void __user *buffer,
@@ -140,6 +152,8 @@ static int proc_tcp_default_init_rwnd(ctl_table *ctl, int write,
 	return ret;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int proc_tcp_congestion_control(ctl_table *ctl, int write,
 				       void __user *buffer, size_t *lenp, loff_t *ppos)
 {
@@ -295,7 +309,13 @@ static struct ctl_table ipv4_table[] = {
 		.data		= &sysctl_tcp_syn_retries,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &tcp_syn_retries_min,
+		.extra2		= &tcp_syn_retries_max
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "tcp_synack_retries",
@@ -501,14 +521,24 @@ static struct ctl_table ipv4_table[] = {
 		.data		= &sysctl_tcp_wmem,
 		.maxlen		= sizeof(sysctl_tcp_wmem),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "tcp_rmem",
 		.data		= &sysctl_tcp_rmem,
 		.maxlen		= sizeof(sysctl_tcp_rmem),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "tcp_app_win",
@@ -695,7 +725,11 @@ static struct ctl_table ipv4_table[] = {
 		.mode           = 0644,
 		.proc_handler   = proc_dointvec
 	},
+<<<<<<< HEAD
 	{
+=======
+        {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.procname       = "tcp_thin_dupack",
 		.data           = &sysctl_tcp_thin_dupack,
 		.maxlen         = sizeof(int),
@@ -703,6 +737,7 @@ static struct ctl_table ipv4_table[] = {
 		.proc_handler   = proc_dointvec
 	},
 	{
+<<<<<<< HEAD
 		.procname       = "tcp_default_init_rwnd",
 		.data           = &sysctl_tcp_default_init_rwnd,
 		.maxlen         = sizeof(int),
@@ -710,6 +745,8 @@ static struct ctl_table ipv4_table[] = {
 		.proc_handler   = proc_tcp_default_init_rwnd
 	},
 	{
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.procname	= "udp_mem",
 		.data		= &sysctl_udp_mem,
 		.maxlen		= sizeof(sysctl_udp_mem),
@@ -722,7 +759,11 @@ static struct ctl_table ipv4_table[] = {
 		.maxlen		= sizeof(sysctl_udp_rmem_min),
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec_minmax,
+<<<<<<< HEAD
 		.extra1		= &zero
+=======
+		.extra1		= &one
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "udp_wmem_min",
@@ -730,6 +771,7 @@ static struct ctl_table ipv4_table[] = {
 		.maxlen		= sizeof(sysctl_udp_wmem_min),
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec_minmax,
+<<<<<<< HEAD
 		.extra1		= &zero
 	},
 	{
@@ -751,6 +793,10 @@ static struct ctl_table ipv4_table[] = {
 		.extra2		    = &tcp_use_userconfig_max,
 	},
 
+=======
+		.extra1		= &one
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 
@@ -817,6 +863,7 @@ static struct ctl_table ipv4_net_table[] = {
 		.mode		= 0644,
 		.proc_handler	= ipv4_tcp_mem,
 	},
+<<<<<<< HEAD
 	{
 		.procname	= "fwmark_reflect",
 		.data		= &init_net.ipv4.sysctl_fwmark_reflect,
@@ -831,6 +878,8 @@ static struct ctl_table ipv4_net_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec,
 	},
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 

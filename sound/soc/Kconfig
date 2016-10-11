@@ -9,7 +9,10 @@ menuconfig SND_SOC
 	select SND_JACK if INPUT=y || INPUT=SND
 	select REGMAP_I2C if I2C
 	select REGMAP_SPI if SPI_MASTER
+<<<<<<< HEAD
 	select SND_COMPRESS_OFFLOAD
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	---help---
 
 	  If you want ASoC support, you should say Y here and also to the
@@ -42,7 +45,10 @@ source "sound/soc/nuc900/Kconfig"
 source "sound/soc/omap/Kconfig"
 source "sound/soc/kirkwood/Kconfig"
 source "sound/soc/mid-x86/Kconfig"
+<<<<<<< HEAD
 source "sound/soc/msm/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "sound/soc/mxs/Kconfig"
 source "sound/soc/pxa/Kconfig"
 source "sound/soc/samsung/Kconfig"
@@ -54,8 +60,11 @@ source "sound/soc/txx9/Kconfig"
 # Supported codecs
 source "sound/soc/codecs/Kconfig"
 
+<<<<<<< HEAD
 # Supported Audience
 source "sound/soc/codecs/audience/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif	# SND_SOC
 

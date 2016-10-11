@@ -523,6 +523,20 @@ static const struct dmi_system_id video_vendor_dmi_table[] = {
 			DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 4750"),
 		},
 	},
+<<<<<<< HEAD
+=======
+	{
+		/*
+		 * Note no video_set_backlight_video_vendor, we must use the
+		 * acer interface, as there is no native backlight interface.
+		 */
+		.ident = "Acer KAV80",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
+			DMI_MATCH(DMI_PRODUCT_NAME, "KAV80"),
+		},
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{}
 };
 

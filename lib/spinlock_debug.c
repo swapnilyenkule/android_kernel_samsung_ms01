@@ -12,7 +12,10 @@
 #include <linux/debug_locks.h>
 #include <linux/delay.h>
 #include <linux/export.h>
+<<<<<<< HEAD
 #include <linux/bug.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void __raw_spin_lock_init(raw_spinlock_t *lock, const char *name,
 			  struct lock_class_key *key)
@@ -50,11 +53,14 @@ void __rwlock_init(rwlock_t *lock, const char *name,
 
 EXPORT_SYMBOL(__rwlock_init);
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SPINLOCK_PANIC
 #define DBG_HRT_MAX 10
 raw_spinlock_t debug_hrtimer_spinlock[DBG_HRT_MAX];
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void spin_dump(raw_spinlock_t *lock, const char *msg)
 {
 	struct task_struct *owner = NULL;
@@ -64,17 +70,25 @@ static void spin_dump(raw_spinlock_t *lock, const char *msg)
 	printk(KERN_EMERG "BUG: spinlock %s on CPU#%d, %s/%d\n",
 		msg, raw_smp_processor_id(),
 		current->comm, task_pid_nr(current));
+<<<<<<< HEAD
 	printk(KERN_EMERG " lock: %pS, .magic: %08x, .owner: %s/%d, "
+=======
+	printk(KERN_EMERG " lock: %p, .magic: %08x, .owner: %s/%d, "
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			".owner_cpu: %d\n",
 		lock, lock->magic,
 		owner ? owner->comm : "<none>",
 		owner ? task_pid_nr(owner) : -1,
 		lock->owner_cpu);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SPINLOCK_PANIC
 		panic("spinlock bug");
 #else
 	dump_stack();
 #endif
+=======
+	dump_stack();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void spin_bug(raw_spinlock_t *lock, const char *msg)
@@ -113,6 +127,7 @@ static inline void debug_spin_unlock(raw_spinlock_t *lock)
 	lock->owner_cpu = -1;
 }
 
+<<<<<<< HEAD
 #if 0
 static void __spin_lock_debug(raw_spinlock_t *lock)
 {
@@ -141,16 +156,45 @@ static void __spin_lock_debug(raw_spinlock_t *lock)
 	arch_spin_lock(&lock->raw_lock);
 }
 #endif
+=======
+static void __spin_lock_debug(raw_spinlock_t *lock)
+{
+	u64 i;
+	u64 loops = loops_per_jiffy * HZ;
+	int print_once = 1;
+
+	for (;;) {
+		for (i = 0; i < loops; i++) {
+			if (arch_spin_trylock(&lock->raw_lock))
+				return;
+			__delay(1);
+		}
+		/* lockup suspected: */
+		if (print_once) {
+			print_once = 0;
+			spin_dump(lock, "lockup");
+#ifdef CONFIG_SMP
+			trigger_all_cpu_backtrace();
+#endif
+		}
+	}
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void do_raw_spin_lock(raw_spinlock_t *lock)
 {
 	debug_spin_lock_before(lock);
+<<<<<<< HEAD
 #if 0 /* Temporarily comment out for testing hrtimer spinlock issue */
 	if (unlikely(!arch_spin_trylock(&lock->raw_lock)))
 		__spin_lock_debug(lock);
 #else
 	arch_spin_lock(&lock->raw_lock);
 #endif
+=======
+	if (unlikely(!arch_spin_trylock(&lock->raw_lock)))
+		__spin_lock_debug(lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	debug_spin_lock_after(lock);
 }
 

@@ -240,6 +240,11 @@ u32 ft_get_task_tag(struct se_cmd *se_cmd)
 {
 	struct ft_cmd *cmd = container_of(se_cmd, struct ft_cmd, se_cmd);
 
+<<<<<<< HEAD
+=======
+	if (cmd->aborted)
+		return ~0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return fc_seq_exch(cmd->seq)->rxid;
 }
 

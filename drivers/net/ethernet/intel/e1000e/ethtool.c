@@ -258,7 +258,12 @@ static int e1000_set_settings(struct net_device *netdev,
 	 * When SoL/IDER sessions are active, autoneg/speed/duplex
 	 * cannot be changed
 	 */
+<<<<<<< HEAD
 	if (hw->phy.ops.check_reset_block(hw)) {
+=======
+	if (hw->phy.ops.check_reset_block &&
+	    hw->phy.ops.check_reset_block(hw)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		e_err("Cannot change link characteristics when SoL/IDER is "
 		      "active.\n");
 		return -EINVAL;
@@ -1604,7 +1609,12 @@ static int e1000_loopback_test(struct e1000_adapter *adapter, u64 *data)
 	 * PHY loopback cannot be performed if SoL/IDER
 	 * sessions are active
 	 */
+<<<<<<< HEAD
 	if (hw->phy.ops.check_reset_block(hw)) {
+=======
+	if (hw->phy.ops.check_reset_block &&
+	    hw->phy.ops.check_reset_block(hw)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		e_err("Cannot do PHY loopback test when SoL/IDER is active.\n");
 		*data = 0;
 		goto out;

@@ -268,15 +268,21 @@
 #include <linux/crypto.h>
 #include <linux/time.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <linux/uid_stat.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <net/icmp.h>
 #include <net/tcp.h>
 #include <net/xfrm.h>
 #include <net/ip.h>
+<<<<<<< HEAD
 #include <net/ip6_route.h>
 #include <net/ipv6.h>
 #include <net/transp_v6.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/netdma.h>
 #include <net/sock.h>
 
@@ -294,12 +300,15 @@ int sysctl_tcp_rmem[3] __read_mostly;
 EXPORT_SYMBOL(sysctl_tcp_rmem);
 EXPORT_SYMBOL(sysctl_tcp_wmem);
 
+<<<<<<< HEAD
 int sysctl_tcp_delack_seg __read_mostly = TCP_DELACK_SEG;
 EXPORT_SYMBOL(sysctl_tcp_delack_seg);
 
 int sysctl_tcp_use_userconfig __read_mostly;
 EXPORT_SYMBOL(sysctl_tcp_use_userconfig);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 atomic_long_t tcp_memory_allocated;	/* Current allocated memory. */
 EXPORT_SYMBOL(tcp_memory_allocated);
 
@@ -714,7 +723,11 @@ struct sk_buff *sk_stream_alloc_skb(struct sock *sk, int size, gfp_t gfp)
 			 * Make sure that we have exactly size bytes
 			 * available to the caller, no more, no less.
 			 */
+<<<<<<< HEAD
 			skb->avail_size = size;
+=======
+			skb->reserved_tailroom = skb->end - skb->tail - size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return skb;
 		}
 		__kfree_skb(skb);
@@ -748,7 +761,13 @@ static unsigned int tcp_xmit_size_goal(struct sock *sk, u32 mss_now,
 			   old_size_goal + mss_now > xmit_size_goal)) {
 			xmit_size_goal = old_size_goal;
 		} else {
+<<<<<<< HEAD
 			tp->xmit_size_goal_segs = xmit_size_goal / mss_now;
+=======
+			tp->xmit_size_goal_segs =
+				min_t(u16, xmit_size_goal / mss_now,
+				      sk->sk_gso_max_segs);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			xmit_size_goal = tp->xmit_size_goal_segs * mss_now;
 		}
 	}
@@ -1123,9 +1142,12 @@ out:
 	if (copied)
 		tcp_push(sk, flags, mss_now, tp->nonagle);
 	release_sock(sk);
+<<<<<<< HEAD
 
 	if (copied > 0)
 		uid_stat_tcp_snd(current_uid(), copied);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return copied;
 
 do_fault:
@@ -1219,11 +1241,16 @@ void tcp_cleanup_rbuf(struct sock *sk, int copied)
 		   /* Delayed ACKs frequently hit locked sockets during bulk
 		    * receive. */
 		if (icsk->icsk_ack.blocked ||
+<<<<<<< HEAD
 		    /* Once-per-sysctl_tcp_delack_seg segments
 			  * ACK was not sent by tcp_input.c
 			  */
 		    tp->rcv_nxt - tp->rcv_wup > (icsk->icsk_ack.rcv_mss) *
 						sysctl_tcp_delack_seg ||
+=======
+		    /* Once-per-two-segments ACK was not sent by tcp_input.c */
+		    tp->rcv_nxt - tp->rcv_wup > icsk->icsk_ack.rcv_mss ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		    /*
 		     * If this read emptied read buffer, we send ACK, if
 		     * connection is not bidirectional, user drained
@@ -1403,11 +1430,16 @@ int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
 	tcp_rcv_space_adjust(sk);
 
 	/* Clean up data we have read: This will do ACK frames. */
+<<<<<<< HEAD
 	if (copied > 0) {
 		tcp_cleanup_rbuf(sk, copied);
 		uid_stat_tcp_rcv(current_uid(), copied);
 	}
 
+=======
+	if (copied > 0)
+		tcp_cleanup_rbuf(sk, copied);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return copied;
 }
 EXPORT_SYMBOL(tcp_read_sock);
@@ -1609,8 +1641,19 @@ int tcp_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		}
 
 #ifdef CONFIG_NET_DMA
+<<<<<<< HEAD
 		if (tp->ucopy.dma_chan)
 			dma_async_memcpy_issue_pending(tp->ucopy.dma_chan);
+=======
+		if (tp->ucopy.dma_chan) {
+			if (tp->rcv_wnd == 0 &&
+			    !skb_queue_empty(&sk->sk_async_wait_queue)) {
+				tcp_service_net_dma(sk, true);
+				tcp_cleanup_rbuf(sk, copied);
+			} else
+				dma_async_memcpy_issue_pending(tp->ucopy.dma_chan);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 		if (copied >= target) {
 			/* Do not sleep, just process backlog. */
@@ -1790,9 +1833,12 @@ skip_copy:
 	tcp_cleanup_rbuf(sk, copied);
 
 	release_sock(sk);
+<<<<<<< HEAD
 
 	if (copied > 0)
 		uid_stat_tcp_rcv(current_uid(), copied);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return copied;
 
 out:
@@ -1801,8 +1847,11 @@ out:
 
 recv_urg:
 	err = tcp_recv_urg(sk, msg, len, flags);
+<<<<<<< HEAD
 	if (err > 0)
 		uid_stat_tcp_rcv(current_uid(), err);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	goto out;
 }
 EXPORT_SYMBOL(tcp_recvmsg);
@@ -2430,7 +2479,14 @@ static int do_tcp_setsockopt(struct sock *sk, int level,
 		/* Cap the max timeout in ms TCP will retry/retrans
 		 * before giving up and aborting (ETIMEDOUT) a connection.
 		 */
+<<<<<<< HEAD
 		icsk->icsk_user_timeout = msecs_to_jiffies(val);
+=======
+		if (val < 0)
+			err = -EINVAL;
+		else
+			icsk->icsk_user_timeout = msecs_to_jiffies(val);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	default:
 		err = -ENOPROTOOPT;
@@ -2528,12 +2584,15 @@ void tcp_get_info(const struct sock *sk, struct tcp_info *info)
 	info->tcpi_rcv_space = tp->rcvq_space.space;
 
 	info->tcpi_total_retrans = tp->total_retrans;
+<<<<<<< HEAD
 
 	if (sk->sk_socket) {
 		struct file *filep = sk->sk_socket->file;
 		if (filep)
 			info->tcpi_count = file_count(filep);
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(tcp_get_info);
 
@@ -3074,8 +3133,16 @@ int tcp_md5_hash_skb_data(struct tcp_md5sig_pool *hp,
 
 	for (i = 0; i < shi->nr_frags; ++i) {
 		const struct skb_frag_struct *f = &shi->frags[i];
+<<<<<<< HEAD
 		struct page *page = skb_frag_page(f);
 		sg_set_page(&sg, page, skb_frag_size(f), f->page_offset);
+=======
+		unsigned int offset = f->page_offset;
+		struct page *page = skb_frag_page(f) + (offset >> PAGE_SHIFT);
+
+		sg_set_page(&sg, page, skb_frag_size(f),
+			    offset_in_page(offset));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (crypto_hash_update(desc, &sg, skb_frag_size(f)))
 			return 1;
 	}
@@ -3245,6 +3312,7 @@ void tcp_done(struct sock *sk)
 }
 EXPORT_SYMBOL_GPL(tcp_done);
 
+<<<<<<< HEAD
 int tcp_abort(struct sock *sk, int err)
 {
 	if (sk->sk_state == TCP_TIME_WAIT) {
@@ -3282,6 +3350,8 @@ int tcp_abort(struct sock *sk, int err)
 }
 EXPORT_SYMBOL_GPL(tcp_abort);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern struct tcp_congestion_ops tcp_reno;
 
 static __initdata unsigned long thash_entries;
@@ -3392,6 +3462,7 @@ void __init tcp_init(void)
 	tcp_secret_retiring = &tcp_secret_two;
 	tcp_secret_secondary = &tcp_secret_two;
 }
+<<<<<<< HEAD
 
 static int tcp_is_local(struct net *net, __be32 addr) {
 	struct rtable *rt;
@@ -3502,3 +3573,5 @@ restart:
 
 	return 0;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

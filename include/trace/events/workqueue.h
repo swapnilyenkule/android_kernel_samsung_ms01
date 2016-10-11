@@ -54,7 +54,11 @@ TRACE_EVENT(workqueue_queue_work,
 		__entry->function	= work->func;
 		__entry->workqueue	= cwq->wq;
 		__entry->req_cpu	= req_cpu;
+<<<<<<< HEAD
 		__entry->cpu		= cwq->pool->gcwq->cpu;
+=======
+		__entry->cpu		= cwq->gcwq->cpu;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	),
 
 	TP_printk("work struct=%p function=%pf workqueue=%p req_cpu=%u cpu=%u",

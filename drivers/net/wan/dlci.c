@@ -384,6 +384,7 @@ static int dlci_del(struct dlci_add *dlci)
 	struct frad_local	*flp;
 	struct net_device	*master, *slave;
 	int			err;
+<<<<<<< HEAD
 
 	/* validate slave device */
 	master = __dev_get_by_name(&init_net, dlci->devname);
@@ -392,13 +393,43 @@ static int dlci_del(struct dlci_add *dlci)
 
 	if (netif_running(master)) {
 		return -EBUSY;
+=======
+	bool			found = false;
+
+	rtnl_lock();
+
+	/* validate slave device */
+	master = __dev_get_by_name(&init_net, dlci->devname);
+	if (!master) {
+		err = -ENODEV;
+		goto out;
+	}
+
+	list_for_each_entry(dlp, &dlci_devs, list) {
+		if (dlp->master == master) {
+			found = true;
+			break;
+		}
+	}
+	if (!found) {
+		err = -ENODEV;
+		goto out;
+	}
+
+	if (netif_running(master)) {
+		err = -EBUSY;
+		goto out;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	dlp = netdev_priv(master);
 	slave = dlp->slave;
 	flp = netdev_priv(slave);
 
+<<<<<<< HEAD
 	rtnl_lock();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = (*flp->deassoc)(slave, master);
 	if (!err) {
 		list_del(&dlp->list);
@@ -407,8 +438,13 @@ static int dlci_del(struct dlci_add *dlci)
 
 		dev_put(slave);
 	}
+<<<<<<< HEAD
 	rtnl_unlock();
 
+=======
+out:
+	rtnl_unlock();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 

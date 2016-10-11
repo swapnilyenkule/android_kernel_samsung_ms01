@@ -28,11 +28,15 @@ struct mm_struct;
  */
 
 enum {
+<<<<<<< HEAD
 	PROC_ROOT_INO		= 1,
 	PROC_IPC_INIT_INO	= 0xEFFFFFFFU,
 	PROC_UTS_INIT_INO	= 0xEFFFFFFEU,
 	PROC_USER_INIT_INO	= 0xEFFFFFFDU,
 	PROC_PID_INIT_INO	= 0xEFFFFFFCU,
+=======
+	PROC_ROOT_INO = 1,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /*
@@ -178,10 +182,14 @@ extern struct proc_dir_entry *proc_net_mkdir(struct net *net, const char *name,
 	struct proc_dir_entry *parent);
 
 extern struct file *proc_ns_fget(int fd);
+<<<<<<< HEAD
 extern bool proc_ns_inode(struct inode *inode);
 
 extern int proc_alloc_inum(unsigned int *pino);
 extern void proc_free_inum(unsigned int inum);
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 
 #define proc_net_fops_create(net, name, mode, fops)  ({ (void)(mode), NULL; })
@@ -236,6 +244,7 @@ static inline struct file *proc_ns_fget(int fd)
 	return ERR_PTR(-EINVAL);
 }
 
+<<<<<<< HEAD
 static inline bool proc_ns_inode(struct inode *inode)
 {
 	return false;
@@ -249,6 +258,8 @@ static inline int proc_alloc_inum(unsigned int *inum)
 static inline void proc_free_inum(unsigned int inum)
 {
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* CONFIG_PROC_FS */
 
 #if !defined(CONFIG_PROC_KCORE)
@@ -267,13 +278,19 @@ struct proc_ns_operations {
 	void *(*get)(struct task_struct *task);
 	void (*put)(void *ns);
 	int (*install)(struct nsproxy *nsproxy, void *ns);
+<<<<<<< HEAD
 	unsigned int (*inum)(void *ns);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 extern const struct proc_ns_operations netns_operations;
 extern const struct proc_ns_operations utsns_operations;
 extern const struct proc_ns_operations ipcns_operations;
+<<<<<<< HEAD
 extern const struct proc_ns_operations pidns_operations;
 extern const struct proc_ns_operations mntns_operations;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 union proc_op {
 	int (*proc_get_link)(struct dentry *, struct path *);

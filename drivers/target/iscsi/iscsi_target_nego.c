@@ -89,7 +89,11 @@ int extract_param(
 	if (len < 0)
 		return -1;
 
+<<<<<<< HEAD
 	if (len > max_length) {
+=======
+	if (len >= max_length) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pr_err("Length of input: %d exceeds max_length:"
 			" %d\n", len, max_length);
 		return -1;
@@ -628,8 +632,16 @@ static int iscsi_target_handle_csg_one(struct iscsi_conn *conn, struct iscsi_log
 			login->req_buf,
 			payload_length,
 			conn->param_list);
+<<<<<<< HEAD
 	if (ret < 0)
 		return -1;
+=======
+	if (ret < 0) {
+		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_INITIATOR_ERR,
+				ISCSI_LOGIN_STATUS_INIT_ERR);
+		return -1;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (login->first_request)
 		if (iscsi_target_check_first_request(conn, login) < 0)
@@ -644,8 +656,16 @@ static int iscsi_target_handle_csg_one(struct iscsi_conn *conn, struct iscsi_log
 			login->rsp_buf,
 			&login->rsp_length,
 			conn->param_list);
+<<<<<<< HEAD
 	if (ret < 0)
 		return -1;
+=======
+	if (ret < 0) {
+		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_INITIATOR_ERR,
+				ISCSI_LOGIN_STATUS_INIT_ERR);
+		return -1;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!login->auth_complete &&
 	     ISCSI_TPG_ATTRIB(ISCSI_TPG_C(conn))->authentication) {

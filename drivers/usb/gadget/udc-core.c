@@ -265,7 +265,11 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
 		udc->driver->disconnect(udc->gadget);
 		usb_gadget_disconnect(udc->gadget);
 		udc->driver->unbind(udc->gadget);
+<<<<<<< HEAD
 		usb_gadget_udc_stop(udc->gadget, udc->driver);
+=======
+		usb_gadget_udc_stop(udc->gadget, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 		usb_gadget_stop(udc->gadget, udc->driver);
 	}
@@ -322,9 +326,14 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
 
 	mutex_lock(&udc_lock);
 	list_for_each_entry(udc, &udc_list, list) {
+<<<<<<< HEAD
 		/* Match according to usb_core_id */
 		if (!udc->driver && udc->gadget &&
 		    udc->gadget->usb_core_id == driver->usb_core_id)
+=======
+		/* For now we take the first one */
+		if (!udc->driver)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto found;
 	}
 
@@ -348,6 +357,10 @@ found:
 			driver->unbind(udc->gadget);
 			goto err1;
 		}
+<<<<<<< HEAD
+=======
+		usb_gadget_connect(udc->gadget);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 
 		ret = usb_gadget_start(udc->gadget, driver, bind);

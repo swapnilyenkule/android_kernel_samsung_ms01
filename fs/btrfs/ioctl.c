@@ -1653,7 +1653,15 @@ static noinline int copy_to_sk(struct btrfs_root *root,
 		item_off = btrfs_item_ptr_offset(leaf, i);
 		item_len = btrfs_item_size_nr(leaf, i);
 
+<<<<<<< HEAD
 		if (item_len > BTRFS_SEARCH_ARGS_BUFSIZE)
+=======
+		btrfs_item_key_to_cpu(leaf, key, i);
+		if (!key_in_sk(key, sk))
+			continue;
+
+		if (sizeof(sh) + item_len > BTRFS_SEARCH_ARGS_BUFSIZE)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			item_len = 0;
 
 		if (sizeof(sh) + item_len + *sk_offset >
@@ -1662,10 +1670,13 @@ static noinline int copy_to_sk(struct btrfs_root *root,
 			goto overflow;
 		}
 
+<<<<<<< HEAD
 		btrfs_item_key_to_cpu(leaf, key, i);
 		if (!key_in_sk(key, sk))
 			continue;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		sh.objectid = key->objectid;
 		sh.offset = key->offset;
 		sh.type = key->type;
@@ -2374,6 +2385,14 @@ static noinline long btrfs_ioctl_clone(struct file *file, unsigned long srcfd,
 	if (off + len == src->i_size)
 		len = ALIGN(src->i_size, bs) - off;
 
+<<<<<<< HEAD
+=======
+	if (len == 0) {
+		ret = 0;
+		goto out_unlock;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* verify the end result is block aligned */
 	if (!IS_ALIGNED(off, bs) || !IS_ALIGNED(off + len, bs) ||
 	    !IS_ALIGNED(destoff, bs))

@@ -246,9 +246,13 @@ static int old_dev_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 		if (!capable(CAP_NET_ADMIN))
 			return -EPERM;
 
+<<<<<<< HEAD
 		spin_lock_bh(&br->lock);
 		br_stp_set_bridge_priority(br, args[1]);
 		spin_unlock_bh(&br->lock);
+=======
+		br_stp_set_bridge_priority(br, args[1]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	case BRCTL_SET_PORT_PRIORITY:

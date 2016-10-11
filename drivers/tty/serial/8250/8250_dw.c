@@ -79,7 +79,11 @@ static int dw8250_handle_irq(struct uart_port *p)
 	} else if ((iir & UART_IIR_BUSY) == UART_IIR_BUSY) {
 		/* Clear the USR and write the LCR again. */
 		(void)p->serial_in(p, UART_USR);
+<<<<<<< HEAD
 		p->serial_out(p, d->last_lcr, UART_LCR);
+=======
+		p->serial_out(p, UART_LCR, d->last_lcr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		return 1;
 	}

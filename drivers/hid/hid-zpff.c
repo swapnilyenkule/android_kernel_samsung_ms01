@@ -70,6 +70,7 @@ static int zpff_init(struct hid_device *hid)
 	struct hid_report *report;
 	struct hid_input *hidinput = list_entry(hid->inputs.next,
 						struct hid_input, list);
+<<<<<<< HEAD
 	struct list_head *report_list =
 			&hid->report_enum[HID_OUTPUT_REPORT].report_list;
 	struct input_dev *dev = hidinput->input;
@@ -85,6 +86,15 @@ static int zpff_init(struct hid_device *hid)
 	if (report->maxfield < 4) {
 		hid_err(hid, "not enough fields in report\n");
 		return -ENODEV;
+=======
+	struct input_dev *dev = hidinput->input;
+	int i, error;
+
+	for (i = 0; i < 4; i++) {
+		report = hid_validate_values(hid, HID_OUTPUT_REPORT, 0, i, 1);
+		if (!report)
+			return -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	zpff = kzalloc(sizeof(struct zpff_device), GFP_KERNEL);

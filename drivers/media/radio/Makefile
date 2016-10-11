@@ -28,8 +28,11 @@ obj-$(CONFIG_RADIO_TEF6862) += tef6862.o
 obj-$(CONFIG_RADIO_TIMBERDALE) += radio-timb.o
 obj-$(CONFIG_RADIO_WL1273) += radio-wl1273.o
 obj-$(CONFIG_RADIO_WL128X) += wl128x/
+<<<<<<< HEAD
 obj-$(CONFIG_RADIO_TAVARUA) += radio-tavarua.o
 obj-$(CONFIG_RADIO_IRIS) += radio-iris.o
 obj-$(CONFIG_RADIO_IRIS_TRANSPORT) += radio-iris-transport.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 ccflags-y += -Isound

@@ -16,6 +16,7 @@
 #include <linux/types.h>
 #include <linux/io.h>
 #include <linux/mmc/host.h>
+<<<<<<< HEAD
 #include <linux/pm_qos.h>
 
 #define SDHCI_TRACE_RBUF_SZ_ORDER	10	/* 2^10 pages */
@@ -49,6 +50,8 @@ struct sdhci_trace_buffer {
 	atomic_t			wr_idx;
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct sdhci_host {
 	/* Data set by hardware interface driver */
@@ -124,6 +127,7 @@ struct sdhci_host {
 	unsigned int quirks2;	/* More deviations from spec. */
 
 #define SDHCI_QUIRK2_HOST_OFF_CARD_ON			(1<<0)
+<<<<<<< HEAD
 /*
  * Read Transfer Active/ Write Transfer Active may be not
  * de-asserted after end of transaction. Issue reset for DAT line.
@@ -189,6 +193,8 @@ struct sdhci_host {
 
 /* Start logging events */
 #define SDHCI_QUIRK2_TRACE_ON				(1<<10)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	int irq;		/* Device IRQ */
 	void __iomem *ioaddr;	/* Mapped address */
@@ -220,7 +226,10 @@ struct sdhci_host {
 #define SDHCI_PV_ENABLED	(1<<8)	/* Preset value enabled */
 #define SDHCI_SDIO_IRQ_ENABLED	(1<<9)	/* SDIO irq enabled */
 #define SDHCI_HS200_NEEDS_TUNING (1<<10)	/* HS200 needs tuning */
+<<<<<<< HEAD
 #define SDHCI_HS400_NEEDS_TUNING (1<<11)	/* HS400 needs tuning */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	unsigned int version;	/* SDHCI spec. version */
 
@@ -246,10 +255,13 @@ struct sdhci_host {
 	u8 *adma_desc;		/* ADMA descriptor table */
 	u8 *align_buffer;	/* Bounce buffer */
 
+<<<<<<< HEAD
 	unsigned int adma_desc_sz; /* ADMA descriptor table size */
 	unsigned int align_buf_sz; /* Bounce buffer size */
 	unsigned int adma_max_desc; /* Max ADMA descriptos (max sg segments) */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dma_addr_t adma_addr;	/* Mapped ADMA descr. table */
 	dma_addr_t align_addr;	/* Mapped bounce buffer */
 
@@ -272,6 +284,7 @@ struct sdhci_host {
 #define SDHCI_TUNING_MODE_1	0
 	struct timer_list	tuning_timer;	/* Timer for tuning */
 
+<<<<<<< HEAD
 	unsigned int cpu_dma_latency_us;
 	struct pm_qos_request pm_qos_req_dma;
 	unsigned int pm_qos_timeout_us;         /* timeout for PM QoS request */
@@ -287,6 +300,8 @@ struct sdhci_host {
 	bool disable_sdio_irq_deferred; /* status of disabling sdio irq */
 	struct sdhci_trace_buffer trace_buf;
 	u32 auto_cmd_err_sts;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long private[0] ____cacheline_aligned;
 };
 #endif /* LINUX_MMC_SDHCI_H */

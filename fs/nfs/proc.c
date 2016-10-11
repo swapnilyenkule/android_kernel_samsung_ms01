@@ -47,6 +47,7 @@
 #define NFSDBG_FACILITY		NFSDBG_PROC
 
 /*
+<<<<<<< HEAD
  * wrapper to handle the -EKEYEXPIRED error message. This should generally
  * only happen if using krb5 auth and a user's TGT expires. NFSv2 doesn't
  * support the NFSERR_JUKEBOX error code, but we handle this situation in the
@@ -80,6 +81,8 @@ nfs_async_handle_expired_key(struct rpc_task *task)
 }
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Bare-bones access to getattr: this is for nfs_read_super.
  */
 static int
@@ -365,8 +368,11 @@ static void nfs_proc_unlink_rpc_prepare(struct rpc_task *task, struct nfs_unlink
 
 static int nfs_proc_unlink_done(struct rpc_task *task, struct inode *dir)
 {
+<<<<<<< HEAD
 	if (nfs_async_handle_expired_key(task))
 		return 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nfs_mark_for_revalidate(dir);
 	return 1;
 }
@@ -386,8 +392,11 @@ static int
 nfs_proc_rename_done(struct rpc_task *task, struct inode *old_dir,
 		     struct inode *new_dir)
 {
+<<<<<<< HEAD
 	if (nfs_async_handle_expired_key(task))
 		return 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nfs_mark_for_revalidate(old_dir);
 	nfs_mark_for_revalidate(new_dir);
 	return 1;
@@ -641,9 +650,12 @@ nfs_proc_pathconf(struct nfs_server *server, struct nfs_fh *fhandle,
 
 static int nfs_read_done(struct rpc_task *task, struct nfs_read_data *data)
 {
+<<<<<<< HEAD
 	if (nfs_async_handle_expired_key(task))
 		return -EAGAIN;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nfs_invalidate_atime(data->inode);
 	if (task->tk_status >= 0) {
 		nfs_refresh_inode(data->inode, data->res.fattr);
@@ -668,9 +680,12 @@ static void nfs_proc_read_rpc_prepare(struct rpc_task *task, struct nfs_read_dat
 
 static int nfs_write_done(struct rpc_task *task, struct nfs_write_data *data)
 {
+<<<<<<< HEAD
 	if (nfs_async_handle_expired_key(task))
 		return -EAGAIN;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (task->tk_status >= 0)
 		nfs_post_op_update_inode_force_wcc(data->inode, data->res.fattr);
 	return 0;

@@ -363,10 +363,13 @@ static enum dev_type i82975x_dram_type(void __iomem *mch_window, int rank)
 static void i82975x_init_csrows(struct mem_ctl_info *mci,
 		struct pci_dev *pdev, void __iomem *mch_window)
 {
+<<<<<<< HEAD
 	static const char *labels[4] = {
 							"DIMM A1", "DIMM A2",
 							"DIMM B1", "DIMM B2"
 						};
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct csrow_info *csrow;
 	unsigned long last_cumul_size;
 	u8 value;
@@ -407,9 +410,16 @@ static void i82975x_init_csrows(struct mem_ctl_info *mci,
 		 *   [0-3] for dual-channel; i.e. csrow->nr_channels = 2
 		 */
 		for (chan = 0; chan < csrow->nr_channels; chan++)
+<<<<<<< HEAD
 			strncpy(csrow->channels[chan].label,
 					labels[(index >> 1) + (chan * 2)],
 					EDAC_MC_LABEL_LEN);
+=======
+
+			snprintf(csrow->channels[chan].label, EDAC_MC_LABEL_LEN, "DIMM %c%d",
+				 (chan == 0) ? 'A' : 'B',
+				 index);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (cumul_size == last_cumul_size)
 			continue;	/* not populated */

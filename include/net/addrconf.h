@@ -81,6 +81,12 @@ extern int			ipv6_dev_get_saddr(struct net *net,
 					       const struct in6_addr *daddr,
 					       unsigned int srcprefs,
 					       struct in6_addr *saddr);
+<<<<<<< HEAD
+=======
+extern int			__ipv6_get_lladdr(struct inet6_dev *idev,
+						  struct in6_addr *addr,
+						  unsigned char banned_flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int			ipv6_get_lladdr(struct net_device *dev,
 						struct in6_addr *addr,
 						unsigned char banned_flags);
@@ -165,9 +171,12 @@ extern int ipv6_dev_ac_inc(struct net_device *dev, const struct in6_addr *addr);
 extern int __ipv6_dev_ac_dec(struct inet6_dev *idev, const struct in6_addr *addr);
 extern int ipv6_chk_acast_addr(struct net *net, struct net_device *dev,
 			       const struct in6_addr *addr);
+<<<<<<< HEAD
 extern void ipv6_ac_destroy_dev(struct inet6_dev *idev);
 
 u32 addrconf_rt_table(const struct net_device *dev, u32 default_table);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 /* Device notifier */

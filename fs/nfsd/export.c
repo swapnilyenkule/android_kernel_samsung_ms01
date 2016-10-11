@@ -401,7 +401,11 @@ fsloc_parse(char **mesg, char *buf, struct nfsd4_fs_locations *fsloc)
 	int migrated, i, err;
 
 	/* listsize */
+<<<<<<< HEAD
 	err = get_int(mesg, &fsloc->locations_count);
+=======
+	err = get_uint(mesg, &fsloc->locations_count);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err)
 		return err;
 	if (fsloc->locations_count > MAX_FS_LOCATIONS)
@@ -459,7 +463,11 @@ static int secinfo_parse(char **mesg, char *buf, struct svc_export *exp)
 		return -EINVAL;
 
 	for (f = exp->ex_flavors; f < exp->ex_flavors + listsize; f++) {
+<<<<<<< HEAD
 		err = get_int(mesg, &f->pseudoflavor);
+=======
+		err = get_uint(mesg, &f->pseudoflavor);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err)
 			return err;
 		/*
@@ -468,7 +476,11 @@ static int secinfo_parse(char **mesg, char *buf, struct svc_export *exp)
 		 * problem at export time instead of when a client fails
 		 * to authenticate.
 		 */
+<<<<<<< HEAD
 		err = get_int(mesg, &f->flags);
+=======
+		err = get_uint(mesg, &f->flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err)
 			return err;
 		/* Only some flags are allowed to differ between flavors: */

@@ -803,7 +803,11 @@ lowpan_process_data(struct sk_buff *skb)
 	 * Traffic class carried in-line
 	 * ECN + DSCP (1 byte), Flow Label is elided
 	 */
+<<<<<<< HEAD
 	case 1: /* 10b */
+=======
+	case 2: /* 10b */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!skb->len)
 			goto drop;
 		tmp = lowpan_fetch_skb_u8(skb);
@@ -816,7 +820,11 @@ lowpan_process_data(struct sk_buff *skb)
 	 * Flow Label carried in-line
 	 * ECN + 2-bit Pad + Flow Label (3 bytes), DSCP is elided
 	 */
+<<<<<<< HEAD
 	case 2: /* 01b */
+=======
+	case 1: /* 01b */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!skb->len)
 			goto drop;
 		tmp = lowpan_fetch_skb_u8(skb);

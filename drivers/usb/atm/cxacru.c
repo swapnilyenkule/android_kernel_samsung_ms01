@@ -686,7 +686,12 @@ static int cxacru_cm_get_array(struct cxacru_data *instance, enum cxacru_cm_requ
 {
 	int ret, len;
 	__le32 *buf;
+<<<<<<< HEAD
 	int offb, offd;
+=======
+	int offb;
+	unsigned int offd;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	const int stride = CMD_PACKET_SIZE / (4 * 2) - 1;
 	int buflen =  ((size - 1) / stride + 1 + size * 2) * 4;
 

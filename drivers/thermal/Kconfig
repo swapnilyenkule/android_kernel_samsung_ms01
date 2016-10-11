@@ -19,6 +19,7 @@ config THERMAL_HWMON
 	depends on HWMON=y || HWMON=THERMAL
 	default y
 
+<<<<<<< HEAD
 config THERMAL_MSM_POPMEM
 	tristate "Qualcomm MSM POP memory temperature sensor"
 	depends on THERMAL
@@ -84,6 +85,8 @@ config THERMAL_MONITOR
 	  entity starts running in the userspace. Monitors TSENS temperature
 	  and limits the max frequency of the cores.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SPEAR_THERMAL
 	bool "SPEAr thermal sensor driver"
 	depends on THERMAL
@@ -91,6 +94,7 @@ config SPEAR_THERMAL
 	help
 	  Enable this to plug the SPEAr thermal sensor driver into the Linux
 	  thermal framework
+<<<<<<< HEAD
 
 config THERMAL_QPNP
 	tristate "Qualcomm Plug-and-Play PMIC Temperature Alarm"
@@ -117,3 +121,5 @@ config THERMAL_QPNP_ADC_TM
 	  Disabling the thermal zone device via the mode file results in disabling
 	  the sensor. Also able to set threshold temperature for both hot and cold
 	  and update when a threshold is reached.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

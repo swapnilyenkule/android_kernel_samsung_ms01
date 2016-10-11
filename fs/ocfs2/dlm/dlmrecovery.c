@@ -540,7 +540,14 @@ master_here:
 		/* success!  see if any other nodes need recovery */
 		mlog(0, "DONE mastering recovery of %s:%u here(this=%u)!\n",
 		     dlm->name, dlm->reco.dead_node, dlm->node_num);
+<<<<<<< HEAD
 		dlm_reset_recovery(dlm);
+=======
+		spin_lock(&dlm->spinlock);
+		__dlm_reset_recovery(dlm);
+		dlm->reco.state &= ~DLM_RECO_STATE_FINALIZE;
+		spin_unlock(&dlm->spinlock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	dlm_end_recovery(dlm);
 
@@ -698,6 +705,17 @@ static int dlm_remaster_locks(struct dlm_ctxt *dlm, u8 dead_node)
 		if (all_nodes_done) {
 			int ret;
 
+<<<<<<< HEAD
+=======
+			/* Set this flag on recovery master to avoid
+			 * a new recovery for another dead node start
+			 * before the recovery is not done. That may
+			 * cause recovery hung.*/
+			spin_lock(&dlm->spinlock);
+			dlm->reco.state |= DLM_RECO_STATE_FINALIZE;
+			spin_unlock(&dlm->spinlock);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/* all nodes are now in DLM_RECO_NODE_DATA_DONE state
 	 		 * just send a finalize message to everyone and
 	 		 * clean up */
@@ -1678,6 +1696,10 @@ int dlm_master_requery_handler(struct o2net_msg *msg, u32 len, void *data,
 	unsigned int hash;
 	int master = DLM_LOCK_RES_OWNER_UNKNOWN;
 	u32 flags = DLM_ASSERT_MASTER_REQUERY;
+<<<<<<< HEAD
+=======
+	int dispatched = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!dlm_grab(dlm)) {
 		/* since the domain has gone away on this
@@ -1699,6 +1721,11 @@ int dlm_master_requery_handler(struct o2net_msg *msg, u32 len, void *data,
 				mlog_errno(-ENOMEM);
 				/* retry!? */
 				BUG();
+<<<<<<< HEAD
+=======
+			} else {
+				dispatched = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			}
 		} else /* put.. incase we are not the master */
 			dlm_lockres_put(res);
@@ -1706,7 +1733,12 @@ int dlm_master_requery_handler(struct o2net_msg *msg, u32 len, void *data,
 	}
 	spin_unlock(&dlm->spinlock);
 
+<<<<<<< HEAD
 	dlm_put(dlm);
+=======
+	if (!dispatched)
+		dlm_put(dlm);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return master;
 }
 
@@ -1752,13 +1784,21 @@ static int dlm_process_recovery_data(struct dlm_ctxt *dlm,
 				     struct dlm_migratable_lockres *mres)
 {
 	struct dlm_migratable_lock *ml;
+<<<<<<< HEAD
 	struct list_head *queue;
+=======
+	struct list_head *queue, *iter;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct list_head *tmpq = NULL;
 	struct dlm_lock *newlock = NULL;
 	struct dlm_lockstatus *lksb = NULL;
 	int ret = 0;
 	int i, j, bad;
+<<<<<<< HEAD
 	struct dlm_lock *lock = NULL;
+=======
+	struct dlm_lock *lock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u8 from = O2NM_MAX_NODES;
 	unsigned int added = 0;
 	__be64 c;
@@ -1793,6 +1833,7 @@ static int dlm_process_recovery_data(struct dlm_ctxt *dlm,
 			/* MIGRATION ONLY! */
 			BUG_ON(!(mres->flags & DLM_MRES_MIGRATION));
 
+<<<<<<< HEAD
 			spin_lock(&res->spinlock);
 			for (j = DLM_GRANTED_LIST; j <= DLM_BLOCKED_LIST; j++) {
 				tmpq = dlm_list_idx_to_ptr(res, j);
@@ -1801,6 +1842,18 @@ static int dlm_process_recovery_data(struct dlm_ctxt *dlm,
 						lock = NULL;
 					else
 						break;
+=======
+			lock = NULL;
+			spin_lock(&res->spinlock);
+			for (j = DLM_GRANTED_LIST; j <= DLM_BLOCKED_LIST; j++) {
+				tmpq = dlm_list_idx_to_ptr(res, j);
+				list_for_each(iter, tmpq) {
+					lock = list_entry(iter,
+						  struct dlm_lock, list);
+					if (lock->ml.cookie == ml->cookie)
+						break;
+					lock = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				}
 				if (lock)
 					break;
@@ -2870,8 +2923,13 @@ int dlm_finalize_reco_handler(struct o2net_msg *msg, u32 len, void *data,
 				BUG();
 			}
 			dlm->reco.state &= ~DLM_RECO_STATE_FINALIZE;
+<<<<<<< HEAD
 			spin_unlock(&dlm->spinlock);
 			dlm_reset_recovery(dlm);
+=======
+			__dlm_reset_recovery(dlm);
+			spin_unlock(&dlm->spinlock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			dlm_kick_recovery_thread(dlm);
 			break;
 		default:

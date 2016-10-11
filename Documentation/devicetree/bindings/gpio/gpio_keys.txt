@@ -4,7 +4,10 @@ Required properties:
 	- compatible = "gpio-keys";
 
 Optional properties:
+<<<<<<< HEAD
 	- input-name: input name of the device
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	- autorepeat: Boolean, Enable auto repeat feature of Linux input
 	  subsystem.
 
@@ -29,7 +32,10 @@ Example nodes:
 			#address-cells = <1>;
 			#size-cells = <0>;
 			autorepeat;
+<<<<<<< HEAD
 			input-name = "gpio-keys";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			button@21 {
 				label = "GPIO Key UP";
 				linux,code = <103>;

@@ -29,8 +29,11 @@
 #include <linux/fault-inject.h>
 #include <linux/list_sort.h>
 #include <linux/delay.h>
+<<<<<<< HEAD
 #include <linux/ratelimit.h>
 #include <linux/pm_runtime.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/block.h>
@@ -299,18 +302,22 @@ EXPORT_SYMBOL(blk_sync_queue);
  * Description:
  *    See @blk_run_queue. This variant must be called with the queue lock
  *    held and interrupts disabled.
+<<<<<<< HEAD
  *    Device driver will be notified of an urgent request
  *    pending under the following conditions:
  *    1. The driver and the current scheduler support urgent reques handling
  *    2. There is an urgent request pending in the scheduler
  *    3. There isn't already an urgent request in flight, meaning previously
  *       notified urgent request completed (!q->notified_urgent)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 void __blk_run_queue(struct request_queue *q)
 {
 	if (unlikely(blk_queue_stopped(q)))
 		return;
 
+<<<<<<< HEAD
 	if (!q->notified_urgent &&
 		q->elevator->type->ops.elevator_is_urgent_fn &&
 		q->urgent_request_fn &&
@@ -320,6 +327,9 @@ void __blk_run_queue(struct request_queue *q)
 		q->urgent_request_fn(q);
 	} else
 		q->request_fn(q);
+=======
+	q->request_fn(q);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL(__blk_run_queue);
 
@@ -515,7 +525,11 @@ struct request_queue *blk_alloc_queue_node(gfp_t gfp_mask, int node_id)
 		goto fail_id;
 
 	if (blk_throtl_init(q))
+<<<<<<< HEAD
 		goto fail_id;
+=======
+		goto fail_bdi;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	setup_timer(&q->backing_dev_info.laptop_mode_wb_timer,
 		    laptop_mode_timer_fn, (unsigned long) q);
@@ -540,6 +554,11 @@ struct request_queue *blk_alloc_queue_node(gfp_t gfp_mask, int node_id)
 
 	return q;
 
+<<<<<<< HEAD
+=======
+fail_bdi:
+	bdi_destroy(&q->backing_dev_info);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 fail_id:
 	ida_simple_remove(&blk_queue_ida, q->id);
 fail_q:
@@ -617,7 +636,11 @@ blk_init_allocated_queue(struct request_queue *q, request_fn_proc *rfn,
 	q->request_fn		= rfn;
 	q->prep_rq_fn		= NULL;
 	q->unprep_rq_fn		= NULL;
+<<<<<<< HEAD
 	q->queue_flags		= QUEUE_FLAG_DEFAULT;
+=======
+	q->queue_flags		|= QUEUE_FLAG_DEFAULT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Override internal queue lock with supplied lock pointer */
 	if (lock)
@@ -993,6 +1016,11 @@ struct request *blk_get_request(struct request_queue *q, int rw, gfp_t gfp_mask)
 {
 	struct request *rq;
 
+<<<<<<< HEAD
+=======
+	BUG_ON(rw != READ && rw != WRITE);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock_irq(q->queue_lock);
 	if (gfp_mask & __GFP_WAIT)
 		rq = get_request_wait(q, rw, NULL);
@@ -1082,6 +1110,7 @@ void blk_requeue_request(struct request_queue *q, struct request *rq)
 
 	BUG_ON(blk_queued_rq(rq));
 
+<<<<<<< HEAD
 	if (rq->cmd_flags & REQ_URGENT) {
 		/*
 		 * It's not compliant with the design to re-insert
@@ -1092,10 +1121,13 @@ void blk_requeue_request(struct request_queue *q, struct request *rq)
 		WARN_ON(!q->dispatched_urgent);
 		q->dispatched_urgent = false;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	elv_requeue_request(q, rq);
 }
 EXPORT_SYMBOL(blk_requeue_request);
 
+<<<<<<< HEAD
 /**
  * blk_reinsert_request() - Insert a request back to the scheduler
  * @q:		request queue
@@ -1150,6 +1182,8 @@ bool blk_reinsert_req_sup(struct request_queue *q)
 }
 EXPORT_SYMBOL(blk_reinsert_req_sup);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void add_acct_request(struct request_queue *q, struct request *rq,
 			     int where)
 {
@@ -1197,6 +1231,7 @@ void part_round_stats(int cpu, struct hd_struct *part)
 }
 EXPORT_SYMBOL_GPL(part_round_stats);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 static void blk_pm_put_request(struct request *rq)
 {
@@ -1207,6 +1242,8 @@ static void blk_pm_put_request(struct request *rq)
 static inline void blk_pm_put_request(struct request *rq) {}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * queue lock must be held
  */
@@ -1217,8 +1254,11 @@ void __blk_put_request(struct request_queue *q, struct request *req)
 	if (unlikely(--req->ref_count))
 		return;
 
+<<<<<<< HEAD
 	blk_pm_put_request(req);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	elv_completed_request(q, req);
 
 	/* this is a bio leak */
@@ -1401,7 +1441,10 @@ void init_request_from_bio(struct request *req, struct bio *bio)
 	req->ioprio = bio_prio(bio);
 	blk_rq_bio_prep(req->q, req, bio);
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(init_request_from_bio);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void blk_queue_bio(struct request_queue *q, struct bio *bio)
 {
@@ -1637,7 +1680,11 @@ generic_make_request_checks(struct bio *bio)
 		goto end_io;
 	}
 
+<<<<<<< HEAD
 	if (unlikely(!(bio->bi_rw & (REQ_DISCARD | REQ_SANITIZE)) &&
+=======
+	if (unlikely(!(bio->bi_rw & REQ_DISCARD) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		     nr_sectors > queue_max_hw_sectors(q))) {
 		printk(KERN_ERR "bio too big device %s (%u > %u)\n",
 		       bdevname(bio->bi_bdev, b),
@@ -1685,6 +1732,7 @@ generic_make_request_checks(struct bio *bio)
 		goto end_io;
 	}
 
+<<<<<<< HEAD
 	if ((bio->bi_rw & REQ_SANITIZE) &&
 	    (!blk_queue_sanitize(q))) {
 		pr_info("%s - got a SANITIZE request but the queue "
@@ -1693,6 +1741,8 @@ generic_make_request_checks(struct bio *bio)
 		goto end_io;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (blk_throtl_bio(q, bio))
 		return false;	/* throttled, will be resubmitted later */
 
@@ -1798,8 +1848,12 @@ void submit_bio(int rw, struct bio *bio)
 	 * If it's a regular read/write or a barrier with data attached,
 	 * go through the normal accounting stuff before submission.
 	 */
+<<<<<<< HEAD
 	if (bio_has_data(bio) &&
 	    (!(rw & (REQ_DISCARD | REQ_SANITIZE)))) {
+=======
+	if (bio_has_data(bio) && !(rw & REQ_DISCARD)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rw & WRITE) {
 			count_vm_events(PGPGOUT, count);
 		} else {
@@ -1845,7 +1899,11 @@ EXPORT_SYMBOL(submit_bio);
  */
 int blk_rq_check_limits(struct request_queue *q, struct request *rq)
 {
+<<<<<<< HEAD
 	if (rq->cmd_flags & (REQ_DISCARD | REQ_SANITIZE))
+=======
+	if (rq->cmd_flags & REQ_DISCARD)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	if (blk_rq_sectors(rq) > queue_max_sectors(q) ||
@@ -1995,6 +2053,7 @@ static void blk_account_io_done(struct request *req)
 	}
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 /*
  * Don't process normal requests when queue is suspended
@@ -2017,6 +2076,8 @@ static inline struct request *blk_pm_peek_request(struct request_queue *q,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * blk_peek_request - peek at the top of a request queue
  * @q: request queue to peek at
@@ -2039,11 +2100,14 @@ struct request *blk_peek_request(struct request_queue *q)
 	int ret;
 
 	while ((rq = __elv_next_request(q)) != NULL) {
+<<<<<<< HEAD
 
 		rq = blk_pm_peek_request(q, rq);
 		if (!rq)
 			break;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!(rq->cmd_flags & REQ_STARTED)) {
 			/*
 			 * This is the first time the device driver
@@ -2059,10 +2123,13 @@ struct request *blk_peek_request(struct request_queue *q)
 			 * not be passed by new incoming requests
 			 */
 			rq->cmd_flags |= REQ_STARTED;
+<<<<<<< HEAD
 			if (rq->cmd_flags & REQ_URGENT) {
 				WARN_ON(q->dispatched_urgent);
 				q->dispatched_urgent = true;
 			}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			trace_block_rq_issue(q, rq);
 		}
 
@@ -2172,6 +2239,10 @@ void blk_start_request(struct request *req)
 	if (unlikely(blk_bidi_rq(req)))
 		req->next_rq->resid_len = blk_rq_bytes(req->next_rq);
 
+<<<<<<< HEAD
+=======
+	BUG_ON(test_bit(REQ_ATOM_COMPLETE, &req->atomic_flags));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	blk_add_timer(req);
 }
 EXPORT_SYMBOL(blk_start_request);
@@ -2232,7 +2303,11 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 	if (!req->bio)
 		return false;
 
+<<<<<<< HEAD
 	trace_block_rq_complete(req->q, req);
+=======
+	trace_block_rq_complete(req->q, req, nr_bytes);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * For fs requests, rq is just carrier of independent bio's
@@ -2264,11 +2339,17 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 			error_type = "I/O";
 			break;
 		}
+<<<<<<< HEAD
 		printk_ratelimited(
 			KERN_ERR "end_request: %s error, dev %s, sector %llu\n",
 			error_type,
 			req->rq_disk ? req->rq_disk->disk_name : "?",
 			(unsigned long long)blk_rq_pos(req));
+=======
+		printk(KERN_ERR "end_request: %s error, dev %s, sector %llu\n",
+		       error_type, req->rq_disk ? req->rq_disk->disk_name : "?",
+		       (unsigned long long)blk_rq_pos(req));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	blk_account_io_completion(req, nr_bytes);
@@ -3020,6 +3101,7 @@ void blk_finish_plug(struct blk_plug *plug)
 }
 EXPORT_SYMBOL(blk_finish_plug);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 /**
  * blk_pm_runtime_init - Block layer runtime PM initialization routine
@@ -3163,6 +3245,8 @@ void blk_post_runtime_resume(struct request_queue *q, int err)
 EXPORT_SYMBOL(blk_post_runtime_resume);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int __init blk_dev_init(void)
 {
 	BUILD_BUG_ON(__REQ_NR_BITS > 8 *

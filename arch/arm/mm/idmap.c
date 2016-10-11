@@ -22,6 +22,16 @@ static void idmap_add_pmd(pud_t *pud, unsigned long addr, unsigned long end,
 			pr_warning("Failed to allocate identity pmd.\n");
 			return;
 		}
+<<<<<<< HEAD
+=======
+		/*
+		 * Copy the original PMD to ensure that the PMD entries for
+		 * the kernel image are preserved.
+		 */
+		if (!pud_none(*pud))
+			memcpy(pmd, pmd_offset(pud, 0),
+			       PTRS_PER_PMD * sizeof(pmd_t));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pud_populate(&init_mm, pud, pmd);
 		pmd += pmd_index(addr);
 	} else
@@ -37,6 +47,7 @@ static void idmap_add_pmd(pud_t *pud, unsigned long addr, unsigned long end,
 static void idmap_add_pmd(pud_t *pud, unsigned long addr, unsigned long end,
 	unsigned long prot)
 {
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_L1_TABLES
 	unsigned long cmd_id = 0x3f809221;
 	unsigned long tima_wr_out;
@@ -93,6 +104,14 @@ static void idmap_add_pmd(pud_t *pud, unsigned long addr, unsigned long end,
 	addr += SECTION_SIZE;
 	pmd[1] = __pmd(addr);
 #endif
+=======
+	pmd_t *pmd = pmd_offset(pud, addr);
+
+	addr = (addr & PMD_MASK) | prot;
+	pmd[0] = __pmd(addr);
+	addr += SECTION_SIZE;
+	pmd[1] = __pmd(addr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	flush_pmd_entry(pmd);
 }
 #endif	/* CONFIG_ARM_LPAE */

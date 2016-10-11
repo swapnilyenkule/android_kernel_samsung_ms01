@@ -163,7 +163,12 @@ static int do_udf_readdir(struct inode *dir, struct file *filp,
 			struct kernel_lb_addr tloc = lelb_to_cpu(cfi.icb.extLocation);
 
 			iblock = udf_get_lb_pblock(dir->i_sb, &tloc, 0);
+<<<<<<< HEAD
 			flen = udf_get_filename(dir->i_sb, nameptr, fname, lfi);
+=======
+			flen = udf_get_filename(dir->i_sb, nameptr, lfi, fname,
+						UDF_NAME_LEN);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			dt_type = DT_UNKNOWN;
 		}
 

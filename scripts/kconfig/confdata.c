@@ -182,7 +182,11 @@ static int conf_set_sym_val(struct symbol *sym, int def, int def_flags, char *p)
 	return 0;
 }
 
+<<<<<<< HEAD
 int conf_read_simple(const char *name, int def, int sym_init)
+=======
+int conf_read_simple(const char *name, int def)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	FILE *in = NULL;
 	char line[1024];
@@ -229,8 +233,11 @@ load:
 	conf_unsaved = 0;
 
 	def_flags = SYMBOL_DEF << def;
+<<<<<<< HEAD
 	if (!sym_init)
 		goto readsym;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	for_all_symbols(i, sym) {
 		sym->flags |= SYMBOL_CHANGED;
 		sym->flags &= ~(def_flags|SYMBOL_VALID);
@@ -248,7 +255,11 @@ load:
 			sym->def[def].tri = no;
 		}
 	}
+<<<<<<< HEAD
 readsym:
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (fgets(line, sizeof(line), in)) {
 		conf_lineno++;
 		sym = NULL;
@@ -351,7 +362,11 @@ int conf_read(const char *name)
 
 	sym_set_change_count(0);
 
+<<<<<<< HEAD
 	if (conf_read_simple(name, S_DEF_USER, true))
+=======
+	if (conf_read_simple(name, S_DEF_USER))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 1;
 
 	for_all_symbols(i, sym) {
@@ -782,7 +797,11 @@ static int conf_split_config(void)
 	int res, i, fd;
 
 	name = conf_get_autoconfig_name();
+<<<<<<< HEAD
 	conf_read_simple(name, S_DEF_AUTO, true);
+=======
+	conf_read_simple(name, S_DEF_AUTO);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (chdir("include/config"))
 		return 1;

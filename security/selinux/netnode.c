@@ -174,7 +174,12 @@ static void sel_netnode_insert(struct sel_netnode *node)
 	if (sel_netnode_hash[idx].size == SEL_NETNODE_HASH_BKT_LIMIT) {
 		struct sel_netnode *tail;
 		tail = list_entry(
+<<<<<<< HEAD
 			rcu_dereference(sel_netnode_hash[idx].list.prev),
+=======
+			rcu_dereference_protected(sel_netnode_hash[idx].list.prev,
+						  lockdep_is_held(&sel_netnode_lock)),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			struct sel_netnode, list);
 		list_del_rcu(&tail->list);
 		kfree_rcu(tail, rcu);
@@ -312,9 +317,12 @@ static __init int sel_netnode_init(void)
 	int iter;
 	int ret;
 
+<<<<<<< HEAD
 #ifdef CONFIG_ALWAYS_ENFORCE
 	selinux_enabled = 1;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!selinux_enabled)
 		return 0;
 

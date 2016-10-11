@@ -68,6 +68,10 @@ struct nbd_device {
 	u64 bytesize;
 	pid_t pid; /* pid of nbd-client, if attached */
 	int xmit_timeout;
+<<<<<<< HEAD
+=======
+	int disconnect; /* a disconnect has been requested by user */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #endif

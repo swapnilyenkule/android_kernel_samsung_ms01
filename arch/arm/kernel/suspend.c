@@ -17,8 +17,11 @@ extern void cpu_resume_mmu(void);
  */
 void __cpu_suspend_save(u32 *ptr, u32 ptrsz, u32 sp, u32 *save_ptr)
 {
+<<<<<<< HEAD
 	u32 *ctx = ptr;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*save_ptr = virt_to_phys(ptr);
 
 	/* This must correspond to the LDM in cpu_resume() assembly */
@@ -28,6 +31,7 @@ void __cpu_suspend_save(u32 *ptr, u32 ptrsz, u32 sp, u32 *save_ptr)
 
 	cpu_do_suspend(ptr);
 
+<<<<<<< HEAD
 	flush_cache_louis();
 
 	/*
@@ -42,6 +46,9 @@ void __cpu_suspend_save(u32 *ptr, u32 ptrsz, u32 sp, u32 *save_ptr)
 	__cpuc_flush_dcache_area(ctx, ptrsz);
 	__cpuc_flush_dcache_area(save_ptr, sizeof(*save_ptr));
 
+=======
+	flush_cache_all();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	outer_clean_range(*save_ptr, *save_ptr + ptrsz);
 	outer_clean_range(virt_to_phys(save_ptr),
 			  virt_to_phys(save_ptr) + sizeof(*save_ptr));

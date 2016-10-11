@@ -26,7 +26,11 @@
 static __u8 *pl_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 		unsigned int *rsize)
 {
+<<<<<<< HEAD
 	if (*rsize >= 60 && rdesc[39] == 0x2a && rdesc[40] == 0xf5 &&
+=======
+	if (*rsize >= 62 && rdesc[39] == 0x2a && rdesc[40] == 0xf5 &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			rdesc[41] == 0x00 && rdesc[59] == 0x26 &&
 			rdesc[60] == 0xf9 && rdesc[61] == 0x00) {
 		hid_info(hdev, "fixing up Petalynx Maxter Remote report descriptor\n");

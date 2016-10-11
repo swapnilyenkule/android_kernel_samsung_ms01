@@ -535,7 +535,11 @@ static inline int audit_arch(void)
 asmlinkage void syscall_trace_enter(struct pt_regs *regs)
 {
 	/* do the secure computing check first */
+<<<<<<< HEAD
 	secure_computing_strict(regs->regs[2]);
+=======
+	secure_computing(regs->regs[2]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!(current->ptrace & PT_PTRACED))
 		goto out;

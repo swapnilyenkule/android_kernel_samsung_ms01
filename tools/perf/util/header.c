@@ -1060,6 +1060,7 @@ static void print_cpudesc(struct perf_header *ph, int fd, FILE *fp)
 static void print_nrcpus(struct perf_header *ph, int fd, FILE *fp)
 {
 	ssize_t ret;
+<<<<<<< HEAD
 	u32 nr;
 
 	ret = read(fd, &nr, sizeof(nr));
@@ -1079,6 +1080,21 @@ static void print_nrcpus(struct perf_header *ph, int fd, FILE *fp)
 		nr = bswap_32(nr);
 
 	fprintf(fp, "# nrcpus avail : %u\n", nr);
+=======
+	u32 nr[2];
+
+	ret = read(fd, &nr, sizeof(nr));
+	if (ret != (ssize_t)sizeof(nr))
+		nr[0] = nr[1] = -1; /* interpreted as error */
+
+	if (ph->needs_swap) {
+		nr[0] = bswap_32(nr[0]);
+		nr[1] = bswap_32(nr[1]);
+	}
+
+	fprintf(fp, "# nrcpus online : %u\n", nr[1]);
+	fprintf(fp, "# nrcpus avail : %u\n", nr[0]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void print_version(struct perf_header *ph, int fd, FILE *fp)

@@ -105,7 +105,11 @@ static struct {
 };
 
 static unsigned int rates_11289[] = {
+<<<<<<< HEAD
 	44100, 88235,
+=======
+	44100, 88200,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct snd_pcm_hw_constraint_list constraints_11289 = {
@@ -132,7 +136,11 @@ static struct snd_pcm_hw_constraint_list constraints_16384 = {
 };
 
 static unsigned int rates_16934[] = {
+<<<<<<< HEAD
 	44100, 88235,
+=======
+	44100, 88200,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct snd_pcm_hw_constraint_list constraints_16934 = {
@@ -150,7 +158,11 @@ static struct snd_pcm_hw_constraint_list constraints_18432 = {
 };
 
 static unsigned int rates_22579[] = {
+<<<<<<< HEAD
 	44100, 88235, 1764000
+=======
+	44100, 88200, 176400
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct snd_pcm_hw_constraint_list constraints_22579 = {
@@ -168,7 +180,11 @@ static struct snd_pcm_hw_constraint_list constraints_24576 = {
 };
 
 static unsigned int rates_36864[] = {
+<<<<<<< HEAD
 	48000, 96000, 19200
+=======
+	48000, 96000, 192000
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct snd_pcm_hw_constraint_list constraints_36864 = {

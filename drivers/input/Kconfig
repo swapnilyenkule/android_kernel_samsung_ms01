@@ -71,7 +71,11 @@ config INPUT_SPARSEKMAP
 comment "Userland interfaces"
 
 config INPUT_MOUSEDEV
+<<<<<<< HEAD
 	tristate "Mouse interface" if EXPERT
+=======
+	tristate "Mouse interface"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default y
 	help
 	  Say Y here if you want your mouse to be accessible as char devices
@@ -165,6 +169,7 @@ config INPUT_APMPOWER
 	  To compile this driver as a module, choose M here: the
 	  module will be called apm-power.
 
+<<<<<<< HEAD
 config INPUT_KEYRESET
 	tristate "Reset key"
 	depends on INPUT
@@ -174,6 +179,8 @@ config INPUT_KEYRESET
 	  To compile this driver as a module, choose M here: the
 	  module will be called keyreset.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 comment "Input Device Drivers"
 
 source "drivers/input/keyboard/Kconfig"

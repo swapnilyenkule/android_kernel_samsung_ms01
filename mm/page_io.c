@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *  linux/mm/page_io.c
  *
@@ -19,8 +22,11 @@
 #include <linux/bio.h>
 #include <linux/swapops.h>
 #include <linux/writeback.h>
+<<<<<<< HEAD
 #include <linux/blkdev.h>
 #include <linux/frontswap.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/pgtable.h>
 
 static struct bio *get_swap_bio(gfp_t gfp_flags,
@@ -43,7 +49,11 @@ static struct bio *get_swap_bio(gfp_t gfp_flags,
 	return bio;
 }
 
+<<<<<<< HEAD
 void end_swap_bio_write(struct bio *bio, int err)
+=======
+static void end_swap_bio_write(struct bio *bio, int err)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	const int uptodate = test_bit(BIO_UPTODATE, &bio->bi_flags);
 	struct page *page = bio->bi_io_vec[0].bv_page;
@@ -59,12 +69,18 @@ void end_swap_bio_write(struct bio *bio, int err)
 		 * Also clear PG_reclaim to avoid rotate_reclaimable_page()
 		 */
 		set_page_dirty(page);
+<<<<<<< HEAD
 #ifndef CONFIG_VNSWAP
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		printk(KERN_ALERT "Write-error on swap-device (%u:%u:%Lu)\n",
 				imajor(bio->bi_bdev->bd_inode),
 				iminor(bio->bi_bdev->bd_inode),
 				(unsigned long long)bio->bi_sector);
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ClearPageReclaim(page);
 	}
 	end_page_writeback(page);
@@ -83,6 +99,7 @@ void end_swap_bio_read(struct bio *bio, int err)
 				imajor(bio->bi_bdev->bd_inode),
 				iminor(bio->bi_bdev->bd_inode),
 				(unsigned long long)bio->bi_sector);
+<<<<<<< HEAD
 		goto out;
 	}
 
@@ -131,25 +148,39 @@ void end_swap_bio_read(struct bio *bio, int err)
 	}
 
 out:
+=======
+	} else {
+		SetPageUptodate(page);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unlock_page(page);
 	bio_put(bio);
 }
 
+<<<<<<< HEAD
 int __swap_writepage(struct page *page, struct writeback_control *wbc,
 	void (*end_write_func)(struct bio *, int));
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * We may have stale swap cache pages in memory: notice
  * them here and get rid of the unnecessary final write.
  */
 int swap_writepage(struct page *page, struct writeback_control *wbc)
 {
+<<<<<<< HEAD
 	int ret = 0;
+=======
+	struct bio *bio;
+	int ret = 0, rw = WRITE;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (try_to_free_swap(page)) {
 		unlock_page(page);
 		goto out;
 	}
+<<<<<<< HEAD
 	if (frontswap_store(page) == 0) {
 		set_page_writeback(page);
 		unlock_page(page);
@@ -168,6 +199,9 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
 	int ret = 0, rw = WRITE;
 
 	bio = get_swap_bio(GFP_NOIO, page, end_write_func);
+=======
+	bio = get_swap_bio(GFP_NOIO, page, end_swap_bio_write);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (bio == NULL) {
 		set_page_dirty(page);
 		unlock_page(page);
@@ -191,11 +225,14 @@ int swap_readpage(struct page *page)
 
 	VM_BUG_ON(!PageLocked(page));
 	VM_BUG_ON(PageUptodate(page));
+<<<<<<< HEAD
 	if (frontswap_load(page) == 0) {
 		SetPageUptodate(page);
 		unlock_page(page);
 		goto out;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bio = get_swap_bio(GFP_KERNEL, page, end_swap_bio_read);
 	if (bio == NULL) {
 		unlock_page(page);

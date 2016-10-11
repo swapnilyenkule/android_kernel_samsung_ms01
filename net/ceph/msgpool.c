@@ -12,7 +12,11 @@ static void *msgpool_alloc(gfp_t gfp_mask, void *arg)
 	struct ceph_msgpool *pool = arg;
 	struct ceph_msg *msg;
 
+<<<<<<< HEAD
 	msg = ceph_msg_new(0, pool->front_len, gfp_mask, true);
+=======
+	msg = ceph_msg_new(pool->type, pool->front_len, gfp_mask, true);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!msg) {
 		dout("msgpool_alloc %s failed\n", pool->name);
 	} else {
@@ -32,10 +36,18 @@ static void msgpool_free(void *element, void *arg)
 	ceph_msg_put(msg);
 }
 
+<<<<<<< HEAD
 int ceph_msgpool_init(struct ceph_msgpool *pool,
 		      int front_len, int size, bool blocking, const char *name)
 {
 	dout("msgpool %s init\n", name);
+=======
+int ceph_msgpool_init(struct ceph_msgpool *pool, int type,
+		      int front_len, int size, bool blocking, const char *name)
+{
+	dout("msgpool %s init\n", name);
+	pool->type = type;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pool->front_len = front_len;
 	pool->pool = mempool_create(size, msgpool_alloc, msgpool_free, pool);
 	if (!pool->pool)
@@ -61,7 +73,11 @@ struct ceph_msg *ceph_msgpool_get(struct ceph_msgpool *pool,
 		WARN_ON(1);
 
 		/* try to alloc a fresh message */
+<<<<<<< HEAD
 		return ceph_msg_new(0, front_len, GFP_NOFS, false);
+=======
+		return ceph_msg_new(pool->type, front_len, GFP_NOFS, false);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	msg = mempool_alloc(pool->pool, GFP_NOFS);

@@ -340,7 +340,11 @@ void smp_send_stop(void)
 	return;
 }
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int ret;
 	struct blackfin_cpudata *ci = &per_cpu(cpu_data, cpu);

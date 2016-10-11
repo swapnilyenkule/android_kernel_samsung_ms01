@@ -4,6 +4,10 @@
 
 config PINCTRL
 	bool
+<<<<<<< HEAD
+=======
+	depends on EXPERIMENTAL
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 if PINCTRL
 
@@ -34,16 +38,28 @@ config PINCTRL_MMP2
 	bool "MMP2 pin controller driver"
 	depends on ARCH_MMP
 	select PINCTRL_PXA3xx
+<<<<<<< HEAD
+=======
+	select PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config PINCTRL_PXA168
 	bool "PXA168 pin controller driver"
 	depends on ARCH_MMP
 	select PINCTRL_PXA3xx
+<<<<<<< HEAD
+=======
+	select PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config PINCTRL_PXA910
 	bool "PXA910 pin controller driver"
 	depends on ARCH_MMP
 	select PINCTRL_PXA3xx
+<<<<<<< HEAD
+=======
+	select PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config PINCTRL_SIRF
 	bool "CSR SiRFprimaII pin controller driver"
@@ -52,15 +68,28 @@ config PINCTRL_SIRF
 
 config PINCTRL_TEGRA
 	bool
+<<<<<<< HEAD
 	select PINMUX
 	select PINCONF
 
 config PINCTRL_TEGRA20
 	bool
+=======
+
+config PINCTRL_TEGRA20
+	bool
+	select PINMUX
+	select PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select PINCTRL_TEGRA
 
 config PINCTRL_TEGRA30
 	bool
+<<<<<<< HEAD
+=======
+	select PINMUX
+	select PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select PINCTRL_TEGRA
 
 config PINCTRL_U300
@@ -71,7 +100,11 @@ config PINCTRL_U300
 
 config PINCTRL_COH901
 	bool "ST-Ericsson U300 COH 901 335/571 GPIO"
+<<<<<<< HEAD
 	depends on GPIOLIB && ARCH_U300 && PINCTRL_U300
+=======
+	depends on GPIOLIB && ARCH_U300 && PINMUX_U300
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Say yes here to support GPIO interface on ST-Ericsson U300.
 	  The names of the two IP block variants supported are

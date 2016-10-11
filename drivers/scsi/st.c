@@ -1268,9 +1268,15 @@ static int st_open(struct inode *inode, struct file *filp)
  err_out:
 	normalize_buffer(STp->buffer);
 	STp->in_use = 0;
+<<<<<<< HEAD
 	scsi_tape_put(STp);
 	if (resumed)
 		scsi_autopm_put_device(STp->device);
+=======
+	if (resumed)
+		scsi_autopm_put_device(STp->device);
+	scsi_tape_put(STp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&st_mutex);
 	return retval;
 

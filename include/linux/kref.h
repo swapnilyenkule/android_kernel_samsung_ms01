@@ -18,8 +18,11 @@
 #include <linux/bug.h>
 #include <linux/atomic.h>
 #include <linux/kernel.h>
+<<<<<<< HEAD
 #include <linux/mutex.h>
 #include <linux/spinlock.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct kref {
 	atomic_t refcount;
@@ -40,11 +43,16 @@ static inline void kref_init(struct kref *kref)
  */
 static inline void kref_get(struct kref *kref)
 {
+<<<<<<< HEAD
 	/* If refcount was 0 before incrementing then we have a race
 	 * condition when this kref is freeing by some other thread right now.
 	 * In this case one should use kref_get_unless_zero()
 	 */
 	WARN_ON_ONCE(atomic_inc_return(&kref->refcount) < 2);
+=======
+	WARN_ON(!atomic_read(&kref->refcount));
+	atomic_inc(&kref->refcount);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -100,6 +108,7 @@ static inline int kref_put(struct kref *kref, void (*release)(struct kref *kref)
 }
 
 /**
+<<<<<<< HEAD
  * kref_put_spinlock_irqsave - decrement refcount for object.
  * @kref: object.
  * @release: pointer to the function that will clean up the object when the
@@ -149,6 +158,8 @@ static inline int kref_put_mutex(struct kref *kref,
 }
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * kref_get_unless_zero - Increment refcount for object unless it is zero.
  * @kref: object.
  *

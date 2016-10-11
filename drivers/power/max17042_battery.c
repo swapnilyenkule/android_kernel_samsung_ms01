@@ -105,7 +105,10 @@ static enum power_supply_property max17042_battery_props[] = {
 	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
 	POWER_SUPPLY_PROP_VOLTAGE_AVG,
+<<<<<<< HEAD
 	POWER_SUPPLY_PROP_VOLTAGE_OCV,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	POWER_SUPPLY_PROP_CAPACITY,
 	POWER_SUPPLY_PROP_CHARGE_FULL,
 	POWER_SUPPLY_PROP_TEMP,
@@ -172,6 +175,7 @@ static int max17042_get_property(struct power_supply *psy,
 
 		val->intval = ret * 625 / 8;
 		break;
+<<<<<<< HEAD
 	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
 		ret = max17042_read_reg(chip->client, MAX17042_OCVInternal);
 		if (ret < 0)
@@ -179,6 +183,8 @@ static int max17042_get_property(struct power_supply *psy,
 
 		val->intval = ret * 625 / 8;
 		break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case POWER_SUPPLY_PROP_CAPACITY:
 		ret = max17042_read_reg(chip->client, MAX17042_RepSOC);
 		if (ret < 0)

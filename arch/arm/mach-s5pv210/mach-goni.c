@@ -233,11 +233,14 @@ static void __init goni_radio_init(void)
 	gpio_request_one(gpio, GPIOF_OUT_INIT_HIGH, "FM_RST");
 }
 
+<<<<<<< HEAD
 static u8 read_chg(void)
 {
 	return gpio_get_value(S5PV210_GPJ0(5));
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* TSP */
 static struct mxt_platform_data qt602240_platform_data = {
 	.x_line		= 17,
@@ -249,7 +252,10 @@ static struct mxt_platform_data qt602240_platform_data = {
 	.voltage	= 2800000,              /* 2.8V */
 	.orient		= MXT_DIAGONAL,
 	.irqflags	= IRQF_TRIGGER_FALLING,
+<<<<<<< HEAD
 	.read_chg	= &read_chg,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct s3c2410_platform_i2c i2c2_data __initdata = {

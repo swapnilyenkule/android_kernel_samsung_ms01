@@ -24,7 +24,12 @@
 */
 
 enum dma_ch {
+<<<<<<< HEAD
 	DMACH_XD0,
+=======
+	DMACH_DT_PROP = -1,	/* not yet supported, do not use */
+	DMACH_XD0 = 0,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	DMACH_XD1,
 	DMACH_SDI,
 	DMACH_SPI0,

@@ -1684,7 +1684,11 @@ itd_link_urb (
 
 	/* don't need that schedule data any more */
 	iso_sched_free (stream, iso_sched);
+<<<<<<< HEAD
 	urb->hcpriv = NULL;
+=======
+	urb->hcpriv = stream;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	timer_action (ehci, TIMER_IO_WATCHDOG);
 	return enable_periodic(ehci);
@@ -2094,7 +2098,11 @@ sitd_link_urb (
 
 	/* don't need that schedule data any more */
 	iso_sched_free (stream, sched);
+<<<<<<< HEAD
 	urb->hcpriv = NULL;
+=======
+	urb->hcpriv = stream;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	timer_action (ehci, TIMER_IO_WATCHDOG);
 	return enable_periodic(ehci);

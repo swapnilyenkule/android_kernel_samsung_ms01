@@ -393,7 +393,11 @@ int btrfs_lookup_csums_range(struct btrfs_root *root, u64 start, u64 end,
 	ret = 0;
 fail:
 	while (ret < 0 && !list_empty(&tmplist)) {
+<<<<<<< HEAD
 		sums = list_entry(&tmplist, struct btrfs_ordered_sum, list);
+=======
+		sums = list_entry(tmplist.next, struct btrfs_ordered_sum, list);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		list_del(&sums->list);
 		kfree(sums);
 	}

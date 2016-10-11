@@ -1258,7 +1258,11 @@ idt77252_rx_raw(struct idt77252_dev *card)
 	tail = readl(SAR_REG_RAWCT);
 
 	pci_dma_sync_single_for_cpu(card->pcidev, IDT77252_PRV_PADDR(queue),
+<<<<<<< HEAD
 				    skb_end_pointer(queue) - queue->head - 16,
+=======
+				    skb_end_offset(queue) - 16,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				    PCI_DMA_FROMDEVICE);
 
 	while (head != tail) {
@@ -3513,7 +3517,11 @@ init_card(struct atm_dev *dev)
 	tmp = dev_get_by_name(&init_net, tname);	/* jhs: was "tmp = dev_get(tname);" */
 	if (tmp) {
 		memcpy(card->atmdev->esi, tmp->dev_addr, 6);
+<<<<<<< HEAD
 
+=======
+		dev_put(tmp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		printk("%s: ESI %pM\n", card->name, card->atmdev->esi);
 	}
 	/*

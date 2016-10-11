@@ -191,8 +191,13 @@ struct mapped_device {
 	/* forced geometry settings */
 	struct hd_geometry geometry;
 
+<<<<<<< HEAD
 	/* sysfs handle */
 	struct kobject kobj;
+=======
+	/* kobject and completion */
+	struct dm_kobject_holder kobj_holder;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* zero-length flush that will be cloned and submitted to targets */
 	struct bio flush_bio;
@@ -754,8 +759,19 @@ static void rq_completed(struct mapped_device *md, int rw, int run_queue)
 	if (!md_in_flight(md))
 		wake_up(&md->wait);
 
+<<<<<<< HEAD
 	if (run_queue)
 		blk_run_queue(md->queue);
+=======
+	/*
+	 * Run this off this callpath, as drivers could invoke end_io while
+	 * inside their request_fn (and holding the queue lock). Calling
+	 * back into ->request_fn() could deadlock attempting to grab the
+	 * queue lock again.
+	 */
+	if (run_queue)
+		blk_run_queue_async(md->queue);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * dm_put() must be at the end of this function. See the comment above
@@ -865,10 +881,21 @@ static void dm_done(struct request *clone, int error, bool mapped)
 {
 	int r = error;
 	struct dm_rq_target_io *tio = clone->end_io_data;
+<<<<<<< HEAD
 	dm_request_endio_fn rq_end_io = tio->ti->type->rq_end_io;
 
 	if (mapped && rq_end_io)
 		r = rq_end_io(tio->ti, clone, error, &tio->info);
+=======
+	dm_request_endio_fn rq_end_io = NULL;
+
+	if (tio->ti) {
+		rq_end_io = tio->ti->type->rq_end_io;
+
+		if (mapped && rq_end_io)
+			r = rq_end_io(tio->ti, clone, error, &tio->info);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (r <= 0)
 		/* The target wants to complete the I/O */
@@ -1566,6 +1593,7 @@ static int map_request(struct dm_target *ti, struct request *clone,
 	int r, requeued = 0;
 	struct dm_rq_target_io *tio = clone->end_io_data;
 
+<<<<<<< HEAD
 	/*
 	 * Hold the md reference here for the in-flight I/O.
 	 * We can't rely on the reference count by device opener,
@@ -1575,6 +1603,8 @@ static int map_request(struct dm_target *ti, struct request *clone,
 	 */
 	dm_get(md);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	tio->ti = ti;
 	r = ti->type->map_rq(ti, clone, &tio->info);
 	switch (r) {
@@ -1606,6 +1636,29 @@ static int map_request(struct dm_target *ti, struct request *clone,
 	return requeued;
 }
 
+<<<<<<< HEAD
+=======
+static struct request *dm_start_request(struct mapped_device *md, struct request *orig)
+{
+	struct request *clone;
+
+	blk_start_request(orig);
+	clone = orig->special;
+	atomic_inc(&md->pending[rq_data_dir(clone)]);
+
+	/*
+	 * Hold the md reference here for the in-flight I/O.
+	 * We can't rely on the reference count by device opener,
+	 * because the device may be closed during the request completion
+	 * when all bios are completed.
+	 * See the comment in rq_completed() too.
+	 */
+	dm_get(md);
+
+	return clone;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * q->request_fn for request-based dm.
  * Called with the queue lock held.
@@ -1635,14 +1688,31 @@ static void dm_request_fn(struct request_queue *q)
 			pos = blk_rq_pos(rq);
 
 		ti = dm_table_find_target(map, pos);
+<<<<<<< HEAD
 		BUG_ON(!dm_target_is_valid(ti));
+=======
+		if (!dm_target_is_valid(ti)) {
+			/*
+			 * Must perform setup, that dm_done() requires,
+			 * before calling dm_kill_unmapped_request
+			 */
+			DMERR_LIMIT("request attempted access beyond the end of device");
+			clone = dm_start_request(md, rq);
+			dm_kill_unmapped_request(clone, -EIO);
+			continue;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (ti->type->busy && ti->type->busy(ti))
 			goto delay_and_out;
 
+<<<<<<< HEAD
 		blk_start_request(rq);
 		clone = rq->special;
 		atomic_inc(&md->pending[rq_data_dir(clone)]);
+=======
+		clone = dm_start_request(md, rq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		spin_unlock(q->queue_lock);
 		if (map_request(ti, clone, md))
@@ -1662,8 +1732,11 @@ delay_and_out:
 	blk_delay_queue(q, HZ / 10);
 out:
 	dm_table_put(map);
+<<<<<<< HEAD
 
 	return;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int dm_underlying_device_busy(struct request_queue *q)
@@ -1865,6 +1938,10 @@ static struct mapped_device *alloc_dev(int minor)
 	init_waitqueue_head(&md->wait);
 	INIT_WORK(&md->work, dm_wq_work);
 	init_waitqueue_head(&md->eventq);
+<<<<<<< HEAD
+=======
+	init_completion(&md->kobj_holder.completion);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	md->disk->major = _major;
 	md->disk->first_minor = minor;
@@ -2205,7 +2282,11 @@ int dm_setup_md_queue(struct mapped_device *md)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct mapped_device *dm_find_md(dev_t dev)
+=======
+struct mapped_device *dm_get_md(dev_t dev)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct mapped_device *md;
 	unsigned minor = MINOR(dev);
@@ -2216,12 +2297,24 @@ static struct mapped_device *dm_find_md(dev_t dev)
 	spin_lock(&_minor_lock);
 
 	md = idr_find(&_minor_idr, minor);
+<<<<<<< HEAD
 	if (md && (md == MINOR_ALLOCED ||
 		   (MINOR(disk_devt(dm_disk(md))) != minor) ||
 		   dm_deleting_md(md) ||
 		   test_bit(DMF_FREEING, &md->flags))) {
 		md = NULL;
 		goto out;
+=======
+	if (md) {
+		if ((md == MINOR_ALLOCED ||
+		     (MINOR(disk_devt(dm_disk(md))) != minor) ||
+		     dm_deleting_md(md) ||
+		     test_bit(DMF_FREEING, &md->flags))) {
+			md = NULL;
+			goto out;
+		}
+		dm_get(md);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 out:
@@ -2229,6 +2322,7 @@ out:
 
 	return md;
 }
+<<<<<<< HEAD
 
 struct mapped_device *dm_get_md(dev_t dev)
 {
@@ -2239,6 +2333,8 @@ struct mapped_device *dm_get_md(dev_t dev)
 
 	return md;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL_GPL(dm_get_md);
 
 void *dm_get_mdptr(struct mapped_device *md)
@@ -2275,10 +2371,22 @@ static void __dm_destroy(struct mapped_device *md, bool wait)
 	set_bit(DMF_FREEING, &md->flags);
 	spin_unlock(&_minor_lock);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Take suspend_lock so that presuspend and postsuspend methods
+	 * do not race with internal suspend.
+	 */
+	mutex_lock(&md->suspend_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!dm_suspended_md(md)) {
 		dm_table_presuspend_targets(map);
 		dm_table_postsuspend_targets(map);
 	}
+<<<<<<< HEAD
+=======
+	mutex_unlock(&md->suspend_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Rare, but there may be I/O requests still going to complete,
@@ -2656,6 +2764,7 @@ struct gendisk *dm_disk(struct mapped_device *md)
 
 struct kobject *dm_kobject(struct mapped_device *md)
 {
+<<<<<<< HEAD
 	return &md->kobj;
 }
 
@@ -2663,13 +2772,22 @@ struct kobject *dm_kobject(struct mapped_device *md)
  * struct mapped_device should not be exported outside of dm.c
  * so use this check to verify that kobj is part of md structure
  */
+=======
+	return &md->kobj_holder.kobj;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct mapped_device *dm_get_from_kobject(struct kobject *kobj)
 {
 	struct mapped_device *md;
 
+<<<<<<< HEAD
 	md = container_of(kobj, struct mapped_device, kobj);
 	if (&md->kobj != kobj)
 		return NULL;
+=======
+	md = container_of(kobj, struct mapped_device, kobj_holder.kobj);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (test_bit(DMF_FREEING, &md->flags) ||
 	    dm_deleting_md(md))

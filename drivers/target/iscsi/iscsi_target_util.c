@@ -656,7 +656,11 @@ void iscsit_add_cmd_to_immediate_queue(
 	atomic_set(&conn->check_immediate_queue, 1);
 	spin_unlock_bh(&conn->immed_queue_lock);
 
+<<<<<<< HEAD
 	wake_up_process(conn->thread_set->tx_thread);
+=======
+	wake_up(&conn->queues_wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 struct iscsi_queue_req *iscsit_get_cmd_from_immediate_queue(struct iscsi_conn *conn)
@@ -730,7 +734,11 @@ void iscsit_add_cmd_to_response_queue(
 	atomic_inc(&cmd->response_queue_count);
 	spin_unlock_bh(&conn->response_queue_lock);
 
+<<<<<<< HEAD
 	wake_up_process(conn->thread_set->tx_thread);
+=======
+	wake_up(&conn->queues_wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 struct iscsi_queue_req *iscsit_get_cmd_from_response_queue(struct iscsi_conn *conn)
@@ -784,6 +792,27 @@ static void iscsit_remove_cmd_from_response_queue(
 	}
 }
 
+<<<<<<< HEAD
+=======
+bool iscsit_conn_all_queues_empty(struct iscsi_conn *conn)
+{
+	bool empty;
+
+	spin_lock_bh(&conn->immed_queue_lock);
+	empty = list_empty(&conn->immed_queue_list);
+	spin_unlock_bh(&conn->immed_queue_lock);
+
+	if (!empty)
+		return empty;
+
+	spin_lock_bh(&conn->response_queue_lock);
+	empty = list_empty(&conn->response_queue_list);
+	spin_unlock_bh(&conn->response_queue_lock);
+
+	return empty;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void iscsit_free_queue_reqs_for_conn(struct iscsi_conn *conn)
 {
 	struct iscsi_queue_req *qr, *qr_tmp;
@@ -1462,15 +1491,24 @@ static int iscsit_do_tx_data(
 	struct iscsi_conn *conn,
 	struct iscsi_data_count *count)
 {
+<<<<<<< HEAD
 	int data = count->data_length, total_tx = 0, tx_loop = 0, iov_len;
+=======
+	int ret, iov_len;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct kvec *iov_p;
 	struct msghdr msg;
 
 	if (!conn || !conn->sock || !conn->conn_ops)
 		return -1;
 
+<<<<<<< HEAD
 	if (data <= 0) {
 		pr_err("Data length is: %d\n", data);
+=======
+	if (count->data_length <= 0) {
+		pr_err("Data length is: %d\n", count->data_length);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -1;
 	}
 
@@ -1479,6 +1517,7 @@ static int iscsit_do_tx_data(
 	iov_p = count->iov;
 	iov_len = count->iov_count;
 
+<<<<<<< HEAD
 	while (total_tx < data) {
 		tx_loop = kernel_sendmsg(conn->sock, &msg, iov_p, iov_len,
 					(data - total_tx));
@@ -1493,6 +1532,18 @@ static int iscsit_do_tx_data(
 	}
 
 	return total_tx;
+=======
+	ret = kernel_sendmsg(conn->sock, &msg, iov_p, iov_len,
+			     count->data_length);
+	if (ret != count->data_length) {
+		pr_err("Unexpected ret: %d send data %d\n",
+		       ret, count->data_length);
+		return -EPIPE;
+	}
+	pr_debug("ret: %d, sent data: %d\n", ret, count->data_length);
+
+	return ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int rx_data(

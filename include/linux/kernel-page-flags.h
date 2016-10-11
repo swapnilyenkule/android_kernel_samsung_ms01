@@ -32,6 +32,11 @@
 #define KPF_KSM			21
 #define KPF_THP			22
 
+<<<<<<< HEAD
+=======
+#ifdef __KERNEL__
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* kernel hacking assistances
  * WARNING: subject to change, never rely on them!
  */
@@ -44,4 +49,9 @@
 #define KPF_ARCH		38
 #define KPF_UNCACHED		39
 
+<<<<<<< HEAD
+=======
+#endif /* __KERNEL__ */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* LINUX_KERNEL_PAGE_FLAGS_H */

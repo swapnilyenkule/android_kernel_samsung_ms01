@@ -513,13 +513,18 @@ static int iwl_find_otp_image(struct iwl_trans *trans,
  * iwl_get_max_txpower_avg - get the highest tx power from all chains.
  *     find the highest tx power from all chains for the channel
  */
+<<<<<<< HEAD
 static s8 iwl_get_max_txpower_avg(const struct iwl_cfg *cfg,
+=======
+static s8 iwl_get_max_txpower_avg(struct iwl_priv *priv,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		struct iwl_eeprom_enhanced_txpwr *enhanced_txpower,
 		int element, s8 *max_txpower_in_half_dbm)
 {
 	s8 max_txpower_avg = 0; /* (dBm) */
 
 	/* Take the highest tx power from any valid chains */
+<<<<<<< HEAD
 	if ((cfg->valid_tx_ant & ANT_A) &&
 	    (enhanced_txpower[element].chain_a_max > max_txpower_avg))
 		max_txpower_avg = enhanced_txpower[element].chain_a_max;
@@ -535,6 +540,23 @@ static s8 iwl_get_max_txpower_avg(const struct iwl_cfg *cfg,
 	    (enhanced_txpower[element].mimo2_max > max_txpower_avg))
 		max_txpower_avg =  enhanced_txpower[element].mimo2_max;
 	if ((cfg->valid_tx_ant == ANT_ABC) &&
+=======
+	if ((hw_params(priv).valid_tx_ant & ANT_A) &&
+	    (enhanced_txpower[element].chain_a_max > max_txpower_avg))
+		max_txpower_avg = enhanced_txpower[element].chain_a_max;
+	if ((hw_params(priv).valid_tx_ant & ANT_B) &&
+	    (enhanced_txpower[element].chain_b_max > max_txpower_avg))
+		max_txpower_avg = enhanced_txpower[element].chain_b_max;
+	if ((hw_params(priv).valid_tx_ant & ANT_C) &&
+	    (enhanced_txpower[element].chain_c_max > max_txpower_avg))
+		max_txpower_avg = enhanced_txpower[element].chain_c_max;
+	if (((hw_params(priv).valid_tx_ant == ANT_AB) |
+	    (hw_params(priv).valid_tx_ant == ANT_BC) |
+	    (hw_params(priv).valid_tx_ant == ANT_AC)) &&
+	    (enhanced_txpower[element].mimo2_max > max_txpower_avg))
+		max_txpower_avg =  enhanced_txpower[element].mimo2_max;
+	if ((hw_params(priv).valid_tx_ant == ANT_ABC) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    (enhanced_txpower[element].mimo3_max > max_txpower_avg))
 		max_txpower_avg = enhanced_txpower[element].mimo3_max;
 
@@ -637,7 +659,11 @@ static void iwl_eeprom_enhanced_txpower(struct iwl_priv *priv)
 				 ((txp->delta_20_in_40 & 0xf0) >> 4),
 				 (txp->delta_20_in_40 & 0x0f));
 
+<<<<<<< HEAD
 		max_txp_avg = iwl_get_max_txpower_avg(cfg(priv), txp_array, idx,
+=======
+		max_txp_avg = iwl_get_max_txpower_avg(priv, txp_array, idx,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 						      &max_txp_avg_halfdbm);
 
 		/*

@@ -3747,13 +3747,20 @@ static struct DeviceCtlBlk *device_alloc(struct AdapterCtlBlk *acb,
 	dcb->max_command = 1;
 	dcb->target_id = target;
 	dcb->target_lun = lun;
+<<<<<<< HEAD
+=======
+	dcb->dev_mode = eeprom->target[target].cfg0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef DC395x_NO_DISCONNECT
 	dcb->identify_msg =
 	    IDENTIFY(dcb->dev_mode & NTC_DO_DISCONNECT, lun);
 #else
 	dcb->identify_msg = IDENTIFY(0, lun);
 #endif
+<<<<<<< HEAD
 	dcb->dev_mode = eeprom->target[target].cfg0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dcb->inquiry7 = 0;
 	dcb->sync_mode = 0;
 	dcb->min_nego_period = clock_period[period_index];

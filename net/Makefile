@@ -70,4 +70,7 @@ obj-$(CONFIG_CEPH_LIB)		+= ceph/
 obj-$(CONFIG_BATMAN_ADV)	+= batman-adv/
 obj-$(CONFIG_NFC)		+= nfc/
 obj-$(CONFIG_OPENVSWITCH)	+= openvswitch/
+<<<<<<< HEAD
 obj-$(CONFIG_NET_ACTIVITY_STATS)		+= activity_stats.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

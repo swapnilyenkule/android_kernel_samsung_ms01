@@ -117,6 +117,10 @@
 
 #define CHIP_VER_B			BIT(4)
 #define CHIP_92C_BITMASK		BIT(0)
+<<<<<<< HEAD
+=======
+#define CHIP_UNKNOWN			BIT(7)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define CHIP_92C_1T2R			0x03
 #define CHIP_92C			0x01
 #define CHIP_88C			0x00

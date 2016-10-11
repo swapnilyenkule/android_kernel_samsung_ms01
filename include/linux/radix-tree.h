@@ -368,8 +368,16 @@ radix_tree_next_slot(void **slot, struct radix_tree_iter *iter, unsigned flags)
 			iter->index++;
 			if (likely(*slot))
 				return slot;
+<<<<<<< HEAD
 			if (flags & RADIX_TREE_ITER_CONTIG)
 				break;
+=======
+			if (flags & RADIX_TREE_ITER_CONTIG) {
+				/* forbid switching to the next chunk */
+				iter->next_index = 0;
+				break;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 	return NULL;

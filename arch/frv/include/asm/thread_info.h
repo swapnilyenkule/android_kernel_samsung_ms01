@@ -21,8 +21,11 @@
 
 #define THREAD_SIZE		8192
 
+<<<<<<< HEAD
 #define __HAVE_ARCH_TASK_STRUCT_ALLOCATOR
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * low level task data that entry.S needs immediate access to
  * - this struct should fit entirely inside of one cache line

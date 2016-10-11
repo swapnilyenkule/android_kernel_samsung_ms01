@@ -1041,6 +1041,10 @@ static void __cpuinit build_update_entries(u32 **p, unsigned int tmp,
 struct mips_huge_tlb_info {
 	int huge_pte;
 	int restore_scratch;
+<<<<<<< HEAD
+=======
+	bool need_reload_pte;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct mips_huge_tlb_info __cpuinit
@@ -1055,6 +1059,10 @@ build_fast_tlb_refill_handler (u32 **p, struct uasm_label **l,
 
 	rv.huge_pte = scratch;
 	rv.restore_scratch = 0;
+<<<<<<< HEAD
+=======
+	rv.need_reload_pte = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (check_for_high_segbits) {
 		UASM_i_MFC0(p, tmp, C0_BADVADDR);
@@ -1247,6 +1255,10 @@ static void __cpuinit build_r4000_tlb_refill_handler(void)
 	} else {
 		htlb_info.huge_pte = K0;
 		htlb_info.restore_scratch = 0;
+<<<<<<< HEAD
+=======
+		htlb_info.need_reload_pte = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		vmalloc_mode = refill_noscratch;
 		/*
 		 * create the plain linear handler
@@ -1283,6 +1295,11 @@ static void __cpuinit build_r4000_tlb_refill_handler(void)
 	}
 #ifdef CONFIG_HUGETLB_PAGE
 	uasm_l_tlb_huge_update(&l, p);
+<<<<<<< HEAD
+=======
+	if (htlb_info.need_reload_pte)
+		UASM_i_LW(&p, htlb_info.huge_pte, 0, K1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	build_huge_update_entries(&p, htlb_info.huge_pte, K1);
 	build_huge_tlb_write_entry(&p, &l, &r, K0, tlb_random,
 				   htlb_info.restore_scratch);

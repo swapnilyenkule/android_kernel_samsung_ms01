@@ -47,6 +47,11 @@ static struct console usbcons;
  * ------------------------------------------------------------
  */
 
+<<<<<<< HEAD
+=======
+static const struct tty_operations usb_console_fake_tty_ops = {
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * The parsing of the command line works exactly like the
@@ -141,6 +146,7 @@ static int usb_console_setup(struct console *co, char *options)
 				goto reset_open_count;
 			}
 			kref_init(&tty->kref);
+<<<<<<< HEAD
 			tty_port_tty_set(&port->port, tty);
 			tty->driver = usb_serial_tty_driver;
 			tty->index = co->index;
@@ -149,6 +155,19 @@ static int usb_console_setup(struct console *co, char *options)
 				err("no more memory");
 				goto free_tty;
 			}
+=======
+			tty->driver = usb_serial_tty_driver;
+			tty->index = co->index;
+			INIT_LIST_HEAD(&tty->tty_files);
+			kref_get(&tty->driver->kref);
+			tty->ops = &usb_console_fake_tty_ops;
+			if (tty_init_termios(tty)) {
+				retval = -ENOMEM;
+				err("no more memory");
+				goto put_tty;
+			}
+			tty_port_tty_set(&port->port, tty);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 		/* only call the device specific open if this
@@ -170,7 +189,11 @@ static int usb_console_setup(struct console *co, char *options)
 			serial->type->set_termios(tty, port, &dummy);
 
 			tty_port_tty_set(&port->port, NULL);
+<<<<<<< HEAD
 			kfree(tty);
+=======
+			tty_kref_put(tty);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		set_bit(ASYNCB_INITIALIZED, &port->port.flags);
 	}
@@ -186,8 +209,13 @@ static int usb_console_setup(struct console *co, char *options)
 
  fail:
 	tty_port_tty_set(&port->port, NULL);
+<<<<<<< HEAD
  free_tty:
 	kfree(tty);
+=======
+ put_tty:
+	tty_kref_put(tty);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  reset_open_count:
 	port->port.count = 0;
 	usb_autopm_put_interface(serial->interface);

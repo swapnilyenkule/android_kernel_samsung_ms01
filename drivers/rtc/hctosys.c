@@ -24,7 +24,11 @@
 
 int rtc_hctosys_ret = -ENODEV;
 
+<<<<<<< HEAD
 int rtc_hctosys(void)
+=======
+static int __init rtc_hctosys(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int err = -ENODEV;
 	struct rtc_time tm;
@@ -47,12 +51,15 @@ int rtc_hctosys(void)
 
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Force update rtc year time to 2014
 	 * (The release year of device)
 	 */
 	tm.tm_year = 114;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = rtc_valid_tm(&tm);
 	if (err) {
 		dev_err(rtc->dev.parent,

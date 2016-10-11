@@ -1333,7 +1333,11 @@ static void nfs3_xdr_enc_setacl3args(struct rpc_rqst *req,
 	if (args->npages != 0)
 		xdr_write_pages(xdr, args->pages, 0, args->len);
 	else
+<<<<<<< HEAD
 		xdr_reserve_space(xdr, NFS_ACL_INLINE_BUFSIZE);
+=======
+		xdr_reserve_space(xdr, args->len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	error = nfsacl_encode(xdr->buf, base, args->inode,
 			    (args->mask & NFS_ACL) ?

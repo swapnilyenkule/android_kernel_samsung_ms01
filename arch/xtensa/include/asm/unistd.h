@@ -394,7 +394,12 @@ __SYSCALL(174, sys_chroot, 1)
 #define __NR_pivot_root 			175
 __SYSCALL(175, sys_pivot_root, 2)
 #define __NR_umount 				176
+<<<<<<< HEAD
 __SYSCALL(176, sys_umount, 2)
+=======
+__SYSCALL(176, sys_oldumount, 1)
+#define __ARCH_WANT_SYS_OLDUMOUNT
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define __NR_swapoff 				177
 __SYSCALL(177, sys_swapoff, 1)
 #define __NR_sync 				178

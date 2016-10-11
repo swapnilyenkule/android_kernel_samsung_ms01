@@ -129,8 +129,11 @@ static int resume_physical_mapping_init(pgd_t *pgd_base)
 		}
 	}
 
+<<<<<<< HEAD
 	resume_map_numa_kva(pgd_base);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 

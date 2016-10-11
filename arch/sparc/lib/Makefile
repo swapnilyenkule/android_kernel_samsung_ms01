@@ -40,7 +40,11 @@ lib-$(CONFIG_SPARC64) += copy_in_user.o user_fixup.o memmove.o
 lib-$(CONFIG_SPARC64) += mcount.o ipcsum.o xor.o hweight.o ffs.o
 
 obj-y                 += iomap.o
+<<<<<<< HEAD
 obj-$(CONFIG_SPARC32) += atomic32.o
+=======
+obj-$(CONFIG_SPARC32) += atomic32.o ucmpdi2.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-y                 += ksyms.o
 obj-$(CONFIG_SPARC64) += PeeCeeI.o
 obj-y                 += usercopy.o

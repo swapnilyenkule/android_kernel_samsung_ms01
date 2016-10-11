@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright (C) 2007 Google, Inc.
  * Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
@@ -257,3 +258,6 @@ int __init msm_gpio_of_init(struct device_node *node,
 #endif
 
 #endif /* __ASM_ARCH_MSM_GPIO_H */
+=======
+/* empty */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

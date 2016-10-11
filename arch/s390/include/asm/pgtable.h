@@ -67,6 +67,13 @@ static inline int is_zero_pfn(unsigned long pfn)
 
 #define my_zero_pfn(addr)	page_to_pfn(ZERO_PAGE(addr))
 
+<<<<<<< HEAD
+=======
+/* TODO: s390 cannot support io_remap_pfn_range... */
+#define io_remap_pfn_range(vma, vaddr, pfn, size, prot) 	       \
+	remap_pfn_range(vma, vaddr, pfn, size, prot)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* !__ASSEMBLY__ */
 
 /*

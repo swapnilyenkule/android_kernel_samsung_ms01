@@ -35,7 +35,11 @@
 #include <net/netfilter/nf_conntrack.h>
 #endif
 
+<<<<<<< HEAD
 void
+=======
+static void
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 xt_socket_put_sk(struct sock *sk)
 {
 	if (sk->sk_state == TCP_TIME_WAIT)
@@ -43,7 +47,10 @@ xt_socket_put_sk(struct sock *sk)
 	else
 		sock_put(sk);
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(xt_socket_put_sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int
 extract_icmp4_fields(const struct sk_buff *skb,
@@ -102,8 +109,14 @@ extract_icmp4_fields(const struct sk_buff *skb,
 	return 0;
 }
 
+<<<<<<< HEAD
 struct sock*
 xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
+=======
+static bool
+socket_match(const struct sk_buff *skb, struct xt_action_param *par,
+	     const struct xt_socket_mtinfo1 *info)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	const struct iphdr *iph = ip_hdr(skb);
 	struct udphdr _hdr, *hp = NULL;
@@ -120,7 +133,11 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 		hp = skb_header_pointer(skb, ip_hdrlen(skb),
 					sizeof(_hdr), &_hdr);
 		if (hp == NULL)
+<<<<<<< HEAD
 			return NULL;
+=======
+			return false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		protocol = iph->protocol;
 		saddr = iph->saddr;
@@ -131,9 +148,15 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 	} else if (iph->protocol == IPPROTO_ICMP) {
 		if (extract_icmp4_fields(skb, &protocol, &saddr, &daddr,
 					&sport, &dport))
+<<<<<<< HEAD
 			return NULL;
 	} else {
 		return NULL;
+=======
+			return false;
+	} else {
+		return false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 #ifdef XT_SOCKET_HAVE_CONNTRACK
@@ -157,6 +180,7 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 
 	sk = nf_tproxy_get_sock_v4(dev_net(skb->dev), protocol,
 				   saddr, daddr, sport, dport, par->in, NFT_LOOKUP_ANY);
+<<<<<<< HEAD
 
 	pr_debug("proto %hhu %pI4:%hu -> %pI4:%hu (orig %pI4:%hu) sock %p\n",
 		 protocol, &saddr, ntohs(sport),
@@ -174,6 +198,8 @@ socket_match(const struct sk_buff *skb, struct xt_action_param *par,
 	struct sock *sk;
 
 	sk = xt_socket_get4_sk(skb, par);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sk != NULL) {
 		bool wildcard;
 		bool transparent = true;
@@ -196,6 +222,14 @@ socket_match(const struct sk_buff *skb, struct xt_action_param *par,
 			sk = NULL;
 	}
 
+<<<<<<< HEAD
+=======
+	pr_debug("proto %hhu %pI4:%hu -> %pI4:%hu (orig %pI4:%hu) sock %p\n",
+		 protocol, &saddr, ntohs(sport),
+		 &daddr, ntohs(dport),
+		 &iph->daddr, hp ? ntohs(hp->dest) : 0, sk);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return (sk != NULL);
 }
 
@@ -217,12 +251,22 @@ static int
 extract_icmp6_fields(const struct sk_buff *skb,
 		     unsigned int outside_hdrlen,
 		     int *protocol,
+<<<<<<< HEAD
 		     struct in6_addr **raddr,
 		     struct in6_addr **laddr,
 		     __be16 *rport,
 		     __be16 *lport)
 {
 	struct ipv6hdr *inside_iph, _inside_iph;
+=======
+		     const struct in6_addr **raddr,
+		     const struct in6_addr **laddr,
+		     __be16 *rport,
+		     __be16 *lport,
+		     struct ipv6hdr *ipv6_var)
+{
+	const struct ipv6hdr *inside_iph;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct icmp6hdr *icmph, _icmph;
 	__be16 *ports, _ports[2];
 	u8 inside_nexthdr;
@@ -237,12 +281,22 @@ extract_icmp6_fields(const struct sk_buff *skb,
 	if (icmph->icmp6_type & ICMPV6_INFOMSG_MASK)
 		return 1;
 
+<<<<<<< HEAD
 	inside_iph = skb_header_pointer(skb, outside_hdrlen + sizeof(_icmph), sizeof(_inside_iph), &_inside_iph);
+=======
+	inside_iph = skb_header_pointer(skb, outside_hdrlen + sizeof(_icmph),
+					sizeof(*ipv6_var), ipv6_var);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (inside_iph == NULL)
 		return 1;
 	inside_nexthdr = inside_iph->nexthdr;
 
+<<<<<<< HEAD
 	inside_hdrlen = ipv6_skip_exthdr(skb, outside_hdrlen + sizeof(_icmph) + sizeof(_inside_iph),
+=======
+	inside_hdrlen = ipv6_skip_exthdr(skb, outside_hdrlen + sizeof(_icmph) +
+					      sizeof(*ipv6_var),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					 &inside_nexthdr, &inside_fragoff);
 	if (inside_hdrlen < 0)
 		return 1; /* hjm: Packet has no/incomplete transport layer headers. */
@@ -267,6 +321,7 @@ extract_icmp6_fields(const struct sk_buff *skb,
 	return 0;
 }
 
+<<<<<<< HEAD
 struct sock*
 xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
 {
@@ -276,6 +331,18 @@ xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
 	struct in6_addr *daddr, *saddr;
 	__be16 dport, sport;
 	int thoff, tproto;
+=======
+static bool
+socket_mt6_v1(const struct sk_buff *skb, struct xt_action_param *par)
+{
+	struct ipv6hdr ipv6_var, *iph = ipv6_hdr(skb);
+	struct udphdr _hdr, *hp = NULL;
+	struct sock *sk;
+	const struct in6_addr *daddr, *saddr;
+	__be16 dport, sport;
+	int thoff, tproto;
+	const struct xt_socket_mtinfo1 *info = (struct xt_socket_mtinfo1 *) par->matchinfo;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	tproto = ipv6_find_hdr(skb, &thoff, -1, NULL);
 	if (tproto < 0) {
@@ -287,7 +354,11 @@ xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
 		hp = skb_header_pointer(skb, thoff,
 					sizeof(_hdr), &_hdr);
 		if (hp == NULL)
+<<<<<<< HEAD
 			return NULL;
+=======
+			return false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		saddr = &iph->saddr;
 		sport = hp->source;
@@ -296,14 +367,22 @@ xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
 
 	} else if (tproto == IPPROTO_ICMPV6) {
 		if (extract_icmp6_fields(skb, thoff, &tproto, &saddr, &daddr,
+<<<<<<< HEAD
 					 &sport, &dport))
 			return NULL;
 	} else {
 		return NULL;
+=======
+					 &sport, &dport, &ipv6_var))
+			return false;
+	} else {
+		return false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	sk = nf_tproxy_get_sock_v6(dev_net(skb->dev), tproto,
 				   saddr, daddr, sport, dport, par->in, NFT_LOOKUP_ANY);
+<<<<<<< HEAD
 	pr_debug("proto %hhd %pI6:%hu -> %pI6:%hu "
 		 "(orig %pI6:%hu) sock %p\n",
 		 tproto, saddr, ntohs(sport),
@@ -321,6 +400,8 @@ socket_mt6_v1(const struct sk_buff *skb, struct xt_action_param *par)
 
 	info = (struct xt_socket_mtinfo1 *) par->matchinfo;
 	sk = xt_socket_get6_sk(skb, par);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sk != NULL) {
 		bool wildcard;
 		bool transparent = true;
@@ -343,6 +424,15 @@ socket_mt6_v1(const struct sk_buff *skb, struct xt_action_param *par)
 			sk = NULL;
 	}
 
+<<<<<<< HEAD
+=======
+	pr_debug("proto %hhd %pI6:%hu -> %pI6:%hu "
+		 "(orig %pI6:%hu) sock %p\n",
+		 tproto, saddr, ntohs(sport),
+		 daddr, ntohs(dport),
+		 &iph->daddr, hp ? ntohs(hp->dest) : 0, sk);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return (sk != NULL);
 }
 #endif

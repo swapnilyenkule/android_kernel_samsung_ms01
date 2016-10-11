@@ -298,6 +298,21 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 	sector_t remaining = where->count;
 	struct request_queue *q = bdev_get_queue(where->bdev);
 	sector_t discard_sectors;
+<<<<<<< HEAD
+=======
+	unsigned int uninitialized_var(special_cmd_max_sectors);
+
+	/*
+	 * Reject unsupported discard and write same requests.
+	 */
+	if (rw & REQ_DISCARD) {
+		special_cmd_max_sectors = q->limits.max_discard_sectors;
+		if (special_cmd_max_sectors == 0) {
+			dec_count(io, region, -EOPNOTSUPP);
+			return;
+		}
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * where->count may be zero if rw holds a flush and we need to
@@ -321,7 +336,11 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 		store_io_and_region_in_bio(bio, io, region);
 
 		if (rw & REQ_DISCARD) {
+<<<<<<< HEAD
 			discard_sectors = min_t(sector_t, q->limits.max_discard_sectors, remaining);
+=======
+			discard_sectors = min_t(sector_t, special_cmd_max_sectors, remaining);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			bio->bi_size = discard_sectors << SECTOR_SHIFT;
 			remaining -= discard_sectors;
 		} else while (remaining) {

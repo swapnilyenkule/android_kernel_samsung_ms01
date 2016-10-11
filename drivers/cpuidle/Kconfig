@@ -18,6 +18,9 @@ config CPU_IDLE_GOV_MENU
 	bool
 	depends on CPU_IDLE && NO_HZ
 	default y
+<<<<<<< HEAD
 
 config ARCH_NEEDS_CPU_IDLE_COUPLED
 	def_bool n
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

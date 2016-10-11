@@ -137,6 +137,10 @@ struct elantech_data {
 	struct finger_pos mt[ETP_MAX_FINGERS];
 	unsigned char parity[256];
 	int (*send_cmd)(struct psmouse *psmouse, unsigned char c, unsigned char *param);
+<<<<<<< HEAD
+=======
+	void (*original_set_rate)(struct psmouse *psmouse, unsigned int rate);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #ifdef CONFIG_MOUSE_PS2_ELANTECH

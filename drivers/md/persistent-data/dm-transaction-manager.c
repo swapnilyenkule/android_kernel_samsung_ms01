@@ -138,6 +138,12 @@ EXPORT_SYMBOL_GPL(dm_tm_create_non_blocking_clone);
 
 void dm_tm_destroy(struct dm_transaction_manager *tm)
 {
+<<<<<<< HEAD
+=======
+	if (!tm->is_clone)
+		wipe_shadow_table(tm);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(tm);
 }
 EXPORT_SYMBOL_GPL(dm_tm_destroy);
@@ -342,8 +348,15 @@ static int dm_tm_create_internal(struct dm_block_manager *bm,
 		}
 
 		*sm = dm_sm_checker_create(inner);
+<<<<<<< HEAD
 		if (!*sm)
 			goto bad2;
+=======
+		if (IS_ERR(*sm)) {
+			r = PTR_ERR(*sm);
+			goto bad2;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	} else {
 		r = dm_bm_write_lock(dm_tm_get_bm(*tm), sb_location,
@@ -362,8 +375,15 @@ static int dm_tm_create_internal(struct dm_block_manager *bm,
 		}
 
 		*sm = dm_sm_checker_create(inner);
+<<<<<<< HEAD
 		if (!*sm)
 			goto bad2;
+=======
+		if (IS_ERR(*sm)) {
+			r = PTR_ERR(*sm);
+			goto bad2;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return 0;

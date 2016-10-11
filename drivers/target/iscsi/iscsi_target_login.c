@@ -45,6 +45,10 @@ extern spinlock_t sess_idr_lock;
 
 static int iscsi_login_init_conn(struct iscsi_conn *conn)
 {
+<<<<<<< HEAD
+=======
+	init_waitqueue_head(&conn->queues_wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	INIT_LIST_HEAD(&conn->conn_list);
 	INIT_LIST_HEAD(&conn->conn_cmd_list);
 	INIT_LIST_HEAD(&conn->immed_queue_list);
@@ -130,6 +134,7 @@ int iscsi_check_for_session_reinstatement(struct iscsi_conn *conn)
 
 	initiatorname_param = iscsi_find_param_from_key(
 			INITIATORNAME, conn->param_list);
+<<<<<<< HEAD
 	if (!initiatorname_param)
 		return -1;
 
@@ -137,6 +142,15 @@ int iscsi_check_for_session_reinstatement(struct iscsi_conn *conn)
 			SESSIONTYPE, conn->param_list);
 	if (!sessiontype_param)
 		return -1;
+=======
+	sessiontype_param = iscsi_find_param_from_key(
+			SESSIONTYPE, conn->param_list);
+	if (!initiatorname_param || !sessiontype_param) {
+		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_INITIATOR_ERR,
+			ISCSI_LOGIN_STATUS_MISSING_FIELDS);
+		return -1;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	sessiontype = (strncmp(sessiontype_param->value, NORMAL, 6)) ? 1 : 0;
 
@@ -795,6 +809,7 @@ int iscsi_target_setup_login_socket(
 	}
 	np->np_socket = sock;
 	/*
+<<<<<<< HEAD
 	 * The SCTP stack needs struct socket->file.
 	 */
 	if ((np->np_network_transport == ISCSI_SCTP_TCP) ||
@@ -811,6 +826,8 @@ int iscsi_target_setup_login_socket(
 		}
 	}
 	/*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Setup the np->np_sockaddr from the passed sockaddr setup
 	 * in iscsi_target_configfs.c code..
 	 */
@@ -869,6 +886,7 @@ int iscsi_target_setup_login_socket(
 
 fail:
 	np->np_socket = NULL;
+<<<<<<< HEAD
 	if (sock) {
 		if (np->np_flags & NPF_SCTP_STRUCT_FILE) {
 			kfree(sock->file);
@@ -877,13 +895,21 @@ fail:
 
 		sock_release(sock);
 	}
+=======
+	if (sock)
+		sock_release(sock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 
 static int __iscsi_target_login_thread(struct iscsi_np *np)
 {
 	u8 buffer[ISCSI_HDR_LEN], iscsi_opcode, zero_tsih = 0;
+<<<<<<< HEAD
 	int err, ret = 0, set_sctp_conn_flag, stop;
+=======
+	int err, ret = 0, stop;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct iscsi_conn *conn = NULL;
 	struct iscsi_login *login;
 	struct iscsi_portal_group *tpg = NULL;
@@ -894,7 +920,10 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
 	struct sockaddr_in6 sock_in6;
 
 	flush_signals(current);
+<<<<<<< HEAD
 	set_sctp_conn_flag = 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sock = np->np_socket;
 
 	spin_lock_bh(&np->np_thread_lock);
@@ -917,6 +946,7 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
 		spin_unlock_bh(&np->np_thread_lock);
 		goto out;
 	}
+<<<<<<< HEAD
 	/*
 	 * The SCTP stack needs struct socket->file.
 	 */
@@ -936,16 +966,21 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
 		}
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	iscsi_start_login_thread_timer(np);
 
 	conn = kzalloc(sizeof(struct iscsi_conn), GFP_KERNEL);
 	if (!conn) {
 		pr_err("Could not allocate memory for"
 			" new connection\n");
+<<<<<<< HEAD
 		if (set_sctp_conn_flag) {
 			kfree(new_sock->file);
 			new_sock->file = NULL;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		sock_release(new_sock);
 		/* Get another socket */
 		return 1;
@@ -955,9 +990,12 @@ static int __iscsi_target_login_thread(struct iscsi_np *np)
 	conn->conn_state = TARG_CONN_STATE_FREE;
 	conn->sock = new_sock;
 
+<<<<<<< HEAD
 	if (set_sctp_conn_flag)
 		conn->conn_flags |= CONNFLAG_SCTP_STRUCT_FILE;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pr_debug("Moving to TARG_CONN_STATE_XPT_UP.\n");
 	conn->conn_state = TARG_CONN_STATE_XPT_UP;
 
@@ -1205,6 +1243,7 @@ old_sess_out:
 		iscsi_release_param_list(conn->param_list);
 		conn->param_list = NULL;
 	}
+<<<<<<< HEAD
 	if (conn->sock) {
 		if (conn->conn_flags & CONNFLAG_SCTP_STRUCT_FILE) {
 			kfree(conn->sock->file);
@@ -1212,6 +1251,10 @@ old_sess_out:
 		}
 		sock_release(conn->sock);
 	}
+=======
+	if (conn->sock)
+		sock_release(conn->sock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(conn);
 
 	if (tpg) {

@@ -451,11 +451,16 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
 	INIT_LIST_HEAD(&dev->filelist);
 
 #ifdef	CONFIG_PM
+<<<<<<< HEAD
 	if (usb_hcd->driver->set_autosuspend_delay)
 		usb_hcd->driver->set_autosuspend_delay(dev);
 	else
 		pm_runtime_set_autosuspend_delay(&dev->dev,
 				usb_autosuspend_delay * 1000);
+=======
+	pm_runtime_set_autosuspend_delay(&dev->dev,
+			usb_autosuspend_delay * 1000);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->connect_time = jiffies;
 	dev->active_duration = -jiffies;
 #endif
@@ -1013,6 +1018,10 @@ static int __init usb_init(void)
 		pr_info("%s: USB support disabled\n", usbcore_name);
 		return 0;
 	}
+<<<<<<< HEAD
+=======
+	usb_init_pool_max();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	retval = usb_debugfs_init();
 	if (retval)

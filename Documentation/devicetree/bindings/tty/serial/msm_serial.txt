@@ -25,6 +25,7 @@ Example:
 		      <0x19c00000 0x1000>;
 		interrupts = <195>;
 	};
+<<<<<<< HEAD
 
 * Qualcomm MSM HSUART
 
@@ -82,3 +83,5 @@ Example:
 				<84 512 0 0>,
 				<84 512 500 800>;
 	};
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

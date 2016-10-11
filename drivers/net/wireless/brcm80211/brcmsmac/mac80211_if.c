@@ -1400,9 +1400,16 @@ void brcms_add_timer(struct brcms_timer *t, uint ms, int periodic)
 #endif
 	t->ms = ms;
 	t->periodic = (bool) periodic;
+<<<<<<< HEAD
 	t->set = true;
 
 	atomic_inc(&t->wl->callbacks);
+=======
+	if (!t->set) {
+		t->set = true;
+		atomic_inc(&t->wl->callbacks);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ieee80211_queue_delayed_work(hw, &t->dly_wrk, msecs_to_jiffies(ms));
 }

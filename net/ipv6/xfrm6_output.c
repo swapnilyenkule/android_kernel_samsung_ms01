@@ -137,20 +137,40 @@ static int __xfrm6_output(struct sk_buff *skb)
 	struct dst_entry *dst = skb_dst(skb);
 	struct xfrm_state *x = dst->xfrm;
 	int mtu = ip6_skb_dst_mtu(skb);
+<<<<<<< HEAD
 
 	if (skb->len > mtu && xfrm6_local_dontfrag(skb)) {
 		xfrm6_local_rxpmtu(skb, mtu);
 		return -EMSGSIZE;
 	} else if (!skb->local_df && skb->len > mtu && skb->sk) {
+=======
+	bool toobig;
+
+	if (x->props.mode != XFRM_MODE_TUNNEL)
+		goto skip_frag;
+
+	toobig = skb->len > mtu && !skb_is_gso(skb);
+
+	if (toobig && xfrm6_local_dontfrag(skb)) {
+		xfrm6_local_rxpmtu(skb, mtu);
+		return -EMSGSIZE;
+	} else if (!skb->local_df && toobig && skb->sk) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		xfrm6_local_error(skb, mtu);
 		return -EMSGSIZE;
 	}
 
+<<<<<<< HEAD
 	if (x->props.mode == XFRM_MODE_TUNNEL &&
 	    ((skb->len > mtu && !skb_is_gso(skb)) ||
 		dst_allfrag(skb_dst(skb)))) {
 			return ip6_fragment(skb, x->outer_mode->afinfo->output_finish);
 	}
+=======
+	if (toobig || dst_allfrag(skb_dst(skb)))
+			return ip6_fragment(skb, x->outer_mode->afinfo->output_finish);
+skip_frag:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return x->outer_mode->afinfo->output_finish(skb);
 }
 

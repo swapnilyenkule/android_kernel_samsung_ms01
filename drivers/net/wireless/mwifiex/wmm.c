@@ -404,6 +404,11 @@ mwifiex_wmm_init(struct mwifiex_adapter *adapter)
 		priv->add_ba_param.tx_win_size = MWIFIEX_AMPDU_DEF_TXWINSIZE;
 		priv->add_ba_param.rx_win_size = MWIFIEX_AMPDU_DEF_RXWINSIZE;
 
+<<<<<<< HEAD
+=======
+		mwifiex_reset_11n_rx_seq_num(priv);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		atomic_set(&priv->wmm.tx_pkts_queued, 0);
 		atomic_set(&priv->wmm.highest_queued_prio, HIGH_PRIO_TID);
 	}
@@ -1209,6 +1214,10 @@ mwifiex_dequeue_tx_packet(struct mwifiex_adapter *adapter)
 
 	if (!ptr->is_11n_enabled ||
 	    mwifiex_is_ba_stream_setup(priv, ptr, tid) ||
+<<<<<<< HEAD
+=======
+	    priv->wps.session_enable ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    ((priv->sec_info.wpa_enabled ||
 	      priv->sec_info.wpa2_enabled) &&
 	     !priv->wpa_is_gtk_set)) {

@@ -455,16 +455,29 @@ static __be32 decode_cb_sequence_args(struct svc_rqst *rqstp,
 	args->csa_nrclists = ntohl(*p++);
 	args->csa_rclists = NULL;
 	if (args->csa_nrclists) {
+<<<<<<< HEAD
 		args->csa_rclists = kmalloc(args->csa_nrclists *
 					    sizeof(*args->csa_rclists),
 					    GFP_KERNEL);
+=======
+		args->csa_rclists = kmalloc_array(args->csa_nrclists,
+						  sizeof(*args->csa_rclists),
+						  GFP_KERNEL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (unlikely(args->csa_rclists == NULL))
 			goto out;
 
 		for (i = 0; i < args->csa_nrclists; i++) {
 			status = decode_rc_list(xdr, &args->csa_rclists[i]);
+<<<<<<< HEAD
 			if (status)
 				goto out_free;
+=======
+			if (status) {
+				args->csa_nrclists = i;
+				goto out_free;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 	status = 0;

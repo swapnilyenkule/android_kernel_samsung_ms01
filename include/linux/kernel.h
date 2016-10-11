@@ -35,6 +35,10 @@
 #define LLONG_MAX	((long long)(~0ULL>>1))
 #define LLONG_MIN	(-LLONG_MAX - 1)
 #define ULLONG_MAX	(~0ULL)
+<<<<<<< HEAD
+=======
+#define SIZE_MAX	(~(size_t)0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define STACK_MAGIC	0xdeadbeef
 
@@ -486,7 +490,11 @@ do {									\
 		  __attribute__((section("__trace_printk_fmt"))) =	\
 			__builtin_constant_p(fmt) ? fmt : NULL;		\
 									\
+<<<<<<< HEAD
 		__trace_printk(_THIS_IP_, trace_printk_fmt, ##args);	\
+=======
+		__trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);	\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else								\
 		__trace_printk(_THIS_IP_, fmt, ##args);		\
 } while (0)
@@ -705,9 +713,12 @@ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
 
 extern int do_sysinfo(struct sysinfo *info);
 
+<<<<<<< HEAD
 /* To identify board information in panic logs, set this */
 extern char *mach_panic_string;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* __KERNEL__ */
 
 #endif

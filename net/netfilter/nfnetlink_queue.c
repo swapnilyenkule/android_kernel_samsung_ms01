@@ -39,10 +39,13 @@
 
 #define NFQNL_QMAX_DEFAULT 1024
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_NET_FILTER
 int sec_url_filter_slow(struct nf_queue_entry *entry, unsigned int queuenum);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct nfqnl_instance {
 	struct hlist_node hlist;		/* global list of queues */
 	struct rcu_head rcu;
@@ -393,24 +396,32 @@ nla_put_failure:
 	return NULL;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_NET_FILTER
 int nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
 #else
 static int
 nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
 #endif
+=======
+static int
+nfqnl_enqueue_packet(struct nf_queue_entry *entry, unsigned int queuenum)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct sk_buff *nskb;
 	struct nfqnl_instance *queue;
 	int err = -ENOBUFS;
 	__be32 *packet_id_ptr;
 
+<<<<<<< HEAD
 #ifdef	CONFIG_SEC_NET_FILTER
 	if (queuenum == 5001)
         {
            return sec_url_filter_slow(entry, queuenum);
         }
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* rcu_read_lock()ed by nf_hook_slow() */
 	queue = instance_lookup(queuenum);
 	if (!queue) {
@@ -1033,10 +1044,13 @@ static void __exit nfnetlink_queue_fini(void)
 	rcu_barrier(); /* Wait for completion of call_rcu()'s */
 }
 
+<<<<<<< HEAD
 #ifdef	CONFIG_SEC_NET_FILTER
 EXPORT_SYMBOL(nfqnl_enqueue_packet);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 MODULE_DESCRIPTION("netfilter packet queue handler");
 MODULE_AUTHOR("Harald Welte <laforge@netfilter.org>");
 MODULE_LICENSE("GPL");

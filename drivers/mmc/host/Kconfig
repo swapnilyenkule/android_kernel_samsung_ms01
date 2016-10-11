@@ -297,6 +297,7 @@ config MMC_ATMELMCI
 
 endchoice
 
+<<<<<<< HEAD
 config MMC_ATMELMCI_DMA
 	bool "Atmel MCI DMA support"
 	depends on MMC_ATMELMCI && (AVR32 || ARCH_AT91SAM9G45) && DMA_ENGINE
@@ -307,6 +308,8 @@ config MMC_ATMELMCI_DMA
 
 	  If unsure, say N.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config MMC_IMX
 	tristate "Motorola i.MX Multimedia Card Interface support"
 	depends on ARCH_MX1
@@ -458,6 +461,7 @@ config MMC_SDRICOH_CS
 config MMC_TMIO_CORE
 	tristate
 
+<<<<<<< HEAD
 config MMC_SDHCI_MSM
 	tristate "Qualcomm SDHCI Controller Support"
 	depends on ARCH_MSM
@@ -566,6 +570,8 @@ config MMC_MSM_SPS_SUPPORT
 	help
 	  Select Y to use SPS BAM as data mover
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config MMC_TMIO
 	tristate "Toshiba Mobile IO Controller (TMIO) MMC/SD function support"
 	depends on MFD_TMIO || MFD_ASIC3

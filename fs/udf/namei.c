@@ -233,7 +233,12 @@ static struct fileIdentDesc *udf_find_entry(struct inode *dir,
 		if (!lfi)
 			continue;
 
+<<<<<<< HEAD
 		flen = udf_get_filename(dir->i_sb, nameptr, fname, lfi);
+=======
+		flen = udf_get_filename(dir->i_sb, nameptr, lfi, fname,
+					UDF_NAME_LEN);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (flen && udf_match(flen, fname, child->len, child->name))
 			goto out_ok;
 	}
@@ -1280,6 +1285,10 @@ static int udf_encode_fh(struct dentry *de, __u32 *fh, int *lenp,
 	*lenp = 3;
 	fid->udf.block = location.logicalBlockNum;
 	fid->udf.partref = location.partitionReferenceNum;
+<<<<<<< HEAD
+=======
+	fid->udf.parent_partref = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fid->udf.generation = inode->i_generation;
 
 	if (connectable && !S_ISDIR(inode->i_mode)) {

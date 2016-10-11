@@ -81,7 +81,11 @@ static struct dentry *v9fs_dentry_from_dir_inode(struct inode *inode)
 	spin_lock(&inode->i_lock);
 	/* Directory should have only one entry. */
 	BUG_ON(S_ISDIR(inode->i_mode) && !list_is_singular(&inode->i_dentry));
+<<<<<<< HEAD
 	dentry = list_entry(inode->i_dentry.next, struct dentry, d_alias);
+=======
+	dentry = list_entry(inode->i_dentry.next, struct dentry, d_u.d_alias);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock(&inode->i_lock);
 	return dentry;
 }
@@ -169,8 +173,12 @@ static struct inode *v9fs_qid_iget_dotl(struct super_block *sb,
 	unlock_new_inode(inode);
 	return inode;
 error:
+<<<<<<< HEAD
 	unlock_new_inode(inode);
 	iput(inode);
+=======
+	iget_failed(inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ERR_PTR(retval);
 
 }

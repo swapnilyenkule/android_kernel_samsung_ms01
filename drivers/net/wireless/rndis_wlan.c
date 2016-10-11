@@ -407,9 +407,15 @@ struct ndis_80211_pmkid {
 #define CAP_MODE_80211G		4
 #define CAP_MODE_MASK		7
 
+<<<<<<< HEAD
 #define WORK_LINK_UP		(1<<0)
 #define WORK_LINK_DOWN		(1<<1)
 #define WORK_SET_MULTICAST_LIST	(1<<2)
+=======
+#define WORK_LINK_UP		0
+#define WORK_LINK_DOWN		1
+#define WORK_SET_MULTICAST_LIST	2
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define RNDIS_WLAN_ALG_NONE	0
 #define RNDIS_WLAN_ALG_WEP	(1<<0)

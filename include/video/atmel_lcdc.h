@@ -62,6 +62,10 @@ struct atmel_lcdfb_info {
 	void (*atmel_lcdfb_power_control)(int on);
 	struct fb_monspecs	*default_monspecs;
 	u32			pseudo_palette[16];
+<<<<<<< HEAD
+=======
+	bool			have_intensity_bit;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #define ATMEL_LCDC_DMABADDR1	0x00

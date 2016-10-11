@@ -20,7 +20,10 @@ ifneq ($(CONFIG_USB_XHCI_PLATFORM), )
 endif
 
 obj-$(CONFIG_USB_WHCI_HCD)	+= whci/
+<<<<<<< HEAD
 obj-$(CONFIG_USB_PEHCI_HCD)	+= pehci/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 obj-$(CONFIG_PCI)		+= pci-quirks.o
 

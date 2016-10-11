@@ -69,6 +69,7 @@ MODULE_PARM_DESC(maximum_speed, "Maximum supported speed.");
 
 static DECLARE_BITMAP(dwc3_devs, DWC3_DEVS_POSSIBLE);
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_H_PROJECT) || defined(CONFIG_SEC_F_PROJECT) || defined(CONFIG_SEC_K_PROJECT)
 static void sec_reconnect_work(struct work_struct *data)
 {
@@ -86,6 +87,8 @@ INIT_WORK(&udc->reconnect_work, sec_reconnect_work);
 #define WORK_INIT(udc)
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int dwc3_get_device_id(void)
 {
 	int		id;
@@ -116,7 +119,10 @@ void dwc3_put_device_id(int id)
 
 	ret = test_bit(id, dwc3_devs);
 	WARN(!ret, "dwc3: ID %d not in use\n", id);
+<<<<<<< HEAD
 	smp_mb__before_clear_bit();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	clear_bit(id, dwc3_devs);
 }
 EXPORT_SYMBOL_GPL(dwc3_put_device_id);
@@ -128,6 +134,7 @@ void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
 	reg &= ~(DWC3_GCTL_PRTCAPDIR(DWC3_GCTL_PRTCAP_OTG));
 	reg |= DWC3_GCTL_PRTCAPDIR(mode);
+<<<<<<< HEAD
 	/*
 	 * Set this bit so that device attempts three more times at SS, even
 	 * if it failed previously to operate in SS mode.
@@ -155,6 +162,9 @@ void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
 	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
 	reg |= DWC3_GUSB2PHYCFG_SUSPHY;
 	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+=======
+	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -170,8 +180,11 @@ static void dwc3_core_soft_reset(struct dwc3 *dwc)
 	reg |= DWC3_GCTL_CORESOFTRESET;
 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
 
+<<<<<<< HEAD
 	dwc3_notify_event(dwc, DWC3_CONTROLLER_RESET_EVENT);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Assert USB3 PHY reset */
 	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
 	reg |= DWC3_GUSB3PIPECTL_PHYSOFTRST;
@@ -194,14 +207,20 @@ static void dwc3_core_soft_reset(struct dwc3 *dwc)
 	reg &= ~DWC3_GUSB2PHYCFG_PHYSOFTRST;
 	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
 
+<<<<<<< HEAD
 	mdelay(100);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* After PHYs are stable we can take Core out of reset state */
 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
 	reg &= ~DWC3_GCTL_CORESOFTRESET;
 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+<<<<<<< HEAD
 
 	dwc3_notify_event(dwc, DWC3_CONTROLLER_POST_RESET_EVENT);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -288,6 +307,7 @@ static int __devinit dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned length)
 	for (i = 0; i < num; i++) {
 		struct dwc3_event_buffer	*evt;
 
+<<<<<<< HEAD
 		/*
 		 * As SW workaround, allocate 8 bytes more than size of event
 		 * buffer given to USB Controller to avoid possible memory
@@ -295,6 +315,9 @@ static int __devinit dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned length)
 		 * Vendor Device test event which could be of 12 bytes.
 		 */
 		evt = dwc3_alloc_one_event_buffer(dwc, (length + 8));
+=======
+		evt = dwc3_alloc_one_event_buffer(dwc, length);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (IS_ERR(evt)) {
 			dev_err(dwc->dev, "can't allocate event buffer\n");
 			return PTR_ERR(evt);
@@ -311,7 +334,11 @@ static int __devinit dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned length)
  *
  * Returns 0 on success otherwise negative errno.
  */
+<<<<<<< HEAD
 int dwc3_event_buffers_setup(struct dwc3 *dwc)
+=======
+static int __devinit dwc3_event_buffers_setup(struct dwc3 *dwc)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct dwc3_event_buffer	*evt;
 	int				n;
@@ -322,14 +349,21 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
 				evt->buf, (unsigned long long) evt->dma,
 				evt->length);
 
+<<<<<<< HEAD
 		evt->lpos = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(n),
 				lower_32_bits(evt->dma));
 		dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(n),
 				upper_32_bits(evt->dma));
 		dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(n),
+<<<<<<< HEAD
 				(evt->length - 8) & 0xffff);
+=======
+				evt->length & 0xffff);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(n), 0);
 	}
 
@@ -343,9 +377,12 @@ static void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
 
 	for (n = 0; n < dwc->num_event_buffers; n++) {
 		evt = dwc->ev_buffs[n];
+<<<<<<< HEAD
 
 		evt->lpos = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dwc3_writel(dwc->regs, DWC3_GEVNTADRLO(n), 0);
 		dwc3_writel(dwc->regs, DWC3_GEVNTADRHI(n), 0);
 		dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(n), 0);
@@ -353,7 +390,11 @@ static void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
 	}
 }
 
+<<<<<<< HEAD
 static void dwc3_cache_hwparams(struct dwc3 *dwc)
+=======
+static void __devinit dwc3_cache_hwparams(struct dwc3 *dwc)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct dwc3_hwparams	*parms = &dwc->hwparams;
 
@@ -374,7 +415,11 @@ static void dwc3_cache_hwparams(struct dwc3 *dwc)
  *
  * Returns 0 on success otherwise negative errno.
  */
+<<<<<<< HEAD
 static int dwc3_core_init(struct dwc3 *dwc)
+=======
+static int __devinit dwc3_core_init(struct dwc3 *dwc)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long		timeout;
 	u32			reg;
@@ -389,6 +434,11 @@ static int dwc3_core_init(struct dwc3 *dwc)
 	}
 	dwc->revision = reg;
 
+<<<<<<< HEAD
+=======
+	dwc3_core_soft_reset(dwc);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* issue device SoftReset too */
 	timeout = jiffies + msecs_to_jiffies(500);
 	dwc3_writel(dwc->regs, DWC3_DCTL, DWC3_DCTL_CSFTRST);
@@ -406,8 +456,11 @@ static int dwc3_core_init(struct dwc3 *dwc)
 		cpu_relax();
 	} while (true);
 
+<<<<<<< HEAD
 	dwc3_core_soft_reset(dwc);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dwc3_cache_hwparams(dwc);
 
 	reg = dwc3_readl(dwc->regs, DWC3_GCTL);
@@ -433,6 +486,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
 
 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
 
+<<<<<<< HEAD
 	/*
 	 * The default value of GUCTL[31:22] should be 0x8. But on cores
 	 * revision < 2.30a, the default value is mistakenly overridden
@@ -490,6 +544,13 @@ static int dwc3_core_init(struct dwc3 *dwc)
 			ret = -ENOMEM;
 			goto err1;
 		}
+=======
+	ret = dwc3_alloc_event_buffers(dwc, DWC3_EVENT_BUFFERS_SIZE);
+	if (ret) {
+		dev_err(dwc->dev, "failed to allocate event buffers\n");
+		ret = -ENOMEM;
+		goto err1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	ret = dwc3_event_buffers_setup(dwc);
@@ -513,6 +574,7 @@ static void dwc3_core_exit(struct dwc3 *dwc)
 	dwc3_free_event_buffers(dwc);
 }
 
+<<<<<<< HEAD
 /* XHCI reset, resets other CORE registers as well, re-init those */
 void dwc3_post_host_reset_core_init(struct dwc3 *dwc)
 {
@@ -538,6 +600,10 @@ EXPORT_SYMBOL(dwc3_notify_event);
 #define DWC3_ALIGN_MASK		(16 - 1)
 
 static u64 dwc3_dma_mask = DMA_BIT_MASK(64);
+=======
+#define DWC3_ALIGN_MASK		(16 - 1)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __devinit dwc3_probe(struct platform_device *pdev)
 {
 	struct device_node	*node = pdev->dev.of_node;
@@ -546,12 +612,19 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 	struct device		*dev = &pdev->dev;
 
 	int			ret = -ENOMEM;
+<<<<<<< HEAD
+=======
+	int			irq;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	void __iomem		*regs;
 	void			*mem;
 
 	u8			mode;
+<<<<<<< HEAD
 	bool			host_only_mode;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mem = devm_kzalloc(dev, sizeof(*dwc) + DWC3_ALIGN_MASK, GFP_KERNEL);
 	if (!mem) {
@@ -561,6 +634,7 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 	dwc = PTR_ALIGN(mem, DWC3_ALIGN_MASK + 1);
 	dwc->mem = mem;
 
+<<<<<<< HEAD
 	if (!dev->dma_mask)
 		dev->dma_mask = &dwc3_dma_mask;
 	if (!dev->coherent_dma_mask)
@@ -596,23 +670,52 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 			resource_size(res) - DWC3_GLOBALS_REGS_START,
 			dev_name(dev));
 
+=======
+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	if (!res) {
+		dev_err(dev, "missing resource\n");
+		return -ENODEV;
+	}
+
+	dwc->res = res;
+
+	res = devm_request_mem_region(dev, res->start, resource_size(res),
+			dev_name(dev));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!res) {
 		dev_err(dev, "can't request mem region\n");
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
 	regs = devm_ioremap_nocache(dev, res->start, resource_size(res));
+=======
+	regs = devm_ioremap(dev, res->start, resource_size(res));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!regs) {
 		dev_err(dev, "ioremap failed\n");
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
+=======
+	irq = platform_get_irq(pdev, 0);
+	if (irq < 0) {
+		dev_err(dev, "missing IRQ\n");
+		return -ENODEV;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock_init(&dwc->lock);
 	platform_set_drvdata(pdev, dwc);
 
 	dwc->regs	= regs;
 	dwc->regs_size	= resource_size(res);
 	dwc->dev	= dev;
+<<<<<<< HEAD
+=======
+	dwc->irq	= irq;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!strncmp("super", maximum_speed, 5))
 		dwc->maximum_speed = DWC3_DCFG_SUPERSPEED;
@@ -625,6 +728,7 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 	else
 		dwc->maximum_speed = DWC3_DCFG_SUPERSPEED;
 
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_H_PROJECT) || defined(CONFIG_SEC_F_PROJECT) || defined(CONFIG_SEC_K_PROJECT)
 	dwc->speed_limit = dwc->maximum_speed;
 	dwc->ss_host_avail = -1;
@@ -636,6 +740,14 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 	pm_runtime_no_callbacks(dev);
 	pm_runtime_set_active(dev);
 	pm_runtime_enable(dev);
+=======
+	if (of_get_property(node, "tx-fifo-resize", NULL))
+		dwc->needs_fifo_resize = true;
+
+	pm_runtime_enable(dev);
+	pm_runtime_get_sync(dev);
+	pm_runtime_forbid(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ret = dwc3_core_init(dwc);
 	if (ret) {
@@ -645,12 +757,15 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 
 	mode = DWC3_MODE(dwc->hwparams.hwparams0);
 
+<<<<<<< HEAD
 	/* Override mode if user selects host-only config with DRD core */
 	if (host_only_mode && (mode == DWC3_MODE_DRD)) {
 		dev_dbg(dev, "host only mode selected\n");
 		mode = DWC3_MODE_HOST;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (mode) {
 	case DWC3_MODE_DEVICE:
 		dwc3_set_mode(dwc, DWC3_GCTL_PRTCAP_DEVICE);
@@ -670,6 +785,7 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 		break;
 	case DWC3_MODE_DRD:
 		dwc3_set_mode(dwc, DWC3_GCTL_PRTCAP_OTG);
+<<<<<<< HEAD
 		ret = dwc3_otg_init(dwc);
 		if (ret) {
 			dev_err(dev, "failed to initialize otg\n");
@@ -680,14 +796,22 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 		if (ret) {
 			dev_err(dev, "failed to initialize host\n");
 			dwc3_otg_exit(dwc);
+=======
+		ret = dwc3_host_init(dwc);
+		if (ret) {
+			dev_err(dev, "failed to initialize host\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto err1;
 		}
 
 		ret = dwc3_gadget_init(dwc);
 		if (ret) {
 			dev_err(dev, "failed to initialize gadget\n");
+<<<<<<< HEAD
 			dwc3_host_exit(dwc);
 			dwc3_otg_exit(dwc);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto err1;
 		}
 		break;
@@ -703,11 +827,16 @@ static int __devinit dwc3_probe(struct platform_device *pdev)
 		goto err2;
 	}
 
+<<<<<<< HEAD
 	dwc3_notify_event(dwc, DWC3_CONTROLLER_POST_INITIALIZATION_EVENT);
 
 #if defined(CONFIG_SEC_H_PROJECT) || defined(CONFIG_SEC_F_PROJECT) || defined(CONFIG_SEC_K_PROJECT)
 	WORK_INIT(dwc);
 #endif
+=======
+	pm_runtime_allow(dev);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 
 err2:
@@ -719,9 +848,14 @@ err2:
 		dwc3_host_exit(dwc);
 		break;
 	case DWC3_MODE_DRD:
+<<<<<<< HEAD
 		dwc3_gadget_exit(dwc);
 		dwc3_host_exit(dwc);
 		dwc3_otg_exit(dwc);
+=======
+		dwc3_host_exit(dwc);
+		dwc3_gadget_exit(dwc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	default:
 		/* do nothing */
@@ -741,8 +875,11 @@ static int __devexit dwc3_remove(struct platform_device *pdev)
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 
+<<<<<<< HEAD
 	pm_runtime_disable(&pdev->dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dwc3_debugfs_exit(dwc);
 
 	switch (dwc->mode) {
@@ -753,9 +890,14 @@ static int __devexit dwc3_remove(struct platform_device *pdev)
 		dwc3_host_exit(dwc);
 		break;
 	case DWC3_MODE_DRD:
+<<<<<<< HEAD
 		dwc3_gadget_exit(dwc);
 		dwc3_host_exit(dwc);
 		dwc3_otg_exit(dwc);
+=======
+		dwc3_host_exit(dwc);
+		dwc3_gadget_exit(dwc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	default:
 		/* do nothing */
@@ -764,6 +906,7 @@ static int __devexit dwc3_remove(struct platform_device *pdev)
 
 	dwc3_core_exit(dwc);
 
+<<<<<<< HEAD
 	return 0;
 }
 
@@ -777,12 +920,23 @@ static const struct of_device_id of_dwc3_match[] = {
 MODULE_DEVICE_TABLE(of, of_dwc3_match);
 #endif
 
+=======
+	pm_runtime_put(&pdev->dev);
+	pm_runtime_disable(&pdev->dev);
+
+	return 0;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct platform_driver dwc3_driver = {
 	.probe		= dwc3_probe,
 	.remove		= __devexit_p(dwc3_remove),
 	.driver		= {
 		.name	= "dwc3",
+<<<<<<< HEAD
 		.of_match_table	= of_match_ptr(of_dwc3_match),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 };
 

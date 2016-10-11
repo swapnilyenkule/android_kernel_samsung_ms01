@@ -3216,6 +3216,10 @@ static s32 ixgbe_device_supports_autoneg_fc(struct ixgbe_hw *hw)
 
 	switch (hw->device_id) {
 	case IXGBE_DEV_ID_X540T:
+<<<<<<< HEAD
+=======
+	case IXGBE_DEV_ID_X540T1:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 	case IXGBE_DEV_ID_82599_T3_LOM:
 		return 0;

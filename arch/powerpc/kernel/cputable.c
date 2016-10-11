@@ -269,7 +269,11 @@ static struct cpu_spec __initdata cpu_specs[] = {
 		.cpu_features		= CPU_FTRS_PPC970,
 		.cpu_user_features	= COMMON_USER_POWER4 |
 			PPC_FEATURE_HAS_ALTIVEC_COMP,
+<<<<<<< HEAD
 		.mmu_features		= MMU_FTR_HPTE_TABLE,
+=======
+		.mmu_features		= MMU_FTRS_PPC970,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.icache_bsize		= 128,
 		.dcache_bsize		= 128,
 		.num_pmcs		= 8,

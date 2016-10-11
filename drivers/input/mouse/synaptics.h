@@ -76,6 +76,11 @@
  *					for noise.
  * 2	0x08	image sensor		image sensor tracks 5 fingers, but only
  *					reports 2.
+<<<<<<< HEAD
+=======
+ * 2	0x01	uniform clickpad	whole clickpad moves instead of being
+ *					hinged at the top.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * 2	0x20	report min		query 0x0f gives min coord reported
  */
 #define SYN_CAP_CLICKPAD(ex0c)		((ex0c) & 0x100000) /* 1-button ClickPad */
@@ -174,6 +179,14 @@ struct synaptics_data {
 	 */
 	struct synaptics_hw_state agm;
 	bool agm_pending;			/* new AGM packet received */
+<<<<<<< HEAD
+=======
+
+	/* ForcePad handling */
+	unsigned long				press_start;
+	bool					press;
+	bool					report_press;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 void synaptics_module_init(void);

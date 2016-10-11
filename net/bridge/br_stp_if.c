@@ -129,6 +129,17 @@ static void br_stp_start(struct net_bridge *br)
 	char *envp[] = { NULL };
 
 	r = call_usermodehelper(BR_STP_PROG, argv, envp, UMH_WAIT_PROC);
+<<<<<<< HEAD
+=======
+
+	spin_lock_bh(&br->lock);
+
+	if (br->bridge_forward_delay < BR_MIN_FORWARD_DELAY)
+		__br_set_forward_delay(br, BR_MIN_FORWARD_DELAY);
+	else if (br->bridge_forward_delay > BR_MAX_FORWARD_DELAY)
+		__br_set_forward_delay(br, BR_MAX_FORWARD_DELAY);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (r == 0) {
 		br->stp_enabled = BR_USER_STP;
 		br_debug(br, "userspace STP started\n");
@@ -137,10 +148,17 @@ static void br_stp_start(struct net_bridge *br)
 		br_debug(br, "using kernel STP\n");
 
 		/* To start timers on any ports left in blocking */
+<<<<<<< HEAD
 		spin_lock_bh(&br->lock);
 		br_port_state_selection(br);
 		spin_unlock_bh(&br->lock);
 	}
+=======
+		br_port_state_selection(br);
+	}
+
+	spin_unlock_bh(&br->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void br_stp_stop(struct net_bridge *br)
@@ -234,12 +252,20 @@ bool br_stp_recalculate_bridge_id(struct net_bridge *br)
 	return true;
 }
 
+<<<<<<< HEAD
 /* called under bridge lock */
+=======
+/* Acquires and releases bridge lock */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void br_stp_set_bridge_priority(struct net_bridge *br, u16 newprio)
 {
 	struct net_bridge_port *p;
 	int wasroot;
 
+<<<<<<< HEAD
+=======
+	spin_lock_bh(&br->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	wasroot = br_is_root_bridge(br);
 
 	list_for_each_entry(p, &br->port_list, list) {
@@ -257,6 +283,10 @@ void br_stp_set_bridge_priority(struct net_bridge *br, u16 newprio)
 	br_port_state_selection(br);
 	if (br_is_root_bridge(br) && !wasroot)
 		br_become_root_bridge(br);
+<<<<<<< HEAD
+=======
+	spin_unlock_bh(&br->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* called under bridge lock */

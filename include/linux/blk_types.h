@@ -135,7 +135,11 @@ enum rq_flag_bits {
 				 * throttling rules. Don't do it again. */
 
 	/* request only flags */
+<<<<<<< HEAD
 	__REQ_SORTED = __REQ_RAHEAD, /* elevator knows about this request */
+=======
+	__REQ_SORTED,		/* elevator knows about this request */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__REQ_SOFTBARRIER,	/* may not be passed by ioscheduler */
 	__REQ_NOMERGE,		/* don't touch this for merging */
 	__REQ_STARTED,		/* drive already may have started this one */
@@ -144,15 +148,24 @@ enum rq_flag_bits {
 	__REQ_ELVPRIV,		/* elevator private data attached */
 	__REQ_FAILED,		/* set if the request failed */
 	__REQ_QUIET,		/* don't worry about errors */
+<<<<<<< HEAD
 	__REQ_PREEMPT,		/* set for "ide_preempt" requests */
+=======
+	__REQ_PREEMPT,		/* set for "ide_preempt" requests and also
+				   for requests for which the SCSI "quiesce"
+				   state must be ignored. */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__REQ_ALLOCED,		/* request came from our alloc pool */
 	__REQ_COPY_USER,	/* contains copies of user pages */
 	__REQ_FLUSH_SEQ,	/* request for flush sequence */
 	__REQ_IO_STAT,		/* account I/O stat */
 	__REQ_MIXED_MERGE,	/* merge of different types, fail separately */
+<<<<<<< HEAD
 	__REQ_SANITIZE,		/* sanitize */
 	__REQ_URGENT,		/* urgent request */
 	__REQ_PM,		/* runtime pm request */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__REQ_NR_BITS,		/* stops here */
 };
 
@@ -164,20 +177,29 @@ enum rq_flag_bits {
 #define REQ_META		(1 << __REQ_META)
 #define REQ_PRIO		(1 << __REQ_PRIO)
 #define REQ_DISCARD		(1 << __REQ_DISCARD)
+<<<<<<< HEAD
 #define REQ_SANITIZE		(1 << __REQ_SANITIZE)
 #define REQ_URGENT		(1 << __REQ_URGENT)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define REQ_NOIDLE		(1 << __REQ_NOIDLE)
 
 #define REQ_FAILFAST_MASK \
 	(REQ_FAILFAST_DEV | REQ_FAILFAST_TRANSPORT | REQ_FAILFAST_DRIVER)
 #define REQ_COMMON_MASK \
 	(REQ_WRITE | REQ_FAILFAST_MASK | REQ_SYNC | REQ_META | REQ_PRIO | \
+<<<<<<< HEAD
 	 REQ_DISCARD | REQ_NOIDLE | REQ_FLUSH | REQ_FUA | REQ_SECURE | \
 	 REQ_SANITIZE)
 #define REQ_CLONE_MASK		REQ_COMMON_MASK
 
 #define MMC_REQ_NOREINSERT_MASK (REQ_URGENT | REQ_FUA | REQ_FLUSH)
 
+=======
+	 REQ_DISCARD | REQ_NOIDLE | REQ_FLUSH | REQ_FUA | REQ_SECURE)
+#define REQ_CLONE_MASK		REQ_COMMON_MASK
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define REQ_RAHEAD		(1 << __REQ_RAHEAD)
 #define REQ_THROTTLED		(1 << __REQ_THROTTLED)
 
@@ -199,6 +221,9 @@ enum rq_flag_bits {
 #define REQ_IO_STAT		(1 << __REQ_IO_STAT)
 #define REQ_MIXED_MERGE		(1 << __REQ_MIXED_MERGE)
 #define REQ_SECURE		(1 << __REQ_SECURE)
+<<<<<<< HEAD
 #define REQ_PM                 (1 << __REQ_PM)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif /* __LINUX_BLK_TYPES_H */

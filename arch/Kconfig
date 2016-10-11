@@ -142,6 +142,7 @@ config HAVE_ARCH_TRACEHOOK
 config HAVE_DMA_ATTRS
 	bool
 
+<<<<<<< HEAD
 config HAVE_DMA_CONTIGUOUS
 	bool
 
@@ -151,6 +152,11 @@ config USE_GENERIC_SMP_HELPERS
 config GENERIC_SMP_IDLE_THREAD
        bool
 
+=======
+config USE_GENERIC_SMP_HELPERS
+	bool
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HAVE_REGS_AND_STACK_ACCESS_API
 	bool
 	help
@@ -222,6 +228,7 @@ config HAVE_CMPXCHG_DOUBLE
 config ARCH_WANT_OLD_COMPAT_IPC
 	bool
 
+<<<<<<< HEAD
 config HAVE_ARCH_SECCOMP_FILTER
 	bool
 	help
@@ -314,4 +321,6 @@ config ARCH_MMAP_RND_COMPAT_BITS
 	  This value can be changed after boot using the
 	  /proc/sys/vm/mmap_rnd_compat_bits tunable
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "kernel/gcov/Kconfig"

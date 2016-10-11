@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -31,7 +35,10 @@
 #define PM8xxx_RTC_ENABLE		BIT(7)
 #define PM8xxx_RTC_ALARM_ENABLE		BIT(1)
 #define PM8xxx_RTC_ALARM_CLEAR		BIT(0)
+<<<<<<< HEAD
 #define PM8xxx_RTC_ABORT_ENABLE		BIT(0)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define NUM_8_BIT_RTC_REGS		0x4
 
@@ -447,6 +454,7 @@ static int __devinit pm8xxx_rtc_probe(struct platform_device *pdev)
 		}
 	}
 
+<<<<<<< HEAD
 	/* Enable abort enable feature */
 	ctrl_reg |= PM8xxx_RTC_ABORT_ENABLE;
 	rc = pm8xxx_write_wrapper(rtc_dd, &ctrl_reg, rtc_dd->rtc_base, 1);
@@ -455,6 +463,8 @@ static int __devinit pm8xxx_rtc_probe(struct platform_device *pdev)
 		goto fail_rtc_enable;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rtc_dd->ctrl_reg = ctrl_reg;
 	if (rtc_write_enable == true)
 		pm8xxx_rtc_ops.set_time = pm8xxx_rtc_set_time;
@@ -531,6 +541,7 @@ static int pm8xxx_rtc_suspend(struct device *dev)
 
 static SIMPLE_DEV_PM_OPS(pm8xxx_rtc_pm_ops, pm8xxx_rtc_suspend, pm8xxx_rtc_resume);
 
+<<<<<<< HEAD
 static void pm8xxx_rtc_shutdown(struct platform_device *pdev)
 {
 	u8 value[4] = {0, 0, 0, 0};
@@ -573,6 +584,11 @@ static struct platform_driver pm8xxx_rtc_driver = {
 	.probe		= pm8xxx_rtc_probe,
 	.remove		= __devexit_p(pm8xxx_rtc_remove),
 	.shutdown	= pm8xxx_rtc_shutdown,
+=======
+static struct platform_driver pm8xxx_rtc_driver = {
+	.probe		= pm8xxx_rtc_probe,
+	.remove		= __devexit_p(pm8xxx_rtc_remove),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.driver	= {
 		.name	= PM8XXX_RTC_DEV_NAME,
 		.owner	= THIS_MODULE,

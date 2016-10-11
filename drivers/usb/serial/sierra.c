@@ -59,6 +59,10 @@ struct sierra_intf_private {
 	spinlock_t susp_lock;
 	unsigned int suspended:1;
 	int in_flight;
+<<<<<<< HEAD
+=======
+	unsigned int open_ports;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int sierra_set_power_state(struct usb_device *udev, __u16 swiState)
@@ -171,7 +175,10 @@ static int sierra_probe(struct usb_serial *serial,
 {
 	int result = 0;
 	struct usb_device *udev;
+<<<<<<< HEAD
 	struct sierra_intf_private *data;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u8 ifnum;
 
 	udev = serial->dev;
@@ -199,11 +206,14 @@ static int sierra_probe(struct usb_serial *serial,
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	data = serial->private = kzalloc(sizeof(struct sierra_intf_private), GFP_KERNEL);
 	if (!data)
 		return -ENOMEM;
 	spin_lock_init(&data->susp_lock);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return result;
 }
 
@@ -301,6 +311,7 @@ static const struct usb_device_id id_table[] = {
 	{ USB_DEVICE(0x1199, 0x68A2),   /* Sierra Wireless MC77xx in QMI mode */
 	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
 	},
+<<<<<<< HEAD
 	{ USB_DEVICE(0x1199, 0x68A3), 	/* Sierra Wireless Direct IP modems */
 	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
 	},
@@ -308,6 +319,24 @@ static const struct usb_device_id id_table[] = {
 	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
 	},
        { USB_DEVICE(0x413C, 0x08133) }, /* Dell Computer Corp. Wireless 5720 VZW Mobile Broadband (EVDO Rev-A) Minicard GPS Port */
+=======
+	/* Sierra Wireless Direct IP modems */
+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1199, 0x68A3, 0xFF, 0xFF, 0xFF),
+	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
+	},
+	{ USB_DEVICE_AND_INTERFACE_INFO(0x1199, 0x68AA, 0xFF, 0xFF, 0xFF),
+	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
+	},
+	{ USB_DEVICE(0x1199, 0x68AB) }, /* Sierra Wireless AR8550 */
+	/* AT&T Direct IP LTE modems */
+	{ USB_DEVICE_AND_INTERFACE_INFO(0x0F3D, 0x68AA, 0xFF, 0xFF, 0xFF),
+	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
+	},
+	/* Airprime/Sierra Wireless Direct IP modems */
+	{ USB_DEVICE_AND_INTERFACE_INFO(0x0F3D, 0x68A3, 0xFF, 0xFF, 0xFF),
+	  .driver_info = (kernel_ulong_t)&direct_ip_interface_blacklist
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	{ }
 };
@@ -804,6 +833,10 @@ static void sierra_close(struct usb_serial_port *port)
 	struct usb_serial *serial = port->serial;
 	struct sierra_port_private *portdata;
 	struct sierra_intf_private *intfdata = port->serial->private;
+<<<<<<< HEAD
+=======
+	struct urb *urb;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 	dev_dbg(&port->dev, "%s\n", __func__);
@@ -815,7 +848,10 @@ static void sierra_close(struct usb_serial_port *port)
 	if (serial->dev) {
 		mutex_lock(&serial->disc_mutex);
 		if (!serial->disconnected) {
+<<<<<<< HEAD
 			serial->interface->needs_remote_wakeup = 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/* odd error handling due to pm counters */
 			if (!usb_autopm_get_interface(serial->interface))
 				sierra_send_setup(port);
@@ -826,8 +862,26 @@ static void sierra_close(struct usb_serial_port *port)
 		mutex_unlock(&serial->disc_mutex);
 		spin_lock_irq(&intfdata->susp_lock);
 		portdata->opened = 0;
+<<<<<<< HEAD
 		spin_unlock_irq(&intfdata->susp_lock);
 
+=======
+		if (--intfdata->open_ports == 0)
+			serial->interface->needs_remote_wakeup = 0;
+		spin_unlock_irq(&intfdata->susp_lock);
+
+		for (;;) {
+			urb = usb_get_from_anchor(&portdata->delayed);
+			if (!urb)
+				break;
+			kfree(urb->transfer_buffer);
+			usb_free_urb(urb);
+			usb_autopm_put_interface_async(serial->interface);
+			spin_lock(&portdata->lock);
+			portdata->outstanding_urbs--;
+			spin_unlock(&portdata->lock);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* Stop reading urbs */
 		sierra_stop_rx_urbs(port);
@@ -870,6 +924,7 @@ static int sierra_open(struct tty_struct *tty, struct usb_serial_port *port)
 			usb_sndbulkpipe(serial->dev, endpoint) | USB_DIR_IN);
 
 	err = sierra_submit_rx_urbs(port, GFP_KERNEL);
+<<<<<<< HEAD
 	if (err) {
 		/* get rid of everything as in close */
 		sierra_close(port);
@@ -883,33 +938,68 @@ static int sierra_open(struct tty_struct *tty, struct usb_serial_port *port)
 	serial->interface->needs_remote_wakeup = 1;
 	spin_lock_irq(&intfdata->susp_lock);
 	portdata->opened = 1;
+=======
+	if (err)
+		goto err_submit;
+
+	sierra_send_setup(port);
+
+	spin_lock_irq(&intfdata->susp_lock);
+	portdata->opened = 1;
+	if (++intfdata->open_ports == 1)
+		serial->interface->needs_remote_wakeup = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock_irq(&intfdata->susp_lock);
 	usb_autopm_put_interface(serial->interface);
 
 	return 0;
+<<<<<<< HEAD
+=======
+
+err_submit:
+	sierra_stop_rx_urbs(port);
+
+	for (i = 0; i < portdata->num_in_urbs; i++) {
+		sierra_release_urb(portdata->in_urbs[i]);
+		portdata->in_urbs[i] = NULL;
+	}
+
+	return err;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 
 static void sierra_dtr_rts(struct usb_serial_port *port, int on)
 {
+<<<<<<< HEAD
 	struct usb_serial *serial = port->serial;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct sierra_port_private *portdata;
 
 	portdata = usb_get_serial_port_data(port);
 	portdata->rts_state = on;
 	portdata->dtr_state = on;
 
+<<<<<<< HEAD
 	if (serial->dev) {
 		mutex_lock(&serial->disc_mutex);
 		if (!serial->disconnected)
 			sierra_send_setup(port);
 		mutex_unlock(&serial->disc_mutex);
 	}
+=======
+	sierra_send_setup(port);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int sierra_startup(struct usb_serial *serial)
 {
 	struct usb_serial_port *port;
+<<<<<<< HEAD
+=======
+	struct sierra_intf_private *intfdata;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct sierra_port_private *portdata;
 	struct sierra_iface_info *himemoryp = NULL;
 	int i;
@@ -917,6 +1007,17 @@ static int sierra_startup(struct usb_serial *serial)
 
 	dev_dbg(&serial->dev->dev, "%s\n", __func__);
 
+<<<<<<< HEAD
+=======
+	intfdata = kzalloc(sizeof(*intfdata), GFP_KERNEL);
+	if (!intfdata)
+		return -ENOMEM;
+
+	spin_lock_init(&intfdata->susp_lock);
+
+	usb_set_serial_data(serial, intfdata);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Set Device mode to D0 */
 	sierra_set_power_state(serial->dev, 0x0000);
 
@@ -932,7 +1033,11 @@ static int sierra_startup(struct usb_serial *serial)
 			dev_dbg(&port->dev, "%s: kmalloc for "
 				"sierra_port_private (%d) failed!\n",
 				__func__, i);
+<<<<<<< HEAD
 			return -ENOMEM;
+=======
+			goto err;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		spin_lock_init(&portdata->lock);
 		init_usb_anchor(&portdata->active);
@@ -969,6 +1074,17 @@ static int sierra_startup(struct usb_serial *serial)
 	}
 
 	return 0;
+<<<<<<< HEAD
+=======
+err:
+	for (--i; i >= 0; --i) {
+		portdata = usb_get_serial_port_data(serial->port[i]);
+		kfree(portdata);
+	}
+	kfree(intfdata);
+
+	return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void sierra_release(struct usb_serial *serial)
@@ -986,8 +1102,15 @@ static void sierra_release(struct usb_serial *serial)
 		portdata = usb_get_serial_port_data(port);
 		if (!portdata)
 			continue;
+<<<<<<< HEAD
 		kfree(portdata);
 	}
+=======
+		usb_set_serial_port_data(port, NULL);
+		kfree(portdata);
+	}
+	kfree(serial->private);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifdef CONFIG_PM
@@ -1001,6 +1124,11 @@ static void stop_read_write_urbs(struct usb_serial *serial)
 	for (i = 0; i < serial->num_ports; ++i) {
 		port = serial->port[i];
 		portdata = usb_get_serial_port_data(port);
+<<<<<<< HEAD
+=======
+		if (!portdata)
+			continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		sierra_stop_rx_urbs(port);
 		usb_kill_anchored_urbs(&portdata->active);
 	}
@@ -1043,6 +1171,12 @@ static int sierra_resume(struct usb_serial *serial)
 		port = serial->port[i];
 		portdata = usb_get_serial_port_data(port);
 
+<<<<<<< HEAD
+=======
+		if (!portdata)
+			continue;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		while ((urb = usb_get_from_anchor(&portdata->delayed))) {
 			usb_anchor_urb(urb, &portdata->active);
 			intfdata->in_flight++;
@@ -1050,8 +1184,17 @@ static int sierra_resume(struct usb_serial *serial)
 			if (err < 0) {
 				intfdata->in_flight--;
 				usb_unanchor_urb(urb);
+<<<<<<< HEAD
 				usb_scuttle_anchored_urbs(&portdata->delayed);
 				break;
+=======
+				kfree(urb->transfer_buffer);
+				usb_free_urb(urb);
+				spin_lock(&portdata->lock);
+				portdata->outstanding_urbs--;
+				spin_unlock(&portdata->lock);
+				continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			}
 		}
 

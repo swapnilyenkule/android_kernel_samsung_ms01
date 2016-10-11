@@ -18,7 +18,10 @@
 #include <linux/of.h>
 #include <linux/of_address.h>
 #include <linux/of_gpio.h>
+<<<<<<< HEAD
 #include <linux/pinctrl/pinctrl.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/slab.h>
 
 /**
@@ -50,7 +53,11 @@ int of_get_named_gpio_flags(struct device_node *np, const char *propname,
 	if (!gc) {
 		pr_debug("%s: gpio controller %s isn't registered\n",
 			 np->full_name, gpiospec.np->full_name);
+<<<<<<< HEAD
 		ret = -EPROBE_DEFER;
+=======
+		ret = -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto err1;
 	}
 
@@ -207,6 +214,7 @@ err0:
 }
 EXPORT_SYMBOL(of_mm_gpiochip_add);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PINCTRL
 void of_gpiochip_add_pin_range(struct gpio_chip *chip)
 {
@@ -254,6 +262,8 @@ void of_gpiochip_add_pin_range(struct gpio_chip *chip) {}
 void of_gpiochip_remove_pin_range(struct gpio_chip *chip) {}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void of_gpiochip_add(struct gpio_chip *chip)
 {
 	if ((!chip->of_node) && (chip->dev))
@@ -267,14 +277,20 @@ void of_gpiochip_add(struct gpio_chip *chip)
 		chip->of_xlate = of_gpio_simple_xlate;
 	}
 
+<<<<<<< HEAD
 	of_gpiochip_add_pin_range(chip);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	of_node_get(chip->of_node);
 }
 
 void of_gpiochip_remove(struct gpio_chip *chip)
 {
+<<<<<<< HEAD
 	of_gpiochip_remove_pin_range(chip);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (chip->of_node)
 		of_node_put(chip->of_node);
 }

@@ -280,11 +280,19 @@ static irqreturn_t mxs_mmc_irq_handler(int irq, void *dev_id)
 	writel(stat & MXS_MMC_IRQ_BITS,
 	       host->base + HW_SSP_CTRL1 + MXS_CLR_ADDR);
 
+<<<<<<< HEAD
 	if ((stat & BM_SSP_CTRL1_SDIO_IRQ) && (stat & BM_SSP_CTRL1_SDIO_IRQ_EN))
 		mmc_signal_sdio_irq(host->mmc);
 
 	spin_unlock(&host->lock);
 
+=======
+	spin_unlock(&host->lock);
+
+	if ((stat & BM_SSP_CTRL1_SDIO_IRQ) && (stat & BM_SSP_CTRL1_SDIO_IRQ_EN))
+		mmc_signal_sdio_irq(host->mmc);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (stat & BM_SSP_CTRL1_RESP_TIMEOUT_IRQ)
 		cmd->error = -ETIMEDOUT;
 	else if (stat & BM_SSP_CTRL1_RESP_ERR_IRQ)
@@ -639,10 +647,13 @@ static void mxs_mmc_enable_sdio_irq(struct mmc_host *mmc, int enable)
 		       host->base + HW_SSP_CTRL0 + MXS_SET_ADDR);
 		writel(BM_SSP_CTRL1_SDIO_IRQ_EN,
 		       host->base + HW_SSP_CTRL1 + MXS_SET_ADDR);
+<<<<<<< HEAD
 
 		if (readl(host->base + HW_SSP_STATUS) & BM_SSP_STATUS_SDIO_IRQ)
 			mmc_signal_sdio_irq(host->mmc);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 		writel(BM_SSP_CTRL0_SDIO_IRQ_CHECK,
 		       host->base + HW_SSP_CTRL0 + MXS_CLR_ADDR);
@@ -651,6 +662,13 @@ static void mxs_mmc_enable_sdio_irq(struct mmc_host *mmc, int enable)
 	}
 
 	spin_unlock_irqrestore(&host->lock, flags);
+<<<<<<< HEAD
+=======
+
+	if (enable && readl(host->base + HW_SSP_STATUS) & BM_SSP_STATUS_SDIO_IRQ)
+		mmc_signal_sdio_irq(host->mmc);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const struct mmc_host_ops mxs_mmc_ops = {

@@ -628,7 +628,11 @@ void rt2x00lib_rxdone(struct queue_entry *entry)
 	 */
 	if (unlikely(rxdesc.size == 0 ||
 		     rxdesc.size > entry->queue->data_size)) {
+<<<<<<< HEAD
 		WARNING(rt2x00dev, "Wrong frame size %d max %d.\n",
+=======
+		ERROR(rt2x00dev, "Wrong frame size %d max %d.\n",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			rxdesc.size, entry->queue->data_size);
 		dev_kfree_skb(entry->skb);
 		goto renew_skb;
@@ -1022,9 +1026,16 @@ static void rt2x00lib_uninitialize(struct rt2x00_dev *rt2x00dev)
 		return;
 
 	/*
+<<<<<<< HEAD
 	 * Unregister extra components.
 	 */
 	rt2x00rfkill_unregister(rt2x00dev);
+=======
+	 * Stop rfkill polling.
+	 */
+	if (test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_unregister(rt2x00dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Allow the HW to uninitialize.
@@ -1062,6 +1073,15 @@ static int rt2x00lib_initialize(struct rt2x00_dev *rt2x00dev)
 
 	set_bit(DEVICE_STATE_INITIALIZED, &rt2x00dev->flags);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Start rfkill polling.
+	 */
+	if (test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_register(rt2x00dev);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -1157,7 +1177,13 @@ int rt2x00lib_probe_dev(struct rt2x00_dev *rt2x00dev)
 		rt2x00dev->hw->wiphy->interface_modes |=
 		    BIT(NL80211_IFTYPE_ADHOC) |
 		    BIT(NL80211_IFTYPE_AP) |
+<<<<<<< HEAD
 		    BIT(NL80211_IFTYPE_MESH_POINT) |
+=======
+#ifdef CONFIG_MAC80211_MESH
+		    BIT(NL80211_IFTYPE_MESH_POINT) |
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		    BIT(NL80211_IFTYPE_WDS);
 
 	/*
@@ -1205,7 +1231,16 @@ int rt2x00lib_probe_dev(struct rt2x00_dev *rt2x00dev)
 	rt2x00link_register(rt2x00dev);
 	rt2x00leds_register(rt2x00dev);
 	rt2x00debug_register(rt2x00dev);
+<<<<<<< HEAD
 	rt2x00rfkill_register(rt2x00dev);
+=======
+
+	/*
+	 * Start rfkill polling.
+	 */
+	if (!test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_register(rt2x00dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 
@@ -1221,6 +1256,15 @@ void rt2x00lib_remove_dev(struct rt2x00_dev *rt2x00dev)
 	clear_bit(DEVICE_STATE_PRESENT, &rt2x00dev->flags);
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Stop rfkill polling.
+	 */
+	if (!test_bit(REQUIRE_DELAYED_RFKILL, &rt2x00dev->cap_flags))
+		rt2x00rfkill_unregister(rt2x00dev);
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Disable radio.
 	 */
 	rt2x00lib_disable_radio(rt2x00dev);

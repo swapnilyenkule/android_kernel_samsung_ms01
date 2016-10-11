@@ -1,8 +1,16 @@
 config USB_DWC3
 	tristate "DesignWare USB3 DRD Core Support"
+<<<<<<< HEAD
 	depends on (USB || USB_GADGET)
 	select USB_OTG_UTILS
 	select USB_XHCI_PLATFORM if USB_SUPPORT && USB_XHCI_HCD
+=======
+	depends on (USB && USB_GADGET)
+	select USB_OTG_UTILS
+	select USB_GADGET_DUALSPEED
+	select USB_GADGET_SUPERSPEED
+	select USB_XHCI_PLATFORM
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Say Y or M here if your system has a Dual Role SuperSpeed
 	  USB controller based on the DesignWare USB3 IP Core.

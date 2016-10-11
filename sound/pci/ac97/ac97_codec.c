@@ -1271,6 +1271,11 @@ static int snd_ac97_cvol_new(struct snd_card *card, char *name, int reg, unsigne
 		tmp.index = ac97->num;
 		kctl = snd_ctl_new1(&tmp, ac97);
 	}
+<<<<<<< HEAD
+=======
+	if (!kctl)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (reg >= AC97_PHONE && reg <= AC97_PCM)
 		set_tlv_db_scale(kctl, db_scale_5bit_12db_max);
 	else

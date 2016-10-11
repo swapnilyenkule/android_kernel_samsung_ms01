@@ -121,7 +121,11 @@ static void ath_tx_cabq(struct ieee80211_hw *hw, struct sk_buff *skb)
 
 	if (ath_tx_start(hw, skb, &txctl) != 0) {
 		ath_dbg(common, XMIT, "CABQ TX failed\n");
+<<<<<<< HEAD
 		dev_kfree_skb_any(skb);
+=======
+		ieee80211_free_txskb(hw, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 
@@ -154,6 +158,10 @@ static struct ath_buf *ath_beacon_generate(struct ieee80211_hw *hw,
 				 skb->len, DMA_TO_DEVICE);
 		dev_kfree_skb_any(skb);
 		bf->bf_buf_addr = 0;
+<<<<<<< HEAD
+=======
+		bf->bf_mpdu = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* Get a new beacon from mac80211 */

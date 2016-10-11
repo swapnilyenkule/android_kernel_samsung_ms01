@@ -213,6 +213,10 @@ static ssize_t write_unlock_ip(struct file *file, char *buf, size_t size)
 	struct sockaddr *sap = (struct sockaddr *)&address;
 	size_t salen = sizeof(address);
 	char *fo_path;
+<<<<<<< HEAD
+=======
+	struct net *net = file->f_dentry->d_sb->s_fs_info;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* sanity check */
 	if (size == 0)
@@ -225,7 +229,11 @@ static ssize_t write_unlock_ip(struct file *file, char *buf, size_t size)
 	if (qword_get(&buf, fo_path, size) < 0)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (rpc_pton(&init_net, fo_path, size, sap, salen) == 0)
+=======
+	if (rpc_pton(net, fo_path, size, sap, salen) == 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EINVAL;
 
 	return nlmsvc_unlock_all_by_ip(sap);
@@ -389,6 +397,11 @@ static ssize_t write_threads(struct file *file, char *buf, size_t size)
 {
 	char *mesg = buf;
 	int rv;
+<<<<<<< HEAD
+=======
+	struct net *net = file->f_dentry->d_sb->s_fs_info;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (size > 0) {
 		int newthreads;
 		rv = get_int(&mesg, &newthreads);
@@ -396,7 +409,11 @@ static ssize_t write_threads(struct file *file, char *buf, size_t size)
 			return rv;
 		if (newthreads < 0)
 			return -EINVAL;
+<<<<<<< HEAD
 		rv = nfsd_svc(NFS_PORT, newthreads);
+=======
+		rv = nfsd_svc(NFS_PORT, newthreads, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rv < 0)
 			return rv;
 	} else
@@ -438,6 +455,10 @@ static ssize_t write_pool_threads(struct file *file, char *buf, size_t size)
 	int len;
 	int npools;
 	int *nthreads;
+<<<<<<< HEAD
+=======
+	struct net *net = file->f_dentry->d_sb->s_fs_info;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mutex_lock(&nfsd_mutex);
 	npools = nfsd_nrpools();
@@ -468,7 +489,11 @@ static ssize_t write_pool_threads(struct file *file, char *buf, size_t size)
 			if (nthreads[i] < 0)
 				goto out_free;
 		}
+<<<<<<< HEAD
 		rv = nfsd_set_nrthreads(i, nthreads);
+=======
+		rv = nfsd_set_nrthreads(i, nthreads, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rv)
 			goto out_free;
 	}
@@ -647,7 +672,11 @@ static ssize_t __write_ports_names(char *buf)
  * a socket of a supported family/protocol, and we use it as an
  * nfsd listener.
  */
+<<<<<<< HEAD
 static ssize_t __write_ports_addfd(char *buf)
+=======
+static ssize_t __write_ports_addfd(char *buf, struct net *net)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	char *mesg = buf;
 	int fd, err;
@@ -656,13 +685,26 @@ static ssize_t __write_ports_addfd(char *buf)
 	if (err != 0 || fd < 0)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	err = nfsd_create_serv();
+=======
+	if (svc_alien_sock(net, fd)) {
+		printk(KERN_ERR "%s: socket net is different to NFSd's one\n", __func__);
+		return -EINVAL;
+	}
+
+	err = nfsd_create_serv(net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err != 0)
 		return err;
 
 	err = svc_addsock(nfsd_serv, fd, buf, SIMPLE_TRANSACTION_LIMIT);
 	if (err < 0) {
+<<<<<<< HEAD
 		svc_destroy(nfsd_serv);
+=======
+		nfsd_destroy(net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return err;
 	}
 
@@ -694,7 +736,11 @@ static ssize_t __write_ports_delfd(char *buf)
  * A transport listener is added by writing it's transport name and
  * a port number.
  */
+<<<<<<< HEAD
 static ssize_t __write_ports_addxprt(char *buf)
+=======
+static ssize_t __write_ports_addxprt(char *buf, struct net *net)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	char transport[16];
 	struct svc_xprt *xprt;
@@ -706,16 +752,28 @@ static ssize_t __write_ports_addxprt(char *buf)
 	if (port < 1 || port > USHRT_MAX)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	err = nfsd_create_serv();
 	if (err != 0)
 		return err;
 
 	err = svc_create_xprt(nfsd_serv, transport, &init_net,
+=======
+	err = nfsd_create_serv(net);
+	if (err != 0)
+		return err;
+
+	err = svc_create_xprt(nfsd_serv, transport, net,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				PF_INET, port, SVC_SOCK_ANONYMOUS);
 	if (err < 0)
 		goto out_err;
 
+<<<<<<< HEAD
 	err = svc_create_xprt(nfsd_serv, transport, &init_net,
+=======
+	err = svc_create_xprt(nfsd_serv, transport, net,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				PF_INET6, port, SVC_SOCK_ANONYMOUS);
 	if (err < 0 && err != -EAFNOSUPPORT)
 		goto out_close;
@@ -724,13 +782,21 @@ static ssize_t __write_ports_addxprt(char *buf)
 	nfsd_serv->sv_nrthreads--;
 	return 0;
 out_close:
+<<<<<<< HEAD
 	xprt = svc_find_xprt(nfsd_serv, transport, &init_net, PF_INET, port);
+=======
+	xprt = svc_find_xprt(nfsd_serv, transport, net, PF_INET, port);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (xprt != NULL) {
 		svc_close_xprt(xprt);
 		svc_xprt_put(xprt);
 	}
 out_err:
+<<<<<<< HEAD
 	svc_destroy(nfsd_serv);
+=======
+	nfsd_destroy(net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -738,7 +804,11 @@ out_err:
  * A transport listener is removed by writing a "-", it's transport
  * name, and it's port number.
  */
+<<<<<<< HEAD
 static ssize_t __write_ports_delxprt(char *buf)
+=======
+static ssize_t __write_ports_delxprt(char *buf, struct net *net)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct svc_xprt *xprt;
 	char transport[16];
@@ -750,7 +820,11 @@ static ssize_t __write_ports_delxprt(char *buf)
 	if (port < 1 || port > USHRT_MAX || nfsd_serv == NULL)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	xprt = svc_find_xprt(nfsd_serv, transport, &init_net, AF_UNSPEC, port);
+=======
+	xprt = svc_find_xprt(nfsd_serv, transport, net, AF_UNSPEC, port);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (xprt == NULL)
 		return -ENOTCONN;
 
@@ -759,22 +833,38 @@ static ssize_t __write_ports_delxprt(char *buf)
 	return 0;
 }
 
+<<<<<<< HEAD
 static ssize_t __write_ports(struct file *file, char *buf, size_t size)
+=======
+static ssize_t __write_ports(struct file *file, char *buf, size_t size,
+				struct net *net)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	if (size == 0)
 		return __write_ports_names(buf);
 
 	if (isdigit(buf[0]))
+<<<<<<< HEAD
 		return __write_ports_addfd(buf);
+=======
+		return __write_ports_addfd(buf, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (buf[0] == '-' && isdigit(buf[1]))
 		return __write_ports_delfd(buf);
 
 	if (isalpha(buf[0]))
+<<<<<<< HEAD
 		return __write_ports_addxprt(buf);
 
 	if (buf[0] == '-' && isalpha(buf[1]))
 		return __write_ports_delxprt(buf);
+=======
+		return __write_ports_addxprt(buf, net);
+
+	if (buf[0] == '-' && isalpha(buf[1]))
+		return __write_ports_delxprt(buf, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return -EINVAL;
 }
@@ -853,9 +943,16 @@ static ssize_t __write_ports(struct file *file, char *buf, size_t size)
 static ssize_t write_ports(struct file *file, char *buf, size_t size)
 {
 	ssize_t rv;
+<<<<<<< HEAD
 
 	mutex_lock(&nfsd_mutex);
 	rv = __write_ports(file, buf, size);
+=======
+	struct net *net = file->f_dentry->d_sb->s_fs_info;
+
+	mutex_lock(&nfsd_mutex);
+	rv = __write_ports(file, buf, size, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&nfsd_mutex);
 	return rv;
 }
@@ -1090,20 +1187,47 @@ static int nfsd_fill_super(struct super_block * sb, void * data, int silent)
 #endif
 		/* last one */ {""}
 	};
+<<<<<<< HEAD
 	return simple_fill_super(sb, 0x6e667364, nfsd_files);
+=======
+	struct net *net = data;
+	int ret;
+
+	ret = simple_fill_super(sb, 0x6e667364, nfsd_files);
+	if (ret)
+		return ret;
+	sb->s_fs_info = get_net(net);
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static struct dentry *nfsd_mount(struct file_system_type *fs_type,
 	int flags, const char *dev_name, void *data)
 {
+<<<<<<< HEAD
 	return mount_single(fs_type, flags, data, nfsd_fill_super);
+=======
+	return mount_ns(fs_type, flags, current->nsproxy->net_ns, nfsd_fill_super);
+}
+
+static void nfsd_umount(struct super_block *sb)
+{
+	struct net *net = sb->s_fs_info;
+
+	kill_litter_super(sb);
+	put_net(net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static struct file_system_type nfsd_fs_type = {
 	.owner		= THIS_MODULE,
 	.name		= "nfsd",
 	.mount		= nfsd_mount,
+<<<<<<< HEAD
 	.kill_sb	= kill_litter_super,
+=======
+	.kill_sb	= nfsd_umount,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #ifdef CONFIG_PROC_FS
@@ -1137,6 +1261,7 @@ static int __init init_nfsd(void)
 	int retval;
 	printk(KERN_INFO "Installing knfsd (copyright (C) 1996 okir@monad.swb.de).\n");
 
+<<<<<<< HEAD
 	retval = register_cld_notifier();
 	if (retval)
 		return retval;
@@ -1146,6 +1271,17 @@ static int __init init_nfsd(void)
 	retval = nfsd4_init_slabs();
 	if (retval)
 		goto out_unregister_pernet;
+=======
+	retval = register_pernet_subsys(&nfsd_net_ops);
+	if (retval < 0)
+		return retval;
+	retval = register_cld_notifier();
+	if (retval)
+		goto out_unregister_pernet;
+	retval = nfsd4_init_slabs();
+	if (retval)
+		goto out_unregister_notifier;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nfs4_state_init();
 	retval = nfsd_fault_inject_init(); /* nfsd fault injection controls */
 	if (retval)
@@ -1183,10 +1319,17 @@ out_free_stat:
 	nfsd_fault_inject_cleanup();
 out_free_slabs:
 	nfsd4_free_slabs();
+<<<<<<< HEAD
 out_unregister_pernet:
 	unregister_pernet_subsys(&nfsd_net_ops);
 out_unregister_notifier:
 	unregister_cld_notifier();
+=======
+out_unregister_notifier:
+	unregister_cld_notifier();
+out_unregister_pernet:
+	unregister_pernet_subsys(&nfsd_net_ops);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return retval;
 }
 
@@ -1202,8 +1345,13 @@ static void __exit exit_nfsd(void)
 	nfsd4_free_slabs();
 	nfsd_fault_inject_cleanup();
 	unregister_filesystem(&nfsd_fs_type);
+<<<<<<< HEAD
 	unregister_pernet_subsys(&nfsd_net_ops);
 	unregister_cld_notifier();
+=======
+	unregister_cld_notifier();
+	unregister_pernet_subsys(&nfsd_net_ops);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 MODULE_AUTHOR("Olaf Kirch <okir@monad.swb.de>");

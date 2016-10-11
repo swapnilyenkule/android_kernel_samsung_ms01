@@ -741,7 +741,14 @@ static inline void arch_leave_lazy_mmu_mode(void)
 	PVOP_VCALL0(pv_mmu_ops.lazy_mode.leave);
 }
 
+<<<<<<< HEAD
 void arch_flush_lazy_mmu_mode(void);
+=======
+static inline void arch_flush_lazy_mmu_mode(void)
+{
+	PVOP_VCALL0(pv_mmu_ops.lazy_mode.flush);
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline void __set_fixmap(unsigned /* enum fixed_addresses */ idx,
 				phys_addr_t phys, pgprot_t flags)

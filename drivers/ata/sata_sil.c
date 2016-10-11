@@ -157,6 +157,10 @@ static const struct sil_drivelist {
 	{ "ST380011ASL",	SIL_QUIRK_MOD15WRITE },
 	{ "ST3120022ASL",	SIL_QUIRK_MOD15WRITE },
 	{ "ST3160021ASL",	SIL_QUIRK_MOD15WRITE },
+<<<<<<< HEAD
+=======
+	{ "TOSHIBA MK2561GSYN",	SIL_QUIRK_MOD15WRITE },
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ "Maxtor 4D060H3",	SIL_QUIRK_UDMA5MAX },
 	{ }
 };

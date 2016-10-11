@@ -435,6 +435,26 @@ static void dump_header(struct task_struct *p, gfp_t gfp_mask, int order,
 		dump_tasks(memcg, nodemask);
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Number of OOM killer invocations (including memcg OOM killer).
+ * Primarily used by PM freezer to check for potential races with
+ * OOM killed frozen task.
+ */
+static atomic_t oom_kills = ATOMIC_INIT(0);
+
+int oom_kills_count(void)
+{
+	return atomic_read(&oom_kills);
+}
+
+void note_oom_kill(void)
+{
+	atomic_inc(&oom_kills);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define K(x) ((x) << (PAGE_SHIFT-10))
 static void oom_kill_process(struct task_struct *p, gfp_t gfp_mask, int order,
 			     unsigned int points, unsigned long totalpages,
@@ -562,11 +582,19 @@ void mem_cgroup_out_of_memory(struct mem_cgroup *memcg, gfp_t gfp_mask,
 	struct task_struct *p;
 
 	/*
+<<<<<<< HEAD
 	 * If current has a pending SIGKILL, then automatically select it.  The
 	 * goal is to allow it to allocate so that it may quickly exit and free
 	 * its memory.
 	 */
 	if (fatal_signal_pending(current)) {
+=======
+	 * If current has a pending SIGKILL or is exiting, then automatically
+	 * select it.  The goal is to allow it to allocate so that it may
+	 * quickly exit and free its memory.
+	 */
+	if (fatal_signal_pending(current) || current->flags & PF_EXITING) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		set_thread_flag(TIF_MEMDIE);
 		return;
 	}

@@ -128,6 +128,10 @@ struct sigaction {
 	__sigrestore_t sa_restorer;
 	sigset_t sa_mask;		/* mask last for extensibility */
 };
+<<<<<<< HEAD
+=======
+#define __ARCH_HAS_SA_RESTORER
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct k_sigaction {
 	struct sigaction sa;

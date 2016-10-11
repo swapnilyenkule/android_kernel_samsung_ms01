@@ -57,17 +57,35 @@ static void bdev_inode_switch_bdi(struct inode *inode,
 			struct backing_dev_info *dst)
 {
 	struct backing_dev_info *old = inode->i_data.backing_dev_info;
+<<<<<<< HEAD
+=======
+	bool wakeup_bdi = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (unlikely(dst == old))		/* deadlock avoidance */
 		return;
 	bdi_lock_two(&old->wb, &dst->wb);
 	spin_lock(&inode->i_lock);
 	inode->i_data.backing_dev_info = dst;
+<<<<<<< HEAD
 	if (inode->i_state & I_DIRTY)
 		list_move(&inode->i_wb_list, &dst->wb.b_dirty);
 	spin_unlock(&inode->i_lock);
 	spin_unlock(&old->wb.list_lock);
 	spin_unlock(&dst->wb.list_lock);
+=======
+	if (inode->i_state & I_DIRTY) {
+		if (bdi_cap_writeback_dirty(dst) && !wb_has_dirty_io(&dst->wb))
+			wakeup_bdi = true;
+		list_move(&inode->i_wb_list, &dst->wb.b_dirty);
+	}
+	spin_unlock(&inode->i_lock);
+	spin_unlock(&old->wb.list_lock);
+	spin_unlock(&dst->wb.list_lock);
+
+	if (wakeup_bdi)
+		bdi_wakeup_thread_delayed(dst);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 sector_t blkdev_max_block(struct block_device *bdev)
@@ -604,6 +622,10 @@ struct block_device *bdgrab(struct block_device *bdev)
 	ihold(bdev->bd_inode);
 	return bdev;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(bdgrab);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 long nr_blockdev_pages(void)
 {
@@ -1047,6 +1069,10 @@ int revalidate_disk(struct gendisk *disk)
 
 	mutex_lock(&bdev->bd_mutex);
 	check_disk_size_change(disk, bdev);
+<<<<<<< HEAD
+=======
+	bdev->bd_invalidated = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&bdev->bd_mutex);
 	bdput(bdev);
 	return ret;
@@ -1085,7 +1111,13 @@ void bd_set_size(struct block_device *bdev, loff_t size)
 {
 	unsigned bsize = bdev_logical_block_size(bdev);
 
+<<<<<<< HEAD
 	bdev->bd_inode->i_size = size;
+=======
+	mutex_lock(&bdev->bd_inode->i_mutex);
+	i_size_write(bdev->bd_inode, size);
+	mutex_unlock(&bdev->bd_inode->i_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (bsize < PAGE_CACHE_SIZE) {
 		if (size & bsize)
 			break;

@@ -151,6 +151,11 @@ static int xfrm_output_gso(struct sk_buff *skb)
 	kfree_skb(skb);
 	if (IS_ERR(segs))
 		return PTR_ERR(segs);
+<<<<<<< HEAD
+=======
+	if (segs == NULL)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	do {
 		struct sk_buff *nskb = segs->next;

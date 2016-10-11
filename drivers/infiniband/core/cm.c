@@ -856,6 +856,14 @@ retest:
 	case IB_CM_SIDR_REQ_RCVD:
 		spin_unlock_irq(&cm_id_priv->lock);
 		cm_reject_sidr_req(cm_id_priv, IB_SIDR_REJECT);
+<<<<<<< HEAD
+=======
+		spin_lock_irq(&cm.lock);
+		if (!RB_EMPTY_NODE(&cm_id_priv->sidr_id_node))
+			rb_erase(&cm_id_priv->sidr_id_node,
+				 &cm.remote_sidr_table);
+		spin_unlock_irq(&cm.lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case IB_CM_REQ_SENT:
 		ib_cancel_mad(cm_id_priv->av.port->mad_agent, cm_id_priv->msg);
@@ -3092,7 +3100,14 @@ int ib_send_cm_sidr_rep(struct ib_cm_id *cm_id,
 	spin_unlock_irqrestore(&cm_id_priv->lock, flags);
 
 	spin_lock_irqsave(&cm.lock, flags);
+<<<<<<< HEAD
 	rb_erase(&cm_id_priv->sidr_id_node, &cm.remote_sidr_table);
+=======
+	if (!RB_EMPTY_NODE(&cm_id_priv->sidr_id_node)) {
+		rb_erase(&cm_id_priv->sidr_id_node, &cm.remote_sidr_table);
+		RB_CLEAR_NODE(&cm_id_priv->sidr_id_node);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock_irqrestore(&cm.lock, flags);
 	return 0;
 

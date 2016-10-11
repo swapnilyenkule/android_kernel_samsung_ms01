@@ -215,8 +215,13 @@ static const char *ferr_fat_fbd_name[] = {
 	[0]  = "Memory Write error on non-redundant retry or "
 	       "FBD configuration Write error on retry",
 };
+<<<<<<< HEAD
 #define GET_FBD_FAT_IDX(fbderr)	(fbderr & (3 << 28))
 #define FERR_FAT_FBD_ERR_MASK ((1 << 0) | (1 << 1) | (1 << 2) | (1 << 3))
+=======
+#define GET_FBD_FAT_IDX(fbderr)	(((fbderr) >> 28) & 3)
+#define FERR_FAT_FBD_ERR_MASK ((1 << 0) | (1 << 1) | (1 << 2) | (1 << 22))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define FERR_NF_FBD	0xa0
 static const char *ferr_nf_fbd_name[] = {
@@ -243,7 +248,11 @@ static const char *ferr_nf_fbd_name[] = {
 	[1]  = "Aliased Uncorrectable Non-Mirrored Demand Data ECC",
 	[0]  = "Uncorrectable Data ECC on Replay",
 };
+<<<<<<< HEAD
 #define GET_FBD_NF_IDX(fbderr)	(fbderr & (3 << 28))
+=======
+#define GET_FBD_NF_IDX(fbderr)	(((fbderr) >> 28) & 3)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define FERR_NF_FBD_ERR_MASK ((1 << 24) | (1 << 23) | (1 << 22) | (1 << 21) |\
 			      (1 << 18) | (1 << 17) | (1 << 16) | (1 << 15) |\
 			      (1 << 14) | (1 << 13) | (1 << 11) | (1 << 10) |\
@@ -485,7 +494,11 @@ static void i7300_process_fbd_error(struct mem_ctl_info *mci)
 		errnum = find_first_bit(&errors,
 					ARRAY_SIZE(ferr_nf_fbd_name));
 		specific = GET_ERR_FROM_TABLE(ferr_nf_fbd_name, errnum);
+<<<<<<< HEAD
 		branch = (GET_FBD_FAT_IDX(error_reg) == 2) ? 1 : 0;
+=======
+		branch = (GET_FBD_NF_IDX(error_reg) == 2) ? 1 : 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		pci_read_config_dword(pvt->pci_dev_16_1_fsb_addr_map,
 			REDMEMA, &syndrome);
@@ -962,6 +975,7 @@ static int __devinit i7300_get_devices(struct mem_ctl_info *mci)
 
 	/* Attempt to 'get' the MCH register we want */
 	pdev = NULL;
+<<<<<<< HEAD
 	while (!pvt->pci_dev_16_1_fsb_addr_map ||
 	       !pvt->pci_dev_16_2_fsb_err_regs) {
 		pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
@@ -985,10 +999,40 @@ static int __devinit i7300_get_devices(struct mem_ctl_info *mci)
 			break;
 		case 2:
 			pvt->pci_dev_16_2_fsb_err_regs = pdev;
+=======
+	while ((pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
+				      PCI_DEVICE_ID_INTEL_I7300_MCH_ERR,
+				      pdev))) {
+		/* Store device 16 funcs 1 and 2 */
+		switch (PCI_FUNC(pdev->devfn)) {
+		case 1:
+			if (!pvt->pci_dev_16_1_fsb_addr_map)
+				pvt->pci_dev_16_1_fsb_addr_map =
+							pci_dev_get(pdev);
+			break;
+		case 2:
+			if (!pvt->pci_dev_16_2_fsb_err_regs)
+				pvt->pci_dev_16_2_fsb_err_regs =
+							pci_dev_get(pdev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	if (!pvt->pci_dev_16_1_fsb_addr_map ||
+	    !pvt->pci_dev_16_2_fsb_err_regs) {
+		/* At least one device was not found */
+		i7300_printk(KERN_ERR,
+			"'system address,Process Bus' device not found:"
+			"vendor 0x%x device 0x%x ERR funcs (broken BIOS?)\n",
+			PCI_VENDOR_ID_INTEL,
+			PCI_DEVICE_ID_INTEL_I7300_MCH_ERR);
+		goto error;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	debugf1("System Address, processor bus- PCI Bus ID: %s  %x:%x\n",
 		pci_name(pvt->pci_dev_16_0_fsb_ctlr),
 		pvt->pci_dev_16_0_fsb_ctlr->vendor,

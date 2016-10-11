@@ -98,6 +98,7 @@ typedef struct siginfo {
 			__ARCH_SI_BAND_T _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
 			int _fd;
 		} _sigpoll;
+<<<<<<< HEAD
 
 		/* SIGSYS */
 		struct {
@@ -110,6 +111,11 @@ typedef struct siginfo {
 
 /* If the arch shares siginfo, then it has SIGSYS. */
 #define __ARCH_SIGSYS
+=======
+	} _sifields;
+} __ARCH_SI_ATTRIBUTES siginfo_t;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 /*
@@ -133,11 +139,14 @@ typedef struct siginfo {
 #define si_addr_lsb	_sifields._sigfault._addr_lsb
 #define si_band		_sifields._sigpoll._band
 #define si_fd		_sifields._sigpoll._fd
+<<<<<<< HEAD
 #ifdef __ARCH_SIGSYS
 #define si_call_addr	_sifields._sigsys._call_addr
 #define si_syscall	_sifields._sigsys._syscall
 #define si_arch		_sifields._sigsys._arch
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef __KERNEL__
 #define __SI_MASK	0xffff0000u
@@ -148,7 +157,10 @@ typedef struct siginfo {
 #define __SI_CHLD	(4 << 16)
 #define __SI_RT		(5 << 16)
 #define __SI_MESGQ	(6 << 16)
+<<<<<<< HEAD
 #define __SI_SYS	(7 << 16)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define __SI_CODE(T,N)	((T) | ((N) & 0xffff))
 #else
 #define __SI_KILL	0
@@ -158,7 +170,10 @@ typedef struct siginfo {
 #define __SI_CHLD	0
 #define __SI_RT		0
 #define __SI_MESGQ	0
+<<<<<<< HEAD
 #define __SI_SYS	0
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define __SI_CODE(T,N)	(N)
 #endif
 
@@ -256,12 +271,15 @@ typedef struct siginfo {
 #define NSIGPOLL	6
 
 /*
+<<<<<<< HEAD
  * SIGSYS si_codes
  */
 #define SYS_SECCOMP		(__SI_SYS|1)	/* seccomp triggered */
 #define NSIGSYS	1
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * sigevent definitions
  * 
  * It seems likely that SIGEV_THREAD will have to be handled from 

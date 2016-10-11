@@ -133,7 +133,11 @@ static int cyttsp_exit_bl_mode(struct cyttsp *ts)
 	memcpy(bl_cmd, bl_command, sizeof(bl_command));
 	if (ts->pdata->bl_keys)
 		memcpy(&bl_cmd[sizeof(bl_command) - CY_NUM_BL_KEYS],
+<<<<<<< HEAD
 			ts->pdata->bl_keys, sizeof(bl_command));
+=======
+			ts->pdata->bl_keys, CY_NUM_BL_KEYS);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	error = ttsp_write_block_data(ts, CY_REG_BASE,
 				      sizeof(bl_cmd), bl_cmd);

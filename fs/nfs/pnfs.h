@@ -161,7 +161,11 @@ extern int nfs4_proc_getdevicelist(struct nfs_server *server,
 				   struct pnfs_devicelist *devlist);
 extern int nfs4_proc_getdeviceinfo(struct nfs_server *server,
 				   struct pnfs_device *dev);
+<<<<<<< HEAD
 extern int nfs4_proc_layoutget(struct nfs4_layoutget *lgp);
+=======
+extern int nfs4_proc_layoutget(struct nfs4_layoutget *lgp, gfp_t gfp_flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int nfs4_proc_layoutreturn(struct nfs4_layoutreturn *lrp);
 
 /* pnfs.c */

@@ -11,8 +11,11 @@
 
 
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/net.h>
 #include <linux/sock_diag.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/inet_diag.h>
 
 #include <linux/tcp.h>
@@ -48,6 +51,7 @@ static int tcp_diag_dump_one(struct sk_buff *in_skb, const struct nlmsghdr *nlh,
 	return inet_diag_dump_one_icsk(&tcp_hashinfo, in_skb, nlh, req);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_INET_DIAG_DESTROY
 static int tcp_diag_destroy(struct sk_buff *in_skb,
 			    struct inet_diag_req_v2 *req)
@@ -62,14 +66,19 @@ static int tcp_diag_destroy(struct sk_buff *in_skb,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static const struct inet_diag_handler tcp_diag_handler = {
 	.dump		 = tcp_diag_dump,
 	.dump_one	 = tcp_diag_dump_one,
 	.idiag_get_info	 = tcp_diag_get_info,
 	.idiag_type	 = IPPROTO_TCP,
+<<<<<<< HEAD
 #ifdef CONFIG_INET_DIAG_DESTROY
 	.destroy	 = tcp_diag_destroy,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int __init tcp_diag_init(void)

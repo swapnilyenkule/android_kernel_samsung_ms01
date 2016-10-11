@@ -152,6 +152,7 @@ int selinux_xfrm_state_pol_flow_match(struct xfrm_state *x, struct xfrm_policy *
 	return rc;
 }
 
+<<<<<<< HEAD
 /*
  * LSM hook implementation that checks and/or returns the xfrm sid for the
  * incoming packet.
@@ -167,6 +168,15 @@ int selinux_xfrm_decode_session(struct sk_buff *skb, u32 *sid, int ckall)
 		return 0;
 
 	sp = skb->sp;
+=======
+static int selinux_xfrm_skb_sid_ingress(struct sk_buff *skb,
+					u32 *sid, int ckall)
+{
+	struct sec_path *sp = skb->sp;
+
+	*sid = SECSID_NULL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sp) {
 		int i, sid_set = 0;
 
@@ -190,6 +200,48 @@ int selinux_xfrm_decode_session(struct sk_buff *skb, u32 *sid, int ckall)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static u32 selinux_xfrm_skb_sid_egress(struct sk_buff *skb)
+{
+	struct dst_entry *dst = skb_dst(skb);
+	struct xfrm_state *x;
+
+	if (dst == NULL)
+		return SECSID_NULL;
+	x = dst->xfrm;
+	if (x == NULL || !selinux_authorizable_xfrm(x))
+		return SECSID_NULL;
+
+	return x->security->ctx_sid;
+}
+
+/*
+ * LSM hook implementation that checks and/or returns the xfrm sid for the
+ * incoming packet.
+ */
+
+int selinux_xfrm_decode_session(struct sk_buff *skb, u32 *sid, int ckall)
+{
+	if (skb == NULL) {
+		*sid = SECSID_NULL;
+		return 0;
+	}
+	return selinux_xfrm_skb_sid_ingress(skb, sid, ckall);
+}
+
+int selinux_xfrm_skb_sid(struct sk_buff *skb, u32 *sid)
+{
+	int rc;
+
+	rc = selinux_xfrm_skb_sid_ingress(skb, sid, 0);
+	if (rc == 0 && *sid == SECSID_NULL)
+		*sid = selinux_xfrm_skb_sid_egress(skb);
+
+	return rc;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Security blob allocation for xfrm_policy and xfrm_state
  * CTX does not have a meaningful value on input
@@ -310,7 +362,11 @@ int selinux_xfrm_policy_clone(struct xfrm_sec_ctx *old_ctx,
 
 	if (old_ctx) {
 		new_ctx = kmalloc(sizeof(*old_ctx) + old_ctx->ctx_len,
+<<<<<<< HEAD
 				  GFP_KERNEL);
+=======
+				  GFP_ATOMIC);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!new_ctx)
 			return -ENOMEM;
 

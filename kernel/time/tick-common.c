@@ -323,6 +323,10 @@ static void tick_shutdown(unsigned int *cpup)
 		 */
 		dev->mode = CLOCK_EVT_MODE_UNUSED;
 		clockevents_exchange_device(dev, NULL);
+<<<<<<< HEAD
+=======
+		dev->event_handler = clockevents_handle_noop;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		td->evtdev = NULL;
 	}
 	raw_spin_unlock_irqrestore(&tick_device_lock, flags);

@@ -131,6 +131,7 @@ found:
  *	0 - deliver
  *	1 - block
  */
+<<<<<<< HEAD
 static __inline__ int icmp_filter(struct sock *sk, struct sk_buff *skb)
 {
 	int type;
@@ -143,6 +144,22 @@ static __inline__ int icmp_filter(struct sock *sk, struct sk_buff *skb)
 		__u32 data = raw_sk(sk)->filter.data;
 
 		return ((1 << type) & data) != 0;
+=======
+static int icmp_filter(const struct sock *sk, const struct sk_buff *skb)
+{
+	struct icmphdr _hdr;
+	const struct icmphdr *hdr;
+
+	hdr = skb_header_pointer(skb, skb_transport_offset(skb),
+				 sizeof(_hdr), &_hdr);
+	if (!hdr)
+		return 1;
+
+	if (hdr->type < 32) {
+		__u32 data = raw_sk(sk)->filter.data;
+
+		return ((1U << hdr->type) & data) != 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* Do not block unknown ICMP types */
@@ -382,7 +399,11 @@ static int raw_send_hdrinc(struct sock *sk, struct flowi4 *fl4,
 		iph->check   = 0;
 		iph->tot_len = htons(length);
 		if (!iph->id)
+<<<<<<< HEAD
 			ip_select_ident(iph, &rt->dst, NULL);
+=======
+			ip_select_ident(skb, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		iph->check = ip_fast_csum((unsigned char *)iph, iph->ihl);
 	}
@@ -567,8 +588,12 @@ static int raw_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 			   RT_SCOPE_UNIVERSE,
 			   inet->hdrincl ? IPPROTO_RAW : sk->sk_protocol,
 			   inet_sk_flowi_flags(sk) | FLOWI_FLAG_CAN_SLEEP,
+<<<<<<< HEAD
 			   daddr, saddr, 0, 0,
 			   sock_i_uid(sk));
+=======
+			   daddr, saddr, 0, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!inet->hdrincl) {
 		err = raw_probe_proto_opt(&fl4, msg);
@@ -687,11 +712,16 @@ static int raw_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	if (flags & MSG_OOB)
 		goto out;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len = sizeof(*sin);
 
 	if (flags & MSG_ERRQUEUE) {
 		err = ip_recv_error(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE) {
+		err = ip_recv_error(sk, msg, len, addr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 
@@ -717,6 +747,10 @@ static int raw_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 		sin->sin_port = 0;
 		memset(&sin->sin_zero, 0, sizeof(sin->sin_zero));
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	if (inet->cmsg_flags)
 		ip_cmsg_recv(msg, skb);

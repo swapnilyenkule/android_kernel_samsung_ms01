@@ -33,8 +33,13 @@
 
 /* the following macro is used when enabling interrupts */
 #if defined(MACH_ATARI_ONLY)
+<<<<<<< HEAD
 	/* block out HSYNC on the atari */
 #define ALLOWINT	(~0x400)
+=======
+	/* block out HSYNC = ipl 2 on the atari */
+#define ALLOWINT	(~0x500)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define	MAX_NOINT_IPL	3
 #else
 	/* portable version */

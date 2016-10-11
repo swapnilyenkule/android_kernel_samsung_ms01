@@ -1,6 +1,13 @@
 config ZRAM
 	tristate "Compressed RAM block device support"
+<<<<<<< HEAD
 	depends on BLOCK && SYSFS && ZSMALLOC
+=======
+	# X86 dependency is because zsmalloc uses non-portable pte/tlb
+	# functions
+	depends on BLOCK && SYSFS && X86
+	select ZSMALLOC
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select LZO_COMPRESS
 	select LZO_DECOMPRESS
 	default n
@@ -14,7 +21,11 @@ config ZRAM
 	  disks and maybe many more.
 
 	  See zram.txt for more information.
+<<<<<<< HEAD
 	  Project home: <https://compcache.googlecode.com/>
+=======
+	  Project home: http://compcache.googlecode.com/
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config ZRAM_DEBUG
 	bool "Compressed RAM block device debug support"

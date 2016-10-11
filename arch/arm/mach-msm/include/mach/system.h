@@ -17,6 +17,9 @@
  * PSHOLD line on the PMIC to hard reset the system
  */
 extern void (*msm_hw_reset_hook)(void);
+<<<<<<< HEAD
 
 void msm_set_i2c_mux(bool gpio, int *gpio_clk, int *gpio_dat);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

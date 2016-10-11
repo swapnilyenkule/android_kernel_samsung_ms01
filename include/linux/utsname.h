@@ -52,7 +52,10 @@ struct uts_namespace {
 	struct kref kref;
 	struct new_utsname name;
 	struct user_namespace *user_ns;
+<<<<<<< HEAD
 	unsigned int proc_inum;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 extern struct uts_namespace init_uts_ns;
 

@@ -36,8 +36,11 @@ struct builtin_fw {
 	__used __section(.builtin_fw) = { name, blob, size }
 
 #if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
+<<<<<<< HEAD
 int request_firmware_direct(const char *name, struct device *device,
 			    phys_addr_t addr, size_t size);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int request_firmware(const struct firmware **fw, const char *name,
 		     struct device *device);
 int request_firmware_nowait(
@@ -47,12 +50,15 @@ int request_firmware_nowait(
 
 void release_firmware(const struct firmware *fw);
 #else
+<<<<<<< HEAD
 static inline int request_firmware_direct(const char *name,
 					  struct device *device,
 					  phys_addr_t addr, size_t size)
 {
 	return -EINVAL;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline int request_firmware(const struct firmware **fw,
 				   const char *name,
 				   struct device *device)

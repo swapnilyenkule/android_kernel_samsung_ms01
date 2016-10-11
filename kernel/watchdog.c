@@ -112,7 +112,11 @@ static unsigned long get_timestamp(int this_cpu)
 	return cpu_clock(this_cpu) >> 30LL;  /* 2^30 ~= 10^9 */
 }
 
+<<<<<<< HEAD
 static unsigned long get_sample_period(void)
+=======
+static u64 get_sample_period(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	/*
 	 * convert watchdog_thresh from seconds to ns
@@ -121,13 +125,21 @@ static unsigned long get_sample_period(void)
 	 * and hard thresholds) to increment before the
 	 * hardlockup detector generates a warning
 	 */
+<<<<<<< HEAD
 	return get_softlockup_thresh() * (NSEC_PER_SEC / 5);
+=======
+	return get_softlockup_thresh() * ((u64)NSEC_PER_SEC / 5);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Commands for resetting the watchdog */
 static void __touch_watchdog(void)
 {
+<<<<<<< HEAD
 	int this_cpu = raw_smp_processor_id();
+=======
+	int this_cpu = smp_processor_id();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	__this_cpu_write(watchdog_touch_ts, get_timestamp(this_cpu));
 }
@@ -154,6 +166,7 @@ void touch_all_softlockup_watchdogs(void)
 #ifdef CONFIG_HARDLOCKUP_DETECTOR
 void touch_nmi_watchdog(void)
 {
+<<<<<<< HEAD
 	if (watchdog_enabled) {
 		unsigned cpu;
 
@@ -162,6 +175,16 @@ void touch_nmi_watchdog(void)
 				per_cpu(watchdog_nmi_touch, cpu) = true;
 		}
 	}
+=======
+	/*
+	 * Using __raw here because some code paths have
+	 * preemption enabled.  If preemption is enabled
+	 * then interrupts should be enabled too, in which
+	 * case we shouldn't have to worry about the watchdog
+	 * going off.
+	 */
+	__raw_get_cpu_var(watchdog_nmi_touch) = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	touch_softlockup_watchdog();
 }
 EXPORT_SYMBOL(touch_nmi_watchdog);

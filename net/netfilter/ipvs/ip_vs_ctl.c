@@ -1521,11 +1521,19 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
 {
 	struct net_device *dev = ptr;
 	struct net *net = dev_net(dev);
+<<<<<<< HEAD
+=======
+	struct netns_ipvs *ipvs = net_ipvs(net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct ip_vs_service *svc;
 	struct ip_vs_dest *dest;
 	unsigned int idx;
 
+<<<<<<< HEAD
 	if (event != NETDEV_UNREGISTER)
+=======
+	if (event != NETDEV_UNREGISTER || !ipvs)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return NOTIFY_DONE;
 	IP_VS_DBG(3, "%s() dev=%s\n", __func__, dev->name);
 	EnterFunction(2);
@@ -1551,7 +1559,11 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
 		}
 	}
 
+<<<<<<< HEAD
 	list_for_each_entry(dest, &net_ipvs(net)->dest_trash, n_list) {
+=======
+	list_for_each_entry(dest, &ipvs->dest_trash, n_list) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__ip_vs_dev_reset(dest, dev);
 	}
 	mutex_unlock(&__ip_vs_mutex);
@@ -2713,6 +2725,10 @@ do_ip_vs_get_ctl(struct sock *sk, int cmd, void __user *user, int *len)
 	{
 		struct ip_vs_timeout_user t;
 
+<<<<<<< HEAD
+=======
+		memset(&t, 0, sizeof(t));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__ip_vs_get_timeouts(net, &t);
 		if (copy_to_user(user, &t, sizeof(t)) != 0)
 			ret = -EFAULT;
@@ -3687,6 +3703,12 @@ void __net_exit ip_vs_control_net_cleanup_sysctl(struct net *net)
 	cancel_delayed_work_sync(&ipvs->defense_work);
 	cancel_work_sync(&ipvs->defense_work.work);
 	unregister_net_sysctl_table(ipvs->sysctl_hdr);
+<<<<<<< HEAD
+=======
+
+	if (!net_eq(net, &init_net))
+		kfree(ipvs->sysctl_tbl);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #else

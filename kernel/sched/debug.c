@@ -215,6 +215,17 @@ void print_cfs_rq(struct seq_file *m, int cpu, struct cfs_rq *cfs_rq)
 	SEQ_printf(m, "  .%-30s: %d\n", "load_tg",
 			atomic_read(&cfs_rq->tg->load_weight));
 #endif
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CFS_BANDWIDTH
+	SEQ_printf(m, "  .%-30s: %d\n", "tg->cfs_bandwidth.timer_active",
+			cfs_rq->tg->cfs_bandwidth.timer_active);
+	SEQ_printf(m, "  .%-30s: %d\n", "throttled",
+			cfs_rq->throttled);
+	SEQ_printf(m, "  .%-30s: %d\n", "throttle_count",
+			cfs_rq->throttle_count);
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	print_cfs_group_stats(m, cpu, cfs_rq->tg);
 #endif
@@ -374,12 +385,18 @@ static int sched_debug_show(struct seq_file *m, void *v)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SYSRQ_SCHED_DEBUG
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void sysrq_sched_debug_show(void)
 {
 	sched_debug_show(NULL, NULL);
 }
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int sched_debug_open(struct inode *inode, struct file *filp)
 {

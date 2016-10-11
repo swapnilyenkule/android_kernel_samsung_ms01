@@ -340,8 +340,12 @@ mwifiex_cmd_append_11n_tlv(struct mwifiex_private *priv,
 		ht_cap->header.len =
 				cpu_to_le16(sizeof(struct ieee80211_ht_cap));
 		memcpy((u8 *) ht_cap + sizeof(struct mwifiex_ie_types_header),
+<<<<<<< HEAD
 		       (u8 *) bss_desc->bcn_ht_cap +
 		       sizeof(struct ieee_types_header),
+=======
+		       (u8 *)bss_desc->bcn_ht_cap,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		       le16_to_cpu(ht_cap->header.len));
 
 		mwifiex_fill_cap_info(priv, radio_type, ht_cap);

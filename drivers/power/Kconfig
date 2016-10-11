@@ -288,6 +288,7 @@ config CHARGER_MAX8998
 	  Say Y to enable support for the battery charger control sysfs and
 	  platform data of MAX8998/LP3974 PMICs.
 
+<<<<<<< HEAD
 config BATTERY_MSM
 	tristate "MSM battery"
 	depends on ARCH_MSM && MSM_ONCRPCROUTER
@@ -486,6 +487,8 @@ config BATTERY_BCL
 	  thermal daemon enables BCL.
 	  It will notify thermal daemon if IBat crosses Imax threshold.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CHARGER_SMB347
 	tristate "Summit Microelectronics SMB347 Battery Charger"
 	depends on I2C
@@ -505,6 +508,7 @@ config AB8500_BATTERY_THERM_ON_BATCTRL
 	help
 	  Say Y to enable battery temperature measurements using
 	  thermistor connected on BATCTRL ADC.
+<<<<<<< HEAD
 
 config QPNP_BMS
 	tristate "QPNP Battery Monitoring System driver"
@@ -514,4 +518,6 @@ config QPNP_BMS
 	  Say Y here to enable support for QPNP chip bms device.
 	  It registers a fuelgauge bms power supply to report
 	  State of Charge.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # POWER_SUPPLY

@@ -222,7 +222,11 @@ DEVICE_PARAM(b80211hEnable, "802.11h mode");
 // Static vars definitions
 //
 
+<<<<<<< HEAD
 static struct usb_device_id vt6656_table[] __devinitdata = {
+=======
+static struct usb_device_id vt6656_table[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{USB_DEVICE(VNT_USB_VENDOR_ID, VNT_USB_PRODUCT_ID)},
 	{}
 };
@@ -718,8 +722,11 @@ static int vt6656_suspend(struct usb_interface *intf, pm_message_t message)
 	if (device->flags & DEVICE_FLAGS_OPENED)
 		device_close(device->dev);
 
+<<<<<<< HEAD
 	usb_put_dev(interface_to_usbdev(intf));
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -730,8 +737,11 @@ static int vt6656_resume(struct usb_interface *intf)
 	if (!device || !device->dev)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	usb_get_dev(interface_to_usbdev(intf));
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!(device->flags & DEVICE_FLAGS_OPENED))
 		device_open(device->dev);
 
@@ -1224,6 +1234,11 @@ device_release_WPADEV(pDevice);
     memset(pMgmt->abyCurrBSSID, 0, 6);
     pMgmt->eCurrState = WMAC_STATE_IDLE;
 
+<<<<<<< HEAD
+=======
+	pDevice->flags &= ~DEVICE_FLAGS_OPENED;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
     device_free_tx_bufs(pDevice);
     device_free_rx_bufs(pDevice);
     device_free_int_bufs(pDevice);
@@ -1235,7 +1250,10 @@ device_release_WPADEV(pDevice);
     usb_free_urb(pDevice->pInterruptURB);
 
     BSSvClearNodeDBTable(pDevice, 0);
+<<<<<<< HEAD
     pDevice->flags &=(~DEVICE_FLAGS_OPENED);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "device_close2 \n");
 

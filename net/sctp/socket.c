@@ -70,6 +70,10 @@
 #include <linux/init.h>
 #include <linux/crypto.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/compat.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <net/ip.h>
 #include <net/icmp.h>
@@ -814,6 +818,12 @@ static int sctp_send_asconf_del_ip(struct sock		*sk,
 			goto skip_mkasconf;
 		}
 
+<<<<<<< HEAD
+=======
+		if (laddr == NULL)
+			return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* We do not need RCU protection throughout this loop
 		 * because this is done under a socket lock from the
 		 * setsockopt call.
@@ -1231,8 +1241,19 @@ out_free:
 	SCTP_DEBUG_PRINTK("About to exit __sctp_connect() free asoc: %p"
 			  " kaddrs: %p err: %d\n",
 			  asoc, kaddrs, err);
+<<<<<<< HEAD
 	if (asoc)
 		sctp_association_free(asoc);
+=======
+	if (asoc) {
+		/* sctp_primitive_ASSOCIATE may have added this association
+		 * To the hash table, try to unhash it, just in case, its a noop
+		 * if it wasn't hashed so we're safe
+		 */
+		sctp_unhash_established(asoc);
+		sctp_association_free(asoc);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -1367,11 +1388,27 @@ SCTP_STATIC int sctp_setsockopt_connectx(struct sock* sk,
 /*
  * New (hopefully final) interface for the API.
  * We use the sctp_getaddrs_old structure so that use-space library
+<<<<<<< HEAD
  * can avoid any unnecessary allocations.   The only defferent part
  * is that we store the actual length of the address buffer into the
  * addrs_num structure member.  That way we can re-use the existing
  * code.
  */
+=======
+ * can avoid any unnecessary allocations. The only different part
+ * is that we store the actual length of the address buffer into the
+ * addrs_num structure member. That way we can re-use the existing
+ * code.
+ */
+#ifdef CONFIG_COMPAT
+struct compat_sctp_getaddrs_old {
+	sctp_assoc_t	assoc_id;
+	s32		addr_num;
+	compat_uptr_t	addrs;		/* struct sockaddr * */
+};
+#endif
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SCTP_STATIC int sctp_getsockopt_connectx3(struct sock* sk, int len,
 					char __user *optval,
 					int __user *optlen)
@@ -1380,6 +1417,7 @@ SCTP_STATIC int sctp_getsockopt_connectx3(struct sock* sk, int len,
 	sctp_assoc_t assoc_id = 0;
 	int err = 0;
 
+<<<<<<< HEAD
 	if (len < sizeof(param))
 		return -EINVAL;
 
@@ -1390,6 +1428,32 @@ SCTP_STATIC int sctp_getsockopt_connectx3(struct sock* sk, int len,
 			(struct sockaddr __user *)param.addrs,
 			param.addr_num, &assoc_id);
 
+=======
+#ifdef CONFIG_COMPAT
+	if (is_compat_task()) {
+		struct compat_sctp_getaddrs_old param32;
+
+		if (len < sizeof(param32))
+			return -EINVAL;
+		if (copy_from_user(&param32, optval, sizeof(param32)))
+			return -EFAULT;
+
+		param.assoc_id = param32.assoc_id;
+		param.addr_num = param32.addr_num;
+		param.addrs = compat_ptr(param32.addrs);
+	} else
+#endif
+	{
+		if (len < sizeof(param))
+			return -EINVAL;
+		if (copy_from_user(&param, optval, sizeof(param)))
+			return -EFAULT;
+	}
+
+	err = __sctp_setsockopt_connectx(sk, (struct sockaddr __user *)
+					 param.addrs, param.addr_num,
+					 &assoc_id);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err == 0 || err == -EINPROGRESS) {
 		if (copy_to_user(optval, &assoc_id, sizeof(assoc_id)))
 			return -EFAULT;
@@ -1507,8 +1571,15 @@ SCTP_STATIC void sctp_close(struct sock *sk, long timeout)
 
 	/* Supposedly, no process has access to the socket, but
 	 * the net layers still may.
+<<<<<<< HEAD
 	 */
 	sctp_local_bh_disable();
+=======
+	 * Also, sctp_destroy_sock() needs to be called with addr_wq_lock
+	 * held and that should be grabbed before socket lock.
+	 */
+	spin_lock_bh(&sctp_globals.addr_wq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sctp_bh_lock_sock(sk);
 
 	/* Hold the sock, since sk_common_release() will put sock_put()
@@ -1518,7 +1589,11 @@ SCTP_STATIC void sctp_close(struct sock *sk, long timeout)
 	sk_common_release(sk);
 
 	sctp_bh_unlock_sock(sk);
+<<<<<<< HEAD
 	sctp_local_bh_enable();
+=======
+	spin_unlock_bh(&sctp_globals.addr_wq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	sock_put(sk);
 
@@ -1902,8 +1977,13 @@ SCTP_STATIC int sctp_sendmsg(struct kiocb *iocb, struct sock *sk,
 
 	/* Break the message into multiple chunks of maximum size. */
 	datamsg = sctp_datamsg_from_user(asoc, sinfo, msg, msg_len);
+<<<<<<< HEAD
 	if (!datamsg) {
 		err = -ENOMEM;
+=======
+	if (IS_ERR(datamsg)) {
+		err = PTR_ERR(datamsg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out_free;
 	}
 
@@ -1942,8 +2022,15 @@ SCTP_STATIC int sctp_sendmsg(struct kiocb *iocb, struct sock *sk,
 	goto out_unlock;
 
 out_free:
+<<<<<<< HEAD
 	if (new_asoc)
 		sctp_association_free(asoc);
+=======
+	if (new_asoc) {
+		sctp_unhash_established(asoc);
+		sctp_association_free(asoc);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 out_unlock:
 	sctp_release_sock(sk);
 
@@ -3367,7 +3454,11 @@ static int sctp_setsockopt_auth_key(struct sock *sk,
 
 	ret = sctp_auth_set_key(sctp_sk(sk)->ep, asoc, authkey);
 out:
+<<<<<<< HEAD
 	kfree(authkey);
+=======
+	kzfree(authkey);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 
@@ -3458,6 +3549,10 @@ static int sctp_setsockopt_auto_asconf(struct sock *sk, char __user *optval,
 	if ((val && sp->do_auto_asconf) || (!val && !sp->do_auto_asconf))
 		return 0;
 
+<<<<<<< HEAD
+=======
+	spin_lock_bh(&sctp_globals.addr_wq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (val == 0 && sp->do_auto_asconf) {
 		list_del(&sp->auto_asconf_list);
 		sp->do_auto_asconf = 0;
@@ -3466,6 +3561,10 @@ static int sctp_setsockopt_auto_asconf(struct sock *sk, char __user *optval,
 		    &sctp_auto_asconf_splist);
 		sp->do_auto_asconf = 1;
 	}
+<<<<<<< HEAD
+=======
+	spin_unlock_bh(&sctp_globals.addr_wq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -3901,18 +4000,41 @@ SCTP_STATIC int sctp_init_sock(struct sock *sk)
 	local_bh_disable();
 	percpu_counter_inc(&sctp_sockets_allocated);
 	sock_prot_inuse_add(sock_net(sk), sk->sk_prot, 1);
+<<<<<<< HEAD
 	if (sctp_default_auto_asconf) {
 		list_add_tail(&sp->auto_asconf_list,
 		    &sctp_auto_asconf_splist);
 		sp->do_auto_asconf = 1;
 	} else
 		sp->do_auto_asconf = 0;
+=======
+
+	/* Nothing can fail after this block, otherwise
+	 * sctp_destroy_sock() will be called without addr_wq_lock held
+	 */
+	if (sctp_default_auto_asconf) {
+		spin_lock(&sctp_globals.addr_wq_lock);
+		list_add_tail(&sp->auto_asconf_list,
+		    &sctp_auto_asconf_splist);
+		sp->do_auto_asconf = 1;
+		spin_unlock(&sctp_globals.addr_wq_lock);
+	} else {
+		sp->do_auto_asconf = 0;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	local_bh_enable();
 
 	return 0;
 }
 
+<<<<<<< HEAD
 /* Cleanup any SCTP per socket resources.  */
+=======
+/* Cleanup any SCTP per socket resources. Must be called with
+ * sctp_globals.addr_wq_lock held if sp->do_auto_asconf is true
+ */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SCTP_STATIC void sctp_destroy_sock(struct sock *sk)
 {
 	struct sctp_sock *sp;
@@ -3921,6 +4043,15 @@ SCTP_STATIC void sctp_destroy_sock(struct sock *sk)
 
 	/* Release our hold on the endpoint. */
 	sp = sctp_sk(sk);
+<<<<<<< HEAD
+=======
+	/* This could happen during socket init, thus we bail out
+	 * early, since the rest of the below is not setup either.
+	 */
+	if (sp->ep == NULL)
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sp->do_auto_asconf) {
 		sp->do_auto_asconf = 0;
 		list_del(&sp->auto_asconf_list);
@@ -6329,6 +6460,49 @@ static void __sctp_write_space(struct sctp_association *asoc)
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void sctp_wake_up_waiters(struct sock *sk,
+				 struct sctp_association *asoc)
+{
+	struct sctp_association *tmp = asoc;
+
+	/* We do accounting for the sndbuf space per association,
+	 * so we only need to wake our own association.
+	 */
+	if (asoc->ep->sndbuf_policy)
+		return __sctp_write_space(asoc);
+
+	/* If association goes down and is just flushing its
+	 * outq, then just normally notify others.
+	 */
+	if (asoc->base.dead)
+		return sctp_write_space(sk);
+
+	/* Accounting for the sndbuf space is per socket, so we
+	 * need to wake up others, try to be fair and in case of
+	 * other associations, let them have a go first instead
+	 * of just doing a sctp_write_space() call.
+	 *
+	 * Note that we reach sctp_wake_up_waiters() only when
+	 * associations free up queued chunks, thus we are under
+	 * lock and the list of associations on a socket is
+	 * guaranteed not to change.
+	 */
+	for (tmp = list_next_entry(tmp, asocs); 1;
+	     tmp = list_next_entry(tmp, asocs)) {
+		/* Manually skip the head element. */
+		if (&tmp->asocs == &((sctp_sk(sk))->ep->asocs))
+			continue;
+		/* Wake up association. */
+		__sctp_write_space(tmp);
+		/* We've reached the end. */
+		if (tmp == asoc)
+			break;
+	}
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Do accounting for the sndbuf space.
  * Decrement the used sndbuf space of the corresponding association by the
  * data size which was just transmitted(freed).
@@ -6356,7 +6530,11 @@ static void sctp_wfree(struct sk_buff *skb)
 	sk_mem_uncharge(sk, skb->truesize);
 
 	sock_wfree(skb);
+<<<<<<< HEAD
 	__sctp_write_space(asoc);
+=======
+	sctp_wake_up_waiters(sk, asoc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	sctp_association_put(asoc);
 }
@@ -6666,6 +6844,22 @@ void sctp_copy_sock(struct sock *newsk, struct sock *sk,
 	newinet->mc_list = NULL;
 }
 
+<<<<<<< HEAD
+=======
+static inline void sctp_copy_descendant(struct sock *sk_to,
+					const struct sock *sk_from)
+{
+	int ancestor_size = sizeof(struct inet_sock) +
+			    sizeof(struct sctp_sock) -
+			    offsetof(struct sctp_sock, auto_asconf_list);
+
+	if (sk_from->sk_family == PF_INET6)
+		ancestor_size += sizeof(struct ipv6_pinfo);
+
+	__inet_sk_copy_descendant(sk_to, sk_from, ancestor_size);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Populate the fields of the newsk from the oldsk and migrate the assoc
  * and its messages to the newsk.
  */
@@ -6680,7 +6874,10 @@ static void sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
 	struct sk_buff *skb, *tmp;
 	struct sctp_ulpevent *event;
 	struct sctp_bind_hashbucket *head;
+<<<<<<< HEAD
 	struct list_head tmplist;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Migrate socket buffer sizes and all the socket level options to the
 	 * new socket.
@@ -6688,12 +6885,16 @@ static void sctp_sock_migrate(struct sock *oldsk, struct sock *newsk,
 	newsk->sk_sndbuf = oldsk->sk_sndbuf;
 	newsk->sk_rcvbuf = oldsk->sk_rcvbuf;
 	/* Brute force copy old sctp opt. */
+<<<<<<< HEAD
 	if (oldsp->do_auto_asconf) {
 		memcpy(&tmplist, &newsp->auto_asconf_list, sizeof(tmplist));
 		inet_sk_copy_descendant(newsk, oldsk);
 		memcpy(&newsp->auto_asconf_list, &tmplist, sizeof(tmplist));
 	} else
 		inet_sk_copy_descendant(newsk, oldsk);
+=======
+	sctp_copy_descendant(newsk, oldsk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Restore the ep value that was overwritten with the above structure
 	 * copy.

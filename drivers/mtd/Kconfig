@@ -128,7 +128,11 @@ config MTD_AFS_PARTS
 
 config MTD_OF_PARTS
 	tristate "OpenFirmware partitioning information support"
+<<<<<<< HEAD
 	default Y
+=======
+	default y
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	depends on OF
 	help
 	  This provides a partition parsing function which derives
@@ -314,6 +318,7 @@ config MTD_SWAP
 	  The driver provides wear leveling by storing erase counter into the
 	  OOB.
 
+<<<<<<< HEAD
 config MTD_LAZYECCSTATS
 	bool "MTD Lazy ECC Stats collection support"
 	default y
@@ -325,6 +330,8 @@ config MTD_LAZYECCSTATS
 	  This can significantly decrease boot times depending on the size of
 	  the partition.  If unsure, say 'N'.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/mtd/chips/Kconfig"
 
 source "drivers/mtd/maps/Kconfig"

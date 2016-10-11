@@ -144,6 +144,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
 			hcd->has_tt = 1;
 			tdi_reset(ehci);
 		}
+<<<<<<< HEAD
 		if (pdev->subsystem_vendor == PCI_VENDOR_ID_ASUSTEK) {
 			/* EHCI #1 or #2 on 6 Series/C200 Series chipset */
 			if (pdev->device == 0x1c26 || pdev->device == 0x1c2d) {
@@ -152,6 +153,8 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
 				device_set_wakeup_capable(&pdev->dev, false);
 			}
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case PCI_VENDOR_ID_TDI:
 		if (pdev->device == PCI_DEVICE_ID_TDI_EHCI) {
@@ -368,7 +371,14 @@ static bool usb_is_intel_switchable_ehci(struct pci_dev *pdev)
 {
 	return pdev->class == PCI_CLASS_SERIAL_USB_EHCI &&
 		pdev->vendor == PCI_VENDOR_ID_INTEL &&
+<<<<<<< HEAD
 		pdev->device == 0x1E26;
+=======
+		(pdev->device == 0x1E26 ||
+		 pdev->device == 0x8C2D ||
+		 pdev->device == 0x8C26 ||
+		 pdev->device == 0x9C26);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void ehci_enable_xhci_companion(void)
@@ -554,7 +564,11 @@ static struct pci_driver ehci_pci_driver = {
 	.remove =	usb_hcd_pci_remove,
 	.shutdown = 	usb_hcd_pci_shutdown,
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_SLEEP
+=======
+#ifdef CONFIG_PM
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.driver =	{
 		.pm =	&usb_hcd_pci_pm_ops
 	},

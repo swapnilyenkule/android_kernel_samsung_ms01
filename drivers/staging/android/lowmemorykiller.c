@@ -36,6 +36,7 @@
 #include <linux/oom.h>
 #include <linux/sched.h>
 #include <linux/rcupdate.h>
+<<<<<<< HEAD
 #include <linux/notifier.h>
 #include <linux/mutex.h>
 #include <linux/delay.h>
@@ -66,6 +67,12 @@ static uint32_t oom_count = 0;
 #endif
 
 static uint32_t lowmem_debug_level = 1;
+=======
+#include <linux/profile.h>
+#include <linux/notifier.h>
+
+static uint32_t lowmem_debug_level = 2;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int lowmem_adj[6] = {
 	0,
 	1,
@@ -88,6 +95,7 @@ static unsigned long lowmem_deathpending_timeout;
 		if (lowmem_debug_level >= (level))	\
 			printk(x);			\
 	} while (0)
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_DEBUG_LMK_MEMINFO)
 static void dump_tasks_info(void)
 {
@@ -139,6 +147,8 @@ static int test_task_flag(struct task_struct *p, int flag)
 }
 
 static DEFINE_MUTEX(scan_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 {
@@ -151,6 +161,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int selected_tasksize = 0;
 	int selected_oom_score_adj;
 	int array_size = ARRAY_SIZE(lowmem_adj);
+<<<<<<< HEAD
 	int other_free;
 	int other_file;
 	unsigned long nr_to_scan = sc->nr_to_scan;
@@ -177,6 +188,11 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 						total_swapcache_pages;
 	else
 		other_file = 0;
+=======
+	int other_free = global_page_state(NR_FREE_PAGES);
+	int other_file = global_page_state(NR_FILE_PAGES) -
+						global_page_state(NR_SHMEM);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (lowmem_adj_size < array_size)
 		array_size = lowmem_adj_size;
@@ -189,14 +205,21 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			break;
 		}
 	}
+<<<<<<< HEAD
 	if (nr_to_scan > 0)
 		lowmem_print(3, "lowmem_shrink %lu, %x, ofree %d %d, ma %d\n",
 				nr_to_scan, sc->gfp_mask, other_free,
+=======
+	if (sc->nr_to_scan > 0)
+		lowmem_print(3, "lowmem_shrink %lu, %x, ofree %d %d, ma %d\n",
+				sc->nr_to_scan, sc->gfp_mask, other_free,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				other_file, min_score_adj);
 	rem = global_page_state(NR_ACTIVE_ANON) +
 		global_page_state(NR_ACTIVE_FILE) +
 		global_page_state(NR_INACTIVE_ANON) +
 		global_page_state(NR_INACTIVE_FILE);
+<<<<<<< HEAD
 	if (nr_to_scan <= 0 || min_score_adj == OOM_SCORE_ADJ_MAX + 1) {
 		lowmem_print(5, "lowmem_shrink %lu, %x, return %d\n",
 			     nr_to_scan, sc->gfp_mask, rem);
@@ -204,6 +227,11 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		if (nr_to_scan > 0)
 			mutex_unlock(&scan_mutex);
 
+=======
+	if (sc->nr_to_scan <= 0 || min_score_adj == OOM_SCORE_ADJ_MAX + 1) {
+		lowmem_print(5, "lowmem_shrink %lu, %x, return %d\n",
+			     sc->nr_to_scan, sc->gfp_mask, rem);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return rem;
 	}
 	selected_oom_score_adj = min_score_adj;
@@ -216,6 +244,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		if (tsk->flags & PF_KTHREAD)
 			continue;
 
+<<<<<<< HEAD
 		/* if task no longer has any memory ignore it */
 		if (test_task_flag(tsk, TIF_MM_RELEASED))
 			continue;
@@ -230,10 +259,13 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			}
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		p = find_lock_task_mm(tsk);
 		if (!p)
 			continue;
 
+<<<<<<< HEAD
 		oom_score_adj = p->signal->oom_score_adj;
 		if (oom_score_adj < min_score_adj) {
 			task_unlock(p);
@@ -366,6 +398,14 @@ static int android_oom_handler(struct notifier_block *nb,
 		if (!p)
 			continue;
 
+=======
+		if (test_tsk_thread_flag(p, TIF_MEMDIE) &&
+		    time_before_eq(jiffies, lowmem_deathpending_timeout)) {
+			task_unlock(p);
+			rcu_read_unlock();
+			return 0;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		oom_score_adj = p->signal->oom_score_adj;
 		if (oom_score_adj < min_score_adj) {
 			task_unlock(p);
@@ -375,6 +415,7 @@ static int android_oom_handler(struct notifier_block *nb,
 		task_unlock(p);
 		if (tasksize <= 0)
 			continue;
+<<<<<<< HEAD
 
 		lowmem_print(2, "oom: ------ %d (%s), adj %d, size %d\n",
 			     p->pid, p->comm, oom_score_adj, tasksize);
@@ -416,6 +457,8 @@ static int android_oom_handler(struct notifier_block *nb,
 				max_selected_oom_idx, p->pid, p->comm, oom_score_adj, tasksize);
 		}
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (selected) {
 			if (oom_score_adj < selected_oom_score_adj)
 				continue;
@@ -426,6 +469,7 @@ static int android_oom_handler(struct notifier_block *nb,
 		selected = p;
 		selected_tasksize = tasksize;
 		selected_oom_score_adj = oom_score_adj;
+<<<<<<< HEAD
 		lowmem_print(2, "oom: select %d (%s), adj %d, size %d, to kill\n",
 			     p->pid, p->comm, oom_score_adj, tasksize);
 #endif
@@ -472,6 +516,26 @@ static struct notifier_block android_oom_notifier = {
 };
 #endif /* CONFIG_SEC_OOM_KILLER */
 
+=======
+		lowmem_print(2, "select %d (%s), adj %d, size %d, to kill\n",
+			     p->pid, p->comm, oom_score_adj, tasksize);
+	}
+	if (selected) {
+		lowmem_print(1, "send sigkill to %d (%s), adj %d, size %d\n",
+			     selected->pid, selected->comm,
+			     selected_oom_score_adj, selected_tasksize);
+		lowmem_deathpending_timeout = jiffies + HZ;
+		send_sig(SIGKILL, selected, 0);
+		set_tsk_thread_flag(selected, TIF_MEMDIE);
+		rem -= selected_tasksize;
+	}
+	lowmem_print(4, "lowmem_shrink %lu, %x, return %d\n",
+		     sc->nr_to_scan, sc->gfp_mask, rem);
+	rcu_read_unlock();
+	return rem;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct shrinker lowmem_shrinker = {
 	.shrink = lowmem_shrink,
 	.seeks = DEFAULT_SEEKS * 16
@@ -480,10 +544,13 @@ static struct shrinker lowmem_shrinker = {
 static int __init lowmem_init(void)
 {
 	register_shrinker(&lowmem_shrinker);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_OOM_KILLER
 	register_oom_notifier(&android_oom_notifier);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -492,6 +559,7 @@ static void __exit lowmem_exit(void)
 	unregister_shrinker(&lowmem_shrinker);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_ANDROID_LOW_MEMORY_KILLER_AUTODETECT_OOM_ADJ_VALUES
 static int lowmem_oom_adj_to_oom_score_adj(int oom_adj)
 {
@@ -591,6 +659,14 @@ module_param_named(lmkcount, lmk_count, uint, S_IRUGO);
 #ifdef OOM_COUNT_READ
 module_param_named(oomcount, oom_count, uint, S_IRUGO);
 #endif
+=======
+module_param_named(cost, lowmem_shrinker.seeks, int, S_IRUGO | S_IWUSR);
+module_param_array_named(adj, lowmem_adj, int, &lowmem_adj_size,
+			 S_IRUGO | S_IWUSR);
+module_param_array_named(minfree, lowmem_minfree, uint, &lowmem_minfree_size,
+			 S_IRUGO | S_IWUSR);
+module_param_named(debug_level, lowmem_debug_level, uint, S_IRUGO | S_IWUSR);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 module_init(lowmem_init);
 module_exit(lowmem_exit);

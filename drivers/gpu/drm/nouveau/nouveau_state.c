@@ -47,6 +47,10 @@ static int nouveau_init_engine_ptrs(struct drm_device *dev)
 {
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_engine *engine = &dev_priv->engine;
+<<<<<<< HEAD
+=======
+	u32 pclass = dev->pdev->class >> 8;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	switch (dev_priv->chipset & 0xf0) {
 	case 0x00:
@@ -526,7 +530,12 @@ static int nouveau_init_engine_ptrs(struct drm_device *dev)
 	}
 
 	/* headless mode */
+<<<<<<< HEAD
 	if (nouveau_modeset == 2) {
+=======
+	if (nouveau_modeset == 2 ||
+	    (nouveau_modeset < 0 && pclass != PCI_CLASS_DISPLAY_VGA)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		engine->display.early_init = nouveau_stub_init;
 		engine->display.late_takedown = nouveau_stub_takedown;
 		engine->display.create = nouveau_stub_init;

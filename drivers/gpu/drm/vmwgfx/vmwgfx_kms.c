@@ -1688,15 +1688,29 @@ int vmw_du_page_flip(struct drm_crtc *crtc,
 	struct vmw_private *dev_priv = vmw_priv(crtc->dev);
 	struct drm_framebuffer *old_fb = crtc->fb;
 	struct vmw_framebuffer *vfb = vmw_framebuffer_to_vfb(fb);
+<<<<<<< HEAD
 	struct drm_file *file_priv = event->base.file_priv;
+=======
+	struct drm_file *file_priv ;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct vmw_fence_obj *fence = NULL;
 	struct drm_clip_rect clips;
 	int ret;
 
+<<<<<<< HEAD
+=======
+	if (event == NULL)
+		return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* require ScreenObject support for page flipping */
 	if (!dev_priv->sou_priv)
 		return -ENOSYS;
 
+<<<<<<< HEAD
+=======
+	file_priv = event->base.file_priv;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!vmw_kms_screen_object_flippable(dev_priv, crtc))
 		return -EINVAL;
 
@@ -1911,6 +1925,17 @@ int vmw_du_connector_fill_modes(struct drm_connector *connector,
 		DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_PVSYNC)
 	};
 	int i;
+<<<<<<< HEAD
+=======
+	u32 assumed_bpp = 2;
+
+	/*
+	 * If using screen objects, then assume 32-bpp because that's what the
+	 * SVGA device is assuming
+	 */
+	if (dev_priv->sou_priv)
+		assumed_bpp = 4;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Add preferred mode */
 	{
@@ -1921,8 +1946,14 @@ int vmw_du_connector_fill_modes(struct drm_connector *connector,
 		mode->vdisplay = du->pref_height;
 		vmw_guess_mode_timing(mode);
 
+<<<<<<< HEAD
 		if (vmw_kms_validate_mode_vram(dev_priv, mode->hdisplay * 2,
 					       mode->vdisplay)) {
+=======
+		if (vmw_kms_validate_mode_vram(dev_priv,
+						mode->hdisplay * assumed_bpp,
+						mode->vdisplay)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			drm_mode_probed_add(connector, mode);
 		} else {
 			drm_mode_destroy(dev, mode);
@@ -1944,7 +1975,12 @@ int vmw_du_connector_fill_modes(struct drm_connector *connector,
 		    bmode->vdisplay > max_height)
 			continue;
 
+<<<<<<< HEAD
 		if (!vmw_kms_validate_mode_vram(dev_priv, bmode->hdisplay * 2,
+=======
+		if (!vmw_kms_validate_mode_vram(dev_priv,
+						bmode->hdisplay * assumed_bpp,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 						bmode->vdisplay))
 			continue;
 

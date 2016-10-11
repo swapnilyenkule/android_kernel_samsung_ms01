@@ -306,7 +306,11 @@ void vmw_bo_pin(struct ttm_buffer_object *bo, bool pin)
 
 	BUG_ON(!atomic_read(&bo->reserved));
 	BUG_ON(old_mem_type != TTM_PL_VRAM &&
+<<<<<<< HEAD
 	       old_mem_type != VMW_PL_FLAG_GMR);
+=======
+	       old_mem_type != VMW_PL_GMR);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pl_flags = TTM_PL_FLAG_VRAM | VMW_PL_FLAG_GMR | TTM_PL_FLAG_CACHED;
 	if (pin)

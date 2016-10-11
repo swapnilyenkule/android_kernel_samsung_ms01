@@ -32,12 +32,17 @@
 #include <linux/sched.h>
 #include <linux/kthread.h>
 #include <linux/freezer.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SENSORS_HALL_IRQ_CTRL
 #include <linux/gpio_keys.h>
 #endif
 #include <linux/atomic.h>
 
 #include <linux/input.h>
+=======
+
+#include <linux/atomic.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "w1.h"
 #include "w1_log.h"
@@ -49,6 +54,7 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Evgeniy Polyakov <zbr@ioremap.net>");
 MODULE_DESCRIPTION("Driver for 1-wire Dallas network protocol.");
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_SLAVE_DS28EL15
 static int w1_timeout = 2;
 int w1_max_slave_count = 1;
@@ -70,6 +76,11 @@ int w1_max_slave_ttl = 10;
 #ifdef CONFIG_SEC_H_PROJECT
 int verified = -1;
 #endif
+=======
+static int w1_timeout = 10;
+int w1_max_slave_count = 10;
+int w1_max_slave_ttl = 10;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 module_param_named(timeout, w1_timeout, int, 0);
 module_param_named(max_slave_count, w1_max_slave_count, int, 0);
@@ -104,6 +115,7 @@ static void w1_slave_release(struct device *dev)
 	struct w1_slave *sl = dev_to_w1_slave(dev);
 
 	dev_dbg(dev, "%s: Releasing %s.\n", __func__, sl->name);
+<<<<<<< HEAD
 	printk(KERN_ERR "%s: Releasing %s.\n", __func__, sl->name);
 
 	/* add for sending uevent*/
@@ -111,6 +123,8 @@ static void w1_slave_release(struct device *dev)
 	input_report_switch(sl->master->bus_master->input, SW_W1, 0);
 	input_sync(sl->master->bus_master->input);
 	/* end */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	while (atomic_read(&sl->refcnt)) {
 		dev_dbg(dev, "Waiting for %s to become free: refcnt=%d.\n",
@@ -469,7 +483,11 @@ static ssize_t w1_master_attribute_store_add(struct device *dev,
 						const char *buf, size_t count)
 {
 	struct w1_master *md = dev_to_w1_master(dev);
+<<<<<<< HEAD
 	struct w1_reg_num rn = {0, };
+=======
+	struct w1_reg_num rn;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct w1_slave *sl;
 	ssize_t result = count;
 
@@ -507,7 +525,11 @@ static ssize_t w1_master_attribute_store_remove(struct device *dev,
 						const char *buf, size_t count)
 {
 	struct w1_master *md = dev_to_w1_master(dev);
+<<<<<<< HEAD
 	struct w1_reg_num rn = {0, };
+=======
+	struct w1_reg_num rn;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct w1_slave *sl;
 	ssize_t result = count;
 
@@ -528,6 +550,7 @@ static ssize_t w1_master_attribute_store_remove(struct device *dev,
 	return result;
 }
 
+<<<<<<< HEAD
 static ssize_t w1_master_attribute_show_verify_mac(struct device *dev, struct device_attribute *attr, char *buf)
 {
 	int result = -1;
@@ -565,6 +588,8 @@ static ssize_t w1_master_attribute_show_check_color(struct device *dev, struct d
 	return sprintf(buf, "%d\n", color);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define W1_MASTER_ATTR_RO(_name, _mode)				\
 	struct device_attribute w1_master_attribute_##_name =	\
 		__ATTR(w1_master_##_name, _mode,		\
@@ -587,12 +612,15 @@ static W1_MASTER_ATTR_RW(search, S_IRUGO | S_IWUSR | S_IWGRP);
 static W1_MASTER_ATTR_RW(pullup, S_IRUGO | S_IWUSR | S_IWGRP);
 static W1_MASTER_ATTR_RW(add, S_IRUGO | S_IWUSR | S_IWGRP);
 static W1_MASTER_ATTR_RW(remove, S_IRUGO | S_IWUSR | S_IWGRP);
+<<<<<<< HEAD
 static W1_MASTER_ATTR_RO(verify_mac, S_IRUGO);
 #ifdef CONFIG_W1_CF
 static W1_MASTER_ATTR_RO(cf, S_IRUGO);
 #endif
 static W1_MASTER_ATTR_RO(check_id, S_IRUGO);
 static W1_MASTER_ATTR_RO(check_color, S_IRUGO);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static struct attribute *w1_master_default_attrs[] = {
 	&w1_master_attribute_name.attr,
@@ -606,12 +634,15 @@ static struct attribute *w1_master_default_attrs[] = {
 	&w1_master_attribute_pullup.attr,
 	&w1_master_attribute_add.attr,
 	&w1_master_attribute_remove.attr,
+<<<<<<< HEAD
 	&w1_master_attribute_verify_mac.attr,
 #ifdef CONFIG_W1_CF
 	&w1_master_attribute_cf.attr,
 #endif
 	&w1_master_attribute_check_id.attr,
 	&w1_master_attribute_check_color.attr,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NULL
 };
 
@@ -641,10 +672,13 @@ static int w1_uevent(struct device *dev, struct kobj_uevent_env *env)
 		md = container_of(dev, struct w1_master, dev);
 		event_owner = "master";
 		name = md->name;
+<<<<<<< HEAD
 #ifdef CONFIG_W1_SLAVE_DS28EL15
 		master_dev = md; //container_of(dev, struct w1_master, dev);
 		printk(KERN_ERR "%s master_dev name = %s\n", __func__, master_dev->name);
 #endif	/* CONFIG_W1_SLAVE_DS28EL15 */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else if (dev->driver == &w1_slave_driver) {
 		sl = container_of(dev, struct w1_slave, dev);
 		event_owner = "slave";
@@ -678,6 +712,7 @@ static int w1_uevent(struct device *dev, struct kobj_uevent_env *env)
 }
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_SLAVE_DS28EL15
 static void w1_search_process(struct w1_master *dev, u8 search_type);
 
@@ -691,6 +726,8 @@ void w1_master_search(void)
 EXPORT_SYMBOL(w1_master_search);
 #endif /* CONFIG_W1_SLAVE_DS28EL15 */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __w1_attach_slave_device(struct w1_slave *sl)
 {
 	int err;
@@ -745,9 +782,13 @@ static int __w1_attach_slave_device(struct w1_slave *sl)
 			dev_name(&sl->dev), err);
 		goto out_rem2;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_SENSORS_HALL_IRQ_CTRL
 	gpio_hall_irq_set(enable, true);
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	list_add_tail(&sl->w1_slave_entry, &sl->master->slist);
 
 	return 0;
@@ -824,7 +865,10 @@ void w1_slave_detach(struct w1_slave *sl)
 	struct w1_netlink_msg msg;
 
 	dev_dbg(&sl->dev, "%s: detaching %s [%p].\n", __func__, sl->name, sl);
+<<<<<<< HEAD
 	printk(KERN_ERR "%s: detaching %s [%p].\n", __func__, sl->name, sl);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	list_del(&sl->w1_slave_entry);
 
@@ -839,9 +883,13 @@ void w1_slave_detach(struct w1_slave *sl)
 	device_remove_file(&sl->dev, &w1_slave_attr_id);
 	device_remove_file(&sl->dev, &w1_slave_attr_name);
 	device_unregister(&sl->dev);
+<<<<<<< HEAD
 #ifdef CONFIG_SENSORS_HALL_IRQ_CTRL
 	gpio_hall_irq_set(disable, true);
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	wait_for_completion(&sl->released);
 	kfree(sl);
 }
@@ -940,6 +988,7 @@ void w1_slave_found(struct w1_master *dev, u64 rn)
 	sl = w1_slave_search_device(dev, tmp);
 	if (sl) {
 		set_bit(W1_SLAVE_ACTIVE, (long *)&sl->flags);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_H_PROJECT
 			verified = 0;
 #endif
@@ -951,6 +1000,11 @@ void w1_slave_found(struct w1_master *dev, u64 rn)
 #endif
 			w1_attach_slave_device(dev, tmp);
 		}
+=======
+	} else {
+		if (rn && tmp->crc == w1_calc_crc8((u8 *)&rn_le, 7))
+			w1_attach_slave_device(dev, tmp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	atomic_dec(&dev->refcnt);
@@ -997,9 +1051,12 @@ void w1_search(struct w1_master *dev, u8 search_type, w1_slave_found_callback cb
 		 */
 		if (w1_reset_bus(dev)) {
 			dev_dbg(&dev->dev, "No devices present on the wire.\n");
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_H_PROJECT
 			verified = -1;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 
@@ -1039,7 +1096,12 @@ void w1_search(struct w1_master *dev, u8 search_type, w1_slave_found_callback cb
 			tmp64 = (triplet_ret >> 2);
 			rn |= (tmp64 << i);
 
+<<<<<<< HEAD
 			if (kthread_should_stop()) {
+=======
+			/* ensure we're called from kthread and not by netlink callback */
+			if (!dev->priv && kthread_should_stop()) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				dev_dbg(&dev->dev, "Abort w1_search\n");
 				return;
 			}
@@ -1113,6 +1175,7 @@ int w1_process(void *data)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_WORKQUEUE
 void w1_work(struct work_struct *work)
 {
@@ -1129,6 +1192,8 @@ void w1_work(struct work_struct *work)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __init w1_init(void)
 {
 	int retval;
@@ -1192,5 +1257,9 @@ static void __exit w1_fini(void)
 	bus_unregister(&w1_bus_type);
 }
 
+<<<<<<< HEAD
 late_initcall(w1_init);
+=======
+module_init(w1_init);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 module_exit(w1_fini);

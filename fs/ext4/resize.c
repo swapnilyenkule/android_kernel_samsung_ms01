@@ -161,6 +161,11 @@ static struct ext4_new_flex_group_data *alloc_flex_gd(unsigned long flexbg_size)
 	if (flex_gd == NULL)
 		goto out3;
 
+<<<<<<< HEAD
+=======
+	if (flexbg_size >= UINT_MAX / sizeof(struct ext4_new_flex_group_data))
+		goto out2;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	flex_gd->count = flexbg_size;
 
 	flex_gd->groups = kmalloc(sizeof(struct ext4_new_group_data) *
@@ -198,8 +203,16 @@ static void free_flex_gd(struct ext4_new_flex_group_data *flex_gd)
  * be a partial of a flex group.
  *
  * @sb: super block of fs to which the groups belongs
+<<<<<<< HEAD
  */
 static void ext4_alloc_group_tables(struct super_block *sb,
+=======
+ *
+ * Returns 0 on a successful allocation of the metadata blocks in the
+ * block group.
+ */
+static int ext4_alloc_group_tables(struct super_block *sb,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				struct ext4_new_flex_group_data *flex_gd,
 				int flexbg_size)
 {
@@ -224,6 +237,11 @@ static void ext4_alloc_group_tables(struct super_block *sb,
 	       (last_group & ~(flexbg_size - 1))));
 next_group:
 	group = group_data[0].group;
+<<<<<<< HEAD
+=======
+	if (src_group >= group_data[0].group + flex_gd->count)
+		return -ENOSPC;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	start_blk = ext4_group_first_block_no(sb, src_group);
 	last_blk = start_blk + group_data[src_group - group].blocks_count;
 
@@ -233,7 +251,10 @@ next_group:
 
 	start_blk += overhead;
 
+<<<<<<< HEAD
 	BUG_ON(src_group >= group_data[0].group + flex_gd->count);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* We collect contiguous blocks as much as possible. */
 	src_group++;
 	for (; src_group <= last_group; src_group++)
@@ -298,6 +319,10 @@ next_group:
 			       group_data[i].free_blocks_count);
 		}
 	}
+<<<<<<< HEAD
+=======
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static struct buffer_head *bclean(handle_t *handle, struct super_block *sb,
@@ -308,7 +333,11 @@ static struct buffer_head *bclean(handle_t *handle, struct super_block *sb,
 
 	bh = sb_getblk(sb, blk);
 	if (!bh)
+<<<<<<< HEAD
 		return ERR_PTR(-EIO);
+=======
+		return ERR_PTR(-ENOMEM);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if ((err = ext4_journal_get_write_access(handle, bh))) {
 		brelse(bh);
 		bh = ERR_PTR(err);
@@ -370,7 +399,11 @@ static int set_flexbg_block_bitmap(struct super_block *sb, handle_t *handle,
 		start = ext4_group_first_block_no(sb, group);
 		group -= flex_gd->groups[0].group;
 
+<<<<<<< HEAD
 		count2 = sb->s_blocksize * 8 - (block - start);
+=======
+		count2 = EXT4_BLOCKS_PER_GROUP(sb) - (block - start);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (count2 > count)
 			count2 = count;
 
@@ -385,7 +418,11 @@ static int set_flexbg_block_bitmap(struct super_block *sb, handle_t *handle,
 
 		bh = sb_getblk(sb, flex_gd->groups[group].block_bitmap);
 		if (!bh)
+<<<<<<< HEAD
 			return -EIO;
+=======
+			return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		err = ext4_journal_get_write_access(handle, bh);
 		if (err)
@@ -449,6 +486,12 @@ static int setup_new_flex_group_blocks(struct super_block *sb,
 		gdblocks = ext4_bg_num_gdb(sb, group);
 		start = ext4_group_first_block_no(sb, group);
 
+<<<<<<< HEAD
+=======
+		if (!ext4_bg_has_super(sb, group))
+			goto handle_itb;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* Copy all of the GDT blocks into the backup in this group */
 		for (j = 0, block = start + 1; j < gdblocks; j++, block++) {
 			struct buffer_head *gdb;
@@ -460,7 +503,11 @@ static int setup_new_flex_group_blocks(struct super_block *sb,
 
 			gdb = sb_getblk(sb, block);
 			if (!gdb) {
+<<<<<<< HEAD
 				err = -EIO;
+=======
+				err = -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				goto out;
 			}
 
@@ -491,6 +538,10 @@ static int setup_new_flex_group_blocks(struct super_block *sb,
 				goto out;
 		}
 
+<<<<<<< HEAD
+=======
+handle_itb:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* Initialize group tables of the grop @group */
 		if (!(bg_flags[i] & EXT4_BG_INODE_ZEROED))
 			goto handle_bb;
@@ -517,6 +568,10 @@ handle_bb:
 		bh = bclean(handle, sb, block);
 		if (IS_ERR(bh)) {
 			err = PTR_ERR(bh);
+<<<<<<< HEAD
+=======
+			bh = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto out;
 		}
 		if (ext4_bg_has_super(sb, group)) {
@@ -545,6 +600,10 @@ handle_ib:
 		bh = bclean(handle, sb, block);
 		if (IS_ERR(bh)) {
 			err = PTR_ERR(bh);
+<<<<<<< HEAD
+=======
+			bh = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto out;
 		}
 
@@ -978,9 +1037,15 @@ static void update_backups(struct super_block *sb,
 		    (err = ext4_journal_restart(handle, EXT4_MAX_TRANS_DATA)))
 			break;
 
+<<<<<<< HEAD
 		bh = sb_getblk(sb, group * bpg + blk_off);
 		if (!bh) {
 			err = -EIO;
+=======
+		bh = sb_getblk(sb, ((ext4_fsblk_t)group) * bpg + blk_off);
+		if (!bh) {
+			err = -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 		ext4_debug("update metadata backup %#04lx\n",
@@ -1101,7 +1166,11 @@ static int ext4_setup_new_descs(handle_t *handle, struct super_block *sb,
 		ext4_inode_bitmap_set(sb, gdp, group_data->inode_bitmap);
 		ext4_inode_table_set(sb, gdp, group_data->inode_table);
 		ext4_free_group_clusters_set(sb, gdp,
+<<<<<<< HEAD
 					     EXT4_B2C(sbi, group_data->free_blocks_count));
+=======
+			EXT4_NUM_B2C(sbi, group_data->free_blocks_count));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ext4_free_inodes_set(sb, gdp, EXT4_INODES_PER_GROUP(sb));
 		gdp->bg_flags = cpu_to_le16(*bg_flags);
 		gdp->bg_checksum = ext4_group_desc_csum(sbi, group, gdp);
@@ -1139,7 +1208,11 @@ static void ext4_update_super(struct super_block *sb,
 	struct ext4_new_group_data *group_data = flex_gd->groups;
 	struct ext4_sb_info *sbi = EXT4_SB(sb);
 	struct ext4_super_block *es = sbi->s_es;
+<<<<<<< HEAD
 	int i;
+=======
+	int i, ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	BUG_ON(flex_gd->count == 0 || group_data == NULL);
 	/*
@@ -1191,6 +1264,11 @@ static void ext4_update_super(struct super_block *sb,
 
 	/* Update the global fs size fields */
 	sbi->s_groups_count += flex_gd->count;
+<<<<<<< HEAD
+=======
+	sbi->s_blockfile_groups = min_t(ext4_group_t, sbi->s_groups_count,
+			(EXT4_MAX_BLOCK_FILE_PHYS / EXT4_BLOCKS_PER_GROUP(sb)));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Update the reserved block counts only once the new group is
 	 * active. */
@@ -1199,7 +1277,11 @@ static void ext4_update_super(struct super_block *sb,
 
 	/* Update the free space counts */
 	percpu_counter_add(&sbi->s_freeclusters_counter,
+<<<<<<< HEAD
 			   EXT4_B2C(sbi, free_blocks));
+=======
+			   EXT4_NUM_B2C(sbi, free_blocks));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	percpu_counter_add(&sbi->s_freeinodes_counter,
 			   EXT4_INODES_PER_GROUP(sb) * flex_gd->count);
 
@@ -1208,12 +1290,25 @@ static void ext4_update_super(struct super_block *sb,
 	    sbi->s_log_groups_per_flex) {
 		ext4_group_t flex_group;
 		flex_group = ext4_flex_group(sbi, group_data[0].group);
+<<<<<<< HEAD
 		atomic_add(EXT4_B2C(sbi, free_blocks),
 			   &sbi->s_flex_groups[flex_group].free_clusters);
+=======
+		atomic64_add(EXT4_NUM_B2C(sbi, free_blocks),
+			     &sbi->s_flex_groups[flex_group].free_clusters);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		atomic_add(EXT4_INODES_PER_GROUP(sb) * flex_gd->count,
 			   &sbi->s_flex_groups[flex_group].free_inodes);
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Update the fs overhead information
+	 */
+	ext4_calculate_overhead(sb);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (test_opt(sb, DEBUG))
 		printk(KERN_DEBUG "EXT4-fs: added group %u:"
 		       "%llu blocks(%llu free %llu reserved)\n", flex_gd->count,
@@ -1286,6 +1381,7 @@ exit_journal:
 		err = err2;
 
 	if (!err) {
+<<<<<<< HEAD
 		int i;
 		update_backups(sb, sbi->s_sbh->b_blocknr, (char *)es,
 			       sizeof(struct ext4_super_block));
@@ -1293,6 +1389,17 @@ exit_journal:
 			struct buffer_head *gdb_bh;
 			int gdb_num;
 			gdb_num = group / EXT4_BLOCKS_PER_GROUP(sb);
+=======
+		int gdb_num = group / EXT4_DESC_PER_BLOCK(sb);
+		int gdb_num_end = ((group + flex_gd->count - 1) /
+				   EXT4_DESC_PER_BLOCK(sb));
+
+		update_backups(sb, sbi->s_sbh->b_blocknr, (char *)es,
+			       sizeof(struct ext4_super_block));
+		for (; gdb_num <= gdb_num_end; gdb_num++) {
+			struct buffer_head *gdb_bh;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			gdb_bh = sbi->s_group_desc[gdb_num];
 			update_backups(sb, gdb_bh->b_blocknr, gdb_bh->b_data,
 				       gdb_bh->b_size);
@@ -1610,6 +1717,13 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
 		return 0;
 
 	ext4_get_group_no_and_offset(sb, n_blocks_count - 1, &n_group, &offset);
+<<<<<<< HEAD
+=======
+	if (n_group > (0xFFFFFFFFUL / EXT4_INODES_PER_GROUP(sb))) {
+		ext4_warning(sb, "resize would cause inodes_count overflow");
+		return -EINVAL;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ext4_get_group_no_and_offset(sb, o_blocks_count - 1, &o_group, &offset);
 
 	n_desc_blocks = (n_group + EXT4_DESC_PER_BLOCK(sb)) /
@@ -1669,7 +1783,12 @@ int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count)
 	 */
 	while (ext4_setup_next_flex_gd(sb, flex_gd, n_blocks_count,
 					      flexbg_size)) {
+<<<<<<< HEAD
 		ext4_alloc_group_tables(sb, flex_gd, flexbg_size);
+=======
+		if (ext4_alloc_group_tables(sb, flex_gd, flexbg_size) != 0)
+			break;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		err = ext4_flex_group_add(sb, resize_inode, flex_gd);
 		if (unlikely(err))
 			break;

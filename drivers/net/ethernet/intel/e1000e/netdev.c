@@ -495,7 +495,11 @@ static void e1000_receive_skb(struct e1000_adapter *adapter,
  * @sk_buff: socket buffer with received data
  **/
 static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
+<<<<<<< HEAD
 			      __le16 csum, struct sk_buff *skb)
+=======
+			      struct sk_buff *skb)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	u16 status = (u16)status_err;
 	u8 errors = (u8)(status_err >> 24);
@@ -510,8 +514,13 @@ static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
 	if (status & E1000_RXD_STAT_IXSM)
 		return;
 
+<<<<<<< HEAD
 	/* TCP/UDP checksum error bit is set */
 	if (errors & E1000_RXD_ERR_TCPE) {
+=======
+	/* TCP/UDP checksum error bit or IP checksum error bit is set */
+	if (errors & (E1000_RXD_ERR_TCPE | E1000_RXD_ERR_IPE)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* let the stack verify checksum errors */
 		adapter->hw_csum_err++;
 		return;
@@ -522,6 +531,7 @@ static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
 		return;
 
 	/* It must be a TCP or UDP packet with a valid checksum */
+<<<<<<< HEAD
 	if (status & E1000_RXD_STAT_TCPCS) {
 		/* TCP checksum is good */
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
@@ -535,6 +545,9 @@ static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
 		skb->csum = csum_unfold(~sum);
 		skb->ip_summed = CHECKSUM_COMPLETE;
 	}
+=======
+	skb->ip_summed = CHECKSUM_UNNECESSARY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	adapter->hw_csum_good++;
 }
 
@@ -978,8 +991,12 @@ static bool e1000_clean_rx_irq(struct e1000_ring *rx_ring, int *work_done,
 		skb_put(skb, length);
 
 		/* Receive Checksum Offload */
+<<<<<<< HEAD
 		e1000_rx_checksum(adapter, staterr,
 				  rx_desc->wb.lower.hi_dword.csum_ip.csum, skb);
+=======
+		e1000_rx_checksum(adapter, staterr, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		e1000_rx_hash(netdev, rx_desc->wb.lower.hi_dword.rss, skb);
 
@@ -1360,8 +1377,12 @@ copydone:
 		total_rx_bytes += skb->len;
 		total_rx_packets++;
 
+<<<<<<< HEAD
 		e1000_rx_checksum(adapter, staterr,
 				  rx_desc->wb.lower.hi_dword.csum_ip.csum, skb);
+=======
+		e1000_rx_checksum(adapter, staterr, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		e1000_rx_hash(netdev, rx_desc->wb.lower.hi_dword.rss, skb);
 
@@ -1531,9 +1552,14 @@ static bool e1000_clean_jumbo_rx_irq(struct e1000_ring *rx_ring, int *work_done,
 			}
 		}
 
+<<<<<<< HEAD
 		/* Receive Checksum Offload XXX recompute due to CRC strip? */
 		e1000_rx_checksum(adapter, staterr,
 				  rx_desc->wb.lower.hi_dword.csum_ip.csum, skb);
+=======
+		/* Receive Checksum Offload */
+		e1000_rx_checksum(adapter, staterr, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		e1000_rx_hash(netdev, rx_desc->wb.lower.hi_dword.rss, skb);
 
@@ -2821,7 +2847,11 @@ static void e1000_configure_tx(struct e1000_adapter *adapter)
 		 * set up some performance related parameters to encourage the
 		 * hardware to use the bus more efficiently in bursts, depends
 		 * on the tx_int_delay to be enabled,
+<<<<<<< HEAD
 		 * wthresh = 5 ==> burst write a cacheline (64 bytes) at a time
+=======
+		 * wthresh = 1 ==> burst write is disabled to avoid Tx stalls
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		 * hthresh = 1 ==> prefetch when one or more available
 		 * pthresh = 0x1f ==> prefetch if internal cache 31 or less
 		 * BEWARE: this seems to work but should be considered first if
@@ -3120,6 +3150,7 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
 
 	/* Enable Receive Checksum Offload for TCP and UDP */
 	rxcsum = er32(RXCSUM);
+<<<<<<< HEAD
 	if (adapter->netdev->features & NETIF_F_RXCSUM) {
 		rxcsum |= E1000_RXCSUM_TUOFL;
 
@@ -3133,6 +3164,12 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
 		rxcsum &= ~E1000_RXCSUM_TUOFL;
 		/* no need to clear IPPCSE as it defaults to 0 */
 	}
+=======
+	if (adapter->netdev->features & NETIF_F_RXCSUM)
+		rxcsum |= E1000_RXCSUM_TUOFL;
+	else
+		rxcsum &= ~E1000_RXCSUM_TUOFL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ew32(RXCSUM, rxcsum);
 
 	if (adapter->hw.mac.type == e1000_pch2lan) {
@@ -3522,6 +3559,18 @@ void e1000e_reset(struct e1000_adapter *adapter)
 	}
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Alignment of Tx data is on an arbitrary byte boundary with the
+	 * maximum size per Tx descriptor limited only to the transmit
+	 * allocation of the packet buffer minus 96 bytes with an upper
+	 * limit of 24KB due to receive synchronization limitations.
+	 */
+	adapter->tx_fifo_limit = min_t(u32, ((er32(PBA) >> 16) << 10) - 96,
+				       24 << 10);
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Disable Adaptive Interrupt Moderation if 2 full packets cannot
 	 * fit in receive buffer.
 	 */
@@ -4790,12 +4839,18 @@ static bool e1000_tx_csum(struct e1000_ring *tx_ring, struct sk_buff *skb)
 	return 1;
 }
 
+<<<<<<< HEAD
 #define E1000_MAX_PER_TXD	8192
 #define E1000_MAX_TXD_PWR	12
 
 static int e1000_tx_map(struct e1000_ring *tx_ring, struct sk_buff *skb,
 			unsigned int first, unsigned int max_per_txd,
 			unsigned int nr_frags, unsigned int mss)
+=======
+static int e1000_tx_map(struct e1000_ring *tx_ring, struct sk_buff *skb,
+			unsigned int first, unsigned int max_per_txd,
+			unsigned int nr_frags)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct e1000_adapter *adapter = tx_ring->adapter;
 	struct pci_dev *pdev = adapter->pdev;
@@ -5028,20 +5083,31 @@ static int __e1000_maybe_stop_tx(struct e1000_ring *tx_ring, int size)
 
 static int e1000_maybe_stop_tx(struct e1000_ring *tx_ring, int size)
 {
+<<<<<<< HEAD
+=======
+	BUG_ON(size > tx_ring->count);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (e1000_desc_unused(tx_ring) >= size)
 		return 0;
 	return __e1000_maybe_stop_tx(tx_ring, size);
 }
 
+<<<<<<< HEAD
 #define TXD_USE_COUNT(S, X) (((S) >> (X)) + 1)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
 				    struct net_device *netdev)
 {
 	struct e1000_adapter *adapter = netdev_priv(netdev);
 	struct e1000_ring *tx_ring = adapter->tx_ring;
 	unsigned int first;
+<<<<<<< HEAD
 	unsigned int max_per_txd = E1000_MAX_PER_TXD;
 	unsigned int max_txd_pwr = E1000_MAX_TXD_PWR;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned int tx_flags = 0;
 	unsigned int len = skb_headlen(skb);
 	unsigned int nr_frags;
@@ -5061,6 +5127,7 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
 	}
 
 	mss = skb_shinfo(skb)->gso_size;
+<<<<<<< HEAD
 	/*
 	 * The controller does a simple calculation to
 	 * make sure there is enough room in the FIFO before
@@ -5073,6 +5140,10 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
 		u8 hdr_len;
 		max_per_txd = min(mss << 2, max_per_txd);
 		max_txd_pwr = fls(max_per_txd) - 1;
+=======
+	if (mss) {
+		u8 hdr_len;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/*
 		 * TSO Workaround for 82571/2/3 Controllers -- if skb->data
@@ -5102,12 +5173,21 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
 		count++;
 	count++;
 
+<<<<<<< HEAD
 	count += TXD_USE_COUNT(len, max_txd_pwr);
 
 	nr_frags = skb_shinfo(skb)->nr_frags;
 	for (f = 0; f < nr_frags; f++)
 		count += TXD_USE_COUNT(skb_frag_size(&skb_shinfo(skb)->frags[f]),
 				       max_txd_pwr);
+=======
+	count += DIV_ROUND_UP(len, adapter->tx_fifo_limit);
+
+	nr_frags = skb_shinfo(skb)->nr_frags;
+	for (f = 0; f < nr_frags; f++)
+		count += DIV_ROUND_UP(skb_frag_size(&skb_shinfo(skb)->frags[f]),
+				      adapter->tx_fifo_limit);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (adapter->hw.mac.tx_pkt_filtering)
 		e1000_transfer_dhcp_info(adapter, skb);
@@ -5149,13 +5229,25 @@ static netdev_tx_t e1000_xmit_frame(struct sk_buff *skb,
 		tx_flags |= E1000_TX_FLAGS_NO_FCS;
 
 	/* if count is 0 then mapping error has occurred */
+<<<<<<< HEAD
 	count = e1000_tx_map(tx_ring, skb, first, max_per_txd, nr_frags, mss);
+=======
+	count = e1000_tx_map(tx_ring, skb, first, adapter->tx_fifo_limit,
+			     nr_frags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (count) {
 		netdev_sent_queue(netdev, skb->len);
 		e1000_tx_queue(tx_ring, tx_flags, count);
 		/* Make sure there is space in the ring for the next send. */
+<<<<<<< HEAD
 		e1000_maybe_stop_tx(tx_ring, MAX_SKB_FRAGS + 2);
 
+=======
+		e1000_maybe_stop_tx(tx_ring,
+				    (MAX_SKB_FRAGS *
+				     DIV_ROUND_UP(PAGE_SIZE,
+						  adapter->tx_fifo_limit) + 2));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 		dev_kfree_skb_any(skb);
 		tx_ring->buffer_info[first].time_stamp = 0;
@@ -5260,6 +5352,7 @@ static int e1000_change_mtu(struct net_device *netdev, int new_mtu)
 	int max_frame = new_mtu + ETH_HLEN + ETH_FCS_LEN;
 
 	/* Jumbo frame support */
+<<<<<<< HEAD
 	if (max_frame > ETH_FRAME_LEN + ETH_FCS_LEN) {
 		if (!(adapter->flags & FLAG_HAS_JUMBO_FRAMES)) {
 			e_err("Jumbo Frames not supported.\n");
@@ -5276,6 +5369,12 @@ static int e1000_change_mtu(struct net_device *netdev, int new_mtu)
 			e_err("Jumbo frames cannot be enabled when both receive checksum offload and receive hashing are enabled.  Disable one of the receive offload features before enabling jumbos.\n");
 			return -EINVAL;
 		}
+=======
+	if ((max_frame > ETH_FRAME_LEN + ETH_FCS_LEN) &&
+	    !(adapter->flags & FLAG_HAS_JUMBO_FRAMES)) {
+		e_err("Jumbo Frames not supported.\n");
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* Supported frame sizes */
@@ -5293,6 +5392,7 @@ static int e1000_change_mtu(struct net_device *netdev, int new_mtu)
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	/* 82573 Errata 17 */
 	if (((adapter->hw.mac.type == e1000_82573) ||
 	     (adapter->hw.mac.type == e1000_82574)) &&
@@ -5301,6 +5401,8 @@ static int e1000_change_mtu(struct net_device *netdev, int new_mtu)
 		e1000e_disable_aspm(adapter->pdev, PCIE_LINK_STATE_L1);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (test_and_set_bit(__E1000_RESETTING, &adapter->state))
 		usleep_range(1000, 2000);
 	/* e1000e_down -> e1000e_reset dependent on max_frame_size & mtu */
@@ -5579,7 +5681,11 @@ static int __e1000_shutdown(struct pci_dev *pdev, bool *enable_wake,
 	 */
 	e1000e_release_hw_control(adapter);
 
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+	pci_clear_master(pdev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -6057,6 +6163,7 @@ static int e1000_set_features(struct net_device *netdev,
 			 NETIF_F_RXALL)))
 		return 0;
 
+<<<<<<< HEAD
 	/*
 	 * IP payload checksum (enabled with jumbos/packet-split when Rx
 	 * checksum is enabled) and generation of RSS hash is mutually
@@ -6068,6 +6175,8 @@ static int e1000_set_features(struct net_device *netdev,
 		return -EINVAL;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (changed & NETIF_F_RXFCS) {
 		if (features & NETIF_F_RXFCS) {
 			adapter->flags2 &= ~FLAG2_CRC_STRIPPING;
@@ -6264,7 +6373,11 @@ static int __devinit e1000_probe(struct pci_dev *pdev,
 		adapter->hw.phy.ms_type = e1000_ms_hw_default;
 	}
 
+<<<<<<< HEAD
 	if (hw->phy.ops.check_reset_block(hw))
+=======
+	if (hw->phy.ops.check_reset_block && hw->phy.ops.check_reset_block(hw))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		e_info("PHY reset is blocked due to SOL/IDER session.\n");
 
 	/* Set initial default active device features */
@@ -6358,8 +6471,13 @@ static int __devinit e1000_probe(struct pci_dev *pdev,
 	adapter->hw.phy.autoneg_advertised = 0x2f;
 
 	/* ring size defaults */
+<<<<<<< HEAD
 	adapter->rx_ring->count = 256;
 	adapter->tx_ring->count = 256;
+=======
+	adapter->rx_ring->count = E1000_DEFAULT_RXD;
+	adapter->tx_ring->count = E1000_DEFAULT_TXD;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Initial Wake on LAN setting - If APM wake is enabled in
@@ -6431,7 +6549,11 @@ err_register:
 	if (!(adapter->flags & FLAG_HAS_AMT))
 		e1000e_release_hw_control(adapter);
 err_eeprom:
+<<<<<<< HEAD
 	if (!hw->phy.ops.check_reset_block(hw))
+=======
+	if (hw->phy.ops.check_reset_block && !hw->phy.ops.check_reset_block(hw))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		e1000_phy_hw_reset(&adapter->hw);
 err_hw_init:
 	kfree(adapter->tx_ring);

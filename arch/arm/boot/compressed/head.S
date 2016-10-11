@@ -10,6 +10,10 @@
  */
 #include <linux/linkage.h>
 
+<<<<<<< HEAD
+=======
+	.arch	armv7-a
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Debugging stuff
  *
@@ -390,11 +394,16 @@ wont_overwrite:
  *   sp  = stack pointer
  */
 		orrs	r1, r0, r5
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK
 		beq not_relocated_copy
 #else
 		beq	not_relocated
 #endif
+=======
+		beq	not_relocated
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		add	r11, r11, r0
 		add	r12, r12, r0
 
@@ -407,9 +416,12 @@ wont_overwrite:
 		add	r2, r2, r0
 		add	r3, r3, r0
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK
         bl copy_compressed
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/*
 		 * Relocate all entries in the GOT table.
 		 * Bump bss entries to _edata + dtb size
@@ -491,6 +503,7 @@ params:		ldr	r0, =0x10000100		@ params_phys for RPC
 #endif
 
 /*
+<<<<<<< HEAD
  * change@ksingh.sra-dallas - Copying the zImage to a secure location 
  * this copy will be used to computer integrity for FIPS validation
  */
@@ -531,6 +544,8 @@ copy_compressed:
 #endif
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Turn on the cache.  We need to setup some page tables so that we
  * can have both the I and D caches on.
  *
@@ -613,12 +628,15 @@ __armv3_mpu_cache_on:
 		mcr	p15, 0, r0, c7, c0, 0	@ invalidate whole cache v3
 		mov	pc, lr
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
 #define CB_BITS 0x08
 #else
 #define CB_BITS 0x0c
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 __setup_mmu:	sub	r3, r4, #16384		@ Page directory size
 		bic	r3, r3, #0xff		@ Align the pointer
 		bic	r3, r3, #0x3f00
@@ -630,6 +648,7 @@ __setup_mmu:	sub	r3, r4, #16384		@ Page directory size
 		mov	r9, r0, lsr #18
 		mov	r9, r9, lsl #18		@ start of RAM
 		add	r10, r9, #0x10000000	@ a reasonable RAM size
+<<<<<<< HEAD
 		mov	r1, #0x12		@ XN|U + section mapping
 		orr	r1, r1, #3 << 10	@ AP=11
 		add	r2, r3, #16384
@@ -638,6 +657,19 @@ __setup_mmu:	sub	r3, r4, #16384		@ Page directory size
 		bic	r1, r1, #0x1c		@ clear XN|U + C + B
 		orrlo	r1, r1, #0x10		@ Set XN|U for non-RAM
 		orrhs	r1, r1, r6		@ set RAM section settings
+=======
+		mov	r1, #0x12
+		orr	r1, r1, #3 << 10
+		add	r2, r3, #16384
+1:		cmp	r1, r9			@ if virt > start of RAM
+#ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+		orrhs	r1, r1, #0x08		@ set cacheable
+#else
+		orrhs	r1, r1, #0x0c		@ set cacheable, bufferable
+#endif
+		cmp	r1, r10			@ if virt > end of RAM
+		bichs	r1, r1, #0x0c		@ clear cacheable, bufferable
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		str	r1, [r0], #4		@ 1:1 mapping
 		add	r1, r1, #1048576
 		teq	r0, r2
@@ -648,7 +680,11 @@ __setup_mmu:	sub	r3, r4, #16384		@ Page directory size
  * so there is no map overlap problem for up to 1 MB compressed kernel.
  * If the execution is in RAM then we would only be duplicating the above.
  */
+<<<<<<< HEAD
 		orr	r1, r6, #0x04		@ ensure B is set for this
+=======
+		mov	r1, #0x1e
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		orr	r1, r1, #3 << 10
 		mov	r2, pc
 		mov	r2, r2, lsr #20
@@ -669,7 +705,10 @@ __arm926ejs_mmu_cache_on:
 __armv4_mmu_cache_on:
 		mov	r12, lr
 #ifdef CONFIG_MMU
+<<<<<<< HEAD
 		mov	r6, #CB_BITS | 0x12	@ U
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		bl	__setup_mmu
 		mov	r0, #0
 		mcr	p15, 0, r0, c7, c10, 4	@ drain write buffer
@@ -691,7 +730,10 @@ __armv7_mmu_cache_on:
 #ifdef CONFIG_MMU
 		mrc	p15, 0, r11, c0, c1, 4	@ read ID_MMFR0
 		tst	r11, #0xf		@ VMSA
+<<<<<<< HEAD
 		movne	r6, #CB_BITS | 0x02	@ !XN
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		blne	__setup_mmu
 		mov	r0, #0
 		mcr	p15, 0, r0, c7, c10, 4	@ drain write buffer
@@ -699,6 +741,10 @@ __armv7_mmu_cache_on:
 		mcrne	p15, 0, r0, c8, c7, 0	@ flush I,D TLBs
 #endif
 		mrc	p15, 0, r0, c1, c0, 0	@ read control reg
+<<<<<<< HEAD
+=======
+		bic	r0, r0, #1 << 28	@ clear SCTLR.TRE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		orr	r0, r0, #0x5000		@ I-cache enable, RR cache replacement
 		orr	r0, r0, #0x003c		@ write buffer
 #ifdef CONFIG_MMU
@@ -706,7 +752,11 @@ __armv7_mmu_cache_on:
 		orr	r0, r0, #1 << 25	@ big-endian page tables
 #endif
 		orrne	r0, r0, #1		@ MMU enabled
+<<<<<<< HEAD
 		movne	r1, #0xfffffffd		@ domain 0 = client
+=======
+		movne	r1, #-1
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mcrne	p15, 0, r3, c2, c0, 0	@ load page table pointer
 		mcrne	p15, 0, r1, c3, c0, 0	@ load domain access control
 #endif
@@ -719,7 +769,10 @@ __armv7_mmu_cache_on:
 
 __fa526_cache_on:
 		mov	r12, lr
+<<<<<<< HEAD
 		mov	r6, #CB_BITS | 0x12	@ U
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		bl	__setup_mmu
 		mov	r0, #0
 		mcr	p15, 0, r0, c7, c7, 0	@ Invalidate whole cache
@@ -734,7 +787,10 @@ __fa526_cache_on:
 
 __arm6_mmu_cache_on:
 		mov	r12, lr
+<<<<<<< HEAD
 		mov	r6, #CB_BITS | 0x12	@ U
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		bl	__setup_mmu
 		mov	r0, #0
 		mcr	p15, 0, r0, c7, c0, 0	@ invalidate whole cache v3
@@ -819,8 +875,11 @@ proc_types:
 @		b	__arm6_mmu_cache_off
 @		b	__armv3_mmu_cache_flush
 
+<<<<<<< HEAD
 #if !defined(CONFIG_CPU_V7)
 		/* This collides with some V7 IDs, preventing correct detection */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.word	0x00000000		@ old ARM ID
 		.word	0x0000f000
 		mov	pc, lr
@@ -829,7 +888,10 @@ proc_types:
  THUMB(		nop				)
 		mov	pc, lr
  THUMB(		nop				)
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		.word	0x41007000		@ ARM7/710
 		.word	0xfff8fe00

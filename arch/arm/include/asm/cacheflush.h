@@ -49,6 +49,7 @@
  *
  *		Unconditionally clean and invalidate the entire cache.
  *
+<<<<<<< HEAD
  *     flush_kern_louis()
  *
  *             Flush data cache levels up to the level of unification
@@ -56,6 +57,8 @@
  *             Only needed from v7 onwards, falls back to flush_cache_all()
  *             for all other processor versions.
  *
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *	flush_user_all()
  *
  *		Clean and invalidate all user space cache entries
@@ -94,6 +97,7 @@
  *	DMA Cache Coherency
  *	===================
  *
+<<<<<<< HEAD
  *	dma_inv_range(start, end)
  *
  *		Invalidate (discard) the specified virtual address range.
@@ -109,6 +113,8 @@
  *		- start  - virtual start address
  *		- end    - virtual end address
  *
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *	dma_flush_range(start, end)
  *
  *		Clean and invalidate the specified virtual address range.
@@ -119,7 +125,10 @@
 struct cpu_cache_fns {
 	void (*flush_icache_all)(void);
 	void (*flush_kern_all)(void);
+<<<<<<< HEAD
 	void (*flush_kern_louis)(void);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void (*flush_user_all)(void);
 	void (*flush_user_range)(unsigned long, unsigned long, unsigned int);
 
@@ -130,8 +139,11 @@ struct cpu_cache_fns {
 	void (*dma_map_area)(const void *, size_t, int);
 	void (*dma_unmap_area)(const void *, size_t, int);
 
+<<<<<<< HEAD
 	void (*dma_inv_range)(const void *, const void *);
 	void (*dma_clean_range)(const void *, const void *);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void (*dma_flush_range)(const void *, const void *);
 };
 
@@ -144,7 +156,10 @@ extern struct cpu_cache_fns cpu_cache;
 
 #define __cpuc_flush_icache_all		cpu_cache.flush_icache_all
 #define __cpuc_flush_kern_all		cpu_cache.flush_kern_all
+<<<<<<< HEAD
 #define __cpuc_flush_kern_louis		cpu_cache.flush_kern_louis
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define __cpuc_flush_user_all		cpu_cache.flush_user_all
 #define __cpuc_flush_user_range		cpu_cache.flush_user_range
 #define __cpuc_coherent_kern_range	cpu_cache.coherent_kern_range
@@ -159,15 +174,21 @@ extern struct cpu_cache_fns cpu_cache;
  */
 #define dmac_map_area			cpu_cache.dma_map_area
 #define dmac_unmap_area			cpu_cache.dma_unmap_area
+<<<<<<< HEAD
 #define dmac_inv_range			cpu_cache.dma_inv_range
 #define dmac_clean_range		cpu_cache.dma_clean_range
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define dmac_flush_range		cpu_cache.dma_flush_range
 
 #else
 
 extern void __cpuc_flush_icache_all(void);
 extern void __cpuc_flush_kern_all(void);
+<<<<<<< HEAD
 extern void __cpuc_flush_kern_louis(void);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void __cpuc_flush_user_all(void);
 extern void __cpuc_flush_user_range(unsigned long, unsigned long, unsigned int);
 extern void __cpuc_coherent_kern_range(unsigned long, unsigned long);
@@ -182,8 +203,11 @@ extern void __cpuc_flush_dcache_area(void *, size_t);
  */
 extern void dmac_map_area(const void *, size_t, int);
 extern void dmac_unmap_area(const void *, size_t, int);
+<<<<<<< HEAD
 extern void dmac_inv_range(const void *, const void *);
 extern void dmac_clean_range(const void *, const void *);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void dmac_flush_range(const void *, const void *);
 
 #endif
@@ -233,6 +257,7 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
 static inline void __flush_icache_all(void)
 {
 	__flush_icache_preferred();
+<<<<<<< HEAD
 }
 
 /*
@@ -240,6 +265,11 @@ static inline void __flush_icache_all(void)
  */
 #define flush_cache_louis()		__cpuc_flush_kern_louis()
 
+=======
+	dsb();
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define flush_cache_all()		__cpuc_flush_kern_all()
 
 static inline void vivt_flush_cache_mm(struct mm_struct *mm)
@@ -251,7 +281,13 @@ static inline void vivt_flush_cache_mm(struct mm_struct *mm)
 static inline void
 vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end)
 {
+<<<<<<< HEAD
 	if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm)))
+=======
+	struct mm_struct *mm = vma->vm_mm;
+
+	if (!mm || cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm)))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__cpuc_flush_user_range(start & PAGE_MASK, PAGE_ALIGN(end),
 					vma->vm_flags);
 }
@@ -259,7 +295,13 @@ vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
 static inline void
 vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
 {
+<<<<<<< HEAD
 	if (cpumask_test_cpu(smp_processor_id(), mm_cpumask(vma->vm_mm))) {
+=======
+	struct mm_struct *mm = vma->vm_mm;
+
+	if (!mm || cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		unsigned long addr = user_addr & PAGE_MASK;
 		__cpuc_flush_user_range(addr, addr + PAGE_SIZE, vma->vm_flags);
 	}
@@ -337,9 +379,13 @@ static inline void flush_anon_page(struct vm_area_struct *vma,
 }
 
 #define ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
+<<<<<<< HEAD
 static inline void flush_kernel_dcache_page(struct page *page)
 {
 }
+=======
+extern void flush_kernel_dcache_page(struct page *);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define flush_dcache_mmap_lock(mapping) \
 	spin_lock_irq(&(mapping)->tree_lock)
@@ -380,9 +426,12 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
 		flush_cache_all();
 }
 
+<<<<<<< HEAD
 int set_memory_ro(unsigned long addr, int numpages);
 int set_memory_rw(unsigned long addr, int numpages);
 int set_memory_x(unsigned long addr, int numpages);
 int set_memory_nx(unsigned long addr, int numpages);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

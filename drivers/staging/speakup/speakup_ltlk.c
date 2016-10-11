@@ -161,7 +161,11 @@ static int synth_probe(struct spk_synth *synth)
 {
 	int failed = 0;
 
+<<<<<<< HEAD
 	failed = serial_synth_probe(synth);
+=======
+	failed = spk_serial_synth_probe(synth);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (failed == 0)
 		synth_interrogate(synth);
 	synth->alive = !failed;

@@ -128,7 +128,11 @@ struct kparam_array
  * The ops can have NULL set or get functions.
  */
 #define module_param_cb(name, ops, arg, perm)				      \
+<<<<<<< HEAD
 	__module_param_call(MODULE_PARAM_PREFIX, name, ops, arg, perm, 0)
+=======
+	__module_param_call(MODULE_PARAM_PREFIX, name, ops, arg, perm, -1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * <level>_param_cb - general callback for a module/cmdline parameter
@@ -192,7 +196,11 @@ struct kparam_array
 		 { (void *)set, (void *)get };				\
 	__module_param_call(MODULE_PARAM_PREFIX,			\
 			    name, &__param_ops_##name, arg,		\
+<<<<<<< HEAD
 			    (perm) + sizeof(__check_old_set_param(set))*0, 0)
+=======
+			    (perm) + sizeof(__check_old_set_param(set))*0, -1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* We don't get oldget: it's often a new-style param_get_uint, etc. */
 static inline int
@@ -272,7 +280,11 @@ static inline void __kernel_param_unlock(void)
  */
 #define core_param(name, var, type, perm)				\
 	param_check_##type(name, &(var));				\
+<<<<<<< HEAD
 	__module_param_call("", name, &param_ops_##type, &var, perm, 0)
+=======
+	__module_param_call("", name, &param_ops_##type, &var, perm, -1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* !MODULE */
 
 /**
@@ -290,7 +302,11 @@ static inline void __kernel_param_unlock(void)
 		= { len, string };					\
 	__module_param_call(MODULE_PARAM_PREFIX, name,			\
 			    &param_ops_string,				\
+<<<<<<< HEAD
 			    .str = &__param_string_##name, perm, 0);	\
+=======
+			    .str = &__param_string_##name, perm, -1);	\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__MODULE_PARM_TYPE(name, "string")
 
 /**
@@ -431,7 +447,11 @@ extern int param_set_bint(const char *val, const struct kernel_param *kp);
 	__module_param_call(MODULE_PARAM_PREFIX, name,			\
 			    &param_array_ops,				\
 			    .arr = &__param_arr_##name,			\
+<<<<<<< HEAD
 			    perm, 0);					\
+=======
+			    perm, -1);					\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__MODULE_PARM_TYPE(name, "array of " #type)
 
 extern struct kernel_param_ops param_array_ops;

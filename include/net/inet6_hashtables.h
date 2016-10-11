@@ -28,16 +28,28 @@
 
 struct inet_hashinfo;
 
+<<<<<<< HEAD
 /* I have no idea if this is a good hash for v6 or not. -DaveM */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline unsigned int inet6_ehashfn(struct net *net,
 				const struct in6_addr *laddr, const u16 lport,
 				const struct in6_addr *faddr, const __be16 fport)
 {
+<<<<<<< HEAD
 	u32 ports = (lport ^ (__force u16)fport);
 
 	return jhash_3words((__force u32)laddr->s6_addr32[3],
 			    (__force u32)faddr->s6_addr32[3],
 			    ports, inet_ehash_secret + net_hash_mix(net));
+=======
+	u32 ports = (((u32)lport) << 16) | (__force u32)fport;
+
+	return jhash_3words((__force u32)laddr->s6_addr32[3],
+			    ipv6_addr_jhash(faddr),
+			    ports,
+			    inet_ehash_secret + net_hash_mix(net));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline int inet6_sk_ehashfn(const struct sock *sk)

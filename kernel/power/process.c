@@ -17,8 +17,11 @@
 #include <linux/delay.h>
 #include <linux/workqueue.h>
 #include <linux/kmod.h>
+<<<<<<< HEAD
 #include <linux/wakelock.h>
 #include "power.h"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* 
  * Timeout for stopping processes
@@ -28,7 +31,10 @@
 static int try_to_freeze_tasks(bool user_only)
 {
 	struct task_struct *g, *p;
+<<<<<<< HEAD
 	struct task_struct *q = NULL;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long end_time;
 	unsigned int todo;
 	bool wq_busy = false;
@@ -62,10 +68,15 @@ static int try_to_freeze_tasks(bool user_only)
 			 * transition can't race with task state testing here.
 			 */
 			if (!task_is_stopped_or_traced(p) &&
+<<<<<<< HEAD
 			    !freezer_should_skip(p)) {
 				todo++;
 				q = p;
 			}
+=======
+			    !freezer_should_skip(p))
+				todo++;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		} while_each_thread(g, p);
 		read_unlock(&tasklist_lock);
 
@@ -95,6 +106,7 @@ static int try_to_freeze_tasks(bool user_only)
 	elapsed_csecs = elapsed_csecs64;
 
 	if (todo) {
+<<<<<<< HEAD
 		/* This does not unfreeze processes that are already frozen
 		 * (we have slightly ugly calling convention in that respect,
 		 * and caller must call thaw_processes() if something fails),
@@ -114,13 +126,25 @@ static int try_to_freeze_tasks(bool user_only)
 			       elapsed_csecs / 100, elapsed_csecs % 100,
 			       todo - wq_busy, wq_busy);
 		}
+=======
+		printk("\n");
+		printk(KERN_ERR "Freezing of tasks %s after %d.%02d seconds "
+		       "(%d tasks refusing to freeze, wq_busy=%d):\n",
+		       wakeup ? "aborted" : "failed",
+		       elapsed_csecs / 100, elapsed_csecs % 100,
+		       todo - wq_busy, wq_busy);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (!wakeup) {
 			read_lock(&tasklist_lock);
 			do_each_thread(g, p) {
 				if (p != current && !freezer_should_skip(p)
+<<<<<<< HEAD
 				    && freezing(p) && !frozen(p) &&
 				    elapsed_csecs > 100)
+=======
+				    && freezing(p) && !frozen(p))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					sched_show_task(p);
 			} while_each_thread(g, p);
 			read_unlock(&tasklist_lock);
@@ -133,6 +157,31 @@ static int try_to_freeze_tasks(bool user_only)
 	return todo ? -EBUSY : 0;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Returns true if all freezable tasks (except for current) are frozen already
+ */
+static bool check_frozen_processes(void)
+{
+	struct task_struct *g, *p;
+	bool ret = true;
+
+	read_lock(&tasklist_lock);
+	for_each_process_thread(g, p) {
+		if (p != current && !freezer_should_skip(p) &&
+		    !frozen(p)) {
+			ret = false;
+			goto done;
+		}
+	}
+done:
+	read_unlock(&tasklist_lock);
+
+	return ret;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * freeze_processes - Signal user space processes to enter the refrigerator.
  *
@@ -141,6 +190,10 @@ static int try_to_freeze_tasks(bool user_only)
 int freeze_processes(void)
 {
 	int error;
+<<<<<<< HEAD
+=======
+	int oom_kills_saved;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	error = __usermodehelper_disable(UMH_FREEZING);
 	if (error)
@@ -151,12 +204,36 @@ int freeze_processes(void)
 
 	printk("Freezing user space processes ... ");
 	pm_freezing = true;
+<<<<<<< HEAD
 	error = try_to_freeze_tasks(true);
 	if (!error) {
 		printk("done.");
 		__usermodehelper_set_disable_depth(UMH_DISABLED);
 		oom_killer_disable();
 	}
+=======
+	oom_kills_saved = oom_kills_count();
+	error = try_to_freeze_tasks(true);
+	if (!error) {
+		__usermodehelper_set_disable_depth(UMH_DISABLED);
+		oom_killer_disable();
+
+		/*
+		 * There might have been an OOM kill while we were
+		 * freezing tasks and the killed task might be still
+		 * on the way out so we have to double check for race.
+		 */
+		if (oom_kills_count() != oom_kills_saved &&
+				!check_frozen_processes()) {
+			__usermodehelper_set_disable_depth(UMH_ENABLED);
+			printk("OOM in progress.");
+			error = -EBUSY;
+			goto done;
+		}
+		printk("done.");
+	}
+done:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	printk("\n");
 	BUG_ON(in_atomic());
 
@@ -204,6 +281,10 @@ void thaw_processes(void)
 
 	printk("Restarting tasks ... ");
 
+<<<<<<< HEAD
+=======
+	__usermodehelper_set_disable_depth(UMH_FREEZING);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	thaw_workqueues();
 
 	read_lock(&tasklist_lock);

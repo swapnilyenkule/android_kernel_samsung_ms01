@@ -71,7 +71,11 @@ void sctp_auth_key_put(struct sctp_auth_bytes *key)
 		return;
 
 	if (atomic_dec_and_test(&key->refcnt)) {
+<<<<<<< HEAD
 		kfree(key);
+=======
+		kzfree(key);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		SCTP_DBG_OBJCNT_DEC(keys);
 	}
 }

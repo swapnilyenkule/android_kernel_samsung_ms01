@@ -75,6 +75,7 @@ Example of two SOC GPIO banks defined as gpio-controller nodes:
 		gpio-controller;
 	};
 
+<<<<<<< HEAD
 2.1) gpio-controller and pinctrl subsystem
 ------------------------------------------
 
@@ -112,3 +113,6 @@ where,
 
 The pinctrl node must have "#gpio-range-cells" property to show number of
 arguments to pass with phandle from gpio controllers node.
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -256,7 +256,11 @@ wraperr:
 	return err;
 }
 
+<<<<<<< HEAD
 static const struct usb_device_id id_table[] __devinitconst = {
+=======
+static const struct usb_device_id id_table[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ USB_DEVICE(EMI62_VENDOR_ID, EMI62_PRODUCT_ID) },
 	{ }                                             /* Terminating entry */
 };

@@ -305,9 +305,15 @@ static ssize_t dio_complete(struct dio *dio, loff_t offset, ssize_t ret, bool is
 		dio->end_io(dio->iocb, offset, transferred,
 			    dio->private, ret, is_async);
 	} else {
+<<<<<<< HEAD
 		if (is_async)
 			aio_complete(dio->iocb, ret, 0);
 		inode_dio_done(dio->inode);
+=======
+		inode_dio_done(dio->inode);
+		if (is_async)
+			aio_complete(dio->iocb, ret, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return ret;

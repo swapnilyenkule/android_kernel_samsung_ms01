@@ -17,5 +17,8 @@ generic-y += poll.h
 generic-y += resource.h
 generic-y += sections.h
 generic-y += siginfo.h
+<<<<<<< HEAD
 generic-y += simd.h
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 generic-y += sizes.h

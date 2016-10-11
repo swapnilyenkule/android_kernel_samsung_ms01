@@ -310,7 +310,11 @@ static int rv3029c2_rtc_i2c_set_alarm(struct i2c_client *client,
 		dev_dbg(&client->dev, "alarm IRQ armed\n");
 	} else {
 		/* disable AIE irq */
+<<<<<<< HEAD
 		ret = rv3029c2_rtc_i2c_alarm_set_irq(client, 1);
+=======
+		ret = rv3029c2_rtc_i2c_alarm_set_irq(client, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ret)
 			return ret;
 

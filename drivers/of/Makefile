@@ -12,8 +12,12 @@ obj-$(CONFIG_OF_SELFTEST) += selftest.o
 obj-$(CONFIG_OF_MDIO)	+= of_mdio.o
 obj-$(CONFIG_OF_PCI)	+= of_pci.o
 obj-$(CONFIG_OF_PCI_IRQ)  += of_pci_irq.o
+<<<<<<< HEAD
 obj-$(CONFIG_OF_SPMI)	+= of_spmi.o
 obj-$(CONFIG_OF_MTD)	+= of_mtd.o
 obj-$(CONFIG_OF_SLIMBUS)	+= of_slimbus.o
 obj-$(CONFIG_OF_CORESIGHT) += of_coresight.o
 obj-$(CONFIG_OF_BATTERYDATA)	+= of_batterydata.o
+=======
+obj-$(CONFIG_OF_MTD)	+= of_mtd.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

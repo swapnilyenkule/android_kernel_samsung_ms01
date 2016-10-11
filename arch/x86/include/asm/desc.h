@@ -250,7 +250,12 @@ static inline void native_load_tls(struct thread_struct *t, unsigned int cpu)
 		gdt[GDT_ENTRY_TLS_MIN + i] = t->tls_array[i];
 }
 
+<<<<<<< HEAD
 #define _LDT_empty(info)				\
+=======
+/* This intentionally ignores lm, since 32-bit apps don't have that field. */
+#define LDT_empty(info)					\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	((info)->base_addr		== 0	&&	\
 	 (info)->limit			== 0	&&	\
 	 (info)->contents		== 0	&&	\
@@ -260,6 +265,7 @@ static inline void native_load_tls(struct thread_struct *t, unsigned int cpu)
 	 (info)->seg_not_present	== 1	&&	\
 	 (info)->useable		== 0)
 
+<<<<<<< HEAD
 #ifdef CONFIG_X86_64
 #define LDT_empty(info) (_LDT_empty(info) && ((info)->lm == 0))
 #else
@@ -284,6 +290,24 @@ static inline void load_LDT(mm_context_t *pc)
 	preempt_disable();
 	load_LDT_nolock(pc);
 	preempt_enable();
+=======
+/* Lots of programs expect an all-zero user_desc to mean "no segment at all". */
+static inline bool LDT_zero(const struct user_desc *info)
+{
+	return (info->base_addr		== 0 &&
+		info->limit		== 0 &&
+		info->contents		== 0 &&
+		info->read_exec_only	== 0 &&
+		info->seg_32bit		== 0 &&
+		info->limit_in_pages	== 0 &&
+		info->seg_not_present	== 0 &&
+		info->useable		== 0);
+}
+
+static inline void clear_LDT(void)
+{
+	set_ldt(NULL, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline unsigned long get_desc_base(const struct desc_struct *desc)

@@ -13,7 +13,10 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/of.h>
+<<<<<<< HEAD
 #include <linux/string.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/regulator/machine.h>
 
 static void of_get_regulation_constraints(struct device_node *np,
@@ -62,6 +65,7 @@ static void of_get_regulation_constraints(struct device_node *np,
 		constraints->valid_ops_mask |= REGULATOR_CHANGE_STATUS;
 }
 
+<<<<<<< HEAD
 static const char *consumer_supply_prop_name = "qcom,consumer-supplies";
 #define MAX_DEV_NAME_LEN 256
 /*
@@ -127,6 +131,8 @@ static int of_get_qcom_regulator_init_data(struct device *dev,
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * of_get_regulator_init_data - extract regulator_init_data structure info
  * @dev: device requesting for regulator_init_data
@@ -139,7 +145,10 @@ struct regulator_init_data *of_get_regulator_init_data(struct device *dev,
 						struct device_node *node)
 {
 	struct regulator_init_data *init_data;
+<<<<<<< HEAD
 	int rc;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!node)
 		return NULL;
@@ -149,12 +158,15 @@ struct regulator_init_data *of_get_regulator_init_data(struct device *dev,
 		return NULL; /* Out of memory? */
 
 	of_get_regulation_constraints(node, &init_data);
+<<<<<<< HEAD
 	rc = of_get_qcom_regulator_init_data(dev, &init_data);
 	if (rc) {
 		devm_kfree(dev, init_data);
 		return NULL;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return init_data;
 }
 EXPORT_SYMBOL_GPL(of_get_regulator_init_data);

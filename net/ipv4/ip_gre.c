@@ -722,6 +722,10 @@ static netdev_tx_t ipgre_tunnel_xmit(struct sk_buff *skb, struct net_device *dev
 		tiph = &tunnel->parms.iph;
 	}
 
+<<<<<<< HEAD
+=======
+	memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if ((dst = tiph->daddr) == 0) {
 		/* NBMA tunnel */
 
@@ -865,7 +869,10 @@ static netdev_tx_t ipgre_tunnel_xmit(struct sk_buff *skb, struct net_device *dev
 	skb_reset_transport_header(skb);
 	skb_push(skb, gre_hlen);
 	skb_reset_network_header(skb);
+<<<<<<< HEAD
 	memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	IPCB(skb)->flags &= ~(IPSKB_XFRM_TUNNEL_SIZE | IPSKB_XFRM_TRANSFORMED |
 			      IPSKB_REROUTED);
 	skb_dst_drop(skb);

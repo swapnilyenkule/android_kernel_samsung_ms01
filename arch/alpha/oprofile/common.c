@@ -12,6 +12,10 @@
 #include <linux/smp.h>
 #include <linux/errno.h>
 #include <asm/ptrace.h>
+<<<<<<< HEAD
+=======
+#include <asm/special_insns.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "op_impl.h"
 

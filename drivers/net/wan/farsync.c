@@ -1972,6 +1972,10 @@ fst_get_iface(struct fst_card_info *card, struct fst_port_info *port,
 	}
 
 	i = port->index;
+<<<<<<< HEAD
+=======
+	memset(&sync, 0, sizeof(sync));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sync.clock_rate = FST_RDL(card, portConfig[i].lineSpeed);
 	/* Lucky card and linux use same encoding here */
 	sync.clock_type = FST_RDB(card, portConfig[i].internalClock) ==

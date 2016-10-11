@@ -197,7 +197,11 @@ config SERIAL_SAMSUNG_UARTS_4
 config SERIAL_SAMSUNG_UARTS
 	int
 	depends on ARM && PLAT_SAMSUNG
+<<<<<<< HEAD
 	default 6 if ARCH_S5P6450
+=======
+	default 6 if CPU_S5P6450
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default 4 if SERIAL_SAMSUNG_UARTS_4 || CPU_S3C2416
 	default 3
 	help
@@ -988,6 +992,7 @@ config SERIAL_MSM_HS
 	  Choose M here to compile it as a module. The module will be
 	  called msm_serial_hs.
 
+<<<<<<< HEAD
 config SERIAL_MSM_RX_WAKEUP
 	bool "Wakeup the msm uart clock on GPIO activity."
 	depends on SERIAL_MSM_CLOCK_CONTROL
@@ -1018,6 +1023,8 @@ config SERIAL_BCM_BT_LPM
 	help
 	  Select this module for Broadcom Bluetooth low power management.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SERIAL_VT8500
 	bool "VIA VT8500 on-chip serial port support"
 	depends on ARM && ARCH_VT8500

@@ -576,6 +576,11 @@ static void xen_hvm_cpu_die(unsigned int cpu)
 	unbind_from_irqhandler(per_cpu(xen_callfunc_irq, cpu), NULL);
 	unbind_from_irqhandler(per_cpu(xen_debug_irq, cpu), NULL);
 	unbind_from_irqhandler(per_cpu(xen_callfuncsingle_irq, cpu), NULL);
+<<<<<<< HEAD
+=======
+	xen_uninit_lock_cpu(cpu);
+	xen_teardown_timer(cpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	native_cpu_die(cpu);
 }
 

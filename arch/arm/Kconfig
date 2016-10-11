@@ -1,11 +1,16 @@
 config ARM
 	bool
 	default y
+<<<<<<< HEAD
 	select HAVE_AOUT
 	select HAVE_DMA_API_DEBUG
 	select HAVE_IDE if PCI || ISA || PCMCIA
 	select HAVE_DMA_CONTIGUOUS if (CPU_V6 || CPU_V6K || CPU_V7)
 	select HAVE_DMA_ATTRS
+=======
+	select HAVE_DMA_API_DEBUG
+	select HAVE_IDE if PCI || ISA || PCMCIA
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select HAVE_MEMBLOCK
 	select RTC_LIB
 	select SYS_SUPPORTS_APM_EMULATION
@@ -16,7 +21,10 @@ config ARM
 	select HAVE_KPROBES if !XIP_KERNEL
 	select HAVE_KRETPROBES if (HAVE_KPROBES)
 	select HAVE_FUNCTION_TRACER if (!XIP_KERNEL)
+<<<<<<< HEAD
 	select HAVE_ARCH_MMAP_RND_BITS if MMU
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select HAVE_FTRACE_MCOUNT_RECORD if (!XIP_KERNEL)
 	select HAVE_DYNAMIC_FTRACE if (!XIP_KERNEL)
 	select HAVE_FUNCTION_GRAPH_TRACER if (!THUMB2_KERNEL)
@@ -33,13 +41,19 @@ config ARM
 	select HAVE_HW_BREAKPOINT if (PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7))
 	select HAVE_C_RECORDMCOUNT
 	select HAVE_GENERIC_HARDIRQS
+<<<<<<< HEAD
 	select HAVE_SPARSE_IRQ
 	select HAVE_ARCH_SECCOMP_FILTER
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select GENERIC_IRQ_SHOW
 	select CPU_PM if (SUSPEND || CPU_IDLE)
 	select GENERIC_PCI_IOMAP
 	select HAVE_BPF_JIT if NET
+<<<<<<< HEAD
 	select GENERIC_SMP_IDLE_THREAD
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  The ARM series is a line of low-power-consumption RISC chip designs
 	  licensed by ARM Ltd and targeted at embedded applications and
@@ -51,6 +65,7 @@ config ARM
 config ARM_HAS_SG_CHAIN
 	bool
 
+<<<<<<< HEAD
 config NEED_SG_DMA_LENGTH
 	bool
 
@@ -59,6 +74,8 @@ config ARM_DMA_USE_IOMMU
 	select ARM_HAS_SG_CHAIN
 	bool
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HAVE_PWM
 	bool
 
@@ -150,6 +167,7 @@ config GENERIC_IRQ_PROBE
 
 config GENERIC_LOCKBREAK
 	bool
+<<<<<<< HEAD
 	default y if !ARM_TICKET_LOCKS
 	depends on SMP && PREEMPT
 
@@ -162,6 +180,11 @@ config ARM_TICKET_LOCKS
 	default y if ARCH_MSM_SCORPIONMP || ARCH_MSM_KRAITMP
 	depends on SMP
 
+=======
+	default y
+	depends on SMP && PREEMPT
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config RWSEM_GENERIC_SPINLOCK
 	bool
 	default y
@@ -217,17 +240,24 @@ config NEED_RET_TO_USER
 config ARCH_MTD_XIP
 	bool
 
+<<<<<<< HEAD
 config ARCH_WANT_KMAP_ATOMIC_FLUSH
 	bool
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config VECTORS_BASE
 	hex
 	default 0xffff0000 if MMU || CPU_HIGH_VECTOR
 	default DRAM_BASE if REMAP_VECTORS_TO_RAM
 	default 0x00000000
 	help
+<<<<<<< HEAD
 	  The base address of exception vectors.  This must be two pages
 	  in size.
+=======
+	  The base address of exception vectors.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config ARM_PATCH_PHYS_VIRT
 	bool "Patch physical to virtual translations at runtime" if EMBEDDED
@@ -272,6 +302,7 @@ config GENERIC_BUG
 	def_bool y
 	depends on BUG
 
+<<<<<<< HEAD
 config GENERIC_TIME_VSYSCALL
 	bool "Enable gettimeofday updates"
 	depends on CPU_V7
@@ -303,6 +334,8 @@ config ARCH_RANDOM
 
 	 If unsure, say N
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "init/Kconfig"
 
 source "kernel/Kconfig.freezer"
@@ -316,6 +349,7 @@ config MMU
 	  Select if you want MMU-based virtualised addressing space
 	  support by paged memory management. If unsure, say 'Y'.
 
+<<<<<<< HEAD
 config ARCH_MMAP_RND_BITS_MIN
 	default 8
 
@@ -324,6 +358,8 @@ config ARCH_MMAP_RND_BITS_MAX
 	default 15 if PAGE_OFFSET=0x80000000
 	default 16
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #
 # The "ARM system type" choice list is ordered alphabetically by option
 # text.  Please add new entries in the option alphabetic order.
@@ -622,7 +658,11 @@ config ARCH_IXP4XX
 	select ARCH_HAS_DMA_SET_COHERENT_MASK
 	select CLKSRC_MMIO
 	select CPU_XSCALE
+<<<<<<< HEAD
 	select GENERIC_GPIO
+=======
+	select ARCH_REQUIRE_GPIOLIB
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select GENERIC_CLOCKEVENTS
 	select MIGHT_HAVE_PCI
 	select NEED_MACH_IO_H
@@ -645,6 +685,10 @@ config ARCH_KIRKWOOD
 	bool "Marvell Kirkwood"
 	select CPU_FEROCEON
 	select PCI
+<<<<<<< HEAD
+=======
+	select PCI_QUIRKS
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select ARCH_REQUIRE_GPIOLIB
 	select GENERIC_CLOCKEVENTS
 	select NEED_MACH_IO_H
@@ -798,6 +842,7 @@ config ARCH_MSM
 	select GENERIC_CLOCKEVENTS
 	select ARCH_REQUIRE_GPIOLIB
 	select CLKDEV_LOOKUP
+<<<<<<< HEAD
 	select ARCH_HAS_CPUFREQ
 	select GENERIC_GPIO
 	select GENERIC_TIME
@@ -807,6 +852,8 @@ config ARCH_MSM
 	select NEED_MACH_MEMORY_H
 	select NEED_MACH_IO_H
 	select SOC_BUS
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Support for Qualcomm MSM/QSD based systems.  This runs on the
 	  apps processor of the MSM/QSD and depends on a shared memory
@@ -1233,6 +1280,7 @@ config ARM_NR_BANKS
 	default 16 if ARCH_EP93XX
 	default 8
 
+<<<<<<< HEAD
 config RESERVE_FIRST_PAGE
 	bool
 	default n
@@ -1242,6 +1290,8 @@ config RESERVE_FIRST_PAGE
 	  boot operations. Reserve this page so that it is
 	  not allocated by the kernel.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config IWMMXT
 	bool "Enable iWMMXt support"
 	depends on CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_PJ4
@@ -1489,6 +1539,7 @@ config PL310_ERRATA_769419
 	  on systems with an outer cache, the store buffer is drained
 	  explicitly.
 
+<<<<<<< HEAD
 config KSAPI
         tristate "KSAPI support (EXPERIMENTAL)"
 	depends on ARCH_MSM_SCORPION || ARCH_MSM_KRAIT
@@ -1500,6 +1551,17 @@ config KSAPI
           counter statistics. It can monitor the counter statistics for
           Scorpion processor supported hardware performance counters on a per
           thread basis or AXI counters on an overall system basis.
+=======
+config ARM_ERRATA_775420
+       bool "ARM errata: A data cache maintenance operation which aborts, might lead to deadlock"
+       depends on CPU_V7
+       help
+	 This option enables the workaround for the 775420 Cortex-A9 (r2p2,
+	 r2p6,r2p8,r2p10,r3p0) erratum. In case a date cache maintenance
+	 operation aborts with MMU exception, it might cause the processor
+	 to deadlock. This workaround puts DSB before executing ISB if
+	 an abort may occur on cache maintenance.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 endmenu
 
@@ -1587,7 +1649,11 @@ config SMP
 	depends on HAVE_SMP
 	depends on MMU
 	select USE_GENERIC_SMP_HELPERS
+<<<<<<< HEAD
 	select HAVE_ARM_SCU
+=======
+	select HAVE_ARM_SCU if !ARCH_MSM_SCORPIONMP
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This enables support for systems with more than one CPU. If you have
 	  a system with only one CPU, like most personal computers, say N. If
@@ -1648,6 +1714,7 @@ config HAVE_ARM_SCU
 	help
 	  This option enables support for the ARM system coherency unit
 
+<<<<<<< HEAD
 config ARM_ARCH_TIMER
 	bool "Architected timer support"
 	depends on CPU_V7
@@ -1655,6 +1722,8 @@ config ARM_ARCH_TIMER
 	help
 	  This option enables support for the ARM architected timer
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HAVE_ARM_TWD
 	bool
 	depends on SMP
@@ -1702,7 +1771,11 @@ config LOCAL_TIMERS
 	bool "Use local timer interrupts"
 	depends on SMP
 	default y
+<<<<<<< HEAD
 	select HAVE_ARM_TWD if (!MSM_SMP && !EXYNOS4_MCT)
+=======
+	select HAVE_ARM_TWD if (!ARCH_MSM_SCORPIONMP && !EXYNOS4_MCT)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Enable support for local timers on SMP platforms, rather then the
 	  legacy IPI broadcast method.  Local timers allows the system
@@ -1796,7 +1869,11 @@ config AEABI
 config OABI_COMPAT
 	bool "Allow old ABI binaries to run with this kernel (EXPERIMENTAL)"
 	depends on AEABI && EXPERIMENTAL && !THUMB2_KERNEL
+<<<<<<< HEAD
 	default y if !SMP
+=======
+	default y
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This option preserves the old syscall interface along with the
 	  new (ARM EABI) one. It also provides a compatibility layer to
@@ -1856,6 +1933,7 @@ config HW_PERF_EVENTS
 
 source "mm/Kconfig"
 
+<<<<<<< HEAD
 config ARCH_MEMORY_PROBE
 	def_bool n
 
@@ -1900,6 +1978,8 @@ config HOLES_IN_ZONE
 	def_bool n
 	depends on SPARSEMEM
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config FORCE_MAX_ZONEORDER
 	int "Maximum zone order" if ARCH_SHMOBILE
 	range 11 64 if ARCH_SHMOBILE
@@ -2032,6 +2112,7 @@ config DEPRECATED_PARAM_STRUCT
 	  This was deprecated in 2001 and announced to live on for 5 years.
 	  Some old boot loaders still use this way.
 
+<<<<<<< HEAD
 config ARM_FLUSH_CONSOLE_ON_RESTART
 	bool "Force flush the console on restart"
 	help
@@ -2056,6 +2137,10 @@ endmenu
 
 source "arch/arm/mvp/Kconfig"
 
+=======
+endmenu
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 menu "Boot options"
 
 config USE_OF
@@ -2066,6 +2151,7 @@ config USE_OF
 	help
 	  Include support for flattened device tree machine descriptions.
 
+<<<<<<< HEAD
 config BUILD_ARM_APPENDED_DTB_IMAGE
 	bool "Build a concatenated zImage/dtb by default"
 	depends on OF
@@ -2081,6 +2167,8 @@ config BUILD_ARM_APPENDED_DTB_IMAGE_NAMES
 	  Space separated list of names of dtbs to append when
 	  building a concatenated zImage-dtb.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # Compressed boot loader in ROM.  Yes, we really want to ask about
 # TEXT and BSS so we preserve their values in the config files.
 config ZBOOT_ROM_TEXT
@@ -2297,6 +2385,10 @@ source "drivers/cpufreq/Kconfig"
 config CPU_FREQ_IMX
 	tristate "CPUfreq driver for i.MX CPUs"
 	depends on ARCH_MXC && CPU_FREQ
+<<<<<<< HEAD
+=======
+	select CPU_FREQ_TABLE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  This enables the CPUfreq driver for i.MX CPUs.
 
@@ -2376,6 +2468,7 @@ source "drivers/cpuidle/Kconfig"
 
 endmenu
 
+<<<<<<< HEAD
 config CPU_FREQ_MSM
         bool
         depends on CPU_FREQ && ARCH_MSM
@@ -2384,6 +2477,8 @@ config CPU_FREQ_MSM
           This enables the CPUFreq driver for Qualcomm CPUs.
           If in doubt, say Y.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 menu "Floating point emulation"
 
 comment "At least one emulation must be selected"
@@ -2450,6 +2545,7 @@ config NEON
 	  Say Y to include support code for NEON, the ARMv7 Advanced SIMD
 	  Extension.
 
+<<<<<<< HEAD
 config KERNEL_MODE_NEON
 	bool "Support for NEON in kernel mode"
 	default n
@@ -2457,6 +2553,8 @@ config KERNEL_MODE_NEON
 	help
 	  Say Y to include support for NEON in kernel mode.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endmenu
 
 menu "Userspace binary formats"
@@ -2480,7 +2578,11 @@ menu "Power management options"
 source "kernel/power/Kconfig"
 
 config ARCH_SUSPEND_POSSIBLE
+<<<<<<< HEAD
 	depends on !ARCH_S5PC100 && !ARCH_FSM9XXX
+=======
+	depends on !ARCH_S5PC100
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	depends on CPU_ARM920T || CPU_ARM926T || CPU_SA1100 || \
 		CPU_V6 || CPU_V6K || CPU_V7 || CPU_XSC3 || CPU_XSCALE
 	def_bool y

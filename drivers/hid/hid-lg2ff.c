@@ -66,6 +66,7 @@ int lg2ff_init(struct hid_device *hid)
 	struct hid_report *report;
 	struct hid_input *hidinput = list_entry(hid->inputs.next,
 						struct hid_input, list);
+<<<<<<< HEAD
 	struct list_head *report_list =
 			&hid->report_enum[HID_OUTPUT_REPORT].report_list;
 	struct input_dev *dev = hidinput->input;
@@ -86,6 +87,15 @@ int lg2ff_init(struct hid_device *hid)
 		hid_err(hid, "not enough values in the field\n");
 		return -ENODEV;
 	}
+=======
+	struct input_dev *dev = hidinput->input;
+	int error;
+
+	/* Check that the report looks ok */
+	report = hid_validate_values(hid, HID_OUTPUT_REPORT, 0, 0, 7);
+	if (!report)
+		return -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	lg2ff = kmalloc(sizeof(struct lg2ff_device), GFP_KERNEL);
 	if (!lg2ff)

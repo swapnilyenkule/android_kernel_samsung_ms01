@@ -840,7 +840,11 @@ static ssize_t show_modalias(struct device *dev,
 	alt = intf->cur_altsetting;
 
 	return sprintf(buf, "usb:v%04Xp%04Xd%04Xdc%02Xdsc%02Xdp%02X"
+<<<<<<< HEAD
 			"ic%02Xisc%02Xip%02Xin%02X\n",
+=======
+			"ic%02Xisc%02Xip%02X\n",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			le16_to_cpu(udev->descriptor.idVendor),
 			le16_to_cpu(udev->descriptor.idProduct),
 			le16_to_cpu(udev->descriptor.bcdDevice),
@@ -849,8 +853,12 @@ static ssize_t show_modalias(struct device *dev,
 			udev->descriptor.bDeviceProtocol,
 			alt->desc.bInterfaceClass,
 			alt->desc.bInterfaceSubClass,
+<<<<<<< HEAD
 			alt->desc.bInterfaceProtocol,
 			alt->desc.bInterfaceNumber);
+=======
+			alt->desc.bInterfaceProtocol);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 static DEVICE_ATTR(modalias, S_IRUGO, show_modalias, NULL);
 

@@ -937,7 +937,11 @@ static inline int atapi_cdb_len(const u16 *dev_id)
 	}
 }
 
+<<<<<<< HEAD
 static inline bool atapi_command_packet_set(const u16 *dev_id)
+=======
+static inline int atapi_command_packet_set(const u16 *dev_id)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return (dev_id[ATA_ID_CONFIG] >> 8) & 0x1f;
 }

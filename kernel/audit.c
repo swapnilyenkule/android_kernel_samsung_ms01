@@ -64,10 +64,13 @@
 
 #include "audit.h"
 
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_AVC
 #include <linux/proc_avc.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* No auditing will take place until audit_initialized == AUDIT_INITIALIZED.
  * (Initialization happens after skb_init is called.) */
 #define AUDIT_DISABLED		-1
@@ -84,7 +87,11 @@ int		audit_ever_enabled;
 EXPORT_SYMBOL_GPL(audit_enabled);
 
 /* Default state when kernel boots without any parameters. */
+<<<<<<< HEAD
 static int	audit_default = 1;
+=======
+static int	audit_default;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* If auditing cannot proceed, audit_failure selects what happens. */
 static int	audit_failure = AUDIT_FAIL_PRINTK;
@@ -185,6 +192,10 @@ void audit_panic(const char *message)
 	case AUDIT_FAIL_SILENT:
 		break;
 	case AUDIT_FAIL_PRINTK:
+<<<<<<< HEAD
+=======
+		if (printk_ratelimit())
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			printk(KERN_ERR "audit: %s\n", message);
 		break;
 	case AUDIT_FAIL_PANIC:
@@ -255,6 +266,10 @@ void audit_log_lost(const char *message)
 	}
 
 	if (print) {
+<<<<<<< HEAD
+=======
+		if (printk_ratelimit())
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			printk(KERN_WARNING
 				"audit: audit_lost=%d audit_rate_limit=%d "
 				"audit_backlog_limit=%d\n",
@@ -386,6 +401,7 @@ static void audit_hold_skb(struct sk_buff *skb)
 static void audit_printk_skb(struct sk_buff *skb)
 {
 	struct nlmsghdr *nlh = nlmsg_hdr(skb);
+<<<<<<< HEAD
 #ifdef CONFIG_PROC_AVC
 	char *data = NLMSG_DATA(nlh);
 #endif
@@ -394,6 +410,15 @@ static void audit_printk_skb(struct sk_buff *skb)
 #ifdef CONFIG_PROC_AVC
 		sec_avc_log("%s\n", data);
 #endif
+=======
+	char *data = NLMSG_DATA(nlh);
+
+	if (nlh->nlmsg_type != AUDIT_EOE) {
+		if (printk_ratelimit())
+			printk(KERN_NOTICE "type=%d %s\n", nlh->nlmsg_type, data);
+		else
+			audit_log_lost("printk limit exceeded\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	audit_hold_skb(skb);
@@ -412,6 +437,7 @@ static void kauditd_send_skb(struct sk_buff *skb)
 		audit_pid = 0;
 		/* we might get lucky and get this in the next auditd */
 		audit_hold_skb(skb);
+<<<<<<< HEAD
 	} else {
 #ifdef CONFIG_PROC_AVC
 		struct nlmsghdr *nlh = nlmsg_hdr(skb);
@@ -425,6 +451,12 @@ static void kauditd_send_skb(struct sk_buff *skb)
 		consume_skb(skb);
 }
 }
+=======
+	} else
+		/* drop the extra reference if sent ok */
+		consume_skb(skb);
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int kauditd_thread(void *dummy)
 {
@@ -637,7 +669,11 @@ static int audit_log_common_recv_msg(struct audit_buffer **ab, u16 msg_type,
 	char *ctx = NULL;
 	u32 len;
 
+<<<<<<< HEAD
 	if (!audit_enabled) {
+=======
+	if (!audit_enabled && msg_type != AUDIT_USER_AVC) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		*ab = NULL;
 		return rc;
 	}
@@ -696,6 +732,10 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 
 	switch (msg_type) {
 	case AUDIT_GET:
+<<<<<<< HEAD
+=======
+		status_set.mask		 = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		status_set.enabled	 = audit_enabled;
 		status_set.failure	 = audit_failure;
 		status_set.pid		 = audit_pid;
@@ -707,7 +747,11 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 				 &status_set, sizeof(status_set));
 		break;
 	case AUDIT_SET:
+<<<<<<< HEAD
 		if (nlh->nlmsg_len < sizeof(struct audit_status))
+=======
+		if (nlmsg_len(nlh) < sizeof(struct audit_status))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return -EINVAL;
 		status_get   = (struct audit_status *)data;
 		if (status_get->mask & AUDIT_STATUS_ENABLED) {
@@ -1179,7 +1223,11 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
 
 			/* Wait for auditd to drain the queue a little */
 			DECLARE_WAITQUEUE(wait, current);
+<<<<<<< HEAD
 			set_current_state(TASK_INTERRUPTIBLE);
+=======
+			set_current_state(TASK_UNINTERRUPTIBLE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			add_wait_queue(&audit_backlog_wait, &wait);
 
 			if (audit_backlog_limit &&
@@ -1190,7 +1238,11 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
 			remove_wait_queue(&audit_backlog_wait, &wait);
 			continue;
 		}
+<<<<<<< HEAD
 		if (audit_rate_check())
+=======
+		if (audit_rate_check() && printk_ratelimit())
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			printk(KERN_WARNING
 			       "audit: audit_backlog=%d > "
 			       "audit_backlog_limit=%d\n",

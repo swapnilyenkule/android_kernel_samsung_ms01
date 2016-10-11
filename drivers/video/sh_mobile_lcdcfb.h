@@ -84,6 +84,10 @@ struct sh_mobile_lcdc_chan {
 
 	unsigned long base_addr_y;
 	unsigned long base_addr_c;
+<<<<<<< HEAD
+=======
+	unsigned int line_size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	int (*notify)(struct sh_mobile_lcdc_chan *ch,
 		      enum sh_mobile_lcdc_entity_event event,

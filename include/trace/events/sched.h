@@ -51,6 +51,7 @@ TRACE_EVENT(sched_kthread_stop_ret,
 );
 
 /*
+<<<<<<< HEAD
  * Tracepoint for task enqueue/dequeue:
  */
 TRACE_EVENT(sched_enq_deq_task,
@@ -89,6 +90,8 @@ TRACE_EVENT(sched_enq_deq_task,
 );
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Tracepoint for waking up a task:
  */
 DECLARE_EVENT_CLASS(sched_wakeup_template,
@@ -182,7 +185,11 @@ TRACE_EVENT(sched_switch,
 		  __print_flags(__entry->prev_state & (TASK_STATE_MAX-1), "|",
 				{ 1, "S"} , { 2, "D" }, { 4, "T" }, { 8, "t" },
 				{ 16, "Z" }, { 32, "X" }, { 64, "x" },
+<<<<<<< HEAD
 				{ 128, "K" }, { 256, "W" }, { 512, "P" }) : "R",
+=======
+				{ 128, "W" }) : "R",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__entry->prev_state & TASK_STATE_MAX ? "+" : "",
 		__entry->next_comm, __entry->next_pid, __entry->next_prio)
 );
@@ -217,6 +224,7 @@ TRACE_EVENT(sched_migrate_task,
 		  __entry->orig_cpu, __entry->dest_cpu)
 );
 
+<<<<<<< HEAD
 /*
  * Tracepoint for a CPU going offline/online:
  */
@@ -292,6 +300,8 @@ TRACE_EVENT(sched_load_balance,
 		  __entry->balance_interval)
 );
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 DECLARE_EVENT_CLASS(sched_process_template,
 
 	TP_PROTO(struct task_struct *p),

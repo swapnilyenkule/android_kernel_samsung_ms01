@@ -26,18 +26,47 @@
  */
 static const unsigned max_num_devices = 32;
 
+<<<<<<< HEAD
 /*-- Configurable parameters */
 
+=======
+/*
+ * Stored at beginning of each compressed object.
+ *
+ * It stores back-reference to table entry which points to this
+ * object. This is required to support memory defragmentation.
+ */
+struct zobj_header {
+#if 0
+	u32 table_idx;
+#endif
+};
+
+/*-- Configurable parameters */
+
+/* Default zram disk size: 25% of total RAM */
+static const unsigned default_disksize_perc_ram = 25;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Pages that compress to size greater than this are stored
  * uncompressed in memory.
  */
+<<<<<<< HEAD
 static const size_t max_zpage_size = PAGE_SIZE / 10 * 9;
 
 /*
  * NOTE: max_zpage_size must be less than or equal to:
  *   ZS_MAX_ALLOC_SIZE. Otherwise, zs_malloc() would
  * always return failure.
+=======
+static const size_t max_zpage_size = PAGE_SIZE / 4 * 3;
+
+/*
+ * NOTE: max_zpage_size must be less than or equal to:
+ *   ZS_MAX_ALLOC_SIZE - sizeof(struct zobj_header)
+ * otherwise, xv_malloc() would always return failure.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 
 /*-- End of configurable params */
@@ -53,6 +82,12 @@ static const size_t max_zpage_size = PAGE_SIZE / 10 * 9;
 
 /* Flags for zram pages (table[page_no].flags) */
 enum zram_pageflags {
+<<<<<<< HEAD
+=======
+	/* Page is stored uncompressed */
+	ZRAM_UNCOMPRESSED,
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Page consists entirely of zeros */
 	ZRAM_ZERO,
 
@@ -63,6 +98,7 @@ enum zram_pageflags {
 
 /* Allocated for each disk page */
 struct table {
+<<<<<<< HEAD
 	unsigned long handle;
 	u16 size;	/* object size (excluding header) */
 	u8 count;	/* object ref count (not yet used) */
@@ -108,6 +144,36 @@ struct zram {
 	struct work_struct free_work;  /* handle pending free request */
 	struct zram_slot_free *slot_free_rq; /* list head of free request */
 
+=======
+	void *handle;
+	u16 size;	/* object size (excluding header) */
+	u8 count;	/* object ref count (not yet used) */
+	u8 flags;
+} __attribute__((aligned(4)));
+
+struct zram_stats {
+	u64 compr_size;		/* compressed size of pages stored */
+	u64 num_reads;		/* failed + successful */
+	u64 num_writes;		/* --do-- */
+	u64 failed_reads;	/* should NEVER! happen */
+	u64 failed_writes;	/* can happen when memory is too low */
+	u64 invalid_io;		/* non-page-aligned I/O requests */
+	u64 notify_free;	/* no. of swap slot free notifications */
+	u32 pages_zero;		/* no. of zero filled pages */
+	u32 pages_stored;	/* no. of pages currently stored */
+	u32 good_compress;	/* % of pages with compression ratio<=50% */
+	u32 pages_expand;	/* % of incompressible pages */
+};
+
+struct zram {
+	struct zs_pool *mem_pool;
+	void *compress_workmem;
+	void *compress_buffer;
+	struct table *table;
+	spinlock_t stat64_lock;	/* protect 64-bit stats */
+	struct rw_semaphore lock; /* protect compression buffers and table
+				   * against concurrent read and writes */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct request_queue *queue;
 	struct gendisk *disk;
 	int init_done;
@@ -118,8 +184,24 @@ struct zram {
 	 * we can store in a disk.
 	 */
 	u64 disksize;	/* bytes */
+<<<<<<< HEAD
 	spinlock_t slot_free_lock;
 
 	struct zram_stats stats;
 };
+=======
+
+	struct zram_stats stats;
+};
+
+extern struct zram *zram_devices;
+unsigned int zram_get_num_devices(void);
+#ifdef CONFIG_SYSFS
+extern struct attribute_group zram_disk_attr_group;
+#endif
+
+extern int zram_init_device(struct zram *zram);
+extern void __zram_reset_device(struct zram *zram);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

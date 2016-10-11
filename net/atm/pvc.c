@@ -95,6 +95,10 @@ static int pvc_getname(struct socket *sock, struct sockaddr *sockaddr,
 		return -ENOTCONN;
 	*sockaddr_len = sizeof(struct sockaddr_atmpvc);
 	addr = (struct sockaddr_atmpvc *)sockaddr;
+<<<<<<< HEAD
+=======
+	memset(addr, 0, sizeof(*addr));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	addr->sap_family = AF_ATMPVC;
 	addr->sap_addr.itf = vcc->dev->number;
 	addr->sap_addr.vpi = vcc->vpi;

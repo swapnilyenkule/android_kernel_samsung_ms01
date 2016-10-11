@@ -15,7 +15,11 @@ struct kvm_lapic {
 	bool irr_pending;
 	void *regs;
 	gpa_t vapic_addr;
+<<<<<<< HEAD
 	struct page *vapic_page;
+=======
+	struct gfn_to_hva_cache vapic_cache;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 int kvm_create_lapic(struct kvm_vcpu *vcpu);
 void kvm_free_lapic(struct kvm_vcpu *vcpu);
@@ -46,7 +50,11 @@ int kvm_lapic_find_highest_irr(struct kvm_vcpu *vcpu);
 u64 kvm_get_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu);
 void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data);
 
+<<<<<<< HEAD
 void kvm_lapic_set_vapic_addr(struct kvm_vcpu *vcpu, gpa_t vapic_addr);
+=======
+int kvm_lapic_set_vapic_addr(struct kvm_vcpu *vcpu, gpa_t vapic_addr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void kvm_lapic_sync_from_vapic(struct kvm_vcpu *vcpu);
 void kvm_lapic_sync_to_vapic(struct kvm_vcpu *vcpu);
 

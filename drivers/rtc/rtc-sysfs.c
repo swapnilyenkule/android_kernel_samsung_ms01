@@ -116,6 +116,7 @@ rtc_sysfs_show_hctosys(struct device *dev, struct device_attribute *attr,
 		return sprintf(buf, "0\n");
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_RTC_AUTO_PWRON
 extern int rtc_get_bootalarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
 static ssize_t
@@ -136,6 +137,8 @@ rtc_sysfs_show_alarm_boot(struct device *dev, struct device_attribute *attr,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct device_attribute rtc_attrs[] = {
 	__ATTR(name, S_IRUGO, rtc_sysfs_show_name, NULL),
 	__ATTR(date, S_IRUGO, rtc_sysfs_show_date, NULL),
@@ -144,9 +147,12 @@ static struct device_attribute rtc_attrs[] = {
 	__ATTR(max_user_freq, S_IRUGO | S_IWUSR, rtc_sysfs_show_max_user_freq,
 			rtc_sysfs_set_max_user_freq),
 	__ATTR(hctosys, S_IRUGO, rtc_sysfs_show_hctosys, NULL),
+<<<<<<< HEAD
 #ifdef CONFIG_RTC_AUTO_PWRON
 	__ATTR(alarm_boot, S_IRUGO, rtc_sysfs_show_alarm_boot, NULL),
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ },
 };
 

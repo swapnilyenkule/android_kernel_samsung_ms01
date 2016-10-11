@@ -162,7 +162,10 @@ struct sock_common {
 	volatile unsigned char	skc_state;
 	unsigned char		skc_reuse;
 	int			skc_bound_dev_if;
+<<<<<<< HEAD
 	int			padding[2];
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	union {
 		struct hlist_node	skc_bind_node;
 		struct hlist_nulls_node skc_portaddr_node;
@@ -217,6 +220,10 @@ struct cg_proto;
   *	@sk_route_nocaps: forbidden route capabilities (e.g NETIF_F_GSO_MASK)
   *	@sk_gso_type: GSO type (e.g. %SKB_GSO_TCPV4)
   *	@sk_gso_max_size: Maximum GSO segment size to build
+<<<<<<< HEAD
+=======
+  *	@sk_gso_max_segs: Maximum number of GSO segments
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
   *	@sk_lingertime: %SO_LINGER l_linger setting
   *	@sk_backlog: always used with the per-socket spinlock held
   *	@sk_callback_lock: used with the callbacks in the end of this struct
@@ -328,8 +335,13 @@ struct sock {
 				sk_no_check  : 2,
 				sk_userlocks : 4,
 				sk_protocol  : 8,
+<<<<<<< HEAD
 #define SK_PROTOCOL_MAX U8_MAX
 				sk_type      : 16;
+=======
+				sk_type      : 16;
+#define SK_PROTOCOL_MAX ((u8)~0U)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kmemcheck_bitfield_end(flags);
 	int			sk_wmem_queued;
 	gfp_t			sk_allocation;
@@ -337,6 +349,10 @@ struct sock {
 	netdev_features_t	sk_route_nocaps;
 	int			sk_gso_type;
 	unsigned int		sk_gso_max_size;
+<<<<<<< HEAD
+=======
+	u16			sk_gso_max_segs;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int			sk_rcvlowat;
 	unsigned long	        sk_lingertime;
 	struct sk_buff_head	sk_error_queue;
@@ -920,7 +936,10 @@ struct proto {
 	void			(*destroy_cgroup)(struct cgroup *cgrp);
 	struct cg_proto		*(*proto_cgroup)(struct mem_cgroup *memcg);
 #endif
+<<<<<<< HEAD
 	int			(*diag_destroy)(struct sock *sk, int err);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 struct cg_proto {
@@ -957,7 +976,11 @@ static inline void sk_refcnt_debug_dec(struct sock *sk)
 	       sk->sk_prot->name, sk, atomic_read(&sk->sk_prot->socks));
 }
 
+<<<<<<< HEAD
 inline void sk_refcnt_debug_release(const struct sock *sk)
+=======
+static inline void sk_refcnt_debug_release(const struct sock *sk)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	if (atomic_read(&sk->sk_refcnt) != 1)
 		printk(KERN_DEBUG "Destruction of the %s socket %p delayed, refcnt=%d\n",

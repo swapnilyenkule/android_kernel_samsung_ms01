@@ -101,9 +101,15 @@ asmlinkage __printf(1, 2) __cold
 int printk(const char *fmt, ...);
 
 /*
+<<<<<<< HEAD
  * Special printk facility for scheduler use only, _DO_NOT_USE_ !
  */
 __printf(1, 2) __cold int printk_sched(const char *fmt, ...);
+=======
+ * Special printk facility for scheduler/timekeeping use only, _DO_NOT_USE_ !
+ */
+__printf(1, 2) __cold int printk_deferred(const char *fmt, ...);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Please don't use printk_ratelimit(), because it shares ratelimiting state
@@ -133,7 +139,11 @@ int printk(const char *s, ...)
 	return 0;
 }
 static inline __printf(1, 2) __cold
+<<<<<<< HEAD
 int printk_sched(const char *s, ...)
+=======
+int printk_deferred(const char *s, ...)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return 0;
 }
@@ -314,9 +324,12 @@ static inline void print_hex_dump_bytes(const char *prefix_str, int prefix_type,
 {
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_GSM_MODEM_SPRD6500)
 extern int get_console_suspended(void);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 #endif

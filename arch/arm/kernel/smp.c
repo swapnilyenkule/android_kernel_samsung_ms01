@@ -19,6 +19,10 @@
 #include <linux/mm.h>
 #include <linux/err.h>
 #include <linux/cpu.h>
+<<<<<<< HEAD
+=======
+#include <linux/smp.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/seq_file.h>
 #include <linux/irq.h>
 #include <linux/percpu.h>
@@ -26,7 +30,10 @@
 #include <linux/completion.h>
 
 #include <linux/atomic.h>
+<<<<<<< HEAD
 #include <asm/smp.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/cacheflush.h>
 #include <asm/cpu.h>
 #include <asm/cputype.h>
@@ -42,10 +49,13 @@
 #include <asm/ptrace.h>
 #include <asm/localtimer.h>
 #include <asm/smp_plat.h>
+<<<<<<< HEAD
 #include <asm/mach/arch.h>
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * as from 2.5, kernels no longer have an init_tasks structure
@@ -55,17 +65,24 @@
 struct secondary_data secondary_data;
 
 enum ipi_msg_type {
+<<<<<<< HEAD
 	IPI_CPU_START = 1,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	IPI_TIMER = 2,
 	IPI_RESCHEDULE,
 	IPI_CALL_FUNC,
 	IPI_CALL_FUNC_SINGLE,
 	IPI_CPU_STOP,
+<<<<<<< HEAD
 	IPI_CPU_BACKTRACE,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static DECLARE_COMPLETION(cpu_running);
 
+<<<<<<< HEAD
 static struct smp_operations smp_ops;
 
 void __init smp_set_ops(struct smp_operations *ops)
@@ -79,6 +96,34 @@ int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *idle)
 	int ret;
 
 	/*
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+{
+	struct cpuinfo_arm *ci = &per_cpu(cpu_data, cpu);
+	struct task_struct *idle = ci->idle;
+	int ret;
+
+	/*
+	 * Spawn a new process manually, if not already done.
+	 * Grab a pointer to its task struct so we can mess with it
+	 */
+	if (!idle) {
+		idle = fork_idle(cpu);
+		if (IS_ERR(idle)) {
+			printk(KERN_ERR "CPU%u: fork() failed\n", cpu);
+			return PTR_ERR(idle);
+		}
+		ci->idle = idle;
+	} else {
+		/*
+		 * Since this idle thread is being re-used, call
+		 * init_idle() to reinitialize the thread structure.
+		 */
+		init_idle(idle, cpu);
+	}
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * We need to tell the secondary core where to find
 	 * its stack and the page tables.
 	 */
@@ -114,6 +159,7 @@ int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *idle)
 	return ret;
 }
 
+<<<<<<< HEAD
 /* platform specific SMP operations */
 void __attribute__((weak)) __init smp_init_cpus(void)
 {
@@ -169,6 +215,11 @@ int __attribute__((weak)) platform_cpu_disable(unsigned int cpu)
 	return cpu == 0 ? -EPERM : 0;
 }
 
+=======
+#ifdef CONFIG_HOTPLUG_CPU
+static void percpu_timer_stop(void);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * __cpu_disable runs on the processor to be shutdown.
  */
@@ -227,7 +278,11 @@ void __cpu_die(unsigned int cpu)
 		pr_err("CPU%u: cpu didn't die\n", cpu);
 		return;
 	}
+<<<<<<< HEAD
 	pr_debug("CPU%u: shutdown\n", cpu);
+=======
+	printk(KERN_NOTICE "CPU%u: shutdown\n", cpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!platform_cpu_kill(cpu))
 		printk("CPU%u: unable to kill\n", cpu);
@@ -285,6 +340,11 @@ static void __cpuinit smp_store_cpu_info(unsigned int cpuid)
 	store_cpu_topology(cpuid);
 }
 
+<<<<<<< HEAD
+=======
+static void percpu_timer_setup(void);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * This is the secondary CPU boot entry.  We're using this CPUs
  * idle thread stack, but a set of temporary page tables.
@@ -292,12 +352,25 @@ static void __cpuinit smp_store_cpu_info(unsigned int cpuid)
 asmlinkage void __cpuinit secondary_start_kernel(void)
 {
 	struct mm_struct *mm = &init_mm;
+<<<<<<< HEAD
 	unsigned int cpu = smp_processor_id();
+=======
+	unsigned int cpu;
+
+	/*
+	 * The identity mapping is uncached (strongly ordered), so
+	 * switch away from it before attempting any exclusive accesses.
+	 */
+	cpu_switch_mm(mm->pgd, mm);
+	enter_lazy_tlb(mm, current);
+	local_flush_tlb_all();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * All kernel threads share the same mm context; grab a
 	 * reference and switch to it.
 	 */
+<<<<<<< HEAD
 	atomic_inc(&mm->mm_count);
 	current->active_mm = mm;
 	cpumask_set_cpu(cpu, mm_cpumask(mm));
@@ -306,6 +379,14 @@ asmlinkage void __cpuinit secondary_start_kernel(void)
 	local_flush_tlb_all();
 
 	pr_debug("CPU%u: Booted secondary processor\n", cpu);
+=======
+	cpu = smp_processor_id();
+	atomic_inc(&mm->mm_count);
+	current->active_mm = mm;
+	cpumask_set_cpu(cpu, mm_cpumask(mm));
+
+	printk("CPU%u: Booted secondary processor\n", cpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	cpu_init();
 	preempt_disable();
@@ -361,6 +442,12 @@ void __init smp_cpus_done(unsigned int max_cpus)
 
 void __init smp_prepare_boot_cpu(void)
 {
+<<<<<<< HEAD
+=======
+	unsigned int cpu = smp_processor_id();
+
+	per_cpu(cpu_data, cpu).idle = current;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void __init smp_prepare_cpus(unsigned int max_cpus)
@@ -417,14 +504,21 @@ void arch_send_call_function_single_ipi(int cpu)
 }
 
 static const char *ipi_types[NR_IPI] = {
+<<<<<<< HEAD
 #define S(x,s)	[x - IPI_CPU_START] = s
 	S(IPI_CPU_START, "CPU start interrupts"),
+=======
+#define S(x,s)	[x - IPI_TIMER] = s
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	S(IPI_TIMER, "Timer broadcast interrupts"),
 	S(IPI_RESCHEDULE, "Rescheduling interrupts"),
 	S(IPI_CALL_FUNC, "Function call interrupts"),
 	S(IPI_CALL_FUNC_SINGLE, "Single function call interrupts"),
 	S(IPI_CPU_STOP, "CPU stop interrupts"),
+<<<<<<< HEAD
 	S(IPI_CPU_BACKTRACE, "CPU backtrace"),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 void show_ipi_list(struct seq_file *p, int prec)
@@ -504,7 +598,11 @@ int local_timer_register(struct local_timer_ops *ops)
 }
 #endif
 
+<<<<<<< HEAD
 void __cpuinit percpu_timer_setup(void)
+=======
+static void __cpuinit percpu_timer_setup(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned int cpu = smp_processor_id();
 	struct clock_event_device *evt = &per_cpu(percpu_clockevent, cpu);
@@ -534,6 +632,7 @@ static void percpu_timer_stop(void)
 
 static DEFINE_RAW_SPINLOCK(stop_lock);
 
+<<<<<<< HEAD
 DEFINE_PER_CPU(struct pt_regs, regs_before_stop);
 /*
  * ipi_cpu_stop - handle IPI from smp_send_stop()
@@ -553,16 +652,36 @@ static void ipi_cpu_stop(unsigned int cpu, struct pt_regs *regs)
 	}
 
 	set_cpu_active(cpu, false);
+=======
+/*
+ * ipi_cpu_stop - handle IPI from smp_send_stop()
+ */
+static void ipi_cpu_stop(unsigned int cpu)
+{
+	if (system_state == SYSTEM_BOOTING ||
+	    system_state == SYSTEM_RUNNING) {
+		raw_spin_lock(&stop_lock);
+		printk(KERN_CRIT "CPU%u: stopping\n", cpu);
+		dump_stack();
+		raw_spin_unlock(&stop_lock);
+	}
+
+	set_cpu_online(cpu, false);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	local_fiq_disable();
 	local_irq_disable();
 
+<<<<<<< HEAD
 	flush_cache_all();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (1)
 		cpu_relax();
 }
 
+<<<<<<< HEAD
 static cpumask_t backtrace_mask;
 static DEFINE_RAW_SPINLOCK(backtrace_lock);
 
@@ -616,6 +735,8 @@ static void ipi_cpu_backtrace(unsigned int cpu, struct pt_regs *regs)
 	}
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Main handler for inter-processor interrupts
  */
@@ -629,6 +750,7 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 	unsigned int cpu = smp_processor_id();
 	struct pt_regs *old_regs = set_irq_regs(regs);
 
+<<<<<<< HEAD
 	if (ipinr >= IPI_CPU_START && ipinr < IPI_CPU_START + NR_IPI)
 		__inc_irq_stat(cpu, ipi_irqs[ipinr - IPI_CPU_START]);
 
@@ -636,6 +758,12 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 	case IPI_CPU_START:
 		/* Wake up from WFI/WFE using SGI */
 		break;
+=======
+	if (ipinr >= IPI_TIMER && ipinr < IPI_TIMER + NR_IPI)
+		__inc_irq_stat(cpu, ipi_irqs[ipinr - IPI_TIMER]);
+
+	switch (ipinr) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case IPI_TIMER:
 		irq_enter();
 		ipi_timer();
@@ -660,6 +788,7 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 
 	case IPI_CPU_STOP:
 		irq_enter();
+<<<<<<< HEAD
 		ipi_cpu_stop(cpu, regs);
 		irq_exit();
 		break;
@@ -668,6 +797,12 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 		ipi_cpu_backtrace(cpu, regs);
 		break;
 
+=======
+		ipi_cpu_stop(cpu);
+		irq_exit();
+		break;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		printk(KERN_CRIT "CPU%u: Unknown IPI message 0x%x\n",
 		       cpu, ipinr);
@@ -678,9 +813,12 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 
 void smp_send_reschedule(int cpu)
 {
+<<<<<<< HEAD
 #if defined(CONFIG_ARCH_MSM8974) || defined(CONFIG_ARCH_MSM8974PRO)
 	WARN_ON(cpu_is_offline(cpu));
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	smp_cross_call(cpumask_of(cpu), IPI_RESCHEDULE);
 }
 
@@ -707,10 +845,17 @@ void smp_send_stop(void)
 
 	/* Wait up to one second for other CPUs to stop */
 	timeout = USEC_PER_SEC;
+<<<<<<< HEAD
 	while (num_active_cpus() > 1 && timeout--)
 		udelay(1);
 
 	if (num_active_cpus() > 1)
+=======
+	while (num_online_cpus() > 1 && timeout--)
+		udelay(1);
+
+	if (num_online_cpus() > 1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pr_warning("SMP: failed to stop secondary CPUs\n");
 
 	smp_kill_cpus(&mask);

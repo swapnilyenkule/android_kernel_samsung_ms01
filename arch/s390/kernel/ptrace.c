@@ -292,7 +292,13 @@ static int __poke_user(struct task_struct *child, addr_t addr, addr_t data)
 		 * psw and gprs are stored on the stack
 		 */
 		if (addr == (addr_t) &dummy->regs.psw.mask &&
+<<<<<<< HEAD
 		    ((data & ~PSW_MASK_USER) != psw_user_bits ||
+=======
+		    (((data^psw_user_bits) & ~PSW_MASK_USER) ||
+		     (((data^psw_user_bits) & PSW_MASK_ASC) &&
+		      ((data|psw_user_bits) & PSW_MASK_ASC) == PSW_MASK_ASC) ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		     ((data & PSW_MASK_EA) && !(data & PSW_MASK_BA))))
 			/* Invalid psw mask. */
 			return -EINVAL;
@@ -595,7 +601,14 @@ static int __poke_user_compat(struct task_struct *child,
 		 */
 		if (addr == (addr_t) &dummy32->regs.psw.mask) {
 			/* Build a 64 bit psw mask from 31 bit mask. */
+<<<<<<< HEAD
 			if ((tmp & ~PSW32_MASK_USER) != psw32_user_bits)
+=======
+			if (((tmp^psw32_user_bits) & ~PSW32_MASK_USER) ||
+			    (((tmp^psw32_user_bits) & PSW32_MASK_ASC) &&
+			     ((tmp|psw32_user_bits) & PSW32_MASK_ASC)
+			     == PSW32_MASK_ASC))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				/* Invalid psw mask. */
 				return -EINVAL;
 			regs->psw.mask = (regs->psw.mask & ~PSW_MASK_USER) |
@@ -719,7 +732,11 @@ asmlinkage long do_syscall_trace_enter(struct pt_regs *regs)
 	long ret = 0;
 
 	/* Do the secure computing check first. */
+<<<<<<< HEAD
 	secure_computing_strict(regs->gprs[2]);
+=======
+	secure_computing(regs->gprs[2]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * The sysc_tracesys code in entry.S stored the system

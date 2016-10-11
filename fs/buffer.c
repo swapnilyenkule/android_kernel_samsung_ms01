@@ -603,6 +603,7 @@ void mark_buffer_dirty_inode(struct buffer_head *bh, struct inode *inode)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_inode);
 
+<<<<<<< HEAD
 void mark_buffer_dirty_inode_sync(struct buffer_head *bh, struct inode *inode)
 {
 	set_buffer_sync_flush(bh);
@@ -610,6 +611,8 @@ void mark_buffer_dirty_inode_sync(struct buffer_head *bh, struct inode *inode)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_inode_sync);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Mark the page dirty, and set it dirty in the radix tree, and mark the inode
  * dirty.
@@ -620,14 +623,24 @@ EXPORT_SYMBOL(mark_buffer_dirty_inode_sync);
 static void __set_page_dirty(struct page *page,
 		struct address_space *mapping, int warn)
 {
+<<<<<<< HEAD
 	spin_lock_irq(&mapping->tree_lock);
+=======
+	unsigned long flags;
+
+	spin_lock_irqsave(&mapping->tree_lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (page->mapping) {	/* Race with truncate? */
 		WARN_ON_ONCE(warn && !PageUptodate(page));
 		account_page_dirtied(page, mapping);
 		radix_tree_tag_set(&mapping->page_tree,
 				page_index(page), PAGECACHE_TAG_DIRTY);
 	}
+<<<<<<< HEAD
 	spin_unlock_irq(&mapping->tree_lock);
+=======
+	spin_unlock_irqrestore(&mapping->tree_lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
 }
 
@@ -957,7 +970,11 @@ init_page_buffers(struct page *page, struct block_device *bdev,
  */
 static int
 grow_dev_page(struct block_device *bdev, sector_t block,
+<<<<<<< HEAD
 		pgoff_t index, int size, int sizebits)
+=======
+	      pgoff_t index, int size, int sizebits, gfp_t gfp)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct inode *inode = bdev->bd_inode;
 	struct page *page;
@@ -966,7 +983,11 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 	int ret = 0;		/* Will call free_more_memory() */
 
 	page = find_or_create_page(inode->i_mapping, index,
+<<<<<<< HEAD
 		(mapping_gfp_mask(inode->i_mapping) & ~__GFP_FS)|__GFP_MOVABLE);
+=======
+		(mapping_gfp_mask(inode->i_mapping) & ~__GFP_FS) | gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!page)
 		return ret;
 
@@ -976,7 +997,12 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 		bh = page_buffers(page);
 		if (bh->b_size == size) {
 			end_block = init_page_buffers(page, bdev,
+<<<<<<< HEAD
 						index << sizebits, size);
+=======
+						(sector_t)index << sizebits,
+						size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto done;
 		}
 		if (!try_to_free_buffers(page))
@@ -997,11 +1023,19 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 	 */
 	spin_lock(&inode->i_mapping->private_lock);
 	link_dev_buffers(page, bh);
+<<<<<<< HEAD
 	end_block = init_page_buffers(page, bdev, index << sizebits, size);
 	spin_unlock(&inode->i_mapping->private_lock);
 done:
 	ret = (block < end_block) ? 1 : -ENXIO;
 
+=======
+	end_block = init_page_buffers(page, bdev, (sector_t)index << sizebits,
+			size);
+	spin_unlock(&inode->i_mapping->private_lock);
+done:
+	ret = (block < end_block) ? 1 : -ENXIO;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 failed:
 	unlock_page(page);
 	page_cache_release(page);
@@ -1013,7 +1047,11 @@ failed:
  * that page was dirty, the buffers are set dirty also.
  */
 static int
+<<<<<<< HEAD
 grow_buffers(struct block_device *bdev, sector_t block, int size)
+=======
+grow_buffers(struct block_device *bdev, sector_t block, int size, gfp_t gfp)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	pgoff_t index;
 	int sizebits;
@@ -1040,11 +1078,20 @@ grow_buffers(struct block_device *bdev, sector_t block, int size)
 	}
 
 	/* Create a page with the proper size buffers.. */
+<<<<<<< HEAD
 	return grow_dev_page(bdev, block, index, size, sizebits);
 }
 
 static struct buffer_head *
 __getblk_slow(struct block_device *bdev, sector_t block, int size)
+=======
+	return grow_dev_page(bdev, block, index, size, sizebits, gfp);
+}
+
+struct buffer_head *
+__getblk_slow(struct block_device *bdev, sector_t block,
+	     unsigned size, gfp_t gfp)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	/* Size must be multiple of hard sectorsize */
 	if (unlikely(size & (bdev_logical_block_size(bdev)-1) ||
@@ -1059,20 +1106,32 @@ __getblk_slow(struct block_device *bdev, sector_t block, int size)
 	}
 
 	for (;;) {
+<<<<<<< HEAD
 		struct buffer_head * bh;
+=======
+		struct buffer_head *bh;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		int ret;
 
 		bh = __find_get_block(bdev, block, size);
 		if (bh)
 			return bh;
 
+<<<<<<< HEAD
 		ret = grow_buffers(bdev, block, size);
+=======
+		ret = grow_buffers(bdev, block, size, gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ret < 0)
 			return NULL;
 		if (ret == 0)
 			free_more_memory();
 	}
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(__getblk_slow);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * The relationship between dirty buffers and dirty pages:
@@ -1136,6 +1195,7 @@ void mark_buffer_dirty(struct buffer_head *bh)
 }
 EXPORT_SYMBOL(mark_buffer_dirty);
 
+<<<<<<< HEAD
 void mark_buffer_dirty_sync(struct buffer_head *bh)
 {
 	WARN_ON_ONCE(!buffer_uptodate(bh));
@@ -1164,6 +1224,8 @@ void mark_buffer_dirty_sync(struct buffer_head *bh)
 }
 EXPORT_SYMBOL(mark_buffer_dirty_sync);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Decrement a buffer_head's reference count.  If all buffers against a page
  * have zero reference count, are clean and unlocked, and if the page is clean
@@ -1351,6 +1413,7 @@ __find_get_block(struct block_device *bdev, sector_t block, unsigned size)
 EXPORT_SYMBOL(__find_get_block);
 
 /*
+<<<<<<< HEAD
  * __getblk will locate (and, if necessary, create) the buffer_head
  * which corresponds to the passed block_device, block and size. The
  * returned buffer has its reference count incremented.
@@ -1360,15 +1423,34 @@ EXPORT_SYMBOL(__find_get_block);
  */
 struct buffer_head *
 __getblk(struct block_device *bdev, sector_t block, unsigned size)
+=======
+ * __getblk_gfp() will locate (and, if necessary, create) the buffer_head
+ * which corresponds to the passed block_device, block and size. The
+ * returned buffer has its reference count incremented.
+ *
+ * __getblk_gfp() will lock up the machine if grow_dev_page's
+ * try_to_free_buffers() attempt is failing.  FIXME, perhaps?
+ */
+struct buffer_head *
+__getblk_gfp(struct block_device *bdev, sector_t block,
+	     unsigned size, gfp_t gfp)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct buffer_head *bh = __find_get_block(bdev, block, size);
 
 	might_sleep();
 	if (bh == NULL)
+<<<<<<< HEAD
 		bh = __getblk_slow(bdev, block, size);
 	return bh;
 }
 EXPORT_SYMBOL(__getblk);
+=======
+		bh = __getblk_slow(bdev, block, size, gfp);
+	return bh;
+}
+EXPORT_SYMBOL(__getblk_gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Do async read-ahead on a buffer..
@@ -1384,6 +1466,7 @@ void __breadahead(struct block_device *bdev, sector_t block, unsigned size)
 EXPORT_SYMBOL(__breadahead);
 
 /**
+<<<<<<< HEAD
  *  __bread() - reads a specified block and returns the bh
  *  @bdev: the block_device to read from
  *  @block: number of block
@@ -1396,12 +1479,34 @@ struct buffer_head *
 __bread(struct block_device *bdev, sector_t block, unsigned size)
 {
 	struct buffer_head *bh = __getblk(bdev, block, size);
+=======
+ *  __bread_gfp() - reads a specified block and returns the bh
+ *  @bdev: the block_device to read from
+ *  @block: number of block
+ *  @size: size (in bytes) to read
+ *  @gfp: page allocation flag
+ *
+ *  Reads a specified block, and returns buffer head that contains it.
+ *  The page cache can be allocated from non-movable area
+ *  not to prevent page migration if you set gfp to zero.
+ *  It returns NULL if the block was unreadable.
+ */
+struct buffer_head *
+__bread_gfp(struct block_device *bdev, sector_t block,
+		   unsigned size, gfp_t gfp)
+{
+	struct buffer_head *bh = __getblk_gfp(bdev, block, size, gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (likely(bh) && !buffer_uptodate(bh))
 		bh = __bread_slow(bh);
 	return bh;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(__bread);
+=======
+EXPORT_SYMBOL(__bread_gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * invalidate_bh_lrus() is called rarely - but not only at unmount.
@@ -1433,6 +1538,7 @@ static bool has_bh_in_lru(int cpu, void *dummy)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void __evict_bh_lru(void *arg)
 {
 	struct bh_lru *b = &get_cpu_var(bh_lrus);
@@ -1464,18 +1570,23 @@ static bool bh_exists_in_lru(int cpu, void *arg)
 	return 0;
 
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void invalidate_bh_lrus(void)
 {
 	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1, GFP_KERNEL);
 }
 EXPORT_SYMBOL_GPL(invalidate_bh_lrus);
 
+<<<<<<< HEAD
 void evict_bh_lrus(struct buffer_head *bh)
 {
 	on_each_cpu_cond(bh_exists_in_lru, __evict_bh_lru, bh, 1, GFP_ATOMIC);
 }
 EXPORT_SYMBOL_GPL(evict_bh_lrus);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void set_bh_page(struct buffer_head *bh,
 		struct page *page, unsigned long offset)
 {
@@ -2051,6 +2162,10 @@ int generic_write_end(struct file *file, struct address_space *mapping,
 			struct page *page, void *fsdata)
 {
 	struct inode *inode = mapping->host;
+<<<<<<< HEAD
+=======
+	loff_t old_size = inode->i_size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int i_size_changed = 0;
 
 	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
@@ -2070,6 +2185,11 @@ int generic_write_end(struct file *file, struct address_space *mapping,
 	unlock_page(page);
 	page_cache_release(page);
 
+<<<<<<< HEAD
+=======
+	if (old_size < pos)
+		pagecache_isize_extended(inode, old_size, pos);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Don't mark the inode dirty under page lock. First, it unnecessarily
 	 * makes the holding time of page lock longer. Second, it forces lock
@@ -2290,6 +2410,14 @@ static int cont_expand_zero(struct file *file, struct address_space *mapping,
 		err = 0;
 
 		balance_dirty_pages_ratelimited(mapping);
+<<<<<<< HEAD
+=======
+
+		if (unlikely(fatal_signal_pending(current))) {
+			err = -EINTR;
+			goto out;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/* page covers the boundary, find the boundary offset */
@@ -2980,11 +3108,14 @@ int submit_bh(int rw, struct buffer_head * bh)
 	bio->bi_end_io = end_bio_bh_io_sync;
 	bio->bi_private = bh;
 
+<<<<<<< HEAD
 	if(buffer_sync_flush(bh)) {
 		rw |= REQ_SYNC;
 		clear_buffer_sync_flush(bh);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bio_get(bio);
 	submit_bio(rw, bio);
 
@@ -3130,6 +3261,7 @@ drop_buffers(struct page *page, struct buffer_head **buffers_to_free)
 	do {
 		if (buffer_write_io_error(bh) && page->mapping)
 			set_bit(AS_EIO, &page->mapping->flags);
+<<<<<<< HEAD
 		if (buffer_busy(bh)) {
 			/*
 			 * Check if the busy failure was due to an
@@ -3139,6 +3271,10 @@ drop_buffers(struct page *page, struct buffer_head **buffers_to_free)
 			if (buffer_busy(bh))
 				goto failed;
 		}
+=======
+		if (buffer_busy(bh))
+			goto failed;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		bh = bh->b_this_page;
 	} while (bh != head);
 

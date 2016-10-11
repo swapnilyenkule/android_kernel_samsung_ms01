@@ -68,6 +68,7 @@ lookup_exec_domain(unsigned int personality)
 				goto out;
 	}
 
+<<<<<<< HEAD
 /*
  * Disable the request_module here to avoid trying to
  * load the personality-8 module, which  doesn't exist,
@@ -76,6 +77,9 @@ lookup_exec_domain(unsigned int personality)
  * to their sepolicy, which is maybe too generous
  */
 #if 0
+=======
+#ifdef CONFIG_MODULES
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	read_unlock(&exec_domains_lock);
 	request_module("personality-%d", pers);
 	read_lock(&exec_domains_lock);

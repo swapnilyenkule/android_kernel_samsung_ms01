@@ -1970,7 +1970,11 @@ sci_io_request_frame_handler(struct isci_request *ireq,
 								      frame_index,
 								      (void **)&frame_buffer);
 
+<<<<<<< HEAD
 			sci_controller_copy_sata_response(&ireq->stp.req,
+=======
+			sci_controller_copy_sata_response(&ireq->stp.rsp,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 							       frame_header,
 							       frame_buffer);
 

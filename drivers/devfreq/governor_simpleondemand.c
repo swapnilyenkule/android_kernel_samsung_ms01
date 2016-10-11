@@ -10,29 +10,44 @@
  */
 
 #include <linux/errno.h>
+<<<<<<< HEAD
 #include <linux/module.h>
 #include <linux/devfreq.h>
 #include <linux/math64.h>
 #include "governor.h"
+=======
+#include <linux/devfreq.h>
+#include <linux/math64.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Default constants for DevFreq-Simple-Ondemand (DFSO) */
 #define DFSO_UPTHRESHOLD	(90)
 #define DFSO_DOWNDIFFERENCTIAL	(5)
 static int devfreq_simple_ondemand_func(struct devfreq *df,
+<<<<<<< HEAD
 					unsigned long *freq,
 					u32 *flag)
 {
 	struct devfreq_dev_status stat;
 	int err;
+=======
+					unsigned long *freq)
+{
+	struct devfreq_dev_status stat;
+	int err = df->profile->get_dev_status(df->dev.parent, &stat);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long long a, b;
 	unsigned int dfso_upthreshold = DFSO_UPTHRESHOLD;
 	unsigned int dfso_downdifferential = DFSO_DOWNDIFFERENCTIAL;
 	struct devfreq_simple_ondemand_data *data = df->data;
 	unsigned long max = (df->max_freq) ? df->max_freq : UINT_MAX;
 
+<<<<<<< HEAD
 	stat.private_data = NULL;
 
 	err = df->profile->get_dev_status(df->dev.parent, &stat);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err)
 		return err;
 
@@ -94,6 +109,7 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 	return 0;
 }
 
+<<<<<<< HEAD
 static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
 				unsigned int event, void *data)
 {
@@ -149,3 +165,9 @@ static void __exit devfreq_simple_ondemand_exit(void)
 }
 module_exit(devfreq_simple_ondemand_exit);
 MODULE_LICENSE("GPL");
+=======
+const struct devfreq_governor devfreq_simple_ondemand = {
+	.name = "simple_ondemand",
+	.get_target_freq = devfreq_simple_ondemand_func,
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

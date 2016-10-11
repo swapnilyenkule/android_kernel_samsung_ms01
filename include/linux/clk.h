@@ -101,6 +101,7 @@ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb);
 struct clk *clk_get(struct device *dev, const char *id);
 
 /**
+<<<<<<< HEAD
  * devm_clk_get - Resource managed clk_get()
  * @dev: device for clk "consumer"
  * @id: clk ID.
@@ -111,6 +112,8 @@ struct clk *clk_get(struct device *dev, const char *id);
 struct clk *devm_clk_get(struct device *dev, const char *id);
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * clk_prepare - prepare a clock source
  * @clk: clock source
  *
@@ -216,7 +219,10 @@ unsigned long clk_get_rate(struct clk *clk);
  */
 void clk_put(struct clk *clk);
 
+<<<<<<< HEAD
 int clock_debug_print_clock2(struct clk *c);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * The remaining APIs are optional for machine class support.

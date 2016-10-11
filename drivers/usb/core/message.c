@@ -1535,7 +1535,11 @@ static int usb_if_uevent(struct device *dev, struct kobj_uevent_env *env)
 
 	if (add_uevent_var(env,
 		   "MODALIAS=usb:"
+<<<<<<< HEAD
 		   "v%04Xp%04Xd%04Xdc%02Xdsc%02Xdp%02Xic%02Xisc%02Xip%02Xin%02X",
+=======
+		   "v%04Xp%04Xd%04Xdc%02Xdsc%02Xdp%02Xic%02Xisc%02Xip%02X",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		   le16_to_cpu(usb_dev->descriptor.idVendor),
 		   le16_to_cpu(usb_dev->descriptor.idProduct),
 		   le16_to_cpu(usb_dev->descriptor.bcdDevice),
@@ -1544,8 +1548,12 @@ static int usb_if_uevent(struct device *dev, struct kobj_uevent_env *env)
 		   usb_dev->descriptor.bDeviceProtocol,
 		   alt->desc.bInterfaceClass,
 		   alt->desc.bInterfaceSubClass,
+<<<<<<< HEAD
 		   alt->desc.bInterfaceProtocol,
 		   alt->desc.bInterfaceNumber))
+=======
+		   alt->desc.bInterfaceProtocol))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -ENOMEM;
 
 	return 0;
@@ -1771,6 +1779,7 @@ free_interfaces:
 		goto free_interfaces;
 	}
 
+<<<<<<< HEAD
 	dev->actconfig = cp;
 	if (cp)
 		usb_notify_config_device(dev);
@@ -1796,6 +1805,10 @@ free_interfaces:
 	usb_set_device_state(dev, USB_STATE_CONFIGURED);
 
 	/* Initialize the new interface structures and the
+=======
+	/*
+	 * Initialize the new interface structures and the
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * hc/hcd/usbcore interface/endpoint state.
 	 */
 	for (i = 0; i < nintf; ++i) {
@@ -1807,7 +1820,10 @@ free_interfaces:
 		intfc = cp->intf_cache[i];
 		intf->altsetting = intfc->altsetting;
 		intf->num_altsetting = intfc->num_altsetting;
+<<<<<<< HEAD
 		intf->intf_assoc = find_iad(dev, cp, i);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kref_get(&intfc->ref);
 
 		alt = usb_altnum_to_altsetting(intf, 0);
@@ -1820,6 +1836,11 @@ free_interfaces:
 		if (!alt)
 			alt = &intf->altsetting[0];
 
+<<<<<<< HEAD
+=======
+		intf->intf_assoc =
+			find_iad(dev, cp, alt->desc.bInterfaceNumber);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		intf->cur_altsetting = alt;
 		usb_enable_interface(dev, intf, true);
 		intf->dev.parent = &dev->dev;
@@ -1838,6 +1859,38 @@ free_interfaces:
 	}
 	kfree(new_interfaces);
 
+<<<<<<< HEAD
+=======
+	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+			      USB_REQ_SET_CONFIGURATION, 0, configuration, 0,
+			      NULL, 0, USB_CTRL_SET_TIMEOUT);
+	if (ret < 0 && cp) {
+		/*
+		 * All the old state is gone, so what else can we do?
+		 * The device is probably useless now anyway.
+		 */
+		usb_hcd_alloc_bandwidth(dev, NULL, NULL, NULL);
+		for (i = 0; i < nintf; ++i) {
+			usb_disable_interface(dev, cp->interface[i], true);
+			put_device(&cp->interface[i]->dev);
+			cp->interface[i] = NULL;
+		}
+		cp = NULL;
+	}
+
+	dev->actconfig = cp;
+	mutex_unlock(hcd->bandwidth_mutex);
+
+	if (!cp) {
+		usb_set_device_state(dev, USB_STATE_ADDRESS);
+
+		/* Leave LPM disabled while the device is unconfigured. */
+		usb_autosuspend_device(dev);
+		return ret;
+	}
+	usb_set_device_state(dev, USB_STATE_CONFIGURED);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cp->string == NULL &&
 			!(dev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
 		cp->string = usb_cache_string(dev, cp->desc.iConfiguration);

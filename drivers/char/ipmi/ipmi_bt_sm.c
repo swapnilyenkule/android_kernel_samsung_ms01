@@ -95,9 +95,15 @@ struct si_sm_data {
 	enum bt_states	state;
 	unsigned char	seq;		/* BT sequence number */
 	struct si_sm_io	*io;
+<<<<<<< HEAD
 	unsigned char	write_data[IPMI_MAX_MSG_LENGTH];
 	int		write_count;
 	unsigned char	read_data[IPMI_MAX_MSG_LENGTH];
+=======
+	unsigned char	write_data[IPMI_MAX_MSG_LENGTH + 2]; /* +2 for memcpy */
+	int		write_count;
+	unsigned char	read_data[IPMI_MAX_MSG_LENGTH + 2]; /* +2 for memcpy */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int		read_count;
 	int		truncated;
 	long		timeout;	/* microseconds countdown */
@@ -352,7 +358,11 @@ static inline void write_all_bytes(struct si_sm_data *bt)
 
 static inline int read_all_bytes(struct si_sm_data *bt)
 {
+<<<<<<< HEAD
 	unsigned char i;
+=======
+	unsigned int i;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * length is "framing info", minimum = 4: NetFn, Seq, Cmd, cCode.

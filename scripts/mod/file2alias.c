@@ -156,7 +156,11 @@ static void device_id_check(const char *modname, const char *device_id,
 }
 
 /* USB is special because the bcdDevice can be matched against a numeric range */
+<<<<<<< HEAD
 /* Looks like "usb:vNpNdNdcNdscNdpNicNiscNipNinN" */
+=======
+/* Looks like "usb:vNpNdNdcNdscNdpNicNiscNipN" */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void do_usb_entry(struct usb_device_id *id,
 			 unsigned int bcdDevice_initial, int bcdDevice_initial_digits,
 			 unsigned char range_lo, unsigned char range_hi,
@@ -186,8 +190,13 @@ static void do_usb_entry(struct usb_device_id *id,
 				range_lo < 0x9 ? "[%X-9" : "[%X",
 				range_lo);
 			sprintf(alias + strlen(alias),
+<<<<<<< HEAD
 				range_hi > 0xA ? "a-%X]" : "%X]",
 				range_lo);
+=======
+				range_hi > 0xA ? "A-%X]" : "%X]",
+				range_hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 	if (bcdDevice_initial_digits < (sizeof(id->bcdDevice_lo) * 2 - 1))
@@ -210,9 +219,12 @@ static void do_usb_entry(struct usb_device_id *id,
 	ADD(alias, "ip",
 	    id->match_flags&USB_DEVICE_ID_MATCH_INT_PROTOCOL,
 	    id->bInterfaceProtocol);
+<<<<<<< HEAD
 	ADD(alias, "in",
 	    id->match_flags&USB_DEVICE_ID_MATCH_INT_NUMBER,
 	    id->bInterfaceNumber);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	add_wildcard(alias);
 	buf_printf(&mod->dev_table_buf,

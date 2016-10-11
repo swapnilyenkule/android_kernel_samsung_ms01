@@ -50,10 +50,13 @@ source "drivers/i2c/Kconfig"
 
 source "drivers/spi/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/spmi/Kconfig"
 
 source "drivers/slimbus/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/hsi/Kconfig"
 
 source "drivers/pps/Kconfig"
@@ -100,8 +103,11 @@ source "drivers/memstick/Kconfig"
 
 source "drivers/leds/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/switch/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/accessibility/Kconfig"
 
 source "drivers/infiniband/Kconfig"
@@ -136,8 +142,11 @@ source "drivers/hwspinlock/Kconfig"
 
 source "drivers/clocksource/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/motor/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/iommu/Kconfig"
 
 source "drivers/remoteproc/Kconfig"
@@ -148,6 +157,7 @@ source "drivers/virt/Kconfig"
 
 source "drivers/devfreq/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/gud/Kconfig"
 
 source "drivers/coresight/Kconfig"
@@ -173,4 +183,6 @@ source "drivers/extcon/Kconfig"
 source "drivers/irda/Kconfig"
 
 source "drivers/secfilter/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endmenu

@@ -23,7 +23,10 @@
 #include <linux/mod_devicetable.h>
 #include <linux/slab.h>
 #include <linux/kthread.h>
+<<<<<<< HEAD
 #include <linux/fprint_secure.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * INTERFACES between SPI master-side drivers and SPI infrastructure.
@@ -632,11 +635,15 @@ extern int spi_sync(struct spi_device *spi, struct spi_message *message);
 extern int spi_sync_locked(struct spi_device *spi, struct spi_message *message);
 extern int spi_bus_lock(struct spi_master *master);
 extern int spi_bus_unlock(struct spi_master *master);
+<<<<<<< HEAD
 #ifdef ENABLE_SENSORS_FPRINT_SECURE
 extern int fp_spi_clock_set_rate(struct spi_device *spidev);
 extern int fp_spi_clock_enable(struct spi_device *spidev);
 extern int fp_spi_clock_disable(struct spi_device *spidev);
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * spi_write - SPI synchronous write
  * @spi: device to which data will be written

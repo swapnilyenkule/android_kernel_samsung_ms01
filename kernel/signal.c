@@ -160,7 +160,11 @@ void recalc_sigpending(void)
 
 #define SYNCHRONOUS_MASK \
 	(sigmask(SIGSEGV) | sigmask(SIGBUS) | sigmask(SIGILL) | \
+<<<<<<< HEAD
 	 sigmask(SIGTRAP) | sigmask(SIGFPE) | sigmask(SIGSYS))
+=======
+	 sigmask(SIGTRAP) | sigmask(SIGFPE))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int next_signal(struct sigpending *pending, sigset_t *mask)
 {
@@ -482,7 +486,11 @@ flush_signal_handlers(struct task_struct *t, int force_default)
 		if (force_default || ka->sa.sa_handler != SIG_IGN)
 			ka->sa.sa_handler = SIG_DFL;
 		ka->sa.sa_flags = 0;
+<<<<<<< HEAD
 #ifdef SA_RESTORER
+=======
+#ifdef __ARCH_HAS_SA_RESTORER
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ka->sa.sa_restorer = NULL;
 #endif
 		sigemptyset(&ka->sa.sa_mask);
@@ -2708,6 +2716,7 @@ int copy_siginfo_to_user(siginfo_t __user *to, siginfo_t *from)
 		err |= __put_user(from->si_uid, &to->si_uid);
 		err |= __put_user(from->si_ptr, &to->si_ptr);
 		break;
+<<<<<<< HEAD
 #ifdef __ARCH_SIGSYS
 	case __SI_SYS:
 		err |= __put_user(from->si_call_addr, &to->si_call_addr);
@@ -2715,6 +2724,8 @@ int copy_siginfo_to_user(siginfo_t __user *to, siginfo_t *from)
 		err |= __put_user(from->si_arch, &to->si_arch);
 		break;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default: /* this is just in case for now ... */
 		err |= __put_user(from->si_pid, &to->si_pid);
 		err |= __put_user(from->si_uid, &to->si_uid);
@@ -2874,7 +2885,11 @@ do_send_specific(pid_t tgid, pid_t pid, int sig, struct siginfo *info)
 
 static int do_tkill(pid_t tgid, pid_t pid, int sig)
 {
+<<<<<<< HEAD
 	struct siginfo info;
+=======
+	struct siginfo info = {};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	info.si_signo = sig;
 	info.si_errno = 0;

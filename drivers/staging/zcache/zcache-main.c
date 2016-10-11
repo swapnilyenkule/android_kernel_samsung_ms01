@@ -1259,6 +1259,7 @@ static int zcache_pampd_get_data_and_free(char *data, size_t *bufsize, bool raw,
 					void *pampd, struct tmem_pool *pool,
 					struct tmem_oid *oid, uint32_t index)
 {
+<<<<<<< HEAD
 	int ret = 0;
 
 	BUG_ON(!is_ephemeral(pool));
@@ -1266,6 +1267,14 @@ static int zcache_pampd_get_data_and_free(char *data, size_t *bufsize, bool raw,
 	zbud_free_and_delist((struct zbud_hdr *)pampd);
 	atomic_dec(&zcache_curr_eph_pampd_count);
 	return ret;
+=======
+	BUG_ON(!is_ephemeral(pool));
+	if (zbud_decompress((struct page *)(data), pampd) < 0)
+		return -EINVAL;
+	zbud_free_and_delist((struct zbud_hdr *)pampd);
+	atomic_dec(&zcache_curr_eph_pampd_count);
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -1835,7 +1844,11 @@ static int zcache_frontswap_poolid = -1;
  * Swizzling increases objects per swaptype, increasing tmem concurrency
  * for heavy swaploads.  Later, larger nr_cpus -> larger SWIZ_BITS
  * Setting SWIZ_BITS to 27 basically reconstructs the swap entry from
+<<<<<<< HEAD
  * frontswap_load(), but has side-effects. Hence using 8.
+=======
+ * frontswap_get_page(), but has side-effects. Hence using 8.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 #define SWIZ_BITS		8
 #define SWIZ_MASK		((1 << SWIZ_BITS) - 1)
@@ -1849,7 +1862,11 @@ static inline struct tmem_oid oswiz(unsigned type, u32 ind)
 	return oid;
 }
 
+<<<<<<< HEAD
 static int zcache_frontswap_store(unsigned type, pgoff_t offset,
+=======
+static int zcache_frontswap_put_page(unsigned type, pgoff_t offset,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				   struct page *page)
 {
 	u64 ind64 = (u64)offset;
@@ -1870,7 +1887,11 @@ static int zcache_frontswap_store(unsigned type, pgoff_t offset,
 
 /* returns 0 if the page was successfully gotten from frontswap, -1 if
  * was not present (should never happen!) */
+<<<<<<< HEAD
 static int zcache_frontswap_load(unsigned type, pgoff_t offset,
+=======
+static int zcache_frontswap_get_page(unsigned type, pgoff_t offset,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				   struct page *page)
 {
 	u64 ind64 = (u64)offset;
@@ -1919,8 +1940,13 @@ static void zcache_frontswap_init(unsigned ignored)
 }
 
 static struct frontswap_ops zcache_frontswap_ops = {
+<<<<<<< HEAD
 	.store = zcache_frontswap_store,
 	.load = zcache_frontswap_load,
+=======
+	.put_page = zcache_frontswap_put_page,
+	.get_page = zcache_frontswap_get_page,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.invalidate_page = zcache_frontswap_flush_page,
 	.invalidate_area = zcache_frontswap_flush_area,
 	.init = zcache_frontswap_init

@@ -145,7 +145,11 @@ config MEMORY_HOTPLUG
 	bool "Allow for memory hot-add"
 	depends on SPARSEMEM || X86_64_ACPI_NUMA
 	depends on HOTPLUG && ARCH_ENABLE_MEMORY_HOTPLUG
+<<<<<<< HEAD
 	depends on (IA64 || X86 || PPC_BOOK3S_64 || SUPERH || S390 || ARM)
+=======
+	depends on (IA64 || X86 || PPC_BOOK3S_64 || SUPERH || S390)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config MEMORY_HOTPLUG_SPARSE
 	def_bool y
@@ -198,7 +202,11 @@ config COMPACTION
 config MIGRATION
 	bool "Page migration"
 	def_bool y
+<<<<<<< HEAD
 	depends on NUMA || ARCH_ENABLE_MEMORY_HOTREMOVE || COMPACTION || CMA
+=======
+	depends on NUMA || ARCH_ENABLE_MEMORY_HOTREMOVE || COMPACTION
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Allows the migration of the physical location of pages of processes
 	  while the virtual addresses are not changed. This is useful in
@@ -379,6 +387,7 @@ config CLEANCACHE
 	  in a negligible performance hit.
 
 	  If unsure, say Y to enable cleancache
+<<<<<<< HEAD
 
 config FRONTSWAP
 	bool "Enable frontswap to cache swap pages if tmem is present"
@@ -502,3 +511,5 @@ config MIN_DIRTY_THRESH_PAGES
 	  It is only effective when dirty_ratio is used. (Setting dirty_bytes
 	  disables this option.)
 	  Do not use it if you unsure.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

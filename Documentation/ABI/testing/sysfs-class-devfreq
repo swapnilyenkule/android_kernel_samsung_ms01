@@ -11,7 +11,11 @@ What:		/sys/class/devfreq/.../governor
 Date:		September 2011
 Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
 Description:
+<<<<<<< HEAD
 		The /sys/class/devfreq/.../governor show or set the name of the
+=======
+		The /sys/class/devfreq/.../governor shows the name of the
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		governor used by the corresponding devfreq object.
 
 What:		/sys/class/devfreq/.../cur_freq
@@ -19,6 +23,7 @@ Date:		September 2011
 Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
 Description:
 		The /sys/class/devfreq/.../cur_freq shows the current
+<<<<<<< HEAD
 		frequency of the corresponding devfreq object. Same as
 		target_freq when get_cur_freq() is not implemented by
 		devfreq driver.
@@ -29,6 +34,17 @@ Contact:	Rajagopal Venkat <rajagopal.venkat@linaro.org>
 Description:
 		The /sys/class/devfreq/.../target_freq shows the next governor
 		predicted target frequency of the corresponding devfreq object.
+=======
+		frequency of the corresponding devfreq object.
+
+What:		/sys/class/devfreq/.../central_polling
+Date:		September 2011
+Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
+Description:
+		The /sys/class/devfreq/.../central_polling shows whether
+		the devfreq ojbect is using devfreq-provided central
+		polling mechanism or not.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 What:		/sys/class/devfreq/.../polling_interval
 Date:		September 2011
@@ -44,6 +60,7 @@ Description:
 		(/sys/class/devfreq/.../central_polling is 0), this value
 		may be useless.
 
+<<<<<<< HEAD
 What:		/sys/class/devfreq/.../trans_stat
 Date:		October 2012
 Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
@@ -55,6 +72,8 @@ Descrtiption:
 		driver should provide the list of available frequencies
 		with its profile.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 What:		/sys/class/devfreq/.../userspace/set_freq
 Date:		September 2011
 Contact:	MyungJoo Ham <myungjoo.ham@samsung.com>
@@ -62,6 +81,7 @@ Description:
 		The /sys/class/devfreq/.../userspace/set_freq shows and
 		sets the requested frequency for the devfreq object if
 		userspace governor is in effect.
+<<<<<<< HEAD
 
 What:		/sys/class/devfreq/.../available_frequencies
 Date:		October 2012
@@ -78,3 +98,5 @@ Contact:	Nishanth Menon <nm@ti.com>
 Description:
 		The /sys/class/devfreq/.../available_governors shows
 		currently available governors in the system.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -14,12 +14,15 @@ extern struct pglist_data *node_data[];
 
 #include <asm/numaq.h>
 
+<<<<<<< HEAD
 extern void resume_map_numa_kva(pgd_t *pgd);
 
 #else /* !CONFIG_NUMA */
 
 static inline void resume_map_numa_kva(pgd_t *pgd) {}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* CONFIG_NUMA */
 
 #ifdef CONFIG_DISCONTIGMEM

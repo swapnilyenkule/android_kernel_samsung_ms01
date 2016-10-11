@@ -69,6 +69,13 @@ int qib_alloc_lkey(struct qib_lkey_table *rkt, struct qib_mregion *mr)
 	 * unrestricted LKEY.
 	 */
 	rkt->gen++;
+<<<<<<< HEAD
+=======
+	/*
+	 * bits are capped in qib_verbs.c to insure enough bits
+	 * for generation number
+	 */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mr->lkey = (r << (32 - ib_qib_lkey_table_size)) |
 		((((1 << (24 - ib_qib_lkey_table_size)) - 1) & rkt->gen)
 		 << 8);

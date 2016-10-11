@@ -1233,6 +1233,7 @@ static int au1200fb_fb_blank(int blank_mode, struct fb_info *fbi)
  * method mainly to allow the use of the TLB streaming flag (CCA=6)
  */
 static int au1200fb_fb_mmap(struct fb_info *info, struct vm_area_struct *vma)
+<<<<<<< HEAD
 
 {
 	unsigned int len;
@@ -1255,14 +1256,23 @@ static int au1200fb_fb_mmap(struct fb_info *info, struct vm_area_struct *vma)
 	off += start;
 	vma->vm_pgoff = off >> PAGE_SHIFT;
 
+=======
+{
+	struct au1200fb_device *fbdev = info->par;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
 	pgprot_val(vma->vm_page_prot) |= _CACHE_MASK; /* CCA=7 */
 
 	vma->vm_flags |= VM_IO;
 
+<<<<<<< HEAD
 	return io_remap_pfn_range(vma, vma->vm_start, off >> PAGE_SHIFT,
 				  vma->vm_end - vma->vm_start,
 				  vma->vm_page_prot);
+=======
+	return vm_iomap_memory(vma, fbdev->fb_phys, fbdev->fb_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }

@@ -62,12 +62,31 @@ struct cache_type_info {
 };
 
 /* These are used to index the cache_type_info array. */
+<<<<<<< HEAD
 #define CACHE_TYPE_UNIFIED     0
 #define CACHE_TYPE_INSTRUCTION 1
 #define CACHE_TYPE_DATA        2
 
 static const struct cache_type_info cache_type_info[] = {
 	{
+=======
+#define CACHE_TYPE_UNIFIED     0 /* cache-size, cache-block-size, etc. */
+#define CACHE_TYPE_UNIFIED_D   1 /* d-cache-size, d-cache-block-size, etc */
+#define CACHE_TYPE_INSTRUCTION 2
+#define CACHE_TYPE_DATA        3
+
+static const struct cache_type_info cache_type_info[] = {
+	{
+		/* Embedded systems that use cache-size, cache-block-size,
+		 * etc. for the Unified (typically L2) cache. */
+		.name            = "Unified",
+		.size_prop       = "cache-size",
+		.line_size_props = { "cache-line-size",
+				     "cache-block-size", },
+		.nr_sets_prop    = "cache-sets",
+	},
+	{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* PowerPC Processor binding says the [di]-cache-*
 		 * must be equal on unified caches, so just use
 		 * d-cache properties. */
@@ -293,7 +312,12 @@ static struct cache *cache_find_first_sibling(struct cache *cache)
 {
 	struct cache *iter;
 
+<<<<<<< HEAD
 	if (cache->type == CACHE_TYPE_UNIFIED)
+=======
+	if (cache->type == CACHE_TYPE_UNIFIED ||
+	    cache->type == CACHE_TYPE_UNIFIED_D)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return cache;
 
 	list_for_each_entry(iter, &cache_list, list)
@@ -324,6 +348,7 @@ static bool cache_node_is_unified(const struct device_node *np)
 	return of_get_property(np, "cache-unified", NULL);
 }
 
+<<<<<<< HEAD
 static struct cache *__cpuinit cache_do_one_devnode_unified(struct device_node *node, int level)
 {
 	struct cache *cache;
@@ -333,6 +358,29 @@ static struct cache *__cpuinit cache_do_one_devnode_unified(struct device_node *
 	cache = new_cache(CACHE_TYPE_UNIFIED, level, node);
 
 	return cache;
+=======
+/*
+ * Unified caches can have two different sets of tags.  Most embedded
+ * use cache-size, etc. for the unified cache size, but open firmware systems
+ * use d-cache-size, etc.   Check on initialization for which type we have, and
+ * return the appropriate structure type.  Assume it's embedded if it isn't
+ * open firmware.  If it's yet a 3rd type, then there will be missing entries
+ * in /sys/devices/system/cpu/cpu0/cache/index2/, and this code will need
+ * to be extended further.
+ */
+static int cache_is_unified_d(const struct device_node *np)
+{
+	return of_get_property(np,
+		cache_type_info[CACHE_TYPE_UNIFIED_D].size_prop, NULL) ?
+		CACHE_TYPE_UNIFIED_D : CACHE_TYPE_UNIFIED;
+}
+
+static struct cache *__cpuinit cache_do_one_devnode_unified(struct device_node *node, int level)
+{
+	pr_debug("creating L%d ucache for %s\n", level, node->full_name);
+
+	return new_cache(cache_is_unified_d(node), level, node);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static struct cache *__cpuinit cache_do_one_devnode_split(struct device_node *node, int level)
@@ -788,6 +836,12 @@ static void remove_cache_dir(struct cache_dir *cache_dir)
 {
 	remove_index_dirs(cache_dir);
 
+<<<<<<< HEAD
+=======
+	/* Remove cache dir from sysfs */
+	kobject_del(cache_dir->kobj);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kobject_put(cache_dir->kobj);
 
 	kfree(cache_dir);

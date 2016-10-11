@@ -66,6 +66,11 @@ static struct usb_device_id rtl871x_usb_id_tbl[] = {
 	{USB_DEVICE(0x0B05, 0x1791)}, /* 11n mode disable */
 	/* Belkin */
 	{USB_DEVICE(0x050D, 0x945A)},
+<<<<<<< HEAD
+=======
+	/* ISY IWL - Belkin clone */
+	{USB_DEVICE(0x050D, 0x11F1)},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Corega */
 	{USB_DEVICE(0x07AA, 0x0047)},
 	/* D-Link */
@@ -102,6 +107,11 @@ static struct usb_device_id rtl871x_usb_id_tbl[] = {
 	/* - */
 	{USB_DEVICE(0x20F4, 0x646B)},
 	{USB_DEVICE(0x083A, 0xC512)},
+<<<<<<< HEAD
+=======
+	{USB_DEVICE(0x25D4, 0x4CA1)},
+	{USB_DEVICE(0x25D4, 0x4CAB)},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* RTL8191SU */
 	/* Realtek */
@@ -357,6 +367,13 @@ static u8 key_2char2num(u8 hch, u8 lch)
 	return (hex_to_bin(hch) << 4) | hex_to_bin(lch);
 }
 
+<<<<<<< HEAD
+=======
+static const struct device_type wlan_type = {
+	.name = "wlan",
+};
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * drv_init() - a device potentially for us
  *
@@ -392,6 +409,10 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
 	padapter->pusb_intf = pusb_intf;
 	usb_set_intfdata(pusb_intf, pnetdev);
 	SET_NETDEV_DEV(pnetdev, &pusb_intf->dev);
+<<<<<<< HEAD
+=======
+	pnetdev->dev.type = &wlan_type;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* step 2. */
 	padapter->dvobj_init = &r8712_usb_dvobj_init;
 	padapter->dvobj_deinit = &r8712_usb_dvobj_deinit;

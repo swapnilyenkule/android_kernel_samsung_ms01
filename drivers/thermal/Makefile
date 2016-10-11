@@ -3,6 +3,7 @@
 #
 
 obj-$(CONFIG_THERMAL)		+= thermal_sys.o
+<<<<<<< HEAD
 obj-$(CONFIG_THERMAL_MSM_POPMEM)	+= msm_popmem-tm.o
 obj-$(CONFIG_THERMAL_TSENS)	+= msm_tsens.o
 obj-$(CONFIG_THERMAL_TSENS8960) += msm8960_tsens.o
@@ -12,3 +13,6 @@ obj-$(CONFIG_SPEAR_THERMAL)		+= spear_thermal.o
 obj-$(CONFIG_THERMAL_TSENS8974)	+= msm8974-tsens.o
 obj-$(CONFIG_THERMAL_QPNP)	+= qpnp-temp-alarm.o
 obj-$(CONFIG_THERMAL_QPNP_ADC_TM)	+= qpnp-adc-tm.o
+=======
+obj-$(CONFIG_SPEAR_THERMAL)		+= spear_thermal.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -41,6 +41,7 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 {
 	pte_t *pte, oldpte;
 	spinlock_t *ptl;
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
         unsigned long tima_l2group_flag = 0;
         tima_l2group_entry_t *tima_l2group_buffer1 = NULL;
@@ -58,11 +59,17 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 				&tima_l2group_flag, &tima_l2group_buffer_index,
 				&tima_l2group_buffer1, &tima_l2group_buffer2);
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
+=======
+
+	pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+	arch_enter_lazy_mmu_mode();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	do {
 		oldpte = *pte;
 		if (pte_present(oldpte)) {
 			pte_t ptent;
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 			/* 
 			 * skip the pte_clear here. Instead just 
@@ -74,6 +81,9 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 #else
 			ptent = ptep_modify_prot_start(mm, addr, pte);
 #endif
+=======
+			ptent = ptep_modify_prot_start(mm, addr, pte);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			ptent = pte_modify(ptent, newprot);
 
 			/*
@@ -82,6 +92,7 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 			 */
 			if (dirty_accountable && pte_dirty(ptent))
 				ptent = pte_mkwrite(ptent);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 			tima_l2group_ptep_modify_prot_commit(mm, addr,
 					pte, ptent, tima_l2group_buffer1,
@@ -91,6 +102,10 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 #else
 			ptep_modify_prot_commit(mm, addr, pte, ptent);
 #endif
+=======
+
+			ptep_modify_prot_commit(mm, addr, pte, ptent);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		} else if (IS_ENABLED(CONFIG_MIGRATION) && !pte_file(oldpte)) {
 			swp_entry_t entry = pte_to_swp_entry(oldpte);
 
@@ -105,6 +120,7 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 			}
 		}
 	} while (pte++, addr += PAGE_SIZE, addr != end);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 	if (tima_l2group_flag) {
 		/* First: Flush the cache of the buffer to be read by the TZ side
@@ -118,6 +134,8 @@ static void change_pte_range(struct mm_struct *mm, pmd_t *pmd,
 			&tima_l2group_buffer1, &tima_l2group_buffer2);
 	}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	arch_leave_lazy_mmu_mode();
 	pte_unmap_unlock(pte - 1, ptl);
 }
@@ -223,8 +241,12 @@ mprotect_fixup(struct vm_area_struct *vma, struct vm_area_struct **pprev,
 	 */
 	pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
 	*pprev = vma_merge(mm, *pprev, start, end, newflags,
+<<<<<<< HEAD
 			vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
 			vma_get_anon_name(vma));
+=======
+			vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (*pprev) {
 		vma = *pprev;
 		goto success;

@@ -1303,4 +1303,8 @@ static int __init sit_init(void)
 module_init(sit_init);
 module_exit(sit_cleanup);
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS_RTNL_LINK("sit");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 MODULE_ALIAS_NETDEV("sit0");

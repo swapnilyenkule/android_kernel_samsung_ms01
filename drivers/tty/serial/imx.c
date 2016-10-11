@@ -131,6 +131,10 @@
 #define  UCR4_OREN  	 (1<<1)  /* Receiver overrun interrupt enable */
 #define  UCR4_DREN  	 (1<<0)  /* Recv data ready interrupt enable */
 #define  UFCR_RXTL_SHF   0       /* Receiver trigger level shift */
+<<<<<<< HEAD
+=======
+#define  UFCR_DCEDTE	 (1<<6)  /* DCE/DTE mode select */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define  UFCR_RFDIV      (7<<7)  /* Reference freq divider mask */
 #define  UFCR_RFDIV_REG(x)	(((x) < 7 ? 6 - (x) : 6) << 7)
 #define  UFCR_TXTL_SHF   10      /* Transmitter trigger level shift */
@@ -666,6 +670,7 @@ static void imx_break_ctl(struct uart_port *port, int break_state)
 static int imx_setup_ufcr(struct imx_port *sport, unsigned int mode)
 {
 	unsigned int val;
+<<<<<<< HEAD
 	unsigned int ufcr_rfdiv;
 
 	/* set receiver / transmitter trigger level.
@@ -682,6 +687,13 @@ static int imx_setup_ufcr(struct imx_port *sport, unsigned int mode)
 
 	writel(val, sport->port.membase + UFCR);
 
+=======
+
+	/* set receiver / transmitter trigger level */
+	val = readl(sport->port.membase + UFCR) & (UFCR_RFDIV | UFCR_DCEDTE);
+	val |= TXTL << UFCR_TXTL_SHF | RXTL;
+	writel(val, sport->port.membase + UFCR);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -756,6 +768,10 @@ static int imx_startup(struct uart_port *port)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Finally, clear and enable interrupts
 	 */
@@ -809,7 +825,10 @@ static int imx_startup(struct uart_port *port)
 	/*
 	 * Enable modem status interrupts
 	 */
+<<<<<<< HEAD
 	spin_lock_irqsave(&sport->port.lock,flags);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	imx_enable_ms(&sport->port);
 	spin_unlock_irqrestore(&sport->port.lock,flags);
 
@@ -839,10 +858,20 @@ static void imx_shutdown(struct uart_port *port)
 {
 	struct imx_port *sport = (struct imx_port *)port;
 	unsigned long temp;
+<<<<<<< HEAD
 
 	temp = readl(sport->port.membase + UCR2);
 	temp &= ~(UCR2_TXEN);
 	writel(temp, sport->port.membase + UCR2);
+=======
+	unsigned long flags;
+
+	spin_lock_irqsave(&sport->port.lock, flags);
+	temp = readl(sport->port.membase + UCR2);
+	temp &= ~(UCR2_TXEN);
+	writel(temp, sport->port.membase + UCR2);
+	spin_unlock_irqrestore(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (USE_IRDA(sport)) {
 		struct imxuart_platform_data *pdata;
@@ -871,12 +900,20 @@ static void imx_shutdown(struct uart_port *port)
 	 * Disable all interrupts, port and break condition.
 	 */
 
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	temp = readl(sport->port.membase + UCR1);
 	temp &= ~(UCR1_TXMPTYEN | UCR1_RRDYEN | UCR1_RTSDEN | UCR1_UARTEN);
 	if (USE_IRDA(sport))
 		temp &= ~(UCR1_IREN);
 
 	writel(temp, sport->port.membase + UCR1);
+<<<<<<< HEAD
+=======
+	spin_unlock_irqrestore(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void
@@ -1219,6 +1256,12 @@ imx_console_write(struct console *co, const char *s, unsigned int count)
 	struct imx_port *sport = imx_ports[co->index];
 	struct imx_port_ucrs old_ucr;
 	unsigned int ucr1;
+<<<<<<< HEAD
+=======
+	unsigned long flags;
+
+	spin_lock_irqsave(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 *	First, save UCR1/2/3 and then disable interrupts
@@ -1244,6 +1287,11 @@ imx_console_write(struct console *co, const char *s, unsigned int count)
 	while (!(readl(sport->port.membase + USR2) & USR2_TXDC));
 
 	imx_port_ucrs_restore(&sport->port, &old_ucr);
+<<<<<<< HEAD
+=======
+
+	spin_unlock_irqrestore(&sport->port.lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*

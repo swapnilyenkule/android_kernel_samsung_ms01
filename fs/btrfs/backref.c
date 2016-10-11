@@ -1033,7 +1033,11 @@ static int __get_extent_inline_ref(unsigned long *ptr, struct extent_buffer *eb,
 			*out_eiref = (struct btrfs_extent_inline_ref *)(ei + 1);
 		}
 		*ptr = (unsigned long)*out_eiref;
+<<<<<<< HEAD
 		if ((void *)*ptr >= (void *)ei + item_size)
+=======
+		if ((unsigned long)(*ptr) >= (unsigned long)ei + item_size)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return -ENOENT;
 	}
 

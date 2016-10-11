@@ -161,12 +161,18 @@ struct ipv6_devconf {
 	__s32		accept_ra_rt_info_max_plen;
 #endif
 #endif
+<<<<<<< HEAD
 	__s32		accept_ra_rt_table;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__s32		proxy_ndp;
 	__s32		accept_source_route;
 #ifdef CONFIG_IPV6_OPTIMISTIC_DAD
 	__s32		optimistic_dad;
+<<<<<<< HEAD
 	__s32		use_optimistic;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 #ifdef CONFIG_IPV6_MROUTE
 	__s32		mc_forwarding;
@@ -174,8 +180,11 @@ struct ipv6_devconf {
 	__s32		disable_ipv6;
 	__s32		accept_dad;
 	__s32		force_tllao;
+<<<<<<< HEAD
 	__s32		accept_ra_prefix_route;
 	__s32		use_oif_addrs_only;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void		*sysctl;
 };
 
@@ -217,10 +226,13 @@ enum {
 	DEVCONF_DISABLE_IPV6,
 	DEVCONF_ACCEPT_DAD,
 	DEVCONF_FORCE_TLLAO,
+<<<<<<< HEAD
 	DEVCONF_ACCEPT_RA_PREFIX_ROUTE,
 	DEVCONF_ACCEPT_RA_RT_TABLE,
 	DEVCONF_USE_OPTIMISTIC,
 	DEVCONF_USE_OIF_ADDRS_ONLY,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	DEVCONF_MAX
 };
 

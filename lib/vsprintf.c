@@ -25,6 +25,10 @@
 #include <linux/kallsyms.h>
 #include <linux/uaccess.h>
 #include <linux/ioport.h>
+<<<<<<< HEAD
+=======
+#include <linux/cred.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/addrconf.h>
 
 #include <asm/page.h>		/* for PAGE_SIZE */
@@ -436,7 +440,11 @@ char *symbol_string(char *buf, char *end, void *ptr,
 	else if (ext != 'f' && ext != 's')
 		sprint_symbol(sym, value);
 	else
+<<<<<<< HEAD
 		sprint_symbol_no_offset(sym, value);
+=======
+		kallsyms_lookup(value, NULL, NULL, NULL, sym);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return string(buf, end, sym, spec);
 #else
@@ -857,7 +865,10 @@ int kptr_restrict __read_mostly;
  *       correctness of the format string and va_list arguments.
  * - 'K' For a kernel pointer that should be hidden from unprivileged users
  * - 'NF' For a netdev_features_t
+<<<<<<< HEAD
  * - 'a' For a phys_addr_t type and its derivative types (passed by reference)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * Note: The difference between 'S' and 'F' is that on ia64 and ppc64
  * function pointers are really function descriptors, which contain a
@@ -926,28 +937,70 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
 		 * %pK cannot be used in IRQ context because its test
 		 * for CAP_SYSLOG would be meaningless.
 		 */
+<<<<<<< HEAD
 		if (in_irq() || in_serving_softirq() || in_nmi()) {
+=======
+		if (kptr_restrict && (in_irq() || in_serving_softirq() ||
+				      in_nmi())) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (spec.field_width == -1)
 				spec.field_width = 2 * sizeof(void *);
 			return string(buf, end, "pK-error", spec);
 		}
+<<<<<<< HEAD
 		if (!((kptr_restrict == 0) ||
 		      (kptr_restrict == 1 &&
 		       has_capability_noaudit(current, CAP_SYSLOG))))
 			ptr = NULL;
 		break;
+=======
+
+		switch (kptr_restrict) {
+		case 0:
+			/* Always print %pK values */
+			break;
+		case 1: {
+			/*
+			 * Only print the real pointer value if the current
+			 * process has CAP_SYSLOG and is running with the
+			 * same credentials it started with. This is because
+			 * access to files is checked at open() time, but %pK
+			 * checks permission at read() time. We don't want to
+			 * leak pointer values if a binary opens a file using
+			 * %pK and then elevates privileges before reading it.
+			 */
+			const struct cred *cred = current_cred();
+
+			if (!has_capability_noaudit(current, CAP_SYSLOG) ||
+			    (cred->euid != cred->uid) ||
+			    (cred->egid != cred->gid))
+				ptr = NULL;
+			break;
+		}
+		case 2:
+		default:
+			/* Always print 0's for %pK */
+			ptr = NULL;
+			break;
+		}
+		break;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case 'N':
 		switch (fmt[1]) {
 		case 'F':
 			return netdev_feature_string(buf, end, ptr, spec);
 		}
 		break;
+<<<<<<< HEAD
 	case 'a':
 		spec.flags |= SPECIAL | SMALL | ZEROPAD;
 		spec.field_width = sizeof(phys_addr_t) * 2 + 2;
 		spec.base = 16;
 		return number(buf, end,
 			      (unsigned long long) *((phys_addr_t *)ptr), spec);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	spec.flags |= SMALL;
 	if (spec.field_width == -1) {

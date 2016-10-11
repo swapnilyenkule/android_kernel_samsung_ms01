@@ -25,4 +25,7 @@ obj-$(CONFIG_INPUT_MISC)	+= misc/
 
 obj-$(CONFIG_INPUT_APMPOWER)	+= apm-power.o
 obj-$(CONFIG_INPUT_OF_MATRIX_KEYMAP) += of_keymap.o
+<<<<<<< HEAD
 obj-$(CONFIG_INPUT_KEYRESET)	+= keyreset.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

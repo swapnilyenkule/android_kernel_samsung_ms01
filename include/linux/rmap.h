@@ -37,6 +37,19 @@ struct anon_vma {
 	atomic_t refcount;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Count of child anon_vmas and VMAs which points to this anon_vma.
+	 *
+	 * This counter is used for making decision about reusing anon_vma
+	 * instead of forking new one. See comments in function anon_vma_clone.
+	 */
+	unsigned degree;
+
+	struct anon_vma *parent;	/* Parent of this anon_vma */
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * NOTE: the LSB of the head.next is set by
 	 * mm_take_all_locks() _after_ taking the above lock. So the
 	 * head must only be read/written after taking the above lock
@@ -67,6 +80,7 @@ struct anon_vma_chain {
 	struct list_head same_anon_vma;	/* locked by anon_vma->mutex */
 };
 
+<<<<<<< HEAD
 enum ttu_flags {
 	TTU_UNMAP = 0,			/* unmap mode */
 	TTU_MIGRATION = 1,		/* migration mode */
@@ -78,6 +92,8 @@ enum ttu_flags {
 	TTU_IGNORE_HWPOISON = (1 << 10),/* corrupted page is recoverable */
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MMU
 static inline void get_anon_vma(struct anon_vma *anon_vma)
 {
@@ -172,6 +188,19 @@ int page_referenced(struct page *, int is_locked,
 int page_referenced_one(struct page *, struct vm_area_struct *,
 	unsigned long address, unsigned int *mapcount, unsigned long *vm_flags);
 
+<<<<<<< HEAD
+=======
+enum ttu_flags {
+	TTU_UNMAP = 0,			/* unmap mode */
+	TTU_MIGRATION = 1,		/* migration mode */
+	TTU_MUNLOCK = 2,		/* munlock mode */
+	TTU_ACTION_MASK = 0xff,
+
+	TTU_IGNORE_MLOCK = (1 << 8),	/* ignore mlock */
+	TTU_IGNORE_ACCESS = (1 << 9),	/* don't age */
+	TTU_IGNORE_HWPOISON = (1 << 10),/* corrupted page is recoverable */
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define TTU_ACTION(x) ((x) & TTU_ACTION_MASK)
 
 bool is_vma_temporary_stack(struct vm_area_struct *vma);

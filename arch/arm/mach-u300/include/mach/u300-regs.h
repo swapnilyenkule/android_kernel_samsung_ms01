@@ -101,7 +101,11 @@
 
 #ifdef CONFIG_MACH_U300_BS335
 /* Fast UART1 on U335 only */
+<<<<<<< HEAD
 #define U300_UART1_BASE			(U300_SLOW_PER_PHYS_BASE+0x7000)
+=======
+#define U300_UART1_BASE			(U300_FAST_PER_PHYS_BASE+0x7000)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 /*

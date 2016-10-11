@@ -57,7 +57,11 @@ config GENERIC_CLOCKEVENTS
 	def_bool y
 
 config GENERIC_GPIO
+<<<<<<< HEAD
 	def_bool y
+=======
+	bool
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config GENERIC_CSUM
 	def_bool y

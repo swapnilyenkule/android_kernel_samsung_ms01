@@ -1654,13 +1654,33 @@ pl011_set_termios(struct uart_port *port, struct ktermios *termios,
 			old_cr &= ~ST_UART011_CR_OVSFACT;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Workaround for the ST Micro oversampling variants to
+	 * increase the bitrate slightly, by lowering the divisor,
+	 * to avoid delayed sampling of start bit at high speeds,
+	 * else we see data corruption.
+	 */
+	if (uap->vendor->oversampling) {
+		if ((baud >= 3000000) && (baud < 3250000) && (quot > 1))
+			quot -= 1;
+		else if ((baud > 3250000) && (quot > 2))
+			quot -= 2;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Set baud rate */
 	writew(quot & 0x3f, port->membase + UART011_FBRD);
 	writew(quot >> 6, port->membase + UART011_IBRD);
 
 	/*
 	 * ----------v----------v----------v----------v-----
+<<<<<<< HEAD
 	 * NOTE: MUST BE WRITTEN AFTER UARTLCR_M & UARTLCR_L
+=======
+	 * NOTE: lcrh_tx and lcrh_rx MUST BE WRITTEN AFTER
+	 * UART011_FBRD & UART011_IBRD.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * ----------^----------^----------^----------^-----
 	 */
 	writew(lcr_h, port->membase + uap->lcrh_rx);

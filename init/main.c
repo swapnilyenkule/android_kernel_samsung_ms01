@@ -68,9 +68,14 @@
 #include <linux/shmem_fs.h>
 #include <linux/slab.h>
 #include <linux/perf_event.h>
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_COHERENT_TT
 #include <linux/memblock.h>
 #endif
+=======
+#include <linux/random.h>
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/io.h>
 #include <asm/bugs.h>
 #include <asm/setup.h>
@@ -81,10 +86,13 @@
 #include <asm/smp.h>
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_GPIO_DVS
 #include <linux/secgpio_dvs.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int kernel_init(void *);
 
 extern void init_IRQ(void);
@@ -134,10 +142,13 @@ static char *static_command_line;
 static char *execute_command;
 static char *ramdisk_execute_command;
 
+<<<<<<< HEAD
 int boot_mode_lpm;
 int boot_mode_recovery;
 EXPORT_SYMBOL(boot_mode_recovery);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * If set, this is an indication to the drivers that reset the underlying
  * device before going ahead with the initialization otherwise driver might
@@ -235,6 +246,7 @@ static int __init loglevel(char *str)
 
 early_param("loglevel", loglevel);
 
+<<<<<<< HEAD
 /*androidboot.uart_debug */
 int jig_boot_clk_limit;
 
@@ -269,6 +281,8 @@ early_param("androidboot.uart_debug", jigStatus_tablet);
 
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Change NUL term back to "=", to make "param" the whole string. */
 static int __init repair_env_string(char *param, char *val)
 {
@@ -403,7 +417,10 @@ static __initdata DECLARE_COMPLETION(kthreadd_done);
 static noinline void __init_refok rest_init(void)
 {
 	int pid;
+<<<<<<< HEAD
 	const struct sched_param param = { .sched_priority = 1 };
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rcu_scheduler_starting();
 	/*
@@ -417,7 +434,10 @@ static noinline void __init_refok rest_init(void)
 	rcu_read_lock();
 	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
 	rcu_read_unlock();
+<<<<<<< HEAD
 	sched_setscheduler_nocheck(kthreadd_task, SCHED_FIFO, &param);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	complete(&kthreadd_done);
 
 	/*
@@ -446,6 +466,7 @@ static int __init do_early_param(char *param, char *val)
 		}
 	}
 	/* We accept everything at this stage. */
+<<<<<<< HEAD
 
 	/* Check LPM(Power Off Charging) Mode */
 	if ((strncmp(param, "androidboot.mode", 17) == 0)) {
@@ -462,6 +483,8 @@ static int __init do_early_param(char *param, char *val)
 				boot_mode_recovery = 1;
 			}
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -524,6 +547,7 @@ static void __init mm_init(void)
 	vmalloc_init();
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK
 /* change@ksingh.sra-dallas - in kernel 3.4 and + 
  * the mmu clears the unused/unreserved memory with default RAM initial sticky 
@@ -566,6 +590,8 @@ static void __init integrity_mem_reserve(void) {
 // change@ksingh.sra-dallas - end
 #endif // CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 asmlinkage void __init start_kernel(void)
 {
 	char * command_line;
@@ -579,6 +605,14 @@ asmlinkage void __init start_kernel(void)
 	smp_setup_processor_id();
 	debug_objects_early_init();
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Set up the the initial canary ASAP:
+	 */
+	boot_init_stack_canary();
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cgroup_init_early();
 
 	local_irq_disable();
@@ -593,10 +627,13 @@ asmlinkage void __init start_kernel(void)
 	page_address_init();
 	printk(KERN_NOTICE "%s", linux_banner);
 	setup_arch(&command_line);
+<<<<<<< HEAD
 	/*
 	 * Set up the the initial canary ASAP:
 	 */
 	boot_init_stack_canary();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mm_init_owner(&init_mm, &init_task);
 	mm_init_cpumask(&init_mm);
 	setup_command_line(command_line);
@@ -611,6 +648,7 @@ asmlinkage void __init start_kernel(void)
 	parse_early_param();
 	parse_args("Booting kernel", static_command_line, __start___param,
 		   __stop___param - __start___param,
+<<<<<<< HEAD
 		   0, 0, &unknown_bootoption);
 
 	jump_label_init();
@@ -621,6 +659,12 @@ asmlinkage void __init start_kernel(void)
 	 */
  	integrity_mem_reserve();
 #endif // CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK
+=======
+		   -1, -1, &unknown_bootoption);
+
+	jump_label_init();
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * These use large bootmem allocations and must precede
 	 * kmem_cache_init()
@@ -669,9 +713,12 @@ asmlinkage void __init start_kernel(void)
 	early_boot_irqs_disabled = false;
 	local_irq_enable();
 
+<<<<<<< HEAD
 	/* Interrupts are enabled now so all GFP allocations are safe. */
 	gfp_allowed_mask = __GFP_BITS_MASK;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kmem_cache_init_late();
 
 	/*
@@ -714,9 +761,19 @@ asmlinkage void __init start_kernel(void)
 	pidmap_init();
 	anon_vma_init();
 #ifdef CONFIG_X86
+<<<<<<< HEAD
 	if (efi_enabled)
 		efi_enter_virtual_mode();
 #endif
+=======
+	if (efi_enabled(EFI_RUNTIME_SERVICES))
+		efi_enter_virtual_mode();
+#endif
+#ifdef CONFIG_X86_ESPFIX64
+	/* Should be run before the first non-init thread is created */
+	init_espfix_bsp();
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	thread_info_cache_init();
 	cred_init();
 	fork_init(totalram_pages);
@@ -742,6 +799,12 @@ asmlinkage void __init start_kernel(void)
 	acpi_early_init(); /* before LAPIC and SMP init */
 	sfi_init_late();
 
+<<<<<<< HEAD
+=======
+	if (efi_enabled(EFI_RUNTIME_SERVICES))
+		efi_free_boot_services();
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ftrace_init();
 
 	/* Do the rest non-__init'ed, we're now alive */
@@ -888,6 +951,10 @@ static void __init do_basic_setup(void)
 	do_ctors();
 	usermodehelper_enable();
 	do_initcalls();
+<<<<<<< HEAD
+=======
+	random_int_secret_init();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void __init do_pre_smp_initcalls(void)
@@ -904,6 +971,7 @@ static void run_init_process(const char *init_filename)
 	kernel_execve(init_filename, argv_init, envp_init);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_30
 #define PGT_BIT_ARRAY_LENGTH 0x40000
 unsigned long pgt_bit_array[PGT_BIT_ARRAY_LENGTH];
@@ -937,11 +1005,14 @@ void __ref do_deferred_initcalls(void)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* This is a non __init function. Force it to be noinline otherwise gcc
  * makes it inline to init() and it becomes part of init.text section
  */
 static noinline int init_post(void)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_GPIO_DVS
 	/************************ Caution !!! ****************************/
 	/* This function must be located in appropriate INIT position
@@ -962,11 +1033,21 @@ static noinline int init_post(void)
 	tima_send_cmd4((unsigned long)_stext, (unsigned long)init_mm.pgd, (unsigned long)__init_begin, (unsigned long)__init_end, 0x3f80c221);
 #endif
 #endif
+=======
+	/* need to finish all async __init code before freeing the memory */
+	async_synchronize_full();
+	free_initmem();
+	mark_rodata_ro();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	system_state = SYSTEM_RUNNING;
 	numa_default_policy();
 
 
 	current->signal->flags |= SIGNAL_UNKILLABLE;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ramdisk_execute_command) {
 		run_init_process(ramdisk_execute_command);
 		printk(KERN_WARNING "Failed to execute %s\n",
@@ -995,13 +1076,23 @@ static noinline int init_post(void)
 
 static int __init kernel_init(void * unused)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_COHERENT_TT
 	struct memblock_type *type = (struct memblock_type*)(&memblock.memory);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Wait until kthreadd is all set-up.
 	 */
 	wait_for_completion(&kthreadd_done);
+<<<<<<< HEAD
+=======
+
+	/* Now the scheduler is fully set up and can do blocking allocations */
+	gfp_allowed_mask = __GFP_BITS_MASK;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * init can allocate pages on any node
 	 */
@@ -1015,6 +1106,7 @@ static int __init kernel_init(void * unused)
 
 	smp_prepare_cpus(setup_max_cpus);
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #ifdef CONFIG_TIMA_RKP_30
 #ifdef CONFIG_TIMA_RKP_COHERENT_TT
@@ -1023,6 +1115,8 @@ static int __init kernel_init(void * unused)
 	tima_send_cmd5((unsigned long)_stext, (unsigned long)init_mm.pgd, (unsigned long)__init_begin, (unsigned long)__init_end,(unsigned long)__pa(pgt_bit_array),0x3f80c221);
 #endif
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	do_pre_smp_initcalls();
 	lockup_detector_init();
 

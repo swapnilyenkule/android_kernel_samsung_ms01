@@ -22,4 +22,7 @@ obj-$(CONFIG_HW_RANDOM_OCTEON) += octeon-rng.o
 obj-$(CONFIG_HW_RANDOM_NOMADIK) += nomadik-rng.o
 obj-$(CONFIG_HW_RANDOM_PICOXCELL) += picoxcell-rng.o
 obj-$(CONFIG_HW_RANDOM_PPC4XX) += ppc4xx-rng.o
+<<<<<<< HEAD
 obj-$(CONFIG_HW_RANDOM_MSM) += msm_rng.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

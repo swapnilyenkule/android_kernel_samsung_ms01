@@ -9,8 +9,12 @@
  * we put the segment information here.
  */
 typedef struct {
+<<<<<<< HEAD
 	void *ldt;
 	int size;
+=======
+	struct ldt_struct *ldt;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_X86_64
 	/* True if mm supports a task running in 32 bit compatibility mode. */

@@ -185,6 +185,24 @@ static inline unsigned long __ffs64(u64 word)
 
 #ifdef __KERNEL__
 
+<<<<<<< HEAD
+=======
+#ifndef set_mask_bits
+#define set_mask_bits(ptr, _mask, _bits)	\
+({								\
+	const typeof(*ptr) mask = (_mask), bits = (_bits);	\
+	typeof(*ptr) old, new;					\
+								\
+	do {							\
+		old = ACCESS_ONCE(*ptr);			\
+		new = (old & ~mask) | bits;			\
+	} while (cmpxchg(ptr, old, new) != old);		\
+								\
+	new;							\
+})
+#endif
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef find_last_bit
 /**
  * find_last_bit - find the last set bit in a memory region

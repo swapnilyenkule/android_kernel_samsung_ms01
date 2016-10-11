@@ -1177,7 +1177,11 @@ sys_sigreturn:
 	 nop
 
 	call	syscall_trace
+<<<<<<< HEAD
 	 nop
+=======
+	 mov	1, %o1
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 1:
 	/* We don't want to muck with user registers like a

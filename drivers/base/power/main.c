@@ -28,7 +28,10 @@
 #include <linux/sched.h>
 #include <linux/async.h>
 #include <linux/suspend.h>
+<<<<<<< HEAD
 #include <linux/timer.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "../base.h"
 #include "power.h"
@@ -55,12 +58,15 @@ struct suspend_stats suspend_stats;
 static DEFINE_MUTEX(dpm_list_mtx);
 static pm_message_t pm_transition;
 
+<<<<<<< HEAD
 static void dpm_drv_timeout(unsigned long data);
 struct dpm_drv_wd_data {
 	struct device *dev;
 	struct task_struct *tsk;
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int async_error;
 
 /**
@@ -571,6 +577,10 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
 	pm_callback_t callback = NULL;
 	char *info = NULL;
 	int error = 0;
+<<<<<<< HEAD
+=======
+	bool put = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	TRACE_DEVICE(dev);
 	TRACE_RESUME(0);
@@ -588,6 +598,10 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
 		goto Unlock;
 
 	pm_runtime_enable(dev);
+<<<<<<< HEAD
+=======
+	put = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (dev->pm_domain) {
 		info = "power domain ";
@@ -640,6 +654,12 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
 
 	TRACE_RESUME(error);
 
+<<<<<<< HEAD
+=======
+	if (put)
+		pm_runtime_put_sync(dev);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return error;
 }
 
@@ -661,6 +681,7 @@ static bool is_async(struct device *dev)
 }
 
 /**
+<<<<<<< HEAD
  *	dpm_drv_timeout - Driver suspend / resume watchdog handler
  *	@data: struct device which timed out
  *
@@ -685,6 +706,8 @@ static void dpm_drv_timeout(unsigned long data)
 }
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * dpm_resume - Execute "resume" callbacks for non-sysdev devices.
  * @state: PM transition of the system being carried out.
  *
@@ -774,8 +797,11 @@ static void device_complete(struct device *dev, pm_message_t state)
 	}
 
 	device_unlock(dev);
+<<<<<<< HEAD
 
 	pm_runtime_put_sync(dev);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -917,11 +943,14 @@ static int dpm_suspend_noirq(pm_message_t state)
 		if (!list_empty(&dev->power.entry))
 			list_move(&dev->power.entry, &dpm_noirq_list);
 		put_device(dev);
+<<<<<<< HEAD
 
 		if (pm_wakeup_pending()) {
 			error = -EBUSY;
 			break;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	mutex_unlock(&dpm_list_mtx);
 	if (error)
@@ -995,11 +1024,14 @@ static int dpm_suspend_late(pm_message_t state)
 		if (!list_empty(&dev->power.entry))
 			list_move(&dev->power.entry, &dpm_late_early_list);
 		put_device(dev);
+<<<<<<< HEAD
 
 		if (pm_wakeup_pending()) {
 			error = -EBUSY;
 			break;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	mutex_unlock(&dpm_list_mtx);
 	if (error)
@@ -1022,7 +1054,11 @@ int dpm_suspend_end(pm_message_t state)
 
 	error = dpm_suspend_noirq(state);
 	if (error) {
+<<<<<<< HEAD
 		dpm_resume_early(state);
+=======
+		dpm_resume_early(resume_event(state));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return error;
 	}
 
@@ -1063,28 +1099,40 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 	pm_callback_t callback = NULL;
 	char *info = NULL;
 	int error = 0;
+<<<<<<< HEAD
 	struct timer_list timer;
 	struct dpm_drv_wd_data data;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	dpm_wait_for_children(dev, async);
 
 	if (async_error)
 		goto Complete;
 
+<<<<<<< HEAD
 	/*
 	 * If a device configured to wake up the system from sleep states
 	 * has been suspended at run time and there's a resume request pending
 	 * for it, this is equivalent to the device signaling wakeup, so the
 	 * system suspend operation should be aborted.
 	 */
+=======
+	pm_runtime_get_noresume(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (pm_runtime_barrier(dev) && device_may_wakeup(dev))
 		pm_wakeup_event(dev, 0);
 
 	if (pm_wakeup_pending()) {
+<<<<<<< HEAD
+=======
+		pm_runtime_put_sync(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		async_error = -EBUSY;
 		goto Complete;
 	}
 
+<<<<<<< HEAD
 	data.dev = dev;
 	data.tsk = get_current();
 	init_timer_on_stack(&timer);
@@ -1093,6 +1141,8 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 	timer.data = (unsigned long)&data;
 	add_timer(&timer);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	device_lock(dev);
 
 	if (dev->pm_domain) {
@@ -1148,6 +1198,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 
 	device_unlock(dev);
 
+<<<<<<< HEAD
 	del_timer_sync(&timer);
 	destroy_timer_on_stack(&timer);
 
@@ -1158,6 +1209,17 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 		async_error = error;
 	else if (dev->power.is_suspended)
 		__pm_runtime_disable(dev, false);
+=======
+ Complete:
+	complete_all(&dev->power.completion);
+
+	if (error) {
+		pm_runtime_put_sync(dev);
+		async_error = error;
+	} else if (dev->power.is_suspended) {
+		__pm_runtime_disable(dev, false);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return error;
 }
@@ -1250,6 +1312,7 @@ static int device_prepare(struct device *dev, pm_message_t state)
 	char *info = NULL;
 	int error = 0;
 
+<<<<<<< HEAD
 	/*
 	 * If a device's parent goes into runtime suspend at the wrong time,
 	 * it won't be possible to resume the device.  To prevent this we
@@ -1258,6 +1321,8 @@ static int device_prepare(struct device *dev, pm_message_t state)
 	 */
 	pm_runtime_get_noresume(dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	device_lock(dev);
 
 	dev->power.wakeup_path = device_may_wakeup(dev);

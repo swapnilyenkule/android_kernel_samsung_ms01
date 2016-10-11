@@ -4,6 +4,10 @@
 #include <linux/list.h>
 #include <linux/spinlock.h>
 #include <linux/mm_types.h>
+<<<<<<< HEAD
+=======
+#include <linux/srcu.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct mmu_notifier;
 struct mmu_notifier_ops;

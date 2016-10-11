@@ -361,7 +361,11 @@ nomem:
 }
 
 enum {
+<<<<<<< HEAD
 	Opt_uid, Opt_gid, Opt_umask, Opt_dmask, Opt_fmask
+=======
+	Opt_uid, Opt_gid, Opt_umask, Opt_dmask, Opt_fmask, Opt_err
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static const match_table_t tokens = {
@@ -370,6 +374,10 @@ static const match_table_t tokens = {
 	{Opt_umask, "umask=%o"},
 	{Opt_dmask, "dmask=%o"},
 	{Opt_fmask, "fmask=%o"},
+<<<<<<< HEAD
+=======
+	{Opt_err, NULL},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int parse_options(char *options, struct omfs_sb_info *sbi)

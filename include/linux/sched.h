@@ -141,6 +141,7 @@ extern unsigned long nr_uninterruptible(void);
 extern unsigned long nr_iowait(void);
 extern unsigned long nr_iowait_cpu(int cpu);
 extern unsigned long this_cpu_load(void);
+<<<<<<< HEAD
 #ifdef CONFIG_RUNTIME_COMPCACHE
 extern unsigned long this_cpu_loadx(int i);
 #endif /* CONFIG_RUNTIME_COMPCACHE */
@@ -149,6 +150,12 @@ extern void sched_update_nr_prod(int cpu, unsigned long nr, bool inc);
 extern void sched_get_nr_running_avg(int *avg, int *iowait_avg);
 
 extern void calc_global_load(unsigned long ticks);
+=======
+
+
+extern void calc_global_load(unsigned long ticks);
+extern void update_cpu_load_nohz(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern unsigned long get_parent_ip(unsigned long addr);
 
@@ -196,10 +203,16 @@ print_cfs_rq(struct seq_file *m, int cpu, struct cfs_rq *cfs_rq)
 #define TASK_DEAD		64
 #define TASK_WAKEKILL		128
 #define TASK_WAKING		256
+<<<<<<< HEAD
 #define TASK_PARKED		512
 #define TASK_STATE_MAX		1024
 
 #define TASK_STATE_TO_CHAR_STR "RSDTtZXxKWP"
+=======
+#define TASK_STATE_MAX		512
+
+#define TASK_STATE_TO_CHAR_STR "RSDTtZXxKW"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern char ___assert_task_state[1 - 2*!!(
 		sizeof(TASK_STATE_TO_CHAR_STR)-1 != ilog2(TASK_STATE_MAX)+1)];
@@ -410,6 +423,13 @@ static inline void arch_pick_mmap_layout(struct mm_struct *mm) {}
 extern void set_dumpable(struct mm_struct *mm, int value);
 extern int get_dumpable(struct mm_struct *mm);
 
+<<<<<<< HEAD
+=======
+#define SUID_DUMP_DISABLE	0	/* No setuid dumping */
+#define SUID_DUMP_USER		1	/* Dump as user of process */
+#define SUID_DUMP_ROOT		2	/* Dump as root */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* mm flags */
 /* dumpable bits */
 #define MMF_DUMPABLE      0  /* core dump is permitted */
@@ -1240,6 +1260,10 @@ struct sched_entity {
 struct sched_rt_entity {
 	struct list_head run_list;
 	unsigned long timeout;
+<<<<<<< HEAD
+=======
+	unsigned long watchdog_stamp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned int time_slice;
 	int nr_cpus_allowed;
 
@@ -1286,6 +1310,12 @@ struct task_struct {
 	const struct sched_class *sched_class;
 	struct sched_entity se;
 	struct sched_rt_entity rt;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CGROUP_SCHED
+	struct task_group *sched_task_group;
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	/* list of struct preempt_notifier: */
@@ -1348,6 +1378,10 @@ struct task_struct {
 				 * execve */
 	unsigned in_iowait:1;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Revert to default priority/policy when forking */
 	unsigned sched_reset_on_fork:1;
 	unsigned sched_contributes_to_load:1;
@@ -1356,7 +1390,10 @@ struct task_struct {
 	/* IRQ handler threads */
 	unsigned irq_thread:1;
 #endif
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long atomic_flags; /* Flags needing atomic access. */
 
 	pid_t pid;
@@ -1400,8 +1437,11 @@ struct task_struct {
 
 	cputime_t utime, stime, utimescaled, stimescaled;
 	cputime_t gtime;
+<<<<<<< HEAD
 	unsigned long long cpu_power;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef CONFIG_VIRT_CPU_ACCOUNTING
 	cputime_t prev_utime, prev_stime;
 #endif
@@ -1461,7 +1501,11 @@ struct task_struct {
 	uid_t loginuid;
 	unsigned int sessionid;
 #endif
+<<<<<<< HEAD
 	struct seccomp seccomp;
+=======
+	seccomp_t seccomp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Thread group tracking */
    	u32 parent_exec_id;
@@ -1812,9 +1856,12 @@ static inline void put_task_struct(struct task_struct *t)
 extern void task_times(struct task_struct *p, cputime_t *ut, cputime_t *st);
 extern void thread_group_times(struct task_struct *p, cputime_t *ut, cputime_t *st);
 
+<<<<<<< HEAD
 extern int task_free_register(struct notifier_block *n);
 extern int task_free_unregister(struct notifier_block *n);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Per process flags
  */
@@ -1830,7 +1877,10 @@ extern int task_free_unregister(struct notifier_block *n);
 #define PF_MEMALLOC	0x00000800	/* Allocating memory */
 #define PF_NPROC_EXCEEDED 0x00001000	/* set_user noticed that RLIMIT_NPROC was exceeded */
 #define PF_USED_MATH	0x00002000	/* if unset the fpu must be initialized before use */
+<<<<<<< HEAD
 #define PF_WAKE_UP_IDLE 0x00004000	/* try to wake up on an idle CPU */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define PF_NOFREEZE	0x00008000	/* this thread should not be frozen */
 #define PF_FROZEN	0x00010000	/* frozen for system suspend */
 #define PF_FSTRANS	0x00020000	/* inside a filesystem transaction */
@@ -1839,8 +1889,11 @@ extern int task_free_unregister(struct notifier_block *n);
 #define PF_KTHREAD	0x00200000	/* I am a kernel thread */
 #define PF_RANDOMIZE	0x00400000	/* randomize virtual address space */
 #define PF_SWAPWRITE	0x00800000	/* Allowed to write to swap */
+<<<<<<< HEAD
 #define PF_SPREAD_PAGE	0x01000000	/* Spread page cache over cpuset */
 #define PF_SPREAD_SLAB	0x02000000	/* Spread some slab caches over cpuset */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define PF_THREAD_BOUND	0x04000000	/* Thread bound to specific cpu */
 #define PF_MCE_EARLY    0x08000000      /* Early kill for mce process policy */
 #define PF_MEMPOLICY	0x10000000	/* Non-default NUMA mempolicy */
@@ -1873,6 +1926,7 @@ extern int task_free_unregister(struct notifier_block *n);
 #define used_math() tsk_used_math(current)
 
 /* Per-process atomic flags. */
+<<<<<<< HEAD
 #define PFA_NO_NEW_PRIVS 0x00000001	/* May not gain new privileges. */
 
 static inline bool task_no_new_privs(struct task_struct *p)
@@ -1884,6 +1938,20 @@ static inline void task_set_no_new_privs(struct task_struct *p)
 {
 	set_bit(PFA_NO_NEW_PRIVS, &p->atomic_flags);
 }
+=======
+#define PFA_SPREAD_PAGE  1      /* Spread page cache over cpuset */
+#define PFA_SPREAD_SLAB  2      /* Spread some slab caches over cpuset */
+
+#define TASK_PFA_TEST(name, func)					\
+	static inline bool task_##func(struct task_struct *p)		\
+	{ return test_bit(PFA_##name, &p->atomic_flags); }
+#define TASK_PFA_SET(name, func)					\
+	static inline void task_set_##func(struct task_struct *p)	\
+	{ set_bit(PFA_##name, &p->atomic_flags); }
+#define TASK_PFA_CLEAR(name, func)					\
+	static inline void task_clear_##func(struct task_struct *p)	\
+	{ clear_bit(PFA_##name, &p->atomic_flags); }
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * task->jobctl flags
@@ -1961,6 +2029,7 @@ static inline int set_cpus_allowed_ptr(struct task_struct *p,
 }
 #endif
 
+<<<<<<< HEAD
 static inline void set_wake_up_idle(bool enabled)
 {
 	if (enabled)
@@ -1968,6 +2037,15 @@ static inline void set_wake_up_idle(bool enabled)
 	else
 		current->flags &= ~PF_WAKE_UP_IDLE;
 }
+=======
+#ifdef CONFIG_NO_HZ
+void calc_load_enter_idle(void);
+void calc_load_exit_idle(void);
+#else
+static inline void calc_load_enter_idle(void) { }
+static inline void calc_load_exit_idle(void) { }
+#endif /* CONFIG_NO_HZ */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifndef CONFIG_CPUMASK_OFFSTACK
 static inline int set_cpus_allowed(struct task_struct *p, cpumask_t new_mask)
@@ -1976,6 +2054,17 @@ static inline int set_cpus_allowed(struct task_struct *p, cpumask_t new_mask)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+TASK_PFA_TEST(SPREAD_PAGE, spread_page)
+TASK_PFA_SET(SPREAD_PAGE, spread_page)
+TASK_PFA_CLEAR(SPREAD_PAGE, spread_page)
+
+TASK_PFA_TEST(SPREAD_SLAB, spread_slab)
+TASK_PFA_SET(SPREAD_SLAB, spread_slab)
+TASK_PFA_CLEAR(SPREAD_SLAB, spread_slab)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Do not use outside of architecture code which knows its limitations.
  *
@@ -2063,7 +2152,10 @@ extern unsigned int sysctl_sched_latency;
 extern unsigned int sysctl_sched_min_granularity;
 extern unsigned int sysctl_sched_wakeup_granularity;
 extern unsigned int sysctl_sched_child_runs_first;
+<<<<<<< HEAD
 extern unsigned int sysctl_sched_wake_to_idle;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 enum sched_tunable_scaling {
 	SCHED_TUNABLESCALING_NONE,
@@ -2326,7 +2418,11 @@ static inline void mmdrop(struct mm_struct * mm)
 }
 
 /* mmput gets rid of the mappings and all user-space */
+<<<<<<< HEAD
 extern int mmput(struct mm_struct *);
+=======
+extern void mmput(struct mm_struct *);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Grab a reference to a task's mm, if it is not already going away */
 extern struct mm_struct *get_task_mm(struct task_struct *task);
 /*
@@ -2502,13 +2598,19 @@ static inline void threadgroup_change_end(struct task_struct *tsk)
  *
  * Lock the threadgroup @tsk belongs to.  No new task is allowed to enter
  * and member tasks aren't allowed to exit (as indicated by PF_EXITING) or
+<<<<<<< HEAD
  * perform exec.  This is useful for cases where the threadgroup needs to
  * stay stable across blockable operations.
+=======
+ * change ->group_leader/pid.  This is useful for cases where the threadgroup
+ * needs to stay stable across blockable operations.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * fork and exit paths explicitly call threadgroup_change_{begin|end}() for
  * synchronization.  While held, no new task will be added to threadgroup
  * and no existing live task will have its PF_EXITING set.
  *
+<<<<<<< HEAD
  * During exec, a task goes and puts its thread group through unusual
  * changes.  After de-threading, exclusive access is assumed to resources
  * which are usually shared by tasks in the same group - e.g. sighand may
@@ -2523,6 +2625,13 @@ static inline void threadgroup_lock(struct task_struct *tsk)
 	 * cred_guard_mutex. Grab cred_guard_mutex first.
 	 */
 	mutex_lock(&tsk->signal->cred_guard_mutex);
+=======
+ * de_thread() does threadgroup_change_{begin|end}() when a non-leader
+ * sub-thread becomes a new leader.
+ */
+static inline void threadgroup_lock(struct task_struct *tsk)
+{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	down_write(&tsk->signal->group_rwsem);
 }
 
@@ -2535,7 +2644,10 @@ static inline void threadgroup_lock(struct task_struct *tsk)
 static inline void threadgroup_unlock(struct task_struct *tsk)
 {
 	up_write(&tsk->signal->group_rwsem);
+<<<<<<< HEAD
 	mutex_unlock(&tsk->signal->cred_guard_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #else
 static inline void threadgroup_change_begin(struct task_struct *tsk) {}
@@ -2767,8 +2879,11 @@ static inline void set_task_cpu(struct task_struct *p, unsigned int cpu)
 
 #endif /* CONFIG_SMP */
 
+<<<<<<< HEAD
 extern struct atomic_notifier_head migration_notifier_head;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern long sched_setaffinity(pid_t pid, const struct cpumask *new_mask);
 extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
 
@@ -2794,7 +2909,11 @@ extern int sched_group_set_rt_period(struct task_group *tg,
 extern long sched_group_rt_period(struct task_group *tg);
 extern int sched_rt_can_attach(struct task_group *tg, struct task_struct *tsk);
 #endif
+<<<<<<< HEAD
 #endif
+=======
+#endif /* CONFIG_CGROUP_SCHED */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern int task_can_switch_user(struct user_struct *up,
 					struct task_struct *tsk);

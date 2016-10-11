@@ -70,6 +70,7 @@ struct mt_class {
 	bool is_indirect;	/* true for touchpads */
 };
 
+<<<<<<< HEAD
 struct mt_device {
 	struct mt_slot curdata;	/* placeholder of incoming data */
 	struct mt_class mtclass;	/* our mt device class */
@@ -77,6 +78,22 @@ struct mt_device {
 	unsigned last_slot_field;	/* the last field of a slot */
 	__s8 inputmode;		/* InputMode HID feature, -1 if non-existent */
 	__s8 maxcontact_report_id;	/* Maximum Contact Number HID feature,
+=======
+struct mt_fields {
+	unsigned usages[HID_MAX_FIELDS];
+	unsigned int length;
+};
+
+struct mt_device {
+	struct mt_slot curdata;	/* placeholder of incoming data */
+	struct mt_class mtclass;	/* our mt device class */
+	struct mt_fields *fields;	/* temporary placeholder for storing the
+					   multitouch fields */
+	unsigned last_field_index;	/* last field index of the report */
+	unsigned last_slot_field;	/* the last field of a slot */
+	__s16 inputmode;		/* InputMode HID feature, -1 if non-existent */
+	__s16 maxcontact_report_id;	/* Maximum Contact Number HID feature,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				   -1 if non-existent */
 	__u8 num_received;	/* how many contacts we received */
 	__u8 num_expected;	/* expected last contact index */
@@ -275,11 +292,23 @@ static void set_abs(struct input_dev *input, unsigned int code,
 	input_set_abs_params(input, code, fmin, fmax, fuzz, 0);
 }
 
+<<<<<<< HEAD
 static void set_last_slot_field(struct hid_usage *usage, struct mt_device *td,
 		struct hid_input *hi)
 {
 	if (!test_bit(usage->hid, hi->input->absbit))
 		td->last_slot_field = usage->hid;
+=======
+static void mt_store_field(struct hid_usage *usage, struct mt_device *td,
+		struct hid_input *hi)
+{
+	struct mt_fields *f = td->fields;
+
+	if (f->length >= HID_MAX_FIELDS)
+		return;
+
+	f->usages[f->length++] = usage->hid;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
@@ -319,6 +348,7 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 	if (field->physical == HID_DG_STYLUS)
 		return -1;
 
+<<<<<<< HEAD
 	/* Only map fields from TouchScreen or TouchPad collections.
          * We need to ignore fields that belong to other collections
          * such as Mouse that might have the same GenericDesktop usages. */
@@ -329,6 +359,8 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 	else
 		return 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (usage->hid & HID_USAGE_PAGE) {
 
 	case HID_UP_GENDESK:
@@ -340,7 +372,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 				cls->sn_move);
 			/* touchscreen emulation */
 			set_abs(hi->input, ABS_X, field, cls->sn_move);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_GD_Y:
@@ -350,7 +386,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 				cls->sn_move);
 			/* touchscreen emulation */
 			set_abs(hi->input, ABS_Y, field, cls->sn_move);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		}
@@ -359,24 +399,40 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 	case HID_UP_DIGITIZER:
 		switch (usage->hid) {
 		case HID_DG_INRANGE:
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_CONFIDENCE:
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+			td->last_field_index = field->index;
+			return 1;
+		case HID_DG_CONFIDENCE:
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_TIPSWITCH:
 			hid_map_usage(hi, usage, bit, max, EV_KEY, BTN_TOUCH);
 			input_set_capability(hi->input, EV_KEY, BTN_TOUCH);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_CONTACTID:
 			if (!td->maxcontacts)
 				td->maxcontacts = MT_DEFAULT_MAXCONTACT;
 			input_mt_init_slots(hi->input, td->maxcontacts);
+<<<<<<< HEAD
 			td->last_slot_field = usage->hid;
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			td->touches_by_report++;
 			return 1;
@@ -385,7 +441,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 					EV_ABS, ABS_MT_TOUCH_MAJOR);
 			set_abs(hi->input, ABS_MT_TOUCH_MAJOR, field,
 				cls->sn_width);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_HEIGHT:
@@ -395,7 +455,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 				cls->sn_height);
 			input_set_abs_params(hi->input,
 					ABS_MT_ORIENTATION, 0, 1, 0, 0);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_TIPPRESSURE:
@@ -406,7 +470,11 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 			/* touchscreen emulation */
 			set_abs(hi->input, ABS_PRESSURE, field,
 				cls->sn_pressure);
+<<<<<<< HEAD
 			set_last_slot_field(usage, td, hi);
+=======
+			mt_store_field(usage, td, hi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			td->last_field_index = field->index;
 			return 1;
 		case HID_DG_CONTACTCOUNT:
@@ -645,6 +713,19 @@ static void mt_set_maxcontacts(struct hid_device *hdev)
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void mt_post_parse(struct mt_device *td)
+{
+	struct mt_fields *f = td->fields;
+
+	if (td->touches_by_report > 0) {
+		int field_count_per_touch = f->length / td->touches_by_report;
+		td->last_slot_field = f->usages[field_count_per_touch - 1];
+	}
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 {
 	int ret, i;
@@ -676,6 +757,16 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	td->maxcontact_report_id = -1;
 	hid_set_drvdata(hdev, td);
 
+<<<<<<< HEAD
+=======
+	td->fields = kzalloc(sizeof(struct mt_fields), GFP_KERNEL);
+	if (!td->fields) {
+		dev_err(&hdev->dev, "cannot allocate multitouch fields data\n");
+		ret = -ENOMEM;
+		goto fail;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = hid_parse(hdev);
 	if (ret != 0)
 		goto fail;
@@ -684,6 +775,11 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	if (ret)
 		goto fail;
 
+<<<<<<< HEAD
+=======
+	mt_post_parse(td);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!id && td->touches_by_report == 1) {
 		/* the device has been sent by hid-generic */
 		mtclass = &td->mtclass;
@@ -707,9 +803,19 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	mt_set_maxcontacts(hdev);
 	mt_set_input_mode(hdev);
 
+<<<<<<< HEAD
 	return 0;
 
 fail:
+=======
+	kfree(td->fields);
+	td->fields = NULL;
+
+	return 0;
+
+fail:
+	kfree(td->fields);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(td);
 	return ret;
 }
@@ -759,6 +865,13 @@ static const struct hid_device_id mt_devices[] = {
 		HID_USB_DEVICE(USB_VENDOR_ID_ATMEL,
 			USB_DEVICE_ID_ATMEL_MXT_DIGITIZER) },
 
+<<<<<<< HEAD
+=======
+	/* Baanto multitouch devices */
+	{ .driver_data = MT_CLS_DEFAULT,
+		HID_USB_DEVICE(USB_VENDOR_ID_BAANTO,
+			USB_DEVICE_ID_BAANTO_MT_190W2) },
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Cando panels */
 	{ .driver_data = MT_CLS_DUAL_INRANGE_CONTACTNUMBER,
 		HID_USB_DEVICE(USB_VENDOR_ID_CANDO,
@@ -912,6 +1025,14 @@ static const struct hid_device_id mt_devices[] = {
 		HID_USB_DEVICE(USB_VENDOR_ID_PANASONIC,
 			USB_DEVICE_ID_PANABOARD_UBT880) },
 
+<<<<<<< HEAD
+=======
+	/* Novatek Panel */
+	{ .driver_data = MT_CLS_DEFAULT,
+		HID_USB_DEVICE(USB_VENDOR_ID_NOVATEK,
+			USB_DEVICE_ID_NOVATEK_PCT) },
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* PenMount panels */
 	{ .driver_data = MT_CLS_CONFIDENCE,
 		HID_USB_DEVICE(USB_VENDOR_ID_PENMOUNT,

@@ -1,6 +1,10 @@
 VERSION = 3
 PATCHLEVEL = 4
+<<<<<<< HEAD
 SUBLEVEL = 0
+=======
+SUBLEVEL = 112
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXTRAVERSION =
 NAME = Saber-toothed Squirrel
 
@@ -192,8 +196,13 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
+<<<<<<< HEAD
 ARCH		?=arm
 CROSS_COMPILE	?=/opt/toolchains/arm-eabi-4.9/bin/arm-eabi-
+=======
+ARCH		?= $(SUBARCH)
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -345,11 +354,14 @@ KALLSYMS	= scripts/kallsyms
 PERL		= perl
 CHECK		= sparse
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_CRYPTO_FIPS),)
  READELF	= $(CROSS_COMPILE)readelf
  export READELF
 endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
 CFLAGS_MODULE   =
@@ -378,7 +390,11 @@ KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 KBUILD_AFLAGS_MODULE  := -DMODULE
+<<<<<<< HEAD
 KBUILD_CFLAGS_MODULE  := -DMODULE -fno-pic
+=======
+KBUILD_CFLAGS_MODULE  := -DMODULE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -564,7 +580,11 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+<<<<<<< HEAD
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
+=======
+KBUILD_CFLAGS	+= -Os
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 else
 KBUILD_CFLAGS	+= -O2
 endif
@@ -597,6 +617,11 @@ KBUILD_CFLAGS	+= -fomit-frame-pointer
 endif
 endif
 
+<<<<<<< HEAD
+=======
+KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ifdef CONFIG_DEBUG_INFO
 KBUILD_CFLAGS	+= -g
 KBUILD_AFLAGS	+= -gdwarf-2
@@ -809,10 +834,13 @@ define rule_vmlinux__
 		/bin/false;                                                  \
 	fi;
 	$(verify_kallsyms)
+<<<<<<< HEAD
 
 	$(if $(CONFIG_CRYPTO_FIPS),						
 	@$(kecho) '  FIPS : Generating hmac of crypto and updating vmlinux... ';	
 	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/fips_crypto_hmac.sh $(objtree)/vmlinux $(objtree)/System.map)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endef
 
 
@@ -869,7 +897,10 @@ endef
 # Generate .S file with all kernel symbols
 quiet_cmd_kallsyms = KSYM    $@
       cmd_kallsyms = $(NM) -n $< | $(KALLSYMS) \
+<<<<<<< HEAD
                      --page-offset=$(CONFIG_PAGE_OFFSET) \
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
                      $(if $(CONFIG_KALLSYMS_ALL),--all-symbols) > $@
 
 .tmp_kallsyms1.o .tmp_kallsyms2.o .tmp_kallsyms3.o: %.o: %.S scripts FORCE

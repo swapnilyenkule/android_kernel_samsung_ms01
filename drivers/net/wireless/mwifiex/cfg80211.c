@@ -544,9 +544,15 @@ mwifiex_dump_station_info(struct mwifiex_private *priv,
 
 	/*
 	 * Bit 0 in tx_htinfo indicates that current Tx rate is 11n rate. Valid
+<<<<<<< HEAD
 	 * MCS index values for us are 0 to 7.
 	 */
 	if ((priv->tx_htinfo & BIT(0)) && (priv->tx_rate < 8)) {
+=======
+	 * MCS index values for us are 0 to 15.
+	 */
+	if ((priv->tx_htinfo & BIT(0)) && (priv->tx_rate < 16)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		sinfo->txrate.mcs = priv->tx_rate;
 		sinfo->txrate.flags |= RATE_INFO_FLAGS_MCS;
 		/* 40MHz rate */
@@ -1214,11 +1220,19 @@ struct net_device *mwifiex_add_virtual_intf(struct wiphy *wiphy,
 	void *mdev_priv;
 
 	if (!priv)
+<<<<<<< HEAD
 		return NULL;
 
 	adapter = priv->adapter;
 	if (!adapter)
 		return NULL;
+=======
+		return ERR_PTR(-EFAULT);
+
+	adapter = priv->adapter;
+	if (!adapter)
+		return ERR_PTR(-EFAULT);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	switch (type) {
 	case NL80211_IFTYPE_UNSPECIFIED:
@@ -1227,7 +1241,11 @@ struct net_device *mwifiex_add_virtual_intf(struct wiphy *wiphy,
 		if (priv->bss_mode) {
 			wiphy_err(wiphy, "cannot create multiple"
 					" station/adhoc interfaces\n");
+<<<<<<< HEAD
 			return NULL;
+=======
+			return ERR_PTR(-EINVAL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 		if (type == NL80211_IFTYPE_UNSPECIFIED)
@@ -1244,14 +1262,23 @@ struct net_device *mwifiex_add_virtual_intf(struct wiphy *wiphy,
 		break;
 	default:
 		wiphy_err(wiphy, "type not supported\n");
+<<<<<<< HEAD
 		return NULL;
+=======
+		return ERR_PTR(-EINVAL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	dev = alloc_netdev_mq(sizeof(struct mwifiex_private *), name,
 			      ether_setup, 1);
 	if (!dev) {
 		wiphy_err(wiphy, "no memory available for netdevice\n");
+<<<<<<< HEAD
 		goto error;
+=======
+		priv->bss_mode = NL80211_IFTYPE_UNSPECIFIED;
+		return ERR_PTR(-ENOMEM);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	dev_net_set(dev, wiphy_net(wiphy));
@@ -1276,7 +1303,13 @@ struct net_device *mwifiex_add_virtual_intf(struct wiphy *wiphy,
 	/* Register network device */
 	if (register_netdevice(dev)) {
 		wiphy_err(wiphy, "cannot register virtual network device\n");
+<<<<<<< HEAD
 		goto error;
+=======
+		free_netdev(dev);
+		priv->bss_mode = NL80211_IFTYPE_UNSPECIFIED;
+		return ERR_PTR(-EFAULT);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	sema_init(&priv->async_sem, 1);
@@ -1288,12 +1321,15 @@ struct net_device *mwifiex_add_virtual_intf(struct wiphy *wiphy,
 	mwifiex_dev_debugfs_init(priv);
 #endif
 	return dev;
+<<<<<<< HEAD
 error:
 	if (dev && (dev->reg_state == NETREG_UNREGISTERED))
 		free_netdev(dev);
 	priv->bss_mode = NL80211_IFTYPE_UNSPECIFIED;
 
 	return NULL;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(mwifiex_add_virtual_intf);
 

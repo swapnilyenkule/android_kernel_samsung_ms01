@@ -16,9 +16,15 @@
 
 #include <mach/msm_fb.h>
 #include <mach/vreg.h>
+<<<<<<< HEAD
 #include <mach/proc_comm.h>
 
 #include "board-trout.h"
+=======
+
+#include "board-trout.h"
+#include "proc_comm.h"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "devices.h"
 
 #define TROUT_DEFAULT_BACKLIGHT_BRIGHTNESS 255

@@ -1786,7 +1786,11 @@ static void bnx2fc_parse_fcp_rsp(struct bnx2fc_cmd *io_req,
 			fcp_sns_len = SCSI_SENSE_BUFFERSIZE;
 		}
 
+<<<<<<< HEAD
 		memset(sc_cmd->sense_buffer, 0, sizeof(sc_cmd->sense_buffer));
+=======
+		memset(sc_cmd->sense_buffer, 0, SCSI_SENSE_BUFFERSIZE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (fcp_sns_len)
 			memcpy(sc_cmd->sense_buffer, rq_data, fcp_sns_len);
 

@@ -10,7 +10,10 @@
  * published by the Free Software Foundation.
  */
 
+<<<<<<< HEAD
 #include <linux/cpu.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/module.h>
 #include <linux/highmem.h>
 #include <linux/interrupt.h>
@@ -136,6 +139,7 @@ struct page *kmap_atomic_to_page(const void *ptr)
 
 	return pte_page(get_top_pte(vaddr));
 }
+<<<<<<< HEAD
 
 #ifdef CONFIG_ARCH_WANT_KMAP_ATOMIC_FLUSH
 static void kmap_remove_unused_cpu(int cpu)
@@ -199,3 +203,5 @@ static int __init tima_init_kmap_atomic(void)
 }
 early_initcall(tima_init_kmap_atomic);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

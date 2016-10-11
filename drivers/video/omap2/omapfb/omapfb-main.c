@@ -1187,7 +1187,11 @@ static int _setcolreg(struct fb_info *fbi, u_int regno, u_int red, u_int green,
 			break;
 
 		if (regno < 16) {
+<<<<<<< HEAD
 			u16 pal;
+=======
+			u32 pal;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			pal = ((red >> (16 - var->red.length)) <<
 					var->red.offset) |
 				((green >> (16 - var->green.length)) <<

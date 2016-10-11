@@ -30,7 +30,11 @@ if PM_DEVFREQ
 comment "DEVFREQ Governors"
 
 config DEVFREQ_GOV_SIMPLE_ONDEMAND
+<<<<<<< HEAD
 	tristate "Simple Ondemand"
+=======
+	bool "Simple Ondemand"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Chooses frequency based on the recent load on the device. Works
 	  similar as ONDEMAND governor of CPUFREQ does. A device with
@@ -39,7 +43,11 @@ config DEVFREQ_GOV_SIMPLE_ONDEMAND
 	  values to the governor with data field at devfreq_add_device().
 
 config DEVFREQ_GOV_PERFORMANCE
+<<<<<<< HEAD
 	tristate "Performance"
+=======
+	bool "Performance"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Sets the frequency at the maximum available frequency.
 	  This governor always returns UINT_MAX as frequency so that
@@ -47,7 +55,11 @@ config DEVFREQ_GOV_PERFORMANCE
 	  at any time.
 
 config DEVFREQ_GOV_POWERSAVE
+<<<<<<< HEAD
 	tristate "Powersave"
+=======
+	bool "Powersave"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Sets the frequency at the minimum available frequency.
 	  This governor always returns 0 as frequency so that
@@ -55,7 +67,11 @@ config DEVFREQ_GOV_POWERSAVE
 	  at any time.
 
 config DEVFREQ_GOV_USERSPACE
+<<<<<<< HEAD
 	tristate "Userspace"
+=======
+	bool "Userspace"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Sets the frequency at the user specified one.
 	  This governor returns the user configured frequency if there
@@ -63,6 +79,7 @@ config DEVFREQ_GOV_USERSPACE
 	  Otherwise, the governor does not change the frequnecy
 	  given at the initialization.
 
+<<<<<<< HEAD
 config DEVFREQ_GOV_MSM_ADRENO_TZ
 	tristate "MSM Adreno Trustzone"
 	depends on MSM_KGSL && MSM_SCM
@@ -90,6 +107,8 @@ config DEVFREQ_GOV_MSM_CPUBW_HWMON
 	  with existing profiling tools.  This governor is unlikely to be
 	  useful for other devices.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 comment "DEVFREQ Drivers"
 
 config ARM_EXYNOS4_BUS_DEVFREQ

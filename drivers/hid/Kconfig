@@ -55,6 +55,7 @@ config HIDRAW
 
 	If unsure, say Y.
 
+<<<<<<< HEAD
 config UHID
 	tristate "User-space I/O driver support for HID subsystem"
 	depends on HID
@@ -76,6 +77,8 @@ config UHID
 	To compile this driver as a module, choose M here: the
 	module will be called uhid.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/hid/usbhid/Kconfig"
 
 menu "Special HID drivers"
@@ -261,12 +264,15 @@ config HID_KENSINGTON
 	---help---
 	Support for Kensington Slimblade Trackball.
 
+<<<<<<< HEAD
 config HID_KK_UPGRADE
 	bool "KK Upgrade"
 	depends on USB_HID
 	---help---
 	Feature for KK Upgrade models.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HID_LCPOWER
 	tristate "LC-Power"
 	depends on USB_HID
@@ -283,7 +289,11 @@ config HID_LOGITECH
 config HID_LOGITECH_DJ
 	tristate "Logitech Unifying receivers full support"
 	depends on HID_LOGITECH
+<<<<<<< HEAD
 	default y
+=======
+	default m
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	---help---
 	Say Y if you want support for Logitech Unifying receivers and devices.
 	Unifying receivers are capable of pairing up to 6 Logitech compliant
@@ -528,7 +538,11 @@ config HID_SAITEK
 
 config HID_SAMSUNG
 	tristate "Samsung InfraRed remote control or keyboards"
+<<<<<<< HEAD
 	depends on (USB_HID || BT_HIDP)
+=======
+	depends on USB_HID
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	---help---
 	Support for Samsung InfraRed remote control or keyboards.
 
@@ -590,6 +604,7 @@ config SMARTJOYPLUS_FF
 	Say Y here if you have a SmartJoy PLUS PS2/USB adapter and want to
 	enable force feedback support for it.
 
+<<<<<<< HEAD
 config HID_SYNAPTICS_BT
 	tristate "HID Synaptics"
 	depends on HID
@@ -597,6 +612,8 @@ config HID_SYNAPTICS_BT
 	---help---
 	For a Bluetooth HID touchpad
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HID_TIVO
 	tristate "TiVo Slide Bluetooth remote control support"
 	depends on (USB_HID || BT_HIDP)
@@ -658,12 +675,15 @@ config HID_WIIMOTE_EXT
 	here if you want to use the Nintendo Motion+, Nunchuck or Classic
 	extension controllers with your Wii Remote.
 
+<<<<<<< HEAD
 config HID_ZAGG
 	tristate "ZAGG InfraRed remote control or keyboards"
 	depends on (USB_HID || BT_HIDP)
 	---help---
 	Support for ZAGG InfraRed remote control or keyboards.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HID_ZEROPLUS
 	tristate "Zeroplus based game controller support"
 	depends on USB_HID
@@ -684,6 +704,7 @@ config HID_ZYDACRON
 	---help---
 	Support for Zydacron remote control.
 
+<<<<<<< HEAD
 config HID_OVR
 	tristate "OVR device support"
 	depends on USB_HID
@@ -691,6 +712,8 @@ config HID_OVR
 	Support for OVR devices.
 	Say Y here if you have a OVR device.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endmenu
 
 endif # HID_SUPPORT

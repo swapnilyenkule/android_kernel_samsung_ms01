@@ -390,6 +390,11 @@ static void __unflatten_device_tree(struct boot_param_header *blob,
 	mem = (unsigned long)
 		dt_alloc(size + 4, __alignof__(struct device_node));
 
+<<<<<<< HEAD
+=======
+	memset((void *)mem, 0, size);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	((__be32 *)mem)[size / 4] = cpu_to_be32(0xdeadbeef);
 
 	pr_debug("  unflattening %lx...\n", mem);

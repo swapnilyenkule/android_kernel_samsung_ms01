@@ -40,9 +40,15 @@ def get_kallsyms_table():
 
 def get_sym(sloc):
 	loc = int(sloc)
+<<<<<<< HEAD
 	for i in kallsyms:
 		if (i['loc'] >= loc):
 			return (i['name'], i['loc']-loc)
+=======
+	for i in kallsyms[::-1]:
+		if loc >= i['loc']:
+			return (i['name'], loc - i['loc'])
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return (None, 0)
 
 def print_drop_table():
@@ -64,7 +70,11 @@ def trace_end():
 
 # called from perf, when it finds a correspoinding event
 def skb__kfree_skb(name, context, cpu, sec, nsec, pid, comm,
+<<<<<<< HEAD
 			skbaddr, protocol, location):
+=======
+		   skbaddr, location, protocol):
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	slocation = str(location)
 	try:
 		drop_log[slocation] = drop_log[slocation] + 1

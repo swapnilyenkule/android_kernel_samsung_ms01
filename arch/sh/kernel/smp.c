@@ -220,7 +220,11 @@ extern struct {
 	void *thread_info;
 } stack_start;
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct task_struct *tsk;
 	unsigned long timeout;

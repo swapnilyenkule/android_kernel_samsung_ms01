@@ -251,7 +251,10 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr *uaddr,
 	fl6.flowi6_mark = sk->sk_mark;
 	fl6.fl6_dport = usin->sin6_port;
 	fl6.fl6_sport = inet->inet_sport;
+<<<<<<< HEAD
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	final_p = fl6_update_dst(&fl6, np->opt, &final);
 
@@ -405,7 +408,10 @@ static void tcp_v6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
 			fl6.flowi6_mark = sk->sk_mark;
 			fl6.fl6_dport = inet->inet_dport;
 			fl6.fl6_sport = inet->inet_sport;
+<<<<<<< HEAD
 			fl6.flowi6_uid = sock_i_uid(sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			security_skb_classify_flow(skb, flowi6_to_flowi(&fl6));
 
 			dst = ip6_dst_lookup_flow(sk, &fl6, NULL, false);
@@ -495,10 +501,16 @@ static int tcp_v6_send_synack(struct sock *sk, struct request_sock *req,
 	fl6.saddr = treq->loc_addr;
 	fl6.flowlabel = 0;
 	fl6.flowi6_oif = treq->iif;
+<<<<<<< HEAD
 	fl6.flowi6_mark = inet_rsk(req)->ir_mark;
 	fl6.fl6_dport = inet_rsk(req)->rmt_port;
 	fl6.fl6_sport = inet_rsk(req)->loc_port;
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+	fl6.flowi6_mark = sk->sk_mark;
+	fl6.fl6_dport = inet_rsk(req)->rmt_port;
+	fl6.fl6_sport = inet_rsk(req)->loc_port;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	security_req_classify_flow(req, flowi6_to_flowi(&fl6));
 
 	opt = np->opt;
@@ -901,7 +913,10 @@ static void tcp_v6_send_response(struct sk_buff *skb, u32 seq, u32 ack, u32 win,
 	fl6.flowi6_proto = IPPROTO_TCP;
 	if (ipv6_addr_type(&fl6.daddr) & IPV6_ADDR_LINKLOCAL)
 		fl6.flowi6_oif = inet6_iif(skb);
+<<<<<<< HEAD
 	fl6.flowi6_mark = IP6_REPLY_MARK(net, skb->mark);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fl6.fl6_dport = t1->dest;
 	fl6.fl6_sport = t1->source;
 	security_skb_classify_flow(skb, flowi6_to_flowi(&fl6));
@@ -1148,7 +1163,10 @@ static int tcp_v6_conn_request(struct sock *sk, struct sk_buff *skb)
 		TCP_ECN_create_request(req, tcp_hdr(skb));
 
 	treq->iif = sk->sk_bound_dev_if;
+<<<<<<< HEAD
 	inet_rsk(req)->ir_mark = inet_request_mark(sk, skb);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* So that link locals have meaning */
 	if (!sk->sk_bound_dev_if &&
@@ -1416,7 +1434,12 @@ static struct sock * tcp_v6_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 #endif
 
 	if (__inet_inherit_port(sk, newsk) < 0) {
+<<<<<<< HEAD
 		sock_put(newsk);
+=======
+		inet_csk_prepare_forced_close(newsk);
+		tcp_done(newsk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 	__inet6_hash(newsk, NULL);
@@ -1575,7 +1598,11 @@ ipv6_pktoptions:
 		if (np->rxopt.bits.rxhlim || np->rxopt.bits.rxohlim)
 			np->mcast_hops = ipv6_hdr(opt_skb)->hop_limit;
 		if (np->rxopt.bits.rxtclass)
+<<<<<<< HEAD
 			np->rcv_tclass = ipv6_tclass(ipv6_hdr(skb));
+=======
+			np->rcv_tclass = ipv6_tclass(ipv6_hdr(opt_skb));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ipv6_opt_accepted(sk, opt_skb)) {
 			skb_set_owner_r(opt_skb, sk);
 			opt_skb = xchg(&np->pktoptions, opt_skb);
@@ -2136,7 +2163,10 @@ struct proto tcpv6_prot = {
 	.proto_cgroup		= tcp_proto_cgroup,
 #endif
 	.clear_sk		= tcp_v6_clear_sk,
+<<<<<<< HEAD
 	.diag_destroy		= tcp_abort,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static const struct inet6_protocol tcpv6_protocol = {

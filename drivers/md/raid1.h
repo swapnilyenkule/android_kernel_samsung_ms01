@@ -48,6 +48,14 @@ struct r1conf {
 	 * block, or anything else.
 	 */
 	struct list_head	retry_list;
+<<<<<<< HEAD
+=======
+	/* A separate list of r1bio which just need raid_end_bio_io called.
+	 * This mustn't happen for writes which had any errors if the superblock
+	 * needs to be written.
+	 */
+	struct list_head	bio_end_io_list;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* queue pending writes to be submitted on unplug */
 	struct bio_list		pending_bio_list;

@@ -2,7 +2,10 @@
  *  GPIO driven matrix keyboard driver
  *
  *  Copyright (c) 2008 Marek Vasut <marek.vasut@gmail.com>
+<<<<<<< HEAD
  *  Copyright (c) 2012, The Linux Foundation. All rights reserved.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  *  Based on corgikbd.c
  *
@@ -25,10 +28,13 @@
 #include <linux/input/matrix_keypad.h>
 #include <linux/slab.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PATEK_PROJECT
 	static int check_key_press;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct matrix_keypad {
 	const struct matrix_keypad_platform_data *pdata;
 	struct input_dev *input_dev;
@@ -39,7 +45,11 @@ struct matrix_keypad {
 
 	uint32_t last_key_state[MATRIX_MAX_COLS];
 	struct delayed_work work;
+<<<<<<< HEAD
 	struct mutex lock;
+=======
+	spinlock_t lock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bool scan_pending;
 	bool stopped;
 	bool gpio_all_disabled;
@@ -156,6 +166,7 @@ static void matrix_keypad_scan(struct work_struct *work)
 
 			code = MATRIX_SCAN_CODE(row, col, keypad->row_shift);
 			input_event(input_dev, EV_MSC, MSC_SCAN, code);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PATEK_PROJECT
 			pr_info("%s: [key] [%d:%d] %x, %s\n",__func__,row,col,
 				(new_state[col] & ( 1 << row )),
@@ -167,6 +178,8 @@ static void matrix_keypad_scan(struct work_struct *work)
 				check_key_press--;
 			}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			input_report_key(input_dev,
 					 keypad->keycodes[code],
 					 new_state[col] & (1 << row));
@@ -178,6 +191,7 @@ static void matrix_keypad_scan(struct work_struct *work)
 
 	activate_all_cols(pdata, true);
 
+<<<<<<< HEAD
 	mutex_lock(&keypad->lock);
 	keypad->scan_pending = false;
 	enable_row_irqs(keypad);
@@ -199,6 +213,21 @@ static irqreturn_t matrix_keypad_interrupt(int irq, void *id)
 	struct matrix_keypad *keypad = id;
 
 	mutex_lock(&keypad->lock);
+=======
+	/* Enable IRQs again */
+	spin_lock_irq(&keypad->lock);
+	keypad->scan_pending = false;
+	enable_row_irqs(keypad);
+	spin_unlock_irq(&keypad->lock);
+}
+
+static irqreturn_t matrix_keypad_interrupt(int irq, void *id)
+{
+	struct matrix_keypad *keypad = id;
+	unsigned long flags;
+
+	spin_lock_irqsave(&keypad->lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * See if another IRQ beaten us to it and scheduled the
@@ -214,7 +243,11 @@ static irqreturn_t matrix_keypad_interrupt(int irq, void *id)
 		msecs_to_jiffies(keypad->pdata->debounce_ms));
 
 out:
+<<<<<<< HEAD
 	mutex_unlock(&keypad->lock);
+=======
+	spin_unlock_irqrestore(&keypad->lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return IRQ_HANDLED;
 }
 
@@ -337,6 +370,7 @@ static int __devinit init_matrix_gpio(struct platform_device *pdev,
 				pdata->col_gpios[i], i);
 			goto err_free_cols;
 		}
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PATEK_PROJECT
 		gpio_tlmm_config(GPIO_CFG((pdata->col_gpios[i]), 0,
 			GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_ENABLE);		
@@ -344,6 +378,10 @@ static int __devinit init_matrix_gpio(struct platform_device *pdev,
 #else
 		gpio_direction_output(pdata->col_gpios[i], !pdata->active_low);
 #endif
+=======
+
+		gpio_direction_output(pdata->col_gpios[i], !pdata->active_low);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	for (i = 0; i < pdata->num_row_gpios; i++) {
@@ -355,12 +393,16 @@ static int __devinit init_matrix_gpio(struct platform_device *pdev,
 			goto err_free_rows;
 		}
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PATEK_PROJECT
 		gpio_tlmm_config(GPIO_CFG((pdata->row_gpios[i]), 0,
 			GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
 #else
 		gpio_direction_input(pdata->row_gpios[i]);
 #endif
+=======
+		gpio_direction_input(pdata->row_gpios[i]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (pdata->clustered_irq > 0) {
@@ -368,13 +410,18 @@ static int __devinit init_matrix_gpio(struct platform_device *pdev,
 				matrix_keypad_interrupt,
 				pdata->clustered_irq_flags,
 				"matrix-keypad", keypad);
+<<<<<<< HEAD
 		if (err < 0) {
+=======
+		if (err) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			dev_err(&pdev->dev,
 				"Unable to acquire clustered interrupt\n");
 			goto err_free_rows;
 		}
 	} else {
 		for (i = 0; i < pdata->num_row_gpios; i++) {
+<<<<<<< HEAD
 			err = request_threaded_irq(
 					gpio_to_irq(pdata->row_gpios[i]),
 					NULL,
@@ -384,6 +431,14 @@ static int __devinit init_matrix_gpio(struct platform_device *pdev,
 					IRQF_TRIGGER_FALLING,
 					"matrix-keypad", keypad);
 			if (err < 0) {
+=======
+			err = request_irq(gpio_to_irq(pdata->row_gpios[i]),
+					matrix_keypad_interrupt,
+					IRQF_TRIGGER_RISING |
+					IRQF_TRIGGER_FALLING,
+					"matrix-keypad", keypad);
+			if (err) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				dev_err(&pdev->dev,
 					"Unable to acquire interrupt "
 					"for GPIO line %i\n",
@@ -452,7 +507,11 @@ static int __devinit matrix_keypad_probe(struct platform_device *pdev)
 	keypad->row_shift = row_shift;
 	keypad->stopped = true;
 	INIT_DELAYED_WORK(&keypad->work, matrix_keypad_scan);
+<<<<<<< HEAD
 	mutex_init(&keypad->lock);
+=======
+	spin_lock_init(&keypad->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	input_dev->name		= pdev->name;
 	input_dev->id.bustype	= BUS_HOST;
@@ -514,7 +573,10 @@ static int __devexit matrix_keypad_remove(struct platform_device *pdev)
 	for (i = 0; i < pdata->num_col_gpios; i++)
 		gpio_free(pdata->col_gpios[i]);
 
+<<<<<<< HEAD
 	mutex_destroy(&keypad->lock);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	input_unregister_device(keypad->input_dev);
 	platform_set_drvdata(pdev, NULL);
 	kfree(keypad->keycodes);
@@ -527,11 +589,15 @@ static struct platform_driver matrix_keypad_driver = {
 	.probe		= matrix_keypad_probe,
 	.remove		= __devexit_p(matrix_keypad_remove),
 	.driver		= {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PATEK_PROJECT
 		.name	= "patek_3x4_keypad",
 #else
 		.name	= "matrix-keypad",
 #endif
+=======
+		.name	= "matrix-keypad",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.owner	= THIS_MODULE,
 #ifdef CONFIG_PM
 		.pm	= &matrix_keypad_pm_ops,

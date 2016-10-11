@@ -170,6 +170,7 @@ void __flush_dcache_page(struct address_space *mapping, struct page *page)
 	if (!PageHighMem(page)) {
 		__cpuc_flush_dcache_area(page_address(page), PAGE_SIZE);
 	} else {
+<<<<<<< HEAD
 		void *addr;
 
 		if (cache_is_vipt_nonaliasing()) {
@@ -182,6 +183,17 @@ void __flush_dcache_page(struct address_space *mapping, struct page *page)
 				__cpuc_flush_dcache_area(addr, PAGE_SIZE);
 				kunmap_high(page);
 			}
+=======
+		void *addr = kmap_high_get(page);
+		if (addr) {
+			__cpuc_flush_dcache_area(addr, PAGE_SIZE);
+			kunmap_high(page);
+		} else if (cache_is_vipt()) {
+			/* unmapped pages might still be cached */
+			addr = kmap_atomic(page);
+			__cpuc_flush_dcache_area(addr, PAGE_SIZE);
+			kunmap_atomic(addr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -234,8 +246,11 @@ void __sync_icache_dcache(pte_t pteval)
 	struct page *page;
 	struct address_space *mapping;
 
+<<<<<<< HEAD
 	if (!pte_present_user(pteval))
 		return;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cache_is_vipt_nonaliasing() && !pte_exec(pteval))
 		/* only flush non-aliasing VIPT caches for exec mappings */
 		return;
@@ -304,6 +319,42 @@ void flush_dcache_page(struct page *page)
 EXPORT_SYMBOL(flush_dcache_page);
 
 /*
+<<<<<<< HEAD
+=======
+ * Ensure cache coherency for the kernel mapping of this page. We can
+ * assume that the page is pinned via kmap.
+ *
+ * If the page only exists in the page cache and there are no user
+ * space mappings, this is a no-op since the page was already marked
+ * dirty at creation.  Otherwise, we need to flush the dirty kernel
+ * cache lines directly.
+ */
+void flush_kernel_dcache_page(struct page *page)
+{
+	if (cache_is_vivt() || cache_is_vipt_aliasing()) {
+		struct address_space *mapping;
+
+		mapping = page_mapping(page);
+
+		if (!mapping || mapping_mapped(mapping)) {
+			void *addr;
+
+			addr = page_address(page);
+			/*
+			 * kmap_atomic() doesn't set the page virtual
+			 * address for highmem pages, and
+			 * kunmap_atomic() takes care of cache
+			 * flushing already.
+			 */
+			if (!IS_ENABLED(CONFIG_HIGHMEM) || addr)
+				__cpuc_flush_dcache_area(addr, PAGE_SIZE);
+		}
+	}
+}
+EXPORT_SYMBOL(flush_kernel_dcache_page);
+
+/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Flush an anonymous page so that users of get_user_pages()
  * can safely access the data.  The expected sequence is:
  *
@@ -342,6 +393,7 @@ void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned l
 	 */
 	__cpuc_flush_dcache_area(page_address(page), PAGE_SIZE);
 }
+<<<<<<< HEAD
 
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
 /* Added here for TIMA lazy MMU. */
@@ -360,3 +412,5 @@ void flush_tlb_l2_page(pmd_t *pmd)
 	);
 }
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

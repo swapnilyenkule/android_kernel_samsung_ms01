@@ -250,7 +250,11 @@ acpi_physical_address __init acpi_os_get_root_pointer(void)
 		return acpi_rsdp;
 #endif
 
+<<<<<<< HEAD
 	if (efi_enabled) {
+=======
+	if (efi_enabled(EFI_CONFIG_TABLES)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (efi.acpi20 != EFI_INVALID_TABLE_ADDR)
 			return efi.acpi20;
 		else if (efi.acpi != EFI_INVALID_TABLE_ADDR)

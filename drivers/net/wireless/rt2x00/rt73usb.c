@@ -2167,7 +2167,12 @@ static int rt73usb_probe_hw_mode(struct rt2x00_dev *rt2x00dev)
 		tx_power = rt2x00_eeprom_addr(rt2x00dev, EEPROM_TXPOWER_A_START);
 		for (i = 14; i < spec->num_channels; i++) {
 			info[i].max_power = MAX_TXPOWER;
+<<<<<<< HEAD
 			info[i].default_power1 = TXPOWER_FROM_DEV(tx_power[i]);
+=======
+			info[i].default_power1 =
+					TXPOWER_FROM_DEV(tx_power[i - 14]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -2177,6 +2182,10 @@ static int rt73usb_probe_hw_mode(struct rt2x00_dev *rt2x00dev)
 static int rt73usb_probe_hw(struct rt2x00_dev *rt2x00dev)
 {
 	int retval;
+<<<<<<< HEAD
+=======
+	u32 reg;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Allocate eeprom data.
@@ -2190,6 +2199,17 @@ static int rt73usb_probe_hw(struct rt2x00_dev *rt2x00dev)
 		return retval;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Enable rfkill polling by setting GPIO direction of the
+	 * rfkill switch GPIO pin correctly.
+	 */
+	rt2x00usb_register_read(rt2x00dev, MAC_CSR13, &reg);
+	rt2x00_set_field32(&reg, MAC_CSR13_BIT15, 0);
+	rt2x00usb_register_write(rt2x00dev, MAC_CSR13, reg);
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Initialize hw specifications.
 	 */
 	retval = rt73usb_probe_hw_mode(rt2x00dev);
@@ -2412,6 +2432,10 @@ static struct usb_device_id rt73usb_device_table[] = {
 	{ USB_DEVICE(0x0b05, 0x1723) },
 	{ USB_DEVICE(0x0b05, 0x1724) },
 	/* Belkin */
+<<<<<<< HEAD
+=======
+	{ USB_DEVICE(0x050d, 0x7050) },	/* FCC ID: K7SF5D7050B ver. 3.x */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ USB_DEVICE(0x050d, 0x705a) },
 	{ USB_DEVICE(0x050d, 0x905b) },
 	{ USB_DEVICE(0x050d, 0x905c) },

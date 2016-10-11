@@ -172,7 +172,11 @@ extern int wm8903_mic_detect(struct snd_soc_codec *codec,
 #define WM8903_VMID_BUF_ENA_WIDTH                    1  /* VMID_BUF_ENA */
 
 #define WM8903_VMID_RES_50K                          2
+<<<<<<< HEAD
 #define WM8903_VMID_RES_250K                         3
+=======
+#define WM8903_VMID_RES_250K                         4
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define WM8903_VMID_RES_5K                           6
 
 /*

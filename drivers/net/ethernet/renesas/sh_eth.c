@@ -137,8 +137,14 @@ static struct sh_eth_cpu_data sh_eth_my_cpu_data = {
 	.rmcr_value	= 0x00000001,
 
 	.tx_check	= EESR_FTC | EESR_CND | EESR_DLC | EESR_CD | EESR_RTO,
+<<<<<<< HEAD
 	.eesr_err_check	= EESR_TWB | EESR_TABT | EESR_RABT | EESR_RDE |
 			  EESR_RFRMER | EESR_TFE | EESR_TDE | EESR_ECI,
+=======
+	.eesr_err_check	= EESR_TWB | EESR_TABT | EESR_RABT | EESR_RFE |
+			  EESR_RDE | EESR_RFRMER | EESR_TFE | EESR_TDE |
+			  EESR_ECI,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.tx_error_check	= EESR_TWB | EESR_TABT | EESR_TDE | EESR_TFE,
 
 	.apr		= 1,
@@ -252,9 +258,15 @@ static struct sh_eth_cpu_data sh_eth_my_cpu_data_giga = {
 	.eesipr_value	= DMAC_M_RFRMER | DMAC_M_ECI | 0x003fffff,
 
 	.tx_check	= EESR_TC1 | EESR_FTC,
+<<<<<<< HEAD
 	.eesr_err_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_RABT | \
 			  EESR_RDE | EESR_RFRMER | EESR_TFE | EESR_TDE | \
 			  EESR_ECI,
+=======
+	.eesr_err_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_RABT |
+			  EESR_RFE | EESR_RDE | EESR_RFRMER | EESR_TFE |
+			  EESR_TDE | EESR_ECI,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.tx_error_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_TDE | \
 			  EESR_TFE,
 	.fdr_value	= 0x0000072f,
@@ -361,9 +373,15 @@ static struct sh_eth_cpu_data sh_eth_my_cpu_data = {
 	.eesipr_value	= DMAC_M_RFRMER | DMAC_M_ECI | 0x003fffff,
 
 	.tx_check	= EESR_TC1 | EESR_FTC,
+<<<<<<< HEAD
 	.eesr_err_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_RABT | \
 			  EESR_RDE | EESR_RFRMER | EESR_TFE | EESR_TDE | \
 			  EESR_ECI,
+=======
+	.eesr_err_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_RABT |
+			  EESR_RFE | EESR_RDE | EESR_RFRMER | EESR_TFE |
+			  EESR_TDE | EESR_ECI,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.tx_error_check	= EESR_TWB1 | EESR_TWB | EESR_TABT | EESR_TDE | \
 			  EESR_TFE,
 

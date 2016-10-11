@@ -67,6 +67,10 @@ struct scsi_disk {
 	u8		protection_type;/* Data Integrity Field */
 	u8		provisioning_mode;
 	unsigned	ATO : 1;	/* state of disk ATO bit */
+<<<<<<< HEAD
+=======
+	unsigned	cache_override : 1; /* temp override of WCE,RCD */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned	WCE : 1;	/* state of disk WCE bit */
 	unsigned	RCD : 1;	/* state of disk RCD bit, unused */
 	unsigned	DPOFUA : 1;	/* state of disk DPOFUA bit */
@@ -77,6 +81,7 @@ struct scsi_disk {
 	unsigned	lbpws : 1;
 	unsigned	lbpws10 : 1;
 	unsigned	lbpvpd : 1;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_STORAGE_DETECT
 	wait_queue_head_t	 delay_wait;
 	struct completion	scanning_done;
@@ -85,6 +90,8 @@ struct scsi_disk {
 	int		async_end;
 	int		prv_media_present;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #define to_scsi_disk(obj) container_of(obj,struct scsi_disk,dev)
 

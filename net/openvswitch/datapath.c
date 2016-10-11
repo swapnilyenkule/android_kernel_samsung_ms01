@@ -269,8 +269,15 @@ static int queue_gso_packets(int dp_ifindex, struct sk_buff *skb,
 	int err;
 
 	segs = skb_gso_segment(skb, NETIF_F_SG | NETIF_F_HW_CSUM);
+<<<<<<< HEAD
 	if (IS_ERR(skb))
 		return PTR_ERR(skb);
+=======
+	if (IS_ERR(segs))
+		return PTR_ERR(segs);
+	if (segs == NULL)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Queue all of the segments. */
 	skb = segs;

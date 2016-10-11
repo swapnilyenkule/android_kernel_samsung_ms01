@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -22,9 +26,12 @@
 
 #include <linux/mfd/pm8xxx/core.h>
 #include <linux/input/pmic8xxx-pwrkey.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define PON_CNTL_1 0x1C
 #define PON_CNTL_PULL_UP BIT(7)
@@ -33,20 +40,27 @@
 /**
  * struct pmic8xxx_pwrkey - pmic8xxx pwrkey information
  * @key_press_irq: key press irq number
+<<<<<<< HEAD
  * @pdata: platform data
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct pmic8xxx_pwrkey {
 	struct input_dev *pwr;
 	int key_press_irq;
+<<<<<<< HEAD
 	int key_release_irq;
 	bool press;
 	const struct pm8xxx_pwrkey_platform_data *pdata;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static irqreturn_t pwrkey_press_irq(int irq, void *_pwrkey)
 {
 	struct pmic8xxx_pwrkey *pwrkey = _pwrkey;
 
+<<<<<<< HEAD
 	if (pwrkey->press == true) {
 		pwrkey->press = false;
 		return IRQ_HANDLED;
@@ -59,6 +73,11 @@ static irqreturn_t pwrkey_press_irq(int irq, void *_pwrkey)
 #ifdef CONFIG_SEC_DEBUG
 	sec_debug_check_crash_key(KEY_POWER, 1);
 #endif
+=======
+	input_report_key(pwrkey->pwr, KEY_POWER, 1);
+	input_sync(pwrkey->pwr);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return IRQ_HANDLED;
 }
 
@@ -66,6 +85,7 @@ static irqreturn_t pwrkey_release_irq(int irq, void *_pwrkey)
 {
 	struct pmic8xxx_pwrkey *pwrkey = _pwrkey;
 
+<<<<<<< HEAD
 	if (pwrkey->press == false) {
 		input_report_key(pwrkey->pwr, KEY_POWER, 1);
 		input_sync(pwrkey->pwr);
@@ -79,6 +99,11 @@ static irqreturn_t pwrkey_release_irq(int irq, void *_pwrkey)
 #ifdef CONFIG_SEC_DEBUG
 	sec_debug_check_crash_key(KEY_POWER, 0);
 #endif
+=======
+	input_report_key(pwrkey->pwr, KEY_POWER, 0);
+	input_sync(pwrkey->pwr);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return IRQ_HANDLED;
 }
 
@@ -87,10 +112,15 @@ static int pmic8xxx_pwrkey_suspend(struct device *dev)
 {
 	struct pmic8xxx_pwrkey *pwrkey = dev_get_drvdata(dev);
 
+<<<<<<< HEAD
 	if (device_may_wakeup(dev)) {
 		enable_irq_wake(pwrkey->key_press_irq);
 		enable_irq_wake(pwrkey->key_release_irq);
 	}
+=======
+	if (device_may_wakeup(dev))
+		enable_irq_wake(pwrkey->key_press_irq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -99,10 +129,15 @@ static int pmic8xxx_pwrkey_resume(struct device *dev)
 {
 	struct pmic8xxx_pwrkey *pwrkey = dev_get_drvdata(dev);
 
+<<<<<<< HEAD
 	if (device_may_wakeup(dev)) {
 		disable_irq_wake(pwrkey->key_press_irq);
 		disable_irq_wake(pwrkey->key_release_irq);
 	}
+=======
+	if (device_may_wakeup(dev))
+		disable_irq_wake(pwrkey->key_press_irq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -111,6 +146,7 @@ static int pmic8xxx_pwrkey_resume(struct device *dev)
 static SIMPLE_DEV_PM_OPS(pm8xxx_pwr_key_pm_ops,
 		pmic8xxx_pwrkey_suspend, pmic8xxx_pwrkey_resume);
 
+<<<<<<< HEAD
 static int pmic8xxx_set_pon1(struct device *dev, u32 debounce_us, bool pull_up)
 {
 	int err;
@@ -174,12 +210,19 @@ static ssize_t pmic8xxx_debounce_store(struct device *dev,
 
 static DEVICE_ATTR(debounce_us, 0664, NULL, pmic8xxx_debounce_store);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 {
 	struct input_dev *pwr;
 	int key_release_irq = platform_get_irq(pdev, 0);
 	int key_press_irq = platform_get_irq(pdev, 1);
 	int err;
+<<<<<<< HEAD
+=======
+	unsigned int delay;
+	u8 pon_cntl;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct pmic8xxx_pwrkey *pwrkey;
 	const struct pm8xxx_pwrkey_platform_data *pdata =
 					dev_get_platdata(&pdev->dev);
@@ -189,12 +232,23 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
+=======
+	if (pdata->kpd_trigger_delay_us > 62500) {
+		dev_err(&pdev->dev, "invalid power key trigger delay\n");
+		return -EINVAL;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pwrkey = kzalloc(sizeof(*pwrkey), GFP_KERNEL);
 	if (!pwrkey)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	pwrkey->pdata = pdata;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pwr = input_allocate_device();
 	if (!pwr) {
 		dev_dbg(&pdev->dev, "Can't allocate power button\n");
@@ -208,10 +262,32 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 	pwr->phys = "pmic8xxx_pwrkey/input0";
 	pwr->dev.parent = &pdev->dev;
 
+<<<<<<< HEAD
 	err = pmic8xxx_set_pon1(&pdev->dev,
 			pdata->kpd_trigger_delay_us, pdata->pull_up);
 	if (err) {
 		dev_dbg(&pdev->dev, "Can't set PON CTRL1 register: %d\n", err);
+=======
+	delay = (pdata->kpd_trigger_delay_us << 10) / USEC_PER_SEC;
+	delay = 1 + ilog2(delay);
+
+	err = pm8xxx_readb(pdev->dev.parent, PON_CNTL_1, &pon_cntl);
+	if (err < 0) {
+		dev_err(&pdev->dev, "failed reading PON_CNTL_1 err=%d\n", err);
+		goto free_input_dev;
+	}
+
+	pon_cntl &= ~PON_CNTL_TRIG_DELAY_MASK;
+	pon_cntl |= (delay & PON_CNTL_TRIG_DELAY_MASK);
+	if (pdata->pull_up)
+		pon_cntl |= PON_CNTL_PULL_UP;
+	else
+		pon_cntl &= ~PON_CNTL_PULL_UP;
+
+	err = pm8xxx_writeb(pdev->dev.parent, PON_CNTL_1, pon_cntl);
+	if (err < 0) {
+		dev_err(&pdev->dev, "failed writing PON_CNTL_1 err=%d\n", err);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto free_input_dev;
 	}
 
@@ -222,11 +298,15 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 	}
 
 	pwrkey->key_press_irq = key_press_irq;
+<<<<<<< HEAD
 	pwrkey->key_release_irq = key_release_irq;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pwrkey->pwr = pwr;
 
 	platform_set_drvdata(pdev, pwrkey);
 
+<<<<<<< HEAD
 	/* check power key status during boot */
 	err = pm8xxx_read_irq_stat(pdev->dev.parent, key_press_irq);
 	if (err < 0) {
@@ -241,6 +321,9 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 	}
 
 	err = request_any_context_irq(key_press_irq, pwrkey_press_irq,
+=======
+	err = request_irq(key_press_irq, pwrkey_press_irq,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		IRQF_TRIGGER_RISING, "pmic8xxx_pwrkey_press", pwrkey);
 	if (err < 0) {
 		dev_dbg(&pdev->dev, "Can't get %d IRQ for pwrkey: %d\n",
@@ -248,7 +331,11 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 		goto unreg_input_dev;
 	}
 
+<<<<<<< HEAD
 	err = request_any_context_irq(key_release_irq, pwrkey_release_irq,
+=======
+	err = request_irq(key_release_irq, pwrkey_release_irq,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		 IRQF_TRIGGER_RISING, "pmic8xxx_pwrkey_release", pwrkey);
 	if (err < 0) {
 		dev_dbg(&pdev->dev, "Can't get %d IRQ for pwrkey: %d\n",
@@ -257,6 +344,7 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 		goto free_press_irq;
 	}
 
+<<<<<<< HEAD
 	err = device_create_file(&pdev->dev, &dev_attr_debounce_us);
 	if (err < 0) {
 		dev_err(&pdev->dev,
@@ -265,14 +353,21 @@ static int __devinit pmic8xxx_pwrkey_probe(struct platform_device *pdev)
 		goto free_rel_irq;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	device_init_wakeup(&pdev->dev, pdata->wakeup);
 
 	return 0;
 
+<<<<<<< HEAD
 free_rel_irq:
 	free_irq(key_release_irq, pwrkey);
 free_press_irq:
 	free_irq(key_press_irq, pwrkey);
+=======
+free_press_irq:
+	free_irq(key_press_irq, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 unreg_input_dev:
 	platform_set_drvdata(pdev, NULL);
 	input_unregister_device(pwr);
@@ -292,7 +387,10 @@ static int __devexit pmic8xxx_pwrkey_remove(struct platform_device *pdev)
 
 	device_init_wakeup(&pdev->dev, 0);
 
+<<<<<<< HEAD
 	device_remove_file(&pdev->dev, &dev_attr_debounce_us);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	free_irq(key_press_irq, pwrkey);
 	free_irq(key_release_irq, pwrkey);
 	input_unregister_device(pwrkey->pwr);

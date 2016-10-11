@@ -15,6 +15,10 @@
 
 #include <linux/ipv6.h>
 #include <linux/hardirq.h>
+<<<<<<< HEAD
+=======
+#include <linux/jhash.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/if_inet6.h>
 #include <net/ndisc.h>
 #include <net/flow.h>
@@ -109,9 +113,12 @@ struct frag_hdr {
 
 #define	IP6_MF	0x0001
 
+<<<<<<< HEAD
 #define IP6_REPLY_MARK(net, mark) \
 	((net)->ipv6.sysctl.fwmark_reflect ? (mark) : 0)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/sock.h>
 
 /* sysctls */
@@ -255,9 +262,12 @@ static inline void fl6_sock_release(struct ip6_flowlabel *fl)
 		atomic_dec(&fl->users);
 }
 
+<<<<<<< HEAD
 int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
 			       struct icmp6hdr *thdr, int len);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int 			ip6_ra_control(struct sock *sk, int sel);
 
 extern int			ipv6_parse_hopopts(struct sk_buff *skb);
@@ -300,6 +310,7 @@ static inline int ipv6_addr_src_scope(const struct in6_addr *addr)
 	return __ipv6_addr_src_scope(__ipv6_addr_type(addr));
 }
 
+<<<<<<< HEAD
 static inline bool __ipv6_addr_needs_scope_id(int type)
 {
 	return type & IPV6_ADDR_LINKLOCAL ||
@@ -312,6 +323,8 @@ static inline __u32 ipv6_iface_scope_id(const struct in6_addr *addr, int iface)
 	return __ipv6_addr_needs_scope_id(__ipv6_addr_type(addr)) ? iface : 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline int ipv6_addr_cmp(const struct in6_addr *a1, const struct in6_addr *a2)
 {
 	return memcmp(a1, a2, sizeof(struct in6_addr));
@@ -408,6 +421,25 @@ struct ip6_create_arg {
 void ip6_frag_init(struct inet_frag_queue *q, void *a);
 int ip6_frag_match(struct inet_frag_queue *q, void *a);
 
+<<<<<<< HEAD
+=======
+/* more secured version of ipv6_addr_hash() */
+static inline u32 __ipv6_addr_jhash(const struct in6_addr *a, const u32 initval)
+{
+	u32 v = (__force u32)a->s6_addr32[0] ^ (__force u32)a->s6_addr32[1];
+
+	return jhash_3words(v,
+			    (__force u32)a->s6_addr32[2],
+			    (__force u32)a->s6_addr32[3],
+			    initval);
+}
+
+static inline u32 ipv6_addr_jhash(const struct in6_addr *a)
+{
+	return __ipv6_addr_jhash(a, ipv6_hash_secret);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline int ipv6_addr_any(const struct in6_addr *a)
 {
 	return (a->s6_addr32[0] | a->s6_addr32[1] |
@@ -486,6 +518,10 @@ static inline int ipv6_addr_diff(const struct in6_addr *a1, const struct in6_add
 }
 
 extern void ipv6_select_ident(struct frag_hdr *fhdr, struct rt6_info *rt);
+<<<<<<< HEAD
+=======
+void ipv6_proxy_select_ident(struct sk_buff *skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  *	Prototypes exported by ipv6
@@ -612,8 +648,15 @@ extern int			compat_ipv6_getsockopt(struct sock *sk,
 extern int			ip6_datagram_connect(struct sock *sk, 
 						     struct sockaddr *addr, int addr_len);
 
+<<<<<<< HEAD
 extern int 			ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len);
 extern int 			ipv6_recv_rxpmtu(struct sock *sk, struct msghdr *msg, int len);
+=======
+extern int 			ipv6_recv_error(struct sock *sk, struct msghdr *msg, int len,
+						int *addr_len);
+extern int 			ipv6_recv_rxpmtu(struct sock *sk, struct msghdr *msg, int len,
+						 int *addr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void			ipv6_icmp_error(struct sock *sk, struct sk_buff *skb, int err, __be16 port,
 						u32 info, u8 *payload);
 extern void			ipv6_local_error(struct sock *sk, int err, struct flowi6 *fl6, u32 info);

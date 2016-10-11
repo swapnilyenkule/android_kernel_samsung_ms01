@@ -45,21 +45,33 @@ static ssize_t power_supply_show_property(struct device *dev,
 					  char *buf) {
 	static char *type_text[] = {
 		"Unknown", "Battery", "UPS", "Mains", "USB",
+<<<<<<< HEAD
 		"USB_DCP", "USB_CDP", "USB_ACA",
 		"BMS", "MISC", "Wireless", "CARDOCK", "UARTOFF", "OTG",
 		"LAN_HUB", "MHL_500", "MHL_900", "MHL_1500", "MHL_USB",
 		"SMART_OTG", "SMART_NOTG", "POWER_SHARING",
 		"Mains", "POGO"
+=======
+		"USB_DCP", "USB_CDP", "USB_ACA"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	};
 	static char *status_text[] = {
 		"Unknown", "Charging", "Discharging", "Not charging", "Full"
 	};
 	static char *charge_type[] = {
+<<<<<<< HEAD
 		"Unknown", "N/A", "Trickle", "Fast", "Slow"
 	};
 	static char *health_text[] = {
 		"Unknown", "Good", "Overheat", "Warm", "Dead", "Over voltage",
 		"Unspecified failure", "Cold", "Cool", "Under voltage", "OverheatLimit"
+=======
+		"Unknown", "N/A", "Trickle", "Fast"
+	};
+	static char *health_text[] = {
+		"Unknown", "Good", "Overheat", "Dead", "Over voltage",
+		"Unspecified failure", "Cold",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	};
 	static char *technology_text[] = {
 		"Unknown", "NiMH", "Li-ion", "Li-poly", "LiFe", "NiCd",
@@ -142,7 +154,10 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(health),
 	POWER_SUPPLY_ATTR(present),
 	POWER_SUPPLY_ATTR(online),
+<<<<<<< HEAD
 	POWER_SUPPLY_ATTR(charging_enabled),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	POWER_SUPPLY_ATTR(technology),
 	POWER_SUPPLY_ATTR(cycle_count),
 	POWER_SUPPLY_ATTR(voltage_max),
@@ -151,12 +166,16 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(voltage_min_design),
 	POWER_SUPPLY_ATTR(voltage_now),
 	POWER_SUPPLY_ATTR(voltage_avg),
+<<<<<<< HEAD
 	POWER_SUPPLY_ATTR(input_voltage_regulation),
 	POWER_SUPPLY_ATTR(voltage_ocv),
 	POWER_SUPPLY_ATTR(current_max),
 	POWER_SUPPLY_ATTR(input_current_max),
 	POWER_SUPPLY_ATTR(input_current_trim),
 	POWER_SUPPLY_ATTR(input_current_settled),
+=======
+	POWER_SUPPLY_ATTR(current_max),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	POWER_SUPPLY_ATTR(current_now),
 	POWER_SUPPLY_ATTR(current_avg),
 	POWER_SUPPLY_ATTR(power_now),
@@ -168,7 +187,10 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(charge_now),
 	POWER_SUPPLY_ATTR(charge_avg),
 	POWER_SUPPLY_ATTR(charge_counter),
+<<<<<<< HEAD
 	POWER_SUPPLY_ATTR(charge_counter_shadow),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	POWER_SUPPLY_ATTR(energy_full_design),
 	POWER_SUPPLY_ATTR(energy_empty_design),
 	POWER_SUPPLY_ATTR(energy_full),
@@ -178,8 +200,11 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(capacity),
 	POWER_SUPPLY_ATTR(capacity_level),
 	POWER_SUPPLY_ATTR(temp),
+<<<<<<< HEAD
 	POWER_SUPPLY_ATTR(temp_cool),
 	POWER_SUPPLY_ATTR(temp_warm),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	POWER_SUPPLY_ATTR(temp_ambient),
 	POWER_SUPPLY_ATTR(time_to_empty_now),
 	POWER_SUPPLY_ATTR(time_to_empty_avg),
@@ -187,8 +212,11 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(time_to_full_avg),
 	POWER_SUPPLY_ATTR(type),
 	POWER_SUPPLY_ATTR(scope),
+<<<<<<< HEAD
 	POWER_SUPPLY_ATTR(system_temp_level),
 	POWER_SUPPLY_ATTR(resistance),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Properties of type `const char *' */
 	POWER_SUPPLY_ATTR(model_name),
 	POWER_SUPPLY_ATTR(manufacturer),

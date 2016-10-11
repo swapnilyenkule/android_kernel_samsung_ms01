@@ -55,6 +55,7 @@ static int ecryptfs_d_revalidate(struct dentry *dentry, struct nameidata *nd)
 
 	lower_dentry = ecryptfs_dentry_to_lower(dentry);
 	lower_mnt = ecryptfs_dentry_to_lower_mnt(dentry);
+<<<<<<< HEAD
 	if (!lower_dentry->d_op || !lower_dentry->d_op->d_revalidate)
 		goto out;
 	if (nd) {
@@ -75,6 +76,28 @@ static int ecryptfs_d_revalidate(struct dentry *dentry, struct nameidata *nd)
 		fsstack_copy_attr_all(dentry->d_inode, lower_inode);
 	}
 out:
+=======
+	if (lower_dentry->d_op && lower_dentry->d_op->d_revalidate) {
+		if (nd) {
+			dentry_save = nd->path.dentry;
+			vfsmount_save = nd->path.mnt;
+			nd->path.dentry = lower_dentry;
+			nd->path.mnt = lower_mnt;
+		}
+		rc = lower_dentry->d_op->d_revalidate(lower_dentry, nd);
+		if (nd) {
+			nd->path.dentry = dentry_save;
+			nd->path.mnt = vfsmount_save;
+		}
+	}
+	if (dentry->d_inode) {
+		struct inode *inode = dentry->d_inode;
+
+		fsstack_copy_attr_all(inode, ecryptfs_inode_to_lower(inode));
+		if (!inode->i_nlink)
+			return 0;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return rc;
 }
 

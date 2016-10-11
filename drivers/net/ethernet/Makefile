@@ -41,7 +41,10 @@ obj-$(CONFIG_NET_VENDOR_MELLANOX) += mellanox/
 obj-$(CONFIG_NET_VENDOR_MICREL) += micrel/
 obj-$(CONFIG_NET_VENDOR_MICROCHIP) += microchip/
 obj-$(CONFIG_MIPS_SIM_NET) += mipsnet.o
+<<<<<<< HEAD
 obj-$(CONFIG_ARCH_MSM) += msm/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_NET_VENDOR_MYRI) += myricom/
 obj-$(CONFIG_FEALNX) += fealnx.o
 obj-$(CONFIG_NET_VENDOR_NATSEMI) += natsemi/

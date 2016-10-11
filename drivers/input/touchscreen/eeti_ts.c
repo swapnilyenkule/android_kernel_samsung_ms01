@@ -48,7 +48,11 @@ struct eeti_ts_priv {
 	struct input_dev *input;
 	struct work_struct work;
 	struct mutex mutex;
+<<<<<<< HEAD
 	int irq, irq_active_high;
+=======
+	int irq_gpio, irq, irq_active_high;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #define EETI_TS_BITDEPTH	(11)
@@ -62,7 +66,11 @@ struct eeti_ts_priv {
 
 static inline int eeti_ts_irq_active(struct eeti_ts_priv *priv)
 {
+<<<<<<< HEAD
 	return gpio_get_value(irq_to_gpio(priv->irq)) == priv->irq_active_high;
+=======
+	return gpio_get_value(priv->irq_gpio) == priv->irq_active_high;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void eeti_ts_read(struct work_struct *work)
@@ -157,7 +165,11 @@ static void eeti_ts_close(struct input_dev *dev)
 static int __devinit eeti_ts_probe(struct i2c_client *client,
 				   const struct i2c_device_id *idp)
 {
+<<<<<<< HEAD
 	struct eeti_ts_platform_data *pdata;
+=======
+	struct eeti_ts_platform_data *pdata = client->dev.platform_data;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct eeti_ts_priv *priv;
 	struct input_dev *input;
 	unsigned int irq_flags;
@@ -199,9 +211,18 @@ static int __devinit eeti_ts_probe(struct i2c_client *client,
 
 	priv->client = client;
 	priv->input = input;
+<<<<<<< HEAD
 	priv->irq = client->irq;
 
 	pdata = client->dev.platform_data;
+=======
+	priv->irq_gpio = pdata->irq_gpio;
+	priv->irq = gpio_to_irq(pdata->irq_gpio);
+
+	err = gpio_request_one(pdata->irq_gpio, GPIOF_IN, client->name);
+	if (err < 0)
+		goto err1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (pdata)
 		priv->irq_active_high = pdata->irq_active_high;
@@ -215,13 +236,21 @@ static int __devinit eeti_ts_probe(struct i2c_client *client,
 
 	err = input_register_device(input);
 	if (err)
+<<<<<<< HEAD
 		goto err1;
+=======
+		goto err2;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	err = request_irq(priv->irq, eeti_ts_isr, irq_flags,
 			  client->name, priv);
 	if (err) {
 		dev_err(&client->dev, "Unable to request touchscreen IRQ.\n");
+<<<<<<< HEAD
 		goto err2;
+=======
+		goto err3;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/*
@@ -233,9 +262,17 @@ static int __devinit eeti_ts_probe(struct i2c_client *client,
 	device_init_wakeup(&client->dev, 0);
 	return 0;
 
+<<<<<<< HEAD
 err2:
 	input_unregister_device(input);
 	input = NULL; /* so we dont try to free it below */
+=======
+err3:
+	input_unregister_device(input);
+	input = NULL; /* so we dont try to free it below */
+err2:
+	gpio_free(pdata->irq_gpio);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 err1:
 	input_free_device(input);
 	kfree(priv);

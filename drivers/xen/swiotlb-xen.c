@@ -232,7 +232,11 @@ xen_swiotlb_alloc_coherent(struct device *hwdev, size_t size,
 		return ret;
 
 	if (hwdev && hwdev->coherent_dma_mask)
+<<<<<<< HEAD
 		dma_mask = hwdev->coherent_dma_mask;
+=======
+		dma_mask = dma_alloc_coherent_mask(hwdev, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	phys = virt_to_phys(ret);
 	dev_addr = xen_phys_to_bus(phys);

@@ -95,13 +95,20 @@ typedef enum tagWZONETYPE {
 // Ioctl interface structure
 // Command structure
 //
+<<<<<<< HEAD
 #pragma pack(1)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 typedef struct tagSCmdRequest {
 	u8 name[16];
 	void	*data;
 	u16	    wResult;
 	u16     wCmdCode;
+<<<<<<< HEAD
 } SCmdRequest, *PSCmdRequest;
+=======
+} __packed SCmdRequest, *PSCmdRequest;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 //
 // Scan
@@ -111,7 +118,11 @@ typedef struct tagSCmdScan {
 
     u8	    ssid[SSID_MAXLEN + 2];
 
+<<<<<<< HEAD
 } SCmdScan, *PSCmdScan;
+=======
+} __packed SCmdScan, *PSCmdScan;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 //
 // BSS Join
@@ -126,7 +137,11 @@ typedef struct tagSCmdBSSJoin {
     BOOL    bPSEnable;
     BOOL    bShareKeyAuth;
 
+<<<<<<< HEAD
 } SCmdBSSJoin, *PSCmdBSSJoin;
+=======
+} __packed SCmdBSSJoin, *PSCmdBSSJoin;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 //
 // Zonetype Setting
@@ -137,7 +152,11 @@ typedef struct tagSCmdZoneTypeSet {
  BOOL       bWrite;
  WZONETYPE  ZoneType;
 
+<<<<<<< HEAD
 } SCmdZoneTypeSet, *PSCmdZoneTypeSet;
+=======
+} __packed SCmdZoneTypeSet, *PSCmdZoneTypeSet;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef struct tagSWPAResult {
          char	ifname[100];
@@ -145,7 +164,11 @@ typedef struct tagSWPAResult {
 	u8 key_mgmt;
 	u8 eap_type;
          BOOL authenticated;
+<<<<<<< HEAD
 } SWPAResult, *PSWPAResult;
+=======
+} __packed SWPAResult, *PSWPAResult;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef struct tagSCmdStartAP {
 
@@ -157,7 +180,11 @@ typedef struct tagSCmdStartAP {
     BOOL    bShareKeyAuth;
     u8      byBasicRate;
 
+<<<<<<< HEAD
 } SCmdStartAP, *PSCmdStartAP;
+=======
+} __packed SCmdStartAP, *PSCmdStartAP;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef struct tagSCmdSetWEP {
 
@@ -167,7 +194,11 @@ typedef struct tagSCmdSetWEP {
     BOOL    bWepKeyAvailable[WEP_NKEYS];
     u32     auWepKeyLength[WEP_NKEYS];
 
+<<<<<<< HEAD
 } SCmdSetWEP, *PSCmdSetWEP;
+=======
+} __packed SCmdSetWEP, *PSCmdSetWEP;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef struct tagSBSSIDItem {
 
@@ -180,14 +211,22 @@ typedef struct tagSBSSIDItem {
     BOOL    bWEPOn;
     u32     uRSSI;
 
+<<<<<<< HEAD
 } SBSSIDItem;
+=======
+} __packed SBSSIDItem;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 typedef struct tagSBSSIDList {
 
 	u32		    uItem;
 	SBSSIDItem	sBSSIDList[0];
+<<<<<<< HEAD
 } SBSSIDList, *PSBSSIDList;
+=======
+} __packed SBSSIDList, *PSBSSIDList;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 typedef struct tagSNodeItem {
@@ -208,7 +247,11 @@ typedef struct tagSNodeItem {
     u32            uTxAttempts;
     u16            wFailureRatio;
 
+<<<<<<< HEAD
 } SNodeItem;
+=======
+} __packed SNodeItem;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 typedef struct tagSNodeList {
@@ -216,7 +259,11 @@ typedef struct tagSNodeList {
 	u32		    uItem;
 	SNodeItem	sNodeList[0];
 
+<<<<<<< HEAD
 } SNodeList, *PSNodeList;
+=======
+} __packed SNodeList, *PSNodeList;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 typedef struct tagSCmdLinkStatus {
@@ -229,7 +276,11 @@ typedef struct tagSCmdLinkStatus {
     u32     uChannel;
     u32     uLinkRate;
 
+<<<<<<< HEAD
 } SCmdLinkStatus, *PSCmdLinkStatus;
+=======
+} __packed SCmdLinkStatus, *PSCmdLinkStatus;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 //
 // 802.11 counter
@@ -247,7 +298,11 @@ typedef struct tagSDot11MIBCount {
     u32 ReceivedFragmentCount;
     u32 MulticastReceivedFrameCount;
     u32 FCSErrorCount;
+<<<<<<< HEAD
 } SDot11MIBCount, *PSDot11MIBCount;
+=======
+} __packed SDot11MIBCount, *PSDot11MIBCount;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 
@@ -355,13 +410,21 @@ typedef struct tagSStatMIBCount {
     u32   ullTxBroadcastBytes[2];
     u32   ullTxMulticastBytes[2];
     u32   ullTxDirectedBytes[2];
+<<<<<<< HEAD
 } SStatMIBCount, *PSStatMIBCount;
+=======
+} __packed SStatMIBCount, *PSStatMIBCount;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 typedef struct tagSCmdValue {
 
     u32     dwValue;
 
+<<<<<<< HEAD
 } SCmdValue,  *PSCmdValue;
+=======
+} __packed SCmdValue,  *PSCmdValue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 //
 // hostapd & viawget ioctl related
@@ -431,7 +494,11 @@ struct viawget_hostapd_param {
 			u8 ssid[32];
 		} scan_req;
 	} u;
+<<<<<<< HEAD
 };
+=======
+} __packed;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*---------------------  Export Classes  ----------------------------*/
 

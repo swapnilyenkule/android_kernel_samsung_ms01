@@ -582,6 +582,7 @@ static char *driver_short_names[] __devinitdata = {
 #define get_azx_dev(substream) (substream->runtime->private_data)
 
 #ifdef CONFIG_X86
+<<<<<<< HEAD
 static void __mark_pages_wc(struct azx *chip, void *addr, size_t size, bool on)
 {
 	if (azx_snoop(chip))
@@ -593,11 +594,39 @@ static void __mark_pages_wc(struct azx *chip, void *addr, size_t size, bool on)
 		else
 			set_memory_wb((unsigned long)addr, pages);
 	}
+=======
+static void __mark_pages_wc(struct azx *chip, struct snd_dma_buffer *dmab, bool on)
+{
+	int pages;
+
+	if (azx_snoop(chip))
+		return;
+	if (!dmab || !dmab->area || !dmab->bytes)
+		return;
+
+#ifdef CONFIG_SND_DMA_SGBUF
+	if (dmab->dev.type == SNDRV_DMA_TYPE_DEV_SG) {
+		struct snd_sg_buf *sgbuf = dmab->private_data;
+		if (on)
+			set_pages_array_wc(sgbuf->page_table, sgbuf->pages);
+		else
+			set_pages_array_wb(sgbuf->page_table, sgbuf->pages);
+		return;
+	}
+#endif
+
+	pages = (dmab->bytes + PAGE_SIZE - 1) >> PAGE_SHIFT;
+	if (on)
+		set_memory_wc((unsigned long)dmab->area, pages);
+	else
+		set_memory_wb((unsigned long)dmab->area, pages);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void mark_pages_wc(struct azx *chip, struct snd_dma_buffer *buf,
 				 bool on)
 {
+<<<<<<< HEAD
 	__mark_pages_wc(chip, buf->area, buf->bytes, on);
 }
 static inline void mark_runtime_wc(struct azx *chip, struct azx_dev *azx_dev,
@@ -605,6 +634,15 @@ static inline void mark_runtime_wc(struct azx *chip, struct azx_dev *azx_dev,
 {
 	if (azx_dev->wc_marked != on) {
 		__mark_pages_wc(chip, runtime->dma_area, runtime->dma_bytes, on);
+=======
+	__mark_pages_wc(chip, buf, on);
+}
+static inline void mark_runtime_wc(struct azx *chip, struct azx_dev *azx_dev,
+				   struct snd_pcm_substream *substream, bool on)
+{
+	if (azx_dev->wc_marked != on) {
+		__mark_pages_wc(chip, substream->runtime->dma_buffer_p, on);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		azx_dev->wc_marked = on;
 	}
 }
@@ -615,7 +653,11 @@ static inline void mark_pages_wc(struct azx *chip, struct snd_dma_buffer *buf,
 {
 }
 static inline void mark_runtime_wc(struct azx *chip, struct azx_dev *azx_dev,
+<<<<<<< HEAD
 				   struct snd_pcm_runtime *runtime, bool on)
+=======
+				   struct snd_pcm_substream *substream, bool on)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 }
 #endif
@@ -1772,11 +1814,18 @@ static int azx_pcm_hw_params(struct snd_pcm_substream *substream,
 {
 	struct azx_pcm *apcm = snd_pcm_substream_chip(substream);
 	struct azx *chip = apcm->chip;
+<<<<<<< HEAD
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct azx_dev *azx_dev = get_azx_dev(substream);
 	int ret;
 
 	mark_runtime_wc(chip, azx_dev, runtime, false);
+=======
+	struct azx_dev *azx_dev = get_azx_dev(substream);
+	int ret;
+
+	mark_runtime_wc(chip, azx_dev, substream, false);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	azx_dev->bufsize = 0;
 	azx_dev->period_bytes = 0;
 	azx_dev->format_val = 0;
@@ -1784,7 +1833,11 @@ static int azx_pcm_hw_params(struct snd_pcm_substream *substream,
 					params_buffer_bytes(hw_params));
 	if (ret < 0)
 		return ret;
+<<<<<<< HEAD
 	mark_runtime_wc(chip, azx_dev, runtime, true);
+=======
+	mark_runtime_wc(chip, azx_dev, substream, true);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 
@@ -1793,7 +1846,10 @@ static int azx_pcm_hw_free(struct snd_pcm_substream *substream)
 	struct azx_pcm *apcm = snd_pcm_substream_chip(substream);
 	struct azx_dev *azx_dev = get_azx_dev(substream);
 	struct azx *chip = apcm->chip;
+<<<<<<< HEAD
 	struct snd_pcm_runtime *runtime = substream->runtime;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct hda_pcm_stream *hinfo = apcm->hinfo[substream->stream];
 
 	/* reset BDL address */
@@ -1806,7 +1862,11 @@ static int azx_pcm_hw_free(struct snd_pcm_substream *substream)
 
 	snd_hda_codec_cleanup(apcm->codec, hinfo, substream);
 
+<<<<<<< HEAD
 	mark_runtime_wc(chip, azx_dev, runtime, false);
+=======
+	mark_runtime_wc(chip, azx_dev, substream, false);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return snd_pcm_lib_free_pages(substream);
 }
 
@@ -2602,6 +2662,10 @@ static struct snd_pci_quirk msi_black_list[] __devinitdata = {
 	SND_PCI_QUIRK(0x1043, 0x81f2, "ASUS", 0), /* Athlon64 X2 + nvidia */
 	SND_PCI_QUIRK(0x1043, 0x81f6, "ASUS", 0), /* nvidia */
 	SND_PCI_QUIRK(0x1043, 0x822d, "ASUS", 0), /* Athlon64 X2 + nvidia MCP55 */
+<<<<<<< HEAD
+=======
+	SND_PCI_QUIRK(0x1179, 0xfb44, "Toshiba Satellite C870", 0), /* AMD Hudson */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	SND_PCI_QUIRK(0x1849, 0x0888, "ASRock", 0), /* Athlon64 X2 + nvidia */
 	SND_PCI_QUIRK(0xa0a0, 0x0575, "Aopen MZ915-M", 0), /* ICH6 */
 	{}
@@ -2672,6 +2736,10 @@ static int __devinit azx_create(struct snd_card *card, struct pci_dev *pci,
 	struct azx *chip;
 	int i, err;
 	unsigned short gcap;
+<<<<<<< HEAD
+=======
+	unsigned int dma_bits = 64;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	static struct snd_device_ops ops = {
 		.dev_free = azx_dev_free,
 	};
@@ -2767,9 +2835,20 @@ static int __devinit azx_create(struct snd_card *card, struct pci_dev *pci,
 	gcap = azx_readw(chip, GCAP);
 	snd_printdd(SFX "chipset global capabilities = 0x%x\n", gcap);
 
+<<<<<<< HEAD
 	/* disable SB600 64bit support for safety */
 	if (chip->pci->vendor == PCI_VENDOR_ID_ATI) {
 		struct pci_dev *p_smbus;
+=======
+	/* AMD devices support 40 or 48bit DMA, take the safe one */
+	if (chip->pci->vendor == PCI_VENDOR_ID_AMD)
+		dma_bits = 40;
+
+	/* disable SB600 64bit support for safety */
+	if (chip->pci->vendor == PCI_VENDOR_ID_ATI) {
+		struct pci_dev *p_smbus;
+		dma_bits = 40;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		p_smbus = pci_get_device(PCI_VENDOR_ID_ATI,
 					 PCI_DEVICE_ID_ATI_SBX00_SMBUS,
 					 NULL);
@@ -2799,9 +2878,17 @@ static int __devinit azx_create(struct snd_card *card, struct pci_dev *pci,
 	}
 
 	/* allow 64bit DMA address if supported by H/W */
+<<<<<<< HEAD
 	if ((gcap & ICH6_GCAP_64OK) && !pci_set_dma_mask(pci, DMA_BIT_MASK(64)))
 		pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(64));
 	else {
+=======
+	if (!(gcap & ICH6_GCAP_64OK))
+		dma_bits = 32;
+	if (!pci_set_dma_mask(pci, DMA_BIT_MASK(dma_bits))) {
+		pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(dma_bits));
+	} else {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pci_set_dma_mask(pci, DMA_BIT_MASK(32));
 		pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(32));
 	}

@@ -198,7 +198,10 @@ struct oti6858_private {
 	u8 setup_done;
 	struct delayed_work delayed_setup_work;
 
+<<<<<<< HEAD
 	wait_queue_head_t intr_wait;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct usb_serial_port *port;   /* USB port with which associated */
 };
 
@@ -356,7 +359,10 @@ static int oti6858_startup(struct usb_serial *serial)
 			break;
 
 		spin_lock_init(&priv->lock);
+<<<<<<< HEAD
 		init_waitqueue_head(&priv->intr_wait);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*		INIT_WORK(&priv->setup_work, setup_line, serial->port[i]); */
 /*		INIT_WORK(&priv->write_work, send_data, serial->port[i]); */
 		priv->port = port;
@@ -703,11 +709,22 @@ static int wait_modem_info(struct usb_serial_port *port, unsigned int arg)
 	spin_unlock_irqrestore(&priv->lock, flags);
 
 	while (1) {
+<<<<<<< HEAD
 		wait_event_interruptible(priv->intr_wait,
+=======
+		wait_event_interruptible(port->delta_msr_wait,
+					port->serial->disconnected ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					priv->status.pin_state != prev);
 		if (signal_pending(current))
 			return -ERESTARTSYS;
 
+<<<<<<< HEAD
+=======
+		if (port->serial->disconnected)
+			return -EIO;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_lock_irqsave(&priv->lock, flags);
 		status = priv->status.pin_state & PIN_MASK;
 		spin_unlock_irqrestore(&priv->lock, flags);
@@ -819,7 +836,11 @@ static void oti6858_read_int_callback(struct urb *urb)
 
 		if (!priv->transient) {
 			if (xs->pin_state != priv->status.pin_state)
+<<<<<<< HEAD
 				wake_up_interruptible(&priv->intr_wait);
+=======
+				wake_up_interruptible(&port->delta_msr_wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			memcpy(&priv->status, xs, OTI6858_CTRL_PKT_SIZE);
 		}
 

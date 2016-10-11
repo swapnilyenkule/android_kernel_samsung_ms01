@@ -338,6 +338,7 @@ static int ipv6_dev_ac_dec(struct net_device *dev, const struct in6_addr *addr)
 	return __ipv6_dev_ac_dec(idev, addr);
 }
 
+<<<<<<< HEAD
 void ipv6_ac_destroy_dev(struct inet6_dev *idev)
 {
 	struct ifacaddr6 *aca;
@@ -359,6 +360,8 @@ void ipv6_ac_destroy_dev(struct inet6_dev *idev)
 	write_unlock_bh(&idev->lock);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *	check if the interface has this anycast address
  *	called with rcu_read_lock()

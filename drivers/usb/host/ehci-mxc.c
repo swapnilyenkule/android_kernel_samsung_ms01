@@ -298,7 +298,11 @@ static int __exit ehci_mxc_drv_remove(struct platform_device *pdev)
 	if (pdata && pdata->exit)
 		pdata->exit(pdev);
 
+<<<<<<< HEAD
 	if (pdata->otg)
+=======
+	if (pdata && pdata->otg)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		usb_phy_shutdown(pdata->otg);
 
 	usb_remove_hcd(hcd);

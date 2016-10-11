@@ -346,7 +346,11 @@ retry:
 	 */
 	err = ubi_scan_add_used(ubi, si, new_seb->pnum, new_seb->ec,
 				vid_hdr, 0);
+<<<<<<< HEAD
 	kfree(new_seb);
+=======
+	kmem_cache_free(si->scan_leb_slab, new_seb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ubi_free_vid_hdr(ubi, vid_hdr);
 	return err;
 
@@ -359,7 +363,11 @@ write_error:
 		list_add(&new_seb->u.list, &si->erase);
 		goto retry;
 	}
+<<<<<<< HEAD
 	kfree(new_seb);
+=======
+	kmem_cache_free(si->scan_leb_slab, new_seb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 out_free:
 	ubi_free_vid_hdr(ubi, vid_hdr);
 	return err;
@@ -656,6 +664,10 @@ static int init_volumes(struct ubi_device *ubi, const struct ubi_scan_info *si,
 		if (ubi->corr_peb_count)
 			ubi_err("%d PEBs are corrupted and not used",
 				ubi->corr_peb_count);
+<<<<<<< HEAD
+=======
+		return -ENOSPC;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	ubi->rsvd_pebs += reserved_pebs;
 	ubi->avail_pebs -= reserved_pebs;

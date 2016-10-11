@@ -326,6 +326,7 @@ static void cpuset_update_task_spread_flag(struct cpuset *cs,
 					struct task_struct *tsk)
 {
 	if (is_spread_page(cs))
+<<<<<<< HEAD
 		tsk->flags |= PF_SPREAD_PAGE;
 	else
 		tsk->flags &= ~PF_SPREAD_PAGE;
@@ -333,6 +334,16 @@ static void cpuset_update_task_spread_flag(struct cpuset *cs,
 		tsk->flags |= PF_SPREAD_SLAB;
 	else
 		tsk->flags &= ~PF_SPREAD_SLAB;
+=======
+		task_set_spread_page(tsk);
+	else
+		task_clear_spread_page(tsk);
+
+	if (is_spread_slab(cs))
+		task_set_spread_slab(tsk);
+	else
+		task_clear_spread_slab(tsk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -983,8 +994,15 @@ static void cpuset_change_task_nodemask(struct task_struct *tsk,
 	need_loop = task_has_mempolicy(tsk) ||
 			!nodes_intersects(*newmems, tsk->mems_allowed);
 
+<<<<<<< HEAD
 	if (need_loop)
 		write_seqcount_begin(&tsk->mems_allowed_seq);
+=======
+	if (need_loop) {
+		local_irq_disable();
+		write_seqcount_begin(&tsk->mems_allowed_seq);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	nodes_or(tsk->mems_allowed, tsk->mems_allowed, *newmems);
 	mpol_rebind_task(tsk, newmems, MPOL_REBIND_STEP1);
@@ -992,8 +1010,15 @@ static void cpuset_change_task_nodemask(struct task_struct *tsk,
 	mpol_rebind_task(tsk, newmems, MPOL_REBIND_STEP2);
 	tsk->mems_allowed = *newmems;
 
+<<<<<<< HEAD
 	if (need_loop)
 		write_seqcount_end(&tsk->mems_allowed_seq);
+=======
+	if (need_loop) {
+		write_seqcount_end(&tsk->mems_allowed_seq);
+		local_irq_enable();
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	task_unlock(tsk);
 }
@@ -1148,7 +1173,17 @@ done:
 
 int current_cpuset_is_being_rebound(void)
 {
+<<<<<<< HEAD
 	return task_cs(current) == cpuset_being_rebound;
+=======
+	int ret;
+
+	rcu_read_lock();
+	ret = task_cs(current) == cpuset_being_rebound;
+	rcu_read_unlock();
+
+	return ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int update_relax_domain_level(struct cpuset *cs, s64 val)
@@ -2065,6 +2100,12 @@ static void scan_for_empty_cpusets(struct cpuset *root)
  * (of no affect) on systems that are actively using CPU hotplug
  * but making no active use of cpusets.
  *
+<<<<<<< HEAD
+=======
+ * The only exception to this is suspend/resume, where we don't
+ * modify cpusets at all.
+ *
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * This routine ensures that top_cpuset.cpus_allowed tracks
  * cpu_active_mask on each CPU hotplug (cpuhp) event.
  *
@@ -2331,9 +2372,15 @@ int __cpuset_node_allowed_softwall(int node, gfp_t gfp_mask)
 
 	task_lock(current);
 	cs = nearest_hardwall_ancestor(task_cs(current));
+<<<<<<< HEAD
 	task_unlock(current);
 
 	allowed = node_isset(node, cs->mems_allowed);
+=======
+	allowed = node_isset(node, cs->mems_allowed);
+	task_unlock(current);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&callback_mutex);
 	return allowed;
 }
@@ -2476,8 +2523,21 @@ void cpuset_print_task_mems_allowed(struct task_struct *tsk)
 
 	dentry = task_cs(tsk)->css.cgroup->dentry;
 	spin_lock(&cpuset_buffer_lock);
+<<<<<<< HEAD
 	snprintf(cpuset_name, CPUSET_NAME_LEN,
 		 dentry ? (const char *)dentry->d_name.name : "/");
+=======
+
+	if (!dentry) {
+		strcpy(cpuset_name, "/");
+	} else {
+		spin_lock(&dentry->d_lock);
+		strlcpy(cpuset_name, (const char *)dentry->d_name.name,
+			CPUSET_NAME_LEN);
+		spin_unlock(&dentry->d_lock);
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nodelist_scnprintf(cpuset_nodelist, CPUSET_NODELIST_LEN,
 			   tsk->mems_allowed);
 	printk(KERN_INFO "%s cpuset=%s mems_allowed=%s\n",

@@ -918,7 +918,11 @@ int cachefiles_write_page(struct fscache_storage *op, struct page *page)
 	 * own time */
 	dget(object->backer);
 	mntget(cache->mnt);
+<<<<<<< HEAD
 	file = dentry_open(object->backer, cache->mnt, O_RDWR,
+=======
+	file = dentry_open(object->backer, cache->mnt, O_RDWR | O_LARGEFILE,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			   cache->cache_cred);
 	if (IS_ERR(file)) {
 		ret = PTR_ERR(file);

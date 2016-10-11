@@ -539,8 +539,15 @@ int rs600_gart_set_page(struct radeon_device *rdev, int i, uint64_t addr)
 		return -EINVAL;
 	}
 	addr = addr & 0xFFFFFFFFFFFFF000ULL;
+<<<<<<< HEAD
 	addr |= R600_PTE_VALID | R600_PTE_SYSTEM | R600_PTE_SNOOPED;
 	addr |= R600_PTE_READABLE | R600_PTE_WRITEABLE;
+=======
+	if (addr != rdev->dummy_page.addr)
+		addr |= R600_PTE_VALID | R600_PTE_READABLE |
+			R600_PTE_WRITEABLE;
+	addr |= R600_PTE_SYSTEM | R600_PTE_SNOOPED;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	writeq(addr, ptr + (i * 8));
 	return 0;
 }
@@ -583,6 +590,13 @@ int rs600_irq_set(struct radeon_device *rdev)
 	WREG32(R_006540_DxMODE_INT_MASK, mode_int);
 	WREG32(R_007D08_DC_HOT_PLUG_DETECT1_INT_CONTROL, hpd1);
 	WREG32(R_007D18_DC_HOT_PLUG_DETECT2_INT_CONTROL, hpd2);
+<<<<<<< HEAD
+=======
+
+	/* posting read */
+	RREG32(R_000040_GEN_INT_CNTL);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -864,6 +878,15 @@ static int rs600_startup(struct radeon_device *rdev)
 	}
 
 	/* Enable IRQ */
+<<<<<<< HEAD
+=======
+	if (!rdev->irq.installed) {
+		r = radeon_irq_kms_init(rdev);
+		if (r)
+			return r;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rs600_irq_set(rdev);
 	rdev->config.r300.hdp_cntl = RREG32(RADEON_HOST_PATH_CNTL);
 	/* 1M ring buffer */
@@ -994,9 +1017,12 @@ int rs600_init(struct radeon_device *rdev)
 	r = radeon_fence_driver_init(rdev);
 	if (r)
 		return r;
+<<<<<<< HEAD
 	r = radeon_irq_kms_init(rdev);
 	if (r)
 		return r;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Memory manager */
 	r = radeon_bo_init(rdev);
 	if (r)

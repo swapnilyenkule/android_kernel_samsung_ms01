@@ -6,7 +6,12 @@
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
+<<<<<<< HEAD
  *   the Free Software Foundation; only version 2 of the License.
+=======
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  *   This program is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,14 +30,20 @@
 #include <linux/export.h>
 #include <sound/core.h>
 #include <sound/control.h>
+<<<<<<< HEAD
 #include <sound/tlv.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <sound/info.h>
 #include <sound/pcm.h>
 #include <sound/pcm_params.h>
 #include <sound/timer.h>
 
+<<<<<<< HEAD
 #define STRING_LENGTH_OF_INT 12
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * fill ring buffer with silence
  * runtime->silence_start: starting pointer to silence area
@@ -1032,7 +1043,11 @@ static int snd_interval_ratden(struct snd_interval *i,
  * Returns non-zero if the value is changed, zero if not changed.
  */
 int snd_interval_list(struct snd_interval *i, unsigned int count,
+<<<<<<< HEAD
 		      unsigned int *list, unsigned int mask)
+=======
+		      const unsigned int *list, unsigned int mask)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
         unsigned int k;
 	struct snd_interval list_range;
@@ -1672,11 +1687,14 @@ static int snd_pcm_lib_ioctl_channel_info(struct snd_pcm_substream *substream,
 	switch (runtime->access) {
 	case SNDRV_PCM_ACCESS_MMAP_INTERLEAVED:
 	case SNDRV_PCM_ACCESS_RW_INTERLEAVED:
+<<<<<<< HEAD
 		if ((UINT_MAX/width) < info->channel) {
 			snd_printd("%s: integer overflow while multiply\n",
 				   __func__);
 			return -EINVAL;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		info->first = info->channel * width;
 		info->step = runtime->channels * width;
 		break;
@@ -1684,12 +1702,15 @@ static int snd_pcm_lib_ioctl_channel_info(struct snd_pcm_substream *substream,
 	case SNDRV_PCM_ACCESS_RW_NONINTERLEAVED:
 	{
 		size_t size = runtime->dma_bytes / runtime->channels;
+<<<<<<< HEAD
 
 		if ((size > 0) && ((UINT_MAX/(size * 8)) < info->channel)) {
 			snd_printd("%s: integer overflow while multiply\n",
 				   __func__);
 			return -EINVAL;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		info->first = info->channel * size * 8;
 		info->step = width;
 		break;
@@ -1706,14 +1727,25 @@ static int snd_pcm_lib_ioctl_fifo_size(struct snd_pcm_substream *substream,
 {
 	struct snd_pcm_hw_params *params = arg;
 	snd_pcm_format_t format;
+<<<<<<< HEAD
 	int channels, width;
+=======
+	int channels;
+	ssize_t frame_size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	params->fifo_size = substream->runtime->hw.fifo_size;
 	if (!(substream->runtime->hw.info & SNDRV_PCM_INFO_FIFO_IN_FRAMES)) {
 		format = params_format(params);
 		channels = params_channels(params);
+<<<<<<< HEAD
 		width = snd_pcm_format_physical_width(format);
 		params->fifo_size /= width * channels;
+=======
+		frame_size = snd_pcm_format_size(format, channels);
+		if (frame_size > 0)
+			params->fifo_size /= (unsigned)frame_size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return 0;
 }
@@ -1809,11 +1841,15 @@ static int wait_for_avail(struct snd_pcm_substream *substream,
 	if (runtime->no_period_wakeup)
 		wait_time = MAX_SCHEDULE_TIMEOUT;
 	else {
+<<<<<<< HEAD
                 if (substream->pcm->card->number != 0)
 			wait_time = 1;
 		else
 			wait_time = 10;
 
+=======
+		wait_time = 10;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (runtime->rate) {
 			long t = runtime->period_size * 2 / runtime->rate;
 			wait_time = max(t, wait_time);
@@ -1864,6 +1900,11 @@ static int wait_for_avail(struct snd_pcm_substream *substream,
 		case SNDRV_PCM_STATE_DISCONNECTED:
 			err = -EBADFD;
 			goto _endloop;
+<<<<<<< HEAD
+=======
+		case SNDRV_PCM_STATE_PAUSED:
+			continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		if (!tout) {
 			snd_printd("%s write error (DMA or IRQ trouble?)\n",
@@ -2009,9 +2050,12 @@ static int pcm_sanity_check(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime;
 	if (PCM_RUNTIME_CHECK(substream))
 		return -ENXIO;
+<<<<<<< HEAD
 	/* TODO: consider and -EINVAL here */
 	if (substream->hw_no_buffer)
 		snd_printd("%s: warning this PCM is host less\n", __func__);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	runtime = substream->runtime;
 	if (snd_BUG_ON(!substream->ops->copy && !runtime->dma_area))
 		return -EINVAL;
@@ -2307,6 +2351,7 @@ snd_pcm_sframes_t snd_pcm_lib_readv(struct snd_pcm_substream *substream,
 }
 
 EXPORT_SYMBOL(snd_pcm_lib_readv);
+<<<<<<< HEAD
 
 /*
  * standard channel mapping helpers
@@ -2608,3 +2653,5 @@ int snd_pcm_add_volume_ctls(struct snd_pcm *pcm, int stream,
 	return 0;
 }
 EXPORT_SYMBOL_GPL(snd_pcm_add_volume_ctls);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -54,12 +54,24 @@ struct pstore_info {
 
 #ifdef CONFIG_PSTORE
 extern int pstore_register(struct pstore_info *);
+<<<<<<< HEAD
+=======
+extern bool pstore_cannot_block_path(enum kmsg_dump_reason reason);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 static inline int
 pstore_register(struct pstore_info *psi)
 {
 	return -ENODEV;
 }
+<<<<<<< HEAD
+=======
+static inline bool
+pstore_cannot_block_path(enum kmsg_dump_reason reason)
+{
+	return false;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 #endif /*_LINUX_PSTORE_H*/

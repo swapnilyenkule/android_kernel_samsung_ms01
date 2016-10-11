@@ -372,7 +372,10 @@ static int afiucv_hs_send(struct iucv_message *imsg, struct sock *sock,
 			skb_trim(skb, skb->dev->mtu);
 	}
 	skb->protocol = ETH_P_AF_IUCV;
+<<<<<<< HEAD
 	skb_shinfo(skb)->tx_flags |= SKBTX_DRV_NEEDS_SK_REF;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nskb = skb_clone(skb, GFP_ATOMIC);
 	if (!nskb)
 		return -ENOMEM;
@@ -408,7 +411,11 @@ static void iucv_sock_destruct(struct sock *sk)
 	sk_mem_reclaim(sk);
 
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		WARN(1, "Attempt to release alive iucv socket %p\n", sk);
+=======
+		pr_err("Attempt to release alive iucv socket %p\n", sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 

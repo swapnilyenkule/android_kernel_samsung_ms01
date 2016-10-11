@@ -2638,7 +2638,11 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
  *	host byte of the result field to, if zero DID_ABORTED is
  *	used.
  *
+<<<<<<< HEAD
  * Returns : 0 - success, -1 on failure.
+=======
+ * Returns : SUCCESS - success, FAILED on failure.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * XXX - there is no way to abort the command that is currently
  *	 connected, you have to wait for it to complete.  If this is

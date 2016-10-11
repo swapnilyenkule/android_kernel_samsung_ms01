@@ -769,7 +769,11 @@ static void __ir_to_input(struct wiimote_data *wdata, const __u8 *ir,
 
 	/*
 	 * Basic IR data is encoded into 3 bytes. The first two bytes are the
+<<<<<<< HEAD
 	 * upper 8 bit of the X/Y data, the 3rd byte contains the lower 2 bits
+=======
+	 * lower 8 bit of the X/Y data, the 3rd byte contains the upper 2 bits
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * of both.
 	 * If data is packed, then the 3rd byte is put first and slightly
 	 * reordered. This allows to interleave packed and non-packed data to
@@ -778,6 +782,7 @@ static void __ir_to_input(struct wiimote_data *wdata, const __u8 *ir,
 	 */
 
 	if (packed) {
+<<<<<<< HEAD
 		x = ir[1] << 2;
 		y = ir[2] << 2;
 
@@ -789,6 +794,13 @@ static void __ir_to_input(struct wiimote_data *wdata, const __u8 *ir,
 
 		x |= (ir[2] >> 4) & 0x3;
 		y |= (ir[2] >> 6) & 0x3;
+=======
+		x = ir[1] | ((ir[0] & 0x03) << 8);
+		y = ir[2] | ((ir[0] & 0x0c) << 6);
+	} else {
+		x = ir[0] | ((ir[2] & 0x30) << 4);
+		y = ir[1] | ((ir[2] & 0xc0) << 2);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	input_report_abs(wdata->ir, xid, x);

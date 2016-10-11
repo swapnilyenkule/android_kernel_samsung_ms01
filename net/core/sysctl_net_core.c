@@ -14,12 +14,23 @@
 #include <linux/vmalloc.h>
 #include <linux/init.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <linux/kmemleak.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <net/ip.h>
 #include <net/sock.h>
 #include <net/net_ratelimit.h>
 
+<<<<<<< HEAD
+=======
+static int zero = 0;
+static int ushort_max = USHRT_MAX;
+
+static int one = 1;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_RPS
 static int rps_sock_flow_sysctl(ctl_table *table, int write,
 				void __user *buffer, size_t *lenp, loff_t *ppos)
@@ -92,28 +103,48 @@ static struct ctl_table net_core_table[] = {
 		.data		= &sysctl_wmem_max,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "rmem_max",
 		.data		= &sysctl_rmem_max,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "wmem_default",
 		.data		= &sysctl_wmem_default,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "rmem_default",
 		.data		= &sysctl_rmem_default,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &one,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "dev_weight",
@@ -198,7 +229,13 @@ static struct ctl_table netns_core_table[] = {
 		.data		= &init_net.core.sysctl_somaxconn,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec
+=======
+		.extra1		= &zero,
+		.extra2		= &ushort_max,
+		.proc_handler	= proc_dointvec_minmax
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{ }
 };
@@ -257,7 +294,11 @@ static __init int sysctl_core_init(void)
 {
 	static struct ctl_table empty[1];
 
+<<<<<<< HEAD
 	kmemleak_not_leak(register_sysctl_paths(net_core_path, empty));
+=======
+	register_sysctl_paths(net_core_path, empty);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	register_net_sysctl_rotable(net_core_path, net_core_table);
 	return register_pernet_subsys(&sysctl_core_ops);
 }

@@ -12,7 +12,11 @@ int bind_evtchn_to_irqhandler(unsigned int evtchn,
 			      irq_handler_t handler,
 			      unsigned long irqflags, const char *devname,
 			      void *dev_id);
+<<<<<<< HEAD
 int bind_virq_to_irq(unsigned int virq, unsigned int cpu);
+=======
+int bind_virq_to_irq(unsigned int virq, unsigned int cpu, bool percpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int bind_virq_to_irqhandler(unsigned int virq, unsigned int cpu,
 			    irq_handler_t handler,
 			    unsigned long irqflags, const char *devname,
@@ -103,6 +107,12 @@ int xen_irq_from_pirq(unsigned pirq);
 /* Return the pirq allocated to the irq. */
 int xen_pirq_from_irq(unsigned irq);
 
+<<<<<<< HEAD
+=======
+/* Return the irq allocated to the gsi */
+int xen_irq_from_gsi(unsigned gsi);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Determine whether to ignore this IRQ if it is passed to a guest. */
 int xen_test_irq_shared(int irq);
 

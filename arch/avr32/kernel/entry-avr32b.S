@@ -399,9 +399,16 @@ handle_critical:
 	/* We should never get here... */
 bad_return:
 	sub	r12, pc, (. - 1f)
+<<<<<<< HEAD
 	bral	panic
 	.align	2
 1:	.asciz	"Return from critical exception!"
+=======
+	lddpc	pc, 2f
+	.align	2
+1:	.asciz	"Return from critical exception!"
+2:	.long	panic
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.align	1
 do_bus_error_write:

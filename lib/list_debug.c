@@ -10,6 +10,7 @@
 #include <linux/list.h>
 #include <linux/bug.h>
 #include <linux/kernel.h>
+<<<<<<< HEAD
 #include <linux/bug.h>
 
 #if 0
@@ -19,6 +20,8 @@ static int list_debug = 0x00000100UL;
 static int list_debug;
 #endif
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Insert a new entry between two known consecutive entries.
@@ -39,6 +42,7 @@ void __list_add(struct list_head *new,
 		"list_add corruption. prev->next should be "
 		"next (%p), but was %p. (prev=%p).\n",
 		next, prev->next, prev);
+<<<<<<< HEAD
 
 #if 0
 	BUG_ON(((prev->next != next) || (next->prev != prev)) &&
@@ -48,6 +52,8 @@ void __list_add(struct list_head *new,
 	{
 		panic("list corruption during add");
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	next->prev = new;
 	new->next = next;
 	new->prev = prev;
@@ -73,6 +79,7 @@ void __list_del_entry(struct list_head *entry)
 		"but was %p\n", entry, prev->next) ||
 	    WARN(next->prev != entry,
 		"list_del corruption. next->prev should be %p, "
+<<<<<<< HEAD
 		"but was %p\n", entry, next->prev)) {
 #if 0
 		BUG_ON(PANIC_CORRUPTION);
@@ -80,6 +87,10 @@ void __list_del_entry(struct list_head *entry)
 		panic("list corruption during del");
 		return;
 	}
+=======
+		"but was %p\n", entry, next->prev))
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	__list_del(prev, next);
 }

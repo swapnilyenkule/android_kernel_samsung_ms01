@@ -25,6 +25,10 @@ struct seq_file;
  * @pin_config_get: get the config of a certain pin, if the requested config
  *	is not available on this controller this should return -ENOTSUPP
  *	and if it is available but disabled it should return -EINVAL
+<<<<<<< HEAD
+=======
+ * @pin_config_get: get the config of a certain pin
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @pin_config_set: configure an individual pin
  * @pin_config_group_get: get configurations for an entire pin group
  * @pin_config_group_set: configure all pins in a group
@@ -32,8 +36,11 @@ struct seq_file;
  *	per-device info for a certain pin in debugfs
  * @pin_config_group_dbg_show: optional debugfs display hook that will provide
  *	per-device info for a certain group in debugfs
+<<<<<<< HEAD
  * @pin_config_config_dbg_show: optional debugfs display hook that will decode
  *	and display a driver's pin configuration parameter
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct pinconf_ops {
 #ifdef CONFIG_GENERIC_PINCONF
@@ -57,9 +64,12 @@ struct pinconf_ops {
 	void (*pin_config_group_dbg_show) (struct pinctrl_dev *pctldev,
 					   struct seq_file *s,
 					   unsigned selector);
+<<<<<<< HEAD
 	void (*pin_config_config_dbg_show) (struct pinctrl_dev *pctldev,
 					    struct seq_file *s,
 					    unsigned long config);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #endif

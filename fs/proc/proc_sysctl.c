@@ -10,7 +10,10 @@
 #include <linux/namei.h>
 #include <linux/mm.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/kmemleak.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "internal.h"
 
 static const struct dentry_operations proc_sys_dentry_operations;
@@ -463,9 +466,12 @@ static struct dentry *proc_sys_lookup(struct inode *dir, struct dentry *dentry,
 
 	err = ERR_PTR(-ENOMEM);
 	inode = proc_sys_make_inode(dir->i_sb, h ? h : head, p);
+<<<<<<< HEAD
 	if (h)
 		sysctl_head_finish(h);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!inode)
 		goto out;
 
@@ -474,6 +480,11 @@ static struct dentry *proc_sys_lookup(struct inode *dir, struct dentry *dentry,
 	d_add(dentry, inode);
 
 out:
+<<<<<<< HEAD
+=======
+	if (h)
+		sysctl_head_finish(h);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sysctl_head_finish(head);
 	return err;
 }
@@ -1216,8 +1227,11 @@ struct ctl_table_header *__register_sysctl_table(
 	if (!header)
 		return NULL;
 
+<<<<<<< HEAD
 	kmemleak_not_leak(header);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	node = (struct ctl_node *)(header + 1);
 	init_header(header, root, set, node, table);
 	if (sysctl_check_table(path, table))

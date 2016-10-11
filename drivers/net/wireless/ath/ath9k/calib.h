@@ -21,6 +21,12 @@
 
 #define AR_PHY_CCA_FILTERWINDOW_LENGTH          5
 
+<<<<<<< HEAD
+=======
+/* Internal noise floor can vary by about 6db depending on the frequency */
+#define ATH9K_NF_CAL_NOISE_THRESH		6
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define NUM_NF_READINGS       6
 #define ATH9K_NF_CAL_HIST_MAX 5
 

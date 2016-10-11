@@ -18,7 +18,11 @@ int drm_get_usb_dev(struct usb_interface *interface,
 
 	usbdev = interface_to_usbdev(interface);
 	dev->usbdev = usbdev;
+<<<<<<< HEAD
 	dev->dev = &usbdev->dev;
+=======
+	dev->dev = &interface->dev;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mutex_lock(&drm_global_mutex);
 

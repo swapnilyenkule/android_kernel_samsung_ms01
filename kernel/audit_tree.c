@@ -154,6 +154,10 @@ static struct audit_chunk *alloc_chunk(int count)
 		chunk->owners[i].index = i;
 	}
 	fsnotify_init_mark(&chunk->mark, audit_tree_destroy_watch);
+<<<<<<< HEAD
+=======
+	chunk->mark.mask = FS_IN_IGNORED;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return chunk;
 }
 
@@ -250,7 +254,10 @@ static void untag_chunk(struct node *p)
 		spin_unlock(&hash_lock);
 		spin_unlock(&entry->lock);
 		fsnotify_destroy_mark(entry);
+<<<<<<< HEAD
 		fsnotify_put_mark(entry);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 
@@ -259,7 +266,11 @@ static void untag_chunk(struct node *p)
 
 	fsnotify_duplicate_mark(&new->mark, entry);
 	if (fsnotify_add_mark(&new->mark, new->mark.group, new->mark.i.inode, NULL, 1)) {
+<<<<<<< HEAD
 		free_chunk(new);
+=======
+		fsnotify_put_mark(&new->mark);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto Fallback;
 	}
 
@@ -293,7 +304,10 @@ static void untag_chunk(struct node *p)
 	spin_unlock(&hash_lock);
 	spin_unlock(&entry->lock);
 	fsnotify_destroy_mark(entry);
+<<<<<<< HEAD
 	fsnotify_put_mark(entry);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	goto out;
 
 Fallback:
@@ -322,7 +336,11 @@ static int create_chunk(struct inode *inode, struct audit_tree *tree)
 
 	entry = &chunk->mark;
 	if (fsnotify_add_mark(entry, audit_tree_group, inode, NULL, 0)) {
+<<<<<<< HEAD
 		free_chunk(chunk);
+=======
+		fsnotify_put_mark(entry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -ENOSPC;
 	}
 
@@ -332,6 +350,10 @@ static int create_chunk(struct inode *inode, struct audit_tree *tree)
 		spin_unlock(&hash_lock);
 		chunk->dead = 1;
 		spin_unlock(&entry->lock);
+<<<<<<< HEAD
+=======
+		fsnotify_get_mark(entry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fsnotify_destroy_mark(entry);
 		fsnotify_put_mark(entry);
 		return 0;
@@ -396,7 +418,11 @@ static int tag_chunk(struct inode *inode, struct audit_tree *tree)
 	fsnotify_duplicate_mark(chunk_entry, old_entry);
 	if (fsnotify_add_mark(chunk_entry, chunk_entry->group, chunk_entry->i.inode, NULL, 1)) {
 		spin_unlock(&old_entry->lock);
+<<<<<<< HEAD
 		free_chunk(chunk);
+=======
+		fsnotify_put_mark(chunk_entry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fsnotify_put_mark(old_entry);
 		return -ENOSPC;
 	}
@@ -412,6 +438,10 @@ static int tag_chunk(struct inode *inode, struct audit_tree *tree)
 		spin_unlock(&chunk_entry->lock);
 		spin_unlock(&old_entry->lock);
 
+<<<<<<< HEAD
+=======
+		fsnotify_get_mark(chunk_entry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fsnotify_destroy_mark(chunk_entry);
 
 		fsnotify_put_mark(chunk_entry);
@@ -445,7 +475,10 @@ static int tag_chunk(struct inode *inode, struct audit_tree *tree)
 	spin_unlock(&old_entry->lock);
 	fsnotify_destroy_mark(old_entry);
 	fsnotify_put_mark(old_entry); /* pair to fsnotify_find mark_entry */
+<<<<<<< HEAD
 	fsnotify_put_mark(old_entry); /* and kill it */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -595,7 +628,11 @@ void audit_trim_trees(void)
 
 		root_mnt = collect_mounts(&path);
 		path_put(&path);
+<<<<<<< HEAD
 		if (IS_ERR(root_mnt))
+=======
+		if (!root_mnt)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto skip_it;
 
 		spin_lock(&hash_lock);
@@ -609,9 +646,15 @@ void audit_trim_trees(void)
 		}
 		spin_unlock(&hash_lock);
 		trim_marked(tree);
+<<<<<<< HEAD
 		put_tree(tree);
 		drop_collected_mounts(root_mnt);
 skip_it:
+=======
+		drop_collected_mounts(root_mnt);
+skip_it:
+		put_tree(tree);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mutex_lock(&audit_filter_mutex);
 	}
 	list_del(&cursor);
@@ -669,8 +712,13 @@ int audit_add_tree_rule(struct audit_krule *rule)
 		goto Err;
 	mnt = collect_mounts(&path);
 	path_put(&path);
+<<<<<<< HEAD
 	if (IS_ERR(mnt)) {
 		err = PTR_ERR(mnt);
+=======
+	if (!mnt) {
+		err = -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto Err;
 	}
 
@@ -719,8 +767,13 @@ int audit_tag_tree(char *old, char *new)
 		return err;
 	tagged = collect_mounts(&path2);
 	path_put(&path2);
+<<<<<<< HEAD
 	if (IS_ERR(tagged))
 		return PTR_ERR(tagged);
+=======
+	if (!tagged)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	err = kern_path(old, 0, &path1);
 	if (err) {

@@ -15,7 +15,11 @@
 
 static __always_inline bool arch_static_branch(struct static_key *key)
 {
+<<<<<<< HEAD
 	asm goto("0:	brcl 0,0\n"
+=======
+	asm_volatile_goto("0:	brcl 0,0\n"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		".pushsection __jump_table, \"aw\"\n"
 		ASM_ALIGN "\n"
 		ASM_PTR " 0b, %l[label], %0\n"

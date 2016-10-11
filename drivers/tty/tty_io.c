@@ -938,6 +938,17 @@ void start_tty(struct tty_struct *tty)
 
 EXPORT_SYMBOL(start_tty);
 
+<<<<<<< HEAD
+=======
+/* We limit tty time update visibility to every 8 seconds or so. */
+static void tty_update_time(struct timespec *time)
+{
+	unsigned long sec = get_seconds();
+	if (abs(sec - time->tv_sec) & ~7)
+		time->tv_sec = sec;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  *	tty_read	-	read method for tty device files
  *	@file: pointer to tty file
@@ -974,8 +985,15 @@ static ssize_t tty_read(struct file *file, char __user *buf, size_t count,
 	else
 		i = -EIO;
 	tty_ldisc_deref(ld);
+<<<<<<< HEAD
 	if (i > 0)
 		inode->i_atime = current_fs_time(inode->i_sb);
+=======
+
+	if (i > 0)
+		tty_update_time(&inode->i_atime);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return i;
 }
 
@@ -1078,7 +1096,11 @@ static inline ssize_t do_tty_write(
 	}
 	if (written) {
 		struct inode *inode = file->f_path.dentry->d_inode;
+<<<<<<< HEAD
 		inode->i_mtime = current_fs_time(inode->i_sb);
+=======
+		tty_update_time(&inode->i_mtime);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ret = written;
 	}
 out:
@@ -1623,6 +1645,11 @@ int tty_release(struct inode *inode, struct file *filp)
 	int	devpts;
 	int	idx;
 	char	buf[64];
+<<<<<<< HEAD
+=======
+	long	timeout = 0;
+	int	once = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (tty_paranoia_check(tty, inode, __func__))
 		return 0;
@@ -1703,11 +1730,26 @@ int tty_release(struct inode *inode, struct file *filp)
 		if (!do_sleep)
 			break;
 
+<<<<<<< HEAD
 		printk(KERN_WARNING "%s: %s: read/write wait queue active!\n",
 				__func__, tty_name(tty, buf));
 		tty_unlock();
 		mutex_unlock(&tty_mutex);
 		schedule();
+=======
+		if (once) {
+			once = 0;
+			printk(KERN_WARNING "%s: %s: read/write wait queue active!\n",
+				__func__, tty_name(tty, buf));
+		}
+		tty_unlock();
+		mutex_unlock(&tty_mutex);
+		schedule_timeout_killable(timeout);
+		if (timeout < 120 * HZ)
+			timeout = 2 * timeout + 1;
+		else
+			timeout = MAX_SCHEDULE_TIMEOUT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/*
@@ -1999,8 +2041,29 @@ retry_open:
 	if (!noctty &&
 	    current->signal->leader &&
 	    !current->signal->tty &&
+<<<<<<< HEAD
 	    tty->session == NULL)
 		__proc_set_tty(current, tty);
+=======
+	    tty->session == NULL) {
+		/*
+		 * Don't let a process that only has write access to the tty
+		 * obtain the privileges associated with having a tty as
+		 * controlling terminal (being able to reopen it with full
+		 * access through /dev/tty, being able to perform pushback).
+		 * Many distributions set the group of all ttys to "tty" and
+		 * grant write-only access to all terminals for setgid tty
+		 * binaries, which should not imply full privileges on all ttys.
+		 *
+		 * This could theoretically break old code that performs open()
+		 * on a write-only file descriptor. In that case, it might be
+		 * necessary to also permit this if
+		 * inode_permission(inode, MAY_READ) == 0.
+		 */
+		if (filp->f_mode & FMODE_READ)
+			__proc_set_tty(current, tty);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock_irq(&current->sighand->siglock);
 	tty_unlock();
 	mutex_unlock(&tty_mutex);
@@ -2289,7 +2352,11 @@ static int fionbio(struct file *file, int __user *p)
  *		Takes ->siglock() when updating signal->tty
  */
 
+<<<<<<< HEAD
 static int tiocsctty(struct tty_struct *tty, int arg)
+=======
+static int tiocsctty(struct tty_struct *tty, struct file *file, int arg)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int ret = 0;
 	if (current->signal->leader && (task_session(current) == tty->session))
@@ -2322,6 +2389,16 @@ static int tiocsctty(struct tty_struct *tty, int arg)
 			goto unlock;
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	/* See the comment in tty_open(). */
+	if ((file->f_mode & FMODE_READ) == 0 && !capable(CAP_SYS_ADMIN)) {
+		ret = -EPERM;
+		goto unlock;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	proc_set_tty(current, tty);
 unlock:
 	mutex_unlock(&tty_mutex);
@@ -2576,11 +2653,16 @@ static int tty_tiocmset(struct tty_struct *tty, unsigned int cmd,
 		clear = ~val;
 		break;
 	}
+<<<<<<< HEAD
 
 	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
 		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
 	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP|TIOCM_CD|
 		TIOCM_RI|TIOCM_DSR|TIOCM_CTS;
+=======
+	set &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
+	clear &= TIOCM_DTR|TIOCM_RTS|TIOCM_OUT1|TIOCM_OUT2|TIOCM_LOOP;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return tty->ops->tiocmset(tty, set, clear);
 }
 
@@ -2679,7 +2761,11 @@ long tty_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		no_tty();
 		return 0;
 	case TIOCSCTTY:
+<<<<<<< HEAD
 		return tiocsctty(tty, arg);
+=======
+		return tiocsctty(tty, file, arg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case TIOCGPGRP:
 		return tiocgpgrp(tty, real_tty, p);
 	case TIOCSPGRP:

@@ -80,7 +80,11 @@ extern struct mutex sched_domains_mutex;
 struct cfs_rq;
 struct rt_rq;
 
+<<<<<<< HEAD
 static LIST_HEAD(task_groups);
+=======
+extern struct list_head task_groups;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct cfs_bandwidth {
 #ifdef CONFIG_CFS_BANDWIDTH
@@ -104,8 +108,11 @@ struct cfs_bandwidth {
 struct task_group {
 	struct cgroup_subsys_state css;
 
+<<<<<<< HEAD
 	bool notify_on_migrate;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_FAIR_GROUP_SCHED
 	/* schedulable entities of this group on each cpu */
 	struct sched_entity **se;
@@ -538,6 +545,7 @@ DECLARE_PER_CPU(int, sd_llc_id);
 /*
  * Return the group to which this tasks belongs.
  *
+<<<<<<< HEAD
  * We use task_subsys_state_check() and extend the RCU verification with
  * pi->lock and rq->lock because cpu_cgroup_attach() holds those locks for each
  * task it moves into the cgroup. Therefore by holding either of those locks,
@@ -559,6 +567,21 @@ static inline struct task_group *task_group(struct task_struct *p)
 static inline bool task_notify_on_migrate(struct task_struct *p)
 {
 	return task_group(p)->notify_on_migrate;
+=======
+ * We cannot use task_subsys_state() and friends because the cgroup
+ * subsystem changes that value before the cgroup_subsys::attach() method
+ * is called, therefore we cannot pin it and might observe the wrong value.
+ *
+ * The same is true for autogroup's p->signal->autogroup->tg, the autogroup
+ * core changes this before calling sched_move_task().
+ *
+ * Instead we use a 'copy' which is updated from sched_move_task() while
+ * holding both task_struct::pi_lock and rq::lock.
+ */
+static inline struct task_group *task_group(struct task_struct *p)
+{
+	return p->sched_task_group;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Change a task's cfs_rq and parent entity if it moves across CPUs/groups */
@@ -586,10 +609,14 @@ static inline struct task_group *task_group(struct task_struct *p)
 {
 	return NULL;
 }
+<<<<<<< HEAD
 static inline bool task_notify_on_migrate(struct task_struct *p)
 {
 	return false;
 }
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* CONFIG_CGROUP_SCHED */
 
 static inline void __set_task_cpu(struct task_struct *p, unsigned int cpu)
@@ -715,8 +742,15 @@ static inline void finish_lock_switch(struct rq *rq, struct task_struct *prev)
 	 * After ->on_cpu is cleared, the task can be moved to a different CPU.
 	 * We must ensure this doesn't happen until the switch is completely
 	 * finished.
+<<<<<<< HEAD
 	 */
 	smp_wmb();
+=======
+	 *
+	 * Pairs with the control dependency and rmb in try_to_wake_up().
+	 */
+	smp_mb();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	prev->on_cpu = 0;
 #endif
 #ifdef CONFIG_DEBUG_SPINLOCK
@@ -872,9 +906,13 @@ static inline void idle_balance(int cpu, struct rq *rq)
 
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_SYSRQ_SCHED_DEBUG
 extern void sysrq_sched_debug_show(void);
 #endif
+=======
+extern void sysrq_sched_debug_show(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void sched_init_granularity(void);
 extern void update_max_interval(void);
 extern void update_group_power(struct sched_domain *sd, int cpu);
@@ -888,7 +926,11 @@ extern void resched_cpu(int cpu);
 extern struct rt_bandwidth def_rt_bandwidth;
 extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);
 
+<<<<<<< HEAD
 extern void update_cpu_load(struct rq *this_rq);
+=======
+extern void update_idle_cpu_load(struct rq *this_rq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_CGROUP_CPUACCT
 #include <linux/cgroup.h>
@@ -928,13 +970,19 @@ static inline void cpuacct_charge(struct task_struct *tsk, u64 cputime) {}
 
 static inline void inc_nr_running(struct rq *rq)
 {
+<<<<<<< HEAD
 	sched_update_nr_prod(cpu_of(rq), rq->nr_running, true);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rq->nr_running++;
 }
 
 static inline void dec_nr_running(struct rq *rq)
 {
+<<<<<<< HEAD
 	sched_update_nr_prod(cpu_of(rq), rq->nr_running, false);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rq->nr_running--;
 }
 
@@ -954,8 +1002,11 @@ static inline u64 sched_avg_period(void)
 	return (u64)sysctl_sched_time_avg * NSEC_PER_MSEC / 2;
 }
 
+<<<<<<< HEAD
 void calc_load_account_idle(struct rq *this_rq);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SCHED_HRTICK
 
 /*
@@ -1158,7 +1209,12 @@ extern void print_rt_stats(struct seq_file *m, int cpu);
 extern void init_cfs_rq(struct cfs_rq *cfs_rq);
 extern void init_rt_rq(struct rt_rq *rt_rq, struct rq *rq);
 
+<<<<<<< HEAD
 extern void account_cfs_bandwidth_used(int enabled, int was_enabled);
+=======
+extern void cfs_bandwidth_usage_inc(void);
+extern void cfs_bandwidth_usage_dec(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_NO_HZ
 enum rq_nohz_flag_bits {

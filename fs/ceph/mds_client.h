@@ -11,6 +11,10 @@
 #include <linux/ceph/types.h>
 #include <linux/ceph/messenger.h>
 #include <linux/ceph/mdsmap.h>
+<<<<<<< HEAD
+=======
+#include <linux/ceph/auth.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Some lock dependencies:
@@ -113,9 +117,13 @@ struct ceph_mds_session {
 
 	struct ceph_connection s_con;
 
+<<<<<<< HEAD
 	struct ceph_authorizer *s_authorizer;
 	void             *s_authorizer_buf, *s_authorizer_reply_buf;
 	size_t            s_authorizer_buf_len, s_authorizer_reply_buf_len;
+=======
+	struct ceph_auth_handshake s_auth;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* protected by s_gen_ttl_lock */
 	spinlock_t        s_gen_ttl_lock;

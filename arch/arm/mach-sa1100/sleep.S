@@ -38,9 +38,15 @@ ENTRY(sa1100_finish_suspend)
 	orr     r4, r4, #MDREFR_K1DB2
 	ldr	r5, =PPCR
 
+<<<<<<< HEAD
 	@ Pre-load __loop_udelay into the I-cache
 	mov	r0, #1
 	bl	__loop_udelay
+=======
+	@ Pre-load __udelay into the I-cache
+	mov	r0, #1
+	bl	__udelay
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mov	r0, r0
 
 	@ The following must all exist in a single cache line to
@@ -53,11 +59,19 @@ ENTRY(sa1100_finish_suspend)
 	@ delay 90us and set CPU PLL to lowest speed
 	@ fixes resume problem on high speed SA1110
 	mov	r0, #90
+<<<<<<< HEAD
 	bl	__loop_udelay
 	mov	r1, #0
 	str	r1, [r5]
 	mov	r0, #90
 	bl	__loop_udelay
+=======
+	bl	__udelay
+	mov	r1, #0
+	str	r1, [r5]
+	mov	r0, #90
+	bl	__udelay
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * SA1110 SDRAM controller workaround.  register values:

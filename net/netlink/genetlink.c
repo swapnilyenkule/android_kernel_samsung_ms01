@@ -142,6 +142,10 @@ int genl_register_mc_group(struct genl_family *family,
 	int err = 0;
 
 	BUG_ON(grp->name[0] == '\0');
+<<<<<<< HEAD
+=======
+	BUG_ON(memchr(grp->name, '\0', GENL_NAMSIZ) == NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	genl_lock();
 

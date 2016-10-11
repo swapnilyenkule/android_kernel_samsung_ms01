@@ -50,5 +50,9 @@
 #define POWER_MANAGEMENT	(BRIDGE_VIRT_BASE | 0x011c)
 
 #define TIMER_VIRT_BASE		(BRIDGE_VIRT_BASE | 0x0300)
+<<<<<<< HEAD
+=======
+#define TIMER_PHYS_BASE         (BRIDGE_PHYS_BASE | 0x0300)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif

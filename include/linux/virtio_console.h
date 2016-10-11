@@ -39,7 +39,11 @@
 #define VIRTIO_CONSOLE_F_SIZE	0	/* Does host provide console size? */
 #define VIRTIO_CONSOLE_F_MULTIPORT 1	/* Does host provide multiple ports? */
 
+<<<<<<< HEAD
 #define VIRTIO_CONSOLE_BAD_ID		(~(u32)0)
+=======
+#define VIRTIO_CONSOLE_BAD_ID		(~(__u32)0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct virtio_console_config {
 	/* colums of the screens */

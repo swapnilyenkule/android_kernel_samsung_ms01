@@ -28,6 +28,7 @@ int pinconf_check_ops(struct pinctrl_dev *pctldev)
 	const struct pinconf_ops *ops = pctldev->desc->confops;
 
 	/* We must be able to read out pin status */
+<<<<<<< HEAD
 	if (!ops->pin_config_get && !ops->pin_config_group_get) {
 		dev_err(pctldev->dev,
 			"pinconf must be able to read out pin status\n");
@@ -39,6 +40,13 @@ int pinconf_check_ops(struct pinctrl_dev *pctldev)
 			"pinconf has to be able to set a pins config\n");
 		return -EINVAL;
 	}
+=======
+	if (!ops->pin_config_get && !ops->pin_config_group_get)
+		return -EINVAL;
+	/* We have to be able to config the pins in SOME way */
+	if (!ops->pin_config_set && !ops->pin_config_group_set)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -50,9 +58,15 @@ int pinconf_validate_map(struct pinctrl_map const *map, int i)
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	if (!map->data.configs.num_configs ||
 			!map->data.configs.configs) {
 		pr_err("failed to register map %s (%d): no configs given\n",
+=======
+	if (map->data.configs.num_configs &&
+			!map->data.configs.configs) {
+		pr_err("failed to register map %s (%d): no configs ptr given\n",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		       map->name, i);
 		return -EINVAL;
 	}
@@ -385,6 +399,7 @@ int pinconf_apply_setting(struct pinctrl_setting const *setting)
 
 void pinconf_show_map(struct seq_file *s, struct pinctrl_map const *map)
 {
+<<<<<<< HEAD
 	struct pinctrl_dev *pctldev;
 	const struct pinconf_ops *confops;
 	int i;
@@ -395,6 +410,10 @@ void pinconf_show_map(struct seq_file *s, struct pinctrl_map const *map)
 	else
 		confops = NULL;
 
+=======
+	int i;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (map->type) {
 	case PIN_MAP_TYPE_CONFIGS_PIN:
 		seq_printf(s, "pin ");
@@ -408,6 +427,7 @@ void pinconf_show_map(struct seq_file *s, struct pinctrl_map const *map)
 
 	seq_printf(s, "%s\n", map->data.configs.group_or_pin);
 
+<<<<<<< HEAD
 	for (i = 0; i < map->data.configs.num_configs; i++) {
 		seq_printf(s, "config ");
 		if (confops && confops->pin_config_config_dbg_show)
@@ -417,6 +437,10 @@ void pinconf_show_map(struct seq_file *s, struct pinctrl_map const *map)
 			seq_printf(s, "%08lx", map->data.configs.configs[i]);
 		seq_printf(s, "\n");
 	}
+=======
+	for (i = 0; i < map->data.configs.num_configs; i++)
+		seq_printf(s, "config %08lx\n", map->data.configs.configs[i]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void pinconf_show_setting(struct seq_file *s,
@@ -424,7 +448,10 @@ void pinconf_show_setting(struct seq_file *s,
 {
 	struct pinctrl_dev *pctldev = setting->pctldev;
 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
+<<<<<<< HEAD
 	const struct pinconf_ops *confops = pctldev->desc->confops;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct pin_desc *desc;
 	int i;
 
@@ -450,6 +477,7 @@ void pinconf_show_setting(struct seq_file *s,
 	 * FIXME: We should really get the pin controler to dump the config
 	 * values, so they can be decoded to something meaningful.
 	 */
+<<<<<<< HEAD
 	for (i = 0; i < setting->data.configs.num_configs; i++) {
 		seq_printf(s, " ");
 		if (confops && confops->pin_config_config_dbg_show)
@@ -459,6 +487,10 @@ void pinconf_show_setting(struct seq_file *s,
 			seq_printf(s, "%08lx",
 				   setting->data.configs.configs[i]);
 	}
+=======
+	for (i = 0; i < setting->data.configs.num_configs; i++)
+		seq_printf(s, " %08lx", setting->data.configs.configs[i]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	seq_printf(s, "\n");
 }
@@ -477,6 +509,7 @@ static void pinconf_dump_pin(struct pinctrl_dev *pctldev,
 static int pinconf_pins_show(struct seq_file *s, void *what)
 {
 	struct pinctrl_dev *pctldev = s->private;
+<<<<<<< HEAD
 	const struct pinconf_ops *ops = pctldev->desc->confops;
 	unsigned i, pin;
 
@@ -485,6 +518,12 @@ static int pinconf_pins_show(struct seq_file *s, void *what)
 
 	seq_puts(s, "Pin config settings per pin\n");
 	seq_puts(s, "Format: pin (name): configs\n");
+=======
+	unsigned i, pin;
+
+	seq_puts(s, "Pin config settings per pin\n");
+	seq_puts(s, "Format: pin (name): pinmux setting array\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mutex_lock(&pinctrl_mutex);
 
@@ -528,16 +567,27 @@ static int pinconf_groups_show(struct seq_file *s, void *what)
 	struct pinctrl_dev *pctldev = s->private;
 	const struct pinctrl_ops *pctlops = pctldev->desc->pctlops;
 	const struct pinconf_ops *ops = pctldev->desc->confops;
+<<<<<<< HEAD
 	unsigned ngroups = pctlops->get_groups_count(pctldev);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned selector = 0;
 
 	if (!ops || !ops->pin_config_group_get)
 		return 0;
 
 	seq_puts(s, "Pin config settings per pin group\n");
+<<<<<<< HEAD
 	seq_puts(s, "Format: group (name): configs\n");
 
 	while (selector < ngroups) {
+=======
+	seq_puts(s, "Format: group (name): pinmux setting array\n");
+
+	mutex_lock(&pinctrl_mutex);
+
+	while (pctlops->list_groups(pctldev, selector) >= 0) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		const char *gname = pctlops->get_group_name(pctldev, selector);
 
 		seq_printf(s, "%u (%s):", selector, gname);
@@ -547,6 +597,11 @@ static int pinconf_groups_show(struct seq_file *s, void *what)
 		selector++;
 	}
 
+<<<<<<< HEAD
+=======
+	mutex_unlock(&pinctrl_mutex);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -574,6 +629,7 @@ static const struct file_operations pinconf_groups_ops = {
 	.release	= single_release,
 };
 
+<<<<<<< HEAD
 /* 32bit read/write ressources */
 #define MAX_NAME_LEN 16
 char dbg_pinname[MAX_NAME_LEN]; /* shared: name of the state of the pin*/
@@ -775,6 +831,8 @@ static const struct file_operations pinconf_dbg_pinconfig_fops = {
 	.owner = THIS_MODULE,
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void pinconf_init_device_debugfs(struct dentry *devroot,
 			 struct pinctrl_dev *pctldev)
 {
@@ -782,12 +840,15 @@ void pinconf_init_device_debugfs(struct dentry *devroot,
 			    devroot, pctldev, &pinconf_pins_ops);
 	debugfs_create_file("pinconf-groups", S_IFREG | S_IRUGO,
 			    devroot, pctldev, &pinconf_groups_ops);
+<<<<<<< HEAD
 	debugfs_create_file("pinconf-name", (S_IRUGO | S_IWUSR | S_IWGRP),
 			    devroot, pctldev, &pinconf_dbg_pinname_fops);
 	debugfs_create_file("pinconf-state",  (S_IRUGO | S_IWUSR | S_IWGRP),
 			    devroot, pctldev, &pinconf_dbg_pinstate_fops);
 	debugfs_create_file("pinconf-config",  (S_IRUGO | S_IWUSR | S_IWGRP),
 			    devroot, pctldev, &pinconf_dbg_pinconfig_fops);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #endif

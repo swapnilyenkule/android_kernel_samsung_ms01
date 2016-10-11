@@ -19,9 +19,12 @@
 #include <linux/math64.h>
 #include <linux/writeback.h>
 #include <linux/compaction.h>
+<<<<<<< HEAD
 #include <linux/mm_inline.h>
 
 #include "internal.h"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_VM_EVENT_COUNTERS
 DEFINE_PER_CPU(struct vm_event_state, vm_event_states) = {{0}};
@@ -616,9 +619,12 @@ static char * const migratetype_names[MIGRATE_TYPES] = {
 	"Reclaimable",
 	"Movable",
 	"Reserve",
+<<<<<<< HEAD
 #ifdef CONFIG_CMA
 	"CMA",
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	"Isolate",
 };
 
@@ -725,7 +731,10 @@ const char * const vmstat_text[] = {
 	"numa_other",
 #endif
 	"nr_anon_transparent_hugepages",
+<<<<<<< HEAD
 	"nr_free_cma",
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	"nr_dirty_threshold",
 	"nr_dirty_background_threshold",
 
@@ -764,6 +773,7 @@ const char * const vmstat_text[] = {
 
 	"pgrotated",
 
+<<<<<<< HEAD
 #ifdef CONFIG_MIGRATION
 	"pgmigrate_success",
 	"pgmigrate_fail",
@@ -772,6 +782,12 @@ const char * const vmstat_text[] = {
 	"compact_migrate_scanned",
 	"compact_free_scanned",
 	"compact_isolated",
+=======
+#ifdef CONFIG_COMPACTION
+	"compact_blocks_moved",
+	"compact_pages_moved",
+	"compact_pagemigrate_failed",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	"compact_stall",
 	"compact_fail",
 	"compact_success",
@@ -1030,7 +1046,11 @@ static void zoneinfo_show_print(struct seq_file *m, pg_data_t *pgdat,
 		   "\n  all_unreclaimable: %u"
 		   "\n  start_pfn:         %lu"
 		   "\n  inactive_ratio:    %u",
+<<<<<<< HEAD
 		   !zone_reclaimable(zone),
+=======
+		   zone->all_unreclaimable,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		   zone->zone_start_pfn,
 		   zone->inactive_ratio);
 	seq_putc(m, '\n');

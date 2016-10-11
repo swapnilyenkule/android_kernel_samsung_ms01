@@ -12,6 +12,7 @@
 
 #include <linux/security.h>
 
+<<<<<<< HEAD
 static int cap_binder_set_context_mgr(struct task_struct *mgr)
 {
 	return 0;
@@ -32,6 +33,8 @@ static int cap_binder_transfer_file(struct task_struct *from, struct task_struct
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int cap_syslog(int type)
 {
 	return 0;
@@ -94,8 +97,13 @@ static int cap_sb_statfs(struct dentry *dentry)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int cap_sb_mount(const char *dev_name, struct path *path,
 			const char *type, unsigned long flags, void *data)
+=======
+static int cap_sb_mount(char *dev_name, struct path *path, char *type,
+			unsigned long flags, void *data)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return 0;
 }
@@ -897,10 +905,13 @@ static void cap_audit_rule_free(void *lsmrule)
 
 void __init security_fixup_ops(struct security_operations *ops)
 {
+<<<<<<< HEAD
 	set_to_cap_if_null(ops, binder_set_context_mgr);
 	set_to_cap_if_null(ops, binder_transaction);
 	set_to_cap_if_null(ops, binder_transfer_binder);
 	set_to_cap_if_null(ops, binder_transfer_file);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	set_to_cap_if_null(ops, ptrace_access_check);
 	set_to_cap_if_null(ops, ptrace_traceme);
 	set_to_cap_if_null(ops, capget);

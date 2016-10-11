@@ -27,6 +27,11 @@ struct module;
  * @irq_count:		stats field to detect stalled irqs
  * @last_unhandled:	aging timer for unhandled count
  * @irqs_unhandled:	stats field for spurious unhandled interrupts
+<<<<<<< HEAD
+=======
+ * @threads_handled:	stats field for deferred spurious detection of threaded handlers
+ * @threads_handled_last: comparator field for deferred spurious detection of theraded handlers
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @lock:		locking for SMP
  * @affinity_hint:	hint to user space for preferred irq affinity
  * @affinity_notify:	context for notification of affinity changes
@@ -39,7 +44,10 @@ struct module;
  */
 struct irq_desc {
 	struct irq_data		irq_data;
+<<<<<<< HEAD
 	struct timer_rand_state *timer_rand_state;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned int __percpu	*kstat_irqs;
 	irq_flow_handler_t	handle_irq;
 #ifdef CONFIG_IRQ_PREFLOW_FASTEOI
@@ -53,6 +61,11 @@ struct irq_desc {
 	unsigned int		irq_count;	/* For detecting broken IRQs */
 	unsigned long		last_unhandled;	/* Aging timer for unhandled count */
 	unsigned int		irqs_unhandled;
+<<<<<<< HEAD
+=======
+	atomic_t		threads_handled;
+	int			threads_handled_last;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	raw_spinlock_t		lock;
 	struct cpumask		*percpu_enabled;
 #ifdef CONFIG_SMP
@@ -154,6 +167,7 @@ static inline int irq_balancing_disabled(unsigned int irq)
 	return desc->status_use_accessors & IRQ_NO_BALANCING_MASK;
 }
 
+<<<<<<< HEAD
 static inline int irq_is_per_cpu(unsigned int irq)
 {
 	struct irq_desc *desc;
@@ -162,6 +176,8 @@ static inline int irq_is_per_cpu(unsigned int irq)
 	return desc->status_use_accessors & IRQ_PER_CPU;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline void
 irq_set_lockdep_class(unsigned int irq, struct lock_class_key *class)
 {

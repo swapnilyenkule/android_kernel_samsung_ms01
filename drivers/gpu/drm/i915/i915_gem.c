@@ -928,6 +928,10 @@ i915_gem_pwrite_ioctl(struct drm_device *dev, void *data,
 	}
 
 	if (obj->gtt_space &&
+<<<<<<< HEAD
+=======
+	    obj->tiling_mode == I915_TILING_NONE &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    obj->base.write_domain != I915_GEM_DOMAIN_CPU) {
 		ret = i915_gem_object_pin(obj, 0, true);
 		if (ret)
@@ -1185,6 +1189,14 @@ out:
 	case 0:
 	case -ERESTARTSYS:
 	case -EINTR:
+<<<<<<< HEAD
+=======
+	case -EBUSY:
+		/*
+		 * EBUSY is ok: this just means that another thread
+		 * already did the job.
+		 */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return VM_FAULT_NOPAGE;
 	case -ENOMEM:
 		return VM_FAULT_OOM;
@@ -2187,6 +2199,16 @@ static int sandybridge_write_fence_reg(struct drm_i915_gem_object *obj,
 	int regnum = obj->fence_reg;
 	uint64_t val;
 
+<<<<<<< HEAD
+=======
+	/* Adjust fence size to match tiled area */
+	if (obj->tiling_mode != I915_TILING_NONE) {
+		uint32_t row_size = obj->stride *
+			(obj->tiling_mode == I915_TILING_Y ? 32 : 8);
+		size = (size / row_size) * row_size;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	val = (uint64_t)((obj->gtt_offset + size - 4096) &
 			 0xfffff000) << 32;
 	val |= obj->gtt_offset & 0xfffff000;
@@ -2224,6 +2246,16 @@ static int i965_write_fence_reg(struct drm_i915_gem_object *obj,
 	int regnum = obj->fence_reg;
 	uint64_t val;
 
+<<<<<<< HEAD
+=======
+	/* Adjust fence size to match tiled area */
+	if (obj->tiling_mode != I915_TILING_NONE) {
+		uint32_t row_size = obj->stride *
+			(obj->tiling_mode == I915_TILING_Y ? 32 : 8);
+		size = (size / row_size) * row_size;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	val = (uint64_t)((obj->gtt_offset + size - 4096) &
 		    0xfffff000) << 32;
 	val |= obj->gtt_offset & 0xfffff000;
@@ -2462,6 +2494,14 @@ i915_find_fence_reg(struct drm_device *dev,
 	return avail;
 }
 
+<<<<<<< HEAD
+=======
+static void i915_gem_write_fence__ipi(void *data)
+{
+	wbinvd();
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * i915_gem_object_get_fence - set up a fence reg for an object
  * @obj: object to map through a fence reg
@@ -2583,6 +2623,20 @@ update:
 	switch (INTEL_INFO(dev)->gen) {
 	case 7:
 	case 6:
+<<<<<<< HEAD
+=======
+		/* In order to fully serialize access to the fenced region and
+		 * the update to the fence register we need to take extreme
+		 * measures on SNB+. In theory, the write to the fence register
+		 * flushes all memory transactions before, and coupled with the
+		 * mb() placed around the register write we serialise all memory
+		 * operations with respect to the changes in the tiler. Yet, on
+		 * SNB+ we need to take a step further and emit an explicit wbinvd()
+		 * on each processor in order to manually flush all memory
+		 * transactions before updating the fence register.
+		 */
+		on_each_cpu(i915_gem_write_fence__ipi, NULL, 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ret = sandybridge_write_fence_reg(obj, pipelined);
 		break;
 	case 5:
@@ -3317,7 +3371,12 @@ i915_gem_object_pin(struct drm_i915_gem_object *obj,
 	struct drm_i915_private *dev_priv = dev->dev_private;
 	int ret;
 
+<<<<<<< HEAD
 	BUG_ON(obj->pin_count == DRM_I915_GEM_OBJECT_MAX_PIN_COUNT);
+=======
+	if (WARN_ON(obj->pin_count == DRM_I915_GEM_OBJECT_MAX_PIN_COUNT))
+		return -EBUSY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	WARN_ON(i915_verify_lists(dev));
 
 	if (obj->gtt_space != NULL) {
@@ -3404,14 +3463,24 @@ i915_gem_pin_ioctl(struct drm_device *dev, void *data,
 		goto out;
 	}
 
+<<<<<<< HEAD
 	obj->user_pin_count++;
 	obj->pin_filp = file;
 	if (obj->user_pin_count == 1) {
+=======
+	if (obj->user_pin_count == 0) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ret = i915_gem_object_pin(obj, args->alignment, true);
 		if (ret)
 			goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	obj->user_pin_count++;
+	obj->pin_filp = file;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* XXX - flush the CPU caches for pinned objects
 	 * as the X server doesn't manage domains yet
 	 */

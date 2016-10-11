@@ -90,6 +90,7 @@ static void pad_len_spaces(struct seq_file *m, int len)
 	seq_printf(m, "%*c", len, ' ');
 }
 
+<<<<<<< HEAD
 static void seq_print_vma_name(struct seq_file *m, struct vm_area_struct *vma)
 {
 	const char __user *name = vma_get_anon_name(vma);
@@ -140,6 +141,8 @@ static void seq_print_vma_name(struct seq_file *m, struct vm_area_struct *vma)
 	seq_putc(m, ']');
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void vma_stop(struct proc_maps_private *priv, struct vm_area_struct *vma)
 {
 	if (vma && vma != priv->tail_vma) {
@@ -339,12 +342,15 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma, int is_pid)
 				pad_len_spaces(m, len);
 				seq_printf(m, "[stack:%d]", tid);
 			}
+<<<<<<< HEAD
 			goto done;
 		}
 
 		if (vma_get_anon_name(vma)) {
 			pad_len_spaces(m, len);
 			seq_print_vma_name(m, vma);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -450,7 +456,10 @@ struct mem_size_stats {
 	unsigned long anonymous_thp;
 	unsigned long swap;
 	u64 pss;
+<<<<<<< HEAD
 	u64 swap_pss;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 
@@ -459,6 +468,7 @@ static void smaps_pte_entry(pte_t ptent, unsigned long addr,
 {
 	struct mem_size_stats *mss = walk->private;
 	struct vm_area_struct *vma = mss->vma;
+<<<<<<< HEAD
 	struct page *page = NULL;
 	int mapcount;
 
@@ -484,6 +494,20 @@ static void smaps_pte_entry(pte_t ptent, unsigned long addr,
 			page = migration_entry_to_page(swpent);
 	}
 
+=======
+	struct page *page;
+	int mapcount;
+
+	if (is_swap_pte(ptent)) {
+		mss->swap += ptent_size;
+		return;
+	}
+
+	if (!pte_present(ptent))
+		return;
+
+	page = vm_normal_page(vma, addr, ptent);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!page)
 		return;
 
@@ -572,7 +596,10 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
 		   "Anonymous:      %8lu kB\n"
 		   "AnonHugePages:  %8lu kB\n"
 		   "Swap:           %8lu kB\n"
+<<<<<<< HEAD
 		   "SwapPss:        %8lu kB\n"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		   "KernelPageSize: %8lu kB\n"
 		   "MMUPageSize:    %8lu kB\n"
 		   "Locked:         %8lu kB\n",
@@ -587,18 +614,24 @@ static int show_smap(struct seq_file *m, void *v, int is_pid)
 		   mss.anonymous >> 10,
 		   mss.anonymous_thp >> 10,
 		   mss.swap >> 10,
+<<<<<<< HEAD
 		   (unsigned long)(mss.swap_pss >> (10 + PSS_SHIFT)),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		   vma_kernel_pagesize(vma) >> 10,
 		   vma_mmu_pagesize(vma) >> 10,
 		   (vma->vm_flags & VM_LOCKED) ?
 			(unsigned long)(mss.pss >> (10 + PSS_SHIFT)) : 0);
 
+<<<<<<< HEAD
 	if (vma_get_anon_name(vma)) {
 		seq_puts(m, "Name:           ");
 		seq_print_vma_name(m, vma);
 		seq_putc(m, '\n');
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (m->count < m->size)  /* vma is copied successfully */
 		m->version = (vma != get_gate_vma(task->mm))
 			? vma->vm_start : 0;
@@ -687,7 +720,10 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
 #define CLEAR_REFS_ALL 1
 #define CLEAR_REFS_ANON 2
 #define CLEAR_REFS_MAPPED 3
+<<<<<<< HEAD
 #define CLEAR_REFS_MM_HIWATER_RSS 5
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 				size_t count, loff_t *ppos)
@@ -707,8 +743,12 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 	rv = kstrtoint(strstrip(buffer), 10, &type);
 	if (rv < 0)
 		return rv;
+<<<<<<< HEAD
 	if ((type < CLEAR_REFS_ALL || type > CLEAR_REFS_MAPPED) &&
 	    type != CLEAR_REFS_MM_HIWATER_RSS)
+=======
+	if (type < CLEAR_REFS_ALL || type > CLEAR_REFS_MAPPED)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EINVAL;
 	task = get_proc_task(file->f_path.dentry->d_inode);
 	if (!task)
@@ -719,6 +759,7 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 			.pmd_entry = clear_refs_pte_range,
 			.mm = mm,
 		};
+<<<<<<< HEAD
 
 		if (type == CLEAR_REFS_MM_HIWATER_RSS) {
 			/*
@@ -731,6 +772,8 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 			goto out_mm;
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		down_read(&mm->mmap_sem);
 		for (vma = mm->mmap; vma; vma = vma->vm_next) {
 			clear_refs_walk.private = vma;
@@ -754,7 +797,10 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
 		}
 		flush_tlb_mm(mm);
 		up_read(&mm->mmap_sem);
+<<<<<<< HEAD
 out_mm:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mmput(mm);
 	}
 	put_task_struct(task);
@@ -772,14 +818,22 @@ typedef struct {
 } pagemap_entry_t;
 
 struct pagemapread {
+<<<<<<< HEAD
 	int pos, len;
+=======
+	int pos, len;		/* units: PM_ENTRY_BYTES, not bytes */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pagemap_entry_t *buffer;
 };
 
 #define PAGEMAP_WALK_SIZE	(PMD_SIZE)
 #define PAGEMAP_WALK_MASK	(PMD_MASK)
 
+<<<<<<< HEAD
 #define PM_ENTRY_BYTES      sizeof(u64)
+=======
+#define PM_ENTRY_BYTES      sizeof(pagemap_entry_t)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define PM_STATUS_BITS      3
 #define PM_STATUS_OFFSET    (64 - PM_STATUS_BITS)
 #define PM_STATUS_MASK      (((1LL << PM_STATUS_BITS) - 1) << PM_STATUS_OFFSET)
@@ -877,7 +931,11 @@ static int pagemap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
 
 	/* find the first VMA at or above 'addr' */
 	vma = find_vma(walk->mm, addr);
+<<<<<<< HEAD
 	if (pmd_trans_huge_lock(pmd, vma) == 1) {
+=======
+	if (vma && pmd_trans_huge_lock(pmd, vma) == 1) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		for (; addr != end; addr += PAGE_SIZE) {
 			unsigned long offset;
 
@@ -1006,8 +1064,13 @@ static ssize_t pagemap_read(struct file *file, char __user *buf,
 	if (!count)
 		goto out_task;
 
+<<<<<<< HEAD
 	pm.len = PM_ENTRY_BYTES * (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
 	pm.buffer = kmalloc(pm.len, GFP_TEMPORARY);
+=======
+	pm.len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+	pm.buffer = kmalloc(pm.len * PM_ENTRY_BYTES, GFP_TEMPORARY);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = -ENOMEM;
 	if (!pm.buffer)
 		goto out_task;
@@ -1080,7 +1143,12 @@ out:
 
 static int pagemap_open(struct inode *inode, struct file *file)
 {
+<<<<<<< HEAD
 	/* do not disclose physical addresses: attack vector */
+=======
+	/* do not disclose physical addresses to unprivileged
+	   userspace (closes a rowhammer attack vector) */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!capable(CAP_SYS_ADMIN))
 		return -EPERM;
 	return 0;

@@ -149,7 +149,10 @@ config SND_SEQ_RTCTIMER_DEFAULT
 
 config SND_DYNAMIC_MINORS
 	bool "Dynamic device file minor numbers"
+<<<<<<< HEAD
 	default y if SND_OMAP_SOC_ABE_DSP
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  If you say Y here, the minor numbers of ALSA device files in
 	  /dev/snd/ are allocated dynamically.  This allows you to have

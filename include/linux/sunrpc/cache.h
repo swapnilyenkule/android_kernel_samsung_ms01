@@ -228,6 +228,25 @@ static inline int get_int(char **bpp, int *anint)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int get_uint(char **bpp, unsigned int *anint)
+{
+	char buf[50];
+	int len = qword_get(bpp, buf, sizeof(buf));
+
+	if (len < 0)
+		return -EINVAL;
+	if (len == 0)
+		return -ENOENT;
+
+	if (kstrtouint(buf, 0, anint))
+		return -EINVAL;
+
+	return 0;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * timestamps kept in the cache are expressed in seconds
  * since boot.  This is the best for measuring differences in

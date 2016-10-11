@@ -2006,6 +2006,10 @@ static int ixgbe_wol_exclusion(struct ixgbe_adapter *adapter,
 		retval = 0;
 		break;
 	case IXGBE_DEV_ID_X540T:
+<<<<<<< HEAD
+=======
+	case IXGBE_DEV_ID_X540T1:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* check eeprom to see if enabled wol */
 		if ((wol_cap == IXGBE_DEVICE_CAPS_WOL_PORT0_1) ||
 		    ((wol_cap == IXGBE_DEVICE_CAPS_WOL_PORT0) &&

@@ -42,10 +42,13 @@ void __check_kvm_seq(struct mm_struct *mm);
 #define ASID_MASK		((~0) << ASID_BITS)
 #define ASID_FIRST_VERSION	(1 << ASID_BITS)
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_DEBUG
 extern unsigned long tima_debug_infra_cnt;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern unsigned int cpu_last_asid;
 #ifdef CONFIG_SMP
 DECLARE_PER_CPU(struct mm_struct *, current_mm);
@@ -109,14 +112,18 @@ enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
  * calling the CPU specific function when the mm hasn't
  * actually changed.
  */
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP
 extern unsigned long tima_switch_count;
 extern spinlock_t tima_switch_count_lock;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline void
 switch_mm(struct mm_struct *prev, struct mm_struct *next,
 	  struct task_struct *tsk)
 {
+<<<<<<< HEAD
 	
 #ifdef	CONFIG_TIMA_RKP
 	unsigned long flags;
@@ -127,6 +134,8 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 	unsigned long va;
 	int ret;
 #endif 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MMU
 	unsigned int cpu = smp_processor_id();
 
@@ -143,6 +152,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 #endif
 		check_context(next);
 		cpu_switch_mm(next->pgd, next);
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP
 		spin_lock_irqsave(&tima_switch_count_lock, flags);
 		tima_switch_count++;
@@ -181,6 +191,8 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 		}
 		#endif /* CONFIG_TIMA_RKP_L2_TABLES */
 	#endif /* CONFIG_TIMA_RKP_DEBUG */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (cache_is_vivt())
 			cpumask_clear_cpu(cpu, mm_cpumask(prev));
 	}

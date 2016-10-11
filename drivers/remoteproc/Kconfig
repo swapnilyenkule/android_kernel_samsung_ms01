@@ -4,9 +4,18 @@ menu "Remoteproc drivers (EXPERIMENTAL)"
 config REMOTEPROC
 	tristate
 	depends on EXPERIMENTAL
+<<<<<<< HEAD
 
 config OMAP_REMOTEPROC
 	tristate "OMAP remoteproc support"
+=======
+	select FW_CONFIG
+	select VIRTIO
+
+config OMAP_REMOTEPROC
+	tristate "OMAP remoteproc support"
+	depends on EXPERIMENTAL
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	depends on ARCH_OMAP4
 	depends on OMAP_IOMMU
 	select REMOTEPROC

@@ -270,6 +270,11 @@ ENTRY(_sclp_print_early)
 	jno	.Lesa2
 	ahi	%r15,-80
 	stmh	%r6,%r15,96(%r15)		# store upper register halves
+<<<<<<< HEAD
+=======
+	basr	%r13,0
+	lmh	%r0,%r15,.Lzeroes-.(%r13)	# clear upper register halves
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 .Lesa2:
 #endif
 	lr	%r10,%r2			# save string pointer
@@ -293,6 +298,11 @@ ENTRY(_sclp_print_early)
 #endif
 	lm	%r6,%r15,120(%r15)		# restore registers
 	br	%r14
+<<<<<<< HEAD
+=======
+.Lzeroes:
+	.fill	64,4,0
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 .LwritedataS4:
 	.long	0x00760005			# SCLP command for write data

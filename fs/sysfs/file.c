@@ -617,6 +617,7 @@ int sysfs_add_file_to_group(struct kobject *kobj,
 EXPORT_SYMBOL_GPL(sysfs_add_file_to_group);
 
 /**
+<<<<<<< HEAD
  * sysfs_chown_file - modify the ownership of the object
  * @kobj: object we're acting for.
  * @attr: attribute descriptor.
@@ -656,6 +657,8 @@ out:
 EXPORT_SYMBOL_GPL(sysfs_chown_file);
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * sysfs_chmod_file - update the modified mode value on an object attribute.
  * @kobj: object we're acting for.
  * @attr: attribute descriptor.

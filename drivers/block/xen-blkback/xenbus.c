@@ -118,6 +118,10 @@ static struct xen_blkif *xen_blkif_alloc(domid_t domid)
 	atomic_set(&blkif->drain, 0);
 	blkif->st_print = jiffies;
 	init_waitqueue_head(&blkif->waiting_to_free);
+<<<<<<< HEAD
+=======
+	init_waitqueue_head(&blkif->shutdown_wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return blkif;
 }
@@ -178,6 +182,10 @@ static void xen_blkif_disconnect(struct xen_blkif *blkif)
 {
 	if (blkif->xenblkd) {
 		kthread_stop(blkif->xenblkd);
+<<<<<<< HEAD
+=======
+		wake_up(&blkif->shutdown_wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		blkif->xenblkd = NULL;
 	}
 
@@ -367,6 +375,10 @@ static int xen_blkbk_remove(struct xenbus_device *dev)
 		be->blkif = NULL;
 	}
 
+<<<<<<< HEAD
+=======
+	kfree(be->mode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(be);
 	dev_set_drvdata(&dev->dev, NULL);
 	return 0;
@@ -502,6 +514,10 @@ static void backend_changed(struct xenbus_watch *watch,
 		= container_of(watch, struct backend_info, backend_watch);
 	struct xenbus_device *dev = be->dev;
 	int cdrom = 0;
+<<<<<<< HEAD
+=======
+	unsigned long handle;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	char *device_type;
 
 	DPRINTK("");
@@ -521,10 +537,17 @@ static void backend_changed(struct xenbus_watch *watch,
 		return;
 	}
 
+<<<<<<< HEAD
 	if ((be->major || be->minor) &&
 	    ((be->major != major) || (be->minor != minor))) {
 		pr_warn(DRV_PFX "changing physical device (from %x:%x to %x:%x) not supported.\n",
 			be->major, be->minor, major, minor);
+=======
+	if (be->major | be->minor) {
+		if (be->major != major || be->minor != minor)
+			pr_warn(DRV_PFX "changing physical device (from %x:%x to %x:%x) not supported.\n",
+				be->major, be->minor, major, minor);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 
@@ -542,6 +565,7 @@ static void backend_changed(struct xenbus_watch *watch,
 		kfree(device_type);
 	}
 
+<<<<<<< HEAD
 	if (be->major == 0 && be->minor == 0) {
 		/* Front end dir is a number, which is used as the handle. */
 
@@ -572,6 +596,35 @@ static void backend_changed(struct xenbus_watch *watch,
 			return;
 		}
 
+=======
+	/* Front end dir is a number, which is used as the handle. */
+	err = strict_strtoul(strrchr(dev->otherend, '/') + 1, 0, &handle);
+	if (err)
+		return;
+
+	be->major = major;
+	be->minor = minor;
+
+	err = xen_vbd_create(be->blkif, handle, major, minor,
+			     !strchr(be->mode, 'w'), cdrom);
+
+	if (err)
+		xenbus_dev_fatal(dev, err, "creating vbd structure");
+	else {
+		err = xenvbd_sysfs_addif(dev);
+		if (err) {
+			xen_vbd_free(&be->blkif->vbd);
+			xenbus_dev_fatal(dev, err, "creating sysfs entries");
+		}
+	}
+
+	if (err) {
+		kfree(be->mode);
+		be->mode = NULL;
+		be->major = 0;
+		be->minor = 0;
+	} else {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* We're potentially connected now */
 		xen_update_blkif_status(be->blkif);
 	}

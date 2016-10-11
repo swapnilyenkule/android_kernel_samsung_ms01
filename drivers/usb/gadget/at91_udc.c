@@ -1735,12 +1735,17 @@ static int __devinit at91udc_probe(struct platform_device *pdev)
 	int		retval;
 	struct resource	*res;
 
+<<<<<<< HEAD
 	if (!dev->platform_data) {
+=======
+	if (!dev->platform_data && !pdev->dev.of_node) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* small (so we copy it) but critical! */
 		DBG("missing platform_data\n");
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	if (pdev->num_resources != 2) {
 		DBG("invalid num_resources\n");
 		return -ENODEV;
@@ -1751,6 +1756,8 @@ static int __devinit at91udc_probe(struct platform_device *pdev)
 		return -ENODEV;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (!res)
 		return -ENXIO;

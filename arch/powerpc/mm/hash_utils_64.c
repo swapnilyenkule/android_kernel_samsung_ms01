@@ -759,6 +759,11 @@ void __init early_init_mmu(void)
 	/* Initialize stab / SLB management */
 	if (mmu_has_feature(MMU_FTR_SLB))
 		slb_initialize();
+<<<<<<< HEAD
+=======
+	else
+		stab_initialize(get_paca()->stab_real);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifdef CONFIG_SMP

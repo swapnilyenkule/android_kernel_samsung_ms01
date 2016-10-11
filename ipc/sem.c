@@ -1606,6 +1606,7 @@ void exit_sem(struct task_struct *tsk)
 		rcu_read_lock();
 		un = list_entry_rcu(ulp->list_proc.next,
 				    struct sem_undo, list_proc);
+<<<<<<< HEAD
 		if (&un->list_proc == &ulp->list_proc)
 			semid = -1;
 		 else
@@ -1616,6 +1617,29 @@ void exit_sem(struct task_struct *tsk)
 			break;
 
 		sma = sem_lock_check(tsk->nsproxy->ipc_ns, un->semid);
+=======
+		if (&un->list_proc == &ulp->list_proc) {
+			/*
+			 * We must wait for freeary() before freeing this ulp,
+			 * in case we raced with last sem_undo. There is a small
+			 * possibility where we exit while freeary() didn't
+			 * finish unlocking sem_undo_list.
+			 */
+			spin_unlock_wait(&ulp->lock);
+			rcu_read_unlock();
+			break;
+		}
+		spin_lock(&ulp->lock);
+		semid = un->semid;
+		spin_unlock(&ulp->lock);
+		rcu_read_unlock();
+
+		/* exit_sem raced with IPC_RMID, nothing to do */
+		if (semid == -1)
+			continue;
+
+		sma = sem_lock_check(tsk->nsproxy->ipc_ns, semid);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* exit_sem raced with IPC_RMID, nothing to do */
 		if (IS_ERR(sma))

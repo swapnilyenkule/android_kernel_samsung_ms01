@@ -19,10 +19,13 @@
 #include <linux/security.h>
 #include "fat.h"
 
+<<<<<<< HEAD
 #if defined(CONFIG_VMWARE_MVP)
 #include <linux/namei.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int fat_ioctl_get_attributes(struct inode *inode, u32 __user *user_attr)
 {
 	u32 attr;
@@ -119,6 +122,7 @@ out:
 	return err;
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_VMWARE_MVP)
 extern int _fat_fallocate(struct inode *inode, loff_t len);
 
@@ -177,6 +181,8 @@ static long fat_vmw_extend(struct file *filp, unsigned long len)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 long fat_generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	struct inode *inode = filp->f_path.dentry->d_inode;
@@ -187,10 +193,13 @@ long fat_generic_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		return fat_ioctl_get_attributes(inode, user_attr);
 	case FAT_IOCTL_SET_ATTRIBUTES:
 		return fat_ioctl_set_attributes(filp, user_attr);
+<<<<<<< HEAD
 #if defined(CONFIG_VMWARE_MVP)
 	case FAT_IOCTL_VMW_EXTEND:
 		return fat_vmw_extend(filp, arg);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		return -ENOTTY;	/* Inappropriate ioctl for device */
 	}

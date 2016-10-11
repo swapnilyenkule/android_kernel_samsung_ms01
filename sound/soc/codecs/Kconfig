@@ -39,10 +39,15 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_LM4857 if I2C
 	select SND_SOC_MAX98088 if I2C
 	select SND_SOC_MAX98095 if I2C
+<<<<<<< HEAD
 	select SND_SOC_MAX98504 if I2C
 	select SND_SOC_MAX98504A if I2C
 	select SND_SOC_MAX98505 if I2C
 	select SND_SOC_MAX9850 if I2C
+=======
+	select SND_SOC_MAX9850 if I2C
+	select SND_SOC_MAX9768 if I2C
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select SND_SOC_MAX9877 if I2C
 	select SND_SOC_PCM3008
 	select SND_SOC_RT5631 if I2C
@@ -65,6 +70,10 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WL1273 if MFD_WL1273_CORE
 	select SND_SOC_WM1250_EV1 if I2C
 	select SND_SOC_WM2000 if I2C
+<<<<<<< HEAD
+=======
+	select SND_SOC_WM2200 if I2C
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select SND_SOC_WM5100 if I2C
 	select SND_SOC_WM8350 if MFD_WM8350
 	select SND_SOC_WM8400 if MFD_WM8400
@@ -108,7 +117,10 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WM9705 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9712 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9713 if SND_SOC_AC97_BUS
+<<<<<<< HEAD
 	select SND_SOC_TIMPANI if MARIMBA_CORE
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
         help
           Normally ASoC codec drivers are only built if a machine driver which
           uses them is also built since they are only usable with a machine
@@ -225,6 +237,7 @@ config SND_SOC_MAX98088
 config SND_SOC_MAX98095
        tristate
 
+<<<<<<< HEAD
 config SND_SOC_MAX98504
 	bool "Support MAX98504"
 	depends on I2C
@@ -249,6 +262,8 @@ config SND_SOC_MAXIM_DSM
 	help
 	MAXIM DSM driver
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SND_SOC_MAX9850
 	tristate
 
@@ -310,6 +325,7 @@ config SND_SOC_UDA134X
 config SND_SOC_UDA1380
         tristate
 
+<<<<<<< HEAD
 config SND_SOC_WCD9304
 	tristate
 
@@ -370,6 +386,8 @@ config SND_SOC_ES705
 
         NOTE: Only one configuration should be enabled.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SND_SOC_WL1273
 	tristate
 
@@ -515,6 +533,7 @@ config SND_SOC_WM9713
 config SND_SOC_LM4857
 	tristate
 
+<<<<<<< HEAD
 config SND_SOC_MAX9877
 	tristate
 
@@ -530,3 +549,13 @@ config SND_SOC_MSM_HDMI_CODEC_RX
 	help
 	HDMI audio drivers should be built only if the platform
         supports hdmi panel.
+=======
+config SND_SOC_MAX9768
+	tristate
+
+config SND_SOC_MAX9877
+	tristate
+
+config SND_SOC_TPA6130A2
+	tristate
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

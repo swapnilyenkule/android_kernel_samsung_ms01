@@ -452,7 +452,11 @@ int cx231xx_init_vbi_isoc(struct cx231xx *dev, int max_packets,
 			return -ENOMEM;
 		}
 		dev->vbi_mode.bulk_ctl.urb[i] = urb;
+<<<<<<< HEAD
 		urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP;
+=======
+		urb->transfer_flags = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		dev->vbi_mode.bulk_ctl.transfer_buffer[i] =
 		    kzalloc(sb_size, GFP_KERNEL);

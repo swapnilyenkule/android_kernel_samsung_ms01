@@ -446,7 +446,11 @@ int dev_pm_qos_add_ancestor_request(struct device *dev,
 	if (ancestor)
 		error = dev_pm_qos_add_request(ancestor, req, value);
 
+<<<<<<< HEAD
 	if (error)
+=======
+	if (error < 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		req->dev = NULL;
 
 	return error;

@@ -90,8 +90,11 @@ extern unsigned long highest_memmap_pfn;
  */
 extern int isolate_lru_page(struct page *page);
 extern void putback_lru_page(struct page *page);
+<<<<<<< HEAD
 extern unsigned long zone_reclaimable_pages(struct zone *zone);
 extern bool zone_reclaimable(struct zone *zone);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * in mm/page_alloc.c
@@ -102,6 +105,7 @@ extern void prep_compound_page(struct page *page, unsigned long order);
 extern bool is_free_buddy_page(struct page *page);
 #endif
 
+<<<<<<< HEAD
 #if defined CONFIG_COMPACTION || defined CONFIG_CMA
 
 /*
@@ -142,6 +146,8 @@ isolate_migratepages_range(struct zone *zone, struct compact_control *cc,
 	unsigned long low_pfn, unsigned long end_pfn, bool unevictable);
 
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * function for dealing with page's order in buddy system.
@@ -352,6 +358,7 @@ extern u64 hwpoison_filter_flags_value;
 extern u64 hwpoison_filter_memcg;
 extern u32 hwpoison_filter_enable;
 
+<<<<<<< HEAD
 /* The ALLOC_WMARK bits are used as an index to zone->watermark */
 #define ALLOC_WMARK_MIN		WMARK_MIN
 #define ALLOC_WMARK_LOW		WMARK_LOW
@@ -368,3 +375,6 @@ extern u32 hwpoison_filter_enable;
 
 unsigned long reclaim_clean_pages_from_list(struct zone *zone,
 					    struct list_head *page_list);
+=======
+extern void set_pageblock_order(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

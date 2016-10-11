@@ -550,7 +550,11 @@ static int aha1740_eh_abort_handler (Scsi_Cmnd *dummy)
  * quiet as possible...
  */
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return SUCCESS;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static struct scsi_host_template aha1740_template = {

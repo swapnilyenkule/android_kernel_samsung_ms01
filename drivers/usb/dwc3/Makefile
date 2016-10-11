@@ -1,14 +1,20 @@
 ccflags-$(CONFIG_USB_DWC3_DEBUG)	:= -DDEBUG
 ccflags-$(CONFIG_USB_DWC3_VERBOSE)	+= -DVERBOSE_DEBUG
+<<<<<<< HEAD
 ccflags-y += -Idrivers/usb/host
 ccflags-y += -Idrivers/base/power
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 obj-$(CONFIG_USB_DWC3)			+= dwc3.o
 
 dwc3-y					:= core.o
 dwc3-y					+= host.o
 dwc3-y					+= gadget.o ep0.o
+<<<<<<< HEAD
 dwc3-y					+= dwc3_otg.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 ifneq ($(CONFIG_DEBUG_FS),)
 	dwc3-y				+= debugfs.o
@@ -29,9 +35,13 @@ endif
 # PCI doesn't provide nops if CONFIG_PCI isn't enabled.
 ##
 
+<<<<<<< HEAD
 
 obj-$(CONFIG_USB_DWC3_OMAP)	+= dwc3-omap.o
 obj-$(CONFIG_USB_DWC3_MSM)	+= dwc3-msm.o
+=======
+obj-$(CONFIG_USB_DWC3)		+= dwc3-omap.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 ##
 # REVISIT Samsung Exynos platform needs the clk API which isn't
@@ -43,7 +53,11 @@ obj-$(CONFIG_USB_DWC3_MSM)	+= dwc3-msm.o
 # for HAVE_CLK should be removed.
 ##
 ifneq ($(CONFIG_HAVE_CLK),)
+<<<<<<< HEAD
 	obj-$(CONFIG_USB_DWC3_EXYNOS)		+= dwc3-exynos.o
+=======
+	obj-$(CONFIG_USB_DWC3)		+= dwc3-exynos.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif
 
 ifneq ($(CONFIG_PCI),)

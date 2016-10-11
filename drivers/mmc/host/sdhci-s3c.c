@@ -656,7 +656,11 @@ static int __devexit sdhci_s3c_remove(struct platform_device *pdev)
 
 	pm_runtime_disable(&pdev->dev);
 
+<<<<<<< HEAD
 	for (ptr = 0; ptr < 3; ptr++) {
+=======
+	for (ptr = 0; ptr < MAX_BUS_CLK; ptr++) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (sc->clk_bus[ptr]) {
 			clk_disable(sc->clk_bus[ptr]);
 			clk_put(sc->clk_bus[ptr]);
@@ -672,7 +676,10 @@ static int __devexit sdhci_s3c_remove(struct platform_device *pdev)
 }
 
 #ifdef CONFIG_PM_SLEEP
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int sdhci_s3c_suspend(struct device *dev)
 {
 	struct sdhci_host *host = dev_get_drvdata(dev);
@@ -713,6 +720,7 @@ static const struct dev_pm_ops sdhci_s3c_pmops = {
 
 #define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
 
+<<<<<<< HEAD
 static const struct dev_pm_ops sdhci_s3c_pmops = {
 	.suspend	= sdhci_s3c_suspend,
 	.resume		= sdhci_s3c_resume,
@@ -720,6 +728,8 @@ static const struct dev_pm_ops sdhci_s3c_pmops = {
 
 #define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 #define SDHCI_S3C_PMOPS NULL
 #endif

@@ -13,6 +13,10 @@
 
 #include <linux/cpu.h>
 #include <linux/cpumask.h>
+<<<<<<< HEAD
+=======
+#include <linux/export.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/init.h>
 #include <linux/percpu.h>
 #include <linux/node.h>
@@ -42,6 +46,10 @@
 #define MPIDR_LEVEL2_SHIFT 16
 
 struct cputopo_arm cpu_topology[NR_CPUS];
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(cpu_topology);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 const struct cpumask *cpu_coregroup_mask(int cpu)
 {

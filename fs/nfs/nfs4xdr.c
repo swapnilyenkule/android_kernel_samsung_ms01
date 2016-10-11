@@ -2955,7 +2955,12 @@ out_overflow:
 	return -EIO;
 }
 
+<<<<<<< HEAD
 static int decode_op_hdr(struct xdr_stream *xdr, enum nfs_opnum4 expected)
+=======
+static bool __decode_op_hdr(struct xdr_stream *xdr, enum nfs_opnum4 expected,
+		int *nfs_retval)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	__be32 *p;
 	uint32_t opnum;
@@ -2965,6 +2970,7 @@ static int decode_op_hdr(struct xdr_stream *xdr, enum nfs_opnum4 expected)
 	if (unlikely(!p))
 		goto out_overflow;
 	opnum = be32_to_cpup(p++);
+<<<<<<< HEAD
 	if (opnum != expected) {
 		dprintk("nfs: Server returned operation"
 			" %d but we issued a request for %d\n",
@@ -2978,6 +2984,34 @@ static int decode_op_hdr(struct xdr_stream *xdr, enum nfs_opnum4 expected)
 out_overflow:
 	print_overflow_msg(__func__, xdr);
 	return -EIO;
+=======
+	if (unlikely(opnum != expected))
+		goto out_bad_operation;
+	nfserr = be32_to_cpup(p);
+	if (nfserr == NFS_OK)
+		*nfs_retval = 0;
+	else
+		*nfs_retval = nfs4_stat_to_errno(nfserr);
+	return true;
+out_bad_operation:
+	dprintk("nfs: Server returned operation"
+		" %d but we issued a request for %d\n",
+			opnum, expected);
+	*nfs_retval = -EREMOTEIO;
+	return false;
+out_overflow:
+	print_overflow_msg(__func__, xdr);
+	*nfs_retval = -EIO;
+	return false;
+}
+
+static int decode_op_hdr(struct xdr_stream *xdr, enum nfs_opnum4 expected)
+{
+	int retval;
+
+	__decode_op_hdr(xdr, expected, &retval);
+	return retval;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Dummy routine */
@@ -4680,11 +4714,20 @@ static int decode_open(struct xdr_stream *xdr, struct nfs_openres *res)
 	uint32_t savewords, bmlen, i;
 	int status;
 
+<<<<<<< HEAD
 	status = decode_op_hdr(xdr, OP_OPEN);
 	if (status != -EIO)
 		nfs_increment_open_seqid(status, res->seqid);
 	if (!status)
 		status = decode_stateid(xdr, &res->stateid);
+=======
+	if (!__decode_op_hdr(xdr, OP_OPEN, &status))
+		return status;
+	nfs_increment_open_seqid(status, res->seqid);
+	if (status)
+		return status;
+	status = decode_stateid(xdr, &res->stateid);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(status))
 		return status;
 
@@ -6081,7 +6124,12 @@ static int nfs4_xdr_dec_open(struct rpc_rqst *rqstp, struct xdr_stream *xdr,
 	status = decode_open(xdr, res);
 	if (status)
 		goto out;
+<<<<<<< HEAD
 	if (decode_getfh(xdr, &res->fh) != 0)
+=======
+	status = decode_getfh(xdr, &res->fh);
+	if (status)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	if (decode_getfattr(xdr, res->f_attr, res->server) != 0)
 		goto out;

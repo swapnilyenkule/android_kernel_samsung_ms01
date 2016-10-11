@@ -40,13 +40,21 @@ static int softsynth_is_alive(struct spk_synth *synth);
 static unsigned char get_index(void);
 
 static struct miscdevice synth_device;
+<<<<<<< HEAD
 static int initialized;
+=======
+static int init_pos;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int misc_registered;
 
 static struct var_t vars[] = {
 	{ CAPS_START, .u.s = {"\x01+3p" } },
 	{ CAPS_STOP, .u.s = {"\x01-3p" } },
+<<<<<<< HEAD
 	{ RATE, .u.n = {"\x01%ds", 5, 0, 9, 0, 0, NULL } },
+=======
+	{ RATE, .u.n = {"\x01%ds", 2, 0, 9, 0, 0, NULL } },
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ PITCH, .u.n = {"\x01%dp", 5, 0, 9, 0, 0, NULL } },
 	{ VOL, .u.n = {"\x01%dv", 5, 0, 9, 0, 0, NULL } },
 	{ TONE, .u.n = {"\x01%dx", 1, 0, 2, 0, 0, NULL } },
@@ -194,7 +202,11 @@ static int softsynth_close(struct inode *inode, struct file *fp)
 	unsigned long flags;
 	spk_lock(flags);
 	synth_soft.alive = 0;
+<<<<<<< HEAD
 	initialized = 0;
+=======
+	init_pos = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_unlock(flags);
 	/* Make sure we let applications go before leaving */
 	speakup_start_ttys();
@@ -239,6 +251,7 @@ static ssize_t softsynth_read(struct file *fp, char *buf, size_t count,
 			ch = '\x18';
 		} else if (synth_buffer_empty()) {
 			break;
+<<<<<<< HEAD
 		} else if (!initialized) {
 			if (*init) {
 				ch = *init;
@@ -246,6 +259,10 @@ static ssize_t softsynth_read(struct file *fp, char *buf, size_t count,
 			} else {
 				initialized = 1;
 			}
+=======
+		} else if (init[init_pos]) {
+			ch = init[init_pos++];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		} else {
 			ch = synth_buffer_getc();
 		}

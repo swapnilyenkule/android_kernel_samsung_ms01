@@ -83,6 +83,14 @@
 #define INSTRUCTION_LOAD_TXB(n)	(0x40 + 2 * (n))
 #define INSTRUCTION_READ_RXB(n)	(((n) == 0) ? 0x90 : 0x94)
 #define INSTRUCTION_RESET	0xC0
+<<<<<<< HEAD
+=======
+#define RTS_TXB0		0x01
+#define RTS_TXB1		0x02
+#define RTS_TXB2		0x04
+#define INSTRUCTION_RTS(n)	(0x80 | ((n) & 0x07))
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* MPC251x registers */
 #define CANSTAT	      0x0e
@@ -397,6 +405,10 @@ static void mcp251x_hw_tx_frame(struct spi_device *spi, u8 *buf,
 static void mcp251x_hw_tx(struct spi_device *spi, struct can_frame *frame,
 			  int tx_buf_idx)
 {
+<<<<<<< HEAD
+=======
+	struct mcp251x_priv *priv = dev_get_drvdata(&spi->dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u32 sid, eid, exide, rtr;
 	u8 buf[SPI_TRANSFER_BUF_LEN];
 
@@ -418,7 +430,14 @@ static void mcp251x_hw_tx(struct spi_device *spi, struct can_frame *frame,
 	buf[TXBDLC_OFF] = (rtr << DLC_RTR_SHIFT) | frame->can_dlc;
 	memcpy(buf + TXBDAT_OFF, frame->data, frame->can_dlc);
 	mcp251x_hw_tx_frame(spi, buf, frame->can_dlc, tx_buf_idx);
+<<<<<<< HEAD
 	mcp251x_write_reg(spi, TXBCTRL(tx_buf_idx), TXBCTRL_TXREQ);
+=======
+
+	/* use INSTRUCTION_RTS, to avoid "repeated frame problem" */
+	priv->spi_tx_buf[0] = INSTRUCTION_RTS(1 << tx_buf_idx);
+	mcp251x_spi_trans(priv->spi, 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void mcp251x_hw_rx_frame(struct spi_device *spi, u8 *buf,
@@ -1152,6 +1171,7 @@ static int mcp251x_can_resume(struct spi_device *spi)
 	struct mcp251x_platform_data *pdata = spi->dev.platform_data;
 	struct mcp251x_priv *priv = dev_get_drvdata(&spi->dev);
 
+<<<<<<< HEAD
 	if (priv->after_suspend & AFTER_SUSPEND_POWER) {
 		pdata->power_enable(1);
 		queue_work(priv->wq, &priv->restart_work);
@@ -1164,6 +1184,19 @@ static int mcp251x_can_resume(struct spi_device *spi)
 			priv->after_suspend = 0;
 		}
 	}
+=======
+	if (priv->after_suspend & AFTER_SUSPEND_POWER)
+		pdata->power_enable(1);
+
+	if (priv->after_suspend & AFTER_SUSPEND_UP) {
+		if (pdata->transceiver_enable)
+			pdata->transceiver_enable(1);
+		queue_work(priv->wq, &priv->restart_work);
+	} else {
+		priv->after_suspend = 0;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	priv->force_quit = 0;
 	enable_irq(spi->irq);
 	return 0;

@@ -139,9 +139,12 @@ ENTRY(v4_dma_map_area)
 ENDPROC(v4_dma_unmap_area)
 ENDPROC(v4_dma_map_area)
 
+<<<<<<< HEAD
 	.globl	v4_flush_kern_cache_louis
 	.equ	v4_flush_kern_cache_louis, v4_flush_kern_cache_all
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__INITDATA
 
 	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)

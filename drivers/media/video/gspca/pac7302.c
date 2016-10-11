@@ -945,6 +945,10 @@ static const struct usb_device_id device_table[] = {
 	{USB_DEVICE(0x093a, 0x262a)},
 	{USB_DEVICE(0x093a, 0x262c)},
 	{USB_DEVICE(0x145f, 0x013c)},
+<<<<<<< HEAD
+=======
+	{USB_DEVICE(0x1ae7, 0x2001)}, /* SpeedLink Snappy Mic SL-6825-SBK */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{}
 };
 MODULE_DEVICE_TABLE(usb, device_table);

@@ -34,7 +34,10 @@
 #include <linux/cgroup.h>
 #include <linux/security.h>
 #include <linux/hugetlb.h>
+<<<<<<< HEAD
 #include <linux/seccomp.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/swap.h>
 #include <linux/syscalls.h>
 #include <linux/jiffies.h>
@@ -159,9 +162,12 @@ struct kmem_cache *vm_area_cachep;
 /* SLAB cache for mm_struct structures (tsk->mm) */
 static struct kmem_cache *mm_cachep;
 
+<<<<<<< HEAD
 /* Notifier list called when a task struct is freed */
 static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void account_kernel_stack(struct thread_info *ti, int account)
 {
 	struct zone *zone = page_zone(virt_to_page(ti));
@@ -175,7 +181,10 @@ void free_task(struct task_struct *tsk)
 	free_thread_info(tsk->stack);
 	rt_mutex_debug_task_free(tsk);
 	ftrace_graph_exit_task(tsk);
+<<<<<<< HEAD
 	put_seccomp_filter(tsk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	free_task_struct(tsk);
 }
 EXPORT_SYMBOL(free_task);
@@ -193,6 +202,7 @@ static inline void put_signal_struct(struct signal_struct *sig)
 		free_signal_struct(sig);
 }
 
+<<<<<<< HEAD
 int task_free_register(struct notifier_block *n)
 {
 	return atomic_notifier_chain_register(&task_free_notifier, n);
@@ -205,6 +215,8 @@ int task_free_unregister(struct notifier_block *n)
 }
 EXPORT_SYMBOL(task_free_unregister);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void __put_task_struct(struct task_struct *tsk)
 {
 	WARN_ON(!tsk->exit_state);
@@ -216,7 +228,10 @@ void __put_task_struct(struct task_struct *tsk)
 	delayacct_tsk_free(tsk);
 	put_signal_struct(tsk->signal);
 
+<<<<<<< HEAD
 	atomic_notifier_call_chain(&task_free_notifier, 0, tsk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!profile_handoff_task(tsk))
 		free_task(tsk);
 }
@@ -296,6 +311,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig)
 		goto out;
 
 	tsk->stack = ti;
+<<<<<<< HEAD
 #ifdef CONFIG_SECCOMP
 	/*
 	 * We must handle setting up seccomp filters once we're under
@@ -305,6 +321,8 @@ static struct task_struct *dup_task_struct(struct task_struct *orig)
 	 */
 	tsk->seccomp.filter = NULL;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	setup_thread_stack(tsk, orig);
 	clear_user_return_notifier(tsk);
@@ -383,7 +401,12 @@ static int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
 		}
 		charge = 0;
 		if (mpnt->vm_flags & VM_ACCOUNT) {
+<<<<<<< HEAD
 			unsigned int len = (mpnt->vm_end - mpnt->vm_start) >> PAGE_SHIFT;
+=======
+			unsigned long len;
+			len = (mpnt->vm_end - mpnt->vm_start) >> PAGE_SHIFT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (security_vm_enough_memory_mm(oldmm, len)) /* sic */
 				goto fail_nomem;
 			charge = len;
@@ -478,6 +501,7 @@ static inline int mm_alloc_pgd(struct mm_struct *mm)
 
 static inline void mm_free_pgd(struct mm_struct *mm)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_DEBUG
 	int i;
 #endif
@@ -496,6 +520,9 @@ static inline void mm_free_pgd(struct mm_struct *mm)
 	}
 	#endif
 #endif 
+=======
+	pgd_free(mm, mm->pgd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #else
 #define dup_mmap(mm, oldmm)	(0)
@@ -609,9 +636,14 @@ EXPORT_SYMBOL_GPL(__mmdrop);
 /*
  * Decrement the use count and release all resources for an mm.
  */
+<<<<<<< HEAD
 int mmput(struct mm_struct *mm)
 {
 	int mm_freed = 0;
+=======
+void mmput(struct mm_struct *mm)
+{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	might_sleep();
 
 	if (atomic_dec_and_test(&mm->mm_users)) {
@@ -625,12 +657,20 @@ int mmput(struct mm_struct *mm)
 			list_del(&mm->mmlist);
 			spin_unlock(&mmlist_lock);
 		}
+<<<<<<< HEAD
 		if (mm->binfmt)
 			module_put(mm->binfmt->module);
 		mmdrop(mm);
 		mm_freed = 1;
 	}
 	return mm_freed;
+=======
+		put_swap_token(mm);
+		if (mm->binfmt)
+			module_put(mm->binfmt->module);
+		mmdrop(mm);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(mmput);
 
@@ -722,8 +762,12 @@ struct mm_struct *mm_access(struct task_struct *task, unsigned int mode)
 
 	mm = get_task_mm(task);
 	if (mm && mm != current->mm &&
+<<<<<<< HEAD
 			!ptrace_may_access(task, mode) &&
 			!capable(CAP_SYS_RESOURCE)) {
+=======
+			!ptrace_may_access(task, mode)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mmput(mm);
 		mm = ERR_PTR(-EACCES);
 	}
@@ -842,6 +886,13 @@ struct mm_struct *dup_mm(struct task_struct *tsk)
 	memcpy(mm, oldmm, sizeof(*mm));
 	mm_init_cpumask(mm);
 
+<<<<<<< HEAD
+=======
+	/* Initializing for Swap token stuff */
+	mm->token_priority = 0;
+	mm->last_interval = 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
 	mm->pmd_huge_pte = NULL;
 #endif
@@ -919,6 +970,13 @@ static int copy_mm(unsigned long clone_flags, struct task_struct *tsk)
 		goto fail_nomem;
 
 good_mm:
+<<<<<<< HEAD
+=======
+	/* Initializing for Swap token stuff */
+	mm->token_priority = 0;
+	mm->last_interval = 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	tsk->mm = mm;
 	tsk->active_mm = mm;
 	return 0;
@@ -1113,6 +1171,7 @@ static void copy_flags(unsigned long clone_flags, struct task_struct *p)
 	p->flags = new_flags;
 }
 
+<<<<<<< HEAD
 static void copy_seccomp(struct task_struct *p)
 {
 #ifdef CONFIG_SECCOMP
@@ -1146,6 +1205,8 @@ static void copy_seccomp(struct task_struct *p)
 #endif
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SYSCALL_DEFINE1(set_tid_address, int __user *, tidptr)
 {
 	current->clear_child_tid = tidptr;
@@ -1200,7 +1261,10 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 {
 	int retval;
 	struct task_struct *p;
+<<<<<<< HEAD
 	int cgroup_callbacks_done = 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if ((clone_flags & (CLONE_NEWNS|CLONE_FS)) == (CLONE_NEWNS|CLONE_FS))
 		return ERR_PTR(-EINVAL);
@@ -1285,7 +1349,10 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 
 	p->utime = p->stime = p->gtime = 0;
 	p->utimescaled = p->stimescaled = 0;
+<<<<<<< HEAD
 	p->cpu_power = 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef CONFIG_VIRT_CPU_ACCOUNTING
 	p->prev_utime = p->prev_stime = 0;
 #endif
@@ -1363,7 +1430,11 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 		goto bad_fork_cleanup_policy;
 	retval = audit_alloc(p);
 	if (retval)
+<<<<<<< HEAD
 		goto bad_fork_cleanup_policy;
+=======
+		goto bad_fork_cleanup_perf;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* copy all the process information */
 	retval = copy_semundo(clone_flags, p);
 	if (retval)
@@ -1460,12 +1531,15 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	p->group_leader = p;
 	INIT_LIST_HEAD(&p->thread_group);
 
+<<<<<<< HEAD
 	/* Now that the task is set up, run cgroup callbacks if
 	 * necessary. We need to run them before the task is visible
 	 * on the tasklist. */
 	cgroup_fork_callbacks(p);
 	cgroup_callbacks_done = 1;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Need tasklist lock for parent etc handling! */
 	write_lock_irq(&tasklist_lock);
 
@@ -1481,12 +1555,15 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	spin_lock(&current->sighand->siglock);
 
 	/*
+<<<<<<< HEAD
 	 * Copy seccomp details explicitly here, in case they were changed
 	 * before holding sighand lock.
 	 */
 	copy_seccomp(p);
 
 	/*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Process group and session signals need to be delivered to just the
 	 * parent before the fork or both the parent and the child after the
 	 * fork. Restart if a signal comes in before we add the new process to
@@ -1502,6 +1579,7 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 		goto bad_fork_free_pid;
 	}
 
+<<<<<<< HEAD
 	if (clone_flags & CLONE_THREAD) {
 		current->signal->nr_threads++;
 		atomic_inc(&current->signal->live);
@@ -1510,6 +1588,8 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 		list_add_tail_rcu(&p->thread_group, &p->group_leader->thread_group);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (likely(p->pid)) {
 		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
 
@@ -1525,6 +1605,15 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 			list_add_tail_rcu(&p->tasks, &init_task.tasks);
 			__this_cpu_inc(process_counts);
 		} else {
+<<<<<<< HEAD
+=======
+			current->signal->nr_threads++;
+			atomic_inc(&current->signal->live);
+			atomic_inc(&current->signal->sigcnt);
+			p->group_leader = current->group_leader;
+			list_add_tail_rcu(&p->thread_group,
+					  &p->group_leader->thread_group);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			list_add_tail_rcu(&p->thread_node,
 					  &p->signal->thread_head);
 		}
@@ -1534,7 +1623,13 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 
 	total_forks++;
 	spin_unlock(&current->sighand->siglock);
+<<<<<<< HEAD
 	write_unlock_irq(&tasklist_lock);
+=======
+	syscall_tracepoint_update(p);
+	write_unlock_irq(&tasklist_lock);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	proc_fork_connector(p);
 	cgroup_post_fork(p);
 	if (clone_flags & CLONE_THREAD)
@@ -1571,15 +1666,25 @@ bad_fork_cleanup_semundo:
 	exit_sem(p);
 bad_fork_cleanup_audit:
 	audit_free(p);
+<<<<<<< HEAD
 bad_fork_cleanup_policy:
 	perf_event_free_task(p);
+=======
+bad_fork_cleanup_perf:
+	perf_event_free_task(p);
+bad_fork_cleanup_policy:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_NUMA
 	mpol_put(p->mempolicy);
 bad_fork_cleanup_cgroup:
 #endif
 	if (clone_flags & CLONE_THREAD)
 		threadgroup_change_end(current);
+<<<<<<< HEAD
 	cgroup_exit(p, cgroup_callbacks_done);
+=======
+	cgroup_exit(p, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	delayacct_tsk_free(p);
 	module_put(task_thread_info(p)->exec_domain->module);
 bad_fork_cleanup_count:

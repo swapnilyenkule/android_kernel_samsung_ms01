@@ -23,8 +23,11 @@
 #ifndef _SS_AVTAB_H_
 #define _SS_AVTAB_H_
 
+<<<<<<< HEAD
 #include "security.h"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct avtab_key {
 	u16 source_type;	/* source type */
 	u16 target_type;	/* target type */
@@ -37,6 +40,7 @@ struct avtab_key {
 #define AVTAB_MEMBER		0x0020
 #define AVTAB_CHANGE		0x0040
 #define AVTAB_TYPE		(AVTAB_TRANSITION | AVTAB_MEMBER | AVTAB_CHANGE)
+<<<<<<< HEAD
 /* extended permissions */
 #define AVTAB_XPERMS_ALLOWED	0x0100
 #define AVTAB_XPERMS_AUDITALLOW	0x0200
@@ -44,11 +48,14 @@ struct avtab_key {
 #define AVTAB_XPERMS		(AVTAB_XPERMS_ALLOWED | \
 				AVTAB_XPERMS_AUDITALLOW | \
 				AVTAB_XPERMS_DONTAUDIT)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define AVTAB_ENABLED_OLD   0x80000000 /* reserved for used in cond_avtab */
 #define AVTAB_ENABLED		0x8000 /* reserved for used in cond_avtab */
 	u16 specified;	/* what field is specified */
 };
 
+<<<<<<< HEAD
 /*
  * For operations that require more than the 32 permissions provided by the avc
  * extended permissions may be used to provide 256 bits of permissions.
@@ -74,6 +81,10 @@ struct avtab_datum {
 		u32 data; /* access vector or type value */
 		struct avtab_extended_perms *xperms;
 	} u;
+=======
+struct avtab_datum {
+	u32 data; /* access vector or type value */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 struct avtab_node {

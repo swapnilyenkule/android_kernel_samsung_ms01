@@ -49,7 +49,11 @@ struct ocfs2_alloc_context {
 
 	/* these are used by the chain search */
 	u16    ac_chain;
+<<<<<<< HEAD
 	int    ac_allow_chain_relink;
+=======
+	int    ac_disable_chain_relink;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	group_search_t *ac_group_search;
 
 	u64    ac_last_group;

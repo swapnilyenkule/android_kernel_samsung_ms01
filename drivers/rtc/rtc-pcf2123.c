@@ -264,6 +264,10 @@ static int __devinit pcf2123_probe(struct spi_device *spi)
 
 	if (!(rxbuf[0] & 0x20)) {
 		dev_err(&spi->dev, "chip not found\n");
+<<<<<<< HEAD
+=======
+		ret = -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto kfree_exit;
 	}
 

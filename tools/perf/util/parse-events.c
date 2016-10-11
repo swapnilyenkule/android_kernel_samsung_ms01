@@ -297,6 +297,7 @@ const char *event_name(struct perf_evsel *evsel)
 {
 	u64 config = evsel->attr.config;
 	int type = evsel->attr.type;
+<<<<<<< HEAD
 	char *buf;
 	size_t buf_sz;
 
@@ -337,6 +338,20 @@ const char *__event_name(int type, u64 config, char *pmu_name)
 	static char buf[32];
 
 	if (!pmu_name && type == PERF_TYPE_RAW) {
+=======
+
+	if (evsel->name)
+		return evsel->name;
+
+	return __event_name(type, config);
+}
+
+const char *__event_name(int type, u64 config)
+{
+	static char buf[32];
+
+	if (type == PERF_TYPE_RAW) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		sprintf(buf, "raw 0x%" PRIx64, config);
 		return buf;
 	}
@@ -377,12 +392,16 @@ const char *__event_name(int type, u64 config, char *pmu_name)
 		return tracepoint_id_to_name(config);
 
 	default:
+<<<<<<< HEAD
 		if (pmu_name) {
 			snprintf(buf, sizeof(buf), "%s 0x%" PRIx64, pmu_name,
 					config);
 			return buf;
 		} else
 			break;
+=======
+		break;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return "unknown";
@@ -446,7 +465,11 @@ int parse_events_add_cache(struct list_head *list, int *idx,
 	for (i = 0; (i < 2) && (op_result[i]); i++) {
 		char *str = op_result[i];
 
+<<<<<<< HEAD
 		snprintf(name + n, MAX_NAME_LEN - n, "-%s\n", str);
+=======
+		n += snprintf(name + n, MAX_NAME_LEN - n, "-%s", str);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (cache_op == -1) {
 			cache_op = parse_aliases(str, hw_cache_op,
@@ -663,6 +686,7 @@ static int config_attr(struct perf_event_attr *attr,
 	return 0;
 }
 
+<<<<<<< HEAD
 int parse_events_add_numeric_legacy(struct list_head *list, int *idx,
 			     const char *name, unsigned long config,
 			     struct list_head *head_config)
@@ -689,6 +713,8 @@ int parse_events_add_numeric_legacy(struct list_head *list, int *idx,
 			 (char *) __event_name(pmu->type, config, pmu_name));
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int parse_events_add_numeric(struct list_head *list, int *idx,
 			     unsigned long type, unsigned long config,
 			     struct list_head *head_config)
@@ -704,7 +730,11 @@ int parse_events_add_numeric(struct list_head *list, int *idx,
 		return -EINVAL;
 
 	return add_event(list, idx, &attr,
+<<<<<<< HEAD
 			 (char *) __event_name(type, config, NULL));
+=======
+			 (char *) __event_name(type, config));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int parse_events_add_pmu(struct list_head *list, int *idx,
@@ -712,7 +742,10 @@ int parse_events_add_pmu(struct list_head *list, int *idx,
 {
 	struct perf_event_attr attr;
 	struct perf_pmu *pmu;
+<<<<<<< HEAD
 	char *ev_name;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pmu = perf_pmu__find(name);
 	if (!pmu)
@@ -729,9 +762,13 @@ int parse_events_add_pmu(struct list_head *list, int *idx,
 	if (perf_pmu__config(pmu, &attr, head_config))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	ev_name = (char *) __event_name(attr.type, attr.config, pmu->name);
 
 	return add_event(list, idx, &attr, ev_name);
+=======
+	return add_event(list, idx, &attr, (char *) "pmu");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void parse_events_update_lists(struct list_head *list_event,

@@ -23,8 +23,11 @@ struct fib_rule {
 	struct fib_rule __rcu	*ctarget;
 	char			iifname[IFNAMSIZ];
 	char			oifname[IFNAMSIZ];
+<<<<<<< HEAD
 	uid_t			uid_start;
 	uid_t			uid_end;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct rcu_head		rcu;
 	struct net *		fr_net;
 };
@@ -81,9 +84,13 @@ struct fib_rules_ops {
 	[FRA_FWMARK]	= { .type = NLA_U32 }, \
 	[FRA_FWMASK]	= { .type = NLA_U32 }, \
 	[FRA_TABLE]     = { .type = NLA_U32 }, \
+<<<<<<< HEAD
 	[FRA_GOTO]	= { .type = NLA_U32 }, \
 	[FRA_UID_START]	= { .type = NLA_U32 }, \
 	[FRA_UID_END]	= { .type = NLA_U32 }
+=======
+	[FRA_GOTO]	= { .type = NLA_U32 }
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline void fib_rule_get(struct fib_rule *rule)
 {

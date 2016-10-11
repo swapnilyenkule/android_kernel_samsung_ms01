@@ -89,7 +89,10 @@ struct inet_request_sock {
 				no_srccheck: 1;
 	kmemcheck_bitfield_end(flags);
 	struct ip_options_rcu	*opt;
+<<<<<<< HEAD
 	u32                     ir_mark;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static inline struct inet_request_sock *inet_rsk(const struct request_sock *sk)
@@ -97,6 +100,7 @@ static inline struct inet_request_sock *inet_rsk(const struct request_sock *sk)
 	return (struct inet_request_sock *)sk;
 }
 
+<<<<<<< HEAD
 static inline u32 inet_request_mark(struct sock *sk, struct sk_buff *skb)
 {
 	if (!sk->sk_mark && sock_net(sk)->ipv4.sysctl_tcp_fwmark_accept) {
@@ -106,6 +110,8 @@ static inline u32 inet_request_mark(struct sock *sk, struct sk_buff *skb)
 	}
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct inet_cork {
 	unsigned int		flags;
 	__be32			addr;
@@ -212,6 +218,10 @@ static inline void inet_sk_copy_descendant(struct sock *sk_to,
 extern int inet_sk_rebuild_header(struct sock *sk);
 
 extern u32 inet_ehash_secret;
+<<<<<<< HEAD
+=======
+extern u32 ipv6_hash_secret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void build_ehash_secret(void);
 
 static inline unsigned int inet_ehashfn(struct net *net,

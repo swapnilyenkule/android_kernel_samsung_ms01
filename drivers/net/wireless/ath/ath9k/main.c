@@ -235,7 +235,11 @@ static bool ath_prepare_reset(struct ath_softc *sc, bool retry_tx, bool flush)
 {
 	struct ath_hw *ah = sc->sc_ah;
 	struct ath_common *common = ath9k_hw_common(ah);
+<<<<<<< HEAD
 	bool ret;
+=======
+	bool ret = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ieee80211_stop_queues(sc->hw);
 
@@ -245,10 +249,20 @@ static bool ath_prepare_reset(struct ath_softc *sc, bool retry_tx, bool flush)
 	ath9k_debug_samp_bb_mac(sc);
 	ath9k_hw_disable_interrupts(ah);
 
+<<<<<<< HEAD
 	ret = ath_drain_all_txq(sc, retry_tx);
 
 	if (!ath_stoprecv(sc))
 		ret = false;
+=======
+	if (AR_SREV_9300_20_OR_LATER(ah)) {
+		ret &= ath_stoprecv(sc);
+		ret &= ath_drain_all_txq(sc, retry_tx);
+	} else {
+		ret &= ath_drain_all_txq(sc, retry_tx);
+		ret &= ath_stoprecv(sc);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!flush) {
 		if (ah->caps.hw_caps & ATH9K_HW_CAP_EDMA)
@@ -960,6 +974,18 @@ void ath_hw_pll_work(struct work_struct *work)
 					    hw_pll_work.work);
 	u32 pll_sqsum;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * ensure that the PLL WAR is executed only
+	 * after the STA is associated (or) if the
+	 * beaconing had started in interfaces that
+	 * uses beacons.
+	 */
+	if (!(sc->sc_flags & SC_OP_BEACONS))
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (AR_SREV_9485(sc->sc_ah)) {
 
 		ath9k_ps_wakeup(sc);
@@ -1138,7 +1164,11 @@ static void ath9k_tx(struct ieee80211_hw *hw, struct sk_buff *skb)
 
 	return;
 exit:
+<<<<<<< HEAD
 	dev_kfree_skb_any(skb);
+=======
+	ieee80211_free_txskb(hw, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void ath9k_stop(struct ieee80211_hw *hw)
@@ -1281,8 +1311,14 @@ void ath9k_calculate_iter_data(struct ieee80211_hw *hw,
 	struct ath_common *common = ath9k_hw_common(ah);
 
 	/*
+<<<<<<< HEAD
 	 * Use the hardware MAC address as reference, the hardware uses it
 	 * together with the BSSID mask when matching addresses.
+=======
+	 * Pick the MAC address of the first interface as the new hardware
+	 * MAC address. The hardware will use it together with the BSSID mask
+	 * when matching addresses.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 */
 	memset(iter_data, 0, sizeof(*iter_data));
 	iter_data->hw_macaddr = common->macaddr;
@@ -1419,6 +1455,7 @@ static int ath9k_add_interface(struct ieee80211_hw *hw,
 		}
 	}
 
+<<<<<<< HEAD
 	if ((ah->opmode == NL80211_IFTYPE_ADHOC) ||
 	    ((vif->type == NL80211_IFTYPE_ADHOC) &&
 	     sc->nvifs > 0)) {
@@ -1428,6 +1465,8 @@ static int ath9k_add_interface(struct ieee80211_hw *hw,
 		goto out;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ath_dbg(common, CONFIG, "Attach a VIF of type: %d\n", vif->type);
 
 	sc->nvifs++;
@@ -1613,6 +1652,7 @@ static int ath9k_config(struct ieee80211_hw *hw, u32 changed)
 		ath_update_survey_stats(sc);
 		spin_unlock_irqrestore(&common->cc_lock, flags);
 
+<<<<<<< HEAD
 		/*
 		 * Preserve the current channel values, before updating
 		 * the same channel
@@ -1620,6 +1660,8 @@ static int ath9k_config(struct ieee80211_hw *hw, u32 changed)
 		if (ah->curchan && (old_pos == pos))
 			ath9k_hw_getnf(ah, ah->curchan);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ath9k_cmn_update_ichannel(&sc->sc_ah->channels[pos],
 					  curchan, conf->channel_type);
 
@@ -1711,6 +1753,10 @@ static int ath9k_sta_add(struct ieee80211_hw *hw,
 	struct ath_common *common = ath9k_hw_common(sc->sc_ah);
 	struct ath_node *an = (struct ath_node *) sta->drv_priv;
 	struct ieee80211_key_conf ps_key = { };
+<<<<<<< HEAD
+=======
+	int key;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ath_node_attach(sc, sta, vif);
 
@@ -1718,7 +1764,13 @@ static int ath9k_sta_add(struct ieee80211_hw *hw,
 	    vif->type != NL80211_IFTYPE_AP_VLAN)
 		return 0;
 
+<<<<<<< HEAD
 	an->ps_key = ath_key_config(common, vif, sta, &ps_key);
+=======
+	key = ath_key_config(common, vif, sta, &ps_key);
+	if (key > 0)
+		an->ps_key = key;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -1735,6 +1787,10 @@ static void ath9k_del_ps_key(struct ath_softc *sc,
 	    return;
 
 	ath_key_delete(common, &ps_key);
+<<<<<<< HEAD
+=======
+	an->ps_key = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int ath9k_sta_remove(struct ieee80211_hw *hw,

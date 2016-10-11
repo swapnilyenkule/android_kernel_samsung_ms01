@@ -578,7 +578,11 @@ void dmaengine_get(void)
 				list_del_rcu(&device->global_node);
 				break;
 			} else if (err)
+<<<<<<< HEAD
 				pr_err("%s: failed to get %s: (%d)\n",
+=======
+				pr_debug("%s: failed to get %s: (%d)\n",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					__func__, dma_chan_name(chan), err);
 		}
 	}

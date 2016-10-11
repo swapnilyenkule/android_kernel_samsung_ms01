@@ -5,7 +5,10 @@
 #include <linux/types.h>
 #include <linux/errno.h>
 #include <linux/of.h>
+<<<<<<< HEAD
 #include <linux/pinctrl/pinctrl.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_GPIOLIB
 
@@ -48,6 +51,7 @@ struct seq_file;
 struct module;
 struct device_node;
 
+<<<<<<< HEAD
 #ifdef CONFIG_PINCTRL
 /**
  * struct gpio_pin_range - pin range controlled by a gpio chip
@@ -68,6 +72,8 @@ void gpiochip_remove_pin_ranges(struct gpio_chip *chip);
 
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * struct gpio_chip - abstract a GPIO controller
  * @label: for diagnostics
@@ -153,6 +159,7 @@ struct gpio_chip {
 	int (*of_xlate)(struct gpio_chip *gc,
 		        const struct of_phandle_args *gpiospec, u32 *flags);
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_PINCTRL
 	/*
 	 * If CONFIG_PINCTRL is enabled, then gpio controllers can optionally
@@ -162,6 +169,8 @@ struct gpio_chip {
 	 */
 	struct list_head pin_ranges;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 extern const char *gpiochip_is_requested(struct gpio_chip *chip,

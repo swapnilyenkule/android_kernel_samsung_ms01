@@ -1590,8 +1590,11 @@ process_symbols(struct event *event, struct print_arg *arg, char **tok)
 	field = malloc_or_die(sizeof(*field));
 
 	type = process_arg(event, field, &token);
+<<<<<<< HEAD
 	while (type == EVENT_OP)
 		type = process_op(event, field, &token);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (test_type_token(type, token, EVENT_DELIM, ","))
 		goto out_free;
 

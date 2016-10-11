@@ -96,8 +96,15 @@ static int xfrm6_fill_dst(struct xfrm_dst *xdst, struct net_device *dev,
 	dev_hold(dev);
 
 	xdst->u.rt6.rt6i_idev = in6_dev_get(dev);
+<<<<<<< HEAD
 	if (!xdst->u.rt6.rt6i_idev)
 		return -ENODEV;
+=======
+	if (!xdst->u.rt6.rt6i_idev) {
+		dev_put(dev);
+		return -ENODEV;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	xdst->u.rt6.rt6i_peer = rt->rt6i_peer;
 	if (rt->rt6i_peer)
@@ -128,9 +135,12 @@ _decode_session6(struct sk_buff *skb, struct flowi *fl, int reverse)
 	struct ipv6_opt_hdr *exthdr;
 	const unsigned char *nh = skb_network_header(skb);
 	u8 nexthdr = nh[IP6CB(skb)->nhoff];
+<<<<<<< HEAD
 	if (IP6CB(skb)->nhoff == 0) {
 		nexthdr = ipv6_hdr(skb)->nexthdr;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	memset(fl6, 0, sizeof(struct flowi6));
 	fl6->flowi6_mark = skb->mark;

@@ -25,6 +25,10 @@
 #include <linux/reboot.h>
 #include <linux/init_task.h>
 #include <linux/mqueue.h>
+<<<<<<< HEAD
+=======
+#include <linux/rcupdate.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/uaccess.h>
 #include <asm/traps.h>
@@ -75,8 +79,15 @@ void cpu_idle(void)
 {
 	/* endless idle loop with no priority at all */
 	while (1) {
+<<<<<<< HEAD
 		while (!need_resched())
 			idle();
+=======
+		rcu_idle_enter();
+		while (!need_resched())
+			idle();
+		rcu_idle_exit();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		schedule_preempt_disabled();
 	}
 }

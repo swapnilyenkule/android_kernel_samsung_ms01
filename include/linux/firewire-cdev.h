@@ -215,8 +215,13 @@ struct fw_cdev_event_request2 {
  * with the %FW_CDEV_ISO_INTERRUPT bit set, when explicitly requested with
  * %FW_CDEV_IOC_FLUSH_ISO, or when there have been so many completed packets
  * without the interrupt bit set that the kernel's internal buffer for @header
+<<<<<<< HEAD
  * is about to overflow.  (In the last case, kernels with ABI version < 5 drop
  * header data up to the next interrupt packet.)
+=======
+ * is about to overflow.  (In the last case, ABI versions < 5 drop header data
+ * up to the next interrupt packet.)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * Isochronous transmit events (context type %FW_CDEV_ISO_CONTEXT_TRANSMIT):
  *

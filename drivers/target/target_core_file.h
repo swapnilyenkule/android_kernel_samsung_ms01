@@ -18,7 +18,11 @@ struct fd_request {
 
 #define FBDF_HAS_PATH		0x01
 #define FBDF_HAS_SIZE		0x02
+<<<<<<< HEAD
 #define FDBD_USE_BUFFERED_IO	0x04
+=======
+#define FDBD_HAS_BUFFERED_IO_WCE 0x04
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct fd_dev {
 	u32		fbd_flags;

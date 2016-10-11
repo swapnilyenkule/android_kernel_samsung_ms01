@@ -2545,6 +2545,10 @@ int ocfs2_super_lock(struct ocfs2_super *osb,
 	 * everything is up to the caller :) */
 	status = ocfs2_should_refresh_lock_res(lockres);
 	if (status < 0) {
+<<<<<<< HEAD
+=======
+		ocfs2_cluster_unlock(osb, lockres, level);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mlog_errno(status);
 		goto bail;
 	}
@@ -2553,8 +2557,15 @@ int ocfs2_super_lock(struct ocfs2_super *osb,
 
 		ocfs2_complete_lock_res_refresh(lockres, status);
 
+<<<<<<< HEAD
 		if (status < 0)
 			mlog_errno(status);
+=======
+		if (status < 0) {
+			ocfs2_cluster_unlock(osb, lockres, level);
+			mlog_errno(status);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ocfs2_track_lock_refresh(lockres);
 	}
 bail:
@@ -3965,9 +3976,19 @@ static void ocfs2_downconvert_thread_do_work(struct ocfs2_super *osb)
 	osb->dc_work_sequence = osb->dc_wake_sequence;
 
 	processed = osb->blocked_lock_count;
+<<<<<<< HEAD
 	while (processed) {
 		BUG_ON(list_empty(&osb->blocked_lock_list));
 
+=======
+	/*
+	 * blocked lock processing in this loop might call iput which can
+	 * remove items off osb->blocked_lock_list. Downconvert up to
+	 * 'processed' number of locks, but stop short if we had some
+	 * removed in ocfs2_mark_lockres_freeing when downconverting.
+	 */
+	while (processed && !list_empty(&osb->blocked_lock_list)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		lockres = list_entry(osb->blocked_lock_list.next,
 				     struct ocfs2_lock_res, l_blocked_list);
 		list_del_init(&lockres->l_blocked_list);

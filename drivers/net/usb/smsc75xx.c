@@ -43,7 +43,10 @@
 #define EEPROM_MAC_OFFSET		(0x01)
 #define DEFAULT_TX_CSUM_ENABLE		(true)
 #define DEFAULT_RX_CSUM_ENABLE		(true)
+<<<<<<< HEAD
 #define DEFAULT_TSO_ENABLE		(true)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define SMSC75XX_INTERNAL_PHY_ID	(1)
 #define SMSC75XX_TX_OVERHEAD		(8)
 #define MAX_RX_FIFO_SIZE		(20 * 1024)
@@ -725,8 +728,17 @@ static int smsc75xx_set_rx_max_frame_length(struct usbnet *dev, int size)
 static int smsc75xx_change_mtu(struct net_device *netdev, int new_mtu)
 {
 	struct usbnet *dev = netdev_priv(netdev);
+<<<<<<< HEAD
 
 	int ret = smsc75xx_set_rx_max_frame_length(dev, new_mtu);
+=======
+	int ret;
+
+	if (new_mtu > MAX_SINGLE_PACKET_SIZE)
+		return -EINVAL;
+
+	ret = smsc75xx_set_rx_max_frame_length(dev, new_mtu + ETH_HLEN);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	check_warn_return(ret, "Failed to set mac rx frame length");
 
 	return usbnet_change_mtu(netdev, new_mtu);
@@ -979,7 +991,11 @@ static int smsc75xx_reset(struct usbnet *dev)
 
 	netif_dbg(dev, ifup, dev->net, "FCT_TX_CTL set to 0x%08x", buf);
 
+<<<<<<< HEAD
 	ret = smsc75xx_set_rx_max_frame_length(dev, 1514);
+=======
+	ret = smsc75xx_set_rx_max_frame_length(dev, dev->net->mtu + ETH_HLEN);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	check_warn_return(ret, "Failed to set max rx frame length");
 
 	ret = smsc75xx_read_reg(dev, MAC_RX, &buf);
@@ -1045,17 +1061,27 @@ static int smsc75xx_bind(struct usbnet *dev, struct usb_interface *intf)
 
 	INIT_WORK(&pdata->set_multicast, smsc75xx_deferred_multicast_write);
 
+<<<<<<< HEAD
 	if (DEFAULT_TX_CSUM_ENABLE) {
 		dev->net->features |= NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM;
 		if (DEFAULT_TSO_ENABLE)
 			dev->net->features |= NETIF_F_SG |
 				NETIF_F_TSO | NETIF_F_TSO6;
 	}
+=======
+	if (DEFAULT_TX_CSUM_ENABLE)
+		dev->net->features |= NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (DEFAULT_RX_CSUM_ENABLE)
 		dev->net->features |= NETIF_F_RXCSUM;
 
 	dev->net->hw_features = NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
+<<<<<<< HEAD
 		NETIF_F_SG | NETIF_F_TSO | NETIF_F_TSO6 | NETIF_F_RXCSUM;
+=======
+				NETIF_F_RXCSUM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Init all registers */
 	ret = smsc75xx_reset(dev);
@@ -1093,6 +1119,13 @@ static void smsc75xx_rx_csum_offload(struct usbnet *dev, struct sk_buff *skb,
 
 static int smsc75xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 {
+<<<<<<< HEAD
+=======
+	/* This check is no longer done by usbnet */
+	if (skb->len < dev->net->hard_header_len)
+		return 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	while (skb->len > 0) {
 		u32 rx_cmd_a, rx_cmd_b, align_count, size;
 		struct sk_buff *ax_skb;
@@ -1123,8 +1156,13 @@ static int smsc75xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 			else if (rx_cmd_a & (RX_CMD_A_LONG | RX_CMD_A_RUNT))
 				dev->net->stats.rx_frame_errors++;
 		} else {
+<<<<<<< HEAD
 			/* ETH_FRAME_LEN + 4(CRC) + 2(COE) + 4(Vlan) */
 			if (unlikely(size > (ETH_FRAME_LEN + 12))) {
+=======
+			/* MAX_SINGLE_PACKET_SIZE + 4(CRC) + 2(COE) + 4(Vlan) */
+			if (unlikely(size > (MAX_SINGLE_PACKET_SIZE + ETH_HLEN + 12))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				netif_dbg(dev, rx_err, dev->net,
 					"size err rx_cmd_a=0x%08x", rx_cmd_a);
 				return 0;
@@ -1180,8 +1218,11 @@ static struct sk_buff *smsc75xx_tx_fixup(struct usbnet *dev,
 {
 	u32 tx_cmd_a, tx_cmd_b;
 
+<<<<<<< HEAD
 	skb_linearize(skb);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (skb_headroom(skb) < SMSC75XX_TX_OVERHEAD) {
 		struct sk_buff *skb2 =
 			skb_copy_expand(skb, SMSC75XX_TX_OVERHEAD, 0, flags);

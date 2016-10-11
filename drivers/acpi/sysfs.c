@@ -173,7 +173,11 @@ static int param_set_trace_state(const char *val, struct kernel_param *kp)
 {
 	int result = 0;
 
+<<<<<<< HEAD
 	if (!strncmp(val, "enable", strlen("enable") - 1)) {
+=======
+	if (!strncmp(val, "enable", strlen("enable"))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		result = acpi_debug_trace(trace_method_name, trace_debug_level,
 					  trace_debug_layer, 0);
 		if (result)
@@ -181,7 +185,11 @@ static int param_set_trace_state(const char *val, struct kernel_param *kp)
 		goto exit;
 	}
 
+<<<<<<< HEAD
 	if (!strncmp(val, "disable", strlen("disable") - 1)) {
+=======
+	if (!strncmp(val, "disable", strlen("disable"))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		int name = 0;
 		result = acpi_debug_trace((char *)&name, trace_debug_level,
 					  trace_debug_layer, 0);

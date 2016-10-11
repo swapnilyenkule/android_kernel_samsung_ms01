@@ -89,11 +89,18 @@ xfs_destroy_ioend(
 	}
 
 	if (ioend->io_iocb) {
+<<<<<<< HEAD
+=======
+		inode_dio_done(ioend->io_inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ioend->io_isasync) {
 			aio_complete(ioend->io_iocb, ioend->io_error ?
 					ioend->io_error : ioend->io_result, 0);
 		}
+<<<<<<< HEAD
 		inode_dio_done(ioend->io_inode);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	mempool_free(ioend, xfs_ioend_pool);

@@ -52,6 +52,7 @@ static inline unsigned int get_cr(void)
 	return val;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #ifdef CONFIG_TIMA_RKP_DEBUG
 //extern unsigned long *l2_mmap_ptr;
@@ -140,6 +141,8 @@ static inline void tima_send_cmd5 (unsigned int p1, unsigned int p2, unsigned in
 }
 
 #endif	/* CONFIG_TIMA_RKP */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline void set_cr(unsigned int val)
 {
 	asm volatile("mcr p15, 0, %0, c1, c0, 0	@ set CR"

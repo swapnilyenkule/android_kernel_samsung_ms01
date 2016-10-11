@@ -101,7 +101,11 @@ static void sam9_smc_cs_read(void __iomem *base,
 	/* Pulse register */
 	val = __raw_readl(base + AT91_SMC_PULSE);
 
+<<<<<<< HEAD
 	config->nwe_setup = val & AT91_SMC_NWEPULSE;
+=======
+	config->nwe_pulse = val & AT91_SMC_NWEPULSE;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	config->ncs_write_pulse = (val & AT91_SMC_NCS_WRPULSE) >> 8;
 	config->nrd_pulse = (val & AT91_SMC_NRDPULSE) >> 16;
 	config->ncs_read_pulse = (val & AT91_SMC_NCS_RDPULSE) >> 24;

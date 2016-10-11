@@ -247,8 +247,13 @@ static acpi_status acpi_pci_query_osc(struct acpi_pci_root *root,
 		*control &= OSC_PCI_CONTROL_MASKS;
 		capbuf[OSC_CONTROL_TYPE] = *control | root->osc_control_set;
 	} else {
+<<<<<<< HEAD
 		/* Run _OSC query for all possible controls. */
 		capbuf[OSC_CONTROL_TYPE] = OSC_PCI_CONTROL_MASKS;
+=======
+		/* Run _OSC query only with existing controls. */
+		capbuf[OSC_CONTROL_TYPE] = root->osc_control_set;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	status = acpi_pci_run_osc(root->device->handle, capbuf, &result);

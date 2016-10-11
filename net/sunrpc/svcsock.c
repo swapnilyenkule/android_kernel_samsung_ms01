@@ -1055,6 +1055,7 @@ static int receive_cb_reply(struct svc_sock *svsk, struct svc_rqst *rqstp)
 	xid = *p++;
 	calldir = *p;
 
+<<<<<<< HEAD
 	if (bc_xprt)
 		req = xprt_lookup_rqst(bc_xprt, xid);
 
@@ -1066,6 +1067,14 @@ static int receive_cb_reply(struct svc_sock *svsk, struct svc_rqst *rqstp)
 			bc_xprt, xid);
 		return -EAGAIN;
 	}
+=======
+	if (!bc_xprt)
+		return -EAGAIN;
+	spin_lock_bh(&bc_xprt->transport_lock);
+	req = xprt_lookup_rqst(bc_xprt, xid);
+	if (!req)
+		goto unlock_notfound;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	memcpy(&req->rq_private_buf, &req->rq_rcv_buf, sizeof(struct xdr_buf));
 	/*
@@ -1076,11 +1085,29 @@ static int receive_cb_reply(struct svc_sock *svsk, struct svc_rqst *rqstp)
 	dst = &req->rq_private_buf.head[0];
 	src = &rqstp->rq_arg.head[0];
 	if (dst->iov_len < src->iov_len)
+<<<<<<< HEAD
 		return -EAGAIN; /* whatever; just giving up. */
 	memcpy(dst->iov_base, src->iov_base, src->iov_len);
 	xprt_complete_rqst(req->rq_task, svsk->sk_reclen);
 	rqstp->rq_arg.len = 0;
 	return 0;
+=======
+		goto unlock_eagain; /* whatever; just giving up. */
+	memcpy(dst->iov_base, src->iov_base, src->iov_len);
+	xprt_complete_rqst(req->rq_task, svsk->sk_reclen);
+	rqstp->rq_arg.len = 0;
+	spin_unlock_bh(&bc_xprt->transport_lock);
+	return 0;
+unlock_notfound:
+	printk(KERN_NOTICE
+		"%s: Got unrecognized reply: "
+		"calldir 0x%x xpt_bc_xprt %p xid %08x\n",
+		__func__, ntohl(calldir),
+		bc_xprt, ntohl(xid));
+unlock_eagain:
+	spin_unlock_bh(&bc_xprt->transport_lock);
+	return -EAGAIN;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int copy_pages_to_kvecs(struct kvec *vec, struct page **pages, int len)
@@ -1137,9 +1164,15 @@ static int svc_tcp_recvfrom(struct svc_rqst *rqstp)
 	if (len >= 0)
 		svsk->sk_tcplen += len;
 	if (len != want) {
+<<<<<<< HEAD
 		if (len < 0 && len != -EAGAIN)
 			goto err_other;
 		svc_tcp_save_pages(svsk, rqstp);
+=======
+		svc_tcp_save_pages(svsk, rqstp);
+		if (len < 0 && len != -EAGAIN)
+			goto err_other;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dprintk("svc: incomplete TCP record (%d of %d)\n",
 			svsk->sk_tcplen, svsk->sk_reclen);
 		goto err_noclose;
@@ -1441,6 +1474,25 @@ static struct svc_sock *svc_setup_socket(struct svc_serv *serv,
 	return svsk;
 }
 
+<<<<<<< HEAD
+=======
+bool svc_alien_sock(struct net *net, int fd)
+{
+	int err;
+	struct socket *sock = sockfd_lookup(fd, &err);
+	bool ret = false;
+
+	if (!sock)
+		goto out;
+	if (sock_net(sock->sk) != net)
+		ret = true;
+	sockfd_put(sock);
+out:
+	return ret;
+}
+EXPORT_SYMBOL_GPL(svc_alien_sock);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * svc_addsock - add a listener socket to an RPC service
  * @serv: pointer to RPC service to which to add a new listener

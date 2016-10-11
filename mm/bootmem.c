@@ -154,7 +154,11 @@ unsigned long __init init_bootmem(unsigned long start, unsigned long pages)
  * down, but we are still initializing the system.  Pages are given directly
  * to the page allocator, no bootmem metadata is updated because it is gone.
  */
+<<<<<<< HEAD
 void free_bootmem_late(unsigned long addr, unsigned long size)
+=======
+void __init free_bootmem_late(unsigned long addr, unsigned long size)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long cursor, end;
 
@@ -766,6 +770,7 @@ void * __init alloc_bootmem_section(unsigned long size,
 				    unsigned long section_nr)
 {
 	bootmem_data_t *bdata;
+<<<<<<< HEAD
 	unsigned long pfn, goal;
 
 	pfn = section_nr_to_pfn(section_nr);
@@ -773,6 +778,19 @@ void * __init alloc_bootmem_section(unsigned long size,
 	bdata = &bootmem_node_data[early_pfn_to_nid(pfn)];
 
 	return alloc_bootmem_core(bdata, size, SMP_CACHE_BYTES, goal, 0);
+=======
+	unsigned long pfn, goal, limit;
+
+	pfn = section_nr_to_pfn(section_nr);
+	goal = pfn << PAGE_SHIFT;
+	limit = section_nr_to_pfn(section_nr + 1) << PAGE_SHIFT;
+	bdata = &bootmem_node_data[early_pfn_to_nid(pfn)];
+
+	if (goal + size > limit)
+		limit = 0;
+
+	return alloc_bootmem_core(bdata, size, SMP_CACHE_BYTES, goal, limit);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #endif
 

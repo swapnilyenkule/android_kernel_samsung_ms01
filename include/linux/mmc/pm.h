@@ -26,6 +26,9 @@ typedef unsigned int mmc_pm_flag_t;
 
 #define MMC_PM_KEEP_POWER	(1 << 0)	/* preserve card power during suspend */
 #define MMC_PM_WAKE_SDIO_IRQ	(1 << 1)	/* wake up host system on SDIO IRQ assertion */
+<<<<<<< HEAD
 #define MMC_PM_IGNORE_PM_NOTIFY	(1 << 2)	/* ignore mmc pm notify */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif /* LINUX_MMC_PM_H */

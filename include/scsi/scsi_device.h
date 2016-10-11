@@ -153,6 +153,10 @@ struct scsi_device {
 	unsigned no_read_capacity_16:1; /* Avoid READ_CAPACITY_16 cmds */
 	unsigned try_rc_10_first:1;	/* Try READ_CAPACACITY_10 first */
 	unsigned is_visible:1;	/* is the device visible in sysfs */
+<<<<<<< HEAD
+=======
+	unsigned broken_fua:1;		/* Don't set FUA bit */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	DECLARE_BITMAP(supported_events, SDEV_EVT_MAXBITS); /* supported events */
 	struct list_head event_list;	/* asserted events */
@@ -384,6 +388,7 @@ extern int scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
 			int data_direction, void *buffer, unsigned bufflen,
 			unsigned char *sense, int timeout, int retries,
 			int flag, int *resid);
+<<<<<<< HEAD
 extern int scsi_execute_req_flags(struct scsi_device *sdev,
 	const unsigned char *cmd, int data_direction, void *buffer,
 	unsigned bufflen, struct scsi_sense_hdr *sshdr, int timeout,
@@ -396,6 +401,12 @@ static inline int scsi_execute_req(struct scsi_device *sdev,
 	return scsi_execute_req_flags(sdev, cmd, data_direction, buffer,
 		bufflen, sshdr, timeout, retries, resid, 0);
 }
+=======
+extern int scsi_execute_req(struct scsi_device *sdev, const unsigned char *cmd,
+			    int data_direction, void *buffer, unsigned bufflen,
+			    struct scsi_sense_hdr *, int timeout, int retries,
+			    int *resid);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_PM_RUNTIME
 extern int scsi_autopm_get_device(struct scsi_device *);

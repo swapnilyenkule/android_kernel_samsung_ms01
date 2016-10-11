@@ -8,6 +8,7 @@ The following attributes are read/write.
 
 	force_ro		Enforce read-only access even if write protect switch is off.
 
+<<<<<<< HEAD
 	num_wr_reqs_to_start_packing 	This attribute is used to determine
 	the trigger for activating the write packing, in case the write
 	packing control feature is enabled.
@@ -34,12 +35,18 @@ The following attributes are read/write.
 	The value can modified via sysfs by writing the required value to:
 	/sys/block/<block_dev_name>/bkops_check_threshold
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SD and MMC Device Attributes
 ============================
 
 All attributes are read-only.
 
+<<<<<<< HEAD
 	cid			Card Identification Register
+=======
+	cid			Card Identifaction Register
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	csd			Card Specific Data Register
 	scr			SD Card Configuration Register (SD only)
 	date			Manufacturing Date (from CID Register)
@@ -51,8 +58,11 @@ All attributes are read-only.
 	serial			Product Serial Number (from CID Register)
 	erase_size		Erase group size
 	preferred_erase_size	Preferred erase size
+<<<<<<< HEAD
 	raw_rpmb_size_mult	RPMB partition size
 	rel_sectors		Reliable write sector count
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 Note on Erase Size and Preferred Erase Size:
 
@@ -93,11 +103,14 @@ Note on Erase Size and Preferred Erase Size:
 
 	"preferred_erase_size" is in bytes.
 
+<<<<<<< HEAD
 Note on raw_rpmb_size_mult:
 	"raw_rpmb_size_mult" is a mutliple of 128kB block.
 	RPMB size in byte is calculated by using the following equation:
 	RPMB partition size = 128kB x raw_rpmb_size_mult
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SD/MMC/SDIO Clock Gating Attribute
 ==================================
 
@@ -107,6 +120,7 @@ This attribute appears only if CONFIG_MMC_CLKGATE is enabled.
 	clkgate_delay	Tune the clock gating delay with desired value in milliseconds.
 
 echo <desired delay> > /sys/class/mmc_host/mmcX/clkgate_delay
+<<<<<<< HEAD
 
 SD/MMC/SDIO Clock Scaling Attributes
 ====================================
@@ -145,3 +159,5 @@ echo <desired value> > /sys/class/mmc_host/mmcX/clk_scaling/polling_interval
 echo <desired value> > /sys/class/mmc_host/mmcX/clk_scaling/up_threshold
 echo <desired value> > /sys/class/mmc_host/mmcX/clk_scaling/down_threshold
 echo <desired value> > /sys/class/mmc_host/mmcX/clk_scaling/enable
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

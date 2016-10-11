@@ -421,7 +421,11 @@ int wf_unregister_client(struct notifier_block *nb)
 {
 	mutex_lock(&wf_lock);
 	blocking_notifier_chain_unregister(&wf_client_list, nb);
+<<<<<<< HEAD
 	wf_client_count++;
+=======
+	wf_client_count--;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (wf_client_count == 0)
 		wf_stop_thread();
 	mutex_unlock(&wf_lock);

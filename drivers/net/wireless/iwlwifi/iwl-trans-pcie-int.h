@@ -209,6 +209,18 @@ struct iwl_queue {
 #define TFD_TX_CMD_SLOTS 256
 #define TFD_CMD_SLOTS 32
 
+<<<<<<< HEAD
+=======
+/*
+ * The FH will write back to the first TB only, so we need
+ * to copy some data into the buffer regardless of whether
+ * it should be mapped or not. This indicates how much to
+ * copy, even for HCMDs it must be big enough to fit the
+ * DRAM scratch from the TX cmd, at least 16 bytes.
+ */
+#define IWL_HCMD_MIN_COPY_SIZE	16
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct iwl_tx_queue {
 	struct iwl_queue q;
 	struct iwl_tfd *tfds;
@@ -342,7 +354,11 @@ void iwl_trans_pcie_tx_agg_setup(struct iwl_trans *trans,
 				 enum iwl_rxon_context_id ctx,
 				 int sta_id, int tid, int frame_limit, u16 ssn);
 void iwlagn_txq_free_tfd(struct iwl_trans *trans, struct iwl_tx_queue *txq,
+<<<<<<< HEAD
 	int index, enum dma_data_direction dma_dir);
+=======
+			 enum dma_data_direction dma_dir);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int iwl_tx_queue_reclaim(struct iwl_trans *trans, int txq_id, int index,
 			 struct sk_buff_head *skbs);
 int iwl_queue_space(const struct iwl_queue *q);
@@ -352,7 +368,11 @@ int iwl_queue_space(const struct iwl_queue *q);
 ******************************************************/
 int iwl_dump_nic_event_log(struct iwl_trans *trans, bool full_log,
 			    char **buf, bool display);
+<<<<<<< HEAD
 int iwl_dump_fh(struct iwl_trans *trans, char **buf, bool display);
+=======
+int iwl_dump_fh(struct iwl_trans *trans, char **buf);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void iwl_dump_csr(struct iwl_trans *trans);
 
 /*****************************************************

@@ -211,7 +211,11 @@ static int br_validate(struct nlattr *tb[], struct nlattr *data[])
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct rtnl_link_ops br_link_ops __read_mostly = {
+=======
+struct rtnl_link_ops br_link_ops __read_mostly = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.kind		= "bridge",
 	.priv_size	= sizeof(struct net_bridge),
 	.setup		= br_dev_setup,

@@ -38,21 +38,42 @@
 #define SNDRV_CTL_TLVT_DB_MINMAX 4	/* dB scale with min/max */
 #define SNDRV_CTL_TLVT_DB_MINMAX_MUTE 5	/* dB scale with min/max with mute */
 
+<<<<<<< HEAD
 #define TLV_DB_SCALE_MASK	0xffff
 #define TLV_DB_SCALE_MUTE	0x10000
 #define TLV_DB_SCALE_ITEM(min, step, mute)			\
 	SNDRV_CTL_TLVT_DB_SCALE, 2 * sizeof(unsigned int),	\
 	(min), ((step) & TLV_DB_SCALE_MASK) | ((mute) ? TLV_DB_SCALE_MUTE : 0)
+=======
+#define TLV_ITEM(type, ...) \
+	(type), TLV_LENGTH(__VA_ARGS__), __VA_ARGS__
+#define TLV_LENGTH(...) \
+	((unsigned int)sizeof((const unsigned int[]) { __VA_ARGS__ }))
+
+#define TLV_DB_SCALE_MASK	0xffff
+#define TLV_DB_SCALE_MUTE	0x10000
+#define TLV_DB_SCALE_ITEM(min, step, mute)			\
+	TLV_ITEM(SNDRV_CTL_TLVT_DB_SCALE,			\
+		 (min),					\
+		 ((step) & TLV_DB_SCALE_MASK) |		\
+			((mute) ? TLV_DB_SCALE_MUTE : 0))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DECLARE_TLV_DB_SCALE(name, min, step, mute) \
 	unsigned int name[] = { TLV_DB_SCALE_ITEM(min, step, mute) }
 
 /* dB scale specified with min/max values instead of step */
 #define TLV_DB_MINMAX_ITEM(min_dB, max_dB)			\
+<<<<<<< HEAD
 	SNDRV_CTL_TLVT_DB_MINMAX, 2 * sizeof(unsigned int),	\
 	(min_dB), (max_dB)
 #define TLV_DB_MINMAX_MUTE_ITEM(min_dB, max_dB)			\
 	SNDRV_CTL_TLVT_DB_MINMAX_MUTE, 2 * sizeof(unsigned int),	\
 	(min_dB), (max_dB)
+=======
+	TLV_ITEM(SNDRV_CTL_TLVT_DB_MINMAX, (min_dB), (max_dB))
+#define TLV_DB_MINMAX_MUTE_ITEM(min_dB, max_dB)			\
+	TLV_ITEM(SNDRV_CTL_TLVT_DB_MINMAX_MUTE, (min_dB), (max_dB))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DECLARE_TLV_DB_MINMAX(name, min_dB, max_dB) \
 	unsigned int name[] = { TLV_DB_MINMAX_ITEM(min_dB, max_dB) }
 #define DECLARE_TLV_DB_MINMAX_MUTE(name, min_dB, max_dB) \
@@ -60,19 +81,31 @@
 
 /* linear volume between min_dB and max_dB (.01dB unit) */
 #define TLV_DB_LINEAR_ITEM(min_dB, max_dB)		    \
+<<<<<<< HEAD
 	SNDRV_CTL_TLVT_DB_LINEAR, 2 * sizeof(unsigned int), \
 	(min_dB), (max_dB)
+=======
+	TLV_ITEM(SNDRV_CTL_TLVT_DB_LINEAR, (min_dB), (max_dB))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DECLARE_TLV_DB_LINEAR(name, min_dB, max_dB)	\
 	unsigned int name[] = { TLV_DB_LINEAR_ITEM(min_dB, max_dB) }
 
 /* dB range container */
 /* Each item is: <min> <max> <TLV> */
+<<<<<<< HEAD
+=======
+#define TLV_DB_RANGE_ITEM(...) \
+	TLV_ITEM(SNDRV_CTL_TLVT_DB_RANGE, __VA_ARGS__)
+#define DECLARE_TLV_DB_RANGE(name, ...) \
+	unsigned int name[] = { TLV_DB_RANGE_ITEM(__VA_ARGS__) }
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* The below assumes that each item TLV is 4 words like DB_SCALE or LINEAR */
 #define TLV_DB_RANGE_HEAD(num)			\
 	SNDRV_CTL_TLVT_DB_RANGE, 6 * (num) * sizeof(unsigned int)
 
 #define TLV_DB_GAIN_MUTE	-9999999
 
+<<<<<<< HEAD
 /*
  * channel-mapping TLV items
  *  TLV length must match with num_channels
@@ -81,4 +114,6 @@
 #define SNDRV_CTL_TLVT_CHMAP_VAR	0x102	/* channels freely swappable */
 #define SNDRV_CTL_TLVT_CHMAP_PAIRED	0x103	/* pair-wise swappable */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* __SOUND_TLV_H */

@@ -515,6 +515,7 @@ int input_open_device(struct input_handle *handle)
 
 	handle->open++;
 
+<<<<<<< HEAD
 	dev->users_private++;
 	if (!dev->disabled && !dev->users++ && dev->open)
 		retval = dev->open(dev);
@@ -523,6 +524,13 @@ int input_open_device(struct input_handle *handle)
 		dev->users_private--;
 		if (!dev->disabled)
 			dev->users--;
+=======
+	if (!dev->users++ && dev->open)
+		retval = dev->open(dev);
+
+	if (retval) {
+		dev->users--;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!--handle->open) {
 			/*
 			 * Make sure we are not delivering any more events
@@ -570,8 +578,12 @@ void input_close_device(struct input_handle *handle)
 
 	__input_release_device(handle);
 
+<<<<<<< HEAD
 	--dev->users_private;
 	if (!dev->disabled && !--dev->users && dev->close)
+=======
+	if (!--dev->users && dev->close)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dev->close(dev);
 
 	if (!--handle->open) {
@@ -587,6 +599,7 @@ void input_close_device(struct input_handle *handle)
 }
 EXPORT_SYMBOL(input_close_device);
 
+<<<<<<< HEAD
 static int input_enable_device(struct input_dev *dev)
 {
 	int retval;
@@ -631,6 +644,8 @@ static int input_disable_device(struct input_dev *dev)
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Simulate keyup events for all keys that are marked as pressed.
  * The function must be called with dev->event_lock held.
@@ -1339,6 +1354,7 @@ static ssize_t input_dev_show_properties(struct device *dev,
 }
 static DEVICE_ATTR(properties, S_IRUGO, input_dev_show_properties, NULL);
 
+<<<<<<< HEAD
 static ssize_t input_dev_show_enabled(struct device *dev,
 					 struct device_attribute *attr,
 					 char *buf)
@@ -1372,13 +1388,18 @@ static ssize_t input_dev_store_enabled(struct device *dev,
 static DEVICE_ATTR(enabled, S_IRUGO | S_IWUSR,
 		   input_dev_show_enabled, input_dev_store_enabled);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct attribute *input_dev_attrs[] = {
 	&dev_attr_name.attr,
 	&dev_attr_phys.attr,
 	&dev_attr_uniq.attr,
 	&dev_attr_modalias.attr,
 	&dev_attr_properties.attr,
+<<<<<<< HEAD
 	&dev_attr_enabled.attr,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NULL
 };
 
@@ -1656,11 +1677,17 @@ void input_reset_device(struct input_dev *dev)
 		 * Keys that have been pressed at suspend time are unlikely
 		 * to be still pressed when we resume.
 		 */
+<<<<<<< HEAD
 		if (!test_bit(INPUT_PROP_NO_DUMMY_RELEASE, dev->propbit)) {
 			spin_lock_irq(&dev->event_lock);
 			input_dev_release_keys(dev);
 			spin_unlock_irq(&dev->event_lock);
 		}
+=======
+		spin_lock_irq(&dev->event_lock);
+		input_dev_release_keys(dev);
+		spin_unlock_irq(&dev->event_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	mutex_unlock(&dev->mutex);
@@ -1791,6 +1818,13 @@ void input_set_capability(struct input_dev *dev, unsigned int type, unsigned int
 		break;
 
 	case EV_ABS:
+<<<<<<< HEAD
+=======
+		input_alloc_absinfo(dev);
+		if (!dev->absinfo)
+			return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		__set_bit(code, dev->absbit);
 		break;
 

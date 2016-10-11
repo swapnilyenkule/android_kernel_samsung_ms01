@@ -108,11 +108,14 @@ int blkcipher_walk_done(struct blkcipher_desc *desc,
 	struct crypto_blkcipher *tfm = desc->tfm;
 	unsigned int nbytes = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return (-EACCES);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (likely(err >= 0)) {
 		unsigned int n = walk->nbytes - err;
 
@@ -331,11 +334,14 @@ static int blkcipher_walk_first(struct blkcipher_desc *desc,
 	struct crypto_blkcipher *tfm = desc->tfm;
 	unsigned int alignmask = crypto_blkcipher_alignmask(tfm);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return (-EACCES);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (WARN_ON_ONCE(in_irq()))
 		return -EDEADLK;
 
@@ -422,10 +428,13 @@ static int async_encrypt(struct ablkcipher_request *req)
 		.flags = req->base.flags,
 	};
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return (-EACCES);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return alg->encrypt(&desc, req->dst, req->src, req->nbytes);
 }
@@ -440,11 +449,14 @@ static int async_decrypt(struct ablkcipher_request *req)
 		.flags = req->base.flags,
 	};
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return (-EACCES);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return alg->decrypt(&desc, req->dst, req->src, req->nbytes);
 }
 
@@ -518,9 +530,15 @@ static int crypto_blkcipher_report(struct sk_buff *skb, struct crypto_alg *alg)
 {
 	struct crypto_report_blkcipher rblkcipher;
 
+<<<<<<< HEAD
 	snprintf(rblkcipher.type, CRYPTO_MAX_ALG_NAME, "%s", "blkcipher");
 	snprintf(rblkcipher.geniv, CRYPTO_MAX_ALG_NAME, "%s",
 		 alg->cra_blkcipher.geniv ?: "<default>");
+=======
+	strncpy(rblkcipher.type, "blkcipher", sizeof(rblkcipher.type));
+	strncpy(rblkcipher.geniv, alg->cra_blkcipher.geniv ?: "<default>",
+		sizeof(rblkcipher.geniv));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rblkcipher.blocksize = alg->cra_blocksize;
 	rblkcipher.min_keysize = alg->cra_blkcipher.min_keysize;
@@ -606,11 +624,14 @@ struct crypto_instance *skcipher_geniv_alloc(struct crypto_template *tmpl,
 	struct crypto_alg *alg;
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return ERR_PTR(-EACCES);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	algt = crypto_get_attr_type(tb);
 	err = PTR_ERR(algt);
 	if (IS_ERR(algt))
@@ -735,11 +756,14 @@ int skcipher_geniv_init(struct crypto_tfm *tfm)
 	struct crypto_instance *inst = (void *)tfm->__crt_alg;
 	struct crypto_ablkcipher *cipher;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
     if (unlikely(in_fips_err())) 
         return (-EACCES);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cipher = crypto_spawn_skcipher(crypto_instance_ctx(inst));
 	if (IS_ERR(cipher))
 		return PTR_ERR(cipher);

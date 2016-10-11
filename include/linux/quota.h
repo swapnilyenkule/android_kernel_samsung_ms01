@@ -417,6 +417,10 @@ struct quota_module_name {
 #define INIT_QUOTA_MODULE_NAMES {\
 	{QFMT_VFS_OLD, "quota_v1"},\
 	{QFMT_VFS_V0, "quota_v2"},\
+<<<<<<< HEAD
+=======
+	{QFMT_VFS_V1, "quota_v2"},\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{0, NULL}}
 
 #endif /* __KERNEL__ */

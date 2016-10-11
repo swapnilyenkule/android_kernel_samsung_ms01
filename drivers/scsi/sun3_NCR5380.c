@@ -2624,6 +2624,7 @@ static void NCR5380_reselect (struct Scsi_Host *instance)
  * Purpose : abort a command
  *
  * Inputs : cmd - the struct scsi_cmnd to abort, code - code to set the
+<<<<<<< HEAD
  * 	host byte of the result field to, if zero DID_ABORTED is 
  *	used.
  *
@@ -2633,6 +2634,17 @@ static void NCR5380_reselect (struct Scsi_Host *instance)
  * 	 connected, you have to wait for it to complete.  If this is 
  *	 a problem, we could implement longjmp() / setjmp(), setjmp()
  * 	 called where the loop started in NCR5380_main().
+=======
+ *	host byte of the result field to, if zero DID_ABORTED is
+ *	used.
+ *
+ * Returns : SUCCESS - success, FAILED on failure.
+ *
+ * XXX - there is no way to abort the command that is currently
+ *	 connected, you have to wait for it to complete.  If this is
+ *	 a problem, we could implement longjmp() / setjmp(), setjmp()
+ *	 called where the loop started in NCR5380_main().
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 
 static int NCR5380_abort(struct scsi_cmnd *cmd)

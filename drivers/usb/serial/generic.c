@@ -223,6 +223,7 @@ retry:
 		return result;
 	}
 
+<<<<<<< HEAD
 	/* Try sending off another urb, unless in irq context (in which case
 	 * there will be no free urb). */
 	if (!in_irq())
@@ -231,6 +232,9 @@ retry:
 	clear_bit_unlock(USB_SERIAL_WRITE_BUSY, &port->flags);
 
 	return 0;
+=======
+	goto retry;	/* try sending off another urb */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**

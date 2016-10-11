@@ -95,7 +95,11 @@ efi_setup_pcdp_console(char *cmdline)
 	if (efi.hcdp == EFI_INVALID_TABLE_ADDR)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	pcdp = ioremap(efi.hcdp, 4096);
+=======
+	pcdp = early_ioremap(efi.hcdp, 4096);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	printk(KERN_INFO "PCDP: v%d at 0x%lx\n", pcdp->rev, efi.hcdp);
 
 	if (strstr(cmdline, "console=hcdp")) {
@@ -131,6 +135,10 @@ efi_setup_pcdp_console(char *cmdline)
 	}
 
 out:
+<<<<<<< HEAD
 	iounmap(pcdp);
+=======
+	early_iounmap(pcdp, 4096);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return rc;
 }

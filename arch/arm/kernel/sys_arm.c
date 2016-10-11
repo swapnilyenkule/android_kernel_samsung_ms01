@@ -59,6 +59,7 @@ asmlinkage int sys_vfork(struct pt_regs *regs)
 	return do_fork(CLONE_VFORK | CLONE_VM | SIGCHLD, regs->ARM_sp, regs, 0, NULL, NULL);
 }
 
+<<<<<<< HEAD
 
 #if defined CONFIG_SEC_RESTRICT_FORK
 #if defined CONFIG_SEC_RESTRICT_ROOTING_LOG
@@ -186,6 +187,8 @@ out:
 }
 #endif	/* End of CONFIG_SEC_RESTRICT_FORK */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* sys_execve() executes a new program.
  * This is called indirectly via a small wrapper
  */
@@ -200,6 +203,7 @@ asmlinkage int sys_execve(const char __user *filenamei,
 	error = PTR_ERR(filename);
 	if (IS_ERR(filename))
 		goto out;
+<<<<<<< HEAD
 
 #if defined CONFIG_SEC_RESTRICT_FORK
 	if(CHECK_ROOT_UID(current))
@@ -213,6 +217,8 @@ asmlinkage int sys_execve(const char __user *filenamei,
 		}
 #endif	// End of CONFIG_SEC_RESTRICT_FORK
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	error = do_execve(filename, argv, envp, regs);
 	putname(filename);
 out:

@@ -23,6 +23,7 @@
 #include <linux/crc32.h>
 #include <linux/mii.h>
 #include <linux/eeprom_93cx6.h>
+<<<<<<< HEAD
 #include <linux/ks8851.h>
 
 #include <linux/spi/spi.h>
@@ -30,6 +31,10 @@
 #include <linux/gpio.h>
 #include <linux/of.h>
 #include <linux/of_gpio.h>
+=======
+
+#include <linux/spi/spi.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "ks8851.h"
 
@@ -136,10 +141,13 @@ struct ks8851_net {
 	struct spi_transfer	spi_xfer1;
 	struct spi_transfer	spi_xfer2[2];
 
+<<<<<<< HEAD
 	struct regulator	*vdd_io;
 	struct regulator	*vdd_phy;
 	int			rst_gpio;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct eeprom_93cx6	eeprom;
 };
 
@@ -556,7 +564,11 @@ static void ks8851_rx_pkts(struct ks8851_net *ks)
 	for (; rxfc != 0; rxfc--) {
 		rxh = ks8851_rdreg32(ks, KS_RXFHSR);
 		rxstat = rxh & 0xffff;
+<<<<<<< HEAD
 		rxlen = rxh >> 16;
+=======
+		rxlen = (rxh >> 16) & 0xfff;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		netif_dbg(ks, rx_status, ks->netdev,
 			  "rx: stat 0x%04x, len 0x%04x\n", rxstat, rxlen);
@@ -1424,6 +1436,7 @@ static int ks8851_resume(struct spi_device *spi)
 #define ks8851_resume NULL
 #endif
 
+<<<<<<< HEAD
 static int __devinit ks8851_init_hw(struct spi_device *spi,
 				    struct ks8851_net *ks)
 {
@@ -1490,6 +1503,8 @@ fail_gpio:
 	return ret;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __devinit ks8851_probe(struct spi_device *spi)
 {
 	struct net_device *ndev;
@@ -1505,10 +1520,13 @@ static int __devinit ks8851_probe(struct spi_device *spi)
 
 	ks = netdev_priv(ndev);
 
+<<<<<<< HEAD
 	ret = ks8851_init_hw(spi, ks);
 	if (ret)
 		goto err_init;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ks->netdev = ndev;
 	ks->spidev = spi;
 	ks->tx_space = 6144;
@@ -1609,6 +1627,7 @@ err_netdev:
 
 err_id:
 err_irq:
+<<<<<<< HEAD
 	if (gpio_is_valid(ks->rst_gpio))
 		gpio_free(ks->rst_gpio);
 
@@ -1623,6 +1642,8 @@ err_irq:
 	}
 
 err_init:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	free_netdev(ndev);
 	return ret;
 }
@@ -1634,6 +1655,7 @@ static int __devexit ks8851_remove(struct spi_device *spi)
 	if (netif_msg_drv(priv))
 		dev_info(&spi->dev, "remove\n");
 
+<<<<<<< HEAD
 	if (gpio_is_valid(priv->rst_gpio))
 		gpio_free(priv->rst_gpio);
 
@@ -1647,6 +1669,8 @@ static int __devexit ks8851_remove(struct spi_device *spi)
 		regulator_put(priv->vdd_phy);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unregister_netdev(priv->netdev);
 	free_irq(spi->irq, priv);
 	free_netdev(priv->netdev);
@@ -1654,6 +1678,7 @@ static int __devexit ks8851_remove(struct spi_device *spi)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct of_device_id ks8851_match_table[] = {
 	{
 		.compatible = "micrel,ks8851",
@@ -1665,6 +1690,11 @@ static struct spi_driver ks8851_driver = {
 	.driver = {
 		.name = "ks8851",
 		.of_match_table = ks8851_match_table,
+=======
+static struct spi_driver ks8851_driver = {
+	.driver = {
+		.name = "ks8851",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.owner = THIS_MODULE,
 	},
 	.probe = ks8851_probe,

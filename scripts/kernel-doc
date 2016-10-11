@@ -2045,6 +2045,12 @@ sub process_file($) {
 
     $section_counter = 0;
     while (<IN>) {
+<<<<<<< HEAD
+=======
+	while (s/\\\s*$//) {
+	    $_ .= <IN>;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if ($state == 0) {
 	    if (/$doc_start/o) {
 		$state = 1;		# next line is always the function name

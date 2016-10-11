@@ -69,6 +69,10 @@ s16 ath9k_hw_getchan_noise(struct ath_hw *ah, struct ath9k_channel *chan)
 
 	if (chan && chan->noisefloor) {
 		s8 delta = chan->noisefloor -
+<<<<<<< HEAD
+=======
+			   ATH9K_NF_CAL_NOISE_THRESH -
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			   ath9k_hw_get_default_nf(ah, chan);
 		if (delta > 0)
 			noise += delta;
@@ -388,7 +392,10 @@ bool ath9k_hw_getnf(struct ath_hw *ah, struct ath9k_channel *chan)
 
 	if (!caldata) {
 		chan->noisefloor = nf;
+<<<<<<< HEAD
 		ah->noise = ath9k_hw_getchan_noise(ah, chan);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return false;
 	}
 
@@ -410,6 +417,10 @@ void ath9k_init_nfcal_hist_buffer(struct ath_hw *ah,
 
 	ah->caldata->channel = chan->channel;
 	ah->caldata->channelFlags = chan->channelFlags & ~CHANNEL_CW_INT;
+<<<<<<< HEAD
+=======
+	ah->caldata->chanmode = chan->chanmode;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	h = ah->caldata->nfCalHist;
 	default_nf = ath9k_hw_get_default_nf(ah, chan);
 	for (i = 0; i < NUM_NF_READINGS; i++) {

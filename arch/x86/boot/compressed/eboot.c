@@ -12,6 +12,11 @@
 #include <asm/setup.h>
 #include <asm/desc.h>
 
+<<<<<<< HEAD
+=======
+#undef memcpy			/* Use memcpy from misc.c */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "eboot.h"
 
 static efi_system_table_t *sys_table;

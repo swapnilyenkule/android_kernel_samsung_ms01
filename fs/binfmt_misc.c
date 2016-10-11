@@ -117,10 +117,13 @@ static int load_misc_binary(struct linux_binprm *bprm, struct pt_regs *regs)
 	if (!enabled)
 		goto _ret;
 
+<<<<<<< HEAD
 	retval = -ENOEXEC;
 	if (bprm->recursion_depth > BINPRM_MAX_RECURSION)
 		goto _ret;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* to keep locking time low, we copy the interpreter string */
 	read_lock(&entries_lock);
 	fmt = check_file(bprm);
@@ -176,7 +179,14 @@ static int load_misc_binary(struct linux_binprm *bprm, struct pt_regs *regs)
 		goto _error;
 	bprm->argc ++;
 
+<<<<<<< HEAD
 	bprm->interp = iname;	/* for binfmt_script */
+=======
+	/* Update interp in case binfmt_script needs it. */
+	retval = bprm_change_interp(iname, bprm);
+	if (retval < 0)
+		goto _error;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	interp_file = open_exec (iname);
 	retval = PTR_ERR (interp_file);
@@ -197,8 +207,11 @@ static int load_misc_binary(struct linux_binprm *bprm, struct pt_regs *regs)
 	if (retval < 0)
 		goto _error;
 
+<<<<<<< HEAD
 	bprm->recursion_depth++;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	retval = search_binary_handler (bprm, regs);
 	if (retval < 0)
 		goto _error;

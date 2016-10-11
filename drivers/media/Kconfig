@@ -106,8 +106,11 @@ comment "Multimedia drivers"
 source "drivers/media/common/Kconfig"
 source "drivers/media/rc/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/media/platform/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #
 # Tuner drivers for DVB and V4L
 #
@@ -128,6 +131,7 @@ source "drivers/media/radio/Kconfig"
 
 source "drivers/media/dvb/Kconfig"
 
+<<<<<<< HEAD
 #
 # TDMB drivers
 #
@@ -147,4 +151,6 @@ source "drivers/media/isdbt/Kconfig"
 #
 source "drivers/media/mtv/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # MEDIA_SUPPORT

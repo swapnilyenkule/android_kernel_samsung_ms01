@@ -524,11 +524,21 @@ static void s3c24xx_serial_pm(struct uart_port *port, unsigned int level,
 			      unsigned int old)
 {
 	struct s3c24xx_uart_port *ourport = to_ourport(port);
+<<<<<<< HEAD
+=======
+	int timeout = 10000;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ourport->pm_level = level;
 
 	switch (level) {
 	case 3:
+<<<<<<< HEAD
+=======
+		while (--timeout && !s3c24xx_serial_txempty_nofifo(port))
+			udelay(100);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!IS_ERR(ourport->baudclk) && ourport->baudclk != NULL)
 			clk_disable(ourport->baudclk);
 

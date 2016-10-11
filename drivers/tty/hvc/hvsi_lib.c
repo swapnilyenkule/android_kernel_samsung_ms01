@@ -341,8 +341,13 @@ void hvsilib_establish(struct hvsi_priv *pv)
 
 	pr_devel("HVSI@%x:   ... waiting handshake\n", pv->termno);
 
+<<<<<<< HEAD
 	/* Try for up to 200s */
 	for (timeout = 0; timeout < 20; timeout++) {
+=======
+	/* Try for up to 400ms */
+	for (timeout = 0; timeout < 40; timeout++) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (pv->established)
 			goto established;
 		if (!hvsi_get_packet(pv))

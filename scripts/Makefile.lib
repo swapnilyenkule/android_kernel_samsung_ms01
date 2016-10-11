@@ -266,12 +266,15 @@ $(obj)/%.dtb.S: $(obj)/%.dtb
 quiet_cmd_dtc = DTC     $@
 cmd_dtc = $(objtree)/scripts/dtc/dtc -O dtb -o $@ -b 0 $(DTC_FLAGS) -d $(depfile) $<
 
+<<<<<<< HEAD
 # cat
 # ---------------------------------------------------------------------------
 # Concatentate multiple files together
 quiet_cmd_cat = CAT     $@
 cmd_cat = (cat $(filter-out FORCE,$^) > $@) || (rm -f $@; false)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # Bzip2
 # ---------------------------------------------------------------------------
 

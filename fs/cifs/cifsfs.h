@@ -41,6 +41,13 @@ extern struct file_system_type cifs_fs_type;
 extern const struct address_space_operations cifs_addr_ops;
 extern const struct address_space_operations cifs_addr_ops_smallbuf;
 
+<<<<<<< HEAD
+=======
+/* Functions related to super block operations */
+extern void cifs_sb_active(struct super_block *sb);
+extern void cifs_sb_deactive(struct super_block *sb);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Functions related to inodes */
 extern const struct inode_operations cifs_dir_inode_ops;
 extern struct inode *cifs_root_iget(struct super_block *);

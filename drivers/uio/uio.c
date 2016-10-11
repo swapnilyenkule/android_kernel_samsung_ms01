@@ -650,16 +650,41 @@ static int uio_mmap_physical(struct vm_area_struct *vma)
 {
 	struct uio_device *idev = vma->vm_private_data;
 	int mi = uio_find_mem_index(vma);
+<<<<<<< HEAD
 	if (mi < 0)
 		return -EINVAL;
+=======
+	struct uio_mem *mem;
+	if (mi < 0)
+		return -EINVAL;
+	mem = idev->info->mem + mi;
+
+	if (vma->vm_end - vma->vm_start > mem->size)
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	vma->vm_flags |= VM_IO | VM_RESERVED;
 
 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
 
+<<<<<<< HEAD
 	return remap_pfn_range(vma,
 			       vma->vm_start,
 			       idev->info->mem[mi].addr >> PAGE_SHIFT,
+=======
+	/*
+	 * We cannot use the vm_iomap_memory() helper here,
+	 * because vma->vm_pgoff is the map index we looked
+	 * up above in uio_find_mem_index(), rather than an
+	 * actual page offset into the mmap.
+	 *
+	 * So we just do the physical mmap without a page
+	 * offset.
+	 */
+	return remap_pfn_range(vma,
+			       vma->vm_start,
+			       mem->addr >> PAGE_SHIFT,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			       vma->vm_end - vma->vm_start,
 			       vma->vm_page_prot);
 }

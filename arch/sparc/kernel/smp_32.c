@@ -411,7 +411,11 @@ void __init smp_prepare_boot_cpu(void)
 	set_cpu_possible(cpuid, true);
 }
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	extern int __cpuinit smp4m_boot_one_cpu(int);
 	extern int __cpuinit smp4d_boot_one_cpu(int);

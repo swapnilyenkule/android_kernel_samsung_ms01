@@ -23,8 +23,12 @@ static struct dentry *regmap_debugfs_root;
 /* Calculate the length of a fixed format  */
 static size_t regmap_calc_reg_len(int max_val, char *buf, size_t buf_size)
 {
+<<<<<<< HEAD
 	snprintf(buf, buf_size, "%x", max_val);
 	return strlen(buf);
+=======
+	return snprintf(NULL, 0, "%x", max_val);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static ssize_t regmap_name_read_file(struct file *file,
@@ -90,7 +94,11 @@ static ssize_t regmap_map_read_file(struct file *file, char __user *user_buf,
 		/* If we're in the region the user is trying to read */
 		if (p >= *ppos) {
 			/* ...but not beyond it */
+<<<<<<< HEAD
 			if (buf_pos >= count - 1 - tot_len)
+=======
+			if (buf_pos + 1 + tot_len >= count)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				break;
 
 			/* Format the register */
@@ -205,7 +213,11 @@ static ssize_t regmap_access_read_file(struct file *file,
 		/* If we're in the region the user is trying to read */
 		if (p >= *ppos) {
 			/* ...but not beyond it */
+<<<<<<< HEAD
 			if (buf_pos >= count - 1 - tot_len)
+=======
+			if (buf_pos + tot_len + 1 >= count)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				break;
 
 			/* Format the register */
@@ -244,7 +256,16 @@ static const struct file_operations regmap_access_fops = {
 
 void regmap_debugfs_init(struct regmap *map)
 {
+<<<<<<< HEAD
 	map->debugfs = debugfs_create_dir(dev_name(map->dev),
+=======
+	const char *devname = "dummy";
+
+	if (map->dev)
+		devname = dev_name(map->dev);
+
+	map->debugfs = debugfs_create_dir(devname,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					  regmap_debugfs_root);
 	if (!map->debugfs) {
 		dev_warn(map->dev, "Failed to create debugfs directory\n");

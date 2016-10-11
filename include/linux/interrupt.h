@@ -354,7 +354,10 @@ static inline void enable_irq_lockdep_irqrestore(unsigned int irq, unsigned long
 
 /* IRQ wakeup (PM) control: */
 extern int irq_set_irq_wake(unsigned int irq, unsigned int on);
+<<<<<<< HEAD
 extern int irq_read_line(unsigned int irq);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline int enable_irq_wake(unsigned int irq)
 {
@@ -700,5 +703,9 @@ int arch_show_interrupts(struct seq_file *p, int prec);
 extern int early_irq_init(void);
 extern int arch_probe_nr_irqs(void);
 extern int arch_early_irq_init(void);
+<<<<<<< HEAD
 extern void irq_set_pending(unsigned int irq);
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

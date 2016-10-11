@@ -878,7 +878,11 @@ static int lookup_existing_device(struct device *dev, void *data)
 		old->config_rom_retries = 0;
 		fw_notice(card, "rediscovered device %s\n", dev_name(dev));
 
+<<<<<<< HEAD
 		PREPARE_DELAYED_WORK(&old->work, fw_device_update);
+=======
+		old->workfn = fw_device_update;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fw_schedule_device_work(old, 0);
 
 		if (current_node == card->root_node)
@@ -999,6 +1003,13 @@ static void fw_device_init(struct work_struct *work)
 	ret = idr_pre_get(&fw_device_idr, GFP_KERNEL) ?
 	      idr_get_new(&fw_device_idr, device, &minor) :
 	      -ENOMEM;
+<<<<<<< HEAD
+=======
+	if (minor >= 1 << MINORBITS) {
+		idr_remove(&fw_device_idr, minor);
+		minor = -ENOSPC;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	up_write(&fw_device_rwsem);
 
 	if (ret < 0)
@@ -1036,7 +1047,11 @@ static void fw_device_init(struct work_struct *work)
 	if (atomic_cmpxchg(&device->state,
 			   FW_DEVICE_INITIALIZING,
 			   FW_DEVICE_RUNNING) == FW_DEVICE_GONE) {
+<<<<<<< HEAD
 		PREPARE_DELAYED_WORK(&device->work, fw_device_shutdown);
+=======
+		device->workfn = fw_device_shutdown;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fw_schedule_device_work(device, SHUTDOWN_DELAY);
 	} else {
 		fw_notice(card, "created device %s: GUID %08x%08x, S%d00\n",
@@ -1168,13 +1183,27 @@ static void fw_device_refresh(struct work_struct *work)
 		  dev_name(&device->device));
  gone:
 	atomic_set(&device->state, FW_DEVICE_GONE);
+<<<<<<< HEAD
 	PREPARE_DELAYED_WORK(&device->work, fw_device_shutdown);
+=======
+	device->workfn = fw_device_shutdown;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fw_schedule_device_work(device, SHUTDOWN_DELAY);
  out:
 	if (node_id == card->root_node->node_id)
 		fw_schedule_bm_work(card, 0);
 }
 
+<<<<<<< HEAD
+=======
+static void fw_device_workfn(struct work_struct *work)
+{
+	struct fw_device *device = container_of(to_delayed_work(work),
+						struct fw_device, work);
+	device->workfn(work);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
 {
 	struct fw_device *device;
@@ -1224,7 +1253,12 @@ void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
 		 * power-up after getting plugged in.  We schedule the
 		 * first config rom scan half a second after bus reset.
 		 */
+<<<<<<< HEAD
 		INIT_DELAYED_WORK(&device->work, fw_device_init);
+=======
+		device->workfn = fw_device_init;
+		INIT_DELAYED_WORK(&device->work, fw_device_workfn);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fw_schedule_device_work(device, INITIAL_DELAY);
 		break;
 
@@ -1240,7 +1274,11 @@ void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
 		if (atomic_cmpxchg(&device->state,
 			    FW_DEVICE_RUNNING,
 			    FW_DEVICE_INITIALIZING) == FW_DEVICE_RUNNING) {
+<<<<<<< HEAD
 			PREPARE_DELAYED_WORK(&device->work, fw_device_refresh);
+=======
+			device->workfn = fw_device_refresh;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			fw_schedule_device_work(device,
 				device->is_local ? 0 : INITIAL_DELAY);
 		}
@@ -1255,7 +1293,11 @@ void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
 		smp_wmb();  /* update node_id before generation */
 		device->generation = card->generation;
 		if (atomic_read(&device->state) == FW_DEVICE_RUNNING) {
+<<<<<<< HEAD
 			PREPARE_DELAYED_WORK(&device->work, fw_device_update);
+=======
+			device->workfn = fw_device_update;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			fw_schedule_device_work(device, 0);
 		}
 		break;
@@ -1280,7 +1322,11 @@ void fw_node_event(struct fw_card *card, struct fw_node *node, int event)
 		device = node->data;
 		if (atomic_xchg(&device->state,
 				FW_DEVICE_GONE) == FW_DEVICE_RUNNING) {
+<<<<<<< HEAD
 			PREPARE_DELAYED_WORK(&device->work, fw_device_shutdown);
+=======
+			device->workfn = fw_device_shutdown;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			fw_schedule_device_work(device,
 				list_empty(&card->link) ? 0 : SHUTDOWN_DELAY);
 		}

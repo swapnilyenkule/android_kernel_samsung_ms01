@@ -33,7 +33,11 @@
 
 static bool is_enabled;
 
+<<<<<<< HEAD
 static void tegra_cpu_reset_handler_enable(void)
+=======
+static void __init tegra_cpu_reset_handler_enable(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	void __iomem *iram_base = IO_ADDRESS(TEGRA_IRAM_RESET_BASE);
 	void __iomem *evp_cpu_reset =

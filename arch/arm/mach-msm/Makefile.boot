@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MSM7x01A
    zreladdr-$(CONFIG_ARCH_MSM7X01A)	:= 0x10008000
 params_phys-$(CONFIG_ARCH_MSM7X01A)	:= 0x10000100
@@ -493,3 +494,8 @@ endif
 #   zreladdr-$(CONFIG_ARCH_MSMSAMARIUM)	:= 0x00008000
 #	dtb-$(CONFIG_ARCH_MSMSAMARIUM)	+= msmsamarium-sim.dtb
 #	dtb-$(CONFIG_ARCH_MSMSAMARIUM)	+= msmsamarium-rumi.dtb
+=======
+  zreladdr-y		+= 0x10008000
+params_phys-y		:= 0x10000100
+initrd_phys-y		:= 0x10800000
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

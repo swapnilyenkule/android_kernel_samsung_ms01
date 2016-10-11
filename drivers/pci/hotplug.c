@@ -27,7 +27,11 @@ int pci_uevent(struct device *dev, struct kobj_uevent_env *env)
 	if (add_uevent_var(env, "PCI_SLOT_NAME=%s", pci_name(pdev)))
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	if (add_uevent_var(env, "MODALIAS=pci:v%08Xd%08Xsv%08Xsd%08Xbc%02Xsc%02Xi%02x",
+=======
+	if (add_uevent_var(env, "MODALIAS=pci:v%08Xd%08Xsv%08Xsd%08Xbc%02Xsc%02Xi%02X",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			   pdev->vendor, pdev->device,
 			   pdev->subsystem_vendor, pdev->subsystem_device,
 			   (u8)(pdev->class >> 16), (u8)(pdev->class >> 8),

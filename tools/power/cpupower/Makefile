@@ -111,7 +111,11 @@ GMO_FILES = ${shell for HLANG in ${LANGUAGES}; do echo $(OUTPUT)po/$$HLANG.gmo; 
 export CROSS CC AR STRIP RANLIB CFLAGS LDFLAGS LIB_OBJS
 
 # check if compiler option is supported
+<<<<<<< HEAD
 cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -xc /dev/null > /dev/null 2>&1; then echo "$(1)"; fi;}
+=======
+cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -x c /dev/null > /dev/null 2>&1; then echo "$(1)"; fi;}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # use '-Os' optimization if available, else use -O2
 OPTIMIZATION := $(call cc-supports,-Os,-O2)

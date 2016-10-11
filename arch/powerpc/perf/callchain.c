@@ -243,7 +243,11 @@ static void perf_callchain_user_64(struct perf_callchain_entry *entry,
 	sp = regs->gpr[1];
 	perf_callchain_store(entry, next_ip);
 
+<<<<<<< HEAD
 	for (;;) {
+=======
+	while (entry->nr < PERF_MAX_STACK_DEPTH) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fp = (unsigned long __user *) sp;
 		if (!valid_user_sp(sp, 1) || read_user_stack_64(fp, &next_sp))
 			return;

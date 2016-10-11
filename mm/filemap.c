@@ -1174,9 +1174,12 @@ page_ok:
 		 * only mark it as accessed the first time.
 		 */
 		if (prev_index != index || offset != prev_offset)
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 			if (!(filp->f_flags & O_SCFSLOWER))
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			mark_page_accessed(page);
 		prev_index = index;
 
@@ -1196,6 +1199,7 @@ page_ok:
 		offset &= ~PAGE_CACHE_MASK;
 		prev_offset = offset;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
 #if 1
 		{
@@ -1216,6 +1220,8 @@ page_ok:
 			SetPageScfslower(page);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		page_cache_release(page);
 		if (ret == nr && desc->count)
 			continue;
@@ -2366,6 +2372,7 @@ repeat:
 	if (page)
 		goto found;
 
+<<<<<<< HEAD
 retry:
 	page = __page_cache_alloc(gfp_mask & ~gfp_notmask);
 	if (!page)
@@ -2377,6 +2384,11 @@ retry:
 		goto retry;
 	}
 
+=======
+	page = __page_cache_alloc(gfp_mask & ~gfp_notmask);
+	if (!page)
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	status = add_to_page_cache_lru(page, mapping, index,
 						GFP_KERNEL & ~gfp_notmask);
 	if (unlikely(status)) {
@@ -2433,6 +2445,14 @@ again:
 			break;
 		}
 
+<<<<<<< HEAD
+=======
+		if (fatal_signal_pending(current)) {
+			status = -EINTR;
+			break;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		status = a_ops->write_begin(file, mapping, pos, bytes, flags,
 						&page, &fsdata);
 		if (unlikely(status))
@@ -2473,10 +2493,13 @@ again:
 		written += copied;
 
 		balance_dirty_pages_ratelimited(mapping);
+<<<<<<< HEAD
 		if (fatal_signal_pending(current)) {
 			status = -EINTR;
 			break;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} while (iov_iter_count(i));
 
 	return written ? written : status;
@@ -2559,9 +2582,13 @@ ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 	if (err)
 		goto out;
 
+<<<<<<< HEAD
 	err = file_update_time(file);
 	if (err)
 		goto out;
+=======
+	file_update_time(file);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* coalesce the iovecs and go direct-to-BIO for O_DIRECT */
 	if (unlikely(file->f_flags & O_DIRECT)) {

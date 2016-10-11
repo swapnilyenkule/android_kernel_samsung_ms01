@@ -300,8 +300,16 @@ void ubifs_add_to_cat(struct ubifs_info *c, struct ubifs_lprops *lprops,
 	default:
 		ubifs_assert(0);
 	}
+<<<<<<< HEAD
 	lprops->flags &= ~LPROPS_CAT_MASK;
 	lprops->flags |= cat;
+=======
+
+	lprops->flags &= ~LPROPS_CAT_MASK;
+	lprops->flags |= cat;
+	c->in_a_category_cnt += 1;
+	ubifs_assert(c->in_a_category_cnt <= c->main_lebs);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -334,6 +342,12 @@ static void ubifs_remove_from_cat(struct ubifs_info *c,
 	default:
 		ubifs_assert(0);
 	}
+<<<<<<< HEAD
+=======
+
+	c->in_a_category_cnt -= 1;
+	ubifs_assert(c->in_a_category_cnt >= 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**

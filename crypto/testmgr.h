@@ -460,11 +460,15 @@ static struct hash_testvec sha1_tv_template[] = {
 		.plaintext = "abc",
 		.psize	= 3,
 		.digest	= "\xa9\x99\x3e\x36\x47\x06\x81\x6a\xba\x3e"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 6
 			  "\x25\x72\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
 #else
 			  "\x25\x71\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
 #endif
+=======
+			  "\x25\x71\x78\x50\xc2\x6c\x9c\xd0\xd8\x9d",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}, {
 		.plaintext = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
 		.psize	= 56,
@@ -1316,11 +1320,15 @@ static struct hash_testvec hmac_sha1_tv_template[] = {
 		.plaintext = "Hi There",
 		.psize	= 8,
 		.digest	= "\xb6\x17\x31\x86\x55\x05\x72\x64"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 12
 			  "\xe3\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
 #else
 			  "\xe2\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
 #endif
+=======
+			  "\xe2\x8b\xc0\xb6\xfb\x37\x8c\x8e\xf1"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			  "\x46\xbe",
 	}, {
 		.key	= "Jefe",
@@ -2249,11 +2257,15 @@ static struct cipher_testvec des_cbc_dec_tv_template[] = {
 static struct cipher_testvec des3_ede_enc_tv_template[] = {
 	{ /* These are from openssl */
 		.key	= "\x01\x23\x45\x67\x89\xab\xcd\xef"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 7
 			  "\x53\x55\x55\x55\x55\x55\x55\x55"
 #else
 			  "\x55\x55\x55\x55\x55\x55\x55\x55"
 #endif
+=======
+			  "\x55\x55\x55\x55\x55\x55\x55\x55"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			  "\xfe\xdc\xba\x98\x76\x54\x32\x10",
 		.klen	= 24,
 		.input	= "\x73\x6f\x6d\x65\x64\x61\x74\x61",
@@ -6145,11 +6157,15 @@ static struct cipher_testvec cast6_dec_tv_template[] = {
 static struct cipher_testvec aes_enc_tv_template[] = {
 	{ /* From FIPS-197 */
 		.key	= "\x00\x01\x02\x03\x04\x05\x06\x07"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 1
 			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x01",
 #else
 			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
 #endif
+=======
+			  "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.klen	= 16,
 		.input	= "\x00\x11\x22\x33\x44\x55\x66\x77"
 			  "\x88\x99\xaa\xbb\xcc\xdd\xee\xff",
@@ -10357,11 +10373,15 @@ static struct aead_testvec aes_ccm_rfc4309_dec_tv_template[] = {
 static struct cprng_testvec ansi_cprng_aes_tv_template[] = {
 	{
 		.key	= "\xf3\xb1\x66\x6d\x13\x60\x72\x42"
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 8
 			  "\xee\x06\x1c\xab\xb8\xd4\x62\x02",
 #else
 			  "\xed\x06\x1c\xab\xb8\xd4\x62\x02",
 #endif
+=======
+			  "\xed\x06\x1c\xab\xb8\xd4\x62\x02",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.klen	= 16,
 		.dt	= "\xe6\xb3\xbe\x78\x2a\x23\xfa\x62"
 			  "\xd7\x1d\x4a\xfb\xb0\xe9\x22\xf9",
@@ -14578,6 +14598,7 @@ static struct pcomp_testvec zlib_decomp_tv_template[] = {
 static struct comp_testvec lzo_comp_tv_template[] = {
 	{
 		.inlen	= 70,
+<<<<<<< HEAD
 		.outlen	= 46,
 		.input	= "Join us now and share the software "
 			"Join us now and share the software ",
@@ -14594,12 +14615,33 @@ static struct comp_testvec lzo_comp_tv_template[] = {
 			"compression algorithm.  This document defines the application of "
 			"the LZO algorithm used in UBIFS.",
 		.output	= "\x00\x2b\x54\x68\x69\x73\x20\x64"
+=======
+		.outlen	= 57,
+		.input	= "Join us now and share the software "
+			"Join us now and share the software ",
+		.output	= "\x00\x0d\x4a\x6f\x69\x6e\x20\x75"
+			  "\x73\x20\x6e\x6f\x77\x20\x61\x6e"
+			  "\x64\x20\x73\x68\x61\x72\x65\x20"
+			  "\x74\x68\x65\x20\x73\x6f\x66\x74"
+			  "\x77\x70\x01\x32\x88\x00\x0c\x65"
+			  "\x20\x74\x68\x65\x20\x73\x6f\x66"
+			  "\x74\x77\x61\x72\x65\x20\x11\x00"
+			  "\x00",
+	}, {
+		.inlen	= 159,
+		.outlen	= 131,
+		.input	= "This document describes a compression method based on the LZO "
+			"compression algorithm.  This document defines the application of "
+			"the LZO algorithm used in UBIFS.",
+		.output	= "\x00\x2c\x54\x68\x69\x73\x20\x64"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			  "\x6f\x63\x75\x6d\x65\x6e\x74\x20"
 			  "\x64\x65\x73\x63\x72\x69\x62\x65"
 			  "\x73\x20\x61\x20\x63\x6f\x6d\x70"
 			  "\x72\x65\x73\x73\x69\x6f\x6e\x20"
 			  "\x6d\x65\x74\x68\x6f\x64\x20\x62"
 			  "\x61\x73\x65\x64\x20\x6f\x6e\x20"
+<<<<<<< HEAD
 			  "\x74\x68\x65\x20\x4c\x5a\x4f\x2b"
 			  "\x8c\x00\x0d\x61\x6c\x67\x6f\x72"
 			  "\x69\x74\x68\x6d\x2e\x20\x20\x54"
@@ -14610,6 +14652,18 @@ static struct comp_testvec lzo_comp_tv_template[] = {
 			  "\xf0\x00\x0c\x20\x75\x73\x65\x64"
 			  "\x20\x69\x6e\x20\x55\x42\x49\x46"
 			  "\x53\x2e\x11\x00\x00",
+=======
+			  "\x74\x68\x65\x20\x4c\x5a\x4f\x20"
+			  "\x2a\x8c\x00\x09\x61\x6c\x67\x6f"
+			  "\x72\x69\x74\x68\x6d\x2e\x20\x20"
+			  "\x2e\x54\x01\x03\x66\x69\x6e\x65"
+			  "\x73\x20\x74\x06\x05\x61\x70\x70"
+			  "\x6c\x69\x63\x61\x74\x76\x0a\x6f"
+			  "\x66\x88\x02\x60\x09\x27\xf0\x00"
+			  "\x0c\x20\x75\x73\x65\x64\x20\x69"
+			  "\x6e\x20\x55\x42\x49\x46\x53\x2e"
+			  "\x11\x00\x00",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 };
 

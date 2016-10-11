@@ -649,6 +649,7 @@ ecryptfs_write_tag_70_packet(char *dest, size_t *remaining_bytes,
 		       mount_crypt_stat->global_default_fnek_sig, rc);
 		goto out;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(
 		&s->desc.tfm,
@@ -658,6 +659,11 @@ ecryptfs_write_tag_70_packet(char *dest, size_t *remaining_bytes,
 		&s->desc.tfm,
 		&s->tfm_mutex, mount_crypt_stat->global_default_fn_cipher_name);
 #endif
+=======
+	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(
+		&s->desc.tfm,
+		&s->tfm_mutex, mount_crypt_stat->global_default_fn_cipher_name);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(rc)) {
 		printk(KERN_ERR "Internal error whilst attempting to get "
 		       "tfm and mutex for cipher name [%s]; rc = [%d]\n",
@@ -999,6 +1005,7 @@ ecryptfs_parse_tag_70_packet(char **filename, size_t *filename_size,
 		       rc);
 		goto out;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&s->desc.tfm,
 							&s->tfm_mutex,
@@ -1008,6 +1015,11 @@ ecryptfs_parse_tag_70_packet(char **filename, size_t *filename_size,
 							&s->tfm_mutex,
 							s->cipher_string);
 #endif
+=======
+	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&s->desc.tfm,
+							&s->tfm_mutex,
+							s->cipher_string);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(rc)) {
 		printk(KERN_ERR "Internal error whilst attempting to get "
 		       "tfm and mutex for cipher name [%s]; rc = [%d]\n",
@@ -1160,7 +1172,11 @@ decrypt_pki_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 	u8 cipher_code = 0;
 	struct ecryptfs_msg_ctx *msg_ctx;
 	struct ecryptfs_message *msg = NULL;
+<<<<<<< HEAD
 	char *auth_tok_sig = NULL;
+=======
+	char *auth_tok_sig;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	char *payload = NULL;
 	size_t payload_len;
 	int rc;
@@ -1216,8 +1232,12 @@ decrypt_pki_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 out:
 	if (msg)
 		kfree(msg);
+<<<<<<< HEAD
 	if (payload)
 		kfree(payload);
+=======
+	kfree(payload);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return rc;
 }
 
@@ -1686,9 +1706,12 @@ decrypt_passphrase_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 		.flags = CRYPTO_TFM_REQ_MAY_SLEEP
 	};
 	int rc = 0;
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	char iv[ECRYPTFS_DEFAULT_IV_BYTES];
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (unlikely(ecryptfs_verbosity > 0)) {
 		ecryptfs_printk(
@@ -1698,6 +1721,7 @@ decrypt_passphrase_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 			auth_tok->token.password.session_key_encryption_key,
 			auth_tok->token.password.session_key_encryption_key_bytes);
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
 							crypt_stat->cipher, crypt_stat->mount_crypt_stat->flags);
@@ -1705,6 +1729,10 @@ decrypt_passphrase_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
 							crypt_stat->cipher);
 #endif
+=======
+	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
+							crypt_stat->cipher);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(rc)) {
 		printk(KERN_ERR "Internal error whilst attempting to get "
 		       "tfm and mutex for cipher name [%s]; rc = [%d]\n",
@@ -1743,6 +1771,7 @@ decrypt_passphrase_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 		rc = -EINVAL;
 		goto out;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (crypt_stat->mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		crypto_blkcipher_get_iv(desc.tfm, iv, ECRYPTFS_DEFAULT_IV_BYTES);
@@ -1753,6 +1782,10 @@ decrypt_passphrase_encrypted_session_key(struct ecryptfs_auth_tok *auth_tok,
 	if (crypt_stat->mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		crypto_blkcipher_set_iv(desc.tfm, iv, ECRYPTFS_DEFAULT_IV_BYTES);
 #endif
+=======
+	rc = crypto_blkcipher_decrypt(&desc, dst_sg, src_sg,
+				      auth_tok->session_key.encrypted_key_size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(tfm_mutex);
 	if (unlikely(rc)) {
 		printk(KERN_ERR "Error decrypting; rc = [%d]\n", rc);
@@ -2214,7 +2247,11 @@ write_tag_3_packet(char *dest, size_t *remaining_bytes,
 {
 	size_t i;
 	size_t encrypted_session_key_valid = 0;
+<<<<<<< HEAD
 	char session_key_encryption_key[ECRYPTFS_MAX_KEY_BYTES] = {0, };
+=======
+	char session_key_encryption_key[ECRYPTFS_MAX_KEY_BYTES];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct scatterlist dst_sg[2];
 	struct scatterlist src_sg[2];
 	struct mutex *tfm_mutex = NULL;
@@ -2228,13 +2265,17 @@ write_tag_3_packet(char *dest, size_t *remaining_bytes,
 		.flags = CRYPTO_TFM_REQ_MAY_SLEEP
 	};
 	int rc = 0;
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	char iv[ECRYPTFS_DEFAULT_IV_BYTES];
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	(*packet_size) = 0;
 	ecryptfs_from_hex(key_rec->sig, auth_tok->token.password.signature,
 			  ECRYPTFS_SIG_SIZE);
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
 							crypt_stat->cipher, crypt_stat->mount_crypt_stat->flags);
@@ -2242,6 +2283,10 @@ write_tag_3_packet(char *dest, size_t *remaining_bytes,
 	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
 							crypt_stat->cipher);
 #endif
+=======
+	rc = ecryptfs_get_tfm_and_mutex_for_cipher_name(&desc.tfm, &tfm_mutex,
+							crypt_stat->cipher);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(rc)) {
 		printk(KERN_ERR "Internal error whilst attempting to get "
 		       "tfm and mutex for cipher name [%s]; rc = [%d]\n",
@@ -2335,6 +2380,7 @@ write_tag_3_packet(char *dest, size_t *remaining_bytes,
 	rc = 0;
 	ecryptfs_printk(KERN_DEBUG, "Encrypting [%zd] bytes of the key\n",
 			crypt_stat->key_size);
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (crypt_stat->mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		crypto_blkcipher_get_iv(desc.tfm, iv, ECRYPTFS_DEFAULT_IV_BYTES);
@@ -2345,6 +2391,10 @@ write_tag_3_packet(char *dest, size_t *remaining_bytes,
 	if (crypt_stat->mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		crypto_blkcipher_set_iv(desc.tfm, iv, ECRYPTFS_DEFAULT_IV_BYTES);
 #endif
+=======
+	rc = crypto_blkcipher_encrypt(&desc, dst_sg, src_sg,
+				      (*key_rec).enc_key_size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(tfm_mutex);
 	if (rc) {
 		printk(KERN_ERR "Error encrypting; rc = [%d]\n", rc);

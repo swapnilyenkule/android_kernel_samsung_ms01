@@ -15,6 +15,10 @@
  * GNU General Public License for more details.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/slab.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/platform_device.h>

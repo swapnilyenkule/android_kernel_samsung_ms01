@@ -102,8 +102,11 @@ extern char core_pattern[];
 extern unsigned int core_pipe_limit;
 extern int pid_max;
 extern int min_free_kbytes;
+<<<<<<< HEAD
 extern int extra_free_kbytes;
 extern int min_free_order_shift;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int pid_max_min, pid_max_max;
 extern int sysctl_drop_caches;
 extern int percpu_pagelist_fraction;
@@ -129,9 +132,12 @@ static int __maybe_unused two = 2;
 static int __maybe_unused three = 3;
 static unsigned long one_ul = 1;
 static int one_hundred = 100;
+<<<<<<< HEAD
 #ifdef CONFIG_INCREASE_MAXIMUM_SWAPPINESS
 extern int max_swappiness;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_PRINTK
 static int ten_thousand = 10000;
 #endif
@@ -147,6 +153,14 @@ static int min_percpu_pagelist_fract = 8;
 static int ngroups_max = NGROUPS_MAX;
 static const int cap_last_cap = CAP_LAST_CAP;
 
+<<<<<<< HEAD
+=======
+/*this is needed for proc_doulongvec_minmax of sysctl_hung_task_timeout_secs */
+#ifdef CONFIG_DETECT_HUNG_TASK
+static unsigned long hung_task_timeout_max = (LONG_MAX/HZ);
+#endif
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_INOTIFY_USER
 #include <linux/inotify.h>
 #endif
@@ -268,6 +282,7 @@ static struct ctl_table kern_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec,
 	},
+<<<<<<< HEAD
 	{
 		.procname	= "sched_wake_to_idle",
 		.data		= &sysctl_sched_wake_to_idle,
@@ -275,6 +290,8 @@ static struct ctl_table kern_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec,
 	},
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SCHED_DEBUG
 	{
 		.procname	= "sched_min_granularity_ns",
@@ -909,6 +926,10 @@ static struct ctl_table kern_table[] = {
 		.maxlen		= sizeof(unsigned long),
 		.mode		= 0644,
 		.proc_handler	= proc_dohung_task_timeout_secs,
+<<<<<<< HEAD
+=======
+		.extra2		= &hung_task_timeout_max,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	{
 		.procname	= "hung_task_warnings",
@@ -1006,6 +1027,7 @@ static struct ctl_table kern_table[] = {
 		.proc_handler	= proc_dointvec,
 	},
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_ARM
 	{
 		.procname	= "boot_reason",
@@ -1027,6 +1049,8 @@ static struct ctl_table kern_table[] = {
  * NOTE: do not add new entries to this table unless you have read
  * Documentation/sysctl/ctl_unnumbered.txt
  */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 
@@ -1141,11 +1165,15 @@ static struct ctl_table vm_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec_minmax,
 		.extra1		= &zero,
+<<<<<<< HEAD
 #ifdef CONFIG_INCREASE_MAXIMUM_SWAPPINESS
 		.extra2		= &max_swappiness,
 #else
 		.extra2		= &one_hundred,
 #endif
+=======
+		.extra2		= &one_hundred,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 #ifdef CONFIG_HUGETLB_PAGE
 	{
@@ -1236,6 +1264,7 @@ static struct ctl_table vm_table[] = {
 		.extra1		= &zero,
 	},
 	{
+<<<<<<< HEAD
 		.procname	= "extra_free_kbytes",
 		.data		= &extra_free_kbytes,
 		.maxlen		= sizeof(extra_free_kbytes),
@@ -1251,6 +1280,8 @@ static struct ctl_table vm_table[] = {
 		.proc_handler	= &proc_dointvec
 	},
 	{
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.procname	= "percpu_pagelist_fraction",
 		.data		= &percpu_pagelist_fraction,
 		.maxlen		= sizeof(percpu_pagelist_fraction),
@@ -1414,6 +1445,7 @@ static struct ctl_table vm_table[] = {
 		.extra2		= &one,
 	},
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_HAVE_ARCH_MMAP_RND_BITS
 	{
 		.procname	= "mmap_rnd_bits",
@@ -1436,6 +1468,8 @@ static struct ctl_table vm_table[] = {
 		.extra2		= (void *)&mmap_rnd_compat_bits_max,
 	},
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 

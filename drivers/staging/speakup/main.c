@@ -65,11 +65,16 @@ MODULE_VERSION(SPEAKUP_VERSION);
 
 char *synth_name;
 module_param_named(synth, synth_name, charp, S_IRUGO);
+<<<<<<< HEAD
 module_param_named(quiet, quiet_boot, bool, S_IRUGO);
+=======
+module_param_named(quiet, spk_quiet_boot, bool, S_IRUGO);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 MODULE_PARM_DESC(synth, "Synth to start if speakup is built in.");
 MODULE_PARM_DESC(quiet, "Do not announce when the synthesizer is found.");
 
+<<<<<<< HEAD
 special_func special_handler;
 
 short pitch_shift, synth_flags;
@@ -82,6 +87,20 @@ short punc_mask;
 int punc_level, reading_punc;
 char str_caps_start[MAXVARLEN + 1] = "\0", str_caps_stop[MAXVARLEN + 1] = "\0";
 const struct st_bits_data punc_info[] = {
+=======
+special_func spk_special_handler;
+
+short spk_pitch_shift, synth_flags;
+static char buf[256];
+int spk_attrib_bleep, spk_bleeps, spk_bleep_time = 10;
+int spk_no_intr, spk_spell_delay;
+int spk_key_echo, spk_say_word_ctl;
+int spk_say_ctrl, spk_bell_pos;
+short spk_punc_mask;
+int spk_punc_level, spk_reading_punc;
+char spk_str_caps_start[MAXVARLEN + 1] = "\0", spk_str_caps_stop[MAXVARLEN + 1] = "\0";
+const struct st_bits_data spk_punc_info[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{"none", "", 0},
 	{"some", "/$%&@", SOME},
 	{"most", "$%&#()=+*/@^<>|\\", MOST},
@@ -95,9 +114,15 @@ const struct st_bits_data punc_info[] = {
 
 static char mark_cut_flag;
 #define MAX_KEY 160
+<<<<<<< HEAD
 u_char *our_keys[MAX_KEY], *shift_table;
 u_char key_buf[600];
 const u_char key_defaults[] = {
+=======
+u_char *spk_our_keys[MAX_KEY], *spk_shift_table;
+u_char spk_key_buf[600];
+const u_char spk_key_defaults[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "speakupmap.h"
 };
 
@@ -129,9 +154,15 @@ static char *phonetic[] = {
 /* array of 256 char pointers (one for each character description)
  * initialized to default_chars and user selectable via
  * /proc/speakup/characters */
+<<<<<<< HEAD
 char *characters[256];
 
 char *default_chars[256] = {
+=======
+char *spk_characters[256];
+
+char *spk_default_chars[256] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*000*/ "null", "^a", "^b", "^c", "^d", "^e", "^f", "^g",
 /*008*/ "^h", "^i", "^j", "^k", "^l", "^m", "^n", "^o",
 /*016*/ "^p", "^q", "^r", "^s", "^t", "^u", "^v", "^w",
@@ -238,7 +269,11 @@ static u_short default_chartab[256] = {
 };
 
 struct task_struct *speakup_task;
+<<<<<<< HEAD
 struct bleep unprocessed_sound;
+=======
+struct bleep spk_unprocessed_sound;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int spk_keydown;
 static u_char spk_lastkey, spk_close_press, keymap_flags;
 static u_char last_keycode, this_speakup_key;
@@ -282,6 +317,7 @@ static void bleep(u_short val)
 		350, 370, 392, 414, 440, 466, 491, 523, 554, 587, 619, 659
 	};
 	short freq;
+<<<<<<< HEAD
 	int time = bleep_time;
 	freq = vals[val % 12];
 	if (val > 11)
@@ -289,6 +325,15 @@ static void bleep(u_short val)
 	unprocessed_sound.freq = freq;
 	unprocessed_sound.jiffies = msecs_to_jiffies(time);
 	unprocessed_sound.active = 1;
+=======
+	int time = spk_bleep_time;
+	freq = vals[val % 12];
+	if (val > 11)
+		freq *= (1 << (val / 12));
+	spk_unprocessed_sound.freq = freq;
+	spk_unprocessed_sound.jiffies = msecs_to_jiffies(time);
+	spk_unprocessed_sound.active = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* We can only have 1 active sound at a time. */
 }
 
@@ -300,7 +345,11 @@ static void speakup_shut_up(struct vc_data *vc)
 	spk_parked &= 0xfe;
 	speakup_date(vc);
 	if (synth != NULL)
+<<<<<<< HEAD
 		do_flush();
+=======
+		spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void speech_kill(struct vc_data *vc)
@@ -313,9 +362,15 @@ static void speech_kill(struct vc_data *vc)
 	if (val == 2 || spk_killed) {
 		/* dead */
 		spk_shut_up &= ~0x40;
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_IAM_ALIVE));
 	} else {
 		synth_printf("%s\n", msg_get(MSG_YOU_KILLED_SPEAKUP));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_IAM_ALIVE));
+	} else {
+		synth_printf("%s\n", spk_msg_get(MSG_YOU_KILLED_SPEAKUP));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spk_shut_up |= 0x40;
 	}
 }
@@ -324,10 +379,17 @@ static void speakup_off(struct vc_data *vc)
 {
 	if (spk_shut_up & 0x80) {
 		spk_shut_up &= 0x7f;
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_HEY_THATS_BETTER));
 	} else {
 		spk_shut_up |= 0x80;
 		synth_printf("%s\n", msg_get(MSG_YOU_TURNED_ME_OFF));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_HEY_THATS_BETTER));
+	} else {
+		spk_shut_up |= 0x80;
+		synth_printf("%s\n", spk_msg_get(MSG_YOU_TURNED_ME_OFF));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	speakup_date(vc);
 }
@@ -336,10 +398,17 @@ static void speakup_parked(struct vc_data *vc)
 {
 	if (spk_parked & 0x80) {
 		spk_parked = 0;
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_UNPARKED));
 	} else {
 		spk_parked |= 0x80;
 		synth_printf("%s\n", msg_get(MSG_PARKED));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_UNPARKED));
+	} else {
+		spk_parked |= 0x80;
+		synth_printf("%s\n", spk_msg_get(MSG_PARKED));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 
@@ -350,6 +419,7 @@ static void speakup_cut(struct vc_data *vc)
 
 	if (!mark_cut_flag) {
 		mark_cut_flag = 1;
+<<<<<<< HEAD
 		xs = (u_short) spk_x;
 		ys = (u_short) spk_y;
 		spk_sel_cons = vc;
@@ -360,6 +430,18 @@ static void speakup_cut(struct vc_data *vc)
 	ye = (u_short) spk_y;
 	mark_cut_flag = 0;
 	synth_printf("%s\n", msg_get(MSG_CUT));
+=======
+		spk_xs = (u_short) spk_x;
+		spk_ys = (u_short) spk_y;
+		spk_sel_cons = vc;
+		synth_printf("%s\n", spk_msg_get(MSG_MARK));
+		return;
+	}
+	spk_xe = (u_short) spk_x;
+	spk_ye = (u_short) spk_y;
+	mark_cut_flag = 0;
+	synth_printf("%s\n", spk_msg_get(MSG_CUT));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	speakup_clear_selection();
 	ret = speakup_set_selection(tty);
@@ -383,9 +465,15 @@ static void speakup_paste(struct vc_data *vc)
 {
 	if (mark_cut_flag) {
 		mark_cut_flag = 0;
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_MARK_CLEARED));
 	} else {
 		synth_printf("%s\n", msg_get(MSG_PASTE));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_MARK_CLEARED));
+	} else {
+		synth_printf("%s\n", spk_msg_get(MSG_PASTE));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		speakup_paste_selection(tty);
 	}
 }
@@ -395,6 +483,7 @@ static void say_attributes(struct vc_data *vc)
 	int fg = spk_attr & 0x0f;
 	int bg = spk_attr >> 4;
 	if (fg > 8) {
+<<<<<<< HEAD
 		synth_printf("%s ", msg_get(MSG_BRIGHT));
 		fg -= 8;
 	}
@@ -405,6 +494,18 @@ static void say_attributes(struct vc_data *vc)
 	} else
 		synth_printf(" %s ", msg_get(MSG_ON));
 	synth_printf("%s\n", msg_get(MSG_COLORS_START + bg));
+=======
+		synth_printf("%s ", spk_msg_get(MSG_BRIGHT));
+		fg -= 8;
+	}
+	synth_printf("%s", spk_msg_get(MSG_COLORS_START + fg));
+	if (bg > 7) {
+		synth_printf(" %s ", spk_msg_get(MSG_ON_BLINKING));
+		bg -= 8;
+	} else
+		synth_printf(" %s ", spk_msg_get(MSG_ON));
+	synth_printf("%s\n", spk_msg_get(MSG_COLORS_START + bg));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 enum {
@@ -417,14 +518,22 @@ enum {
 
 static void announce_edge(struct vc_data *vc, int msg_id)
 {
+<<<<<<< HEAD
 	if (bleeps & 1)
 		bleep(spk_y);
 	if ((bleeps & 2) && (msg_id < edge_quiet))
 		synth_printf("%s\n", msg_get(MSG_EDGE_MSGS_START + msg_id - 1));
+=======
+	if (spk_bleeps & 1)
+		bleep(spk_y);
+	if ((spk_bleeps & 2) && (msg_id < edge_quiet))
+		synth_printf("%s\n", spk_msg_get(MSG_EDGE_MSGS_START + msg_id - 1));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void speak_char(u_char ch)
 {
+<<<<<<< HEAD
 	char *cp = characters[ch];
 	struct var_t *direct = get_var(DIRECT);
 	if (direct && direct->u.n.value) {
@@ -435,6 +544,18 @@ static void speak_char(u_char ch)
 		synth_printf("%c", ch);
 		if (IS_CHAR(ch, B_CAP))
 			synth_printf("%s", str_caps_stop);
+=======
+	char *cp = spk_characters[ch];
+	struct var_t *direct = spk_get_var(DIRECT);
+	if (direct && direct->u.n.value) {
+		if (IS_CHAR(ch, B_CAP)) {
+			spk_pitch_shift++;
+			synth_printf("%s", spk_str_caps_start);
+		}
+		synth_printf("%c", ch);
+		if (IS_CHAR(ch, B_CAP))
+			synth_printf("%s", spk_str_caps_stop);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	if (cp == NULL) {
@@ -443,6 +564,7 @@ static void speak_char(u_char ch)
 	}
 	synth_buffer_add(SPACE);
 	if (IS_CHAR(ch, B_CAP)) {
+<<<<<<< HEAD
 		pitch_shift++;
 		synth_printf("%s", str_caps_start);
 		synth_printf("%s", cp);
@@ -450,6 +572,15 @@ static void speak_char(u_char ch)
 	} else {
 		if (*cp == '^') {
 			synth_printf("%s", msg_get(MSG_CTRL));
+=======
+		spk_pitch_shift++;
+		synth_printf("%s", spk_str_caps_start);
+		synth_printf("%s", cp);
+		synth_printf("%s", spk_str_caps_stop);
+	} else {
+		if (*cp == '^') {
+			synth_printf("%s", spk_msg_get(MSG_CTRL));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			cp++;
 		}
 		synth_printf("%s", cp);
@@ -479,9 +610,15 @@ static void say_char(struct vc_data *vc)
 	spk_old_attr = spk_attr;
 	ch = get_char(vc, (u_short *) spk_pos, &spk_attr);
 	if (spk_attr != spk_old_attr) {
+<<<<<<< HEAD
 		if (attrib_bleep & 1)
 			bleep(spk_y);
 		if (attrib_bleep & 2)
+=======
+		if (spk_attrib_bleep & 1)
+			bleep(spk_y);
+		if (spk_attrib_bleep & 2)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			say_attributes(vc);
 	}
 	speak_char(ch & 0xff);
@@ -497,7 +634,11 @@ static void say_phonetic_char(struct vc_data *vc)
 		synth_printf("%s\n", phonetic[--ch]);
 	} else {
 		if (IS_CHAR(ch, B_NUM))
+<<<<<<< HEAD
 			synth_printf("%s ", msg_get(MSG_NUMBER));
+=======
+			synth_printf("%s ", spk_msg_get(MSG_NUMBER));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		speak_char(ch);
 	}
 }
@@ -527,8 +668,13 @@ static void say_next_char(struct vc_data *vc)
 }
 
 /* get_word - will first check to see if the character under the
+<<<<<<< HEAD
  * reading cursor is a space and if say_word_ctl is true it will
  * return the word space.  If say_word_ctl is not set it will check to
+=======
+ * reading cursor is a space and if spk_say_word_ctl is true it will
+ * return the word space.  If spk_say_word_ctl is not set it will check to
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * see if there is a word starting on the next position to the right
  * and return that word if it exists.  If it does not exist it will
  * move left to the beginning of any previous word on the line or the
@@ -544,9 +690,15 @@ static u_long get_word(struct vc_data *vc)
 	ch = (char)get_char(vc, (u_short *) tmp_pos, &temp);
 
 /* decided to take out the sayword if on a space (mis-information */
+<<<<<<< HEAD
 	if (say_word_ctl && ch == SPACE) {
 		*buf = '\0';
 		synth_printf("%s\n", msg_get(MSG_SPACE));
+=======
+	if (spk_say_word_ctl && ch == SPACE) {
+		*buf = '\0';
+		synth_printf("%s\n", spk_msg_get(MSG_SPACE));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 	} else if ((tmpx < vc->vc_cols - 2)
 		   && (ch == SPACE || ch == 0 || IS_WDLM(ch))
@@ -582,6 +734,7 @@ static u_long get_word(struct vc_data *vc)
 static void say_word(struct vc_data *vc)
 {
 	u_long cnt = get_word(vc);
+<<<<<<< HEAD
 	u_short saved_punc_mask = punc_mask;
 	if (cnt == 0)
 		return;
@@ -589,6 +742,15 @@ static void say_word(struct vc_data *vc)
 	buf[cnt++] = SPACE;
 	spkup_write(buf, cnt);
 	punc_mask = saved_punc_mask;
+=======
+	u_short saved_punc_mask = spk_punc_mask;
+	if (cnt == 0)
+		return;
+	spk_punc_mask = PUNC;
+	buf[cnt++] = SPACE;
+	spkup_write(buf, cnt);
+	spk_punc_mask = saved_punc_mask;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void say_prev_word(struct vc_data *vc)
@@ -686,13 +848,19 @@ static void say_next_word(struct vc_data *vc)
 static void spell_word(struct vc_data *vc)
 {
 	static char *delay_str[] = { "", ",", ".", ". .", ". . ." };
+<<<<<<< HEAD
 	char *cp = buf, *str_cap = str_caps_stop;
 	char *cp1, *last_cap = str_caps_stop;
+=======
+	char *cp = buf, *str_cap = spk_str_caps_stop;
+	char *cp1, *last_cap = spk_str_caps_stop;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u_char ch;
 	if (!get_word(vc))
 		return;
 	while ((ch = (u_char) *cp)) {
 		if (cp != buf)
+<<<<<<< HEAD
 			synth_printf(" %s ", delay_str[spell_delay]);
 		if (IS_CHAR(ch, B_CAP)) {
 			str_cap = str_caps_start;
@@ -702,6 +870,17 @@ static void spell_word(struct vc_data *vc)
 				last_cap = str_caps_stop;
 		} else
 			str_cap = str_caps_stop;
+=======
+			synth_printf(" %s ", delay_str[spk_spell_delay]);
+		if (IS_CHAR(ch, B_CAP)) {
+			str_cap = spk_str_caps_start;
+			if (*spk_str_caps_stop)
+				spk_pitch_shift++;
+			else	/* synth has no pitch */
+				last_cap = spk_str_caps_stop;
+		} else
+			str_cap = spk_str_caps_stop;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (str_cap != last_cap) {
 			synth_printf("%s", str_cap);
 			last_cap = str_cap;
@@ -711,17 +890,28 @@ static void spell_word(struct vc_data *vc)
 			ch &= 31;
 			cp1 = phonetic[--ch];
 		} else {
+<<<<<<< HEAD
 			cp1 = characters[ch];
 			if (*cp1 == '^') {
 				synth_printf("%s", msg_get(MSG_CTRL));
+=======
+			cp1 = spk_characters[ch];
+			if (*cp1 == '^') {
+				synth_printf("%s", spk_msg_get(MSG_CTRL));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				cp1++;
 			}
 		}
 		synth_printf("%s", cp1);
 		cp++;
 	}
+<<<<<<< HEAD
 	if (str_cap != str_caps_stop)
 		synth_printf("%s", str_caps_stop);
+=======
+	if (str_cap != spk_str_caps_stop)
+		synth_printf("%s", spk_str_caps_stop);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int get_line(struct vc_data *vc)
@@ -746,9 +936,15 @@ static void say_line(struct vc_data *vc)
 {
 	int i = get_line(vc);
 	char *cp;
+<<<<<<< HEAD
 	u_short saved_punc_mask = punc_mask;
 	if (i == 0) {
 		synth_printf("%s\n", msg_get(MSG_BLANK));
+=======
+	u_short saved_punc_mask = spk_punc_mask;
+	if (i == 0) {
+		synth_printf("%s\n", spk_msg_get(MSG_BLANK));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	buf[i++] = '\n';
@@ -758,9 +954,15 @@ static void say_line(struct vc_data *vc)
 			cp++;
 		synth_printf("%d, ", (cp - buf) + 1);
 	}
+<<<<<<< HEAD
 	punc_mask = punc_masks[reading_punc];
 	spkup_write(buf, i);
 	punc_mask = saved_punc_mask;
+=======
+	spk_punc_mask = spk_punc_masks[spk_reading_punc];
+	spkup_write(buf, i);
+	spk_punc_mask = saved_punc_mask;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void say_prev_line(struct vc_data *vc)
@@ -792,7 +994,11 @@ static int say_from_to(struct vc_data *vc, u_long from, u_long to,
 {
 	int i = 0;
 	u_char tmp;
+<<<<<<< HEAD
 	u_short saved_punc_mask = punc_mask;
+=======
+	u_short saved_punc_mask = spk_punc_mask;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_old_attr = spk_attr;
 	spk_attr = get_attributes((u_short *) from);
 	while (from < to) {
@@ -809,10 +1015,17 @@ static int say_from_to(struct vc_data *vc, u_long from, u_long to,
 	if (i < 1)
 		return i;
 	if (read_punc)
+<<<<<<< HEAD
 		punc_mask = punc_info[reading_punc].mask;
 	spkup_write(buf, i);
 	if (read_punc)
 		punc_mask = saved_punc_mask;
+=======
+		spk_punc_mask = spk_punc_info[spk_reading_punc].mask;
+	spkup_write(buf, i);
+	if (read_punc)
+		spk_punc_mask = saved_punc_mask;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return i - 1;
 }
 
@@ -824,7 +1037,11 @@ static void say_line_from_to(struct vc_data *vc, u_long from, u_long to,
 	start += from * 2;
 	if (say_from_to(vc, start, end, read_punc) <= 0)
 		if (cursor_track != read_all_mode)
+<<<<<<< HEAD
 			synth_printf("%s\n", msg_get(MSG_BLANK));
+=======
+			synth_printf("%s\n", spk_msg_get(MSG_BLANK));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Sentence Reading Commands */
@@ -924,7 +1141,11 @@ static void speakup_win_say(struct vc_data *vc)
 {
 	u_long start, end, from, to;
 	if (win_start < 2) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_NO_WINDOW));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_NO_WINDOW));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	start = vc->vc_origin + (win_top * vc->vc_size_row);
@@ -975,7 +1196,11 @@ static void say_first_char(struct vc_data *vc)
 	u_char ch;
 	spk_parked |= 0x01;
 	if (len == 0) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_BLANK));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_BLANK));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	for (i = 0; i < len; i++)
@@ -994,7 +1219,11 @@ static void say_last_char(struct vc_data *vc)
 	u_char ch;
 	spk_parked |= 0x01;
 	if (len == 0) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_BLANK));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_BLANK));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	ch = buf[--len];
@@ -1006,7 +1235,11 @@ static void say_last_char(struct vc_data *vc)
 
 static void say_position(struct vc_data *vc)
 {
+<<<<<<< HEAD
 	synth_printf(msg_get(MSG_POS_INFO), spk_y + 1, spk_x + 1,
+=======
+	synth_printf(spk_msg_get(MSG_POS_INFO), spk_y + 1, spk_x + 1,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		     vc->vc_num + 1);
 	synth_printf("\n");
 }
@@ -1017,7 +1250,11 @@ static void say_char_num(struct vc_data *vc)
 	u_char tmp;
 	u_short ch = get_char(vc, (u_short *) spk_pos, &tmp);
 	ch &= 0xff;
+<<<<<<< HEAD
 	synth_printf(msg_get(MSG_CHAR_INFO), ch, ch);
+=======
+	synth_printf(spk_msg_get(MSG_CHAR_INFO), ch, ch);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* these are stub functions to keep keyboard.c happy. */
@@ -1066,7 +1303,11 @@ static void spkup_write(const char *in_buf, int count)
 		} else {
 			if ((last_type & CH_RPT) && rep_count > 2) {
 				synth_printf(" ");
+<<<<<<< HEAD
 				synth_printf(msg_get(MSG_REPEAT_DESC),
+=======
+				synth_printf(spk_msg_get(MSG_REPEAT_DESC),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					     ++rep_count);
 				synth_printf(" ");
 			}
@@ -1074,7 +1315,11 @@ static void spkup_write(const char *in_buf, int count)
 		}
 		if (ch == spk_lastkey) {
 			rep_count = 0;
+<<<<<<< HEAD
 			if (key_echo == 1 && ch >= MINECHOCHAR)
+=======
+			if (spk_key_echo == 1 && ch >= MINECHOCHAR)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				speak_char(ch);
 		} else if (char_type & B_ALPHA) {
 			if ((synth_flags & SF_DEC) && (last_type & PUNC))
@@ -1083,7 +1328,11 @@ static void spkup_write(const char *in_buf, int count)
 		} else if (char_type & B_NUM) {
 			rep_count = 0;
 			synth_printf("%c", ch);
+<<<<<<< HEAD
 		} else if (char_type & punc_mask) {
+=======
+		} else if (char_type & spk_punc_mask) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			speak_char(ch);
 			char_type &= ~PUNC;	/* for dec nospell processing */
 		} else if (char_type & SYNTH_OK) {
@@ -1111,7 +1360,11 @@ static void spkup_write(const char *in_buf, int count)
 	if (in_count > 2 && rep_count > 2) {
 		if (last_type & CH_RPT) {
 			synth_printf(" ");
+<<<<<<< HEAD
 			synth_printf(msg_get(MSG_REPEAT_DESC2), ++rep_count);
+=======
+			synth_printf(spk_msg_get(MSG_REPEAT_DESC2), ++rep_count);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			synth_printf(" ");
 		}
 		rep_count = 0;
@@ -1135,22 +1388,37 @@ static void do_handle_shift(struct vc_data *vc, u_char value, char up_flag)
 		case KVAL(K_SHIFT):
 			del_timer(&cursor_timer);
 			spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 			do_flush();
+=======
+			spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			read_all_doc(vc);
 			break;
 		case KVAL(K_CTRL):
 			del_timer(&cursor_timer);
 			cursor_track = prev_cursor_track;
 			spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 			do_flush();
+=======
+			spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 	} else {
 		spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 		do_flush();
 	}
 	if (say_ctrl && value < NUM_CTL_LABELS)
 		synth_printf("%s", msg_get(MSG_CTL_START + value));
+=======
+		spk_do_flush();
+	}
+	if (spk_say_ctrl && value < NUM_CTL_LABELS)
+		synth_printf("%s", spk_msg_get(MSG_CTL_START + value));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_unlock(flags);
 }
 
@@ -1171,12 +1439,20 @@ static void do_handle_latin(struct vc_data *vc, u_char value, char up_flag)
 	spk_lastkey = value;
 	spk_keydown++;
 	spk_parked &= 0xfe;
+<<<<<<< HEAD
 	if (key_echo == 2 && value >= MINECHOCHAR)
+=======
+	if (spk_key_echo == 2 && value >= MINECHOCHAR)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		speak_char(value);
 	spk_unlock(flags);
 }
 
+<<<<<<< HEAD
 int set_key_info(const u_char *key_info, u_char *k_buffer)
+=======
+int spk_set_key_info(const u_char *key_info, u_char *k_buffer)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int i = 0, states, key_data_len;
 	const u_char *cp = key_info;
@@ -1188,12 +1464,21 @@ int set_key_info(const u_char *key_info, u_char *k_buffer)
 	num_keys = *cp;
 	states = (int)cp[1];
 	key_data_len = (states + 1) * (num_keys + 1);
+<<<<<<< HEAD
 	if (key_data_len + SHIFT_TBL_SIZE + 4 >= sizeof(key_buf))
 		return -2;
 	memset(k_buffer, 0, SHIFT_TBL_SIZE);
 	memset(our_keys, 0, sizeof(our_keys));
 	shift_table = k_buffer;
 	our_keys[0] = shift_table;
+=======
+	if (key_data_len + SHIFT_TBL_SIZE + 4 >= sizeof(spk_key_buf))
+		return -2;
+	memset(k_buffer, 0, SHIFT_TBL_SIZE);
+	memset(spk_our_keys, 0, sizeof(spk_our_keys));
+	spk_shift_table = k_buffer;
+	spk_our_keys[0] = spk_shift_table;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cp1 += SHIFT_TBL_SIZE;
 	memcpy(cp1, cp, key_data_len + 3);
 	/* get num_keys, states and data */
@@ -1202,13 +1487,21 @@ int set_key_info(const u_char *key_info, u_char *k_buffer)
 		ch = *cp1++;
 		if (ch >= SHIFT_TBL_SIZE)
 			return -3;
+<<<<<<< HEAD
 		shift_table[ch] = i;
+=======
+		spk_shift_table[ch] = i;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	keymap_flags = *cp1++;
 	while ((ch = *cp1)) {
 		if (ch >= MAX_KEY)
 			return -4;
+<<<<<<< HEAD
 		our_keys[ch] = cp1;
+=======
+		spk_our_keys[ch] = cp1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		cp1 += states + 1;
 	}
 	return 0;
@@ -1237,15 +1530,23 @@ static void toggle_cursoring(struct vc_data *vc)
 		cursor_track = prev_cursor_track;
 	if (++cursor_track >= CT_Max)
 		cursor_track = 0;
+<<<<<<< HEAD
 	synth_printf("%s\n", msg_get(MSG_CURSOR_MSGS_START + cursor_track));
 }
 
 void reset_default_chars(void)
+=======
+	synth_printf("%s\n", spk_msg_get(MSG_CURSOR_MSGS_START + cursor_track));
+}
+
+void spk_reset_default_chars(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int i;
 
 	/* First, free any non-default */
 	for (i = 0; i < 256; i++) {
+<<<<<<< HEAD
 		if ((characters[i] != NULL)
 		    && (characters[i] != default_chars[i]))
 			kfree(characters[i]);
@@ -1255,6 +1556,17 @@ void reset_default_chars(void)
 }
 
 void reset_default_chartab(void)
+=======
+		if ((spk_characters[i] != NULL)
+		    && (spk_characters[i] != spk_default_chars[i]))
+			kfree(spk_characters[i]);
+	}
+
+	memcpy(spk_characters, spk_default_chars, sizeof(spk_default_chars));
+}
+
+void spk_reset_default_chartab(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	memcpy(spk_chartab, default_chartab, sizeof(default_chartab));
 }
@@ -1267,8 +1579,13 @@ static int edit_bits(struct vc_data *vc, u_char type, u_char ch, u_short key)
 	if (type != KT_LATIN || (ch_type & B_NUM) || ch < SPACE)
 		return -1;
 	if (ch == SPACE) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_EDIT_DONE));
 		special_handler = NULL;
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_EDIT_DONE));
+		spk_special_handler = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 1;
 	}
 	if (mask < PUNC && !(ch_type & PUNC))
@@ -1276,8 +1593,13 @@ static int edit_bits(struct vc_data *vc, u_char type, u_char ch, u_short key)
 	spk_chartab[ch] ^= mask;
 	speak_char(ch);
 	synth_printf(" %s\n",
+<<<<<<< HEAD
 		     (spk_chartab[ch] & mask) ? msg_get(MSG_ON) :
 		     msg_get(MSG_OFF));
+=======
+		     (spk_chartab[ch] & mask) ? spk_msg_get(MSG_ON) :
+		     spk_msg_get(MSG_OFF));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 1;
 }
 
@@ -1346,7 +1668,11 @@ static void read_all_doc(struct vc_data *vc)
 	if (cursor_track != read_all_mode)
 		prev_cursor_track = cursor_track;
 	cursor_track = read_all_mode;
+<<<<<<< HEAD
 	reset_index_count(0);
+=======
+	spk_reset_index_count(0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (get_sentence_buf(vc, 0) == -1)
 		kbd_fakekey2(vc, RA_DOWN_ARROW);
 	else {
@@ -1361,7 +1687,11 @@ static void stop_read_all(struct vc_data *vc)
 	del_timer(&cursor_timer);
 	cursor_track = prev_cursor_track;
 	spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 	do_flush();
+=======
+	spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void start_read_all_timer(struct vc_data *vc, int command)
@@ -1370,7 +1700,11 @@ static void start_read_all_timer(struct vc_data *vc, int command)
 
 	cursor_con = vc->vc_num;
 	read_all_key = command;
+<<<<<<< HEAD
 	cursor_timeout = get_var(CURSOR_TIME);
+=======
+	cursor_timeout = spk_get_var(CURSOR_TIME);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mod_timer(&cursor_timer,
 		  jiffies + msecs_to_jiffies(cursor_timeout->u.n.value));
 }
@@ -1382,9 +1716,15 @@ static void handle_cursor_read_all(struct vc_data *vc, int command)
 	switch (command) {
 	case RA_NEXT_SENT:
 		/* Get Current Sentence */
+<<<<<<< HEAD
 		get_index_count(&indcount, &sentcount);
 		/*printk("%d %d  ", indcount, sentcount); */
 		reset_index_count(sentcount + 1);
+=======
+		spk_get_index_count(&indcount, &sentcount);
+		/*printk("%d %d  ", indcount, sentcount); */
+		spk_reset_index_count(sentcount + 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (indcount == 1) {
 			if (!say_sentence_num(sentcount + 1, 0)) {
 				kbd_fakekey2(vc, RA_FIND_NEXT_SENT);
@@ -1395,7 +1735,11 @@ static void handle_cursor_read_all(struct vc_data *vc, int command)
 			sn = 0;
 			if (!say_sentence_num(sentcount + 1, 1)) {
 				sn = 1;
+<<<<<<< HEAD
 				reset_index_count(sn);
+=======
+				spk_reset_index_count(sn);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			} else
 				synth_insert_next_index(0);
 			if (!say_sentence_num(sn, 0)) {
@@ -1437,7 +1781,11 @@ static void handle_cursor_read_all(struct vc_data *vc, int command)
 	case RA_FIND_PREV_SENT:
 		break;
 	case RA_TIMER:
+<<<<<<< HEAD
 		get_index_count(&indcount, &sentcount);
+=======
+		spk_get_index_count(&indcount, &sentcount);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (indcount < 2)
 			kbd_fakekey2(vc, RA_DOWN_ARROW);
 		else
@@ -1458,7 +1806,11 @@ static int pre_handle_cursor(struct vc_data *vc, u_char value, char up_flag)
 		}
 		del_timer(&cursor_timer);
 		spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 		do_flush();
+=======
+		spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		start_read_all_timer(vc, value + 1);
 		spk_unlock(flags);
 		return NOTIFY_STOP;
@@ -1479,8 +1831,13 @@ static void do_handle_cursor(struct vc_data *vc, u_char value, char up_flag)
 		return;
 	}
 	spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 	if (no_intr)
 		do_flush();
+=======
+	if (spk_no_intr)
+		spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* the key press flushes if !no_inter but we want to flush on cursor
  * moves regardless of no_inter state */
 	is_cursor = value + 1;
@@ -1491,7 +1848,11 @@ static void do_handle_cursor(struct vc_data *vc, u_char value, char up_flag)
 	cursor_con = vc->vc_num;
 	if (cursor_track == CT_Highlight)
 		reset_highlight_buffers(vc);
+<<<<<<< HEAD
 	cursor_timeout = get_var(CURSOR_TIME);
+=======
+	cursor_timeout = spk_get_var(CURSOR_TIME);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mod_timer(&cursor_timer,
 		  jiffies + msecs_to_jiffies(cursor_timeout->u.n.value));
 	spk_unlock(flags);
@@ -1603,7 +1964,11 @@ static int speak_highlight(struct vc_data *vc)
 			if (speakup_console[vc_num]->ht.ry[hc] != vc->vc_y)
 				return 0;
 		spk_parked |= 0x01;
+<<<<<<< HEAD
 		do_flush();
+=======
+		spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spkup_write(speakup_console[vc_num]->ht.highbuf[hc],
 			    speakup_console[vc_num]->ht.highsize[hc]);
 		spk_pos = spk_cp = speakup_console[vc_num]->ht.rpos[hc];
@@ -1685,7 +2050,11 @@ static void speakup_con_write(struct vc_data *vc, const char *str, int len)
 	if (!spk_trylock(flags))
 		/* Speakup output, discard */
 		return;
+<<<<<<< HEAD
 	if (bell_pos && spk_keydown && (vc->vc_x == bell_pos - 1))
+=======
+	if (spk_bell_pos && spk_keydown && (vc->vc_x == spk_bell_pos - 1))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		bleep(3);
 	if ((is_cursor) || (cursor_track == read_all_mode)) {
 		if (cursor_track == CT_Highlight)
@@ -1726,6 +2095,7 @@ static void do_handle_spec(struct vc_data *vc, u_char value, char up_flag)
 		return;
 	spk_lock(flags);
 	spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 	if (no_intr)
 		do_flush();
 	switch (value) {
@@ -1739,6 +2109,21 @@ static void do_handle_spec(struct vc_data *vc, u_char value, char up_flag)
 		break;
 	case KVAL(K_HOLD):
 		label = msg_get(MSG_KEYNAME_SCROLLLOCK);
+=======
+	if (spk_no_intr)
+		spk_do_flush();
+	switch (value) {
+	case KVAL(K_CAPS):
+		label = spk_msg_get(MSG_KEYNAME_CAPSLOCK);
+		on_off = vt_get_leds(fg_console, VC_CAPSLOCK);
+		break;
+	case KVAL(K_NUM):
+		label = spk_msg_get(MSG_KEYNAME_NUMLOCK);
+		on_off = vt_get_leds(fg_console, VC_NUMLOCK);
+		break;
+	case KVAL(K_HOLD):
+		label = spk_msg_get(MSG_KEYNAME_SCROLLLOCK);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		on_off = vt_get_leds(fg_console, VC_SCROLLOCK);
 		if (speakup_console[vc->vc_num])
 			speakup_console[vc->vc_num]->tty_stopped = on_off;
@@ -1750,7 +2135,11 @@ static void do_handle_spec(struct vc_data *vc, u_char value, char up_flag)
 	}
 	if (on_off < 2)
 		synth_printf("%s %s\n",
+<<<<<<< HEAD
 			     label, msg_get(MSG_STATUS_START + on_off));
+=======
+			     label, spk_msg_get(MSG_STATUS_START + on_off));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_unlock(flags);
 }
 
@@ -1764,13 +2153,21 @@ static int inc_dec_var(u_char value)
 	int var_id = (int)value - VAR_START;
 	int how = (var_id & 1) ? E_INC : E_DEC;
 	var_id = var_id / 2 + FIRST_SET_VAR;
+<<<<<<< HEAD
 	p_header = get_var_header(var_id);
+=======
+	p_header = spk_get_var_header(var_id);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (p_header == NULL)
 		return -1;
 	if (p_header->var_type != VAR_NUM)
 		return -1;
 	var_data = p_header->data;
+<<<<<<< HEAD
 	if (set_num_var(1, p_header, how) != 0)
+=======
+	if (spk_set_num_var(1, p_header, how) != 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -1;
 	if (!spk_close_press) {
 		for (pn = p_header->name; *pn; pn++) {
@@ -1790,18 +2187,30 @@ static void speakup_win_set(struct vc_data *vc)
 {
 	char info[40];
 	if (win_start > 1) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_WINDOW_ALREADY_SET));
 		return;
 	}
 	if (spk_x < win_left || spk_y < win_top) {
 		synth_printf("%s\n", msg_get(MSG_END_BEFORE_START));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_WINDOW_ALREADY_SET));
+		return;
+	}
+	if (spk_x < win_left || spk_y < win_top) {
+		synth_printf("%s\n", spk_msg_get(MSG_END_BEFORE_START));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	if (win_start && spk_x == win_left && spk_y == win_top) {
 		win_left = 0;
 		win_right = vc->vc_cols - 1;
 		win_bottom = spk_y;
+<<<<<<< HEAD
 		snprintf(info, sizeof(info), msg_get(MSG_WINDOW_LINE),
+=======
+		snprintf(info, sizeof(info), spk_msg_get(MSG_WINDOW_LINE),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			 (int)win_top + 1);
 	} else {
 		if (!win_start) {
@@ -1811,8 +2220,13 @@ static void speakup_win_set(struct vc_data *vc)
 			win_bottom = spk_y;
 			win_right = spk_x;
 		}
+<<<<<<< HEAD
 		snprintf(info, sizeof(info), msg_get(MSG_WINDOW_BOUNDARY),
 			 (win_start) ? msg_get(MSG_END) : msg_get(MSG_START),
+=======
+		snprintf(info, sizeof(info), spk_msg_get(MSG_WINDOW_BOUNDARY),
+			 (win_start) ? spk_msg_get(MSG_END) : spk_msg_get(MSG_START),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			 (int)spk_y + 1, (int)spk_x + 1);
 	}
 	synth_printf("%s\n", info);
@@ -1824,25 +2238,40 @@ static void speakup_win_clear(struct vc_data *vc)
 	win_top = win_bottom = 0;
 	win_left = win_right = 0;
 	win_start = 0;
+<<<<<<< HEAD
 	synth_printf("%s\n", msg_get(MSG_WINDOW_CLEARED));
+=======
+	synth_printf("%s\n", spk_msg_get(MSG_WINDOW_CLEARED));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void speakup_win_enable(struct vc_data *vc)
 {
 	if (win_start < 2) {
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_NO_WINDOW));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_NO_WINDOW));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	win_enabled ^= 1;
 	if (win_enabled)
+<<<<<<< HEAD
 		synth_printf("%s\n", msg_get(MSG_WINDOW_SILENCED));
 	else
 		synth_printf("%s\n", msg_get(MSG_WINDOW_SILENCE_DISABLED));
+=======
+		synth_printf("%s\n", spk_msg_get(MSG_WINDOW_SILENCED));
+	else
+		synth_printf("%s\n", spk_msg_get(MSG_WINDOW_SILENCE_DISABLED));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void speakup_bits(struct vc_data *vc)
 {
 	int val = this_speakup_key - (FIRST_EDIT_BITS - 1);
+<<<<<<< HEAD
 	if (special_handler != NULL || val < 1 || val > 6) {
 		synth_printf("%s\n", msg_get(MSG_ERROR));
 		return;
@@ -1850,11 +2279,24 @@ static void speakup_bits(struct vc_data *vc)
 	pb_edit = &punc_info[val];
 	synth_printf(msg_get(MSG_EDIT_PROMPT), pb_edit->name);
 	special_handler = edit_bits;
+=======
+	if (spk_special_handler != NULL || val < 1 || val > 6) {
+		synth_printf("%s\n", spk_msg_get(MSG_ERROR));
+		return;
+	}
+	pb_edit = &spk_punc_info[val];
+	synth_printf(spk_msg_get(MSG_EDIT_PROMPT), pb_edit->name);
+	spk_special_handler = edit_bits;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int handle_goto(struct vc_data *vc, u_char type, u_char ch, u_short key)
 {
+<<<<<<< HEAD
 	static u_char *goto_buf = "\0\0\0\0\0\0";
+=======
+	static u_char goto_buf[8];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	static int num;
 	int maxlen, go_pos;
 	char *cp;
@@ -1887,9 +2329,15 @@ static int handle_goto(struct vc_data *vc, u_char type, u_char ch, u_short key)
 	if (ch < 'x' || ch > 'y') {
 oops:
 		if (!spk_killed)
+<<<<<<< HEAD
 			synth_printf(" %s\n", msg_get(MSG_GOTO_CANCELED));
 		goto_buf[num = 0] = '\0';
 		special_handler = NULL;
+=======
+			synth_printf(" %s\n", spk_msg_get(MSG_GOTO_CANCELED));
+		goto_buf[num = 0] = '\0';
+		spk_special_handler = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 1;
 	}
 	cp = speakup_s2i(goto_buf, &go_pos);
@@ -1917,7 +2365,11 @@ oops:
 	}
 	goto_buf[num = 0] = '\0';
 do_goto:
+<<<<<<< HEAD
 	special_handler = NULL;
+=======
+	spk_special_handler = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_parked |= 0x01;
 	if (goto_x) {
 		spk_pos -= spk_x * 2;
@@ -1934,18 +2386,31 @@ do_goto:
 
 static void speakup_goto(struct vc_data *vc)
 {
+<<<<<<< HEAD
 	if (special_handler != NULL) {
 		synth_printf("%s\n", msg_get(MSG_ERROR));
 		return;
 	}
 	synth_printf("%s\n", msg_get(MSG_GOTO));
 	special_handler = handle_goto;
+=======
+	if (spk_special_handler != NULL) {
+		synth_printf("%s\n", spk_msg_get(MSG_ERROR));
+		return;
+	}
+	synth_printf("%s\n", spk_msg_get(MSG_GOTO));
+	spk_special_handler = handle_goto;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return;
 }
 
 static void speakup_help(struct vc_data *vc)
 {
+<<<<<<< HEAD
 	handle_help(vc, KT_SPKUP, SPEAKUP_HELP, 0);
+=======
+	spk_handle_help(vc, KT_SPKUP, SPEAKUP_HELP, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void do_nothing(struct vc_data *vc)
@@ -1992,7 +2457,11 @@ static void do_spkup(struct vc_data *vc, u_char value)
 	spk_shut_up &= 0xfe;
 	this_speakup_key = value;
 	if (value < SPKUP_MAX_FUNC && spkup_handler[value]) {
+<<<<<<< HEAD
 		do_flush();
+=======
+		spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		(*spkup_handler[value]) (vc);
 	} else {
 		if (inc_dec_var(value) < 0)
@@ -2032,7 +2501,11 @@ speakup_key(struct vc_data *vc, int shift_state, int keycode, u_short keysym,
 	}
 	if (keycode >= MAX_KEY)
 		goto no_map;
+<<<<<<< HEAD
 	key_info = our_keys[keycode];
+=======
+	key_info = spk_our_keys[keycode];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (key_info == 0)
 		goto no_map;
 	/* Check valid read all mode keys */
@@ -2051,7 +2524,11 @@ speakup_key(struct vc_data *vc, int shift_state, int keycode, u_short keysym,
 		}
 	}
 	shift_info = (shift_state & 0x0f) + key_speakup;
+<<<<<<< HEAD
 	offset = shift_table[shift_info];
+=======
+	offset = spk_shift_table[shift_info];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (offset) {
 		new_key = key_info[offset];
 		if (new_key) {
@@ -2062,7 +2539,11 @@ speakup_key(struct vc_data *vc, int shift_state, int keycode, u_short keysym,
 				if (up_flag || spk_killed)
 					goto out;
 				spk_shut_up &= 0xfe;
+<<<<<<< HEAD
 				do_flush();
+=======
+				spk_do_flush();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				goto out;
 			}
 			if (up_flag)
@@ -2070,7 +2551,11 @@ speakup_key(struct vc_data *vc, int shift_state, int keycode, u_short keysym,
 			if (last_keycode == keycode &&
 			    last_spk_jiffy + MAX_DELAY > jiffies) {
 				spk_close_press = 1;
+<<<<<<< HEAD
 				offset = shift_table[shift_info + 32];
+=======
+				offset = spk_shift_table[shift_info + 32];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				/* double press? */
 				if (offset && key_info[offset])
 					new_key = key_info[offset];
@@ -2082,7 +2567,11 @@ speakup_key(struct vc_data *vc, int shift_state, int keycode, u_short keysym,
 		}
 	}
 no_map:
+<<<<<<< HEAD
 	if (type == KT_SPKUP && special_handler == NULL) {
+=======
+	if (type == KT_SPKUP && spk_special_handler == NULL) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		do_spkup(vc, new_key);
 		spk_close_press = 0;
 		ret = 1;
@@ -2096,9 +2585,15 @@ no_map:
 	    || (value == KVAL(K_LEFT))
 	    || (value == KVAL(K_RIGHT));
 	if ((cursor_track != read_all_mode) || !kh)
+<<<<<<< HEAD
 		if (!no_intr)
 			do_flush();
 	if (special_handler) {
+=======
+		if (!spk_no_intr)
+			spk_do_flush();
+	if (spk_special_handler) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (type == KT_SPEC && value == 1) {
 			value = '\n';
 			type = KT_LATIN;
@@ -2106,7 +2601,11 @@ no_map:
 			type = KT_LATIN;
 		else if (value == 0x7f)
 			value = 8;	/* make del = backspace */
+<<<<<<< HEAD
 		ret = (*special_handler) (vc, type, value, keycode);
+=======
+		ret = (*spk_special_handler) (vc, type, value, keycode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spk_close_press = 0;
 		if (ret < 0)
 			bleep(9);
@@ -2219,6 +2718,10 @@ static void __exit speakup_exit(void)
 	unregister_keyboard_notifier(&keyboard_notifier_block);
 	unregister_vt_notifier(&vt_notifier_block);
 	speakup_unregister_devsynth();
+<<<<<<< HEAD
+=======
+	speakup_cancel_paste();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	del_timer(&cursor_timer);
 	kthread_stop(speakup_task);
 	speakup_task = NULL;
@@ -2237,11 +2740,19 @@ static void __exit speakup_exit(void)
 		speakup_unregister_var(i);
 
 	for (i = 0; i < 256; i++) {
+<<<<<<< HEAD
 		if (characters[i] != default_chars[i])
 			kfree(characters[i]);
 	}
 
 	free_user_msgs();
+=======
+		if (spk_characters[i] != spk_default_chars[i])
+			kfree(spk_characters[i]);
+	}
+
+	spk_free_user_msgs();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* call by: module_init() */
@@ -2254,20 +2765,34 @@ static int __init speakup_init(void)
 	struct var_t *var;
 
 	/* These first few initializations cannot fail. */
+<<<<<<< HEAD
 	initialize_msgs();	/* Initialize arrays for i18n. */
 	reset_default_chars();
 	reset_default_chartab();
 	strlwr(synth_name);
+=======
+	spk_initialize_msgs();	/* Initialize arrays for i18n. */
+	spk_reset_default_chars();
+	spk_reset_default_chartab();
+	spk_strlwr(synth_name);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spk_vars[0].u.n.high = vc->vc_cols;
 	for (var = spk_vars; var->var_id != MAXVARS; var++)
 		speakup_register_var(var);
 	for (var = synth_time_vars;
 	     (var->var_id >= 0) && (var->var_id < MAXVARS); var++)
 		speakup_register_var(var);
+<<<<<<< HEAD
 	for (i = 1; punc_info[i].mask != 0; i++)
 		set_mask_bits(0, i, 2);
 
 	set_key_info(key_defaults, key_buf);
+=======
+	for (i = 1; spk_punc_info[i].mask != 0; i++)
+		spk_set_mask_bits(0, i, 2);
+
+	spk_set_key_info(spk_key_defaults, spk_key_buf);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* From here on out, initializations can fail. */
 	err = speakup_add_virtual_keyboard();
@@ -2290,7 +2815,11 @@ static int __init speakup_init(void)
 				goto error_kobjects;
 		}
 
+<<<<<<< HEAD
 	if (quiet_boot)
+=======
+	if (spk_quiet_boot)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spk_shut_up |= 0x01;
 
 	err = speakup_kobj_init();
@@ -2352,11 +2881,19 @@ error_virtkeyboard:
 		speakup_unregister_var(i);
 
 	for (i = 0; i < 256; i++) {
+<<<<<<< HEAD
 		if (characters[i] != default_chars[i])
 			kfree(characters[i]);
 	}
 
 	free_user_msgs();
+=======
+		if (spk_characters[i] != spk_default_chars[i])
+			kfree(spk_characters[i]);
+	}
+
+	spk_free_user_msgs();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 out:
 	return err;

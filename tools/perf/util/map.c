@@ -15,7 +15,13 @@ const char *map_type__name[MAP__NR_TYPES] = {
 
 static inline int is_anon_memory(const char *filename)
 {
+<<<<<<< HEAD
 	return strcmp(filename, "//anon") == 0;
+=======
+	return !strcmp(filename, "//anon") ||
+	       !strcmp(filename, "/dev/zero (deleted)") ||
+	       !strcmp(filename, "/anon_hugepage (deleted)");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline int is_no_dso_memory(const char *filename)

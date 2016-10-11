@@ -54,11 +54,33 @@ struct ieee80211_local;
 
 #define TU_TO_EXP_TIME(x)	(jiffies + usecs_to_jiffies((x) * 1024))
 
+<<<<<<< HEAD
 #define IEEE80211_DEFAULT_UAPSD_QUEUES \
 	(IEEE80211_WMM_IE_STA_QOSINFO_AC_BK |	\
 	 IEEE80211_WMM_IE_STA_QOSINFO_AC_BE |	\
 	 IEEE80211_WMM_IE_STA_QOSINFO_AC_VI |	\
 	 IEEE80211_WMM_IE_STA_QOSINFO_AC_VO)
+=======
+/*
+ * Some APs experience problems when working with U-APSD. Decreasing the
+ * probability of that happening by using legacy mode for all ACs but VO isn't
+ * enough.
+ *
+ * Cisco 4410N originally forced us to enable VO by default only because it
+ * treated non-VO ACs as legacy.
+ *
+ * However some APs (notably Netgear R7000) silently reclassify packets to
+ * different ACs. Since u-APSD ACs require trigger frames for frame retrieval
+ * clients would never see some frames (e.g. ARP responses) or would fetch them
+ * accidentally after a long time.
+ *
+ * It makes little sense to enable u-APSD queues by default because it needs
+ * userspace applications to be aware of it to actually take advantage of the
+ * possible additional powersavings. Implicitly depending on driver autotrigger
+ * frame support doesn't make much sense.
+ */
+#define IEEE80211_DEFAULT_UAPSD_QUEUES 0
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define IEEE80211_DEFAULT_MAX_SP_LEN		\
 	IEEE80211_WMM_IE_STA_QOSINFO_SP_ALL
@@ -378,7 +400,10 @@ enum ieee80211_sta_flags {
 	IEEE80211_STA_UAPSD_ENABLED	= BIT(7),
 	IEEE80211_STA_NULLFUNC_ACKED	= BIT(8),
 	IEEE80211_STA_RESET_SIGNAL_AVE	= BIT(9),
+<<<<<<< HEAD
 	IEEE80211_STA_DISABLE_VHT	= BIT(11),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 struct ieee80211_mgd_auth_data {
@@ -790,12 +815,21 @@ struct tpt_led_trigger {
  *	that the scan completed.
  * @SCAN_ABORTED: Set for our scan work function when the driver reported
  *	a scan complete for an aborted scan.
+<<<<<<< HEAD
+=======
+ * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
+ *	cancelled.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 enum {
 	SCAN_SW_SCANNING,
 	SCAN_HW_SCANNING,
 	SCAN_COMPLETED,
 	SCAN_ABORTED,
+<<<<<<< HEAD
+=======
+	SCAN_HW_CANCELLED,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -1234,9 +1268,15 @@ void ieee80211_mesh_rx_queued_mgmt(struct ieee80211_sub_if_data *sdata,
 
 /* scan/BSS handling */
 void ieee80211_scan_work(struct work_struct *work);
+<<<<<<< HEAD
 int ieee80211_request_internal_scan(struct ieee80211_sub_if_data *sdata,
 				    const u8 *ssid, u8 ssid_len,
 				    struct ieee80211_channel *chan);
+=======
+int ieee80211_request_ibss_scan(struct ieee80211_sub_if_data *sdata,
+				const u8 *ssid, u8 ssid_len,
+				struct ieee80211_channel *chan);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int ieee80211_request_scan(struct ieee80211_sub_if_data *sdata,
 			   struct cfg80211_scan_request *req);
 void ieee80211_scan_cancel(struct ieee80211_local *local);
@@ -1265,10 +1305,15 @@ int ieee80211_request_sched_scan_stop(struct ieee80211_sub_if_data *sdata);
 void ieee80211_sched_scan_stopped_work(struct work_struct *work);
 
 /* off-channel helpers */
+<<<<<<< HEAD
 void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local,
 				    bool offchannel_ps_enable);
 void ieee80211_offchannel_return(struct ieee80211_local *local,
 				 bool offchannel_ps_disable);
+=======
+void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local);
+void ieee80211_offchannel_return(struct ieee80211_local *local);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void ieee80211_hw_roc_setup(struct ieee80211_local *local);
 
 /* interface handling */
@@ -1298,6 +1343,11 @@ netdev_tx_t ieee80211_monitor_start_xmit(struct sk_buff *skb,
 					 struct net_device *dev);
 netdev_tx_t ieee80211_subif_start_xmit(struct sk_buff *skb,
 				       struct net_device *dev);
+<<<<<<< HEAD
+=======
+void ieee80211_purge_tx_queue(struct ieee80211_hw *hw,
+			      struct sk_buff_head *skbs);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* HT */
 bool ieee80111_cfg_override_disables_ht40(struct ieee80211_sub_if_data *sdata);
@@ -1475,8 +1525,11 @@ u8 *ieee80211_ie_build_ht_info(u8 *pos,
 				struct ieee80211_sta_ht_cap *ht_cap,
 				struct ieee80211_channel *channel,
 				enum nl80211_channel_type channel_type);
+<<<<<<< HEAD
 u8 *ieee80211_ie_build_vht_cap(u8 *pos, struct ieee80211_sta_vht_cap *vht_cap,
 			       u32 cap);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* internal work items */
 void ieee80211_work_init(struct ieee80211_local *local);

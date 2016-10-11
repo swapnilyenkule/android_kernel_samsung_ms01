@@ -233,7 +233,11 @@ int __ptrace_may_access(struct task_struct *task, unsigned int mode)
 	 */
 	int dumpable = 0;
 	/* Don't let security modules deny introspection */
+<<<<<<< HEAD
 	if (same_thread_group(task, current))
+=======
+	if (task == current)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 	rcu_read_lock();
 	tcred = __task_cred(task);
@@ -254,7 +258,12 @@ ok:
 	smp_rmb();
 	if (task->mm)
 		dumpable = get_dumpable(task->mm);
+<<<<<<< HEAD
 	if (!dumpable  && !ptrace_has_cap(task_user_ns(task), mode))
+=======
+	if (dumpable != SUID_DUMP_USER &&
+	    !ptrace_has_cap(task_user_ns(task), mode))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EPERM;
 
 	return security_ptrace_access_check(task, mode);
@@ -631,6 +640,11 @@ static int ptrace_setsiginfo(struct task_struct *child, const siginfo_t *info)
 static int ptrace_resume(struct task_struct *child, long request,
 			 unsigned long data)
 {
+<<<<<<< HEAD
+=======
+	bool need_siglock;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!valid_signal(data))
 		return -EIO;
 
@@ -658,8 +672,31 @@ static int ptrace_resume(struct task_struct *child, long request,
 		user_disable_single_step(child);
 	}
 
+<<<<<<< HEAD
 	child->exit_code = data;
 	wake_up_state(child, __TASK_TRACED);
+=======
+	/*
+	 * Change ->exit_code and ->state under siglock to avoid the race
+	 * with wait_task_stopped() in between; a non-zero ->exit_code will
+	 * wrongly look like another report from tracee.
+	 *
+	 * Note that we need siglock even if ->exit_code == data and/or this
+	 * status was not reported yet, the new status must not be cleared by
+	 * wait_task_stopped() after resume.
+	 *
+	 * If data == 0 we do not care if wait_task_stopped() reports the old
+	 * status and clears the code too; this can't race with the tracee, it
+	 * takes siglock after resume.
+	 */
+	need_siglock = data && !thread_group_empty(current);
+	if (need_siglock)
+		spin_lock_irq(&child->sighand->siglock);
+	child->exit_code = data;
+	wake_up_state(child, __TASK_TRACED);
+	if (need_siglock)
+		spin_unlock_irq(&child->sighand->siglock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }

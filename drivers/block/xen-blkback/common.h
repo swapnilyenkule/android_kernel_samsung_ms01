@@ -76,11 +76,24 @@ struct blkif_x86_32_request_discard {
 	uint64_t       nr_sectors;
 } __attribute__((__packed__));
 
+<<<<<<< HEAD
+=======
+struct blkif_x86_32_request_other {
+	uint8_t        _pad1;
+	blkif_vdev_t   _pad2;
+	uint64_t       id;           /* private guest value, echoed in resp  */
+} __attribute__((__packed__));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct blkif_x86_32_request {
 	uint8_t        operation;    /* BLKIF_OP_???                         */
 	union {
 		struct blkif_x86_32_request_rw rw;
 		struct blkif_x86_32_request_discard discard;
+<<<<<<< HEAD
+=======
+		struct blkif_x86_32_request_other other;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} u;
 } __attribute__((__packed__));
 
@@ -112,11 +125,25 @@ struct blkif_x86_64_request_discard {
 	uint64_t       nr_sectors;
 } __attribute__((__packed__));
 
+<<<<<<< HEAD
+=======
+struct blkif_x86_64_request_other {
+	uint8_t        _pad1;
+	blkif_vdev_t   _pad2;
+	uint32_t       _pad3;        /* offsetof(blkif_..,u.discard.id)==8   */
+	uint64_t       id;           /* private guest value, echoed in resp  */
+} __attribute__((__packed__));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct blkif_x86_64_request {
 	uint8_t        operation;    /* BLKIF_OP_???                         */
 	union {
 		struct blkif_x86_64_request_rw rw;
 		struct blkif_x86_64_request_discard discard;
+<<<<<<< HEAD
+=======
+		struct blkif_x86_64_request_other other;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} u;
 } __attribute__((__packed__));
 
@@ -201,6 +228,11 @@ struct xen_blkif {
 	int			st_wr_sect;
 
 	wait_queue_head_t	waiting_to_free;
+<<<<<<< HEAD
+=======
+	/* Thread shutdown wait queue. */
+	wait_queue_head_t	shutdown_wq;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 
@@ -257,10 +289,22 @@ static inline void blkif_get_x86_32_req(struct blkif_request *dst,
 		break;
 	case BLKIF_OP_DISCARD:
 		dst->u.discard.flag = src->u.discard.flag;
+<<<<<<< HEAD
+=======
+		dst->u.discard.id = src->u.discard.id;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dst->u.discard.sector_number = src->u.discard.sector_number;
 		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
 		break;
 	default:
+<<<<<<< HEAD
+=======
+		/*
+		 * Don't know how to translate this op. Only get the
+		 * ID so failure can be reported to the frontend.
+		 */
+		dst->u.other.id = src->u.other.id;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	}
 }
@@ -287,10 +331,22 @@ static inline void blkif_get_x86_64_req(struct blkif_request *dst,
 		break;
 	case BLKIF_OP_DISCARD:
 		dst->u.discard.flag = src->u.discard.flag;
+<<<<<<< HEAD
+=======
+		dst->u.discard.id = src->u.discard.id;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dst->u.discard.sector_number = src->u.discard.sector_number;
 		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
 		break;
 	default:
+<<<<<<< HEAD
+=======
+		/*
+		 * Don't know how to translate this op. Only get the
+		 * ID so failure can be reported to the frontend.
+		 */
+		dst->u.other.id = src->u.other.id;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	}
 }

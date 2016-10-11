@@ -221,10 +221,13 @@ ncp_file_write(struct file *file, const char __user *buf, size_t count, loff_t *
 
 	already_written = 0;
 
+<<<<<<< HEAD
 	errno = file_update_time(file);
 	if (errno)
 		goto outrel;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bouncebuffer = vmalloc(bufsize);
 	if (!bouncebuffer) {
 		errno = -EIO;	/* -ENOMEM */
@@ -256,6 +259,11 @@ ncp_file_write(struct file *file, const char __user *buf, size_t count, loff_t *
 	}
 	vfree(bouncebuffer);
 
+<<<<<<< HEAD
+=======
+	file_update_time(file);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*ppos = pos;
 
 	if (pos > i_size_read(inode)) {

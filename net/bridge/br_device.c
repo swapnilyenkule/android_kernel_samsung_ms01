@@ -38,6 +38,7 @@ netdev_tx_t br_dev_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 #endif
 
+<<<<<<< HEAD
 	BR_INPUT_SKB_CB(skb)->brdev = dev;
 
 	skb_reset_mac_header(skb);
@@ -49,6 +50,18 @@ netdev_tx_t br_dev_xmit(struct sk_buff *skb, struct net_device *dev)
 	brstats->tx_bytes += skb->len;
 	u64_stats_update_end(&brstats->syncp);
 
+=======
+	u64_stats_update_begin(&brstats->syncp);
+	brstats->tx_packets++;
+	brstats->tx_bytes += skb->len;
+	u64_stats_update_end(&brstats->syncp);
+
+	BR_INPUT_SKB_CB(skb)->brdev = dev;
+
+	skb_reset_mac_header(skb);
+	skb_pull(skb, ETH_HLEN);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rcu_read_lock();
 	if (is_broadcast_ether_addr(dest))
 		br_flood_deliver(br, skb);

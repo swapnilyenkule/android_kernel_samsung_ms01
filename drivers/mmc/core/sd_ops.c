@@ -161,7 +161,11 @@ int mmc_send_app_op_cond(struct mmc_host *host, u32 ocr, u32 *rocr)
 		cmd.arg = ocr;
 	cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R3 | MMC_CMD_BCR;
 
+<<<<<<< HEAD
 	for (i = 200; i; i--) {
+=======
+	for (i = 100; i; i--) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		err = mmc_wait_for_app_cmd(host, NULL, &cmd, MMC_CMD_RETRIES);
 		if (err)
 			break;

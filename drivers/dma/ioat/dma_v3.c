@@ -951,7 +951,11 @@ static int __devinit ioat_xor_val_self_test(struct ioatdma_device *device)
 			goto free_resources;
 		}
 	}
+<<<<<<< HEAD
 	dma_sync_single_for_device(dev, dest_dma, PAGE_SIZE, DMA_TO_DEVICE);
+=======
+	dma_sync_single_for_device(dev, dest_dma, PAGE_SIZE, DMA_FROM_DEVICE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* skip validate if the capability is not present */
 	if (!dma_has_cap(DMA_XOR_VAL, dma_chan->device->cap_mask))

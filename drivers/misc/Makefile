@@ -29,12 +29,18 @@ obj-$(CONFIG_HP_ILO)		+= hpilo.o
 obj-$(CONFIG_APDS9802ALS)	+= apds9802als.o
 obj-$(CONFIG_ISL29003)		+= isl29003.o
 obj-$(CONFIG_ISL29020)		+= isl29020.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_HSIC_SMSC_HUB) += smsc_hub.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_SENSORS_TSL2550)	+= tsl2550.o
 obj-$(CONFIG_EP93XX_PWM)	+= ep93xx_pwm.o
 obj-$(CONFIG_DS1682)		+= ds1682.o
 obj-$(CONFIG_TI_DAC7512)	+= ti_dac7512.o
+<<<<<<< HEAD
 obj-$(CONFIG_UID_STAT)		+= uid_stat.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_C2PORT)		+= c2port/
 obj-$(CONFIG_IWMC3200TOP)      += iwmc3200top/
 obj-$(CONFIG_HMC6352)		+= hmc6352.o
@@ -49,6 +55,7 @@ obj-$(CONFIG_AB8500_PWM)	+= ab8500-pwm.o
 obj-y				+= lis3lv02d/
 obj-y				+= carma/
 obj-$(CONFIG_USB_SWITCH_FSA9480) += fsa9480.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_SWITCH_TSU6721) += tsu6721.o
 obj-$(CONFIG_SM5502_MUIC) += sm5502.o
 obj-$(CONFIG_USB_SWITCH_FSA9485) += fsa9485.o
@@ -97,3 +104,7 @@ obj-$(CONFIG_CHECK_SIMSLOT_COUNT) += sim_slot.o
 obj-$(CONFIG_SEC_MODEM) += modem_if/
 obj-$(CONFIG_UID_CPUTIME) += uid_cputime.o
 
+=======
+obj-$(CONFIG_ALTERA_STAPL)	+=altera-stapl/
+obj-$(CONFIG_MAX8997_MUIC)	+= max8997-muic.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

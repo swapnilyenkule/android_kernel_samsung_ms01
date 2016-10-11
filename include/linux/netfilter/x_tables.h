@@ -369,9 +369,12 @@ struct xt_table {
 	/* What hooks you will enter on */
 	unsigned int valid_hooks;
 
+<<<<<<< HEAD
 	/* Locking the man behind the curtain ... */
 	atomic_t	private_lock;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Man behind the curtain... */
 	struct xt_table_info *private;
 
@@ -469,6 +472,7 @@ extern void xt_free_table_info(struct xt_table_info *info);
  */
 DECLARE_PER_CPU(seqcount_t, xt_recseq);
 
+<<<<<<< HEAD
 static inline int get_reader(atomic_t *v){
 #ifdef CONFIG_ARM
 	unsigned long tmp;
@@ -582,6 +586,8 @@ static inline int put_writer(atomic_t *v){
 #endif
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * xt_write_recseq_begin - start of a write section
  *

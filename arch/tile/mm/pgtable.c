@@ -61,7 +61,11 @@ void show_mem(unsigned int filter)
 	       global_page_state(NR_PAGETABLE),
 	       global_page_state(NR_BOUNCE),
 	       global_page_state(NR_FILE_PAGES),
+<<<<<<< HEAD
 	       get_nr_swap_pages());
+=======
+	       nr_swap_pages);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	for_each_zone(zone) {
 		unsigned long flags, order, total = 0, largest_order = -1;

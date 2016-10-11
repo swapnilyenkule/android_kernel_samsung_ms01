@@ -71,7 +71,11 @@
 
 /* Define max times to check status register before we give up. */
 #define	MAX_READY_WAIT_JIFFIES	(40 * HZ)	/* M25P16 specs 40s max chip erase */
+<<<<<<< HEAD
 #define	MAX_CMD_SIZE		5
+=======
+#define	MAX_CMD_SIZE		6
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_M25PXX_USE_FAST_READ
 #define OPCODE_READ 	OPCODE_FAST_READ
@@ -843,6 +847,7 @@ static int __devinit m25p_probe(struct spi_device *spi)
 		}
 	}
 
+<<<<<<< HEAD
 	flash = kzalloc(sizeof *flash, GFP_KERNEL);
 	if (!flash)
 		return -ENOMEM;
@@ -851,6 +856,15 @@ static int __devinit m25p_probe(struct spi_device *spi)
 		kfree(flash);
 		return -ENOMEM;
 	}
+=======
+	flash = devm_kzalloc(&spi->dev, sizeof(*flash), GFP_KERNEL);
+	if (!flash)
+		return -ENOMEM;
+
+	flash->command = devm_kzalloc(&spi->dev, MAX_CMD_SIZE, GFP_KERNEL);
+	if (!flash->command)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	flash->spi = spi;
 	mutex_init(&flash->lock);
@@ -947,6 +961,7 @@ static int __devinit m25p_probe(struct spi_device *spi)
 static int __devexit m25p_remove(struct spi_device *spi)
 {
 	struct m25p	*flash = dev_get_drvdata(&spi->dev);
+<<<<<<< HEAD
 	int		status;
 
 	/* Clean up MTD stuff. */
@@ -955,6 +970,12 @@ static int __devexit m25p_remove(struct spi_device *spi)
 		kfree(flash->command);
 		kfree(flash);
 	}
+=======
+
+	/* Clean up MTD stuff. */
+	mtd_device_unregister(&flash->mtd);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 

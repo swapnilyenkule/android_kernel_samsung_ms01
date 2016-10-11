@@ -100,12 +100,19 @@ int via_driver_load(struct drm_device *dev, unsigned long chipset)
 	if (dev_priv == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
+=======
+	idr_init(&dev_priv->object_idr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->dev_private = (void *)dev_priv;
 
 	dev_priv->chipset = chipset;
 
+<<<<<<< HEAD
 	idr_init(&dev->object_name_idr);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pci_set_master(dev->pdev);
 
 	ret = drm_vblank_init(dev, 1);

@@ -1116,6 +1116,14 @@ void mem_cgroup_lru_del_list(struct page *page, enum lru_list lru)
 	mz->lru_size[lru] -= 1 << compound_order(page);
 }
 
+<<<<<<< HEAD
+=======
+void mem_cgroup_lru_del(struct page *page)
+{
+	mem_cgroup_lru_del_list(page, page_lru(page));
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * mem_cgroup_lru_move_lists - account for moving a page between lrus
  * @zone: zone of the page
@@ -1144,6 +1152,7 @@ struct lruvec *mem_cgroup_lru_move_lists(struct zone *zone,
  * Checks whether given mem is same or in the root_mem_cgroup's
  * hierarchy subtree
  */
+<<<<<<< HEAD
 bool __mem_cgroup_same_or_subtree(const struct mem_cgroup *root_memcg,
 				  struct mem_cgroup *memcg)
 {
@@ -1163,6 +1172,17 @@ static bool mem_cgroup_same_or_subtree(const struct mem_cgroup *root_memcg,
 	ret = __mem_cgroup_same_or_subtree(root_memcg, memcg);
 	rcu_read_unlock();
 	return ret;
+=======
+static bool mem_cgroup_same_or_subtree(const struct mem_cgroup *root_memcg,
+		struct mem_cgroup *memcg)
+{
+	if (root_memcg != memcg) {
+		return (root_memcg->use_hierarchy &&
+			css_is_ancestor(&memcg->css, &root_memcg->css));
+	}
+
+	return true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int task_in_mem_cgroup(struct task_struct *task, const struct mem_cgroup *memcg)
@@ -1494,6 +1514,7 @@ static int mem_cgroup_count_children(struct mem_cgroup *memcg)
 u64 mem_cgroup_get_limit(struct mem_cgroup *memcg)
 {
 	u64 limit;
+<<<<<<< HEAD
 	u64 memsw;
 
 	limit = res_counter_read_u64(&memcg->res, RES_LIMIT);
@@ -1505,6 +1526,28 @@ u64 mem_cgroup_get_limit(struct mem_cgroup *memcg)
 	 * to this memcg, return that limit.
 	 */
 	return min(limit, memsw);
+=======
+
+	limit = res_counter_read_u64(&memcg->res, RES_LIMIT);
+
+	/*
+	 * Do not consider swap space if we cannot swap due to swappiness
+	 */
+	if (mem_cgroup_swappiness(memcg)) {
+		u64 memsw;
+
+		limit += total_swap_pages << PAGE_SHIFT;
+		memsw = res_counter_read_u64(&memcg->memsw, RES_LIMIT);
+
+		/*
+		 * If memsw is finite and limits the amount of swap space
+		 * available to this memcg, return that limit.
+		 */
+		limit = min(limit, memsw);
+	}
+
+	return limit;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static unsigned long mem_cgroup_reclaim(struct mem_cgroup *memcg,
@@ -4345,7 +4388,17 @@ static int compare_thresholds(const void *a, const void *b)
 	const struct mem_cgroup_threshold *_a = a;
 	const struct mem_cgroup_threshold *_b = b;
 
+<<<<<<< HEAD
 	return _a->threshold - _b->threshold;
+=======
+	if (_a->threshold > _b->threshold)
+		return 1;
+
+	if (_a->threshold < _b->threshold)
+		return -1;
+
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int mem_cgroup_oom_notify_cb(struct mem_cgroup *memcg)
@@ -4512,17 +4565,28 @@ static void mem_cgroup_usage_unregister_event(struct cgroup *cgrp,
 swap_buffers:
 	/* Swap primary and spare array */
 	thresholds->spare = thresholds->primary;
+<<<<<<< HEAD
 
 	rcu_assign_pointer(thresholds->primary, new);
 
 	/* To be sure that nobody uses thresholds */
 	synchronize_rcu();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* If all events are unregistered, free the spare array */
 	if (!new) {
 		kfree(thresholds->spare);
 		thresholds->spare = NULL;
 	}
+<<<<<<< HEAD
+=======
+
+	rcu_assign_pointer(thresholds->primary, new);
+
+	/* To be sure that nobody uses thresholds */
+	synchronize_rcu();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 unlock:
 	mutex_unlock(&memcg->thresholds_lock);
 }
@@ -5616,6 +5680,10 @@ static void mem_cgroup_move_task(struct cgroup *cont,
 	if (mm) {
 		if (mc.to)
 			mem_cgroup_move_charge(mm);
+<<<<<<< HEAD
+=======
+		put_swap_token(mm);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		mmput(mm);
 	}
 	if (mc.to)

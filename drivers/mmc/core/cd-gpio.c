@@ -20,6 +20,7 @@
 struct mmc_cd_gpio {
 	unsigned int gpio;
 	char label[0];
+<<<<<<< HEAD
 	bool status;
 };
 
@@ -58,6 +59,14 @@ static irqreturn_t mmc_cd_gpio_irqt(int irq, void *dev_id)
 		mmc_detect_change(host, msecs_to_jiffies(100));
 	}
 out:
+=======
+};
+
+static irqreturn_t mmc_cd_gpio_irqt(int irq, void *dev_id)
+{
+	/* Schedule a card detection after a debounce timeout */
+	mmc_detect_change(dev_id, msecs_to_jiffies(100));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return IRQ_HANDLED;
 }
 
@@ -72,11 +81,16 @@ int mmc_cd_gpio_request(struct mmc_host *host, unsigned int gpio)
 		return irq;
 
 	cd = kmalloc(sizeof(*cd) + len, GFP_KERNEL);
+<<<<<<< HEAD
 	if (!cd) {
 		host->hotplug.handler_priv = NULL;
 		host->hotplug.irq = 0;
 		return -ENOMEM;
 	}
+=======
+	if (!cd)
+		return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	snprintf(cd->label, len, "%s cd", dev_name(host->parent));
 
@@ -84,6 +98,7 @@ int mmc_cd_gpio_request(struct mmc_host *host, unsigned int gpio)
 	if (ret < 0)
 		goto egpioreq;
 
+<<<<<<< HEAD
 	cd->gpio = gpio;
 	host->hotplug.irq = irq;
 	host->hotplug.handler_priv = cd;
@@ -94,17 +109,29 @@ int mmc_cd_gpio_request(struct mmc_host *host, unsigned int gpio)
 
 	cd->status = ret;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = request_threaded_irq(irq, NULL, mmc_cd_gpio_irqt,
 				   IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
 				   cd->label, host);
 	if (ret < 0)
 		goto eirqreq;
 
+<<<<<<< HEAD
 	return 0;
 
 eirqreq:
 	host->hotplug.handler_priv = NULL;
 	host->hotplug.irq = 0;
+=======
+	cd->gpio = gpio;
+	host->hotplug.irq = irq;
+	host->hotplug.handler_priv = cd;
+
+	return 0;
+
+eirqreq:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	gpio_free(gpio);
 egpioreq:
 	kfree(cd);
@@ -116,14 +143,22 @@ void mmc_cd_gpio_free(struct mmc_host *host)
 {
 	struct mmc_cd_gpio *cd = host->hotplug.handler_priv;
 
+<<<<<<< HEAD
 	if (!cd || !gpio_is_valid(cd->gpio))
+=======
+	if (!cd)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 
 	free_irq(host->hotplug.irq, host);
 	gpio_free(cd->gpio);
+<<<<<<< HEAD
 	cd->gpio = -EINVAL;
 	kfree(cd);
 	host->hotplug.handler_priv = NULL;
    
+=======
+	kfree(cd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL(mmc_cd_gpio_free);

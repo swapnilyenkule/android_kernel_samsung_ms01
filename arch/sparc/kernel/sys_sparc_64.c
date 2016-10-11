@@ -519,12 +519,21 @@ SYSCALL_DEFINE1(sparc64_personality, unsigned long, personality)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (current->personality == PER_LINUX32 &&
 	    personality == PER_LINUX)
 		personality = PER_LINUX32;
 	ret = sys_personality(personality);
 	if (ret == PER_LINUX32)
 		ret = PER_LINUX;
+=======
+	if (personality(current->personality) == PER_LINUX32 &&
+	    personality(personality) == PER_LINUX)
+		personality |= PER_LINUX32;
+	ret = sys_personality(personality);
+	if (personality(ret) == PER_LINUX32)
+		ret &= ~PER_LINUX32;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return ret;
 }

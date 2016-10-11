@@ -1115,7 +1115,13 @@ static int at91_open(struct net_device *dev)
 	struct at91_priv *priv = netdev_priv(dev);
 	int err;
 
+<<<<<<< HEAD
 	clk_enable(priv->clk);
+=======
+	err = clk_prepare_enable(priv->clk);
+	if (err)
+		return err;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* check or determine and set bittime */
 	err = open_candev(dev);
@@ -1139,7 +1145,11 @@ static int at91_open(struct net_device *dev)
  out_close:
 	close_candev(dev);
  out:
+<<<<<<< HEAD
 	clk_disable(priv->clk);
+=======
+	clk_disable_unprepare(priv->clk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return err;
 }
@@ -1156,7 +1166,11 @@ static int at91_close(struct net_device *dev)
 	at91_chip_stop(dev, CAN_STATE_STOPPED);
 
 	free_irq(dev->irq, dev);
+<<<<<<< HEAD
 	clk_disable(priv->clk);
+=======
+	clk_disable_unprepare(priv->clk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	close_candev(dev);
 

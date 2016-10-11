@@ -219,7 +219,11 @@ struct ath_rate_priv {
 	struct ath_rc_stats rcstats[RATE_TABLE_SIZE];
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_ATH9K_RATE_CONTROL
+=======
+#ifdef CONFIG_ATH9K_LEGACY_RATE_CONTROL
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int ath_rate_control_register(void);
 void ath_rate_control_unregister(void);
 #else

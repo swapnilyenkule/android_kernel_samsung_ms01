@@ -16,9 +16,12 @@
 #include <linux/bitmap.h>
 
 #include "internals.h"
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * lockdep: we want to handle all irq_desc locks as a single lock-class:
@@ -134,6 +137,19 @@ static void free_masks(struct irq_desc *desc)
 static inline void free_masks(struct irq_desc *desc) { }
 #endif
 
+<<<<<<< HEAD
+=======
+void irq_lock_sparse(void)
+{
+	mutex_lock(&sparse_irq_lock);
+}
+
+void irq_unlock_sparse(void)
+{
+	mutex_unlock(&sparse_irq_lock);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct irq_desc *alloc_desc(int irq, int node, struct module *owner)
 {
 	struct irq_desc *desc;
@@ -170,6 +186,15 @@ static void free_desc(unsigned int irq)
 
 	unregister_irq_proc(irq, desc);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * sparse_irq_lock protects also show_interrupts() and
+	 * kstat_irq_usr(). Once we deleted the descriptor from the
+	 * sparse tree we can free it. Access in proc will fail to
+	 * lookup the descriptor.
+	 */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_lock(&sparse_irq_lock);
 	delete_irq_desc(irq);
 	mutex_unlock(&sparse_irq_lock);
@@ -277,6 +302,10 @@ struct irq_desc *irq_to_desc(unsigned int irq)
 {
 	return (irq < NR_IRQS) ? irq_desc + irq : NULL;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(irq_to_desc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static void free_desc(unsigned int irq)
 {
@@ -314,6 +343,7 @@ int generic_handle_irq(unsigned int irq)
 
 	if (!desc)
 		return -EINVAL;
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 	if (desc->action)
 		sec_debug_irq_sched_log(irq, (void *)desc->action->handler,
@@ -323,6 +353,8 @@ int generic_handle_irq(unsigned int irq)
 			irqs_disabled());
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	generic_handle_irq_desc(irq, desc);
 	return 0;
 }
@@ -500,6 +532,18 @@ void dynamic_irq_cleanup(unsigned int irq)
 	raw_spin_unlock_irqrestore(&desc->lock, flags);
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * kstat_irqs_cpu - Get the statistics for an interrupt on a cpu
+ * @irq:	The interrupt number
+ * @cpu:	The cpu number
+ *
+ * Returns the sum of interrupt counts on @cpu since boot for
+ * @irq. The caller must ensure that the interrupt is not removed
+ * concurrently.
+ */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 unsigned int kstat_irqs_cpu(unsigned int irq, int cpu)
 {
 	struct irq_desc *desc = irq_to_desc(irq);
@@ -508,6 +552,17 @@ unsigned int kstat_irqs_cpu(unsigned int irq, int cpu)
 			*per_cpu_ptr(desc->kstat_irqs, cpu) : 0;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * kstat_irqs - Get the statistics for an interrupt
+ * @irq:	The interrupt number
+ *
+ * Returns the sum of interrupt counts on all cpus since boot for
+ * @irq. The caller must ensure that the interrupt is not removed
+ * concurrently.
+ */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 unsigned int kstat_irqs(unsigned int irq)
 {
 	struct irq_desc *desc = irq_to_desc(irq);
@@ -520,3 +575,25 @@ unsigned int kstat_irqs(unsigned int irq)
 		sum += *per_cpu_ptr(desc->kstat_irqs, cpu);
 	return sum;
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * kstat_irqs_usr - Get the statistics for an interrupt
+ * @irq:	The interrupt number
+ *
+ * Returns the sum of interrupt counts on all cpus since boot for
+ * @irq. Contrary to kstat_irqs() this can be called from any
+ * preemptible context. It's protected against concurrent removal of
+ * an interrupt descriptor when sparse irqs are enabled.
+ */
+unsigned int kstat_irqs_usr(unsigned int irq)
+{
+	int sum;
+
+	irq_lock_sparse();
+	sum = kstat_irqs(irq);
+	irq_unlock_sparse();
+	return sum;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -124,12 +124,18 @@ snd_emux_detach_seq(struct snd_emux *emu)
 	if (emu->voices)
 		snd_emux_terminate_all(emu);
 		
+<<<<<<< HEAD
 	mutex_lock(&emu->register_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (emu->client >= 0) {
 		snd_seq_delete_kernel_client(emu->client);
 		emu->client = -1;
 	}
+<<<<<<< HEAD
 	mutex_unlock(&emu->register_mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 
@@ -269,8 +275,13 @@ snd_emux_event_input(struct snd_seq_event *ev, int direct, void *private_data,
 /*
  * increment usage count
  */
+<<<<<<< HEAD
 int
 snd_emux_inc_count(struct snd_emux *emu)
+=======
+static int
+__snd_emux_inc_count(struct snd_emux *emu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	emu->used++;
 	if (!try_module_get(emu->ops.owner))
@@ -284,12 +295,29 @@ snd_emux_inc_count(struct snd_emux *emu)
 	return 1;
 }
 
+<<<<<<< HEAD
+=======
+int snd_emux_inc_count(struct snd_emux *emu)
+{
+	int ret;
+
+	mutex_lock(&emu->register_mutex);
+	ret = __snd_emux_inc_count(emu);
+	mutex_unlock(&emu->register_mutex);
+	return ret;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * decrease usage count
  */
+<<<<<<< HEAD
 void
 snd_emux_dec_count(struct snd_emux *emu)
+=======
+static void
+__snd_emux_dec_count(struct snd_emux *emu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	module_put(emu->card->module);
 	emu->used--;
@@ -298,6 +326,15 @@ snd_emux_dec_count(struct snd_emux *emu)
 	module_put(emu->ops.owner);
 }
 
+<<<<<<< HEAD
+=======
+void snd_emux_dec_count(struct snd_emux *emu)
+{
+	mutex_lock(&emu->register_mutex);
+	__snd_emux_dec_count(emu);
+	mutex_unlock(&emu->register_mutex);
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Routine that is called upon a first use of a particular port
@@ -317,7 +354,11 @@ snd_emux_use(void *private_data, struct snd_seq_port_subscribe *info)
 
 	mutex_lock(&emu->register_mutex);
 	snd_emux_init_port(p);
+<<<<<<< HEAD
 	snd_emux_inc_count(emu);
+=======
+	__snd_emux_inc_count(emu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&emu->register_mutex);
 	return 0;
 }
@@ -340,7 +381,11 @@ snd_emux_unuse(void *private_data, struct snd_seq_port_subscribe *info)
 
 	mutex_lock(&emu->register_mutex);
 	snd_emux_sounds_off_all(p);
+<<<<<<< HEAD
 	snd_emux_dec_count(emu);
+=======
+	__snd_emux_dec_count(emu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&emu->register_mutex);
 	return 0;
 }

@@ -1,6 +1,10 @@
 include include/asm-generic/Kbuild.asm
 
 header-y += break.h
+<<<<<<< HEAD
+=======
+header-y += cmpxchg.h
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 header-y += fpu.h
 header-y += gcc_intrin.h
 header-y += ia64regs.h

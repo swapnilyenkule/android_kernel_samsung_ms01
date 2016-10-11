@@ -711,6 +711,13 @@ struct mlx4_steer {
 	struct list_head steer_entries[MLX4_NUM_STEERS];
 };
 
+<<<<<<< HEAD
+=======
+enum {
+	MLX4_PCI_DEV_IS_VF              = 1 << 0,
+};
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct mlx4_priv {
 	struct mlx4_dev		dev;
 
@@ -718,6 +725,12 @@ struct mlx4_priv {
 	struct list_head	ctx_list;
 	spinlock_t		ctx_lock;
 
+<<<<<<< HEAD
+=======
+	int			pci_dev_data;
+	int                     removed;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct list_head        pgdir_list;
 	struct mutex            pgdir_mutex;
 

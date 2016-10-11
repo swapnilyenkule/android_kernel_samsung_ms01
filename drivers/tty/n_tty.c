@@ -81,6 +81,7 @@ static inline int tty_put_user(struct tty_struct *tty, unsigned char x,
 }
 
 /**
+<<<<<<< HEAD
  *	n_tty_set_room	-	receive space
  *	@tty: terminal
  *
@@ -89,10 +90,20 @@ static inline int tty_put_user(struct tty_struct *tty, unsigned char x,
  *	just became available.
  *
  *	Locks: Concurrent update is protected with read_lock
+=======
+ *	n_tty_set__room	-	receive space
+ *	@tty: terminal
+ *
+ *	Called by the driver to find out how much data it is
+ *	permitted to feed to the line discipline without any being lost
+ *	and thus to manage flow control. Not serialized. Answers for the
+ *	"instant".
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 
 static void n_tty_set_room(struct tty_struct *tty)
 {
+<<<<<<< HEAD
 	int left;
 	int old_left;
 	unsigned long flags;
@@ -106,6 +117,11 @@ static void n_tty_set_room(struct tty_struct *tty)
 		left = N_TTY_BUF_SIZE - tty->read_cnt * 3 - 1;
 	} else
 		left = N_TTY_BUF_SIZE - tty->read_cnt - 1;
+=======
+	/* tty->read_cnt is not read locked ? */
+	int	left = N_TTY_BUF_SIZE - tty->read_cnt - 1;
+	int old_left;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * If we are doing input canonicalization, and there are no
@@ -118,8 +134,11 @@ static void n_tty_set_room(struct tty_struct *tty)
 	old_left = tty->receive_room;
 	tty->receive_room = left;
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&tty->read_lock, flags);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Did this open up the receive buffer? We may need to flip */
 	if (left && !old_left)
 		schedule_work(&tty->buf.work);
@@ -1310,8 +1329,12 @@ handle_newline:
 			tty->canon_data++;
 			spin_unlock_irqrestore(&tty->read_lock, flags);
 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+<<<<<<< HEAD
 			if (waitqueue_active(&tty->read_wait))
 				wake_up_interruptible(&tty->read_wait);
+=======
+			wake_up_interruptible(&tty->read_wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return;
 		}
 	}
@@ -1434,8 +1457,12 @@ static void n_tty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
 	if ((!tty->icanon && (tty->read_cnt >= tty->minimum_to_wake)) ||
 		L_EXTPROC(tty)) {
 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+<<<<<<< HEAD
 		if (waitqueue_active(&tty->read_wait))
 			wake_up_interruptible(&tty->read_wait);
+=======
+		wake_up_interruptible(&tty->read_wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/*
@@ -1542,6 +1569,17 @@ static void n_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
 			tty->real_raw = 0;
 	}
 	n_tty_set_room(tty);
+<<<<<<< HEAD
+=======
+	/*
+	 * Fix tty hang when I_IXON(tty) is cleared, but the tty
+	 * been stopped by STOP_CHAR(tty) before it.
+	 */
+	if (!I_IXON(tty) && old && (old->c_iflag & IXON) && !tty->flow_stopped) {
+		start_tty(tty);
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* The termios change make the tty ready for I/O */
 	wake_up_interruptible(&tty->write_wait);
 	wake_up_interruptible(&tty->read_wait);
@@ -1740,7 +1778,12 @@ static ssize_t n_tty_read(struct tty_struct *tty, struct file *file,
 
 do_it_again:
 
+<<<<<<< HEAD
 	BUG_ON(!tty->read_buf);
+=======
+	if (WARN_ON(!tty->read_buf))
+		return -EAGAIN;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	c = job_control(tty, file);
 	if (c < 0)
@@ -1824,6 +1867,10 @@ do_it_again:
 				retval = -ERESTARTSYS;
 				break;
 			}
+<<<<<<< HEAD
+=======
+			/* FIXME: does n_tty_set_room need locking ? */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			n_tty_set_room(tty);
 			timeout = schedule_timeout(timeout);
 			BUG_ON(!tty->read_buf);

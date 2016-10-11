@@ -790,7 +790,11 @@ nvd0_crtc_cursor_move(struct drm_crtc *crtc, int x, int y)
 	struct nouveau_crtc *nv_crtc = nouveau_crtc(crtc);
 	int ch = EVO_CURS(nv_crtc->index);
 
+<<<<<<< HEAD
 	evo_piow(crtc->dev, ch, 0x0084, (y << 16) | x);
+=======
+	evo_piow(crtc->dev, ch, 0x0084, (y << 16) | (x & 0xffff));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	evo_piow(crtc->dev, ch, 0x0080, 0x00000000);
 	return 0;
 }

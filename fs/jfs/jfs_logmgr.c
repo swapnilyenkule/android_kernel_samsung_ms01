@@ -1058,7 +1058,12 @@ static int lmLogSync(struct jfs_log * log, int hard_sync)
  */
 void jfs_syncpt(struct jfs_log *log, int hard_sync)
 {	LOG_LOCK(log);
+<<<<<<< HEAD
 	lmLogSync(log, hard_sync);
+=======
+	if (!test_bit(log_QUIESCE, &log->flag))
+		lmLogSync(log, hard_sync);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	LOG_UNLOCK(log);
 }
 

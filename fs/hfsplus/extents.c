@@ -517,7 +517,11 @@ void hfsplus_file_truncate(struct inode *inode)
 		struct address_space *mapping = inode->i_mapping;
 		struct page *page;
 		void *fsdata;
+<<<<<<< HEAD
 		u32 size = inode->i_size;
+=======
+		loff_t size = inode->i_size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		res = pagecache_write_begin(NULL, mapping, size, 0,
 						AOP_FLAG_UNINTERRUPTIBLE,

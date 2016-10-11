@@ -12,6 +12,7 @@
  */
 
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/pm_runtime.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -28,11 +29,21 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
 {
 	struct xhci_plat_data *pdata = dev->platform_data;
 
+=======
+#include <linux/module.h>
+#include <linux/slab.h>
+
+#include "xhci.h"
+
+static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
+{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * As of now platform drivers don't provide MSI support so we ensure
 	 * here that the generic code does not try to make a pci_dev from our
 	 * dev struct in order to setup MSI
 	 */
+<<<<<<< HEAD
 	xhci->quirks |= XHCI_BROKEN_MSI;
 
 	if (!pdata)
@@ -43,6 +54,9 @@ static void xhci_plat_quirks(struct device *dev, struct xhci_hcd *xhci)
 
 	if (pdata->vendor == SYNOPSIS_DWC3_VENDOR && pdata->revision == 0x250A)
 		xhci->quirks |= XHCI_RESET_DELAY;
+=======
+	xhci->quirks |= XHCI_PLAT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* called during probe() after chip reset completes */
@@ -126,7 +140,10 @@ static int xhci_plat_probe(struct platform_device *pdev)
 	if (!hcd)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	hcd_to_bus(hcd)->skip_resume = true;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hcd->rsrc_start = res->start;
 	hcd->rsrc_len = resource_size(res);
 
@@ -137,17 +154,24 @@ static int xhci_plat_probe(struct platform_device *pdev)
 		goto put_hcd;
 	}
 
+<<<<<<< HEAD
 	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
+=======
+	hcd->regs = ioremap_nocache(hcd->rsrc_start, hcd->rsrc_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!hcd->regs) {
 		dev_dbg(&pdev->dev, "error mapping memory\n");
 		ret = -EFAULT;
 		goto release_mem_region;
 	}
 
+<<<<<<< HEAD
 	pm_runtime_set_active(&pdev->dev);
 	pm_runtime_enable(&pdev->dev);
 	pm_runtime_get_sync(&pdev->dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
 	if (ret)
 		goto unmap_registers;
@@ -162,7 +186,10 @@ static int xhci_plat_probe(struct platform_device *pdev)
 		goto dealloc_usb2_hcd;
 	}
 
+<<<<<<< HEAD
 	hcd_to_bus(xhci->shared_hcd)->skip_resume = true;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Set the xHCI pointer before xhci_plat_setup() (aka hcd_driver.reset)
 	 * is called by usb_add_hcd().
@@ -173,6 +200,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
 	if (ret)
 		goto put_usb3_hcd;
 
+<<<<<<< HEAD
 	phy = usb_get_transceiver();
 	/* Register with OTG if present, ignore USB2 OTG using other PHY */
 	if (phy && phy->otg && !(phy->flags & ENABLE_SECONDARY_PHY)) {
@@ -190,6 +218,8 @@ static int xhci_plat_probe(struct platform_device *pdev)
 
 	pm_runtime_put(&pdev->dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 
 put_usb3_hcd:
@@ -215,7 +245,10 @@ static int xhci_plat_remove(struct platform_device *dev)
 	struct usb_hcd	*hcd = platform_get_drvdata(dev);
 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	usb_remove_hcd(xhci->shared_hcd);
 	usb_put_hcd(xhci->shared_hcd);
 
@@ -225,6 +258,7 @@ static int xhci_plat_remove(struct platform_device *dev)
 	usb_put_hcd(hcd);
 	kfree(xhci);
 
+<<<<<<< HEAD
 	if (phy && phy->otg) {
 		otg_set_host(phy->otg, NULL);
 		usb_put_transceiver(phy);
@@ -295,12 +329,20 @@ static const struct dev_pm_ops xhci_msm_dev_pm_ops = {
 				xhci_msm_runtime_idle)
 };
 
+=======
+	return 0;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct platform_driver usb_xhci_driver = {
 	.probe	= xhci_plat_probe,
 	.remove	= xhci_plat_remove,
 	.driver	= {
 		.name = "xhci-hcd",
+<<<<<<< HEAD
 		.pm = &xhci_msm_dev_pm_ops,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 };
 MODULE_ALIAS("platform:xhci-hcd");

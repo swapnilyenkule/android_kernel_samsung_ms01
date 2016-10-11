@@ -457,6 +457,10 @@ mwifiex_hard_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 
 	tx_info = MWIFIEX_SKB_TXCB(skb);
+<<<<<<< HEAD
+=======
+	memset(tx_info, 0, sizeof(*tx_info));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	tx_info->bss_num = priv->bss_num;
 	tx_info->bss_type = priv->bss_type;
 	mwifiex_fill_buffer(skb);

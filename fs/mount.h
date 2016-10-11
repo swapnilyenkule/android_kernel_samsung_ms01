@@ -4,11 +4,16 @@
 
 struct mnt_namespace {
 	atomic_t		count;
+<<<<<<< HEAD
 	unsigned int		proc_inum;
 	struct mount *	root;
 	struct list_head	list;
 	struct user_namespace	*user_ns;
 	u64			seq;	/* Sequence number to prevent loops */
+=======
+	struct mount *	root;
+	struct list_head	list;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	wait_queue_head_t poll;
 	int event;
 };
@@ -25,6 +30,10 @@ struct mount {
 	struct vfsmount mnt;
 #ifdef CONFIG_SMP
 	struct mnt_pcp __percpu *mnt_pcp;
+<<<<<<< HEAD
+=======
+	atomic_t mnt_longterm;		/* how many of the refs are longterm */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 	int mnt_count;
 	int mnt_writers;
@@ -51,8 +60,11 @@ struct mount {
 	int mnt_ghosts;
 };
 
+<<<<<<< HEAD
 #define MNT_NS_INTERNAL ERR_PTR(-EINVAL) /* distinct from any mnt_namespace */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline struct mount *real_mount(struct vfsmount *mnt)
 {
 	return container_of(mnt, struct mount, mnt);
@@ -63,12 +75,15 @@ static inline int mnt_has_parent(struct mount *mnt)
 	return mnt != mnt->mnt_parent;
 }
 
+<<<<<<< HEAD
 static inline int is_mounted(struct vfsmount *mnt)
 {
 	/* neither detached nor internal? */
 	return !IS_ERR_OR_NULL(real_mount(mnt));
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern struct mount *__lookup_mnt(struct vfsmount *, struct dentry *, int);
 
 static inline void get_mnt_ns(struct mnt_namespace *ns)
@@ -77,12 +92,19 @@ static inline void get_mnt_ns(struct mnt_namespace *ns)
 }
 
 struct proc_mounts {
+<<<<<<< HEAD
 	struct seq_file m;
+=======
+	struct seq_file m; /* must be the first element */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct mnt_namespace *ns;
 	struct path root;
 	int (*show)(struct seq_file *, struct vfsmount *);
 };
 
+<<<<<<< HEAD
 #define proc_mounts(p) (container_of((p), struct proc_mounts, m))
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern const struct seq_operations mounts_op;

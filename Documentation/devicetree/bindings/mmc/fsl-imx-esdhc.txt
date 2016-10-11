@@ -10,8 +10,13 @@ Required properties:
 
 Optional properties:
 - fsl,card-wired : Indicate the card is wired to host permanently
+<<<<<<< HEAD
 - fsl,cd-internal : Indicate to use controller internal card detection
 - fsl,wp-internal : Indicate to use controller internal write protection
+=======
+- fsl,cd-controller : Indicate to use controller internal card detection
+- fsl,wp-controller : Indicate to use controller internal write protection
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 - cd-gpios : Specify GPIOs for card detection
 - wp-gpios : Specify GPIOs for write protection
 
@@ -21,8 +26,13 @@ esdhc@70004000 {
 	compatible = "fsl,imx51-esdhc";
 	reg = <0x70004000 0x4000>;
 	interrupts = <1>;
+<<<<<<< HEAD
 	fsl,cd-internal;
 	fsl,wp-internal;
+=======
+	fsl,cd-controller;
+	fsl,wp-controller;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 esdhc@70008000 {

@@ -157,6 +157,10 @@ static const struct sdhci_pci_fixes sdhci_ene_714 = {
 static const struct sdhci_pci_fixes sdhci_cafe = {
 	.quirks		= SDHCI_QUIRK_NO_SIMULT_VDD_AND_POWER |
 			  SDHCI_QUIRK_NO_BUSY_IRQ |
+<<<<<<< HEAD
+=======
+			  SDHCI_QUIRK_BROKEN_CARD_DETECTION |
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			  SDHCI_QUIRK_BROKEN_TIMEOUT_VAL,
 };
 

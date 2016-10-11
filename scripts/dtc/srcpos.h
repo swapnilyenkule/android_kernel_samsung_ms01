@@ -33,6 +33,7 @@ struct srcfile_state {
 extern FILE *depfile; /* = NULL */
 extern struct srcfile_state *current_srcfile; /* = NULL */
 
+<<<<<<< HEAD
 /**
  * Open a source file.
  *
@@ -66,6 +67,12 @@ int srcfile_pop(void);
  */
 void srcfile_add_search_path(const char *dirname);
 
+=======
+FILE *srcfile_relative_open(const char *fname, char **fullnamep);
+void srcfile_push(const char *fname);
+int srcfile_pop(void);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct srcpos {
     int first_line;
     int first_column;
@@ -113,6 +120,9 @@ extern void srcpos_error(struct srcpos *pos, char const *, ...)
 extern void srcpos_warn(struct srcpos *pos, char const *, ...)
      __attribute__((format(printf, 2, 3)));
 
+<<<<<<< HEAD
 extern void srcpos_set_line(char *f, int l);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _SRCPOS_H_ */

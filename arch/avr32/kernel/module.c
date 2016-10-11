@@ -264,7 +264,11 @@ int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
 			break;
 		case R_AVR32_GOT18SW:
 			if ((relocation & 0xfffe0003) != 0
+<<<<<<< HEAD
 			    && (relocation & 0xfffc0003) != 0xffff0000)
+=======
+			    && (relocation & 0xfffc0000) != 0xfffc0000)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				return reloc_overflow(module, "R_AVR32_GOT18SW",
 						     relocation);
 			relocation >>= 2;

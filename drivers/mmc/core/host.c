@@ -4,7 +4,10 @@
  *  Copyright (C) 2003 Russell King, All Rights Reserved.
  *  Copyright (C) 2007-2008 Pierre Ossman
  *  Copyright (C) 2010 Linus Walleij
+<<<<<<< HEAD
  *  Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -21,7 +24,10 @@
 #include <linux/leds.h>
 #include <linux/slab.h>
 #include <linux/suspend.h>
+<<<<<<< HEAD
 #include <linux/pm_runtime.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <linux/mmc/host.h>
 #include <linux/mmc/card.h>
@@ -34,6 +40,7 @@
 static void mmc_host_classdev_release(struct device *dev)
 {
 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
+<<<<<<< HEAD
 	kfree(host->wlock_name);
 	kfree(host);
 }
@@ -142,6 +149,14 @@ static struct class mmc_host_class = {
 	.name		= "mmc_host",
 	.dev_release	= mmc_host_classdev_release,
 	.pm		= &mmc_host_pm_ops,
+=======
+	kfree(host);
+}
+
+static struct class mmc_host_class = {
+	.name		= "mmc_host",
+	.dev_release	= mmc_host_classdev_release,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 int mmc_register_host_class(void)
@@ -263,9 +278,12 @@ void mmc_host_clk_hold(struct mmc_host *host)
 	if (host->clk_gated) {
 		spin_unlock_irqrestore(&host->clk_lock, flags);
 		mmc_ungate_clock(host);
+<<<<<<< HEAD
 
 		/* Reset clock scaling stats as host is out of idle */
 		mmc_reset_clk_scale_stats(host);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_lock_irqsave(&host->clk_lock, flags);
 		pr_debug("%s: ungated MCI clock\n", mmc_hostname(host));
 	}
@@ -278,11 +296,16 @@ void mmc_host_clk_hold(struct mmc_host *host)
  *	mmc_host_may_gate_card - check if this card may be gated
  *	@card: card to check.
  */
+<<<<<<< HEAD
 bool mmc_host_may_gate_card(struct mmc_card *card)
+=======
+static bool mmc_host_may_gate_card(struct mmc_card *card)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	/* If there is no card we may gate it */
 	if (!card)
 		return true;
+<<<<<<< HEAD
 
 	/*
 	 * SDIO3.0 card allows the clock to be gated off so check if
@@ -291,6 +314,8 @@ bool mmc_host_may_gate_card(struct mmc_card *card)
 	if (mmc_card_sdio(card) && card->cccr.async_intr_sup)
 		return true;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Don't gate SDIO cards! These need to be clocked at all times
 	 * since they may be independent systems generating interrupts
@@ -444,10 +469,13 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
 
 	spin_lock_init(&host->lock);
 	init_waitqueue_head(&host->wq);
+<<<<<<< HEAD
 	host->wlock_name = kasprintf(GFP_KERNEL,
 			"%s_detect", mmc_hostname(host));
 	wake_lock_init(&host->detect_wake_lock, WAKE_LOCK_SUSPEND,
 			host->wlock_name);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	INIT_DELAYED_WORK(&host->detect, mmc_rescan);
 #ifdef CONFIG_PM
 	host->pm_notify.notifier_call = mmc_pm_notify;
@@ -473,6 +501,7 @@ free:
 
 EXPORT_SYMBOL(mmc_alloc_host);
 
+<<<<<<< HEAD
 static ssize_t show_enable(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -696,6 +725,8 @@ static struct attribute_group dev_attr_grp = {
 	.attrs = dev_attrs,
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  *	mmc_add_host - initialise host hardware
  *	@host: mmc host
@@ -711,6 +742,7 @@ int mmc_add_host(struct mmc_host *host)
 	WARN_ON((host->caps & MMC_CAP_SDIO_IRQ) &&
 		!host->ops->enable_sdio_irq);
 
+<<<<<<< HEAD
 	err = pm_runtime_set_active(&host->class_dev);
 	if (err)
 		pr_err("%s: %s: failed setting runtime active: err: %d\n",
@@ -718,11 +750,16 @@ int mmc_add_host(struct mmc_host *host)
 	else if (mmc_use_core_runtime_pm(host))
 		pm_runtime_enable(&host->class_dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = device_add(&host->class_dev);
 	if (err)
 		return err;
 
+<<<<<<< HEAD
 	device_enable_async_suspend(&host->class_dev);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	led_trigger_register_simple(dev_name(&host->class_dev), &host->led);
 
 #ifdef CONFIG_DEBUG_FS
@@ -730,6 +767,7 @@ int mmc_add_host(struct mmc_host *host)
 #endif
 	mmc_host_clk_sysfs_init(host);
 
+<<<<<<< HEAD
 	host->clk_scaling.up_threshold = 35;
 	host->clk_scaling.down_threshold = 5;
 	host->clk_scaling.polling_delay_ms = 100;
@@ -747,6 +785,10 @@ int mmc_add_host(struct mmc_host *host)
 	mmc_start_host(host);
 	if (!(host->pm_flags & MMC_PM_IGNORE_PM_NOTIFY))
 		register_pm_notifier(&host->pm_notify);
+=======
+	mmc_start_host(host);
+	register_pm_notifier(&host->pm_notify);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -763,16 +805,23 @@ EXPORT_SYMBOL(mmc_add_host);
  */
 void mmc_remove_host(struct mmc_host *host)
 {
+<<<<<<< HEAD
 	if (!(host->pm_flags & MMC_PM_IGNORE_PM_NOTIFY))
 		unregister_pm_notifier(&host->pm_notify);
 
+=======
+	unregister_pm_notifier(&host->pm_notify);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mmc_stop_host(host);
 
 #ifdef CONFIG_DEBUG_FS
 	mmc_remove_host_debugfs(host);
 #endif
+<<<<<<< HEAD
 	sysfs_remove_group(&host->parent->kobj, &dev_attr_grp);
 	sysfs_remove_group(&host->class_dev.kobj, &clk_scaling_attr_grp);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	device_del(&host->class_dev);
 
@@ -794,7 +843,10 @@ void mmc_free_host(struct mmc_host *host)
 	spin_lock(&mmc_host_lock);
 	idr_remove(&mmc_host_idr, host->index);
 	spin_unlock(&mmc_host_lock);
+<<<<<<< HEAD
 	wake_lock_destroy(&host->detect_wake_lock);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	put_device(&host->class_dev);
 }

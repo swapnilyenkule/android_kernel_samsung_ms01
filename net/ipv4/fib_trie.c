@@ -71,7 +71,10 @@
 #include <linux/init.h>
 #include <linux/list.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <linux/prefetch.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/export.h>
 #include <net/net_namespace.h>
 #include <net/ip.h>
@@ -1772,10 +1775,15 @@ static struct leaf *leaf_walk_rcu(struct tnode *p, struct rt_trie_node *c)
 			if (!c)
 				continue;
 
+<<<<<<< HEAD
 			if (IS_LEAF(c)) {
 				prefetch(rcu_dereference_rtnl(p->child[idx]));
 				return (struct leaf *) c;
 			}
+=======
+			if (IS_LEAF(c))
+				return (struct leaf *) c;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			/* Rescan start scanning in new node */
 			p = (struct tnode *) c;

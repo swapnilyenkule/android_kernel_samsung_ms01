@@ -90,7 +90,11 @@ void __init dove_ge00_init(struct mv643xx_eth_platform_data *eth_data)
 {
 	orion_ge00_init(eth_data,
 			DOVE_GE00_PHYS_BASE, IRQ_DOVE_GE00_SUM,
+<<<<<<< HEAD
 			0, get_tclk());
+=======
+			0, get_tclk(), 1600);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*****************************************************************************

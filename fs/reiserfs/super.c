@@ -256,7 +256,13 @@ static int finish_unfinished(struct super_block *s)
 			retval = remove_save_link_only(s, &save_link_key, 0);
 			continue;
 		}
+<<<<<<< HEAD
 		dquot_initialize(inode);
+=======
+		reiserfs_write_unlock(s);
+		dquot_initialize(inode);
+		reiserfs_write_lock(s);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (truncate && S_ISDIR(inode->i_mode)) {
 			/* We got a truncate request for a dir which is impossible.
@@ -643,18 +649,32 @@ static int reiserfs_show_options(struct seq_file *seq, struct dentry *root)
 		seq_puts(seq, ",acl");
 
 	if (REISERFS_SB(s)->s_jdev)
+<<<<<<< HEAD
 		seq_printf(seq, ",jdev=%s", REISERFS_SB(s)->s_jdev);
+=======
+		seq_show_option(seq, "jdev", REISERFS_SB(s)->s_jdev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (journal->j_max_commit_age != journal->j_default_max_commit_age)
 		seq_printf(seq, ",commit=%d", journal->j_max_commit_age);
 
 #ifdef CONFIG_QUOTA
 	if (REISERFS_SB(s)->s_qf_names[USRQUOTA])
+<<<<<<< HEAD
 		seq_printf(seq, ",usrjquota=%s", REISERFS_SB(s)->s_qf_names[USRQUOTA]);
 	else if (opts & (1 << REISERFS_USRQUOTA))
 		seq_puts(seq, ",usrquota");
 	if (REISERFS_SB(s)->s_qf_names[GRPQUOTA])
 		seq_printf(seq, ",grpjquota=%s", REISERFS_SB(s)->s_qf_names[GRPQUOTA]);
+=======
+		seq_show_option(seq, "usrjquota",
+				REISERFS_SB(s)->s_qf_names[USRQUOTA]);
+	else if (opts & (1 << REISERFS_USRQUOTA))
+		seq_puts(seq, ",usrquota");
+	if (REISERFS_SB(s)->s_qf_names[GRPQUOTA])
+		seq_show_option(seq, "grpjquota",
+				REISERFS_SB(s)->s_qf_names[GRPQUOTA]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	else if (opts & (1 << REISERFS_GRPQUOTA))
 		seq_puts(seq, ",grpquota");
 	if (REISERFS_SB(s)->s_jquota_fmt) {
@@ -1292,7 +1312,11 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 				kfree(qf_names[i]);
 #endif
 		err = -EINVAL;
+<<<<<<< HEAD
 		goto out_err;
+=======
+		goto out_unlock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 #ifdef CONFIG_QUOTA
 	handle_quota_files(s, qf_names, &qfmt);
@@ -1336,7 +1360,11 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 	if (blocks) {
 		err = reiserfs_resize(s, blocks);
 		if (err != 0)
+<<<<<<< HEAD
 			goto out_err;
+=======
+			goto out_unlock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (*mount_flags & MS_RDONLY) {
@@ -1346,9 +1374,21 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 			/* it is read-only already */
 			goto out_ok;
 
+<<<<<<< HEAD
 		err = dquot_suspend(s, -1);
 		if (err < 0)
 			goto out_err;
+=======
+		/*
+		 * Drop write lock. Quota will retake it when needed and lock
+		 * ordering requires calling dquot_suspend() without it.
+		 */
+		reiserfs_write_unlock(s);
+		err = dquot_suspend(s, -1);
+		if (err < 0)
+			goto out_err;
+		reiserfs_write_lock(s);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* try to remount file system with read-only permissions */
 		if (sb_umount_state(rs) == REISERFS_VALID_FS
@@ -1358,7 +1398,11 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 
 		err = journal_begin(&th, s, 10);
 		if (err)
+<<<<<<< HEAD
 			goto out_err;
+=======
+			goto out_unlock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* Mounting a rw partition read-only. */
 		reiserfs_prepare_for_journal(s, SB_BUFFER_WITH_SB(s), 1);
@@ -1373,7 +1417,11 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 
 		if (reiserfs_is_journal_aborted(journal)) {
 			err = journal->j_errno;
+<<<<<<< HEAD
 			goto out_err;
+=======
+			goto out_unlock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 		handle_data_mode(s, mount_options);
@@ -1382,7 +1430,11 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 		s->s_flags &= ~MS_RDONLY;	/* now it is safe to call journal_begin */
 		err = journal_begin(&th, s, 10);
 		if (err)
+<<<<<<< HEAD
 			goto out_err;
+=======
+			goto out_unlock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* Mount a partition which is read-only, read-write */
 		reiserfs_prepare_for_journal(s, SB_BUFFER_WITH_SB(s), 1);
@@ -1399,11 +1451,25 @@ static int reiserfs_remount(struct super_block *s, int *mount_flags, char *arg)
 	SB_JOURNAL(s)->j_must_wait = 1;
 	err = journal_end(&th, s, 10);
 	if (err)
+<<<<<<< HEAD
 		goto out_err;
 	s->s_dirt = 0;
 
 	if (!(*mount_flags & MS_RDONLY)) {
 		dquot_resume(s, -1);
+=======
+		goto out_unlock;
+	s->s_dirt = 0;
+
+	if (!(*mount_flags & MS_RDONLY)) {
+		/*
+		 * Drop write lock. Quota will retake it when needed and lock
+		 * ordering requires calling dquot_resume() without it.
+		 */
+		reiserfs_write_unlock(s);
+		dquot_resume(s, -1);
+		reiserfs_write_lock(s);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		finish_unfinished(s);
 		reiserfs_xattr_init(s, *mount_flags);
 	}
@@ -1413,9 +1479,16 @@ out_ok:
 	reiserfs_write_unlock(s);
 	return 0;
 
+<<<<<<< HEAD
 out_err:
 	kfree(new_opts);
 	reiserfs_write_unlock(s);
+=======
+out_unlock:
+	reiserfs_write_unlock(s);
+out_err:
+	kfree(new_opts);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -2049,13 +2122,23 @@ static int reiserfs_write_dquot(struct dquot *dquot)
 			  REISERFS_QUOTA_TRANS_BLOCKS(dquot->dq_sb));
 	if (ret)
 		goto out;
+<<<<<<< HEAD
 	ret = dquot_commit(dquot);
+=======
+	reiserfs_write_unlock(dquot->dq_sb);
+	ret = dquot_commit(dquot);
+	reiserfs_write_lock(dquot->dq_sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err =
 	    journal_end(&th, dquot->dq_sb,
 			REISERFS_QUOTA_TRANS_BLOCKS(dquot->dq_sb));
 	if (!ret && err)
 		ret = err;
+<<<<<<< HEAD
       out:
+=======
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	reiserfs_write_unlock(dquot->dq_sb);
 	return ret;
 }
@@ -2071,13 +2154,23 @@ static int reiserfs_acquire_dquot(struct dquot *dquot)
 			  REISERFS_QUOTA_INIT_BLOCKS(dquot->dq_sb));
 	if (ret)
 		goto out;
+<<<<<<< HEAD
 	ret = dquot_acquire(dquot);
+=======
+	reiserfs_write_unlock(dquot->dq_sb);
+	ret = dquot_acquire(dquot);
+	reiserfs_write_lock(dquot->dq_sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err =
 	    journal_end(&th, dquot->dq_sb,
 			REISERFS_QUOTA_INIT_BLOCKS(dquot->dq_sb));
 	if (!ret && err)
 		ret = err;
+<<<<<<< HEAD
       out:
+=======
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	reiserfs_write_unlock(dquot->dq_sb);
 	return ret;
 }
@@ -2091,19 +2184,32 @@ static int reiserfs_release_dquot(struct dquot *dquot)
 	ret =
 	    journal_begin(&th, dquot->dq_sb,
 			  REISERFS_QUOTA_DEL_BLOCKS(dquot->dq_sb));
+<<<<<<< HEAD
+=======
+	reiserfs_write_unlock(dquot->dq_sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ret) {
 		/* Release dquot anyway to avoid endless cycle in dqput() */
 		dquot_release(dquot);
 		goto out;
 	}
 	ret = dquot_release(dquot);
+<<<<<<< HEAD
+=======
+	reiserfs_write_lock(dquot->dq_sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err =
 	    journal_end(&th, dquot->dq_sb,
 			REISERFS_QUOTA_DEL_BLOCKS(dquot->dq_sb));
 	if (!ret && err)
 		ret = err;
+<<<<<<< HEAD
       out:
 	reiserfs_write_unlock(dquot->dq_sb);
+=======
+	reiserfs_write_unlock(dquot->dq_sb);
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 
@@ -2128,11 +2234,21 @@ static int reiserfs_write_info(struct super_block *sb, int type)
 	ret = journal_begin(&th, sb, 2);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
 	ret = dquot_commit_info(sb, type);
 	err = journal_end(&th, sb, 2);
 	if (!ret && err)
 		ret = err;
       out:
+=======
+	reiserfs_write_unlock(sb);
+	ret = dquot_commit_info(sb, type);
+	reiserfs_write_lock(sb);
+	err = journal_end(&th, sb, 2);
+	if (!ret && err)
+		ret = err;
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	reiserfs_write_unlock(sb);
 	return ret;
 }
@@ -2157,8 +2273,16 @@ static int reiserfs_quota_on(struct super_block *sb, int type, int format_id,
 	struct reiserfs_transaction_handle th;
 	int opt = type == USRQUOTA ? REISERFS_USRQUOTA : REISERFS_GRPQUOTA;
 
+<<<<<<< HEAD
 	if (!(REISERFS_SB(sb)->s_mount_opt & (1 << opt)))
 		return -EINVAL;
+=======
+	reiserfs_write_lock(sb);
+	if (!(REISERFS_SB(sb)->s_mount_opt & (1 << opt))) {
+		err = -EINVAL;
+		goto out;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Quotafile not on the same filesystem? */
 	if (path->dentry->d_sb != sb) {
@@ -2200,8 +2324,15 @@ static int reiserfs_quota_on(struct super_block *sb, int type, int format_id,
 		if (err)
 			goto out;
 	}
+<<<<<<< HEAD
 	err = dquot_quota_on(sb, type, format_id, path);
 out:
+=======
+	reiserfs_write_unlock(sb);
+	return dquot_quota_on(sb, type, format_id, path);
+out:
+	reiserfs_write_unlock(sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -2275,7 +2406,13 @@ static ssize_t reiserfs_quota_write(struct super_block *sb, int type,
 		tocopy = sb->s_blocksize - offset < towrite ?
 		    sb->s_blocksize - offset : towrite;
 		tmp_bh.b_state = 0;
+<<<<<<< HEAD
 		err = reiserfs_get_block(inode, blk, &tmp_bh, GET_BLOCK_CREATE);
+=======
+		reiserfs_write_lock(sb);
+		err = reiserfs_get_block(inode, blk, &tmp_bh, GET_BLOCK_CREATE);
+		reiserfs_write_unlock(sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err)
 			goto out;
 		if (offset || tocopy != sb->s_blocksize)
@@ -2291,10 +2428,18 @@ static ssize_t reiserfs_quota_write(struct super_block *sb, int type,
 		flush_dcache_page(bh->b_page);
 		set_buffer_uptodate(bh);
 		unlock_buffer(bh);
+<<<<<<< HEAD
+=======
+		reiserfs_write_lock(sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		reiserfs_prepare_for_journal(sb, bh, 1);
 		journal_mark_dirty(current->journal_info, sb, bh);
 		if (!journal_quota)
 			reiserfs_add_ordered_list(inode, bh);
+<<<<<<< HEAD
+=======
+		reiserfs_write_unlock(sb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		brelse(bh);
 		offset = 0;
 		towrite -= tocopy;

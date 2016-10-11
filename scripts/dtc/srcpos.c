@@ -24,6 +24,7 @@
 #include "dtc.h"
 #include "srcpos.h"
 
+<<<<<<< HEAD
 /* A node in our list of directories to search for source/include files */
 struct search_path {
 	struct search_path *next;	/* next node in list, NULL for end */
@@ -33,6 +34,8 @@ struct search_path {
 /* This is the list of directories that we search for source files */
 static struct search_path *search_path_head, **search_path_tail;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static char *dirname(const char *path)
 {
@@ -56,6 +59,7 @@ struct srcfile_state *current_srcfile; /* = NULL */
 #define MAX_SRCFILE_DEPTH     (100)
 static int srcfile_depth; /* = 0 */
 
+<<<<<<< HEAD
 
 /**
  * Try to open a file in a given directory.
@@ -114,6 +118,8 @@ static char *fopen_any_on_path(const char *fname, FILE **fp)
 	return fullname;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 FILE *srcfile_relative_open(const char *fname, char **fullnamep)
 {
 	FILE *f;
@@ -123,7 +129,17 @@ FILE *srcfile_relative_open(const char *fname, char **fullnamep)
 		f = stdin;
 		fullname = xstrdup("<stdin>");
 	} else {
+<<<<<<< HEAD
 		fullname = fopen_any_on_path(fname, &f);
+=======
+		if (!current_srcfile || !current_srcfile->dir
+		    || (fname[0] == '/'))
+			fullname = xstrdup(fname);
+		else
+			fullname = join_path(current_srcfile->dir, fname);
+
+		f = fopen(fullname, "r");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!f)
 			die("Couldn't open \"%s\": %s\n", fname,
 			    strerror(errno));
@@ -180,6 +196,7 @@ int srcfile_pop(void)
 	return current_srcfile ? 1 : 0;
 }
 
+<<<<<<< HEAD
 void srcfile_add_search_path(const char *dirname)
 {
 	struct search_path *node;
@@ -197,6 +214,8 @@ void srcfile_add_search_path(const char *dirname)
 	search_path_tail = &node->next;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * The empty source position.
  */
@@ -328,9 +347,12 @@ srcpos_warn(struct srcpos *pos, char const *fmt, ...)
 
 	va_end(va);
 }
+<<<<<<< HEAD
 
 void srcpos_set_line(char *f, int l)
 {
 	current_srcfile->name = f;
 	current_srcfile->lineno = l;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

@@ -198,6 +198,10 @@ EXPORT_SYMBOL_GPL(btree_init);
 
 void btree_destroy(struct btree_head *head)
 {
+<<<<<<< HEAD
+=======
+	mempool_free(head->node, head->mempool);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mempool_destroy(head->mempool);
 	head->mempool = NULL;
 }
@@ -319,8 +323,13 @@ void *btree_get_prev(struct btree_head *head, struct btree_geo *geo,
 
 	if (head->height == 0)
 		return NULL;
+<<<<<<< HEAD
 retry:
 	longcpy(key, __key, geo->keylen);
+=======
+	longcpy(key, __key, geo->keylen);
+retry:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dec_key(geo, key);
 
 	node = head->node;
@@ -351,7 +360,11 @@ retry:
 	}
 miss:
 	if (retry_key) {
+<<<<<<< HEAD
 		__key = retry_key;
+=======
+		longcpy(key, retry_key, geo->keylen);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		retry_key = NULL;
 		goto retry;
 	}

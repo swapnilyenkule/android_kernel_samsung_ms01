@@ -419,6 +419,13 @@ static int net1080_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 	struct nc_trailer	*trailer;
 	u16			hdr_len, packet_len;
 
+<<<<<<< HEAD
+=======
+	/* This check is no longer done by usbnet */
+	if (skb->len < dev->net->hard_header_len)
+		return 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!(skb->len & 0x01)) {
 #ifdef DEBUG
 		struct net_device	*net = dev->net;

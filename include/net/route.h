@@ -60,7 +60,10 @@ struct rtable {
 	int			rt_iif;
 	int			rt_oif;
 	__u32			rt_mark;
+<<<<<<< HEAD
 	uid_t			rt_uid;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Info on neighbour */
 	__be32			rt_gateway;
@@ -147,7 +150,11 @@ static inline struct rtable *ip_route_output_ports(struct net *net, struct flowi
 	flowi4_init_output(fl4, oif, sk ? sk->sk_mark : 0, tos,
 			   RT_SCOPE_UNIVERSE, proto,
 			   sk ? inet_sk_flowi_flags(sk) : 0,
+<<<<<<< HEAD
 			   daddr, saddr, dport, sport, sk ? sock_i_uid(sk) : 0);
+=======
+			   daddr, saddr, dport, sport);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sk)
 		security_sk_classify_flow(sk, flowi4_to_flowi(fl4));
 	return ip_route_output_flow(net, fl4, sk);
@@ -251,8 +258,12 @@ static inline void ip_route_connect_init(struct flowi4 *fl4, __be32 dst, __be32 
 		flow_flags |= FLOWI_FLAG_CAN_SLEEP;
 
 	flowi4_init_output(fl4, oif, sk->sk_mark, tos, RT_SCOPE_UNIVERSE,
+<<<<<<< HEAD
 			   protocol, flow_flags, dst, src, dport, sport,
 			   sock_i_uid(sk));
+=======
+			   protocol, flow_flags, dst, src, dport, sport);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline struct rtable *ip_route_connect(struct flowi4 *fl4,

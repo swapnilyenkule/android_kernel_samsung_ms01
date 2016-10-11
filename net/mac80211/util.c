@@ -592,6 +592,7 @@ u32 ieee802_11_parse_elems_crc(u8 *start, size_t len,
 			break;
 		}
 
+<<<<<<< HEAD
 		if (id != WLAN_EID_VENDOR_SPECIFIC &&
 		    id != WLAN_EID_QUIET &&
 		    test_bit(id, seen_elems)) {
@@ -599,6 +600,40 @@ u32 ieee802_11_parse_elems_crc(u8 *start, size_t len,
 			left -= elen;
 			pos += elen;
 			continue;
+=======
+		switch (id) {
+		case WLAN_EID_SSID:
+		case WLAN_EID_SUPP_RATES:
+		case WLAN_EID_FH_PARAMS:
+		case WLAN_EID_DS_PARAMS:
+		case WLAN_EID_CF_PARAMS:
+		case WLAN_EID_TIM:
+		case WLAN_EID_IBSS_PARAMS:
+		case WLAN_EID_CHALLENGE:
+		case WLAN_EID_RSN:
+		case WLAN_EID_ERP_INFO:
+		case WLAN_EID_EXT_SUPP_RATES:
+		case WLAN_EID_HT_CAPABILITY:
+		case WLAN_EID_MESH_ID:
+		case WLAN_EID_MESH_CONFIG:
+		case WLAN_EID_PEER_MGMT:
+		case WLAN_EID_PREQ:
+		case WLAN_EID_PREP:
+		case WLAN_EID_PERR:
+		case WLAN_EID_RANN:
+		case WLAN_EID_CHANNEL_SWITCH:
+		case WLAN_EID_EXT_CHANSWITCH_ANN:
+		case WLAN_EID_COUNTRY:
+		case WLAN_EID_PWR_CONSTRAINT:
+		case WLAN_EID_TIMEOUT_INTERVAL:
+			if (test_bit(id, seen_elems)) {
+				elems->parse_error = true;
+				left -= elen;
+				pos += elen;
+				continue;
+			}
+			break;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 		if (calc_crc && id < 64 && (filter & (1ULL << id)))
@@ -1031,10 +1066,13 @@ int ieee80211_build_preq_ies(struct ieee80211_local *local, u8 *buffer,
 		pos += noffset - offset;
 	}
 
+<<<<<<< HEAD
 	if (sband->vht_cap.vht_supported)
 		pos = ieee80211_ie_build_vht_cap(pos, &sband->vht_cap,
 						 sband->vht_cap.cap);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return pos - buffer;
 }
 
@@ -1228,7 +1266,11 @@ int ieee80211_reconfig(struct ieee80211_local *local)
 			enum ieee80211_sta_state state;
 
 			for (state = IEEE80211_STA_NOTEXIST;
+<<<<<<< HEAD
 			     state < sta->sta_state - 1; state++)
+=======
+			     state < sta->sta_state; state++)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				WARN_ON(drv_sta_state(local, sta->sdata, sta,
 						      state, state + 1));
 		}
@@ -1320,11 +1362,25 @@ int ieee80211_reconfig(struct ieee80211_local *local)
 		list_for_each_entry(sdata, &local->interfaces, list) {
 			if (sdata->vif.type != NL80211_IFTYPE_STATION)
 				continue;
+<<<<<<< HEAD
+=======
+			if (!sdata->u.mgd.associated)
+				continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			ieee80211_send_nullfunc(local, sdata, 0);
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/* add back keys */
+	list_for_each_entry(sdata, &local->interfaces, list)
+		if (ieee80211_sdata_running(sdata))
+			ieee80211_enable_keys(sdata);
+
+ wake_up:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Clear the WLAN_STA_BLOCK_BA flag so new aggregation
 	 * sessions can be established after a resume.
@@ -1346,12 +1402,15 @@ int ieee80211_reconfig(struct ieee80211_local *local)
 		mutex_unlock(&local->sta_mtx);
 	}
 
+<<<<<<< HEAD
 	/* add back keys */
 	list_for_each_entry(sdata, &local->interfaces, list)
 		if (ieee80211_sdata_running(sdata))
 			ieee80211_enable_keys(sdata);
 
  wake_up:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ieee80211_wake_queues_by_reason(hw,
 			IEEE80211_QUEUE_STOP_REASON_SUSPEND);
 
@@ -1615,6 +1674,7 @@ u8 *ieee80211_ie_build_ht_cap(u8 *pos, struct ieee80211_sta_ht_cap *ht_cap,
 	return pos;
 }
 
+<<<<<<< HEAD
 u8 *ieee80211_ie_build_vht_cap(u8 *pos, struct ieee80211_sta_vht_cap *vht_cap,
 							   u32 cap)
 {
@@ -1636,6 +1696,8 @@ u8 *ieee80211_ie_build_vht_cap(u8 *pos, struct ieee80211_sta_vht_cap *vht_cap,
 	return pos;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 u8 *ieee80211_ie_build_ht_info(u8 *pos,
 			       struct ieee80211_sta_ht_cap *ht_cap,
 			       struct ieee80211_channel *channel,

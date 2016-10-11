@@ -107,6 +107,7 @@ found:
  *	0 - deliver
  *	1 - block
  */
+<<<<<<< HEAD
 static __inline__ int icmpv6_filter(struct sock *sk, struct sk_buff *skb)
 {
 	struct icmp6hdr *icmph;
@@ -122,6 +123,22 @@ static __inline__ int icmpv6_filter(struct sock *sk, struct sk_buff *skb)
 		return (data[bit_nr >> 5] & (1 << (bit_nr & 31))) != 0;
 	}
 	return 0;
+=======
+static int icmpv6_filter(const struct sock *sk, const struct sk_buff *skb)
+{
+	struct icmp6hdr *_hdr;
+	const struct icmp6hdr *hdr;
+
+	hdr = skb_header_pointer(skb, skb_transport_offset(skb),
+				 sizeof(_hdr), &_hdr);
+	if (hdr) {
+		const __u32 *data = &raw6_sk(sk)->filter.data[0];
+		unsigned int type = hdr->icmp6_type;
+
+		return (data[type >> 5] & (1U << (type & 31))) != 0;
+	}
+	return 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #if defined(CONFIG_IPV6_MIP6) || defined(CONFIG_IPV6_MIP6_MODULE)
@@ -458,6 +475,7 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 	if (flags & MSG_OOB)
 		return -EOPNOTSUPP;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len=sizeof(*sin6);
 
@@ -466,6 +484,13 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 
 	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
 		return ipv6_recv_rxpmtu(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ipv6_recv_error(sk, msg, len, addr_len);
+
+	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
+		return ipv6_recv_rxpmtu(sk, msg, len, addr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	skb = skb_recv_datagram(sk, flags, noblock, &err);
 	if (!skb)
@@ -484,7 +509,11 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 			goto csum_copy_err;
 		err = skb_copy_datagram_iovec(skb, 0, msg->msg_iov, copied);
 	} else {
+<<<<<<< HEAD
 		err = skb_copy_and_csum_datagram_iovec(skb, 0, msg->msg_iov, copied);
+=======
+		err = skb_copy_and_csum_datagram_iovec(skb, 0, msg->msg_iov);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err == -EINVAL)
 			goto csum_copy_err;
 	}
@@ -500,6 +529,10 @@ static int rawv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 		sin6->sin6_scope_id = 0;
 		if (ipv6_addr_type(&sin6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
 			sin6->sin6_scope_id = IP6CB(skb)->iif;
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin6);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	sock_recv_ts_and_drops(msg, sk, skb);
@@ -761,7 +794,10 @@ static int rawv6_sendmsg(struct kiocb *iocb, struct sock *sk,
 	memset(&fl6, 0, sizeof(fl6));
 
 	fl6.flowi6_mark = sk->sk_mark;
+<<<<<<< HEAD
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (sin6) {
 		if (addr_len < SIN6_LEN_RFC2133)

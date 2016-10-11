@@ -157,6 +157,7 @@ config LEDS_GPIO
 	  defined as platform devices and/or OpenFirmware platform devices.
 	  The code to use these bindings can be selected below.
 
+<<<<<<< HEAD
 config LEDS_MSM_PDM
 	tristate "LED Support through PDM"
 	depends on LEDS_CLASS
@@ -195,6 +196,8 @@ config LEDS_MSM_TRICOLOR
 	  To compile this driver as a module, choose M here: the
 	  module will be called leds-msm-tricolor.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_LP3944
 	tristate "LED Support for N.S. LP3944 (Fun Light) I2C chip"
 	depends on LEDS_CLASS
@@ -207,12 +210,15 @@ config LEDS_LP3944
 	  To compile this driver as a module, choose M here: the
 	  module will be called leds-lp3944.
 
+<<<<<<< HEAD
 config LEDS_CPLD
 	tristate "LED Support for CPLD connected LEDs"
 	depends on LEDS_CLASS
 	help
 	  This option enables support for the LEDs connected to CPLD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_LP5521
 	tristate "LED Support for N.S. LP5521 LED driver chip"
 	depends on LEDS_CLASS && I2C
@@ -271,6 +277,7 @@ config LEDS_PCA955X
 	  LED driver chips accessed via the I2C bus.  Supported
 	  devices include PCA9550, PCA9551, PCA9552, and PCA9553.
 
+<<<<<<< HEAD
 config LEDS_PM8XXX
 	tristate "LED Support for Qualcomm PMIC8XXX"
 	depends on MFD_PM8XXX
@@ -282,6 +289,8 @@ config LEDS_PM8XXX
 	  To compile this driver as a module, choose M here: the module will
 	  be called leds-pmic8xxx.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_PCA9633
 	tristate "LED support for PCA9633 I2C chip"
 	depends on LEDS_CLASS
@@ -290,6 +299,7 @@ config LEDS_PCA9633
 	  This option enables support for LEDs connected to the PCA9633
 	  LED driver chip accessed via the I2C bus.
 
+<<<<<<< HEAD
 config LEDS_QPNP
 	tristate "Support for QPNP LEDs"
 	depends on SPMI && OF_SPMI
@@ -310,6 +320,8 @@ config LEDS_MSM_GPIO_FLASH
 	  To compile this driver as a module, choose M here: the module will
 	  be called leds-gpio-flash.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_WM831X_STATUS
 	tristate "LED support for status LEDs on WM831x PMICs"
 	depends on LEDS_CLASS
@@ -364,6 +376,7 @@ config LEDS_BD2802
 	  This option enables support for BD2802GU RGB LED driver chips
 	  accessed via the I2C bus.
 
+<<<<<<< HEAD
 config LEDS_MSM_PMIC
         tristate "LED Support for Qualcomm PMIC connected LEDs"
         default n
@@ -382,6 +395,8 @@ config LEDS_PMIC8058
 	  (Power Management IC) chip on Qualcomm reference boards,
 	  for example SURF and FFAs.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_INTEL_SS4200
 	tristate "LED driver for Intel NAS SS4200 series"
 	depends on LEDS_CLASS
@@ -428,6 +443,7 @@ config LEDS_MC13783
 	  This option enable support for on-chip LED drivers found
 	  on Freescale Semiconductor MC13783 PMIC.
 
+<<<<<<< HEAD
 config LEDS_QCIBL
 	tristate "LED Support for Quanta LCD backlight"
 	depends on SENSORS_WPCE775X && ARCH_MSM_SCORPION
@@ -436,6 +452,8 @@ config LEDS_QCIBL
 	  Say Y here if you want to use the Quanta backlight driver for ST15
 	  platform.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_NS2
 	tristate "LED support for Network Space v2 GPIO LEDs"
 	depends on LEDS_CLASS
@@ -502,6 +520,7 @@ config LEDS_OT200
 	  This option enables support for the LEDs on the Bachmann OT200.
 	  Say Y to enable LEDs on the Bachmann OT200.
 
+<<<<<<< HEAD
 config LEDS_AN30259A
 	tristate "LED support for AN30259A I2C chip"
 	depends on LEDS_CLASS
@@ -516,6 +535,8 @@ config LEDS_SEC_BACKLIGHT
 	help
 	  This option enables support for the LCD backlight on SEC device.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config LEDS_TRIGGERS
 	bool "LED Trigger support"
 	depends on LEDS_CLASS
@@ -583,6 +604,7 @@ config LEDS_TRIGGER_DEFAULT_ON
 	  This allows LEDs to be initialised in the ON state.
 	  If unsure, say Y.
 
+<<<<<<< HEAD
 config LEDS_TRIGGER_SLEEP
 	tristate "LED Sleep Mode Trigger"
 	depends on LEDS_TRIGGERS && HAS_EARLYSUSPEND
@@ -633,6 +655,8 @@ config LEDS_KTD2026
 	  KTD2026 is a fully programmable, constant current
 	  three channel LED driver with flexible control interface.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 comment "iptables trigger is under Netfilter config (LED target)"
 	depends on LEDS_TRIGGERS
 

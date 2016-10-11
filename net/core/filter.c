@@ -38,7 +38,10 @@
 #include <linux/filter.h>
 #include <linux/reciprocal_div.h>
 #include <linux/ratelimit.h>
+<<<<<<< HEAD
 #include <linux/seccomp.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* No hurry in this branch
  *
@@ -118,7 +121,11 @@ unsigned int sk_run_filter(const struct sk_buff *skb,
 	void *ptr;
 	u32 A = 0;			/* Accumulator */
 	u32 X = 0;			/* Index Register */
+<<<<<<< HEAD
 	u32 mem[BPF_MEMWORDS] = {0};		/* Scratch Memory Store */
+=======
+	u32 mem[BPF_MEMWORDS];		/* Scratch Memory Store */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u32 tmp;
 	int k;
 
@@ -323,6 +330,11 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
@@ -339,11 +351,20 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
 			nla = (struct nlattr *)&skb->data[A];
+<<<<<<< HEAD
 			if (nla->nla_len > A - skb->len)
+=======
+			if (nla->nla_len > skb->len - A)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				return 0;
 
 			nla = nla_find_nested(nla, X);
@@ -353,11 +374,14 @@ load_b:
 				A = 0;
 			continue;
 		}
+<<<<<<< HEAD
 #ifdef CONFIG_SECCOMP_FILTER
 		case BPF_S_ANC_SECCOMP_LD_W:
 			A = seccomp_bpf_load(fentry->k);
 			continue;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		default:
 			WARN_RATELIMIT(1, "Unknown code:%u jt:%u tf:%u k:%u\n",
 				       fentry->code, fentry->jt,

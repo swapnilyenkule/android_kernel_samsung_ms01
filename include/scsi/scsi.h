@@ -10,7 +10,10 @@
 
 #include <linux/types.h>
 #include <linux/scatterlist.h>
+<<<<<<< HEAD
 #include <linux/device.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct scsi_cmnd;
 
@@ -563,6 +566,9 @@ static inline __u32 scsi_to_u32(__u8 *ptr)
 	return (ptr[0]<<24) + (ptr[1]<<16) + (ptr[2]<<8) + ptr[3];
 }
 
+<<<<<<< HEAD
 struct scsi_disk *scsi_disk_get_from_dev(struct device *dev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _SCSI_SCSI_H */

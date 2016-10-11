@@ -419,7 +419,12 @@ void sg_miter_stop(struct sg_mapping_iter *miter)
 	if (miter->addr) {
 		miter->__offset += miter->consumed;
 
+<<<<<<< HEAD
 		if (miter->__flags & SG_MITER_TO_SG)
+=======
+		if ((miter->__flags & SG_MITER_TO_SG) &&
+		    !PageSlab(miter->page))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			flush_kernel_dcache_page(miter->page);
 
 		if (miter->__flags & SG_MITER_ATOMIC) {

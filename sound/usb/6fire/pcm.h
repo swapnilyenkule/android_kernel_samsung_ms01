@@ -32,7 +32,11 @@ struct pcm_urb {
 	struct urb instance;
 	struct usb_iso_packet_descriptor packets[PCM_N_PACKETS_PER_URB];
 	/* END DO NOT SEPARATE */
+<<<<<<< HEAD
 	u8 buffer[PCM_N_PACKETS_PER_URB * PCM_MAX_PACKET_SIZE];
+=======
+	u8 *buffer;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	struct pcm_urb *peer;
 };

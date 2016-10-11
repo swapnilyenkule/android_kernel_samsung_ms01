@@ -48,6 +48,7 @@ struct rnd_state {
 
 #ifdef __KERNEL__
 
+<<<<<<< HEAD
 extern void rand_initialize_irq(int irq);
 
 extern void add_input_randomness(unsigned int type, unsigned int code,
@@ -56,6 +57,17 @@ extern void add_interrupt_randomness(int irq);
 
 extern void get_random_bytes(void *buf, int nbytes);
 void generate_random_uuid(unsigned char uuid_out[16]);
+=======
+extern void add_device_randomness(const void *, unsigned int);
+extern void add_input_randomness(unsigned int type, unsigned int code,
+				 unsigned int value);
+extern void add_interrupt_randomness(int irq, int irq_flags);
+
+extern void get_random_bytes(void *buf, int nbytes);
+extern void get_random_bytes_arch(void *buf, int nbytes);
+void generate_random_uuid(unsigned char uuid_out[16]);
+extern int random_int_secret_init(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifndef MODULE
 extern const struct file_operations random_fops, urandom_fops;
@@ -86,9 +98,15 @@ static inline void prandom32_seed(struct rnd_state *state, u64 seed)
 {
 	u32 i = (seed >> 32) ^ (seed << 10) ^ seed;
 
+<<<<<<< HEAD
 	state->s1 = __seed(i, 1);
 	state->s2 = __seed(i, 7);
 	state->s3 = __seed(i, 15);
+=======
+	state->s1 = __seed(i, 2);
+	state->s2 = __seed(i, 8);
+	state->s3 = __seed(i, 16);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifdef CONFIG_ARCH_RANDOM

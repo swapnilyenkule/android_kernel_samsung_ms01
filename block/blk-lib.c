@@ -101,6 +101,7 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
 
 		atomic_inc(&bb.done);
 		submit_bio(type, bio);
+<<<<<<< HEAD
 	}
 
 	/* Wait for bios in-flight */
@@ -154,6 +155,18 @@ int blkdev_issue_sanitize(struct block_device *bdev, gfp_t gfp_mask)
 	atomic_inc(&bb.done);
 	submit_bio(type, bio);
 
+=======
+
+		/*
+		 * We can loop for a long time in here, if someone does
+		 * full device discards (like mkfs). Be nice and allow
+		 * us to schedule out to avoid softlocking if preempt
+		 * is disabled.
+		 */
+		cond_resched();
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Wait for bios in-flight */
 	if (!atomic_dec_and_test(&bb.done))
 		wait_for_completion(&wait);
@@ -163,7 +176,11 @@ int blkdev_issue_sanitize(struct block_device *bdev, gfp_t gfp_mask)
 
 	return ret;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(blkdev_issue_sanitize);
+=======
+EXPORT_SYMBOL(blkdev_issue_discard);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * blkdev_issue_zeroout - generate number of zero filed write bios

@@ -19,7 +19,10 @@
 #include <linux/pipe_fs_i.h>
 #include <linux/swap.h>
 #include <linux/splice.h>
+<<<<<<< HEAD
 #include <linux/freezer.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 MODULE_ALIAS_MISCDEV(FUSE_MINOR);
 MODULE_ALIAS("devname:fuse");
@@ -388,10 +391,14 @@ __acquires(fc->lock)
 	 * Wait it out.
 	 */
 	spin_unlock(&fc->lock);
+<<<<<<< HEAD
 
 	while (req->state != FUSE_REQ_FINISHED)
 		wait_event_freezable(req->waitq,
 				     req->state == FUSE_REQ_FINISHED);
+=======
+	wait_event(req->waitq, req->state == FUSE_REQ_FINISHED);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock(&fc->lock);
 
 	if (!req->aborted)
@@ -721,8 +728,13 @@ static int fuse_try_move_page(struct fuse_copy_state *cs, struct page **pagep)
 
 	newpage = buf->page;
 
+<<<<<<< HEAD
 	if (WARN_ON(!PageUptodate(newpage)))
 		return -EIO;
+=======
+	if (!PageUptodate(newpage))
+		SetPageUptodate(newpage);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ClearPageMappedToDisk(newpage);
 
@@ -1580,6 +1592,10 @@ static int fuse_retrieve(struct fuse_conn *fc, struct inode *inode,
 		req->pages[req->num_pages] = page;
 		req->num_pages++;
 
+<<<<<<< HEAD
+=======
+		offset = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		num -= this_num;
 		total_len += this_num;
 		index++;
@@ -1637,6 +1653,12 @@ copy_finish:
 static int fuse_notify(struct fuse_conn *fc, enum fuse_notify_code code,
 		       unsigned int size, struct fuse_copy_state *cs)
 {
+<<<<<<< HEAD
+=======
+	/* Don't try to move pages (yet) */
+	cs->move_pages = 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (code) {
 	case FUSE_NOTIFY_POLL:
 		return fuse_notify_poll(fc, size, cs);

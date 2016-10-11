@@ -147,7 +147,11 @@ fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
 		return;
 	}
 
+<<<<<<< HEAD
 	for_each_online_cpu(cpu) {
+=======
+	for_each_possible_cpu(cpu) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		unsigned int nr;
 
 		nr = per_cpu(nr_cpu_bp_pinned[type], cpu);
@@ -233,7 +237,11 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
 	if (cpu >= 0) {
 		toggle_bp_task_slot(bp, cpu, enable, type, weight);
 	} else {
+<<<<<<< HEAD
 		for_each_online_cpu(cpu)
+=======
+		for_each_possible_cpu(cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			toggle_bp_task_slot(bp, cpu, enable, type, weight);
 	}
 

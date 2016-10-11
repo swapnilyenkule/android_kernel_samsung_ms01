@@ -396,10 +396,17 @@ SYSCALL_DEFINE1(fchdir, unsigned int, fd)
 {
 	struct file *file;
 	struct inode *inode;
+<<<<<<< HEAD
 	int error;
 
 	error = -EBADF;
 	file = fget(fd);
+=======
+	int error, fput_needed;
+
+	error = -EBADF;
+	file = fget_raw_light(fd, &fput_needed);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!file)
 		goto out;
 
@@ -413,7 +420,11 @@ SYSCALL_DEFINE1(fchdir, unsigned int, fd)
 	if (!error)
 		set_fs_pwd(current->fs, &file->f_path);
 out_putf:
+<<<<<<< HEAD
 	fput(file);
+=======
+	fput_light(file, fput_needed);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 out:
 	return error;
 }
@@ -672,7 +683,10 @@ static struct file *__dentry_open(struct dentry *dentry, struct vfsmount *mnt,
 	f->f_path.dentry = dentry;
 	f->f_path.mnt = mnt;
 	f->f_pos = 0;
+<<<<<<< HEAD
 	file_sb_list_add(f, inode->i_sb);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (unlikely(f->f_mode & FMODE_PATH)) {
 		f->f_op = &empty_fops;
@@ -730,7 +744,10 @@ cleanup_all:
 			mnt_drop_write(mnt);
 		}
 	}
+<<<<<<< HEAD
 	file_sb_list_del(f);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	f->f_path.dentry = NULL;
 	f->f_path.mnt = NULL;
 cleanup_file:
@@ -882,9 +899,16 @@ static inline int build_open_flags(int flags, umode_t mode, struct open_flags *o
 	int lookup_flags = 0;
 	int acc_mode;
 
+<<<<<<< HEAD
 	if (!(flags & O_CREAT))
 		mode = 0;
 	op->mode = mode;
+=======
+	if (flags & O_CREAT)
+		op->mode = (mode & S_IALLUGO) | S_IFREG;
+	else
+		op->mode = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Must never be set by userspace */
 	flags &= ~FMODE_NONOTIFY;
@@ -1072,11 +1096,14 @@ SYSCALL_DEFINE1(close, unsigned int, fd)
 	struct fdtable *fdt;
 	int retval;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_ZERO_FD_CLOSE
 	if (fd == 0 && strcmp(current->group_leader->comm,"mediaserver") == 0)
 		panic("trying to close fd=0");
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock(&files->file_lock);
 	fdt = files_fdtable(files);
 	if (fd >= fdt->max_fds)

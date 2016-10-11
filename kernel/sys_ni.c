@@ -203,6 +203,9 @@ cond_syscall(sys_fanotify_mark);
 cond_syscall(sys_name_to_handle_at);
 cond_syscall(sys_open_by_handle_at);
 cond_syscall(compat_sys_open_by_handle_at);
+<<<<<<< HEAD
 
 /* operate on Secure Computing state */
 cond_syscall(sys_seccomp);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

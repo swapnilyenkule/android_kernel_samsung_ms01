@@ -145,6 +145,7 @@ Modifications include:
 - Addition of encoding options when required (derived from OpenMAX IL)
 - Addition of rateControlSupported (missing in OpenMAX AL)
 
+<<<<<<< HEAD
 Gapless Playback
 ================
 When playing thru an album, the decoders have the ability to skip the encoder
@@ -191,6 +192,8 @@ Sequence flow for gapless would be:
 - DSP switches to second track
 (note: order for partial_drain and write for next track can be reversed as well)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 Not supported:
 
 - Support for VoIP/circuit-switched calls is not the target of this

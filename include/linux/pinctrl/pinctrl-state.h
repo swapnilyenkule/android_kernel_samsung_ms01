@@ -2,6 +2,7 @@
  * Standard pin control state definitions
  */
 
+<<<<<<< HEAD
 /**
  * @PINCTRL_STATE_DEFAULT: the state the pinctrl handle shall be put
  *	into as default, usually this means the pins are up and ready to
@@ -22,3 +23,7 @@
 #define PINCTRL_STATE_DEFAULT "default"
 #define PINCTRL_STATE_IDLE "idle"
 #define PINCTRL_STATE_SLEEP "sleep"
+=======
+#define PINCTRL_STATE_DEFAULT "default"
+#define PINCTRL_STATE_IDLE "idle"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

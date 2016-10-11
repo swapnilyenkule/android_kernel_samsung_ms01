@@ -24,7 +24,10 @@ __first_valid_page(unsigned long pfn, unsigned long nr_pages)
  * to be MIGRATE_ISOLATE.
  * @start_pfn: The lower PFN of the range to be isolated.
  * @end_pfn: The upper PFN of the range to be isolated.
+<<<<<<< HEAD
  * @migratetype: migrate type to set in error recovery.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * Making page-allocation-type to be MIGRATE_ISOLATE means free pages in
  * the range will never be allocated. Any free pages and pages freed in the
@@ -33,8 +36,13 @@ __first_valid_page(unsigned long pfn, unsigned long nr_pages)
  * start_pfn/end_pfn must be aligned to pageblock_order.
  * Returns 0 on success and -EBUSY if any part of range cannot be isolated.
  */
+<<<<<<< HEAD
 int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
 			     unsigned migratetype)
+=======
+int
+start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long pfn;
 	unsigned long undo_pfn;
@@ -57,7 +65,11 @@ undo:
 	for (pfn = start_pfn;
 	     pfn < undo_pfn;
 	     pfn += pageblock_nr_pages)
+<<<<<<< HEAD
 		unset_migratetype_isolate(pfn_to_page(pfn), migratetype);
+=======
+		unset_migratetype_isolate(pfn_to_page(pfn));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return -EBUSY;
 }
@@ -65,8 +77,13 @@ undo:
 /*
  * Make isolated pages available again.
  */
+<<<<<<< HEAD
 int undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
 			    unsigned migratetype)
+=======
+int
+undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long pfn;
 	struct page *page;
@@ -78,7 +95,11 @@ int undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
 		page = __first_valid_page(pfn, pageblock_nr_pages);
 		if (!page || get_pageblock_migratetype(page) != MIGRATE_ISOLATE)
 			continue;
+<<<<<<< HEAD
 		unset_migratetype_isolate(page, migratetype);
+=======
+		unset_migratetype_isolate(page);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return 0;
 }
@@ -87,7 +108,11 @@ int undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
  * all pages in [start_pfn...end_pfn) must be in the same zone.
  * zone->lock must be held before call this.
  *
+<<<<<<< HEAD
  * Returns 1 if all pages in the range are isolated.
+=======
+ * Returns 1 if all pages in the range is isolated.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 static int
 __test_page_isolated_in_pageblock(unsigned long pfn, unsigned long end_pfn)
@@ -100,6 +125,7 @@ __test_page_isolated_in_pageblock(unsigned long pfn, unsigned long end_pfn)
 			continue;
 		}
 		page = pfn_to_page(pfn);
+<<<<<<< HEAD
 		if (PageBuddy(page)) {
 			/*
 			 * If race between isolatation and allocation happens,
@@ -119,6 +145,12 @@ __test_page_isolated_in_pageblock(unsigned long pfn, unsigned long end_pfn)
 		}
 		else if (page_count(page) == 0 &&
 			get_freepage_migratetype(page) == MIGRATE_ISOLATE)
+=======
+		if (PageBuddy(page))
+			pfn += 1 << page_order(page);
+		else if (page_count(page) == 0 &&
+				page_private(page) == MIGRATE_ISOLATE)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			pfn += 1;
 		else
 			break;

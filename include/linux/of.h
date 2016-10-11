@@ -212,6 +212,7 @@ extern int of_property_read_u64(const struct device_node *np,
 extern int of_property_read_string(struct device_node *np,
 				   const char *propname,
 				   const char **out_string);
+<<<<<<< HEAD
 extern int of_property_read_string_index(struct device_node *np,
 					 const char *propname,
 					 int index, const char **output);
@@ -220,6 +221,14 @@ extern int of_property_match_string(struct device_node *np,
 				    const char *string);
 extern int of_property_count_strings(struct device_node *np,
 				     const char *propname);
+=======
+extern int of_property_match_string(struct device_node *np,
+				    const char *propname,
+				    const char *string);
+extern int of_property_read_string_helper(struct device_node *np,
+					      const char *propname,
+					      const char **out_strs, size_t sz, int index);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int of_device_is_compatible(const struct device_node *device,
 				   const char *);
 extern int of_device_is_available(const struct device_node *device);
@@ -243,9 +252,13 @@ extern int of_parse_phandle_with_args(struct device_node *np,
 
 extern void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align));
 extern int of_alias_get_id(struct device_node *np, const char *stem);
+<<<<<<< HEAD
 #ifdef CONFIG_OF_SUBCMDLINE_PARSE
 extern int of_parse_args_on_subcmdline(const char *name, char *buf);
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int of_machine_is_compatible(const char *compat);
 
 extern int prom_add_property(struct device_node* np, struct property* prop);
@@ -306,6 +319,7 @@ static inline int of_property_read_string(struct device_node *np,
 	return -ENOSYS;
 }
 
+<<<<<<< HEAD
 static inline int of_property_read_string_index(struct device_node *np,
 						const char *propname, int index,
 						const char **out_string)
@@ -315,6 +329,11 @@ static inline int of_property_read_string_index(struct device_node *np,
 
 static inline int of_property_count_strings(struct device_node *np,
 					    const char *propname)
+=======
+static inline int of_property_read_string_helper(struct device_node *np,
+						 const char *propname,
+						 const char **out_strs, size_t sz, int index)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return -ENOSYS;
 }
@@ -354,6 +373,73 @@ static inline int of_machine_is_compatible(const char *compat)
 #endif /* CONFIG_OF */
 
 /**
+<<<<<<< HEAD
+=======
+ * of_property_read_string_array() - Read an array of strings from a multiple
+ * strings property.
+ * @np:		device node from which the property value is to be read.
+ * @propname:	name of the property to be searched.
+ * @out_strs:	output array of string pointers.
+ * @sz:		number of array elements to read.
+ *
+ * Search for a property in a device tree node and retrieve a list of
+ * terminated string values (pointer to data, not a copy) in that property.
+ *
+ * If @out_strs is NULL, the number of strings in the property is returned.
+ */
+static inline int of_property_read_string_array(struct device_node *np,
+						const char *propname, const char **out_strs,
+						size_t sz)
+{
+	return of_property_read_string_helper(np, propname, out_strs, sz, 0);
+}
+
+/**
+ * of_property_count_strings() - Find and return the number of strings from a
+ * multiple strings property.
+ * @np:		device node from which the property value is to be read.
+ * @propname:	name of the property to be searched.
+ *
+ * Search for a property in a device tree node and retrieve the number of null
+ * terminated string contain in it. Returns the number of strings on
+ * success, -EINVAL if the property does not exist, -ENODATA if property
+ * does not have a value, and -EILSEQ if the string is not null-terminated
+ * within the length of the property data.
+ */
+static inline int of_property_count_strings(struct device_node *np,
+					    const char *propname)
+{
+	return of_property_read_string_helper(np, propname, NULL, 0, 0);
+}
+
+/**
+ * of_property_read_string_index() - Find and read a string from a multiple
+ * strings property.
+ * @np:		device node from which the property value is to be read.
+ * @propname:	name of the property to be searched.
+ * @index:	index of the string in the list of strings
+ * @out_string:	pointer to null terminated return string, modified only if
+ *		return value is 0.
+ *
+ * Search for a property in a device tree node and retrieve a null
+ * terminated string value (pointer to data, not a copy) in the list of strings
+ * contained in that property.
+ * Returns 0 on success, -EINVAL if the property does not exist, -ENODATA if
+ * property does not have a value, and -EILSEQ if the string is not
+ * null-terminated within the length of the property data.
+ *
+ * The out_string pointer is modified only if a valid string can be decoded.
+ */
+static inline int of_property_read_string_index(struct device_node *np,
+						const char *propname,
+						int index, const char **output)
+{
+	int rc = of_property_read_string_helper(np, propname, output, 1, index);
+	return rc < 0 ? rc : 0;
+}
+
+/**
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * of_property_read_bool - Findfrom a property
  * @np:		device node from which the property value is to be read.
  * @propname:	name of the property to be searched.

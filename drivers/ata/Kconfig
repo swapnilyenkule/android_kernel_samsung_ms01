@@ -83,6 +83,7 @@ config SATA_AHCI_PLATFORM
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
 config SATA_AHCI_MSM
 	tristate "Qualcomm MSM AHCI SATA support"
 	depends on ARCH_MSM
@@ -94,6 +95,8 @@ config SATA_AHCI_MSM
 
 	  If unsure, say N.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SATA_FSL
 	tristate "Freescale 3.0Gbps SATA support"
 	depends on FSL_SOC
@@ -104,7 +107,11 @@ config SATA_FSL
 	  If unsure, say N.
 
 config SATA_INIC162X
+<<<<<<< HEAD
 	tristate "Initio 162x SATA support"
+=======
+	tristate "Initio 162x SATA support (Very Experimental)"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	depends on PCI
 	help
 	  This option enables support for Initio 162x Serial ATA.

@@ -299,7 +299,10 @@ ENTRY(\name\()_processor_functions)
 ENTRY(\name\()_cache_fns)
 	.long	\name\()_flush_icache_all
 	.long	\name\()_flush_kern_cache_all
+<<<<<<< HEAD
 	.long   \name\()_flush_kern_cache_louis
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.long	\name\()_flush_user_cache_all
 	.long	\name\()_flush_user_cache_range
 	.long	\name\()_coherent_kern_range
@@ -307,8 +310,11 @@ ENTRY(\name\()_cache_fns)
 	.long	\name\()_flush_kern_dcache_area
 	.long	\name\()_dma_map_area
 	.long	\name\()_dma_unmap_area
+<<<<<<< HEAD
 	.long	\name\()_dma_inv_range
 	.long	\name\()_dma_clean_range
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.long	\name\()_dma_flush_range
 	.size	\name\()_cache_fns, . - \name\()_cache_fns
 .endm

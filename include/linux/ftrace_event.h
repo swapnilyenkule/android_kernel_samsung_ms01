@@ -71,6 +71,11 @@ struct trace_iterator {
 	/* trace_seq for __print_flags() and __print_symbolic() etc. */
 	struct trace_seq	tmp_seq;
 
+<<<<<<< HEAD
+=======
+	cpumask_var_t		started;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* The below is zeroed out in pipe_read */
 	struct trace_seq	seq;
 	struct trace_entry	*ent;
@@ -83,7 +88,11 @@ struct trace_iterator {
 	loff_t			pos;
 	long			idx;
 
+<<<<<<< HEAD
 	cpumask_var_t		started;
+=======
+	/* All new field here will be zeroed out in pipe_read */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 

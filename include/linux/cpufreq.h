@@ -20,7 +20,10 @@
 #include <linux/workqueue.h>
 #include <linux/cpumask.h>
 #include <asm/div64.h>
+<<<<<<< HEAD
 #include <asm/cputime.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define CPUFREQ_NAME_LEN 16
 
@@ -58,10 +61,13 @@ static inline void disable_cpufreq(void) { }
 #define CPUFREQ_POLICY_POWERSAVE	(1)
 #define CPUFREQ_POLICY_PERFORMANCE	(2)
 
+<<<<<<< HEAD
 /* Minimum frequency cutoff to notify the userspace about cpu utilization
  * changes */
 #define MIN_CPU_UTIL_NOTIFY   40
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Frequency values here are CPU kHz so that hardware which doesn't run
  * with some frequencies can complain without having to guess what per
  * cent / per mille means.
@@ -102,10 +108,13 @@ struct cpufreq_policy {
 	unsigned int		max;    /* in kHz */
 	unsigned int		cur;    /* in kHz, only needed if cpufreq
 					 * governors are used */
+<<<<<<< HEAD
 	unsigned int            util;  /* CPU utilization at max frequency */
 #ifdef CONFIG_SEC_PM
 	unsigned int            load_at_max;  /* CPU utilization at max frequency */
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned int		policy; /* see above */
 	struct cpufreq_governor	*governor; /* see below */
 
@@ -209,8 +218,11 @@ extern int __cpufreq_driver_getavg(struct cpufreq_policy *policy,
 int cpufreq_register_governor(struct cpufreq_governor *governor);
 void cpufreq_unregister_governor(struct cpufreq_governor *governor);
 
+<<<<<<< HEAD
 int lock_policy_rwsem_write(int cpu);
 void unlock_policy_rwsem_write(int cpu);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*********************************************************************
  *                      CPUFREQ DRIVER INTERFACE                     *
@@ -265,8 +277,12 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
 
 
 void cpufreq_notify_transition(struct cpufreq_freqs *freqs, unsigned int state);
+<<<<<<< HEAD
 void cpufreq_notify_utilization(struct cpufreq_policy *policy,
 		unsigned int load);
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline void cpufreq_verify_within_limits(struct cpufreq_policy *policy, unsigned int min, unsigned int max)
 {
@@ -349,6 +365,7 @@ static inline unsigned int cpufreq_quick_get_max(unsigned int cpu)
 }
 #endif
 
+<<<<<<< HEAD
 #if defined (CONFIG_SEC_DVFS) || defined (CONFIG_CPU_FREQ_LIMIT_USERSPACE)
 enum {
 	BOOT_CPU = 0,
@@ -420,6 +437,8 @@ void set_max_lock(int freq);
 #endif
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*********************************************************************
  *                       CPUFREQ DEFAULT GOVERNOR                    *
@@ -447,9 +466,12 @@ extern struct cpufreq_governor cpufreq_gov_ondemand;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE)
 extern struct cpufreq_governor cpufreq_gov_conservative;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_conservative)
+<<<<<<< HEAD
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE)
 extern struct cpufreq_governor cpufreq_gov_interactive;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_interactive)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 
@@ -492,10 +514,13 @@ void cpufreq_frequency_table_get_attr(struct cpufreq_frequency_table *table,
 void cpufreq_frequency_table_put_attr(unsigned int cpu);
 
 
+<<<<<<< HEAD
 /*********************************************************************
  *                         CPUFREQ STATS                             *
  *********************************************************************/
 
 void acct_update_power(struct task_struct *p, cputime_t cputime);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _LINUX_CPUFREQ_H */

@@ -33,6 +33,10 @@
 #include <linux/proc_fs.h>
 #include <linux/acpi.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/regulator/machine.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_X86
 #include <asm/mpspec.h>
 #endif
@@ -56,6 +60,15 @@ EXPORT_SYMBOL(acpi_root_dir);
 
 
 #ifdef CONFIG_X86
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ACPI_CUSTOM_DSDT
+static inline int set_copy_dsdt(const struct dmi_system_id *id)
+{
+	return 0;
+}
+#else
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int set_copy_dsdt(const struct dmi_system_id *id)
 {
 	printk(KERN_NOTICE "%s detected - "
@@ -63,6 +76,10 @@ static int set_copy_dsdt(const struct dmi_system_id *id)
 	acpi_gbl_copy_dsdt_locally = 1;
 	return 0;
 }
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static struct dmi_system_id dsdt_dmi_table[] __initdata = {
 	/*
@@ -921,6 +938,17 @@ void __init acpi_early_init(void)
 		goto error0;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If the system is using ACPI then we can be reasonably
+	 * confident that any regulators are managed by the firmware
+	 * so tell the regulator core it has everything it needs to
+	 * know.
+	 */
+	regulator_has_full_constraints();
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return;
 
       error0:
@@ -954,8 +982,11 @@ static int __init acpi_bus_init(void)
 	status = acpi_ec_ecdt_probe();
 	/* Ignore result. Not having an ECDT is not fatal. */
 
+<<<<<<< HEAD
 	acpi_bus_osc_support();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	status = acpi_initialize_objects(ACPI_FULL_INITIALIZATION);
 	if (ACPI_FAILURE(status)) {
 		printk(KERN_ERR PREFIX "Unable to initialize ACPI objects\n");
@@ -963,6 +994,15 @@ static int __init acpi_bus_init(void)
 	}
 
 	/*
+<<<<<<< HEAD
+=======
+	 * _OSC method may exist in module level code,
+	 * so it must be run after ACPI_FULL_INITIALIZATION
+	 */
+	acpi_bus_osc_support();
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * _PDC control method may load dynamic SSDT tables,
 	 * and we need to install the table handler before that.
 	 */

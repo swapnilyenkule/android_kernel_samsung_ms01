@@ -140,6 +140,10 @@ static inline unsigned long zone_page_state_snapshot(struct zone *zone,
 }
 
 extern unsigned long global_reclaimable_pages(void);
+<<<<<<< HEAD
+=======
+extern unsigned long zone_reclaimable_pages(struct zone *zone);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_NUMA
 /*
@@ -257,6 +261,7 @@ static inline void refresh_zone_stat_thresholds(void) { }
 
 #endif		/* CONFIG_SMP */
 
+<<<<<<< HEAD
 static inline void __mod_zone_freepage_state(struct zone *zone, int nr_pages,
 					     int migratetype)
 {
@@ -264,6 +269,8 @@ static inline void __mod_zone_freepage_state(struct zone *zone, int nr_pages,
 	if (is_migrate_cma(migratetype))
 		__mod_zone_page_state(zone, NR_FREE_CMA_PAGES, nr_pages);
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern const char * const vmstat_text[];
 
 #endif /* _LINUX_VMSTAT_H */

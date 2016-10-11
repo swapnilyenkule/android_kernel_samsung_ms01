@@ -11,6 +11,7 @@ menuconfig INPUT_TOUCHSCREEN
 
 if INPUT_TOUCHSCREEN
 
+<<<<<<< HEAD
 config TOUCHSCREEN_ZINITIX_BT532
 	tristate "ZINITIX BT532 I2C Touchscreen"
 	depends on I2C
@@ -70,6 +71,8 @@ config TOUCHSCREEN_MMS134S
 	  To compile this driver as a module, choose M here: the
 	  module will be called mms_ts.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TOUCHSCREEN_88PM860X
 	tristate "Marvell 88PM860x touchscreen"
 	depends on MFD_88PM860X
@@ -114,6 +117,7 @@ config TOUCHSCREEN_AD7877
 	  To compile this driver as a module, choose M here: the
 	  module will be called ad7877.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_ATMEL_MAXTOUCH
        tristate "Atmel maXTouch based touchscreens"
        depends on I2C
@@ -126,6 +130,8 @@ config TOUCHSCREEN_ATMEL_MAXTOUCH
          To compile this driver as a module, choose M here: the
          module will be called maXTouch.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TOUCHSCREEN_AD7879
 	tristate "Analog Devices AD7879-1/AD7889-1 touchscreen interface"
 	help
@@ -502,6 +508,7 @@ config TOUCHSCREEN_PENMOUNT
 	  To compile this driver as a module, choose M here: the
 	  module will be called penmount.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_MSM
 	bool "Qualcomm MSM touchscreen controller"
 	depends on ARCH_MSM7X30 && MARIMBA_TSADC
@@ -511,6 +518,8 @@ config TOUCHSCREEN_MSM
 	  connected to the TSSC touchscreen controller on a
 	  Qualcomm MSM/QSD based SoC.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TOUCHSCREEN_MIGOR
 	tristate "Renesas MIGO-R touchscreen"
 	depends on SH_MIGOR && I2C
@@ -531,6 +540,7 @@ config TOUCHSCREEN_TNETV107X
 	  To compile this driver as a module, choose M here: the
 	  module will be called tnetv107x-ts.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_SYNAPTICS_I2C_RMI
 	tristate "Synaptics i2c touchscreen"
 	depends on I2C
@@ -581,6 +591,8 @@ config TOUCHSCREEN_CYPRESS_CYTTSP4
 	  Say Y here if you want support for cypress TMA445 touchscreen controllers.
 	  To compile this driver as a module, choose M here: the
 	  module will be called mxt1188s
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TOUCHSCREEN_TOUCHRIGHT
 	tristate "Touchright serial touchscreen"
 	select SERIO
@@ -922,6 +934,7 @@ config TOUCHSCREEN_TSC2007
 	  To compile this driver as a module, choose M here: the
 	  module will be called tsc2007.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_MSM_LEGACY
 	default n
 	tristate "MSM Touchscreen"
@@ -943,6 +956,8 @@ config ANDROID_TOUCHSCREEN_MSM_HACKS
 	  to Android framework to receive adjusted x, y co-ordinates
 	  until proper calibration framework is in place.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TOUCHSCREEN_W90X900
 	tristate "W90P910 touchscreen driver"
 	depends on HAVE_CLK
@@ -996,6 +1011,7 @@ config TOUCHSCREEN_TPS6507X
 	  To compile this driver as a module, choose M here: the
 	  module will be called tps6507x_ts.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_CY8C_TS
 	tristate "Cypress TMA300-TMG200 based touchscreens"
 	depends on I2C
@@ -1143,4 +1159,6 @@ source "drivers/input/touchscreen/cyttsp4/Kconfig"
 source "drivers/input/touchscreen/wacom_hl/Kconfig"
 source "drivers/input/touchscreen/melfas_mms136/Kconfig"
 source "drivers/input/touchscreen/stm_fts/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif

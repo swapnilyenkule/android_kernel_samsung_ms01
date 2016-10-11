@@ -211,6 +211,7 @@ struct ieee80211_sta_ht_cap {
 };
 
 /**
+<<<<<<< HEAD
  * struct ieee80211_sta_vht_cap - STA's VHT capabilities
  *
  * This structure describes most essential parameters needed
@@ -227,6 +228,8 @@ struct ieee80211_sta_vht_cap {
 };
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * struct ieee80211_supported_band - frequency band definition
  *
  * This structure describes a frequency band a wiphy
@@ -249,7 +252,10 @@ struct ieee80211_supported_band {
 	int n_channels;
 	int n_bitrates;
 	struct ieee80211_sta_ht_cap ht_cap;
+<<<<<<< HEAD
 	struct ieee80211_sta_vht_cap vht_cap;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /*
@@ -416,6 +422,7 @@ struct cfg80211_beacon_data {
 	size_t probe_resp_len;
 };
 
+<<<<<<< HEAD
 struct mac_address {
 	u8 addr[ETH_ALEN];
 };
@@ -436,6 +443,8 @@ struct cfg80211_acl_data {
 	struct mac_address mac_addrs[];
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * struct cfg80211_ap_settings - AP configuration
  *
@@ -452,8 +461,11 @@ struct cfg80211_acl_data {
  * @privacy: the BSS uses privacy
  * @auth_type: Authentication type (algorithm)
  * @inactivity_timeout: time in seconds to determine station's inactivity.
+<<<<<<< HEAD
  * @acl: ACL configuration used by the drivers which has support for
  *	MAC address based access control
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct cfg80211_ap_settings {
 	struct cfg80211_beacon_data beacon;
@@ -466,7 +478,10 @@ struct cfg80211_ap_settings {
 	bool privacy;
 	enum nl80211_auth_type auth_type;
 	int inactivity_timeout;
+<<<<<<< HEAD
 	const struct cfg80211_acl_data *acl;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -485,14 +500,20 @@ enum plink_actions {
 /**
  * enum station_parameters_apply_mask - station parameter values to apply
  * @STATION_PARAM_APPLY_UAPSD: apply new uAPSD parameters (uapsd_queues, max_sp)
+<<<<<<< HEAD
  * @STATION_PARAM_APPLY_CAPABILITY: apply new capability
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * Not all station parameters have in-band "no change" signalling,
  * for those that don't these flags will are used.
  */
 enum station_parameters_apply_mask {
 	STATION_PARAM_APPLY_UAPSD = BIT(0),
+<<<<<<< HEAD
 	STATION_PARAM_APPLY_CAPABILITY = BIT(1),
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -513,7 +534,10 @@ enum station_parameters_apply_mask {
  * @plink_action: plink action to take
  * @plink_state: set the peer link state for a station
  * @ht_capa: HT capabilities of station
+<<<<<<< HEAD
  * @vht_capa: VHT capabilities of station
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @uapsd_queues: bitmap of queues configured for uapsd. same format
  *	as the AC bitmap in the QoS info field
  * @max_sp: max Service Period. same format as the MAX_SP in the
@@ -521,9 +545,12 @@ enum station_parameters_apply_mask {
  * @sta_modify_mask: bitmap indicating which parameters changed
  *	(for those that don't have a natural "no change" value),
  *	see &enum station_parameters_apply_mask
+<<<<<<< HEAD
  * @capability: station capability
  * @ext_capab: extended capabilities of the station
  * @ext_capab_len: number of extended capabilities
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct station_parameters {
 	u8 *supported_rates;
@@ -536,6 +563,7 @@ struct station_parameters {
 	u8 plink_action;
 	u8 plink_state;
 	struct ieee80211_ht_cap *ht_capa;
+<<<<<<< HEAD
 	struct ieee80211_vht_cap *vht_capa;
 	u8 uapsd_queues;
 	u8 max_sp;
@@ -546,6 +574,10 @@ struct station_parameters {
 	u8 supported_channels_len;
 	const u8 *supported_oper_classes;
 	u8 supported_oper_classes_len;
+=======
+	u8 uapsd_queues;
+	u8 max_sp;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -605,6 +637,7 @@ enum station_info_flags {
  * Used by the driver to indicate the specific rate transmission
  * type for 802.11n transmissions.
  *
+<<<<<<< HEAD
  * @RATE_INFO_FLAGS_MCS: mcs field filled with HT MCS
  * @RATE_INFO_FLAGS_VHT_MCS: mcs field filled with VHT MCS
  * @RATE_INFO_FLAGS_40_MHZ_WIDTH: 40 MHz width transmission
@@ -623,6 +656,16 @@ enum rate_info_flags {
 	RATE_INFO_FLAGS_160_MHZ_WIDTH		= BIT(5),
 	RATE_INFO_FLAGS_SHORT_GI		= BIT(6),
 	RATE_INFO_FLAGS_60G			= BIT(7),
+=======
+ * @RATE_INFO_FLAGS_MCS: @tx_bitrate_mcs filled
+ * @RATE_INFO_FLAGS_40_MHZ_WIDTH: 40 Mhz width transmission
+ * @RATE_INFO_FLAGS_SHORT_GI: 400ns guard interval
+ */
+enum rate_info_flags {
+	RATE_INFO_FLAGS_MCS		= 1<<0,
+	RATE_INFO_FLAGS_40_MHZ_WIDTH	= 1<<1,
+	RATE_INFO_FLAGS_SHORT_GI	= 1<<2,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -633,13 +676,19 @@ enum rate_info_flags {
  * @flags: bitflag of flags from &enum rate_info_flags
  * @mcs: mcs index if struct describes a 802.11n bitrate
  * @legacy: bitrate in 100kbit/s for 802.11abg
+<<<<<<< HEAD
  * @nss: number of streams (VHT only)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct rate_info {
 	u8 flags;
 	u8 mcs;
 	u16 legacy;
+<<<<<<< HEAD
 	u8 nss;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -1267,7 +1316,10 @@ struct cfg80211_ibss_params {
  * @ie: IEs for association request
  * @ie_len: Length of assoc_ie in octets
  * @privacy: indicates whether privacy-enabled APs should be used
+<<<<<<< HEAD
  * @mfp: indicate whether management frame protection is used
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @crypto: crypto settings
  * @key_len: length of WEP key for shared key authentication
  * @key_idx: index of WEP key for shared key authentication
@@ -1288,7 +1340,10 @@ struct cfg80211_connect_params {
 	u8 *ie;
 	size_t ie_len;
 	bool privacy;
+<<<<<<< HEAD
 	enum nl80211_mfp mfp;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct cfg80211_crypto_settings crypto;
 	const u8 *key;
 	u8 key_len, key_idx;
@@ -1388,6 +1443,7 @@ struct cfg80211_gtk_rekey_data {
 };
 
 /**
+<<<<<<< HEAD
  * struct cfg80211_update_ft_ies_params - FT IE Information
  *
  * This structure provides information needed to update the fast transition IE
@@ -1403,6 +1459,8 @@ struct cfg80211_update_ft_ies_params {
 };
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * struct cfg80211_ops - backend description for wireless configuration
  *
  * This struct is registered by fullmac card drivers and/or wireless stacks
@@ -1586,6 +1644,7 @@ struct cfg80211_update_ft_ies_params {
  *	later passes to cfg80211_probe_status().
  *
  * @set_noack_map: Set the NoAck Map for the TIDs.
+<<<<<<< HEAD
  * @set_mac_acl: Sets MAC address control list in AP and P2P GO mode.
  *	Parameters include ACL policy, an array of MAC address of stations
  *	and the number of MAC addresses. If there is already a list in driver
@@ -1593,6 +1652,8 @@ struct cfg80211_update_ft_ies_params {
  *	when number of MAC addresses entries is passed as 0. Drivers which
  *	advertise the support for MAC based ACL have to implement this callback.
  *
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct cfg80211_ops {
 	int	(*suspend)(struct wiphy *wiphy, struct cfg80211_wowlan *wow);
@@ -1789,11 +1850,14 @@ struct cfg80211_ops {
 				  u16 noack_map);
 
 	struct ieee80211_channel *(*get_channel)(struct wiphy *wiphy);
+<<<<<<< HEAD
 	int	(*update_ft_ies)(struct wiphy *wiphy, struct net_device *dev,
 				 struct cfg80211_update_ft_ies_params *ftie);
 
 	int (*set_mac_acl)(struct wiphy *wiphy, struct net_device *dev,
 			   const struct cfg80211_acl_data *params);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /*
@@ -1805,6 +1869,7 @@ struct cfg80211_ops {
  * enum wiphy_flags - wiphy capability flags
  *
  * @WIPHY_FLAG_CUSTOM_REGULATORY:  tells us the driver for this device
+<<<<<<< HEAD
  *	has its own custom regulatory domain and cannot identify the
  *	ISO / IEC 3166 alpha2 it belongs to. When this is enabled
  *	we will disregard the first regulatory hint (when the
@@ -1827,6 +1892,24 @@ struct cfg80211_ops {
  *	will have their wiphy->regd programmed once the regulatory
  *	domain is set, and all other regulatory hints will be ignored
  *	until their own regulatory domain gets programmed.
+=======
+ * 	has its own custom regulatory domain and cannot identify the
+ * 	ISO / IEC 3166 alpha2 it belongs to. When this is enabled
+ * 	we will disregard the first regulatory hint (when the
+ * 	initiator is %REGDOM_SET_BY_CORE).
+ * @WIPHY_FLAG_STRICT_REGULATORY: tells us the driver for this device will
+ *	ignore regulatory domain settings until it gets its own regulatory
+ *	domain via its regulatory_hint() unless the regulatory hint is
+ *	from a country IE. After its gets its own regulatory domain it will
+ *	only allow further regulatory domain settings to further enhance
+ *	compliance. For example if channel 13 and 14 are disabled by this
+ *	regulatory domain no user regulatory domain can enable these channels
+ *	at a later time. This can be used for devices which do not have
+ *	calibration information guaranteed for frequencies or settings
+ *	outside of its regulatory domain. If used in combination with
+ *	WIPHY_FLAG_CUSTOM_REGULATORY the inspected country IE power settings
+ *	will be followed.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @WIPHY_FLAG_DISABLE_BEACON_HINTS: enable this if your driver needs to ensure
  *	that passive scan flags and beaconing flags may not be lifted by
  *	cfg80211 due to regulatory beacon hints. For more information on beacon
@@ -1868,9 +1951,12 @@ struct cfg80211_ops {
  *	responds to probe-requests in hardware.
  * @WIPHY_FLAG_OFFCHAN_TX: Device supports direct off-channel TX.
  * @WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL: Device supports remain-on-channel call.
+<<<<<<< HEAD
  * @WIPHY_FLAG_DISABLE_11D_HINT_FROM_CORE: enable this flag if the driver
  *	does not want the channel flags to be changed by the country IE of the
  *	connected BSS due to a regulatory hint from the core
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 enum wiphy_flags {
 	WIPHY_FLAG_CUSTOM_REGULATORY		= BIT(0),
@@ -1894,6 +1980,7 @@ enum wiphy_flags {
 	WIPHY_FLAG_AP_PROBE_RESP_OFFLOAD	= BIT(19),
 	WIPHY_FLAG_OFFCHAN_TX			= BIT(20),
 	WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL	= BIT(21),
+<<<<<<< HEAD
 	WIPHY_FLAG_DISABLE_11D_HINT_FROM_CORE	= BIT(22),
 };
 
@@ -1923,6 +2010,8 @@ enum nl80211_country_ie_pref {
 	NL80211_COUNTRY_IE_FOLLOW_CORE,
 	NL80211_COUNTRY_IE_FOLLOW_POWER,
 	NL80211_COUNTRY_IE_IGNORE_CORE,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -1999,6 +2088,13 @@ struct ieee80211_iface_combination {
 	bool beacon_int_infra_match;
 };
 
+<<<<<<< HEAD
+=======
+struct mac_address {
+	u8 addr[ETH_ALEN];
+};
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct ieee80211_txrx_stypes {
 	u16 tx, rx;
 };
@@ -2046,6 +2142,7 @@ struct wiphy_wowlan_support {
 };
 
 /**
+<<<<<<< HEAD
  * enum wiphy_vendor_command_flags - validation flags for vendor commands
  * @WIPHY_VENDOR_CMD_NEED_WDEV: vendor command requires wdev
  * @WIPHY_VENDOR_CMD_NEED_NETDEV: vendor command requires netdev
@@ -2074,6 +2171,8 @@ struct wiphy_vendor_command {
 };
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * struct wiphy - wireless hardware description
  * @reg_notifier: the driver's regulatory notification callback,
  *	note that if your driver uses wiphy_apply_custom_regulatory()
@@ -2167,6 +2266,7 @@ struct wiphy_vendor_command {
  * @ap_sme_capa: AP SME capabilities, flags from &enum nl80211_ap_sme_features.
  * @ht_capa_mod_mask:  Specify what ht_cap values can be over-ridden.
  *	If null, then none can be over-ridden.
+<<<<<<< HEAD
  *
  * @max_acl_mac_addrs: Maximum number of MAC addresses that the device
  *	supports for ACL.
@@ -2177,6 +2277,8 @@ struct wiphy_vendor_command {
  * @n_vendor_commands: number of vendor commands
  * @vendor_events: array of vendor events supported by the hardware
  * @n_vendor_events: number of vendor events
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct wiphy {
 	/* assign these fields before you register the wiphy */
@@ -2198,8 +2300,11 @@ struct wiphy {
 	/* Supported interface modes, OR together BIT(NL80211_IFTYPE_...) */
 	u16 interface_modes;
 
+<<<<<<< HEAD
 	u16 max_acl_mac_addrs;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u32 flags, features;
 
 	u32 ap_sme_capa;
@@ -2241,8 +2346,11 @@ struct wiphy {
 	 */
 	u32 probe_resp_offload;
 
+<<<<<<< HEAD
 	u8 country_ie_pref;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* If multiple wiphys are registered and you're handed e.g.
 	 * a regular netdev with assigned ieee80211_ptr, you won't
 	 * know whether it points to a wiphy your driver has registered
@@ -2281,10 +2389,13 @@ struct wiphy {
 	const struct iw_handler_def *wext;
 #endif
 
+<<<<<<< HEAD
 	const struct wiphy_vendor_command *vendor_commands;
 	const struct nl80211_vendor_cmd_info *vendor_events;
 	int n_vendor_commands, n_vendor_events;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	char priv[0] __attribute__((__aligned__(NETDEV_ALIGN)));
 };
 
@@ -2655,6 +2766,18 @@ unsigned int ieee80211_get_hdrlen_from_skb(const struct sk_buff *skb);
 unsigned int __attribute_const__ ieee80211_hdrlen(__le16 fc);
 
 /**
+<<<<<<< HEAD
+=======
+ * ieee80211_get_mesh_hdrlen - get mesh extension header length
+ * @meshhdr: the mesh extension header, only the flags field
+ *	(first byte) will be accessed
+ * Returns the length of the extension header, which is always at
+ * least 6 bytes and at most 18 if address 5 and 6 are present.
+ */
+unsigned int ieee80211_get_mesh_hdrlen(struct ieee80211s_hdr *meshhdr);
+
+/**
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * DOC: Data path helpers
  *
  * In addition to generic utilities, cfg80211 also offers
@@ -2774,6 +2897,7 @@ const u8 *cfg80211_find_vendor_ie(unsigned int oui, u8 oui_type,
 extern int regulatory_hint(struct wiphy *wiphy, const char *alpha2);
 
 /**
+<<<<<<< HEAD
  * regulatory_hint_user - hint to the wireless core a regulatory domain
  * which the driver has received from an application
  * @alpha2: the ISO/IEC 3166 alpha2 the driver claims its regulatory domain
@@ -2798,6 +2922,8 @@ extern int regulatory_hint(struct wiphy *wiphy, const char *alpha2);
 extern int regulatory_hint_user(const char *alpha2);
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * wiphy_apply_custom_regulatory - apply a custom driver regulatory domain
  * @wiphy: the wireless device we want to process the regulatory domain on
  * @regd: the custom regulatory domain to use for this wiphy
@@ -3165,6 +3291,7 @@ void wiphy_rfkill_start_polling(struct wiphy *wiphy);
  */
 void wiphy_rfkill_stop_polling(struct wiphy *wiphy);
 
+<<<<<<< HEAD
 /**
  * DOC: Vendor commands
  *
@@ -3280,6 +3407,8 @@ static inline void cfg80211_vendor_event(struct sk_buff *skb, gfp_t gfp)
 	__cfg80211_send_event_skb(skb, gfp);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_NL80211_TESTMODE
 /**
  * DOC: Test mode
@@ -3313,12 +3442,17 @@ static inline void cfg80211_vendor_event(struct sk_buff *skb, gfp_t gfp)
  * When done, call cfg80211_testmode_reply() with the skb and return
  * its error code as the result of the @testmode_cmd operation.
  */
+<<<<<<< HEAD
 static inline struct sk_buff *
 cfg80211_testmode_alloc_reply_skb(struct wiphy *wiphy, int approxlen)
 {
 	return __cfg80211_alloc_reply_skb(wiphy, NL80211_CMD_TESTMODE,
 					  NL80211_ATTR_TESTDATA, approxlen);
 }
+=======
+struct sk_buff *cfg80211_testmode_alloc_reply_skb(struct wiphy *wiphy,
+						  int approxlen);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * cfg80211_testmode_reply - send the reply skb
@@ -3331,10 +3465,14 @@ cfg80211_testmode_alloc_reply_skb(struct wiphy *wiphy, int approxlen)
  * Note that this function consumes the skb regardless of the
  * return value.
  */
+<<<<<<< HEAD
 static inline int cfg80211_testmode_reply(struct sk_buff *skb)
 {
 	return cfg80211_vendor_cmd_reply(skb);
 }
+=======
+int cfg80211_testmode_reply(struct sk_buff *skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * cfg80211_testmode_alloc_event_skb - allocate testmode event
@@ -3355,6 +3493,7 @@ static inline int cfg80211_testmode_reply(struct sk_buff *skb)
  * When done filling the skb, call cfg80211_testmode_event() with the
  * skb to send the event.
  */
+<<<<<<< HEAD
 static inline struct sk_buff *
 cfg80211_testmode_alloc_event_skb(struct wiphy *wiphy, int approxlen, gfp_t gfp)
 {
@@ -3362,6 +3501,10 @@ cfg80211_testmode_alloc_event_skb(struct wiphy *wiphy, int approxlen, gfp_t gfp)
 					  NL80211_ATTR_TESTDATA, -1,
 					  approxlen, gfp);
 }
+=======
+struct sk_buff *cfg80211_testmode_alloc_event_skb(struct wiphy *wiphy,
+						  int approxlen, gfp_t gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  * cfg80211_testmode_event - send the event
@@ -3373,10 +3516,14 @@ cfg80211_testmode_alloc_event_skb(struct wiphy *wiphy, int approxlen, gfp_t gfp)
  * by cfg80211_testmode_alloc_event_skb(), as an event. It always
  * consumes it.
  */
+<<<<<<< HEAD
 static inline void cfg80211_testmode_event(struct sk_buff *skb, gfp_t gfp)
 {
 	__cfg80211_send_event_skb(skb, gfp);
 }
+=======
+void cfg80211_testmode_event(struct sk_buff *skb, gfp_t gfp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define CFG80211_TESTMODE_CMD(cmd)	.testmode_cmd = (cmd),
 #define CFG80211_TESTMODE_DUMP(cmd)	.testmode_dump = (cmd),
@@ -3672,6 +3819,7 @@ int cfg80211_can_beacon_sec_chan(struct wiphy *wiphy,
 				 enum nl80211_channel_type channel_type);
 
 /*
+<<<<<<< HEAD
  * cfg80211_tdls_oper_request - request userspace to perform TDLS operation
  * @dev: the device on which the operation is requested
  * @peer: the MAC address of the peer device
@@ -3691,6 +3839,8 @@ void cfg80211_tdls_oper_request(struct net_device *dev, const u8 *peer,
 				u16 reason_code, gfp_t gfp);
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * cfg80211_calculate_bitrate - calculate actual bitrate (in 100Kbps units)
  * @rate: given rate_info to calculate bitrate from
  *
@@ -3698,6 +3848,7 @@ void cfg80211_tdls_oper_request(struct net_device *dev, const u8 *peer,
  */
 u16 cfg80211_calculate_bitrate(struct rate_info *rate);
 
+<<<<<<< HEAD
 /**
  * struct cfg80211_ft_event - FT Information Elements
  * @ies: FT IEs
@@ -3731,6 +3882,8 @@ void cfg80211_ft_event(struct net_device *netdev,
  */
 void cfg80211_ap_stopped(struct net_device *netdev, gfp_t gfp);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Logging, debugging and troubleshooting/diagnostic helpers. */
 
 /* wiphy_printk helpers, similar to dev_printk */

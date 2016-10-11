@@ -272,7 +272,11 @@ int dm_ulog_tfr_init(void)
 
 	r = cn_add_callback(&ulog_cn_id, "dmlogusr", cn_ulog_callback);
 	if (r) {
+<<<<<<< HEAD
 		cn_del_callback(&ulog_cn_id);
+=======
+		kfree(prealloced_cn_msg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return r;
 	}
 

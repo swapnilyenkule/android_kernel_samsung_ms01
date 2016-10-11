@@ -131,7 +131,13 @@ void __bitmap_shift_right(unsigned long *dst,
 		lower = src[off + k];
 		if (left && off + k == lim - 1)
 			lower &= mask;
+<<<<<<< HEAD
 		dst[k] = upper << (BITS_PER_LONG - rem) | lower >> rem;
+=======
+		dst[k] = lower >> rem;
+		if (rem)
+			dst[k] |= upper << (BITS_PER_LONG - rem);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (left && k == lim - 1)
 			dst[k] &= mask;
 	}
@@ -172,7 +178,13 @@ void __bitmap_shift_left(unsigned long *dst,
 		upper = src[k];
 		if (left && k == lim - 1)
 			upper &= (1UL << left) - 1;
+<<<<<<< HEAD
 		dst[k + off] = lower  >> (BITS_PER_LONG - rem) | upper << rem;
+=======
+		dst[k + off] = upper << rem;
+		if (rem)
+			dst[k + off] |= lower >> (BITS_PER_LONG - rem);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (left && k + off == lim - 1)
 			dst[k + off] &= (1UL << left) - 1;
 	}
@@ -315,13 +327,18 @@ void bitmap_clear(unsigned long *map, int start, int nr)
 }
 EXPORT_SYMBOL(bitmap_clear);
 
+<<<<<<< HEAD
 /**
+=======
+/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * bitmap_find_next_zero_area - find a contiguous aligned zero area
  * @map: The address to base the search on
  * @size: The bitmap size in bits
  * @start: The bitnumber to start searching at
  * @nr: The number of zeroed bits we're looking for
  * @align_mask: Alignment mask for zero area
+<<<<<<< HEAD
  * @align_offset: Alignment offset for zero area.
  *
  * The @align_mask should be one less than a power of 2; the effect is that
@@ -334,13 +351,29 @@ unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
 					     unsigned int nr,
 					     unsigned long align_mask,
 					     unsigned long align_offset)
+=======
+ *
+ * The @align_mask should be one less than a power of 2; the effect is that
+ * the bit offset of all zero areas this function finds is multiples of that
+ * power of 2. A @align_mask of 0 means no alignment is required.
+ */
+unsigned long bitmap_find_next_zero_area(unsigned long *map,
+					 unsigned long size,
+					 unsigned long start,
+					 unsigned int nr,
+					 unsigned long align_mask)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long index, end, i;
 again:
 	index = find_next_zero_bit(map, size, start);
 
 	/* Align allocation */
+<<<<<<< HEAD
 	index = __ALIGN_MASK(index + align_offset, align_mask) - align_offset;
+=======
+	index = __ALIGN_MASK(index, align_mask);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	end = index + nr;
 	if (end > size)
@@ -352,7 +385,11 @@ again:
 	}
 	return index;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(bitmap_find_next_zero_area_off);
+=======
+EXPORT_SYMBOL(bitmap_find_next_zero_area);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Bitmap printing & parsing functions: first version by Bill Irwin,
@@ -601,12 +638,20 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 	unsigned a, b;
 	int c, old_c, totaldigits;
 	const char __user __force *ubuf = (const char __user __force *)buf;
+<<<<<<< HEAD
 	int exp_digit, in_range;
+=======
+	int at_start, in_range;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	totaldigits = c = 0;
 	bitmap_zero(maskp, nmaskbits);
 	do {
+<<<<<<< HEAD
 		exp_digit = 1;
+=======
+		at_start = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		in_range = 0;
 		a = b = 0;
 
@@ -635,11 +680,18 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 				break;
 
 			if (c == '-') {
+<<<<<<< HEAD
 				if (exp_digit || in_range)
 					return -EINVAL;
 				b = 0;
 				in_range = 1;
 				exp_digit = 1;
+=======
+				if (at_start || in_range)
+					return -EINVAL;
+				b = 0;
+				in_range = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				continue;
 			}
 
@@ -649,16 +701,28 @@ static int __bitmap_parselist(const char *buf, unsigned int buflen,
 			b = b * 10 + (c - '0');
 			if (!in_range)
 				a = b;
+<<<<<<< HEAD
 			exp_digit = 0;
+=======
+			at_start = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			totaldigits++;
 		}
 		if (!(a <= b))
 			return -EINVAL;
 		if (b >= nmaskbits)
 			return -ERANGE;
+<<<<<<< HEAD
 		while (a <= b) {
 			set_bit(a, maskp);
 			a++;
+=======
+		if (!at_start) {
+			while (a <= b) {
+				set_bit(a, maskp);
+				a++;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	} while (buflen && c == ',');
 	return 0;

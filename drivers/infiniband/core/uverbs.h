@@ -69,7 +69,11 @@
  */
 
 struct ib_uverbs_device {
+<<<<<<< HEAD
 	struct kref				ref;
+=======
+	atomic_t				refcount;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int					num_comp_vectors;
 	struct completion			comp;
 	struct device			       *dev;
@@ -78,6 +82,10 @@ struct ib_uverbs_device {
 	struct cdev			        cdev;
 	struct rb_root				xrcd_tree;
 	struct mutex				xrcd_tree_mutex;
+<<<<<<< HEAD
+=======
+	struct kobject				kobj;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 struct ib_uverbs_event_file {

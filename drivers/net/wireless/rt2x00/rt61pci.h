@@ -372,6 +372,10 @@ struct hw_pairwise_ta_entry {
 #define MAC_CSR13_BIT10			FIELD32(0x00000400)
 #define MAC_CSR13_BIT11			FIELD32(0x00000800)
 #define MAC_CSR13_BIT12			FIELD32(0x00001000)
+<<<<<<< HEAD
+=======
+#define MAC_CSR13_BIT13			FIELD32(0x00002000)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * MAC_CSR14: LED control register.

@@ -1818,6 +1818,11 @@ static void qeth_l3_free_vlan_addresses4(struct qeth_card *card,
 	QETH_CARD_TEXT(card, 4, "frvaddr4");
 
 	netdev = __vlan_find_dev_deep(card->dev, vid);
+<<<<<<< HEAD
+=======
+	if (!netdev)
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	in_dev = in_dev_get(netdev);
 	if (!in_dev)
 		return;
@@ -1846,6 +1851,11 @@ static void qeth_l3_free_vlan_addresses6(struct qeth_card *card,
 	QETH_CARD_TEXT(card, 4, "frvaddr6");
 
 	netdev = __vlan_find_dev_deep(card->dev, vid);
+<<<<<<< HEAD
+=======
+	if (!netdev)
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	in6_dev = in6_dev_get(netdev);
 	if (!in6_dev)
 		return;

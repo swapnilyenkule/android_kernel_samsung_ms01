@@ -30,6 +30,10 @@
 #define XOR_OPERATION_MODE_XOR		0
 #define XOR_OPERATION_MODE_MEMCPY	2
 #define XOR_OPERATION_MODE_MEMSET	4
+<<<<<<< HEAD
+=======
+#define XOR_DESC_SUCCESS		0x40000000
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define XOR_CURR_DESC(chan)	(chan->mmr_base + 0x210 + (chan->idx * 4))
 #define XOR_NEXT_DESC(chan)	(chan->mmr_base + 0x200 + (chan->idx * 4))

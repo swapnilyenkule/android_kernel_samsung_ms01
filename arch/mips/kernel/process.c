@@ -72,9 +72,13 @@ void __noreturn cpu_idle(void)
 			}
 		}
 #ifdef CONFIG_HOTPLUG_CPU
+<<<<<<< HEAD
 		if (!cpu_online(cpu) && !cpu_isset(cpu, cpu_callin_map) &&
 		    (system_state == SYSTEM_RUNNING ||
 		     system_state == SYSTEM_BOOTING))
+=======
+		if (!cpu_online(cpu) && !cpu_isset(cpu, cpu_callin_map))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			play_dead();
 #endif
 		rcu_idle_exit();

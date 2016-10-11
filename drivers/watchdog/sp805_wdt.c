@@ -62,7 +62,10 @@
  * @adev: amba device structure of wdt
  * @status: current status of wdt
  * @load_val: load value to be set for current timeout
+<<<<<<< HEAD
  * @timeout: current programmed timeout
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct sp805_wdt {
 	spinlock_t			lock;
@@ -73,7 +76,10 @@ struct sp805_wdt {
 	#define WDT_BUSY		0
 	#define WDT_CAN_BE_CLOSED	1
 	unsigned int			load_val;
+<<<<<<< HEAD
 	unsigned int			timeout;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /* local variables */
@@ -101,7 +107,11 @@ static void wdt_setload(unsigned int timeout)
 	spin_lock(&wdt->lock);
 	wdt->load_val = load;
 	/* roundup timeout to closest positive integer value */
+<<<<<<< HEAD
 	wdt->timeout = div_u64((load + 1) * 2 + (rate / 2), rate);
+=======
+	wdd->timeout = div_u64((load + 1) * 2 + (rate / 2), rate);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock(&wdt->lock);
 }
 

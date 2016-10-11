@@ -210,6 +210,11 @@ static int do_video_set_spu_palette(unsigned int fd, unsigned int cmd,
 
 	err  = get_user(palp, &up->palette);
 	err |= get_user(length, &up->length);
+<<<<<<< HEAD
+=======
+	if (err)
+		return -EFAULT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	up_native = compat_alloc_user_space(sizeof(struct video_spu_palette));
 	err  = put_user(compat_ptr(palp), &up_native->palette);
@@ -1214,7 +1219,10 @@ COMPATIBLE_IOCTL(HCIGETDEVINFO)
 COMPATIBLE_IOCTL(HCIGETCONNLIST)
 COMPATIBLE_IOCTL(HCIGETCONNINFO)
 COMPATIBLE_IOCTL(HCIGETAUTHINFO)
+<<<<<<< HEAD
 COMPATIBLE_IOCTL(HCISETAUTHINFO)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 COMPATIBLE_IOCTL(HCISETRAW)
 COMPATIBLE_IOCTL(HCISETSCAN)
 COMPATIBLE_IOCTL(HCISETAUTH)

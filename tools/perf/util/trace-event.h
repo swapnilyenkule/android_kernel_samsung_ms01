@@ -305,7 +305,10 @@ int script_spec_register(const char *spec, struct scripting_ops *ops);
 
 void setup_perl_scripting(void);
 void setup_python_scripting(void);
+<<<<<<< HEAD
 void setup_json_export(void);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct scripting_context {
 	void *event_data;

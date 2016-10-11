@@ -997,12 +997,34 @@ static int tty3215_write(struct tty_struct * tty,
 			 const unsigned char *buf, int count)
 {
 	struct raw3215_info *raw;
+<<<<<<< HEAD
+=======
+	int i, written;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!tty)
 		return 0;
 	raw = (struct raw3215_info *) tty->driver_data;
+<<<<<<< HEAD
 	raw3215_write(raw, buf, count);
 	return count;
+=======
+	written = count;
+	while (count > 0) {
+		for (i = 0; i < count; i++)
+			if (buf[i] == '\t' || buf[i] == '\n')
+				break;
+		raw3215_write(raw, buf, i);
+		count -= i;
+		buf += i;
+		if (count > 0) {
+			raw3215_putchar(raw, *buf);
+			count--;
+			buf++;
+		}
+	}
+	return written;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -1149,7 +1171,11 @@ static int __init tty3215_init(void)
 	driver->subtype = SYSTEM_TYPE_TTY;
 	driver->init_termios = tty_std_termios;
 	driver->init_termios.c_iflag = IGNBRK | IGNPAR;
+<<<<<<< HEAD
 	driver->init_termios.c_oflag = ONLCR | XTABS;
+=======
+	driver->init_termios.c_oflag = ONLCR;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	driver->init_termios.c_lflag = ISIG;
 	driver->flags = TTY_DRIVER_REAL_RAW;
 	tty_set_operations(driver, &tty3215_ops);

@@ -34,7 +34,11 @@
 #include <linux/fb.h>
 
 #include <asm/fb.h>
+<<<<<<< HEAD
 #include "dlog.h"
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
     /*
      *  Frame buffer device initialization and setup routines
@@ -1077,7 +1081,11 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 	struct fb_event event;
 	void __user *argp = (void __user *)arg;
 	long ret = 0;
+<<<<<<< HEAD
 	__DLOG__("Node: %x CMD: %x\n",info->node,cmd);
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (cmd) {
 	case FBIOGET_VSCREENINFO:
 		if (!lock_fb_info(info))
@@ -1113,10 +1121,13 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		if (copy_from_user(&cmap, argp, sizeof(cmap)))
 			return -EFAULT;
 		ret = fb_set_user_cmap(&cmap, info);
+<<<<<<< HEAD
 		if (ret) {
 			if (info)
 				fb_dealloc_cmap(&info->cmap);
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case FBIOGETCMAP:
 		if (copy_from_user(&cmap, argp, sizeof(cmap)))
@@ -1172,8 +1183,15 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		event.data = &con2fb;
 		if (!lock_fb_info(info))
 			return -ENODEV;
+<<<<<<< HEAD
 		event.info = info;
 		ret = fb_notifier_call_chain(FB_EVENT_SET_CONSOLE_MAP, &event);
+=======
+		console_lock();
+		event.info = info;
+		ret = fb_notifier_call_chain(FB_EVENT_SET_CONSOLE_MAP, &event);
+		console_unlock();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		unlock_fb_info(info);
 		break;
 	case FBIOBLANK:
@@ -1187,13 +1205,23 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		unlock_fb_info(info);
 		break;
 	default:
+<<<<<<< HEAD
+=======
+		if (!lock_fb_info(info))
+			return -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		fb = info->fbops;
 		if (fb->fb_ioctl)
 			ret = fb->fb_ioctl(info, cmd, arg);
 		else
 			ret = -ENOTTY;
+<<<<<<< HEAD
 	}
 	__DLOG__("Node: %x CMD: %x END: %x\n",info->node,cmd,FUNC_END);
+=======
+		unlock_fb_info(info);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 
@@ -1394,6 +1422,10 @@ fb_mmap(struct file *file, struct vm_area_struct * vma)
 		len = info->fix.mmio_len;
 	}
 	mutex_unlock(&info->mm_lock);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
 	fb_pgprotect(file, vma, start);
 
@@ -1631,7 +1663,13 @@ static int do_register_framebuffer(struct fb_info *fb_info)
 	event.info = fb_info;
 	if (!lock_fb_info(fb_info))
 		return -ENODEV;
+<<<<<<< HEAD
 	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
+=======
+	console_lock();
+	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
+	console_unlock();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unlock_fb_info(fb_info);
 	return 0;
 }
@@ -1647,8 +1685,15 @@ static int do_unregister_framebuffer(struct fb_info *fb_info)
 
 	if (!lock_fb_info(fb_info))
 		return -ENODEV;
+<<<<<<< HEAD
 	event.info = fb_info;
 	ret = fb_notifier_call_chain(FB_EVENT_FB_UNBIND, &event);
+=======
+	console_lock();
+	event.info = fb_info;
+	ret = fb_notifier_call_chain(FB_EVENT_FB_UNBIND, &event);
+	console_unlock();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unlock_fb_info(fb_info);
 
 	if (ret)
@@ -1663,7 +1708,13 @@ static int do_unregister_framebuffer(struct fb_info *fb_info)
 	num_registered_fb--;
 	fb_cleanup_device(fb_info);
 	event.info = fb_info;
+<<<<<<< HEAD
 	fb_notifier_call_chain(FB_EVENT_FB_UNREGISTERED, &event);
+=======
+	console_lock();
+	fb_notifier_call_chain(FB_EVENT_FB_UNREGISTERED, &event);
+	console_unlock();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* this may free fb info */
 	put_fb_info(fb_info);
@@ -1834,11 +1885,16 @@ int fb_new_modelist(struct fb_info *info)
 	err = 1;
 
 	if (!list_empty(&info->modelist)) {
+<<<<<<< HEAD
 		if (!lock_fb_info(info))
 			return -ENODEV;
 		event.info = info;
 		err = fb_notifier_call_chain(FB_EVENT_NEW_MODELIST, &event);
 		unlock_fb_info(info);
+=======
+		event.info = info;
+		err = fb_notifier_call_chain(FB_EVENT_NEW_MODELIST, &event);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return err;

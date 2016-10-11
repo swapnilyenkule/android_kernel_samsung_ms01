@@ -399,11 +399,14 @@ struct v4l2_pix_format {
 #define V4L2_PIX_FMT_XVID     v4l2_fourcc('X', 'V', 'I', 'D') /* Xvid           */
 #define V4L2_PIX_FMT_VC1_ANNEX_G v4l2_fourcc('V', 'C', '1', 'G') /* SMPTE 421M Annex G compliant stream */
 #define V4L2_PIX_FMT_VC1_ANNEX_L v4l2_fourcc('V', 'C', '1', 'L') /* SMPTE 421M Annex L compliant stream */
+<<<<<<< HEAD
 #define V4L2_PIX_FMT_DIVX_311  v4l2_fourcc('D', 'I', 'V', '3') /* DIVX311     */
 #define V4L2_PIX_FMT_DIVX      v4l2_fourcc('D', 'I', 'V', 'X') /* DIVX        */
 #define V4L2_PIX_FMT_VP8 v4l2_fourcc('V', 'P', '8', '0') /* ON2 VP8 stream */
 #define V4L2_PIX_FMT_HEVC v4l2_fourcc('H', 'E', 'V', 'C') /* for HEVC stream */
 #define V4L2_PIX_FMT_HEVC_HYBRID v4l2_fourcc('H', 'V', 'C', 'H')
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*  Vendor-specific formats   */
 #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
@@ -430,6 +433,7 @@ struct v4l2_pix_format {
 #define V4L2_PIX_FMT_CIT_YYVYUY v4l2_fourcc('C', 'I', 'T', 'V') /* one line of Y then 1 line of VYUY */
 #define V4L2_PIX_FMT_KONICA420  v4l2_fourcc('K', 'O', 'N', 'I') /* YUV420 planar in blocks of 256 pixels */
 #define V4L2_PIX_FMT_JPGL	v4l2_fourcc('J', 'P', 'G', 'L') /* JPEG-Lite */
+<<<<<<< HEAD
 /* se401 janggu compressed rgb */
 #define V4L2_PIX_FMT_SE401      v4l2_fourcc('S', '4', '0', '1')
 /* Composite stats */
@@ -452,6 +456,9 @@ struct v4l2_pix_format {
 #define V4L2_PIX_FMT_STATS_BF   v4l2_fourcc('S', 'T', 'B', 'F')
 /* Bayer hist stats */
 #define V4L2_PIX_FMT_STATS_BHST v4l2_fourcc('B', 'H', 'S', 'T')
+=======
+#define V4L2_PIX_FMT_SE401      v4l2_fourcc('S', '4', '0', '1') /* se401 janggu compressed rgb */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  *	F O R M A T   E N U M E R A T I O N
@@ -697,6 +704,7 @@ struct v4l2_buffer {
 /* Cache handling flags */
 #define V4L2_BUF_FLAG_NO_CACHE_INVALIDATE	0x0800
 #define V4L2_BUF_FLAG_NO_CACHE_CLEAN		0x1000
+<<<<<<< HEAD
 #define V4L2_BUF_FLAG_EOS		0x2000
 #define V4L2_QCOM_BUF_FLAG_CODECCONFIG  0x4000
 #define V4L2_QCOM_BUF_FLAG_EOSEQ  0x8000
@@ -712,6 +720,8 @@ struct v4l2_buffer {
 /*Start : Qualcomm Local Patch - 20131226 */
 #define V4L2_MSM_BUF_FLAG_YUV_601_709_CLAMP	0x20000000
 /*End : Qualcomm Local Patch - 20131226 */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  *	O V E R L A Y   P R E V I E W
@@ -772,12 +782,15 @@ struct v4l2_captureparm {
 /*  Flags for 'capability' and 'capturemode' fields */
 #define V4L2_MODE_HIGHQUALITY	0x0001	/*  High quality imaging mode */
 #define V4L2_CAP_TIMEPERFRAME	0x1000	/*  timeperframe field is supported */
+<<<<<<< HEAD
 #define V4L2_CAP_QCOM_FRAMESKIP	0x2000	/*  frame skipping is supported */
 
 struct v4l2_qcom_frameskip {
 	__u64		   maxframeinterval;
 	__u8		   fpsvariance;
 };
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct v4l2_outputparm {
 	__u32		   capability;	 /*  Supported modes */
@@ -1066,6 +1079,10 @@ struct v4l2_bt_timings {
 #define V4L2_DV_VSYNC_POS_POL	0x00000001
 #define V4L2_DV_HSYNC_POS_POL	0x00000002
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* DV timings */
 struct v4l2_dv_timings {
 	__u32 type;
@@ -1312,8 +1329,11 @@ enum v4l2_colorfx {
 
 /* last CID + 1 */
 #define V4L2_CID_LASTP1                         (V4L2_CID_BASE+42)
+<<<<<<< HEAD
 #define V4L2_CID_SPECIAL_EFFECT			(V4L2_CID_BASE+43)
 /* Minimum number of buffer neede by the device */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*  MPEG-class control IDs defined by V4L2 */
 #define V4L2_CID_MPEG_BASE 			(V4L2_CTRL_CLASS_MPEG | 0x900)
@@ -1503,7 +1523,10 @@ enum v4l2_mpeg_video_bitrate_mode {
 enum v4l2_mpeg_video_header_mode {
 	V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE			= 0,
 	V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME	= 1,
+<<<<<<< HEAD
 	V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_I_FRAME		= 2,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 };
 #define V4L2_CID_MPEG_VIDEO_MAX_REF_PIC			(V4L2_CID_MPEG_BASE+217)
@@ -1515,7 +1538,10 @@ enum v4l2_mpeg_video_multi_slice_mode {
 	V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE		= 0,
 	V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB		= 1,
 	V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES	= 2,
+<<<<<<< HEAD
 	V4L2_MPEG_VIDEO_MULTI_SLICE_GOB			= 3,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #define V4L2_CID_MPEG_VIDEO_VBV_SIZE			(V4L2_CID_MPEG_BASE+222)
 #define V4L2_CID_MPEG_VIDEO_DEC_PTS			(V4L2_CID_MPEG_BASE+223)
@@ -1557,7 +1583,10 @@ enum v4l2_mpeg_video_h264_level {
 	V4L2_MPEG_VIDEO_H264_LEVEL_4_2	= 13,
 	V4L2_MPEG_VIDEO_H264_LEVEL_5_0	= 14,
 	V4L2_MPEG_VIDEO_H264_LEVEL_5_1	= 15,
+<<<<<<< HEAD
 	V4L2_MPEG_VIDEO_H264_LEVEL_5_2	= 16,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #define V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA	(V4L2_CID_MPEG_BASE+360)
 #define V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_BETA	(V4L2_CID_MPEG_BASE+361)
@@ -1586,7 +1615,10 @@ enum v4l2_mpeg_video_h264_profile {
 	V4L2_MPEG_VIDEO_H264_PROFILE_SCALABLE_HIGH_INTRA	= 14,
 	V4L2_MPEG_VIDEO_H264_PROFILE_STEREO_HIGH		= 15,
 	V4L2_MPEG_VIDEO_H264_PROFILE_MULTIVIEW_HIGH		= 16,
+<<<<<<< HEAD
 	V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH		= 17,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #define V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_HEIGHT	(V4L2_CID_MPEG_BASE+364)
 #define V4L2_CID_MPEG_VIDEO_H264_VUI_EXT_SAR_WIDTH	(V4L2_CID_MPEG_BASE+365)
@@ -1637,7 +1669,10 @@ enum v4l2_mpeg_video_mpeg4_profile {
 	V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY	= 4,
 };
 #define V4L2_CID_MPEG_VIDEO_MPEG4_QPEL		(V4L2_CID_MPEG_BASE+407)
+<<<<<<< HEAD
 #define V4L2_CID_QCOM_VIDEO_SYNC_FRAME_SEQ_HDR		(V4L2_CID_MPEG_BASE+408)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
 #define V4L2_CID_MPEG_CX2341X_BASE 				(V4L2_CTRL_CLASS_MPEG | 0x1000)
@@ -1707,6 +1742,7 @@ enum v4l2_mpeg_mfc51_video_force_frame_type {
 #define V4L2_CID_MPEG_MFC51_VIDEO_H264_ADAPTIVE_RC_STATIC		(V4L2_CID_MPEG_MFC51_BASE+53)
 #define V4L2_CID_MPEG_MFC51_VIDEO_H264_NUM_REF_PIC_FOR_P		(V4L2_CID_MPEG_MFC51_BASE+54)
 
+<<<<<<< HEAD
 /*  MPEG-class control IDs specific to the msm_vidc driver */
 #define V4L2_CID_MPEG_MSM_VIDC_BASE		(V4L2_CTRL_CLASS_MPEG | 0x2000)
 
@@ -1964,6 +2000,8 @@ enum v4l2_mpeg_vidc_video_priority {
 #define V4L2_CID_MPEG_VIDC_VIDEO_OPERATING_RATE \
 		(V4L2_CID_MPEG_MSM_VIDC_BASE + 75)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*  Camera class control IDs */
 #define V4L2_CID_CAMERA_CLASS_BASE 	(V4L2_CTRL_CLASS_CAMERA | 0x900)
 #define V4L2_CID_CAMERA_CLASS 		(V4L2_CTRL_CLASS_CAMERA | 1)
@@ -2241,7 +2279,10 @@ struct v4l2_enc_idx {
 #define V4L2_ENC_CMD_STOP       (1)
 #define V4L2_ENC_CMD_PAUSE      (2)
 #define V4L2_ENC_CMD_RESUME     (3)
+<<<<<<< HEAD
 #define V4L2_ENC_QCOM_CMD_FLUSH  (4)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Flags for V4L2_ENC_CMD_STOP */
 #define V4L2_ENC_CMD_STOP_AT_GOP_END    (1 << 0)
@@ -2261,7 +2302,10 @@ struct v4l2_encoder_cmd {
 #define V4L2_DEC_CMD_STOP        (1)
 #define V4L2_DEC_CMD_PAUSE       (2)
 #define V4L2_DEC_CMD_RESUME      (3)
+<<<<<<< HEAD
 #define V4L2_DEC_QCOM_CMD_FLUSH  (4)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Flags for V4L2_DEC_CMD_START */
 #define V4L2_DEC_CMD_START_MUTE_AUDIO	(1 << 0)
@@ -2273,6 +2317,7 @@ struct v4l2_encoder_cmd {
 #define V4L2_DEC_CMD_STOP_TO_BLACK	(1 << 0)
 #define V4L2_DEC_CMD_STOP_IMMEDIATELY	(1 << 1)
 
+<<<<<<< HEAD
 /* Flags for V4L2_DEC_QCOM_CMD_FLUSH */
 #define V4L2_DEC_QCOM_CMD_FLUSH_OUTPUT  (1 << 0)
 #define V4L2_DEC_QCOM_CMD_FLUSH_CAPTURE (1 << 1)
@@ -2280,6 +2325,8 @@ struct v4l2_encoder_cmd {
 #define V4L2_QCOM_CMD_FLUSH_OUTPUT  (1 << 0)
 #define V4L2_QCOM_CMD_FLUSH_CAPTURE (1 << 1)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Play format requirements (returned by the driver): */
 
 /* The decoder has no special format requirements */
@@ -2517,6 +2564,7 @@ struct v4l2_streamparm {
 #define V4L2_EVENT_FRAME_SYNC			4
 #define V4L2_EVENT_PRIVATE_START		0x08000000
 
+<<<<<<< HEAD
 #define V4L2_EVENT_MSM_VIDC_START	(V4L2_EVENT_PRIVATE_START + 0x00001000)
 #define V4L2_EVENT_MSM_VIDC_FLUSH_DONE	(V4L2_EVENT_MSM_VIDC_START + 1)
 #define V4L2_EVENT_MSM_VIDC_PORT_SETTINGS_CHANGED_SUFFICIENT	\
@@ -2532,6 +2580,8 @@ struct v4l2_streamparm {
 #define V4L2_EVENT_MSM_VIDC_HW_OVERLOAD (V4L2_EVENT_MSM_VIDC_START + 8)
 #define V4L2_EVENT_MSM_VIDC_MAX_CLIENTS (V4L2_EVENT_MSM_VIDC_START + 9)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Payload for V4L2_EVENT_VSYNC */
 struct v4l2_event_vsync {
 	/* Can be V4L2_FIELD_ANY, _NONE, _TOP or _BOTTOM */

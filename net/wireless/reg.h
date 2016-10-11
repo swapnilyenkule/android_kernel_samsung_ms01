@@ -22,6 +22,11 @@ bool is_world_regdom(const char *alpha2);
 bool reg_is_valid_request(const char *alpha2);
 bool reg_supported_dfs_region(u8 dfs_region);
 
+<<<<<<< HEAD
+=======
+int regulatory_hint_user(const char *alpha2);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int reg_device_uevent(struct device *dev, struct kobj_uevent_env *env);
 void reg_device_remove(struct wiphy *wiphy);
 

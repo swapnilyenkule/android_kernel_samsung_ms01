@@ -123,12 +123,20 @@ static int rcu_scheduler_fully_active __read_mostly;
  */
 static DEFINE_PER_CPU(struct task_struct *, rcu_cpu_kthread_task);
 DEFINE_PER_CPU(unsigned int, rcu_cpu_kthread_status);
+<<<<<<< HEAD
+=======
+DEFINE_PER_CPU(int, rcu_cpu_kthread_cpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 DEFINE_PER_CPU(unsigned int, rcu_cpu_kthread_loops);
 DEFINE_PER_CPU(char, rcu_cpu_has_work);
 
 #endif /* #ifdef CONFIG_RCU_BOOST */
 
+<<<<<<< HEAD
 static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu);
+=======
+static void rcu_node_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void invoke_rcu_core(void);
 static void invoke_rcu_callbacks(struct rcu_state *rsp, struct rcu_data *rdp);
 
@@ -201,6 +209,7 @@ DEFINE_PER_CPU(struct rcu_dynticks, rcu_dynticks) = {
 	.dynticks = ATOMIC_INIT(1),
 };
 
+<<<<<<< HEAD
 static int blimit = 10;		/* Maximum callbacks per rcu_do_batch. */
 static int qhimark = 10000;	/* If this many pending, ignore blimit. */
 static int qlowmark = 100;	/* Once only this many pending, use blimit. */
@@ -208,6 +217,15 @@ static int qlowmark = 100;	/* Once only this many pending, use blimit. */
 module_param(blimit, int, 0);
 module_param(qhimark, int, 0);
 module_param(qlowmark, int, 0);
+=======
+static long blimit = 10;	/* Maximum callbacks per rcu_do_batch. */
+static long qhimark = 10000;	/* If this many pending, ignore blimit. */
+static long qlowmark = 100;	/* Once only this many pending, use blimit. */
+
+module_param(blimit, long, 0);
+module_param(qhimark, long, 0);
+module_param(qlowmark, long, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int rcu_cpu_stall_suppress __read_mostly; /* 1 = suppress stall warnings. */
 int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
@@ -725,7 +743,11 @@ static void print_other_cpu_stall(struct rcu_state *rsp)
 	int cpu;
 	long delta;
 	unsigned long flags;
+<<<<<<< HEAD
 	int ndetected = 0;
+=======
+	int ndetected;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct rcu_node *rnp = rcu_get_root(rsp);
 
 	/* Only let one CPU complain about others per time interval. */
@@ -1413,7 +1435,12 @@ static void rcu_cleanup_dead_cpu(int cpu, struct rcu_state *rsp)
 	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rnp. */
 
 	/* Adjust any no-longer-needed kthreads. */
+<<<<<<< HEAD
 	rcu_boost_kthread_setaffinity(rnp, -1);
+=======
+	rcu_stop_cpu_kthread(cpu);
+	rcu_node_kthread_setaffinity(rnp, -1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Remove the dying CPU from the bitmasks in the rcu_node hierarchy. */
 
@@ -1474,7 +1501,11 @@ static void rcu_do_batch(struct rcu_state *rsp, struct rcu_data *rdp)
 {
 	unsigned long flags;
 	struct rcu_head *next, *list, **tail;
+<<<<<<< HEAD
 	int bl, count, count_lazy;
+=======
+	long bl, count, count_lazy;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* If no callbacks are ready, just return.*/
 	if (!cpu_has_callbacks_ready_to_invoke(rdp)) {
@@ -2357,10 +2388,19 @@ static int __cpuinit rcu_cpu_notify(struct notifier_block *self,
 		break;
 	case CPU_ONLINE:
 	case CPU_DOWN_FAILED:
+<<<<<<< HEAD
 		rcu_boost_kthread_setaffinity(rnp, -1);
 		break;
 	case CPU_DOWN_PREPARE:
 		rcu_boost_kthread_setaffinity(rnp, cpu);
+=======
+		rcu_node_kthread_setaffinity(rnp, -1);
+		rcu_cpu_kthread_setrt(cpu, 1);
+		break;
+	case CPU_DOWN_PREPARE:
+		rcu_node_kthread_setaffinity(rnp, cpu);
+		rcu_cpu_kthread_setrt(cpu, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case CPU_DYING:
 	case CPU_DYING_FROZEN:

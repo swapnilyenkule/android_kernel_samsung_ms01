@@ -115,7 +115,11 @@ sub tda10045 {
 
 sub tda10046 {
 	my $sourcefile = "TT_PCI_2.19h_28_11_2006.zip";
+<<<<<<< HEAD
 	my $url = "http://www.tt-download.com/download/updates/219/$sourcefile";
+=======
+	my $url = "http://technotrend.com.ua/download/software/219/$sourcefile";
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	my $hash = "6a7e1e2f2644b162ff0502367553c72d";
 	my $outfile = "dvb-fe-tda10046.fw";
 	my $tmpdir = tempdir(DIR => "/tmp", CLEANUP => 1);

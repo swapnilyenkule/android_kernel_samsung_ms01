@@ -13,8 +13,11 @@
 #include <linux/smp.h>
 #include <linux/cpu.h>
 
+<<<<<<< HEAD
 #include "smpboot.h"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_USE_GENERIC_SMP_HELPERS
 static struct {
 	struct list_head	queue;
@@ -33,6 +36,10 @@ struct call_function_data {
 	struct call_single_data	csd;
 	atomic_t		refs;
 	cpumask_var_t		cpumask;
+<<<<<<< HEAD
+=======
+	cpumask_var_t		cpumask_ipi;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static DEFINE_PER_CPU_SHARED_ALIGNED(struct call_function_data, cfd_data);
@@ -56,6 +63,12 @@ hotplug_cfd(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		if (!zalloc_cpumask_var_node(&cfd->cpumask, GFP_KERNEL,
 				cpu_to_node(cpu)))
 			return notifier_from_errno(-ENOMEM);
+<<<<<<< HEAD
+=======
+		if (!zalloc_cpumask_var_node(&cfd->cpumask_ipi, GFP_KERNEL,
+				cpu_to_node(cpu)))
+			return notifier_from_errno(-ENOMEM);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 
 #ifdef CONFIG_HOTPLUG_CPU
@@ -65,6 +78,10 @@ hotplug_cfd(struct notifier_block *nfb, unsigned long action, void *hcpu)
 	case CPU_DEAD:
 	case CPU_DEAD_FROZEN:
 		free_cpumask_var(cfd->cpumask);
+<<<<<<< HEAD
+=======
+		free_cpumask_var(cfd->cpumask_ipi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 #endif
 	};
@@ -312,11 +329,24 @@ int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
 	 */
 	this_cpu = get_cpu();
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Can deadlock when called with interrupts disabled.
+	 * We allow cpu's that are not yet online though, as no one else can
+	 * send smp call function interrupt to this cpu and as such deadlocks
+	 * can't happen.
+	 */
+	WARN_ON_ONCE(cpu_online(this_cpu) && irqs_disabled()
+		     && !oops_in_progress);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cpu == this_cpu) {
 		local_irq_save(flags);
 		func(info);
 		local_irq_restore(flags);
 	} else {
+<<<<<<< HEAD
 		/*
 		 * Can deadlock when called with interrupts disabled.
 		 * We allow cpu's that are not yet online though, as no one else
@@ -326,6 +356,8 @@ int smp_call_function_single(int cpu, smp_call_func_t func, void *info,
 		WARN_ON_ONCE(cpu_online(this_cpu) && irqs_disabled()
 			     && !oops_in_progress);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if ((unsigned)cpu < nr_cpu_ids && cpu_online(cpu)) {
 			struct call_single_data *data = &d;
 
@@ -410,12 +442,24 @@ void __smp_call_function_single(int cpu, struct call_single_data *data,
 	unsigned long flags;
 
 	this_cpu = get_cpu();
+<<<<<<< HEAD
+=======
+	/*
+	 * Can deadlock when called with interrupts disabled.
+	 * We allow cpu's that are not yet online though, as no one else can
+	 * send smp call function interrupt to this cpu and as such deadlocks
+	 * can't happen.
+	 */
+	WARN_ON_ONCE(cpu_online(smp_processor_id()) && wait && irqs_disabled()
+		     && !oops_in_progress);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (cpu == this_cpu) {
 		local_irq_save(flags);
 		data->func(data->info);
 		local_irq_restore(flags);
 	} else {
+<<<<<<< HEAD
 		/*
 		 * Can deadlock when called with interrupts disabled.
 		 * We allow cpu's that are not yet online though, as no one else
@@ -425,6 +469,8 @@ void __smp_call_function_single(int cpu, struct call_single_data *data,
 		WARN_ON_ONCE(cpu_online(smp_processor_id()) && wait
 			     && irqs_disabled() && !oops_in_progress);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		csd_lock(data);
 		generic_exec_single(cpu, data, wait);
 	}
@@ -527,6 +573,15 @@ void smp_call_function_many(const struct cpumask *mask,
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * After we put an entry into the list, data->cpumask
+	 * may be cleared again when another CPU sends another IPI for
+	 * a SMP function call, so data->cpumask will be zero.
+	 */
+	cpumask_copy(data->cpumask_ipi, data->cpumask);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	raw_spin_lock_irqsave(&call_function.lock, flags);
 	/*
 	 * Place entry at the _HEAD_ of the list, so that any cpu still
@@ -550,7 +605,11 @@ void smp_call_function_many(const struct cpumask *mask,
 	smp_mb();
 
 	/* Send a message to all CPUs in the map */
+<<<<<<< HEAD
 	arch_send_call_function_ipi_mask(data->cpumask);
+=======
+	arch_send_call_function_ipi_mask(data->cpumask_ipi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Optionally wait for the CPUs to complete */
 	if (wait)
@@ -672,8 +731,11 @@ void __init smp_init(void)
 {
 	unsigned int cpu;
 
+<<<<<<< HEAD
 	idle_threads_init();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* FIXME: This should be done in userspace --RR */
 	for_each_present_cpu(cpu) {
 		if (num_online_cpus() >= setup_max_cpus)

@@ -74,8 +74,11 @@ static inline void __tlb_flush_idte(unsigned long asce)
 
 static inline void __tlb_flush_mm(struct mm_struct * mm)
 {
+<<<<<<< HEAD
 	if (unlikely(cpumask_empty(mm_cpumask(mm))))
 		return;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * If the machine has IDTE we prefer to do a per mm flush
 	 * on all cpus instead of doing a local flush if the mm

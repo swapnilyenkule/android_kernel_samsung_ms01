@@ -80,11 +80,14 @@ int crypto_hash_walk_done(struct crypto_hash_walk *walk, int err)
 	unsigned int alignmask = walk->alignmask;
 	unsigned int nbytes = walk->entrylen;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	walk->data -= walk->offset;
 
 	if (nbytes && walk->offset & alignmask && !err) {
@@ -122,11 +125,14 @@ EXPORT_SYMBOL_GPL(crypto_hash_walk_done);
 int crypto_hash_walk_first(struct ahash_request *req,
 			   struct crypto_hash_walk *walk)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	walk->total = req->nbytes;
 
 	if (!walk->total)
@@ -144,11 +150,14 @@ int crypto_hash_walk_first_compat(struct hash_desc *hdesc,
 				  struct crypto_hash_walk *walk,
 				  struct scatterlist *sg, unsigned int len)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	walk->total = len;
 
 	if (!walk->total)
@@ -267,11 +276,14 @@ static int crypto_ahash_op(struct ahash_request *req,
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 	unsigned long alignmask = crypto_ahash_alignmask(tfm);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if ((unsigned long)req->result & alignmask)
 		return ahash_op_unaligned(req, op);
 
@@ -388,11 +400,14 @@ static int crypto_ahash_init_tfm(struct crypto_tfm *tfm)
 	struct crypto_ahash *hash = __crypto_ahash_cast(tfm);
 	struct ahash_alg *alg = crypto_ahash_alg(hash);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hash->setkey = ahash_nosetkey;
 	hash->export = ahash_no_export;
 	hash->import = ahash_no_import;
@@ -429,7 +444,11 @@ static int crypto_ahash_report(struct sk_buff *skb, struct crypto_alg *alg)
 {
 	struct crypto_report_hash rhash;
 
+<<<<<<< HEAD
 	snprintf(rhash.type, CRYPTO_MAX_ALG_NAME, "%s", "ahash");
+=======
+	strncpy(rhash.type, "ahash", sizeof(rhash.type));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rhash.blocksize = alg->cra_blocksize;
 	rhash.digestsize = __crypto_hash_alg_common(alg)->digestsize;
@@ -487,7 +506,12 @@ static int ahash_prepare_alg(struct ahash_alg *alg)
 	struct crypto_alg *base = &alg->halg.base;
 
 	if (alg->halg.digestsize > PAGE_SIZE / 8 ||
+<<<<<<< HEAD
 	    alg->halg.statesize > PAGE_SIZE / 8)
+=======
+	    alg->halg.statesize > PAGE_SIZE / 8 ||
+	    alg->halg.statesize == 0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EINVAL;
 
 	base->cra_type = &crypto_ahash_type;
@@ -521,11 +545,14 @@ int ahash_register_instance(struct crypto_template *tmpl,
 {
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = ahash_prepare_alg(&inst->alg);
 	if (err)
 		return err;

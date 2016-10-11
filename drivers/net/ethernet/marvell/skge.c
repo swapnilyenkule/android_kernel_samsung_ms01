@@ -4153,6 +4153,16 @@ static struct dmi_system_id skge_32bit_dma_boards[] = {
 			DMI_MATCH(DMI_BOARD_NAME, "nForce"),
 		},
 	},
+<<<<<<< HEAD
+=======
+	{
+		.ident = "ASUS P5NSLI",
+		.matches = {
+			DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
+			DMI_MATCH(DMI_BOARD_NAME, "P5NSLI")
+		},
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{}
 };
 

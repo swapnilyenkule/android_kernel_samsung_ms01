@@ -1139,7 +1139,11 @@ static void ahci_dev_config(struct ata_device *dev)
 	}
 }
 
+<<<<<<< HEAD
 static unsigned int ahci_dev_classify(struct ata_port *ap)
+=======
+unsigned int ahci_dev_classify(struct ata_port *ap)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	void __iomem *port_mmio = ahci_port_base(ap);
 	struct ata_taskfile tf;
@@ -1153,6 +1157,10 @@ static unsigned int ahci_dev_classify(struct ata_port *ap)
 
 	return ata_dev_classify(&tf);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(ahci_dev_classify);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void ahci_fill_cmd_slot(struct ahci_port_priv *pp, unsigned int tag,
 			u32 opts)
@@ -1249,9 +1257,17 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 {
 	struct ata_port *ap = link->ap;
 	struct ahci_host_priv *hpriv = ap->host->private_data;
+<<<<<<< HEAD
 	const char *reason = NULL;
 	unsigned long now, msecs;
 	struct ata_taskfile tf;
+=======
+	struct ahci_port_priv *pp = ap->private_data;
+	const char *reason = NULL;
+	unsigned long now, msecs;
+	struct ata_taskfile tf;
+	bool fbs_disabled = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int rc;
 
 	DPRINTK("ENTER\n");
@@ -1261,6 +1277,19 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 	if (rc && rc != -EOPNOTSUPP)
 		ata_link_warn(link, "failed to reset engine (errno=%d)\n", rc);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * According to AHCI-1.2 9.3.9: if FBS is enable, software shall
+	 * clear PxFBS.EN to '0' prior to issuing software reset to devices
+	 * that is attached to port multiplier.
+	 */
+	if (!ata_is_host_link(link) && pp->fbs_enabled) {
+		ahci_disable_fbs(ap);
+		fbs_disabled = true;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ata_tf_init(link->device, &tf);
 
 	/* issue the first D2H Register FIS */
@@ -1301,6 +1330,13 @@ int ahci_do_softreset(struct ata_link *link, unsigned int *class,
 	} else
 		*class = ahci_dev_classify(ap);
 
+<<<<<<< HEAD
+=======
+	/* re-enable FBS if disabled before */
+	if (fbs_disabled)
+		ahci_enable_fbs(ap);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	DPRINTK("EXIT, class=%u\n", *class);
 	return 0;
 
@@ -1543,8 +1579,12 @@ static void ahci_error_intr(struct ata_port *ap, u32 irq_stat)
 		u32 fbs = readl(port_mmio + PORT_FBS);
 		int pmp = fbs >> PORT_FBS_DWE_OFFSET;
 
+<<<<<<< HEAD
 		if ((fbs & PORT_FBS_SDE) && (pmp < ap->nr_pmp_links) &&
 		    ata_link_online(&ap->pmp_link[pmp])) {
+=======
+		if ((fbs & PORT_FBS_SDE) && (pmp < ap->nr_pmp_links)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			link = &ap->pmp_link[pmp];
 			fbs_need_dec = true;
 		}
@@ -1655,8 +1695,12 @@ static void ahci_port_intr(struct ata_port *ap)
 	if (unlikely(resetting))
 		status &= ~PORT_IRQ_BAD_PMP;
 
+<<<<<<< HEAD
 	/* if LPM is enabled, PHYRDY doesn't mean anything */
 	if (ap->link.lpm_policy > ATA_LPM_MAX_POWER) {
+=======
+	if (sata_lpm_ignore_phy_events(&ap->link)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		status &= ~PORT_IRQ_PHYRDY;
 		ahci_scr_write(&ap->link, SCR_ERROR, SERR_PHYRDY_CHG);
 	}

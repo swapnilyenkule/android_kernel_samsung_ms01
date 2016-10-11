@@ -104,7 +104,10 @@ struct isci_orom *isci_request_oprom(struct pci_dev *pdev)
 
 	if (i >= len) {
 		dev_err(&pdev->dev, "oprom parse error\n");
+<<<<<<< HEAD
 		devm_kfree(&pdev->dev, rom);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rom = NULL;
 	}
 	pci_unmap_biosrom(oprom);

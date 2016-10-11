@@ -11,7 +11,11 @@ all: uImage vmlinux.elf
 
 KBUILD_DEFCONFIG	:= atstk1002_defconfig
 
+<<<<<<< HEAD
 KBUILD_CFLAGS	+= -pipe -fno-builtin -mno-pic
+=======
+KBUILD_CFLAGS	+= -pipe -fno-builtin -mno-pic -D__linux__
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 KBUILD_AFLAGS	+= -mrelax -mno-pic
 KBUILD_CFLAGS_MODULE += -mno-relax
 LDFLAGS_vmlinux	+= --relax

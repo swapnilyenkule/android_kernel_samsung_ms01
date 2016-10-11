@@ -11,8 +11,11 @@ menuconfig BT
 	select CRYPTO_BLKCIPHER
 	select CRYPTO_AES
 	select CRYPTO_ECB
+<<<<<<< HEAD
 	select CRYPTO_HMAC
 	select CRYPTO_SHA256
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	help
 	  Bluetooth is low-cost, low-power, short-range wireless technology.
 	  It was designed as a replacement for cables and other short-range

@@ -851,10 +851,14 @@ struct fb_info {
 	struct fb_cmap cmap;		/* Current cmap */
 	struct list_head modelist;      /* mode list */
 	struct fb_videomode *mode;	/* current mode */
+<<<<<<< HEAD
 #if (defined(CONFIG_MACH_S3VE3G_EUR) || defined(CONFIG_MACH_VICTOR3GDSDTV_LTN)) && defined(CONFIG_ESD_ERR_FG_RECOVERY)
 	int esd_active;
  	struct mutex esd_lock;
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_FB_BACKLIGHT
 	/* assigned backlight device */
 	/* set before framebuffer registration, 

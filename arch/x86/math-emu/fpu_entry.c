@@ -29,7 +29,10 @@
 
 #include <asm/uaccess.h>
 #include <asm/traps.h>
+<<<<<<< HEAD
 #include <asm/desc.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/user.h>
 #include <asm/i387.h>
 
@@ -185,7 +188,11 @@ void math_emulate(struct math_emu_info *info)
 			math_abort(FPU_info, SIGILL);
 		}
 
+<<<<<<< HEAD
 		code_descriptor = LDT_DESCRIPTOR(FPU_CS);
+=======
+		code_descriptor = FPU_get_ldt_descriptor(FPU_CS);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (SEG_D_SIZE(code_descriptor)) {
 			/* The above test may be wrong, the book is not clear */
 			/* Segmented 32 bit protected mode */

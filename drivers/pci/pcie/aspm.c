@@ -583,6 +583,12 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev)
 	struct pcie_link_state *link;
 	int blacklist = !!pcie_aspm_sanity_check(pdev);
 
+<<<<<<< HEAD
+=======
+	if (!aspm_support_enabled)
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!pci_is_pcie(pdev) || pdev->link_state)
 		return;
 	if (pdev->pcie_type != PCI_EXP_TYPE_ROOT_PORT &&
@@ -798,6 +804,12 @@ void pcie_clear_aspm(struct pci_bus *bus)
 {
 	struct pci_dev *child;
 
+<<<<<<< HEAD
+=======
+	if (aspm_force)
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Clear any ASPM setup that the firmware has carried out on this bus
 	 */

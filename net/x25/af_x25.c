@@ -1343,10 +1343,16 @@ static int x25_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (sx25) {
 		sx25->sx25_family = AF_X25;
 		sx25->sx25_addr   = x25->dest_addr;
+<<<<<<< HEAD
 	}
 
 	msg->msg_namelen = sizeof(struct sockaddr_x25);
 
+=======
+		msg->msg_namelen = sizeof(*sx25);
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	x25_check_rbuf(sk);
 	rc = copied;
 out_free_dgram:
@@ -1586,11 +1592,19 @@ out_cud_release:
 	case SIOCX25CALLACCPTAPPRV: {
 		rc = -EINVAL;
 		lock_sock(sk);
+<<<<<<< HEAD
 		if (sk->sk_state != TCP_CLOSE)
 			break;
 		clear_bit(X25_ACCPT_APPRV_FLAG, &x25->flags);
 		release_sock(sk);
 		rc = 0;
+=======
+		if (sk->sk_state == TCP_CLOSE) {
+			clear_bit(X25_ACCPT_APPRV_FLAG, &x25->flags);
+			rc = 0;
+		}
+		release_sock(sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	}
 
@@ -1598,6 +1612,7 @@ out_cud_release:
 		rc = -EINVAL;
 		lock_sock(sk);
 		if (sk->sk_state != TCP_ESTABLISHED)
+<<<<<<< HEAD
 			break;
 		/* must call accptapprv above */
 		if (test_bit(X25_ACCPT_APPRV_FLAG, &x25->flags))
@@ -1606,6 +1621,17 @@ out_cud_release:
 		x25->state = X25_STATE_3;
 		release_sock(sk);
 		rc = 0;
+=======
+			goto out_sendcallaccpt_release;
+		/* must call accptapprv above */
+		if (test_bit(X25_ACCPT_APPRV_FLAG, &x25->flags))
+			goto out_sendcallaccpt_release;
+		x25_write_internal(sk, X25_CALL_ACCEPTED);
+		x25->state = X25_STATE_3;
+		rc = 0;
+out_sendcallaccpt_release:
+		release_sock(sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	}
 

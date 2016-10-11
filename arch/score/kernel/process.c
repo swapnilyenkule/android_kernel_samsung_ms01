@@ -27,6 +27,10 @@
 #include <linux/reboot.h>
 #include <linux/elfcore.h>
 #include <linux/pm.h>
+<<<<<<< HEAD
+=======
+#include <linux/rcupdate.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void (*pm_power_off)(void);
 EXPORT_SYMBOL(pm_power_off);
@@ -50,9 +54,16 @@ void __noreturn cpu_idle(void)
 {
 	/* endless idle loop with no priority at all */
 	while (1) {
+<<<<<<< HEAD
 		while (!need_resched())
 			barrier();
 
+=======
+		rcu_idle_enter();
+		while (!need_resched())
+			barrier();
+		rcu_idle_exit();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		schedule_preempt_disabled();
 	}
 }

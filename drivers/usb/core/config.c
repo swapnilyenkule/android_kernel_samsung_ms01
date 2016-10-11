@@ -114,16 +114,29 @@ static void usb_parse_ss_endpoint_companion(struct device *ddev, int cfgno,
 				cfgno, inum, asnum, ep->desc.bEndpointAddress);
 		ep->ss_ep_comp.bmAttributes = 16;
 	} else if (usb_endpoint_xfer_isoc(&ep->desc) &&
+<<<<<<< HEAD
 			desc->bmAttributes > 2) {
 		dev_warn(ddev, "Isoc endpoint has Mult of %d in "
 				"config %d interface %d altsetting %d ep %d: "
 				"setting to 3\n", desc->bmAttributes + 1,
+=======
+		   USB_SS_MULT(desc->bmAttributes) > 3) {
+		dev_warn(ddev, "Isoc endpoint has Mult of %d in "
+				"config %d interface %d altsetting %d ep %d: "
+				"setting to 3\n",
+				USB_SS_MULT(desc->bmAttributes),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				cfgno, inum, asnum, ep->desc.bEndpointAddress);
 		ep->ss_ep_comp.bmAttributes = 2;
 	}
 
 	if (usb_endpoint_xfer_isoc(&ep->desc))
+<<<<<<< HEAD
 		max_tx = (desc->bMaxBurst + 1) * (desc->bmAttributes + 1) *
+=======
+		max_tx = (desc->bMaxBurst + 1) *
+			(USB_SS_MULT(desc->bmAttributes)) *
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			usb_endpoint_maxp(&ep->desc);
 	else if (usb_endpoint_xfer_int(&ep->desc))
 		max_tx = usb_endpoint_maxp(&ep->desc) *
@@ -201,6 +214,20 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
 			if (n == 0)
 				n = 9;	/* 32 ms = 2^(9-1) uframes */
 			j = 16;
+<<<<<<< HEAD
+=======
+
+			/*
+			 * Adjust bInterval for quirked devices.
+			 * This quirk fixes bIntervals reported in
+			 * linear microframes.
+			 */
+			if (to_usb_device(ddev)->quirks &
+				USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL) {
+				n = clamp(fls(d->bInterval), i, j);
+				i = j = n;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		default:		/* USB_SPEED_FULL or _LOW */
 			/* For low-speed, 10 ms is the official minimum.
@@ -424,7 +451,12 @@ static int usb_parse_configuration(struct usb_device *dev, int cfgidx,
 
 	memcpy(&config->desc, buffer, USB_DT_CONFIG_SIZE);
 	if (config->desc.bDescriptorType != USB_DT_CONFIG ||
+<<<<<<< HEAD
 	    config->desc.bLength < USB_DT_CONFIG_SIZE) {
+=======
+	    config->desc.bLength < USB_DT_CONFIG_SIZE ||
+	    config->desc.bLength > size) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dev_err(ddev, "invalid descriptor for config index %d: "
 		    "type = 0x%X, length = %d\n", cfgidx,
 		    config->desc.bDescriptorType, config->desc.bLength);
@@ -650,10 +682,13 @@ void usb_destroy_configuration(struct usb_device *dev)
  *
  * hub-only!! ... and only in reset path, or usb_new_device()
  * (used by real hubs and virtual root hubs)
+<<<<<<< HEAD
  *
  * NOTE: if this is a WUSB device and is not authorized, we skip the
  *       whole thing. A non-authorized USB device has no
  *       configurations.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 int usb_get_configuration(struct usb_device *dev)
 {
@@ -665,8 +700,11 @@ int usb_get_configuration(struct usb_device *dev)
 	struct usb_config_descriptor *desc;
 
 	cfgno = 0;
+<<<<<<< HEAD
 	if (dev->authorized == 0)	/* Not really an error */
 		goto out_not_authorized;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	result = -ENOMEM;
 	if (ncfg > USB_MAXCONFIG) {
 		dev_warn(ddev, "too many configurations: %d, "
@@ -748,7 +786,10 @@ int usb_get_configuration(struct usb_device *dev)
 
 err:
 	kfree(desc);
+<<<<<<< HEAD
 out_not_authorized:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->descriptor.bNumConfigurations = cfgno;
 err2:
 	if (result == -ENOMEM)

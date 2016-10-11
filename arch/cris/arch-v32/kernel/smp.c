@@ -207,7 +207,11 @@ int setup_profiling_timer(unsigned int multiplier)
  */
 unsigned long cache_decay_ticks = 1;
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	smp_boot_one_cpu(cpu);
 	return cpu_online(cpu) ? 0 : -ENOSYS;

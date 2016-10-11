@@ -135,8 +135,11 @@ struct ehci_hcd {			/* one per controller */
 	ktime_t			last_periodic_enable;
 	u32			command;
 
+<<<<<<< HEAD
 	unsigned		log2_irq_thresh;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* SILICON QUIRKS */
 	unsigned		no_selective_suspend:1;
 	unsigned		has_fsl_port_bug:1; /* FreeScale */
@@ -151,11 +154,14 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		use_dummy_qh:1;	/* AMD Frame List table quirk*/
 	unsigned		has_synopsys_hc_bug:1; /* Synopsys HC */
 	unsigned		frame_index_bug:1; /* MosChip (AKA NetMos) */
+<<<<<<< HEAD
 	unsigned		susp_sof_bug:1; /*Chip Idea HC*/
 	unsigned		resume_sof_bug:1;/*Chip Idea HC*/
 	unsigned		reset_sof_bug:1; /*Chip Idea HC*/
 	bool			disable_cerr;
 	u32			reset_delay;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* required for usb32 quirk */
 	#define OHCI_CTRL_HCFS          (3 << 6)
@@ -168,7 +174,10 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		has_hostpc:1;
 	unsigned		has_lpm:1;  /* support link power management */
 	unsigned		has_ppcd:1; /* support per-port change bits */
+<<<<<<< HEAD
 	unsigned		pool_64_bit_align:1; /* for 64 bit alignment */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u8			sbrn;		/* packed release number */
 
 	/* irq statistics */

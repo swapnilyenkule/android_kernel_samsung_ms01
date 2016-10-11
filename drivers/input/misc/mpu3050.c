@@ -37,6 +37,7 @@
 #include <linux/err.h>
 #include <linux/i2c.h>
 #include <linux/input.h>
+<<<<<<< HEAD
 #include <linux/sensors.h>
 #include <linux/delay.h>
 #include <linux/slab.h>
@@ -46,14 +47,24 @@
 #include <linux/regulator/consumer.h>
 #include <linux/of_gpio.h>
 #include <mach/gpiomux.h>
+=======
+#include <linux/delay.h>
+#include <linux/slab.h>
+#include <linux/pm_runtime.h>
+
+#define MPU3050_CHIP_ID		0x69
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define MPU3050_AUTO_DELAY	1000
 
 #define MPU3050_MIN_VALUE	-32768
 #define MPU3050_MAX_VALUE	32767
 
+<<<<<<< HEAD
 #define MPU3050_MIN_POLL_INTERVAL	1
 #define MPU3050_MAX_POLL_INTERVAL	250
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define MPU3050_DEFAULT_POLL_INTERVAL	200
 #define MPU3050_DEFAULT_FS_RANGE	3
 
@@ -94,10 +105,15 @@
 #define MPU3050_DLPF_CFG_MASK		0x07
 /* INT_CFG */
 #define MPU3050_RAW_RDY_EN		0x01
+<<<<<<< HEAD
 #define MPU3050_MPU_RDY_EN		0x04
 #define MPU3050_LATCH_INT_EN		0x20
 #define MPU3050_OPEN_DRAIN		0x40
 #define MPU3050_ACTIVE_LOW		0x80
+=======
+#define MPU3050_MPU_RDY_EN		0x02
+#define MPU3050_LATCH_INT_EN		0x04
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* PWR_MGM */
 #define MPU3050_PWR_MGM_PLL_X		0x01
 #define MPU3050_PWR_MGM_PLL_Y		0x02
@@ -120,6 +136,7 @@ struct mpu3050_sensor {
 	struct i2c_client *client;
 	struct device *dev;
 	struct input_dev *idev;
+<<<<<<< HEAD
 	struct mpu3050_gyro_platform_data *platform_data;
 	struct delayed_work input_work;
 	struct sensors_classdev cdev;
@@ -426,6 +443,10 @@ static int remove_sysfs_interfaces(struct device *dev)
 	return 0;
 }
 
+=======
+};
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  *	mpu3050_xyz_read_reg	-	read the axes values
  *	@buffer: provide register addr and get register
@@ -490,6 +511,7 @@ static void mpu3050_read_xyz(struct i2c_client *client,
 static void mpu3050_set_power_mode(struct i2c_client *client, u8 val)
 {
 	u8 value;
+<<<<<<< HEAD
 	struct mpu3050_sensor *sensor = i2c_get_clientdata(client);
 
 	if (val) {
@@ -498,12 +520,15 @@ static void mpu3050_set_power_mode(struct i2c_client *client, u8 val)
 		gpio_set_value(sensor->enable_gpio, 1);
 		msleep(60);
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	value = i2c_smbus_read_byte_data(client, MPU3050_PWR_MGM);
 	value = (value & ~MPU3050_PWR_MGM_MASK) |
 		(((val << MPU3050_PWR_MGM_POS) & MPU3050_PWR_MGM_MASK) ^
 		 MPU3050_PWR_MGM_MASK);
 	i2c_smbus_write_byte_data(client, MPU3050_PWR_MGM, value);
+<<<<<<< HEAD
 
 	if (!val) {
 		udelay(10);
@@ -511,6 +536,50 @@ static void mpu3050_set_power_mode(struct i2c_client *client, u8 val)
 		udelay(10);
 		mpu3050_config_regulator(client, 0);
 	}
+=======
+}
+
+/**
+ *	mpu3050_input_open	-	called on input event open
+ *	@input: input dev of opened device
+ *
+ *	The input layer calls this function when input event is opened. The
+ *	function will push the device to resume. Then, the device is ready
+ *	to provide data.
+ */
+static int mpu3050_input_open(struct input_dev *input)
+{
+	struct mpu3050_sensor *sensor = input_get_drvdata(input);
+	int error;
+
+	pm_runtime_get(sensor->dev);
+
+	/* Enable interrupts */
+	error = i2c_smbus_write_byte_data(sensor->client, MPU3050_INT_CFG,
+					  MPU3050_LATCH_INT_EN |
+					  MPU3050_RAW_RDY_EN |
+					  MPU3050_MPU_RDY_EN);
+	if (error < 0) {
+		pm_runtime_put(sensor->dev);
+		return error;
+	}
+
+	return 0;
+}
+
+/**
+ *	mpu3050_input_close	-	called on input event close
+ *	@input: input dev of closed device
+ *
+ *	The input layer calls this function when input event is closed. The
+ *	function will push the device to suspend.
+ */
+static void mpu3050_input_close(struct input_dev *input)
+{
+	struct mpu3050_sensor *sensor = input_get_drvdata(input);
+
+	pm_runtime_put(sensor->dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -537,6 +606,7 @@ static irqreturn_t mpu3050_interrupt_thread(int irq, void *data)
 }
 
 /**
+<<<<<<< HEAD
  *	mpu3050_input_work_fn -		polling work
  *	@work: the work struct
  *
@@ -564,17 +634,32 @@ static void mpu3050_input_work_fn(struct work_struct *work)
 }
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *	mpu3050_hw_init	-	initialize hardware
  *	@sensor: the sensor
  *
  *	Called during device probe; configures the sampling method.
  */
+<<<<<<< HEAD
 static int mpu3050_hw_init(struct mpu3050_sensor *sensor)
+=======
+static int __devinit mpu3050_hw_init(struct mpu3050_sensor *sensor)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct i2c_client *client = sensor->client;
 	int ret;
 	u8 reg;
 
+<<<<<<< HEAD
+=======
+	/* Reset */
+	ret = i2c_smbus_write_byte_data(client, MPU3050_PWR_MGM,
+					MPU3050_PWR_MGM_RESET);
+	if (ret < 0)
+		return ret;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = i2c_smbus_read_byte_data(client, MPU3050_PWR_MGM);
 	if (ret < 0)
 		return ret;
@@ -587,18 +672,28 @@ static int mpu3050_hw_init(struct mpu3050_sensor *sensor)
 
 	/* Output frequency divider. The poll interval */
 	ret = i2c_smbus_write_byte_data(client, MPU3050_SMPLRT_DIV,
+<<<<<<< HEAD
 					sensor->poll_interval - 1);
+=======
+					MPU3050_DEFAULT_POLL_INTERVAL - 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ret < 0)
 		return ret;
 
 	/* Set low pass filter and full scale */
+<<<<<<< HEAD
 	reg = MPU3050_DLPF_CFG_42HZ;
 	reg |= MPU3050_DEFAULT_FS_RANGE << 3;
+=======
+	reg = MPU3050_DEFAULT_FS_RANGE;
+	reg |= MPU3050_DLPF_CFG_42HZ << 3;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	reg |= MPU3050_EXT_SYNC_NONE << 5;
 	ret = i2c_smbus_write_byte_data(client, MPU3050_DLPF_FS_SYNC, reg);
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	/* Enable interrupts */
 	if (!sensor->use_poll) {
 		reg = MPU3050_ACTIVE_LOW;
@@ -642,6 +737,10 @@ static int mpu3050_parse_dt(struct device *dev,
 	return -EINVAL;
 }
 #endif
+=======
+	return 0;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /**
  *	mpu3050_probe	-	device detection callback
@@ -658,10 +757,15 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 {
 	struct mpu3050_sensor *sensor;
 	struct input_dev *idev;
+<<<<<<< HEAD
 	struct mpu3050_gyro_platform_data *pdata;
 	int ret;
 	int error;
 	u32 i;
+=======
+	int ret;
+	int error;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	sensor = kzalloc(sizeof(struct mpu3050_sensor), GFP_KERNEL);
 	idev = input_allocate_device();
@@ -674,6 +778,7 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 	sensor->client = client;
 	sensor->dev = &client->dev;
 	sensor->idev = idev;
+<<<<<<< HEAD
 	i2c_set_clientdata(client, sensor);
 
 	if (client->dev.of_node) {
@@ -727,11 +832,17 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 	}
 
 	mpu3050_set_power_mode(client, 1);
+=======
+
+	mpu3050_set_power_mode(client, 1);
+	msleep(10);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ret = i2c_smbus_read_byte_data(client, MPU3050_CHIP_ID_REG);
 	if (ret < 0) {
 		dev_err(&client->dev, "failed to detect device\n");
 		error = -ENXIO;
+<<<<<<< HEAD
 		goto err_class_sysfs;
 	}
 
@@ -743,12 +854,30 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 		dev_err(&client->dev, "unsupported chip id\n");
 		error = -ENXIO;
 		goto err_class_sysfs;
+=======
+		goto err_free_mem;
+	}
+
+	if (ret != MPU3050_CHIP_ID) {
+		dev_err(&client->dev, "unsupported chip id\n");
+		error = -ENXIO;
+		goto err_free_mem;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	idev->name = "MPU3050";
 	idev->id.bustype = BUS_I2C;
+<<<<<<< HEAD
 
 	input_set_capability(idev, EV_ABS, ABS_MISC);
+=======
+	idev->dev.parent = &client->dev;
+
+	idev->open = mpu3050_input_open;
+	idev->close = mpu3050_input_close;
+
+	__set_bit(EV_ABS, idev->evbit);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	input_set_abs_params(idev, ABS_X,
 			     MPU3050_MIN_VALUE, MPU3050_MAX_VALUE, 0, 0);
 	input_set_abs_params(idev, ABS_Y,
@@ -764,6 +893,7 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 	if (error)
 		goto err_pm_set_suspended;
 
+<<<<<<< HEAD
 	if (client->irq == 0) {
 		sensor->use_poll = 1;
 		INIT_DELAYED_WORK(&sensor->input_work, mpu3050_input_work_fn);
@@ -811,23 +941,39 @@ static int __devinit mpu3050_probe(struct i2c_client *client,
 	sensor->enable = 0;
 	mpu3050_set_power_mode(client, 0);
 
+=======
+	error = request_threaded_irq(client->irq,
+				     NULL, mpu3050_interrupt_thread,
+				     IRQF_TRIGGER_RISING,
+				     "mpu3050", sensor);
+	if (error) {
+		dev_err(&client->dev,
+			"can't get IRQ %d, error %d\n", client->irq, error);
+		goto err_pm_set_suspended;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	error = input_register_device(idev);
 	if (error) {
 		dev_err(&client->dev, "failed to register input device\n");
 		goto err_free_irq;
 	}
 
+<<<<<<< HEAD
 	error = create_sysfs_interfaces(&idev->dev);
 	if (error < 0) {
 		dev_err(&client->dev, "failed to create sysfs\n");
 		goto err_input_cleanup;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pm_runtime_enable(&client->dev);
 	pm_runtime_set_autosuspend_delay(&client->dev, MPU3050_AUTO_DELAY);
 
 	return 0;
 
+<<<<<<< HEAD
 err_input_cleanup:
 	input_unregister_device(idev);
 err_free_irq:
@@ -841,6 +987,12 @@ err_pm_set_suspended:
 	pm_runtime_set_suspended(&client->dev);
 err_class_sysfs:
 	sensors_classdev_unregister(&sensor->cdev);
+=======
+err_free_irq:
+	free_irq(client->irq, sensor);
+err_pm_set_suspended:
+	pm_runtime_set_suspended(&client->dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 err_free_mem:
 	input_free_device(idev);
 	kfree(sensor);
@@ -860,6 +1012,7 @@ static int __devexit mpu3050_remove(struct i2c_client *client)
 	pm_runtime_disable(&client->dev);
 	pm_runtime_set_suspended(&client->dev);
 
+<<<<<<< HEAD
 	if (client->irq)
 		free_irq(client->irq, sensor);
 
@@ -868,6 +1021,10 @@ static int __devexit mpu3050_remove(struct i2c_client *client)
 		gpio_free(sensor->enable_gpio);
 	input_unregister_device(sensor->idev);
 
+=======
+	free_irq(client->irq, sensor);
+	input_unregister_device(sensor->idev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(sensor);
 
 	return 0;
@@ -883,6 +1040,7 @@ static int __devexit mpu3050_remove(struct i2c_client *client)
 static int mpu3050_suspend(struct device *dev)
 {
 	struct i2c_client *client = to_i2c_client(dev);
+<<<<<<< HEAD
 	struct mpu3050_sensor *sensor = i2c_get_clientdata(client);
 
 	if (sensor->enable) {
@@ -890,6 +1048,10 @@ static int mpu3050_suspend(struct device *dev)
 			disable_irq(client->irq);
 		mpu3050_set_power_mode(client, 0);
 	}
+=======
+
+	mpu3050_set_power_mode(client, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -903,6 +1065,7 @@ static int mpu3050_suspend(struct device *dev)
 static int mpu3050_resume(struct device *dev)
 {
 	struct i2c_client *client = to_i2c_client(dev);
+<<<<<<< HEAD
 	struct mpu3050_sensor *sensor = i2c_get_clientdata(client);
 
 	if (sensor->enable) {
@@ -947,11 +1110,17 @@ static int mpu3050_runtime_resume(struct device *dev)
 		mpu3050_set_power_mode(client, 1);
 		mpu3050_hw_init(sensor);
 	}
+=======
+
+	mpu3050_set_power_mode(client, 1);
+	msleep(100);  /* wait for gyro chip resume */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
 #endif
 
+<<<<<<< HEAD
 static const struct dev_pm_ops mpu3050_pm = {
 	.runtime_suspend = mpu3050_runtime_suspend,
 	.runtime_resume = mpu3050_runtime_resume,
@@ -963,6 +1132,9 @@ static const struct dev_pm_ops mpu3050_pm = {
 	.poweroff = mpu3050_suspend,
 	.restore = mpu3050_resume,
 };
+=======
+static UNIVERSAL_DEV_PM_OPS(mpu3050_pm, mpu3050_suspend, mpu3050_resume, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static const struct i2c_device_id mpu3050_ids[] = {
 	{ "mpu3050", 0 },

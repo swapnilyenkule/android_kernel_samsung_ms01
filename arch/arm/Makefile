@@ -23,7 +23,10 @@ KBUILD_CFLAGS	+=$(call cc-option,-marm,)
 
 # Never generate .eh_frame
 KBUILD_CFLAGS	+= $(call cc-option,-fno-dwarf2-cfi-asm)
+<<<<<<< HEAD
 KBUILD_CFLAGS	+= -fno-pic
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Do not use arch/arm/defconfig - it's always outdated.
 # Select a platform tht is kept up-to-date
@@ -54,6 +57,17 @@ endif
 
 comma = ,
 
+<<<<<<< HEAD
+=======
+#
+# The Scalar Replacement of Aggregates (SRA) optimization pass in GCC 4.9 and
+# later may result in code being generated that handles signed short and signed
+# char struct members incorrectly. So disable it.
+# (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65932)
+#
+KBUILD_CFLAGS	+= $(call cc-option,-fno-ipa-sra)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # This selects which instruction set is used.
 # Note that GCC does not numerically define an architecture version
 # macro, but instead defines a whole series of macros which makes
@@ -70,6 +84,7 @@ arch-$(CONFIG_CPU_32v4T)	:=-D__LINUX_ARM_ARCH__=4 -march=armv4t
 arch-$(CONFIG_CPU_32v4)		:=-D__LINUX_ARM_ARCH__=4 -march=armv4
 arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3
 
+<<<<<<< HEAD
 # Since 'cortex-a15' is a superset of the 'armv7-a' arch spec, we need to
 # explicitly redefine the arch options to not include '-march=armv7-a' when
 # generating code for Krait, which is compatible with the instruction set of the
@@ -82,6 +97,8 @@ arch-$(CONFIG_CPU_32v3)		:=-D__LINUX_ARM_ARCH__=3 -march=armv3
 # bigger problems.
 arch-$(CONFIG_ARCH_MSM_KRAIT)	:=-D__LINUX_ARM_ARCH__=7 $(call cc-option,-mcpu=cortex-a15,-march=armv7-a)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # This selects how we optimise for the processor.
 tune-$(CONFIG_CPU_ARM610)	:=-mtune=arm610
 tune-$(CONFIG_CPU_ARM710)	:=-mtune=arm710
@@ -141,6 +158,12 @@ textofs-$(CONFIG_PM_H1940)      := 0x00108000
 ifeq ($(CONFIG_ARCH_SA1100),y)
 textofs-$(CONFIG_SA1111) := 0x00208000
 endif
+<<<<<<< HEAD
+=======
+textofs-$(CONFIG_ARCH_MSM7X30) := 0x00208000
+textofs-$(CONFIG_ARCH_MSM8X60) := 0x00208000
+textofs-$(CONFIG_ARCH_MSM8960) := 0x00208000
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Machine directory name.  This list is sorted alphanumerically
 # by CONFIG_* macro name.
@@ -260,34 +283,50 @@ endif
 core-$(CONFIG_FPE_NWFPE)	+= arch/arm/nwfpe/
 core-$(CONFIG_FPE_FASTFPE)	+= $(FASTFPE_OBJ)
 core-$(CONFIG_VFP)		+= arch/arm/vfp/
+<<<<<<< HEAD
 core-$(CONFIG_VMWARE_MVP)      += arch/arm/mvp/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # If we have a machine-specific directory, then include it in the build.
 core-y				+= arch/arm/kernel/ arch/arm/mm/ arch/arm/common/
 core-y				+= arch/arm/net/
+<<<<<<< HEAD
 core-y				+= arch/arm/crypto/
 core-y				+= $(machdirs) $(platdirs)
 
 drivers-$(CONFIG_OPROFILE)      += arch/arm/oprofile/
 core-y				+= arch/arm/perfmon/
+=======
+core-y				+= $(machdirs) $(platdirs)
+
+drivers-$(CONFIG_OPROFILE)      += arch/arm/oprofile/
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 libs-y				:= arch/arm/lib/ $(libs-y)
 
 # Default target when executing plain make
 ifeq ($(CONFIG_XIP_KERNEL),y)
 KBUILD_IMAGE := xipImage
+<<<<<<< HEAD
 else ifeq ($(CONFIG_BUILD_ARM_APPENDED_DTB_IMAGE),y)
 KBUILD_IMAGE := zImage-dtb
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 else
 KBUILD_IMAGE := zImage
 endif
 
+<<<<<<< HEAD
 # Build the DT binary blobs if we have OF configured
 ifeq ($(CONFIG_USE_OF),y)
 KBUILD_DTBS := dtbs
 endif
 
 all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
+=======
+all:	$(KBUILD_IMAGE)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 boot := arch/arm/boot
 
@@ -309,9 +348,12 @@ zinstall uinstall install: vmlinux
 dtbs: scripts
 	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $(boot)/$@
 
+<<<<<<< HEAD
 zImage-dtb: vmlinux scripts
 	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $(boot)/$@
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # We use MRPROPER_FILES and CLEAN_FILES now
 archclean:
 	$(Q)$(MAKE) $(clean)=$(boot)
@@ -326,9 +368,15 @@ define archhelp
   echo  '  Image         - Uncompressed kernel image (arch/$(ARCH)/boot/Image)'
   echo  '* xipImage      - XIP kernel image, if configured (arch/$(ARCH)/boot/xipImage)'
   echo  '  uImage        - U-Boot wrapped zImage'
+<<<<<<< HEAD
   echo  '  bootpImage    - Combined zImage and initial RAM disk'
   echo  '                  (supply initrd image via make variable INITRD=<path>)'
   echo  '* dtbs          - Build device tree blobs for enabled boards'
+=======
+  echo  '  bootpImage    - Combined zImage and initial RAM disk' 
+  echo  '                  (supply initrd image via make variable INITRD=<path>)'
+  echo  '  dtbs          - Build device tree blobs for enabled boards'
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
   echo  '  install       - Install uncompressed kernel'
   echo  '  zinstall      - Install compressed kernel'
   echo  '  uinstall      - Install U-Boot wrapped compressed kernel'

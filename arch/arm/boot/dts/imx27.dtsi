@@ -208,7 +208,11 @@
 
 			fec: fec@1002b000 {
 				compatible = "fsl,imx27-fec";
+<<<<<<< HEAD
 				reg = <0x1002b000 0x4000>;
+=======
+				reg = <0x1002b000 0x1000>;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				interrupts = <50>;
 				status = "disabled";
 			};

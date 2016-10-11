@@ -130,6 +130,7 @@ static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
 				  pmdval_t prot)
 {
 	pmdval_t pmdval = (pte + PTE_HWTABLE_OFF) | prot;
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_L1_TABLES
 	unsigned long cmd_id = 0x3f809221;
 	unsigned long tima_wr_out, pmd_base;
@@ -174,10 +175,13 @@ static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
 		}
 	#endif
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pmdp[0] = __pmd(pmdval);
 #ifndef CONFIG_ARM_LPAE
 	pmdp[1] = __pmd(pmdval + 256 * sizeof(pte_t));
 #endif
+<<<<<<< HEAD
 #endif
 	flush_pmd_entry(pmdp);
 
@@ -227,6 +231,11 @@ tima_verify_pmd_populate(struct mm_struct *mm, pmd_t *pmdp, unsigned long pte_pa
 }
 
 #endif /* CONFIG_TIMA_RKP_DEBUG */
+=======
+	flush_pmd_entry(pmdp);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Populate the pmdp entry with a pointer to the pte.  This pmd is part
  * of the mm address space.
@@ -240,18 +249,24 @@ pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmdp, pte_t *ptep)
 	 * The pmd must be loaded with the physical address of the PTE table
 	 */
 	__pmd_populate(pmdp, __pa(ptep), _PAGE_KERNEL_TABLE);
+<<<<<<< HEAD
 #ifdef 	CONFIG_TIMA_RKP_DEBUG
 	tima_verify_pmd_populate(mm,pmdp,__pa(ptep));
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void
 pmd_populate(struct mm_struct *mm, pmd_t *pmdp, pgtable_t ptep)
 {
 	__pmd_populate(pmdp, page_to_phys(ptep), _PAGE_USER_TABLE);
+<<<<<<< HEAD
 #ifdef 	CONFIG_TIMA_RKP_DEBUG
 	tima_verify_pmd_populate(mm,pmdp,page_to_phys(ptep));
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #define pmd_pgtable(pmd) pmd_page(pmd)
 

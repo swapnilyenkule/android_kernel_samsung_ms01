@@ -570,6 +570,10 @@ static ssize_t ep_aio_read_retry(struct kiocb *iocb)
 			break;
 	}
 	kfree(priv->buf);
+<<<<<<< HEAD
+=======
+	kfree(priv->iv);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(priv);
 	return len;
 }
@@ -591,6 +595,10 @@ static void ep_aio_complete(struct usb_ep *ep, struct usb_request *req)
 	 */
 	if (priv->iv == NULL || unlikely(req->actual == 0)) {
 		kfree(req->buf);
+<<<<<<< HEAD
+=======
+		kfree(priv->iv);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(priv);
 		iocb->private = NULL;
 		/* aio_complete() reports bytes-transferred _and_ faults */
@@ -626,7 +634,11 @@ ep_aio_rwtail(
 	struct usb_request	*req;
 	ssize_t			value;
 
+<<<<<<< HEAD
 	priv = kmalloc(sizeof *priv, GFP_KERNEL);
+=======
+	priv = kzalloc(sizeof *priv, GFP_KERNEL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!priv) {
 		value = -ENOMEM;
 fail:
@@ -634,11 +646,26 @@ fail:
 		return value;
 	}
 	iocb->private = priv;
+<<<<<<< HEAD
 	priv->iv = iv;
+=======
+	if (iv) {
+		priv->iv = kmemdup(iv, nr_segs * sizeof(struct iovec),
+				   GFP_KERNEL);
+		if (!priv->iv) {
+			kfree(priv);
+			goto fail;
+		}
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	priv->nr_segs = nr_segs;
 
 	value = get_ready_ep(iocb->ki_filp->f_flags, epdata);
 	if (unlikely(value < 0)) {
+<<<<<<< HEAD
+=======
+		kfree(priv->iv);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(priv);
 		goto fail;
 	}
@@ -672,6 +699,10 @@ fail:
 	mutex_unlock(&epdata->lock);
 
 	if (unlikely(value)) {
+<<<<<<< HEAD
+=======
+		kfree(priv->iv);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(priv);
 		put_ep(epdata);
 	} else
@@ -828,6 +859,10 @@ ep_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
 		if (value == 0)
 			data->state = STATE_EP_ENABLED;
 		break;
+<<<<<<< HEAD
+=======
+#ifdef	CONFIG_USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case USB_SPEED_HIGH:
 		/* fails if caller didn't provide that descriptor... */
 		ep->desc = &data->hs_desc;
@@ -835,6 +870,10 @@ ep_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
 		if (value == 0)
 			data->state = STATE_EP_ENABLED;
 		break;
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		DBG(data->dev, "unconnected, %s init abandoned\n",
 				data->name);
@@ -1322,6 +1361,10 @@ static const struct file_operations ep0_io_operations = {
  * Unrecognized ep0 requests may be handled in user space.
  */
 
+<<<<<<< HEAD
+=======
+#ifdef	CONFIG_USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void make_qualifier (struct dev_data *dev)
 {
 	struct usb_qualifier_descriptor		qual;
@@ -1344,6 +1387,10 @@ static void make_qualifier (struct dev_data *dev)
 
 	memcpy (dev->rbuf, &qual, sizeof qual);
 }
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int
 config_buf (struct dev_data *dev, u8 type, unsigned index)
@@ -1423,6 +1470,10 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			dev->dev->bMaxPacketSize0 = dev->gadget->ep0->maxpacket;
 			req->buf = dev->dev;
 			break;
+<<<<<<< HEAD
+=======
+#ifdef	CONFIG_USB_GADGET_DUALSPEED
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case USB_DT_DEVICE_QUALIFIER:
 			if (!dev->hs_config)
 				break;
@@ -1432,6 +1483,10 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			break;
 		case USB_DT_OTHER_SPEED_CONFIG:
 			// FALLTHROUGH
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case USB_DT_CONFIG:
 			value = config_buf (dev,
 					w_value >> 8,
@@ -1493,7 +1548,11 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		}
 		break;
 
+<<<<<<< HEAD
 #ifndef	CONFIG_USB_GADGET_PXA25X
+=======
+#ifndef	CONFIG_USB_PXA25X
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* PXA automagically handles this request too */
 	case USB_REQ_GET_CONFIGURATION:
 		if (ctrl->bRequestType != 0x80)
@@ -1757,6 +1816,14 @@ gadgetfs_suspend (struct usb_gadget *gadget)
 }
 
 static struct usb_gadget_driver gadgetfs_driver = {
+<<<<<<< HEAD
+=======
+#ifdef	CONFIG_USB_GADGET_DUALSPEED
+	.max_speed	= USB_SPEED_HIGH,
+#else
+	.max_speed	= USB_SPEED_FULL,
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.function	= (char *) driver_desc,
 	.unbind		= gadgetfs_unbind,
 	.setup		= gadgetfs_setup,
@@ -1889,10 +1956,13 @@ dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
 
 	/* triggers gadgetfs_bind(); then we can enumerate. */
 	spin_unlock_irq (&dev->lock);
+<<<<<<< HEAD
 	if (dev->hs_config)
 		gadgetfs_driver.max_speed = USB_SPEED_HIGH;
 	else
 		gadgetfs_driver.max_speed = USB_SPEED_FULL;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	value = usb_gadget_probe_driver(&gadgetfs_driver, gadgetfs_bind);
 	if (value != 0) {
 		kfree (dev->buf);

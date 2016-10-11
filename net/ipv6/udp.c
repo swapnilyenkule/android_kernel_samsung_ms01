@@ -348,6 +348,7 @@ int udpv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 	int is_udp4;
 	bool slow;
 
+<<<<<<< HEAD
 	if (addr_len)
 		*addr_len=sizeof(struct sockaddr_in6);
 
@@ -356,6 +357,13 @@ int udpv6_recvmsg(struct kiocb *iocb, struct sock *sk,
 
 	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
 		return ipv6_recv_rxpmtu(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ipv6_recv_error(sk, msg, len, addr_len);
+
+	if (np->rxpmtu && np->rxopt.bits.rxpmtu)
+		return ipv6_recv_rxpmtu(sk, msg, len, addr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 try_again:
 	skb = __skb_recv_datagram(sk, flags | (noblock ? MSG_DONTWAIT : 0),
@@ -387,8 +395,12 @@ try_again:
 		err = skb_copy_datagram_iovec(skb, sizeof(struct udphdr),
 					      msg->msg_iov, copied       );
 	else {
+<<<<<<< HEAD
 		err = skb_copy_and_csum_datagram_iovec(skb, sizeof(struct udphdr),
 						       msg->msg_iov, copied);
+=======
+		err = skb_copy_and_csum_datagram_iovec(skb, sizeof(struct udphdr), msg->msg_iov);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err == -EINVAL)
 			goto csum_copy_err;
 	}
@@ -424,7 +436,11 @@ try_again:
 			if (ipv6_addr_type(&sin6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
 				sin6->sin6_scope_id = IP6CB(skb)->iif;
 		}
+<<<<<<< HEAD
 
+=======
+		*addr_len = sizeof(*sin6);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	if (is_udp4) {
 		if (inet->cmsg_flags)
@@ -456,7 +472,11 @@ csum_copy_err:
 	unlock_sock_fast(sk, slow);
 
 	/* starting over for a new packet, but check if we need to yield */
+<<<<<<< HEAD
         cond_resched();
+=======
+	cond_resched();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	msg->msg_flags &= ~MSG_TRUNC;
 	goto try_again;
 }
@@ -894,11 +914,23 @@ static int udp_v6_push_pending_frames(struct sock *sk)
 	struct udphdr *uh;
 	struct udp_sock  *up = udp_sk(sk);
 	struct inet_sock *inet = inet_sk(sk);
+<<<<<<< HEAD
 	struct flowi6 *fl6 = &inet->cork.fl.u.ip6;
+=======
+	struct flowi6 *fl6;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int err = 0;
 	int is_udplite = IS_UDPLITE(sk);
 	__wsum csum = 0;
 
+<<<<<<< HEAD
+=======
+	if (up->pending == AF_INET)
+		return udp_push_pending_frames(sk);
+
+	fl6 = &inet->cork.fl.u.ip6;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Grab the skbuff where UDP header space exists. */
 	if ((skb = skb_peek(&sk->sk_write_queue)) == NULL)
 		goto out;
@@ -1086,7 +1118,10 @@ do_udp_sendmsg:
 		fl6.flowi6_oif = np->sticky_pktinfo.ipi6_ifindex;
 
 	fl6.flowi6_mark = sk->sk_mark;
+<<<<<<< HEAD
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (msg->msg_controllen) {
 		opt = &opt_space;
@@ -1364,7 +1399,11 @@ static struct sk_buff *udp6_ufo_fragment(struct sk_buff *skb,
 	fptr = (struct frag_hdr *)(skb_network_header(skb) + unfrag_ip6hlen);
 	fptr->nexthdr = nexthdr;
 	fptr->reserved = 0;
+<<<<<<< HEAD
 	ipv6_select_ident(fptr, (struct rt6_info *)skb_dst(skb));
+=======
+	fptr->identification = skb_shinfo(skb)->ip6_frag_id;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Fragment the skb. ipv6 header and the remaining fields of the
 	 * fragment header are updated in ipv6_gso_segment()

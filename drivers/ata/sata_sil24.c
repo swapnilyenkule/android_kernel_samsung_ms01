@@ -246,7 +246,11 @@ enum {
 	/* host flags */
 	SIL24_COMMON_FLAGS	= ATA_FLAG_SATA | ATA_FLAG_PIO_DMA |
 				  ATA_FLAG_NCQ | ATA_FLAG_ACPI_SATA |
+<<<<<<< HEAD
 				  ATA_FLAG_AN | ATA_FLAG_PMP,
+=======
+				  ATA_FLAG_AN | ATA_FLAG_PMP | ATA_FLAG_LOWTAG,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	SIL24_FLAG_PCIX_IRQ_WOC	= (1 << 24), /* IRQ loss errata on PCI-X */
 
 	IRQ_STAT_4PORTS		= 0xf,

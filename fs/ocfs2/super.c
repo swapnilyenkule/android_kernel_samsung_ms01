@@ -1578,8 +1578,13 @@ static int ocfs2_show_options(struct seq_file *s, struct dentry *root)
 		seq_printf(s, ",localflocks,");
 
 	if (osb->osb_cluster_stack[0])
+<<<<<<< HEAD
 		seq_printf(s, ",cluster_stack=%.*s", OCFS2_STACK_LABEL_LEN,
 			   osb->osb_cluster_stack);
+=======
+		seq_show_option_n(s, "cluster_stack", osb->osb_cluster_stack,
+				  OCFS2_STACK_LABEL_LEN);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (opts & OCFS2_MOUNT_USRQUOTA)
 		seq_printf(s, ",usrquota");
 	if (opts & OCFS2_MOUNT_GRPQUOTA)

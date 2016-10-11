@@ -254,6 +254,12 @@ static int br_parse_ip_options(struct sk_buff *skb)
 	struct net_device *dev = skb->dev;
 	u32 len;
 
+<<<<<<< HEAD
+=======
+	if (!pskb_may_pull(skb, sizeof(struct iphdr)))
+		goto inhdr_error;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	iph = ip_hdr(skb);
 	opt = &(IPCB(skb)->opt);
 
@@ -815,12 +821,20 @@ static unsigned int br_nf_forward_arp(unsigned int hook, struct sk_buff *skb,
 	return NF_STOLEN;
 }
 
+<<<<<<< HEAD
 #if IS_ENABLED(CONFIG_NF_CONNTRACK_IPV4)
+=======
+#if IS_ENABLED(CONFIG_NF_DEFRAG_IPV4)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int br_nf_dev_queue_xmit(struct sk_buff *skb)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (skb->nfct != NULL && skb->protocol == htons(ETH_P_IP) &&
+=======
+	if (skb->protocol == htons(ETH_P_IP) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    skb->len + nf_bridge_mtu_reduction(skb) > skb->dev->mtu &&
 	    !skb_is_gso(skb)) {
 		if (br_parse_ip_options(skb))

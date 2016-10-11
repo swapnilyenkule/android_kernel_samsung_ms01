@@ -653,12 +653,18 @@ void dlm_lockres_clear_refmap_bit(struct dlm_ctxt *dlm,
 	clear_bit(bit, res->refmap);
 }
 
+<<<<<<< HEAD
 
 void dlm_lockres_grab_inflight_ref(struct dlm_ctxt *dlm,
 				   struct dlm_lock_resource *res)
 {
 	assert_spin_locked(&res->spinlock);
 
+=======
+static void __dlm_lockres_grab_inflight_ref(struct dlm_ctxt *dlm,
+				   struct dlm_lock_resource *res)
+{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	res->inflight_locks++;
 
 	mlog(0, "%s: res %.*s, inflight++: now %u, %ps()\n", dlm->name,
@@ -666,6 +672,16 @@ void dlm_lockres_grab_inflight_ref(struct dlm_ctxt *dlm,
 	     __builtin_return_address(0));
 }
 
+<<<<<<< HEAD
+=======
+void dlm_lockres_grab_inflight_ref(struct dlm_ctxt *dlm,
+				   struct dlm_lock_resource *res)
+{
+	assert_spin_locked(&res->spinlock);
+	__dlm_lockres_grab_inflight_ref(dlm, res);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void dlm_lockres_drop_inflight_ref(struct dlm_ctxt *dlm,
 				   struct dlm_lock_resource *res)
 {
@@ -725,6 +741,22 @@ lookup:
 	if (tmpres) {
 		spin_unlock(&dlm->spinlock);
 		spin_lock(&tmpres->spinlock);
+<<<<<<< HEAD
+=======
+
+		/*
+		 * Right after dlm spinlock was released, dlm_thread could have
+		 * purged the lockres. Check if lockres got unhashed. If so
+		 * start over.
+		 */
+		if (hlist_unhashed(&tmpres->hash_node)) {
+			spin_unlock(&tmpres->spinlock);
+			dlm_lockres_put(tmpres);
+			tmpres = NULL;
+			goto lookup;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* Wait on the thread that is mastering the resource */
 		if (tmpres->owner == DLM_LOCK_RES_OWNER_UNKNOWN) {
 			__dlm_wait_on_lockres(tmpres);
@@ -855,10 +887,15 @@ lookup:
 	/* finally add the lockres to its hash bucket */
 	__dlm_insert_lockres(dlm, res);
 
+<<<<<<< HEAD
 	/* Grab inflight ref to pin the resource */
 	spin_lock(&res->spinlock);
 	dlm_lockres_grab_inflight_ref(dlm, res);
 	spin_unlock(&res->spinlock);
+=======
+	/* since this lockres is new it doesn't not require the spinlock */
+	__dlm_lockres_grab_inflight_ref(dlm, res);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* get an extra ref on the mle in case this is a BLOCK
 	 * if so, the creator of the BLOCK may try to put the last
@@ -1396,6 +1433,10 @@ int dlm_master_request_handler(struct o2net_msg *msg, u32 len, void *data,
 	int found, ret;
 	int set_maybe;
 	int dispatch_assert = 0;
+<<<<<<< HEAD
+=======
+	int dispatched = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!dlm_grab(dlm))
 		return DLM_MASTER_RESP_NO;
@@ -1602,13 +1643,23 @@ send_response:
 			mlog(ML_ERROR, "failed to dispatch assert master work\n");
 			response = DLM_MASTER_RESP_ERROR;
 			dlm_lockres_put(res);
+<<<<<<< HEAD
+=======
+		} else {
+			dispatched = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	} else {
 		if (res)
 			dlm_lockres_put(res);
 	}
 
+<<<<<<< HEAD
 	dlm_put(dlm);
+=======
+	if (!dispatched)
+		dlm_put(dlm);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return response;
 }
 
@@ -2026,7 +2077,10 @@ int dlm_dispatch_assert_master(struct dlm_ctxt *dlm,
 
 
 	/* queue up work for dlm_assert_master_worker */
+<<<<<<< HEAD
 	dlm_grab(dlm);  /* get an extra ref for the work item */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dlm_init_work_item(dlm, item, dlm_assert_master_worker, NULL);
 	item->u.am.lockres = res; /* already have a ref */
 	/* can optionally ignore node numbers higher than this node */

@@ -340,7 +340,11 @@ static int ddebug_parse_query(char *words[], int nwords,
 			       struct ddebug_query *query)
 {
 	unsigned int i;
+<<<<<<< HEAD
 	int rc = 0;
+=======
+	int rc;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* check we have an even number of words */
 	if (nwords % 2 != 0)

@@ -168,7 +168,11 @@ struct crush_map {
 
 
 /* crush.c */
+<<<<<<< HEAD
 extern int crush_get_bucket_item_weight(struct crush_bucket *b, int pos);
+=======
+extern int crush_get_bucket_item_weight(const struct crush_bucket *b, int pos);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void crush_calc_parents(struct crush_map *map);
 extern void crush_destroy_bucket_uniform(struct crush_bucket_uniform *b);
 extern void crush_destroy_bucket_list(struct crush_bucket_list *b);
@@ -177,4 +181,12 @@ extern void crush_destroy_bucket_straw(struct crush_bucket_straw *b);
 extern void crush_destroy_bucket(struct crush_bucket *b);
 extern void crush_destroy(struct crush_map *map);
 
+<<<<<<< HEAD
+=======
+static inline int crush_calc_tree_node(int i)
+{
+	return ((i+1) << 1)-1;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

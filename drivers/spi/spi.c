@@ -831,8 +831,12 @@ static struct class spi_master_class = {
  *
  * The caller is responsible for assigning the bus number and initializing
  * the master's methods before calling spi_register_master(); and (after errors
+<<<<<<< HEAD
  * adding the device) calling spi_master_put() and kfree() to prevent a memory
  * leak.
+=======
+ * adding the device) calling spi_master_put() to prevent a memory leak.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct spi_master *spi_alloc_master(struct device *dev, unsigned size)
 {

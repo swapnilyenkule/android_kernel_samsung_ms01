@@ -198,7 +198,11 @@ static void virtscsi_map_sgl(struct scatterlist *sg, unsigned int *p_idx,
 	int i;
 
 	for_each_sg(table->sgl, sg_elem, table->nents, i)
+<<<<<<< HEAD
 		sg_set_buf(&sg[idx++], sg_virt(sg_elem), sg_elem->length);
+=======
+		sg[idx++] = *sg_elem;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	*p_idx = idx;
 }

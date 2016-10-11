@@ -6,4 +6,7 @@ obj-$(CONFIG_MTD_TESTS) += mtd_stresstest.o
 obj-$(CONFIG_MTD_TESTS) += mtd_subpagetest.o
 obj-$(CONFIG_MTD_TESTS) += mtd_torturetest.o
 obj-$(CONFIG_MTD_TESTS) += mtd_nandecctest.o
+<<<<<<< HEAD
 obj-$(CONFIG_MTD_TESTS) += mtd_erasepart.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

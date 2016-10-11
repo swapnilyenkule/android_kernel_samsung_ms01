@@ -37,6 +37,16 @@
 
 #define ADDBA_RSP_STATUS_ACCEPT 0
 
+<<<<<<< HEAD
+=======
+#define MWIFIEX_DEF_11N_RX_SEQ_NUM	0xffff
+
+static inline void mwifiex_reset_11n_rx_seq_num(struct mwifiex_private *priv)
+{
+	memset(priv->rx_seq, 0xff, sizeof(priv->rx_seq));
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int mwifiex_11n_rx_reorder_pkt(struct mwifiex_private *,
 			       u16 seqNum,
 			       u16 tid, u8 *ta,

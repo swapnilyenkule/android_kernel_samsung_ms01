@@ -283,8 +283,11 @@ enum rtattr_type_t {
 	RTA_MP_ALGO, /* no longer used */
 	RTA_TABLE,
 	RTA_MARK,
+<<<<<<< HEAD
 	RTA_MFC_STATS, /* not used - backported from the future */
 	RTA_UID,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__RTA_MAX
 };
 

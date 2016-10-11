@@ -148,7 +148,11 @@ static void ieee80211_work_work(struct work_struct *work)
 		}
 
 		if (!started && !local->tmp_channel) {
+<<<<<<< HEAD
 			ieee80211_offchannel_stop_vifs(local, true);
+=======
+			ieee80211_offchannel_stop_vifs(local);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			local->tmp_channel = wk->chan;
 			local->tmp_channel_type = wk->chan_type;
@@ -220,7 +224,11 @@ static void ieee80211_work_work(struct work_struct *work)
 		local->tmp_channel = NULL;
 		ieee80211_hw_config(local, 0);
 
+<<<<<<< HEAD
 		ieee80211_offchannel_return(local, true);
+=======
+		ieee80211_offchannel_return(local);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* give connection some time to breathe */
 		run_again(local, jiffies + HZ/2);

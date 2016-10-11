@@ -58,7 +58,12 @@ static struct ft_tport *ft_tport_create(struct fc_lport *lport)
 	struct ft_tport *tport;
 	int i;
 
+<<<<<<< HEAD
 	tport = rcu_dereference(lport->prov[FC_TYPE_FCP]);
+=======
+	tport = rcu_dereference_protected(lport->prov[FC_TYPE_FCP],
+					  lockdep_is_held(&ft_lport_lock));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (tport && tport->tpg)
 		return tport;
 
@@ -68,6 +73,10 @@ static struct ft_tport *ft_tport_create(struct fc_lport *lport)
 
 	if (tport) {
 		tport->tpg = tpg;
+<<<<<<< HEAD
+=======
+		tpg->tport = tport;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return tport;
 	}
 
@@ -355,11 +364,19 @@ static int ft_prli_locked(struct fc_rport_priv *rdata, u32 spp_len,
 
 	tport = ft_tport_create(rdata->local_port);
 	if (!tport)
+<<<<<<< HEAD
 		return 0;	/* not a target for this local port */
 
 	acl = ft_acl_get(tport->tpg, rdata);
 	if (!acl)
 		return 0;
+=======
+		goto not_target;	/* not a target for this local port */
+
+	acl = ft_acl_get(tport->tpg, rdata);
+	if (!acl)
+		goto not_target;	/* no target for this remote */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!rspp)
 		goto fill;
@@ -396,12 +413,27 @@ static int ft_prli_locked(struct fc_rport_priv *rdata, u32 spp_len,
 
 	/*
 	 * OR in our service parameters with other provider (initiator), if any.
+<<<<<<< HEAD
 	 * TBD XXX - indicate RETRY capability?
 	 */
 fill:
 	fcp_parm = ntohl(spp->spp_params);
 	spp->spp_params = htonl(fcp_parm | FCP_SPPF_TARG_FCN);
 	return FC_SPP_RESP_ACK;
+=======
+	 */
+fill:
+	fcp_parm = ntohl(spp->spp_params);
+	fcp_parm &= ~FCP_SPPF_RETRY;
+	spp->spp_params = htonl(fcp_parm | FCP_SPPF_TARG_FCN);
+	return FC_SPP_RESP_ACK;
+
+not_target:
+	fcp_parm = ntohl(spp->spp_params);
+	fcp_parm &= ~FCP_SPPF_TARG_FCN;
+	spp->spp_params = htonl(fcp_parm);
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -430,7 +462,10 @@ static void ft_sess_rcu_free(struct rcu_head *rcu)
 {
 	struct ft_sess *sess = container_of(rcu, struct ft_sess, rcu);
 
+<<<<<<< HEAD
 	transport_deregister_session(sess->se_sess);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(sess);
 }
 
@@ -438,6 +473,10 @@ static void ft_sess_free(struct kref *kref)
 {
 	struct ft_sess *sess = container_of(kref, struct ft_sess, kref);
 
+<<<<<<< HEAD
+=======
+	transport_deregister_session(sess->se_sess);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	call_rcu(&sess->rcu, ft_sess_rcu_free);
 }
 

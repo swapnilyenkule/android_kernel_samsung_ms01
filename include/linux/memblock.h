@@ -50,15 +50,23 @@ phys_addr_t memblock_find_in_range_node(phys_addr_t start, phys_addr_t end,
 				phys_addr_t size, phys_addr_t align, int nid);
 phys_addr_t memblock_find_in_range(phys_addr_t start, phys_addr_t end,
 				   phys_addr_t size, phys_addr_t align);
+<<<<<<< HEAD
 int memblock_free_reserved_regions(void);
 int memblock_reserve_reserved_regions(void);
 
+=======
+phys_addr_t get_allocated_memblock_reserved_regions_info(phys_addr_t *addr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void memblock_allow_resize(void);
 int memblock_add_node(phys_addr_t base, phys_addr_t size, int nid);
 int memblock_add(phys_addr_t base, phys_addr_t size);
 int memblock_remove(phys_addr_t base, phys_addr_t size);
 int memblock_free(phys_addr_t base, phys_addr_t size);
 int memblock_reserve(phys_addr_t base, phys_addr_t size);
+<<<<<<< HEAD
+=======
+void memblock_trim_memory(phys_addr_t align);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_HAVE_MEMBLOCK_NODE_MAP
 void __next_mem_pfn_range(int *idx, int nid, unsigned long *out_start_pfn,
@@ -162,7 +170,10 @@ phys_addr_t memblock_end_of_DRAM(void);
 void memblock_enforce_memory_limit(phys_addr_t memory_limit);
 int memblock_is_memory(phys_addr_t addr);
 int memblock_is_region_memory(phys_addr_t base, phys_addr_t size);
+<<<<<<< HEAD
 int memblock_overlaps_memory(phys_addr_t base, phys_addr_t size);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int memblock_is_reserved(phys_addr_t addr);
 int memblock_is_region_reserved(phys_addr_t base, phys_addr_t size);
 

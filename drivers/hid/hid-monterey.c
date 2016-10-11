@@ -25,7 +25,11 @@
 static __u8 *mr_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 		unsigned int *rsize)
 {
+<<<<<<< HEAD
 	if (*rsize >= 30 && rdesc[29] == 0x05 && rdesc[30] == 0x09) {
+=======
+	if (*rsize >= 31 && rdesc[29] == 0x05 && rdesc[30] == 0x09) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		hid_info(hdev, "fixing up button/consumer in HID report descriptor\n");
 		rdesc[30] = 0x0c;
 	}

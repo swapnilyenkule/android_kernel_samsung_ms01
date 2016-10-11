@@ -450,7 +450,11 @@ static int newseg(struct ipc_namespace *ns, struct ipc_params *params)
 	size_t size = params->u.size;
 	int error;
 	struct shmid_kernel *shp;
+<<<<<<< HEAD
 	int numpages = (size + PAGE_SIZE -1) >> PAGE_SHIFT;
+=======
+	size_t numpages = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct file * file;
 	char name[13];
 	int id;
@@ -479,10 +483,19 @@ static int newseg(struct ipc_namespace *ns, struct ipc_params *params)
 
 	sprintf (name, "SYSV%08x", key);
 	if (shmflg & SHM_HUGETLB) {
+<<<<<<< HEAD
 		/* hugetlb_file_setup applies strict accounting */
 		if (shmflg & SHM_NORESERVE)
 			acctflag = VM_NORESERVE;
 		file = hugetlb_file_setup(name, 0, size, acctflag,
+=======
+		size_t hugesize = ALIGN(size, huge_page_size(&default_hstate));
+
+		/* hugetlb_file_setup applies strict accounting */
+		if (shmflg & SHM_NORESERVE)
+			acctflag = VM_NORESERVE;
+		file = hugetlb_file_setup(name, hugesize, acctflag,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					&shp->mlock_user, HUGETLB_SHMFS_INODE);
 	} else {
 		/*
@@ -498,12 +511,15 @@ static int newseg(struct ipc_namespace *ns, struct ipc_params *params)
 	if (IS_ERR(file))
 		goto no_file;
 
+<<<<<<< HEAD
 	id = ipc_addid(&shm_ids(ns), &shp->shm_perm, ns->shm_ctlmni);
 	if (id < 0) {
 		error = id;
 		goto no_id;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	shp->shm_cprid = task_tgid_vnr(current);
 	shp->shm_lprid = 0;
 	shp->shm_atim = shp->shm_dtim = 0;
@@ -512,6 +528,16 @@ static int newseg(struct ipc_namespace *ns, struct ipc_params *params)
 	shp->shm_nattch = 0;
 	shp->shm_file = file;
 	shp->shm_creator = current;
+<<<<<<< HEAD
+=======
+
+	id = ipc_addid(&shm_ids(ns), &shp->shm_perm, ns->shm_ctlmni);
+	if (id < 0) {
+		error = id;
+		goto no_id;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * shmid gets reported as "inode#" in /proc/pid/maps.
 	 * proc-ps tools use this. Changing this will break them.

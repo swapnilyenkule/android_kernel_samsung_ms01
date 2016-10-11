@@ -1,6 +1,7 @@
 #ifndef _LINUX_SECCOMP_H
 #define _LINUX_SECCOMP_H
 
+<<<<<<< HEAD
 #include <linux/compiler.h>
 #include <linux/types.h>
 
@@ -54,12 +55,15 @@ struct seccomp_data {
 #ifdef __KERNEL__
 
 #define SECCOMP_FILTER_FLAG_MASK	(SECCOMP_FILTER_FLAG_TSYNC)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_SECCOMP
 
 #include <linux/thread_info.h>
 #include <asm/seccomp.h>
 
+<<<<<<< HEAD
 struct seccomp_filter;
 /**
  * struct seccomp - the state of a seccomp'ed process
@@ -95,6 +99,21 @@ extern long prctl_get_seccomp(void);
 extern long prctl_set_seccomp(unsigned long, char __user *);
 
 static inline int seccomp_mode(struct seccomp *s)
+=======
+typedef struct { int mode; } seccomp_t;
+
+extern void __secure_computing(int);
+static inline void secure_computing(int this_syscall)
+{
+	if (unlikely(test_thread_flag(TIF_SECCOMP)))
+		__secure_computing(this_syscall);
+}
+
+extern long prctl_get_seccomp(void);
+extern long prctl_set_seccomp(unsigned long);
+
+static inline int seccomp_mode(seccomp_t *s)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return s->mode;
 }
@@ -103,22 +122,33 @@ static inline int seccomp_mode(struct seccomp *s)
 
 #include <linux/errno.h>
 
+<<<<<<< HEAD
 struct seccomp { };
 struct seccomp_filter { };
 
 static inline int secure_computing(int this_syscall) { return 0; }
 static inline void secure_computing_strict(int this_syscall) { return; }
+=======
+typedef struct { } seccomp_t;
+
+#define secure_computing(x) do { } while (0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline long prctl_get_seccomp(void)
 {
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 static inline long prctl_set_seccomp(unsigned long arg2, char __user *arg3)
+=======
+static inline long prctl_set_seccomp(unsigned long arg2)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 static inline int seccomp_mode(struct seccomp *s)
 {
 	return 0;
@@ -140,4 +170,13 @@ static inline void get_seccomp_filter(struct task_struct *tsk)
 }
 #endif /* CONFIG_SECCOMP_FILTER */
 #endif /* __KERNEL__ */
+=======
+static inline int seccomp_mode(seccomp_t *s)
+{
+	return 0;
+}
+
+#endif /* CONFIG_SECCOMP */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _LINUX_SECCOMP_H */

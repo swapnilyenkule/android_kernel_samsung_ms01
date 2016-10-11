@@ -21,7 +21,10 @@
 #include <linux/firmware.h>
 #include <linux/slab.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
 #include <linux/io.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define to_dev(obj) container_of(obj, struct device, kobj)
 
@@ -99,8 +102,11 @@ struct firmware_priv {
 	struct page **pages;
 	int nr_pages;
 	int page_array_size;
+<<<<<<< HEAD
 	phys_addr_t dest_addr;
 	size_t dest_size;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct timer_list timeout;
 	struct device dev;
 	bool nowait;
@@ -242,10 +248,13 @@ static ssize_t firmware_loading_store(struct device *dev,
 
 	switch (loading) {
 	case 1:
+<<<<<<< HEAD
 		if (fw_priv->dest_addr) {
 			set_bit(FW_STATUS_LOADING, &fw_priv->status);
 			break;
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		firmware_free_data(fw_priv->fw);
 		memset(fw_priv->fw, 0, sizeof(struct firmware));
 		/* If the pages are not owned by 'struct firmware' */
@@ -259,11 +268,14 @@ static ssize_t firmware_loading_store(struct device *dev,
 		break;
 	case 0:
 		if (test_bit(FW_STATUS_LOADING, &fw_priv->status)) {
+<<<<<<< HEAD
 			if (fw_priv->dest_addr) {
 				complete(&fw_priv->completion);
 				clear_bit(FW_STATUS_LOADING, &fw_priv->status);
 				break;
 			}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			vunmap(fw_priv->fw->data);
 			fw_priv->fw->data = vmap(fw_priv->pages,
 						 fw_priv->nr_pages,
@@ -298,6 +310,7 @@ out:
 
 static DEVICE_ATTR(loading, 0644, firmware_loading_show, firmware_loading_store);
 
+<<<<<<< HEAD
 static int __firmware_data_rw(struct firmware_priv *fw_priv, char *buffer,
 				loff_t *offset, size_t count, int read)
 {
@@ -359,6 +372,8 @@ out:
 	return ret_count;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static ssize_t firmware_data_read(struct file *filp, struct kobject *kobj,
 				  struct bin_attribute *bin_attr,
 				  char *buffer, loff_t offset, size_t count)
@@ -441,6 +456,7 @@ static int fw_realloc_buffer(struct firmware_priv *fw_priv, int min_size)
 	return 0;
 }
 
+<<<<<<< HEAD
 static ssize_t firmware_direct_write(struct file *filp, struct kobject *kobj,
 				   struct bin_attribute *bin_attr,
 				   char *buffer, loff_t offset, size_t count)
@@ -470,6 +486,8 @@ out:
 	return retval;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * firmware_data_write - write method for firmware
  * @filp: open sysfs file
@@ -535,6 +553,7 @@ static struct bin_attribute firmware_attr_data = {
 	.write = firmware_data_write,
 };
 
+<<<<<<< HEAD
 static struct bin_attribute firmware_direct_attr_data = {
 	.attr = { .name = "data", .mode = 0644 },
 	.size = 0,
@@ -542,6 +561,8 @@ static struct bin_attribute firmware_direct_attr_data = {
 	.write = firmware_direct_write,
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void firmware_class_timeout(u_long data)
 {
 	struct firmware_priv *fw_priv = (struct firmware_priv *) data;
@@ -620,8 +641,11 @@ static int _request_firmware_load(struct firmware_priv *fw_priv, bool uevent,
 {
 	int retval = 0;
 	struct device *f_dev = &fw_priv->dev;
+<<<<<<< HEAD
 	struct bin_attribute *fw_attr_data = fw_priv->dest_addr ?
 			&firmware_direct_attr_data : &firmware_attr_data;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	dev_set_uevent_suppress(f_dev, true);
 
@@ -634,7 +658,11 @@ static int _request_firmware_load(struct firmware_priv *fw_priv, bool uevent,
 		goto err_put_dev;
 	}
 
+<<<<<<< HEAD
 	retval = device_create_bin_file(f_dev, fw_attr_data);
+=======
+	retval = device_create_bin_file(f_dev, &firmware_attr_data);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (retval) {
 		dev_err(f_dev, "%s: sysfs_create_bin_file failed\n", __func__);
 		goto err_del_dev;
@@ -669,7 +697,11 @@ static int _request_firmware_load(struct firmware_priv *fw_priv, bool uevent,
 
 	device_remove_file(f_dev, &dev_attr_loading);
 err_del_bin_attr:
+<<<<<<< HEAD
 	device_remove_bin_file(f_dev, fw_attr_data);
+=======
+	device_remove_bin_file(f_dev, &firmware_attr_data);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 err_del_dev:
 	device_del(f_dev);
 err_put_dev:
@@ -677,6 +709,7 @@ err_put_dev:
 	return retval;
 }
 
+<<<<<<< HEAD
 static int
 __request_firmware(const struct firmware **firmware_p, const char *name,
 		   struct device *device, phys_addr_t dest_addr, size_t size)
@@ -706,6 +739,8 @@ __request_firmware(const struct firmware **firmware_p, const char *name,
 	return ret;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * request_firmware: - send firmware request and wait for it
  * @firmware_p: pointer to firmware image
@@ -723,6 +758,7 @@ __request_firmware(const struct firmware **firmware_p, const char *name,
  **/
 int
 request_firmware(const struct firmware **firmware_p, const char *name,
+<<<<<<< HEAD
 		 struct device *device)
 {
 	return __request_firmware(firmware_p, name, device, 0, 0);
@@ -750,6 +786,32 @@ int request_firmware_direct(const char *name, struct device *device,
 		return ret;
 	ret = fp->size;
 	release_firmware(fp);
+=======
+                 struct device *device)
+{
+	struct firmware_priv *fw_priv;
+	int ret;
+
+	if (!name || name[0] == '\0')
+		return -EINVAL;
+
+	fw_priv = _request_firmware_prepare(firmware_p, name, device, true,
+					    false);
+	if (IS_ERR_OR_NULL(fw_priv))
+		return PTR_RET(fw_priv);
+
+	ret = usermodehelper_read_trylock();
+	if (WARN_ON(ret)) {
+		dev_err(device, "firmware: %s will not be loaded\n", name);
+	} else {
+		ret = _request_firmware_load(fw_priv, true,
+					firmware_loading_timeout());
+		usermodehelper_read_unlock();
+	}
+	if (ret)
+		_request_firmware_cleanup(firmware_p);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 

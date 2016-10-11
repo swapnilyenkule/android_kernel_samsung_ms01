@@ -102,7 +102,11 @@ static const char *part_probes[] = { "cmdlinepart", "RedBoot", NULL };
 static int cafe_device_ready(struct mtd_info *mtd)
 {
 	struct cafe_priv *cafe = mtd->priv;
+<<<<<<< HEAD
 	int result = !!(cafe_readl(cafe, NAND_STATUS) | 0x40000000);
+=======
+	int result = !!(cafe_readl(cafe, NAND_STATUS) & 0x40000000);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	uint32_t irqs = cafe_readl(cafe, NAND_IRQ);
 
 	cafe_writel(cafe, irqs, NAND_IRQ);

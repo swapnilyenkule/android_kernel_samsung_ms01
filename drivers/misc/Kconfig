@@ -4,6 +4,7 @@
 
 menu "Misc devices"
 
+<<<<<<< HEAD
 config SEC_FPGA_ICE40XX
 	tristate "this feature allows FPGA_ICE40XX"
 	default n
@@ -23,6 +24,8 @@ config IR_REMOCON_FPGA
 	  To compile this driver as a module, choose M here.
 	  If unsure, say N.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SENSORS_LIS3LV02D
 	tristate
 	depends on INPUT
@@ -50,6 +53,7 @@ config AD525X_DPOT
 	  This driver can also be built as a module.  If so, the module
 	  will be called ad525x_dpot.
 
+<<<<<<< HEAD
 config MUIC_MAX77803_SUPPORT_MHL_CABLE_DETECTION
 	  bool "MUIC_MAX77803_SUPPORT_MHL_CABLE_DETECTION"
 	  depends on MFD_MAX77803
@@ -82,6 +86,8 @@ config MUIC_MAX77804K_SUPPORT_HMT_DETECTION
 	  If you say yes here you will get support for the HMT
 	  detection.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config AD525X_DPOT_I2C
 	tristate "support I2C bus connection"
 	depends on AD525X_DPOT && I2C
@@ -426,6 +432,7 @@ config SENSORS_APDS990X
 	   To compile this driver as a module, choose M here: the
 	   module will be called apds990x. If unsure, say N here.
 
+<<<<<<< HEAD
 config SAMSUNG_JACK
 	bool "3.5 PI Jack driver for Samsung devices"
 	depends on INPUT
@@ -437,6 +444,8 @@ config SAMSUNG_JACK
 	 To samsung jack is reviewed and supported in all the
 	 samsung devices.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config HMC6352
 	tristate "Honeywell HMC6352 compass"
 	depends on I2C
@@ -444,6 +453,7 @@ config HMC6352
 	  This driver provides support for the Honeywell HMC6352 compass,
 	  providing configuration and heading data via sysfs.
 
+<<<<<<< HEAD
 config SENSORS_AK8975
 	tristate "AK8975 compass support"
 	default n
@@ -452,6 +462,8 @@ config SENSORS_AK8975
 	  If you say yes here you get support for Asahi Kasei's
 	  orientation sensor AK8975.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config EP93XX_PWM
 	tristate "EP93xx PWM support"
 	depends on ARCH_EP93XX
@@ -495,10 +507,13 @@ config TI_DAC7512
 	  This driver can also be built as a module. If so, the module
 	  will be called ti_dac7512.
 
+<<<<<<< HEAD
 config UID_STAT
 	bool "UID based statistics tracking exported to /proc/uid_stat"
 	default n
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config VMWARE_BALLOON
 	tristate "VMware Balloon Driver"
 	depends on X86
@@ -555,6 +570,7 @@ config PCH_PHUB
 	  To compile this driver as a module, choose M here: the module will
 	  be called pch_phub.
 
+<<<<<<< HEAD
 config USB_SWITCH_RT8973
         tristate "MUIC RT8973"
         depends on I2C
@@ -564,6 +580,8 @@ config USB_SWITCH_RT8973
           stereo and mono audio, video, microphone and UART data to use
           a common connector port.
 	  
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config USB_SWITCH_FSA9480
 	tristate "FSA9480 USB Switch"
 	depends on I2C
@@ -573,6 +591,7 @@ config USB_SWITCH_FSA9480
 	  stereo and mono audio, video, microphone and UART data to use
 	  a common connector port.
 
+<<<<<<< HEAD
 config SM5502_MUIC
 	bool "SILICON MITUS MUIC"
 	default n
@@ -668,6 +687,8 @@ config MUIC_FSA9485_SUPPORT_LANHUB
 	  The FSA9485 is a USB port accessory detector and switch.
 	  This Config can config for supporting Lanhub or not.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config MAX8997_MUIC
 	tristate "MAX8997 MUIC Support"
 	depends on MFD_MAX8997
@@ -676,6 +697,7 @@ config MAX8997_MUIC
 	  Maxim MAX8997 PMIC.
 	  The MAX8997 MUIC is a USB port accessory detector and switch.
 
+<<<<<<< HEAD
 config MUIC_MAX77828_SUPPORT_OTG_AUDIO_DOCK
 	bool "MUIC_MAX77828_SUPPORT_OTG_AUDIO_DOCK"
 	depends on MFD_MAX77828
@@ -1032,6 +1054,8 @@ config MUIC_DET_JACK
 	 Some project use muic earjack instead of 3.5phi earjack.
 	 Max77804k muic also support earjack detection.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"
 source "drivers/misc/cb710/Kconfig"
@@ -1040,5 +1064,8 @@ source "drivers/misc/ti-st/Kconfig"
 source "drivers/misc/lis3lv02d/Kconfig"
 source "drivers/misc/carma/Kconfig"
 source "drivers/misc/altera-stapl/Kconfig"
+<<<<<<< HEAD
 source "drivers/misc/modem_if/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endmenu

@@ -76,9 +76,15 @@ struct msginfo {
 
 /* one msg_msg structure for each message */
 struct msg_msg {
+<<<<<<< HEAD
 	struct list_head m_list; 
 	long  m_type;          
 	int m_ts;           /* message text size */
+=======
+	struct list_head m_list;
+	long m_type;
+	size_t m_ts;		/* message text size */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct msg_msgseg* next;
 	void *security;
 	/* the actual message follows immediately */

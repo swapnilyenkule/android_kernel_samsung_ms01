@@ -158,6 +158,11 @@ static void netlink_sock_destruct(struct sock *sk)
 	if (nlk->cb) {
 		if (nlk->cb->done)
 			nlk->cb->done(nlk->cb);
+<<<<<<< HEAD
+=======
+
+		module_put(nlk->cb->module);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		netlink_destroy_callback(nlk->cb);
 	}
 
@@ -648,9 +653,12 @@ static int netlink_bind(struct socket *sock, struct sockaddr *addr,
 	struct sockaddr_nl *nladdr = (struct sockaddr_nl *)addr;
 	int err;
 
+<<<<<<< HEAD
 	if (addr_len < sizeof(struct sockaddr_nl))
 		return -EINVAL;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (nladdr->nl_family != AF_NETLINK)
 		return -EINVAL;
 
@@ -1355,7 +1363,11 @@ static int netlink_sendmsg(struct kiocb *kiocb, struct socket *sock,
 		dst_group = ffs(addr->nl_groups);
 		err =  -EPERM;
 		if ((dst_group || dst_pid) &&
+<<<<<<< HEAD
 			!netlink_capable(sock, NL_NONROOT_SEND))
+=======
+		    !netlink_capable(sock, NL_NONROOT_SEND))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto out;
 	} else {
 		dst_pid = nlk->dst_pid;
@@ -1444,8 +1456,11 @@ static int netlink_recvmsg(struct kiocb *kiocb, struct socket *sock,
 	}
 #endif
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	copied = data_skb->len;
 	if (len < copied) {
 		msg->msg_flags |= MSG_TRUNC;
@@ -1742,6 +1757,10 @@ static int netlink_dump(struct sock *sk)
 	nlk->cb = NULL;
 	mutex_unlock(nlk->cb_mutex);
 
+<<<<<<< HEAD
+=======
+	module_put(cb->module);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	netlink_destroy_callback(cb);
 	return 0;
 
@@ -1751,9 +1770,15 @@ errout_skb:
 	return err;
 }
 
+<<<<<<< HEAD
 int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 		       const struct nlmsghdr *nlh,
 		       struct netlink_dump_control *control)
+=======
+int __netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
+			 const struct nlmsghdr *nlh,
+			 struct netlink_dump_control *control)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct netlink_callback *cb;
 	struct sock *sk;
@@ -1768,6 +1793,10 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 	cb->done = control->done;
 	cb->nlh = nlh;
 	cb->data = control->data;
+<<<<<<< HEAD
+=======
+	cb->module = control->module;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cb->min_dump_alloc = control->min_dump_alloc;
 	atomic_inc(&skb->users);
 	cb->skb = skb;
@@ -1778,6 +1807,7 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 		return -ECONNREFUSED;
 	}
 	nlk = nlk_sk(sk);
+<<<<<<< HEAD
 	/* A dump is in progress... */
 	mutex_lock(nlk->cb_mutex);
 	if (nlk->cb) {
@@ -1786,11 +1816,34 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 		sock_put(sk);
 		return -EBUSY;
 	}
+=======
+
+	mutex_lock(nlk->cb_mutex);
+	/* A dump is in progress... */
+	if (nlk->cb) {
+		mutex_unlock(nlk->cb_mutex);
+		netlink_destroy_callback(cb);
+		ret = -EBUSY;
+		goto out;
+	}
+	/* add reference of module which cb->dump belongs to */
+	if (!try_module_get(cb->module)) {
+		mutex_unlock(nlk->cb_mutex);
+		netlink_destroy_callback(cb);
+		ret = -EPROTONOSUPPORT;
+		goto out;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nlk->cb = cb;
 	mutex_unlock(nlk->cb_mutex);
 
 	ret = netlink_dump(sk);
+<<<<<<< HEAD
 
+=======
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sock_put(sk);
 
 	if (ret)
@@ -1801,7 +1854,11 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 	 */
 	return -EINTR;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(netlink_dump_start);
+=======
+EXPORT_SYMBOL(__netlink_dump_start);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err)
 {

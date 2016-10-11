@@ -19,6 +19,14 @@ int pinconf_map_to_setting(struct pinctrl_map const *map,
 			  struct pinctrl_setting *setting);
 void pinconf_free_setting(struct pinctrl_setting const *setting);
 int pinconf_apply_setting(struct pinctrl_setting const *setting);
+<<<<<<< HEAD
+=======
+void pinconf_show_map(struct seq_file *s, struct pinctrl_map const *map);
+void pinconf_show_setting(struct seq_file *s,
+			  struct pinctrl_setting const *setting);
+void pinconf_init_device_debugfs(struct dentry *devroot,
+				 struct pinctrl_dev *pctldev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * You will only be interested in these if you're using PINCONF
@@ -56,6 +64,7 @@ static inline int pinconf_apply_setting(struct pinctrl_setting const *setting)
 	return 0;
 }
 
+<<<<<<< HEAD
 #endif
 
 #if defined(CONFIG_PINCONF) && defined(CONFIG_DEBUG_FS)
@@ -68,6 +77,8 @@ void pinconf_init_device_debugfs(struct dentry *devroot,
 
 #else
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline void pinconf_show_map(struct seq_file *s,
 				    struct pinctrl_map const *map)
 {
@@ -90,7 +101,11 @@ static inline void pinconf_init_device_debugfs(struct dentry *devroot,
  * pin config.
  */
 
+<<<<<<< HEAD
 #if defined(CONFIG_GENERIC_PINCONF) && defined(CONFIG_DEBUG_FS)
+=======
+#ifdef CONFIG_GENERIC_PINCONF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void pinconf_generic_dump_pin(struct pinctrl_dev *pctldev,
 			      struct seq_file *s, unsigned pin);
@@ -115,9 +130,12 @@ static inline void pinconf_generic_dump_group(struct pinctrl_dev *pctldev,
 }
 
 #endif
+<<<<<<< HEAD
 
 #if defined(CONFIG_GENERIC_PINCONF) && defined(CONFIG_OF)
 int pinconf_generic_parse_dt_config(struct device_node *np,
 				    unsigned long **configs,
 				    unsigned int *nconfigs);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

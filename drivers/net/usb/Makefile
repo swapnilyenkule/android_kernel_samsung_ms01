@@ -12,8 +12,12 @@ obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o
 obj-$(CONFIG_USB_NET_CDC_EEM)	+= cdc_eem.o
 obj-$(CONFIG_USB_NET_DM9601)	+= dm9601.o
 obj-$(CONFIG_USB_NET_SMSC75XX)	+= smsc75xx.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_NET_SMSC95XX)	+= smsc9500.o
 obj-$(CONFIG_USB_NET_SMSC95XX)	+= smscusbnet.o
+=======
+obj-$(CONFIG_USB_NET_SMSC95XX)	+= smsc95xx.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_USB_NET_GL620A)	+= gl620a.o
 obj-$(CONFIG_USB_NET_NET1080)	+= net1080.o
 obj-$(CONFIG_USB_NET_PLUSB)	+= plusb.o
@@ -30,7 +34,10 @@ obj-$(CONFIG_USB_SIERRA_NET)	+= sierra_net.o
 obj-$(CONFIG_USB_NET_CX82310_ETH)	+= cx82310_eth.o
 obj-$(CONFIG_USB_NET_CDC_NCM)	+= cdc_ncm.o
 obj-$(CONFIG_USB_VL600)		+= lg-vl600.o
+<<<<<<< HEAD
 rmnet_usb-y			:= rmnet_usb_ctrl.o rmnet_usb_data.o
 obj-$(CONFIG_MSM_RMNET_USB)	+= rmnet_usb.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_USB_NET_QMI_WWAN)	+= qmi_wwan.o
 

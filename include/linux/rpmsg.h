@@ -38,6 +38,11 @@
 #include <linux/types.h>
 #include <linux/device.h>
 #include <linux/mod_devicetable.h>
+<<<<<<< HEAD
+=======
+#include <linux/kref.h>
+#include <linux/mutex.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* The feature bitmap for virtio rpmsg */
 #define VIRTIO_RPMSG_F_NS	0 /* RP supports name service notifications */
@@ -120,7 +125,13 @@ typedef void (*rpmsg_rx_cb_t)(struct rpmsg_channel *, void *, int, void *, u32);
 /**
  * struct rpmsg_endpoint - binds a local rpmsg address to its user
  * @rpdev: rpmsg channel device
+<<<<<<< HEAD
  * @cb: rx callback handler
+=======
+ * @refcount: when this drops to zero, the ept is deallocated
+ * @cb: rx callback handler
+ * @cb_lock: must be taken before accessing/changing @cb
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @addr: local rpmsg address
  * @priv: private data for the driver's use
  *
@@ -140,7 +151,13 @@ typedef void (*rpmsg_rx_cb_t)(struct rpmsg_channel *, void *, int, void *, u32);
  */
 struct rpmsg_endpoint {
 	struct rpmsg_channel *rpdev;
+<<<<<<< HEAD
 	rpmsg_rx_cb_t cb;
+=======
+	struct kref refcount;
+	rpmsg_rx_cb_t cb;
+	struct mutex cb_lock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u32 addr;
 	void *priv;
 };

@@ -356,9 +356,14 @@ extern int unregister_pm_notifier(struct notifier_block *nb);
 extern bool events_check_enabled;
 
 extern bool pm_wakeup_pending(void);
+<<<<<<< HEAD
 extern bool pm_get_wakeup_count(unsigned int *count, bool block);
 extern bool pm_save_wakeup_count(unsigned int count);
 extern void pm_wakep_autosleep_enabled(bool set);
+=======
+extern bool pm_get_wakeup_count(unsigned int *count);
+extern bool pm_save_wakeup_count(unsigned int count);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static inline void lock_system_sleep(void)
 {
@@ -408,6 +413,7 @@ static inline void unlock_system_sleep(void) {}
 
 #endif /* !CONFIG_PM_SLEEP */
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_AUTOSLEEP
 
 /* kernel/power/autosleep.c */
@@ -419,6 +425,8 @@ static inline void queue_up_suspend_work(void) {}
 
 #endif /* !CONFIG_PM_AUTOSLEEP */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_ARCH_SAVE_PAGE_KEYS
 /*
  * The ARCH_SAVE_PAGE_KEYS functions can be used by an architecture
@@ -453,8 +461,11 @@ static inline void page_key_write(void *address) {}
 
 #endif /* !CONFIG_ARCH_SAVE_PAGE_KEYS */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_PM_DEBUG
 int wakeup_sources_stats_active(void);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _LINUX_SUSPEND_H */

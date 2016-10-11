@@ -1002,6 +1002,41 @@ static void __init free_iommu_all(void)
 }
 
 /*
+<<<<<<< HEAD
+=======
+ * Family15h Model 10h-1fh erratum 746 (IOMMU Logging May Stall Translations)
+ * Workaround:
+ *     BIOS should disable L2B micellaneous clock gating by setting
+ *     L2_L2B_CK_GATE_CONTROL[CKGateL2BMiscDisable](D0F2xF4_x90[2]) = 1b
+ */
+static void __init amd_iommu_erratum_746_workaround(struct amd_iommu *iommu)
+{
+	u32 value;
+
+	if ((boot_cpu_data.x86 != 0x15) ||
+	    (boot_cpu_data.x86_model < 0x10) ||
+	    (boot_cpu_data.x86_model > 0x1f))
+		return;
+
+	pci_write_config_dword(iommu->dev, 0xf0, 0x90);
+	pci_read_config_dword(iommu->dev, 0xf4, &value);
+
+	if (value & BIT(2))
+		return;
+
+	/* Select NB indirect register 0x90 and enable writing */
+	pci_write_config_dword(iommu->dev, 0xf0, 0x90 | (1 << 8));
+
+	pci_write_config_dword(iommu->dev, 0xf4, value | 0x4);
+	pr_info("AMD-Vi: Applying erratum 746 workaround for IOMMU at %s\n",
+		dev_name(&iommu->dev->dev));
+
+	/* Clear the enable writing bit */
+	pci_write_config_dword(iommu->dev, 0xf0, 0x90);
+}
+
+/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * This function clues the initialization function for one IOMMU
  * together and also allocates the command buffer and programs the
  * hardware. It does NOT enable the IOMMU. This is done afterwards.
@@ -1029,6 +1064,12 @@ static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h)
 	if (!iommu->dev)
 		return 1;
 
+<<<<<<< HEAD
+=======
+	iommu->root_pdev = pci_get_bus_and_slot(iommu->dev->bus->number,
+						PCI_DEVFN(0, 0));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	iommu->cap_ptr = h->cap_ptr;
 	iommu->pci_seg = h->pci_seg;
 	iommu->mmio_phys = h->mmio_phys;
@@ -1059,6 +1100,11 @@ static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h)
 	if (iommu->cap & (1UL << IOMMU_CAP_NPCACHE))
 		amd_iommu_np_cache = true;
 
+<<<<<<< HEAD
+=======
+	amd_iommu_erratum_746_workaround(iommu);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return pci_enable_device(iommu->dev);
 }
 
@@ -1323,20 +1369,30 @@ static void iommu_apply_resume_quirks(struct amd_iommu *iommu)
 {
 	int i, j;
 	u32 ioc_feature_control;
+<<<<<<< HEAD
 	struct pci_dev *pdev = NULL;
 
 	/* RD890 BIOSes may not have completely reconfigured the iommu */
 	if (!is_rd890_iommu(iommu->dev))
+=======
+	struct pci_dev *pdev = iommu->root_pdev;
+
+	/* RD890 BIOSes may not have completely reconfigured the iommu */
+	if (!is_rd890_iommu(iommu->dev) || !pdev)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 
 	/*
 	 * First, we need to ensure that the iommu is enabled. This is
 	 * controlled by a register in the northbridge
 	 */
+<<<<<<< HEAD
 	pdev = pci_get_bus_and_slot(iommu->dev->bus->number, PCI_DEVFN(0, 0));
 
 	if (!pdev)
 		return;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Select Northbridge indirect register 0x75 and enable writing */
 	pci_write_config_dword(pdev, 0x60, 0x75 | (1 << 7));
@@ -1346,8 +1402,11 @@ static void iommu_apply_resume_quirks(struct amd_iommu *iommu)
 	if (!(ioc_feature_control & 0x1))
 		pci_write_config_dword(pdev, 0x64, ioc_feature_control | 1);
 
+<<<<<<< HEAD
 	pci_dev_put(pdev);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Restore the iommu BAR */
 	pci_write_config_dword(iommu->dev, iommu->cap_ptr + 4,
 			       iommu->stored_addr_lo);
@@ -1541,8 +1600,11 @@ int __init amd_iommu_init_hardware(void)
 	if (amd_iommu_pd_alloc_bitmap == NULL)
 		goto free;
 
+<<<<<<< HEAD
 	/* init the device table */
 	init_device_table();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * let all alias entries point to itself
@@ -1624,6 +1686,10 @@ out:
  */
 static int __init amd_iommu_init(void)
 {
+<<<<<<< HEAD
+=======
+	struct amd_iommu *iommu;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int ret = 0;
 
 	ret = amd_iommu_init_hardware();
@@ -1642,8 +1708,21 @@ static int __init amd_iommu_init(void)
 	if (ret)
 		goto free;
 
+<<<<<<< HEAD
 	amd_iommu_init_api();
 
+=======
+	/* init the device table */
+	init_device_table();
+
+	for_each_iommu(iommu)
+		iommu_flush_all_caches(iommu);
+
+	amd_iommu_init_api();
+
+	x86_platform.iommu_shutdown = disable_iommus;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (iommu_pass_through)
 		goto out;
 
@@ -1652,8 +1731,11 @@ static int __init amd_iommu_init(void)
 	else
 		printk(KERN_INFO "AMD-Vi: Lazy IO/TLB flushing enabled\n");
 
+<<<<<<< HEAD
 	x86_platform.iommu_shutdown = disable_iommus;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 out:
 	return ret;
 

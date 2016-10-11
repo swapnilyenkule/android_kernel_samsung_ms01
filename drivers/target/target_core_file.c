@@ -133,6 +133,7 @@ static struct se_device *fd_create_virtdevice(
 		ret = PTR_ERR(dev_p);
 		goto fail;
 	}
+<<<<<<< HEAD
 #if 0
 	if (di->no_create_file)
 		flags = O_RDWR | O_LARGEFILE;
@@ -148,6 +149,26 @@ static struct se_device *fd_create_virtdevice(
 	 */
 	if (!(fd_dev->fbd_flags & FDBD_USE_BUFFERED_IO))
 		flags |= O_SYNC;
+=======
+	/*
+	 * Use O_DSYNC by default instead of O_SYNC to forgo syncing
+	 * of pure timestamp updates.
+	 */
+	flags = O_RDWR | O_CREAT | O_LARGEFILE | O_DSYNC;
+	/*
+	 * Optionally allow fd_buffered_io=1 to be enabled for people
+	 * who want use the fs buffer cache as an WriteCache mechanism.
+	 *
+	 * This means that in event of a hard failure, there is a risk
+	 * of silent data-loss if the SCSI client has *not* performed a
+	 * forced unit access (FUA) write, or issued SYNCHRONIZE_CACHE
+	 * to write-out the entire device cache.
+	 */
+	if (fd_dev->fbd_flags & FDBD_HAS_BUFFERED_IO_WCE) {
+		pr_debug("FILEIO: Disabling O_DSYNC, using buffered FILEIO\n");
+		flags &= ~O_DSYNC;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	file = filp_open(dev_p, flags, 0600);
 	if (IS_ERR(file)) {
@@ -215,6 +236,15 @@ static struct se_device *fd_create_virtdevice(
 	if (!dev)
 		goto fail;
 
+<<<<<<< HEAD
+=======
+	if (fd_dev->fbd_flags & FDBD_HAS_BUFFERED_IO_WCE) {
+		pr_debug("FILEIO: Forcing setting of emulate_write_cache=1"
+			" with FDBD_HAS_BUFFERED_IO_WCE\n");
+		dev->se_sub_dev->se_dev_attrib.emulate_write_cache = 1;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fd_dev->fd_dev_id = fd_host->fd_host_dev_id_count++;
 	fd_dev->fd_queue_depth = dev->queue_depth;
 
@@ -290,7 +320,11 @@ static int fd_do_readv(struct se_task *task)
 
 	for_each_sg(task->task_sg, sg, task->task_sg_nents, i) {
 		iov[i].iov_len = sg->length;
+<<<<<<< HEAD
 		iov[i].iov_base = sg_virt(sg);
+=======
+		iov[i].iov_base = kmap(sg_page(sg)) + sg->offset;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	old_fs = get_fs();
@@ -298,6 +332,11 @@ static int fd_do_readv(struct se_task *task)
 	ret = vfs_readv(fd, &iov[0], task->task_sg_nents, &pos);
 	set_fs(old_fs);
 
+<<<<<<< HEAD
+=======
+	for_each_sg(task->task_sg, sg, task->task_sg_nents, i)
+		kunmap(sg_page(sg));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(iov);
 	/*
 	 * Return zeros and GOOD status even if the READ did not return
@@ -343,7 +382,11 @@ static int fd_do_writev(struct se_task *task)
 
 	for_each_sg(task->task_sg, sg, task->task_sg_nents, i) {
 		iov[i].iov_len = sg->length;
+<<<<<<< HEAD
 		iov[i].iov_base = sg_virt(sg);
+=======
+		iov[i].iov_base = kmap(sg_page(sg)) + sg->offset;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	old_fs = get_fs();
@@ -351,6 +394,12 @@ static int fd_do_writev(struct se_task *task)
 	ret = vfs_writev(fd, &iov[0], task->task_sg_nents, &pos);
 	set_fs(old_fs);
 
+<<<<<<< HEAD
+=======
+	for_each_sg(task->task_sg, sg, task->task_sg_nents, i)
+		kunmap(sg_page(sg));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(iov);
 
 	if (ret < 0 || ret != task->task_size) {
@@ -399,6 +448,7 @@ static void fd_emulate_sync_cache(struct se_task *task)
 		transport_complete_sync_cache(cmd, ret == 0);
 }
 
+<<<<<<< HEAD
 /*
  * WRITE Force Unit Access (FUA) emulation on a per struct se_task
  * LBA range basis..
@@ -419,6 +469,8 @@ static void fd_emulate_write_fua(struct se_cmd *cmd, struct se_task *task)
 		pr_err("FILEIO: vfs_fsync_range() failed: %d\n", ret);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int fd_do_task(struct se_task *task)
 {
 	struct se_cmd *cmd = task->task_se_cmd;
@@ -433,6 +485,7 @@ static int fd_do_task(struct se_task *task)
 		ret = fd_do_readv(task);
 	} else {
 		ret = fd_do_writev(task);
+<<<<<<< HEAD
 
 		if (ret > 0 &&
 		    dev->se_sub_dev->se_dev_attrib.emulate_write_cache > 0 &&
@@ -446,6 +499,23 @@ static int fd_do_task(struct se_task *task)
 			fd_emulate_write_fua(cmd, task);
 		}
 
+=======
+		/*
+		 * Perform implict vfs_fsync_range() for fd_do_writev() ops
+		 * for SCSI WRITEs with Forced Unit Access (FUA) set.
+		 * Allow this to happen independent of WCE=0 setting.
+		 */
+		if (ret > 0 &&
+		    dev->se_sub_dev->se_dev_attrib.emulate_fua_write > 0 &&
+		    (cmd->se_cmd_flags & SCF_FUA)) {
+			struct fd_dev *fd_dev = dev->dev_ptr;
+			loff_t start = task->task_lba *
+				dev->se_sub_dev->se_dev_attrib.block_size;
+			loff_t end = start + task->task_size;
+
+			vfs_fsync_range(fd_dev->fd_file, start, end, 1);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (ret < 0) {
@@ -544,7 +614,11 @@ static ssize_t fd_set_configfs_dev_params(
 			pr_debug("FILEIO: Using buffered I/O"
 				" operations for struct fd_dev\n");
 
+<<<<<<< HEAD
 			fd_dev->fbd_flags |= FDBD_USE_BUFFERED_IO;
+=======
+			fd_dev->fbd_flags |= FDBD_HAS_BUFFERED_IO_WCE;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		default:
 			break;
@@ -579,8 +653,13 @@ static ssize_t fd_show_configfs_dev_params(
 	bl = sprintf(b + bl, "TCM FILEIO ID: %u", fd_dev->fd_dev_id);
 	bl += sprintf(b + bl, "        File: %s  Size: %llu  Mode: %s\n",
 		fd_dev->fd_dev_name, fd_dev->fd_dev_size,
+<<<<<<< HEAD
 		(fd_dev->fbd_flags & FDBD_USE_BUFFERED_IO) ?
 		"Buffered" : "Synchronous");
+=======
+		(fd_dev->fbd_flags & FDBD_HAS_BUFFERED_IO_WCE) ?
+		"Buffered-WCE" : "O_DSYNC");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return bl;
 }
 

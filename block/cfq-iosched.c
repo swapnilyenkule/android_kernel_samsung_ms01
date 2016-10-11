@@ -2305,9 +2305,12 @@ static void cfq_choose_cfqg(struct cfq_data *cfqd)
 {
 	struct cfq_group *cfqg = cfq_get_next_cfqg(cfqd);
 
+<<<<<<< HEAD
 	if (!cfqg)
 		return;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cfqd->serving_group = cfqg;
 
 	/* Restore the workload type data */

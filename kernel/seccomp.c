@@ -3,6 +3,7 @@
  *
  * Copyright 2004-2005  Andrea Arcangeli <andrea@cpushare.com>
  *
+<<<<<<< HEAD
  * Copyright (C) 2012 Google, Inc.
  * Will Drewry <wad@chromium.org>
  *
@@ -544,6 +545,18 @@ static void seccomp_send_sigsys(int syscall, int reason)
 	force_sig_info(SIGSYS, &info, current);
 }
 #endif	/* CONFIG_SECCOMP_FILTER */
+=======
+ * This defines a simple but solid secure-computing mode.
+ */
+
+#include <linux/audit.h>
+#include <linux/seccomp.h>
+#include <linux/sched.h>
+#include <linux/compat.h>
+
+/* #define SECCOMP_DEBUG 1 */
+#define NR_SECCOMP_MODES 1
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Secure computing mode 1 allows only read/write/exit/sigreturn.
@@ -562,6 +575,7 @@ static int mode1_syscalls_32[] = {
 };
 #endif
 
+<<<<<<< HEAD
 int __secure_computing(int this_syscall)
 {
 	int exit_sig = 0;
@@ -576,6 +590,15 @@ int __secure_computing(int this_syscall)
 
 	switch (current->seccomp.mode) {
 	case SECCOMP_MODE_STRICT:
+=======
+void __secure_computing(int this_syscall)
+{
+	int mode = current->seccomp.mode;
+	int * syscall;
+
+	switch (mode) {
+	case 1:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		syscall = mode1_syscalls;
 #ifdef CONFIG_COMPAT
 		if (is_compat_task())
@@ -583,6 +606,7 @@ int __secure_computing(int this_syscall)
 #endif
 		do {
 			if (*syscall == this_syscall)
+<<<<<<< HEAD
 				return 0;
 		} while (*++syscall);
 		exit_sig = SIGKILL;
@@ -635,6 +659,11 @@ int __secure_computing(int this_syscall)
 		break;
 	}
 #endif
+=======
+				return;
+		} while (*++syscall);
+		break;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		BUG();
 	}
@@ -642,6 +671,7 @@ int __secure_computing(int this_syscall)
 #ifdef SECCOMP_DEBUG
 	dump_stack();
 #endif
+<<<<<<< HEAD
 	audit_seccomp(this_syscall, exit_sig, ret);
 	do_exit(exit_sig);
 #ifdef CONFIG_SECCOMP_FILTER
@@ -649,6 +679,10 @@ skip:
 	audit_seccomp(this_syscall, exit_sig, ret);
 #endif
 	return -1;
+=======
+	audit_seccomp(this_syscall);
+	do_exit(SIGKILL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 long prctl_get_seccomp(void)
@@ -656,6 +690,7 @@ long prctl_get_seccomp(void)
 	return current->seccomp.mode;
 }
 
+<<<<<<< HEAD
 /**
  * seccomp_set_mode_strict: internal function for setting strict seccomp
  *
@@ -805,4 +840,27 @@ long prctl_set_seccomp(unsigned long seccomp_mode, char __user *filter)
 
 	/* prctl interface doesn't have flags, so they are always zero. */
 	return do_seccomp(op, 0, uargs);
+=======
+long prctl_set_seccomp(unsigned long seccomp_mode)
+{
+	long ret;
+
+	/* can set it only once to be even more secure */
+	ret = -EPERM;
+	if (unlikely(current->seccomp.mode))
+		goto out;
+
+	ret = -EINVAL;
+	if (seccomp_mode && seccomp_mode <= NR_SECCOMP_MODES) {
+		current->seccomp.mode = seccomp_mode;
+		set_thread_flag(TIF_SECCOMP);
+#ifdef TIF_NOTSC
+		disable_TSC();
+#endif
+		ret = 0;
+	}
+
+ out:
+	return ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }

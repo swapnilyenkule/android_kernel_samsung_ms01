@@ -49,9 +49,12 @@
 #include <asm/uaccess.h>
 
 #include <trace/events/timer.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * The timer bases:
@@ -235,6 +238,14 @@ again:
 			goto again;
 		}
 		timer->base = new_base;
+<<<<<<< HEAD
+=======
+	} else {
+		if (cpu != this_cpu && hrtimer_check_target(timer, new_base)) {
+			cpu = this_cpu;
+			goto again;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return new_base;
 }
@@ -301,6 +312,13 @@ ktime_t ktime_sub_ns(const ktime_t kt, u64 nsec)
 	} else {
 		unsigned long rem = do_div(nsec, NSEC_PER_SEC);
 
+<<<<<<< HEAD
+=======
+		/* Make sure nsec fits into long */
+		if (unlikely(nsec > KTIME_SEC_MAX))
+			return (ktime_t){ .tv64 = KTIME_MAX };
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		tmp = ktime_set((long)nsec, rem);
 	}
 
@@ -566,6 +584,26 @@ hrtimer_force_reprogram(struct hrtimer_cpu_base *cpu_base, int skip_equal)
 
 	cpu_base->expires_next.tv64 = expires_next.tv64;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If a hang was detected in the last timer interrupt then we
+	 * leave the hang delay active in the hardware. We want the
+	 * system to make progress. That also prevents the following
+	 * scenario:
+	 * T1 expires 50ms from now
+	 * T2 expires 5s from now
+	 *
+	 * T1 is removed, so this code is called and would reprogram
+	 * the hardware to 5s from now. Any hrtimer_start after that
+	 * will not reprogram the hardware due to hang_detected being
+	 * set. So we'd effectivly block all timers until the T2 event
+	 * fires.
+	 */
+	if (cpu_base->hang_detected)
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cpu_base->expires_next.tv64 != KTIME_MAX)
 		tick_program_event(cpu_base->expires_next, 1);
 }
@@ -649,6 +687,17 @@ static inline int hrtimer_enqueue_reprogram(struct hrtimer *timer,
 	return base->cpu_base->hres_active && hrtimer_reprogram(timer, base);
 }
 
+<<<<<<< HEAD
+=======
+static inline ktime_t hrtimer_update_base(struct hrtimer_cpu_base *base)
+{
+	ktime_t *offs_real = &base->clock_base[HRTIMER_BASE_REALTIME].offset;
+	ktime_t *offs_boot = &base->clock_base[HRTIMER_BASE_BOOTTIME].offset;
+
+	return ktime_get_update_offsets(offs_real, offs_boot);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Retrigger next event is called after clock was set
  *
@@ -657,11 +706,15 @@ static inline int hrtimer_enqueue_reprogram(struct hrtimer *timer,
 static void retrigger_next_event(void *arg)
 {
 	struct hrtimer_cpu_base *base = &__get_cpu_var(hrtimer_bases);
+<<<<<<< HEAD
 	struct timespec realtime_offset, xtim, wtm, sleep;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!hrtimer_hres_active())
 		return;
 
+<<<<<<< HEAD
 	/* Optimized out for !HIGH_RES */
 	get_xtime_and_monotonic_and_sleep_offset(&xtim, &wtm, &sleep);
 	set_normalized_timespec(&realtime_offset, -wtm.tv_sec, -wtm.tv_nsec);
@@ -673,6 +726,10 @@ static void retrigger_next_event(void *arg)
 	base->clock_base[HRTIMER_BASE_BOOTTIME].offset =
 		timespec_to_ktime(sleep);
 
+=======
+	raw_spin_lock(&base->lock);
+	hrtimer_update_base(base);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	hrtimer_force_reprogram(base, 0);
 	raw_spin_unlock(&base->lock);
 }
@@ -702,13 +759,35 @@ static int hrtimer_switch_to_hres(void)
 		base->clock_base[i].resolution = KTIME_HIGH_RES;
 
 	tick_setup_sched_timer();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* "Retrigger" the interrupt to get things going */
 	retrigger_next_event(NULL);
 	local_irq_restore(flags);
 	return 1;
 }
 
+<<<<<<< HEAD
+=======
+static void clock_was_set_work(struct work_struct *work)
+{
+	clock_was_set();
+}
+
+static DECLARE_WORK(hrtimer_work, clock_was_set_work);
+
+/*
+ * Called from timekeeping and resume code to reprogramm the hrtimer
+ * interrupt device on all cpus.
+ */
+void clock_was_set_delayed(void)
+{
+	schedule_work(&hrtimer_work);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 
 static inline int hrtimer_hres_active(void) { return 0; }
@@ -755,8 +834,15 @@ void hrtimers_resume(void)
 	WARN_ONCE(!irqs_disabled(),
 		  KERN_INFO "hrtimers_resume() called with IRQs enabled!");
 
+<<<<<<< HEAD
 	retrigger_next_event(NULL);
 	timerfd_clock_was_set();
+=======
+	/* Retrigger on the local CPU */
+	retrigger_next_event(NULL);
+	/* And schedule a retrigger for all others */
+	clock_was_set_delayed();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void timer_stats_hrtimer_set_start_info(struct hrtimer *timer)
@@ -815,6 +901,12 @@ u64 hrtimer_forward(struct hrtimer *timer, ktime_t now, ktime_t interval)
 	if (delta.tv64 < 0)
 		return 0;
 
+<<<<<<< HEAD
+=======
+	if (WARN_ON(timer->state & HRTIMER_STATE_ENQUEUED))
+		return 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (interval.tv64 < timer->base->resolution.tv64)
 		interval.tv64 = timer->base->resolution.tv64;
 
@@ -947,11 +1039,16 @@ int __hrtimer_start_range_ns(struct hrtimer *timer, ktime_t tim,
 	/* Remove an active timer from the queue: */
 	ret = remove_hrtimer(timer, base);
 
+<<<<<<< HEAD
 	/* Switch the timer base, if necessary: */
 	new_base = switch_hrtimer_base(timer, base, mode & HRTIMER_MODE_PINNED);
 
 	if (mode & HRTIMER_MODE_REL) {
 		tim = ktime_add_safe(tim, new_base->get_time());
+=======
+	if (mode & HRTIMER_MODE_REL) {
+		tim = ktime_add_safe(tim, base->get_time());
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/*
 		 * CONFIG_TIME_LOW_RES is a temporary way for architectures
 		 * to signal that they simply return xtime in
@@ -966,6 +1063,12 @@ int __hrtimer_start_range_ns(struct hrtimer *timer, ktime_t tim,
 
 	hrtimer_set_expires_range_ns(timer, tim, delta_ns);
 
+<<<<<<< HEAD
+=======
+	/* Switch the timer base, if necessary: */
+	new_base = switch_hrtimer_base(timer, base, mode & HRTIMER_MODE_PINNED);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	timer_stats_hrtimer_set_start_info(timer);
 
 	leftmost = enqueue_hrtimer(timer, new_base);
@@ -1219,6 +1322,7 @@ static void __run_hrtimer(struct hrtimer *timer, ktime_t *now)
 	 */
 	raw_spin_unlock(&cpu_base->lock);
 	trace_hrtimer_expire_entry(timer, now);
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 	secdbg_msg("hrtimer %pS entry", fn);
 #endif
@@ -1226,6 +1330,9 @@ static void __run_hrtimer(struct hrtimer *timer, ktime_t *now)
 #ifdef CONFIG_SEC_DEBUG
 	secdbg_msg("hrtimer %pS exit", fn);
 #endif
+=======
+	restart = fn(timer);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	trace_hrtimer_expire_exit(timer);
 	raw_spin_lock(&cpu_base->lock);
 
@@ -1233,11 +1340,22 @@ static void __run_hrtimer(struct hrtimer *timer, ktime_t *now)
 	 * Note: We clear the CALLBACK bit after enqueue_hrtimer and
 	 * we do not reprogramm the event hardware. Happens either in
 	 * hrtimer_start_range_ns() or in hrtimer_interrupt()
+<<<<<<< HEAD
 	 */
 	if (restart != HRTIMER_NORESTART) {
 		BUG_ON(timer->state != HRTIMER_STATE_CALLBACK);
 		enqueue_hrtimer(timer, base);
 	}
+=======
+	 *
+	 * Note: Because we dropped the cpu_base->lock above,
+	 * hrtimer_start_range_ns() can have popped in and enqueued the timer
+	 * for us already.
+	 */
+	if (restart != HRTIMER_NORESTART &&
+	    !(timer->state & HRTIMER_STATE_ENQUEUED))
+		enqueue_hrtimer(timer, base);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	WARN_ON_ONCE(!(timer->state & HRTIMER_STATE_CALLBACK));
 
@@ -1260,11 +1378,18 @@ void hrtimer_interrupt(struct clock_event_device *dev)
 	cpu_base->nr_events++;
 	dev->next_event.tv64 = KTIME_MAX;
 
+<<<<<<< HEAD
 	entry_time = now = ktime_get();
 retry:
 	expires_next.tv64 = KTIME_MAX;
 
 	raw_spin_lock(&cpu_base->lock);
+=======
+	raw_spin_lock(&cpu_base->lock);
+	entry_time = now = hrtimer_update_base(cpu_base);
+retry:
+	expires_next.tv64 = KTIME_MAX;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * We set expires_next to KTIME_MAX here with cpu_base->lock
 	 * held to prevent that a timer is enqueued in our queue via
@@ -1308,6 +1433,11 @@ retry:
 
 				expires = ktime_sub(hrtimer_get_expires(timer),
 						    base->offset);
+<<<<<<< HEAD
+=======
+				if (expires.tv64 < 0)
+					expires.tv64 = KTIME_MAX;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				if (expires.tv64 < expires_next.tv64)
 					expires_next = expires;
 				break;
@@ -1340,8 +1470,17 @@ retry:
 	 * We need to prevent that we loop forever in the hrtimer
 	 * interrupt routine. We give it 3 attempts to avoid
 	 * overreacting on some spurious event.
+<<<<<<< HEAD
 	 */
 	now = ktime_get();
+=======
+	 *
+	 * Acquire base lock for updating the offsets and retrieving
+	 * the current time.
+	 */
+	raw_spin_lock(&cpu_base->lock);
+	now = hrtimer_update_base(cpu_base);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cpu_base->nr_retries++;
 	if (++retries < 3)
 		goto retry;
@@ -1353,6 +1492,10 @@ retry:
 	 */
 	cpu_base->nr_hangs++;
 	cpu_base->hang_detected = 1;
+<<<<<<< HEAD
+=======
+	raw_spin_unlock(&cpu_base->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	delta = ktime_sub(now, entry_time);
 	if (delta.tv64 > cpu_base->max_hang_time.tv64)
 		cpu_base->max_hang_time = delta;

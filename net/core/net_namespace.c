@@ -25,7 +25,13 @@ static DEFINE_MUTEX(net_mutex);
 LIST_HEAD(net_namespace_list);
 EXPORT_SYMBOL_GPL(net_namespace_list);
 
+<<<<<<< HEAD
 struct net init_net;
+=======
+struct net init_net = {
+	.dev_base_head = LIST_HEAD_INIT(init_net.dev_base_head),
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL(init_net);
 
 #define INITIAL_NET_GEN_PTRS	13 /* +1 for len +2 for rcu_head */
@@ -376,6 +382,7 @@ struct net *get_net_ns_by_pid(pid_t pid)
 }
 EXPORT_SYMBOL_GPL(get_net_ns_by_pid);
 
+<<<<<<< HEAD
 static __net_init int net_ns_net_init(struct net *net)
 {
 	return proc_alloc_inum(&net->proc_inum);
@@ -391,6 +398,8 @@ static struct pernet_operations __net_initdata net_ns_ops = {
 	.exit = net_ns_net_exit,
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __init net_ns_init(void)
 {
 	struct net_generic *ng;
@@ -422,8 +431,11 @@ static int __init net_ns_init(void)
 
 	mutex_unlock(&net_mutex);
 
+<<<<<<< HEAD
 	register_pernet_subsys(&net_ns_ops);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -647,18 +659,24 @@ static int netns_install(struct nsproxy *nsproxy, void *ns)
 	return 0;
 }
 
+<<<<<<< HEAD
 static unsigned int netns_inum(void *ns)
 {
 	struct net *net = ns;
 	return net->proc_inum;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 const struct proc_ns_operations netns_operations = {
 	.name		= "net",
 	.type		= CLONE_NEWNET,
 	.get		= netns_get,
 	.put		= netns_put,
 	.install	= netns_install,
+<<<<<<< HEAD
 	.inum		= netns_inum,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 #endif

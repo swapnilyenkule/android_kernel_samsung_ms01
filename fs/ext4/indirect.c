@@ -145,6 +145,10 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
 	struct super_block *sb = inode->i_sb;
 	Indirect *p = chain;
 	struct buffer_head *bh;
+<<<<<<< HEAD
+=======
+	int ret = -EIO;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	*err = 0;
 	/* i_data is not going away, no lock needed */
@@ -153,8 +157,15 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
 		goto no_block;
 	while (--depth) {
 		bh = sb_getblk(sb, le32_to_cpu(p->key));
+<<<<<<< HEAD
 		if (unlikely(!bh))
 			goto failure;
+=======
+		if (unlikely(!bh)) {
+			ret = -ENOMEM;
+			goto failure;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (!bh_uptodate_or_lock(bh)) {
 			if (bh_submit_read(bh) < 0) {
@@ -176,7 +187,11 @@ static Indirect *ext4_get_branch(struct inode *inode, int depth,
 	return NULL;
 
 failure:
+<<<<<<< HEAD
 	*err = -EIO;
+=======
+	*err = ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 no_block:
 	return p;
 }
@@ -470,7 +485,11 @@ static int ext4_alloc_branch(handle_t *handle, struct inode *inode,
 		 */
 		bh = sb_getblk(inode->i_sb, new_blocks[n-1]);
 		if (unlikely(!bh)) {
+<<<<<<< HEAD
 			err = -EIO;
+=======
+			err = -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto failed;
 		}
 
@@ -702,7 +721,11 @@ int ext4_ind_map_blocks(handle_t *handle, struct inode *inode,
 				       EXT4_FEATURE_RO_COMPAT_BIGALLOC)) {
 		EXT4_ERROR_INODE(inode, "Can't allocate blocks for "
 				 "non-extent mapped inodes with bigalloc");
+<<<<<<< HEAD
 		return -ENOSPC;
+=======
+		return -EUCLEAN;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	goal = ext4_find_goal(inode, map->m_lblk, partial);

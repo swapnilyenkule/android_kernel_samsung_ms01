@@ -618,6 +618,11 @@ int recv_tt_query(struct sk_buff *skb, struct hard_iface *recv_if)
 			 * changes */
 			if (skb_linearize(skb) < 0)
 				goto out;
+<<<<<<< HEAD
+=======
+			/* skb_linearize() possibly changed skb->data */
+			tt_query = (struct tt_query_packet *)skb->data;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			tt_len = tt_query->tt_data * sizeof(struct tt_change);
 

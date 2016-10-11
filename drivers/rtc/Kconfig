@@ -94,6 +94,7 @@ config RTC_INTF_DEV
 
 	  If unsure, say Y.
 
+<<<<<<< HEAD
 config RTC_INTF_ALARM
 	bool "Android alarm driver"
 	depends on RTC_CLASS
@@ -111,6 +112,8 @@ config RTC_INTF_ALARM_DEV
 	help
 	  Exports the alarm interface to user-space.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config RTC_INTF_DEV_UIE_EMUL
 	bool "RTC UIE emulation on dev interface"
 	depends on RTC_INTF_DEV
@@ -745,6 +748,7 @@ config RTC_DRV_NUC900
 
 comment "on-CPU RTC drivers"
 
+<<<<<<< HEAD
 config RTC_DRV_MSM
 	tristate "RTC on Qualcomm Chipsets"
 	depends on ARCH_MSM
@@ -776,6 +780,8 @@ config RTC_DRV_MSM7X00A
 	help
 	  RTC driver for Qualcomm MSM7K chipsets
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config RTC_DRV_DAVINCI
 	tristate "TI DaVinci RTC"
 	depends on ARCH_DAVINCI_DM365
@@ -1135,6 +1141,7 @@ config RTC_DRV_LOONGSON1
 	  This driver can also be built as a module. If so, the module
 	  will be called rtc-ls1x.
 
+<<<<<<< HEAD
 config RTC_DRV_QPNP
 	tristate "Qualcomm QPNP PMIC RTC"
 	depends on SPMI && OF_SPMI && MSM_QPNP_INT
@@ -1154,4 +1161,6 @@ config PM8926_BATTERY_CHECK_INTERRUPT
 	  PMIC interrupt for SAMSUNG battery driver.
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # RTC_CLASS

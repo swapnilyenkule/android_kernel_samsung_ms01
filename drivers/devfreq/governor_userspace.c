@@ -14,7 +14,10 @@
 #include <linux/devfreq.h>
 #include <linux/pm.h>
 #include <linux/mutex.h>
+<<<<<<< HEAD
 #include <linux/module.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "governor.h"
 
 struct userspace_data {
@@ -22,8 +25,12 @@ struct userspace_data {
 	bool valid;
 };
 
+<<<<<<< HEAD
 static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq,
 					u32 *flag)
+=======
+static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct userspace_data *data = df->data;
 
@@ -118,6 +125,7 @@ static void userspace_exit(struct devfreq *devfreq)
 	devfreq->data = NULL;
 }
 
+<<<<<<< HEAD
 static int devfreq_userspace_handler(struct devfreq *devfreq,
 			unsigned int event, void *data)
 {
@@ -161,3 +169,12 @@ static void __exit devfreq_userspace_exit(void)
 }
 module_exit(devfreq_userspace_exit);
 MODULE_LICENSE("GPL");
+=======
+const struct devfreq_governor devfreq_userspace = {
+	.name = "userspace",
+	.get_target_freq = devfreq_userspace_func,
+	.init = userspace_init,
+	.exit = userspace_exit,
+	.no_central_polling = true,
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

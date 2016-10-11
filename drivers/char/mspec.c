@@ -283,7 +283,11 @@ mspec_mmap(struct file *file, struct vm_area_struct *vma,
 	vdata->flags = flags;
 	vdata->type = type;
 	spin_lock_init(&vdata->lock);
+<<<<<<< HEAD
 	vdata->refcnt = ATOMIC_INIT(1);
+=======
+	atomic_set(&vdata->refcnt, 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vma->vm_private_data = vdata;
 
 	vma->vm_flags |= (VM_IO | VM_RESERVED | VM_PFNMAP | VM_DONTEXPAND);

@@ -496,6 +496,7 @@ int atomic_dec_and_mutex_lock(atomic_t *cnt, struct mutex *lock)
 	return 1;
 }
 EXPORT_SYMBOL(atomic_dec_and_mutex_lock);
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MSM8610
 struct task_struct * mutex_get_owner(struct mutex *lock)
 {
@@ -510,3 +511,5 @@ struct task_struct * mutex_get_owner(struct mutex *lock)
 }
 EXPORT_SYMBOL(mutex_get_owner);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

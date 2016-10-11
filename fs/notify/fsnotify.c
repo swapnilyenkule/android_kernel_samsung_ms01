@@ -63,14 +63,22 @@ void __fsnotify_update_child_dentry_flags(struct inode *inode)
 	spin_lock(&inode->i_lock);
 	/* run all of the dentries associated with this inode.  Since this is a
 	 * directory, there damn well better only be one item on this list */
+<<<<<<< HEAD
 	list_for_each_entry(alias, &inode->i_dentry, d_alias) {
+=======
+	list_for_each_entry(alias, &inode->i_dentry, d_u.d_alias) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		struct dentry *child;
 
 		/* run all of the children of the original inode and fix their
 		 * d_flags to indicate parental interest (their parent is the
 		 * original inode) */
 		spin_lock(&alias->d_lock);
+<<<<<<< HEAD
 		list_for_each_entry(child, &alias->d_subdirs, d_u.d_child) {
+=======
+		list_for_each_entry(child, &alias->d_subdirs, d_child) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (!child->d_inode)
 				continue;
 

@@ -130,13 +130,21 @@ void ubifs_delete_orphan(struct ubifs_info *c, ino_t inum)
 		else if (inum > o->inum)
 			p = p->rb_right;
 		else {
+<<<<<<< HEAD
 			if (o->dnext) {
+=======
+			if (o->del) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				spin_unlock(&c->orphan_lock);
 				dbg_gen("deleted twice ino %lu",
 					(unsigned long)inum);
 				return;
 			}
 			if (o->cnext) {
+<<<<<<< HEAD
+=======
+				o->del = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				o->dnext = c->orph_dnext;
 				c->orph_dnext = o;
 				spin_unlock(&c->orphan_lock);
@@ -447,6 +455,10 @@ static void erase_deleted(struct ubifs_info *c)
 		orphan = dnext;
 		dnext = orphan->dnext;
 		ubifs_assert(!orphan->new);
+<<<<<<< HEAD
+=======
+		ubifs_assert(orphan->del);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rb_erase(&orphan->rb, &c->orph_tree);
 		list_del(&orphan->list);
 		c->tot_orphans -= 1;
@@ -536,6 +548,10 @@ static int insert_dead_orphan(struct ubifs_info *c, ino_t inum)
 	rb_link_node(&orphan->rb, parent, p);
 	rb_insert_color(&orphan->rb, &c->orph_tree);
 	list_add_tail(&orphan->list, &c->orph_list);
+<<<<<<< HEAD
+=======
+	orphan->del = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	orphan->dnext = c->orph_dnext;
 	c->orph_dnext = orphan;
 	dbg_mnt("ino %lu, new %d, tot %d", (unsigned long)inum,

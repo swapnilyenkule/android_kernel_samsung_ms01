@@ -119,6 +119,10 @@ struct loopback_pcm {
 	unsigned int period_size_frac;
 	unsigned long last_jiffies;
 	struct timer_list timer;
+<<<<<<< HEAD
+=======
+	spinlock_t timer_lock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static struct platform_device *devices[SNDRV_CARDS];
@@ -169,6 +173,10 @@ static void loopback_timer_start(struct loopback_pcm *dpcm)
 	unsigned long tick;
 	unsigned int rate_shift = get_rate_shift(dpcm);
 
+<<<<<<< HEAD
+=======
+	spin_lock(&dpcm->timer_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (rate_shift != dpcm->pcm_rate_shift) {
 		dpcm->pcm_rate_shift = rate_shift;
 		dpcm->period_size_frac = frac_pos(dpcm, dpcm->pcm_period_size);
@@ -181,12 +189,23 @@ static void loopback_timer_start(struct loopback_pcm *dpcm)
 	tick = (tick + dpcm->pcm_bps - 1) / dpcm->pcm_bps;
 	dpcm->timer.expires = jiffies + tick;
 	add_timer(&dpcm->timer);
+<<<<<<< HEAD
+=======
+	spin_unlock(&dpcm->timer_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void loopback_timer_stop(struct loopback_pcm *dpcm)
 {
+<<<<<<< HEAD
 	del_timer(&dpcm->timer);
 	dpcm->timer.expires = 0;
+=======
+	spin_lock(&dpcm->timer_lock);
+	del_timer(&dpcm->timer);
+	dpcm->timer.expires = 0;
+	spin_unlock(&dpcm->timer_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #define CABLE_VALID_PLAYBACK	(1 << SNDRV_PCM_STREAM_PLAYBACK)
@@ -282,12 +301,20 @@ static int loopback_trigger(struct snd_pcm_substream *substream, int cmd)
 			loopback_active_notify(dpcm);
 		break;
 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+<<<<<<< HEAD
+=======
+	case SNDRV_PCM_TRIGGER_SUSPEND:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_lock(&cable->lock);	
 		cable->pause |= stream;
 		spin_unlock(&cable->lock);
 		loopback_timer_stop(dpcm);
 		break;
 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+<<<<<<< HEAD
+=======
+	case SNDRV_PCM_TRIGGER_RESUME:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_lock(&cable->lock);
 		dpcm->last_jiffies = jiffies;
 		cable->pause &= ~stream;
@@ -547,7 +574,12 @@ static snd_pcm_uframes_t loopback_pointer(struct snd_pcm_substream *substream)
 static struct snd_pcm_hardware loopback_pcm_hardware =
 {
 	.info =		(SNDRV_PCM_INFO_INTERLEAVED | SNDRV_PCM_INFO_MMAP |
+<<<<<<< HEAD
 			 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_PAUSE),
+=======
+			 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_PAUSE |
+			 SNDRV_PCM_INFO_RESUME),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.formats =	(SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S16_BE |
 			 SNDRV_PCM_FMTBIT_S32_LE | SNDRV_PCM_FMTBIT_S32_BE |
 			 SNDRV_PCM_FMTBIT_FLOAT_LE | SNDRV_PCM_FMTBIT_FLOAT_BE),
@@ -659,6 +691,10 @@ static int loopback_open(struct snd_pcm_substream *substream)
 	dpcm->substream = substream;
 	setup_timer(&dpcm->timer, loopback_timer_function,
 		    (unsigned long)dpcm);
+<<<<<<< HEAD
+=======
+	spin_lock_init(&dpcm->timer_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	cable = loopback->cables[substream->number][dev];
 	if (!cable) {

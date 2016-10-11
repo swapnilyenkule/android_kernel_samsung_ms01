@@ -288,9 +288,16 @@ int cfctrl_linkup_request(struct cflayer *layer,
 
 		count = cfctrl_cancel_req(&cfctrl->serv.layer,
 						user_layer);
+<<<<<<< HEAD
 		if (count != 1)
 			pr_err("Could not remove request (%d)", count);
 			return -ENODEV;
+=======
+		if (count != 1) {
+			pr_err("Could not remove request (%d)", count);
+			return -ENODEV;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return 0;
 }

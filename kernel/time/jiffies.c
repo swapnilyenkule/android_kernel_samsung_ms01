@@ -51,7 +51,17 @@
  * HZ shrinks, so values greater than 8 overflow 32bits when
  * HZ=100.
  */
+<<<<<<< HEAD
 #define JIFFIES_SHIFT	8
+=======
+#if HZ < 34
+#define JIFFIES_SHIFT	6
+#elif HZ < 67
+#define JIFFIES_SHIFT	7
+#else
+#define JIFFIES_SHIFT	8
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static cycle_t jiffies_read(struct clocksource *cs)
 {

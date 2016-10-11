@@ -25,6 +25,10 @@
  * ----------------------------------------------------------------------------
  *
  */
+<<<<<<< HEAD
+=======
+#include <linux/export.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/clk.h>
 #include <linux/errno.h>
 #include <linux/err.h>
@@ -305,6 +309,10 @@ int i2c_dw_init(struct dw_i2c_dev *dev)
 	dw_writel(dev, dev->master_cfg , DW_IC_CON);
 	return 0;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_init);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Waiting for bus not busy
@@ -344,10 +352,21 @@ static void i2c_dw_xfer_init(struct dw_i2c_dev *dev)
 		ic_con &= ~DW_IC_CON_10BITADDR_MASTER;
 	dw_writel(dev, ic_con, DW_IC_CON);
 
+<<<<<<< HEAD
 	/* Enable the adapter */
 	dw_writel(dev, 1, DW_IC_ENABLE);
 
 	/* Enable interrupts */
+=======
+	/* enforce disabled interrupts (due to HW issues) */
+	i2c_dw_disable_int(dev);
+
+	/* Enable the adapter */
+	dw_writel(dev, 1, DW_IC_ENABLE);
+
+	/* Clear and enable interrupts */
+	i2c_dw_clear_int(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dw_writel(dev, DW_IC_INTR_DEFAULT_MASK, DW_IC_INTR_MASK);
 }
 
@@ -557,12 +576,20 @@ done:
 
 	return ret;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_xfer);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 u32 i2c_dw_func(struct i2c_adapter *adap)
 {
 	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
 	return dev->functionality;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_func);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static u32 i2c_dw_read_clear_intrbits(struct dw_i2c_dev *dev)
 {
@@ -667,17 +694,29 @@ tx_aborted:
 
 	return IRQ_HANDLED;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_isr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void i2c_dw_enable(struct dw_i2c_dev *dev)
 {
        /* Enable the adapter */
 	dw_writel(dev, 1, DW_IC_ENABLE);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_enable);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 u32 i2c_dw_is_enabled(struct dw_i2c_dev *dev)
 {
 	return dw_readl(dev, DW_IC_ENABLE);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_is_enabled);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void i2c_dw_disable(struct dw_i2c_dev *dev)
 {
@@ -688,18 +727,34 @@ void i2c_dw_disable(struct dw_i2c_dev *dev)
 	dw_writel(dev, 0, DW_IC_INTR_MASK);
 	dw_readl(dev, DW_IC_CLR_INTR);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_disable);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void i2c_dw_clear_int(struct dw_i2c_dev *dev)
 {
 	dw_readl(dev, DW_IC_CLR_INTR);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_clear_int);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void i2c_dw_disable_int(struct dw_i2c_dev *dev)
 {
 	dw_writel(dev, 0, DW_IC_INTR_MASK);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_disable_int);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 u32 i2c_dw_read_comp_param(struct dw_i2c_dev *dev)
 {
 	return dw_readl(dev, DW_IC_COMP_PARAM_1);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(i2c_dw_read_comp_param);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

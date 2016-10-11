@@ -317,6 +317,10 @@ extern void inet_csk_reqsk_queue_prune(struct sock *parent,
 				       const unsigned long max_rto);
 
 extern void inet_csk_destroy_sock(struct sock *sk);
+<<<<<<< HEAD
+=======
+extern void inet_csk_prepare_forced_close(struct sock *sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * LISTEN is a special case for poll..

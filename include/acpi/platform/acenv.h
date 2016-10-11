@@ -75,6 +75,10 @@
 #define ACPI_CONSTANT_EVAL_ONLY
 #define ACPI_LARGE_NAMESPACE_NODE
 #define ACPI_DATA_TABLE_DISASSEMBLY
+<<<<<<< HEAD
+=======
+#define ACPI_32BIT_PHYSICAL_ADDRESS
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 #ifdef ACPI_EXEC_APP

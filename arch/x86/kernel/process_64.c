@@ -49,6 +49,10 @@
 #include <asm/syscalls.h>
 #include <asm/debugreg.h>
 #include <asm/switch_to.h>
+<<<<<<< HEAD
+=======
+#include <asm/xen/hypervisor.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 asmlinkage extern void ret_from_fork(void);
 
@@ -116,11 +120,19 @@ void __show_regs(struct pt_regs *regs, int all)
 void release_thread(struct task_struct *dead_task)
 {
 	if (dead_task->mm) {
+<<<<<<< HEAD
 		if (dead_task->mm->context.size) {
 			printk("WARNING: dead process %8s still has LDT? <%p/%d>\n",
 					dead_task->comm,
 					dead_task->mm->context.ldt,
 					dead_task->mm->context.size);
+=======
+		if (dead_task->mm->context.ldt) {
+			printk("WARNING: dead process %8s still has LDT? <%p/%d>\n",
+					dead_task->comm,
+					dead_task->mm->context.ldt->entries,
+					dead_task->mm->context.ldt->size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			BUG();
 		}
 	}
@@ -286,6 +298,7 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 
 	fpu = switch_fpu_prepare(prev_p, next_p, cpu);
 
+<<<<<<< HEAD
 	/*
 	 * Reload esp0, LDT and the page table pointer:
 	 */
@@ -304,6 +317,11 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 		loadsegment(ds, next->ds);
 
 
+=======
+	/* Reload esp0 and ss1. */
+	load_sp0(tss, next);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* We must save %fs and %gs before load_TLS() because
 	 * %fs and %gs may be cleared by load_TLS().
 	 *
@@ -312,6 +330,7 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 	savesegment(fs, fsindex);
 	savesegment(gs, gsindex);
 
+<<<<<<< HEAD
 	load_TLS(next, cpu);
 
 	/*
@@ -336,17 +355,110 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 		 * Check if the user used a selector != 0; if yes
 		 *  clear 64bit base, since overloaded base is always
 		 *  mapped to the Null selector
+=======
+	/*
+	 * Load TLS before restoring any segments so that segment loads
+	 * reference the correct GDT entries.
+	 */
+	load_TLS(next, cpu);
+
+	/*
+	 * Leave lazy mode, flushing any hypercalls made here.  This
+	 * must be done after loading TLS entries in the GDT but before
+	 * loading segments that might reference them, and and it must
+	 * be done before math_state_restore, so the TS bit is up to
+	 * date.
+	 */
+	arch_end_context_switch(next_p);
+
+	/* Switch DS and ES.
+	 *
+	 * Reading them only returns the selectors, but writing them (if
+	 * nonzero) loads the full descriptor from the GDT or LDT.  The
+	 * LDT for next is loaded in switch_mm, and the GDT is loaded
+	 * above.
+	 *
+	 * We therefore need to write new values to the segment
+	 * registers on every context switch unless both the new and old
+	 * values are zero.
+	 *
+	 * Note that we don't need to do anything for CS and SS, as
+	 * those are saved and restored as part of pt_regs.
+	 */
+	savesegment(es, prev->es);
+	if (unlikely(next->es | prev->es))
+		loadsegment(es, next->es);
+
+	savesegment(ds, prev->ds);
+	if (unlikely(next->ds | prev->ds))
+		loadsegment(ds, next->ds);
+
+	/*
+	 * Switch FS and GS.
+	 *
+	 * These are even more complicated than FS and GS: they have
+	 * 64-bit bases are that controlled by arch_prctl.  Those bases
+	 * only differ from the values in the GDT or LDT if the selector
+	 * is 0.
+	 *
+	 * Loading the segment register resets the hidden base part of
+	 * the register to 0 or the value from the GDT / LDT.  If the
+	 * next base address zero, writing 0 to the segment register is
+	 * much faster than using wrmsr to explicitly zero the base.
+	 *
+	 * The thread_struct.fs and thread_struct.gs values are 0
+	 * if the fs and gs bases respectively are not overridden
+	 * from the values implied by fsindex and gsindex.  They
+	 * are nonzero, and store the nonzero base addresses, if
+	 * the bases are overridden.
+	 *
+	 * (fs != 0 && fsindex != 0) || (gs != 0 && gsindex != 0) should
+	 * be impossible.
+	 *
+	 * Therefore we need to reload the segment registers if either
+	 * the old or new selector is nonzero, and we need to override
+	 * the base address if next thread expects it to be overridden.
+	 *
+	 * This code is unnecessarily slow in the case where the old and
+	 * new indexes are zero and the new base is nonzero -- it will
+	 * unnecessarily write 0 to the selector before writing the new
+	 * base address.
+	 *
+	 * Note: This all depends on arch_prctl being the only way that
+	 * user code can override the segment base.  Once wrfsbase and
+	 * wrgsbase are enabled, most of this code will need to change.
+	 */
+	if (unlikely(fsindex | next->fsindex | prev->fs)) {
+		loadsegment(fs, next->fsindex);
+
+		/*
+		 * If user code wrote a nonzero value to FS, then it also
+		 * cleared the overridden base address.
+		 *
+		 * XXX: if user code wrote 0 to FS and cleared the base
+		 * address itself, we won't notice and we'll incorrectly
+		 * restore the prior base address next time we reschdule
+		 * the process.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		 */
 		if (fsindex)
 			prev->fs = 0;
 	}
+<<<<<<< HEAD
 	/* when next process has a 64bit base use it */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (next->fs)
 		wrmsrl(MSR_FS_BASE, next->fs);
 	prev->fsindex = fsindex;
 
 	if (unlikely(gsindex | next->gsindex | prev->gs)) {
 		load_gs_index(next->gsindex);
+<<<<<<< HEAD
+=======
+
+		/* This works (and fails) the same way as fsindex above. */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (gsindex)
 			prev->gs = 0;
 	}
@@ -374,6 +486,20 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 		     task_thread_info(prev_p)->flags & _TIF_WORK_CTXSW_PREV))
 		__switch_to_xtra(prev_p, next_p, tss);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_XEN
+	/*
+	 * On Xen PV, IOPL bits in pt_regs->flags have no effect, and
+	 * current_pt_regs()->flags may not match the current task's
+	 * intended IOPL.  We need to switch it manually.
+	 */
+	if (unlikely(xen_pv_domain() &&
+		     prev->iopl != next->iopl))
+		xen_set_iopl_mask(next->iopl);
+#endif
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return prev_p;
 }
 
@@ -425,14 +551,27 @@ void set_personality_ia32(bool x32)
 }
 EXPORT_SYMBOL_GPL(set_personality_ia32);
 
+<<<<<<< HEAD
 unsigned long get_wchan(struct task_struct *p)
 {
 	unsigned long stack;
 	u64 fp, ip;
+=======
+/*
+ * Called from fs/proc with a reference on @p to find the function
+ * which called into schedule(). This needs to be done carefully
+ * because the task might wake up and we might look at a stack
+ * changing under us.
+ */
+unsigned long get_wchan(struct task_struct *p)
+{
+	unsigned long start, bottom, top, sp, fp, ip;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int count = 0;
 
 	if (!p || p == current || p->state == TASK_RUNNING)
 		return 0;
+<<<<<<< HEAD
 	stack = (unsigned long)task_stack_page(p);
 	if (p->thread.sp < stack || p->thread.sp >= stack+THREAD_SIZE)
 		return 0;
@@ -446,6 +585,48 @@ unsigned long get_wchan(struct task_struct *p)
 			return ip;
 		fp = *(u64 *)fp;
 	} while (count++ < 16);
+=======
+
+	start = (unsigned long)task_stack_page(p);
+	if (!start)
+		return 0;
+
+	/*
+	 * Layout of the stack page:
+	 *
+	 * ----------- topmax = start + THREAD_SIZE - sizeof(unsigned long)
+	 * PADDING
+	 * ----------- top = topmax - TOP_OF_KERNEL_STACK_PADDING
+	 * stack
+	 * ----------- bottom = start + sizeof(thread_info)
+	 * thread_info
+	 * ----------- start
+	 *
+	 * The tasks stack pointer points at the location where the
+	 * framepointer is stored. The data on the stack is:
+	 * ... IP FP ... IP FP
+	 *
+	 * We need to read FP and IP, so we need to adjust the upper
+	 * bound by another unsigned long.
+	 */
+	top = start + THREAD_SIZE;
+	top -= 2 * sizeof(unsigned long);
+	bottom = start + sizeof(struct thread_info);
+
+	sp = ACCESS_ONCE(p->thread.sp);
+	if (sp < bottom || sp > top)
+		return 0;
+
+	fp = ACCESS_ONCE(*(unsigned long *)sp);
+	do {
+		if (fp < bottom || fp > top)
+			return 0;
+		ip = ACCESS_ONCE(*(unsigned long *)(fp + sizeof(unsigned long)));
+		if (!in_sched_functions(ip))
+			return ip;
+		fp = ACCESS_ONCE(*(unsigned long *)fp);
+	} while (count++ < 16 && p->state != TASK_RUNNING);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 

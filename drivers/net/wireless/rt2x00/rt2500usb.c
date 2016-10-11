@@ -283,7 +283,11 @@ static int rt2500usb_rfkill_poll(struct rt2x00_dev *rt2x00dev)
 	u16 reg;
 
 	rt2500usb_register_read(rt2x00dev, MAC_CSR19, &reg);
+<<<<<<< HEAD
 	return rt2x00_get_field32(reg, MAC_CSR19_BIT7);
+=======
+	return rt2x00_get_field16(reg, MAC_CSR19_BIT7);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifdef CONFIG_RT2X00_LIB_LEDS
@@ -1768,6 +1772,10 @@ static int rt2500usb_probe_hw_mode(struct rt2x00_dev *rt2x00dev)
 static int rt2500usb_probe_hw(struct rt2x00_dev *rt2x00dev)
 {
 	int retval;
+<<<<<<< HEAD
+=======
+	u16 reg;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Allocate eeprom data.
@@ -1781,6 +1789,17 @@ static int rt2500usb_probe_hw(struct rt2x00_dev *rt2x00dev)
 		return retval;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Enable rfkill polling by setting GPIO direction of the
+	 * rfkill switch GPIO pin correctly.
+	 */
+	rt2500usb_register_read(rt2x00dev, MAC_CSR19, &reg);
+	rt2x00_set_field16(&reg, MAC_CSR19_BIT8, 0);
+	rt2500usb_register_write(rt2x00dev, MAC_CSR19, reg);
+
+	/*
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Initialize hw specifications.
 	 */
 	retval = rt2500usb_probe_hw_mode(rt2x00dev);
@@ -1912,7 +1931,11 @@ static struct usb_device_id rt2500usb_device_table[] = {
 	{ USB_DEVICE(0x0b05, 0x1706) },
 	{ USB_DEVICE(0x0b05, 0x1707) },
 	/* Belkin */
+<<<<<<< HEAD
 	{ USB_DEVICE(0x050d, 0x7050) },
+=======
+	{ USB_DEVICE(0x050d, 0x7050) },	/* FCC ID: K7SF5D7050A ver. 2.x */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ USB_DEVICE(0x050d, 0x7051) },
 	/* Cisco Systems */
 	{ USB_DEVICE(0x13b1, 0x000d) },

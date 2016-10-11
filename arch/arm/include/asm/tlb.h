@@ -208,6 +208,7 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
 	tlb_add_flush(tlb, addr + SZ_1M);
 
 	tlb_remove_page(tlb, pte);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_DEBUG
 	/* with debug infrastructure, check if a page was 
 	 * unprotected after being freed. Scream if not.
@@ -220,6 +221,8 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
 		}
 	#endif
 #endif 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmdp,

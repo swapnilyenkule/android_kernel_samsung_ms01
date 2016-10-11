@@ -955,11 +955,21 @@ int rds_sendmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 		release_sock(sk);
 	}
 
+<<<<<<< HEAD
 	/* racing with another thread binding seems ok here */
 	if (daddr == 0 || rs->rs_bound_addr == 0) {
 		ret = -ENOTCONN; /* XXX not a great errno */
 		goto out;
 	}
+=======
+	lock_sock(sk);
+	if (daddr == 0 || rs->rs_bound_addr == 0) {
+		release_sock(sk);
+		ret = -ENOTCONN; /* XXX not a great errno */
+		goto out;
+	}
+	release_sock(sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* size of rm including all sgs */
 	ret = rds_rm_size(msg, payload_len);
@@ -1122,7 +1132,11 @@ rds_send_pong(struct rds_connection *conn, __be16 dport)
 	rds_stats_inc(s_send_pong);
 
 	if (!test_bit(RDS_LL_SEND_FULL, &conn->c_flags))
+<<<<<<< HEAD
 		rds_send_xmit(conn);
+=======
+		queue_delayed_work(rds_wq, &conn->c_send_w, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rds_message_put(rm);
 	return 0;

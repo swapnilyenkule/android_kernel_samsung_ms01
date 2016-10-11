@@ -391,7 +391,11 @@ ncp_dget_fpos(struct dentry *dentry, struct dentry *parent, unsigned long fpos)
 	spin_lock(&parent->d_lock);
 	next = parent->d_subdirs.next;
 	while (next != &parent->d_subdirs) {
+<<<<<<< HEAD
 		dent = list_entry(next, struct dentry, d_u.d_child);
+=======
+		dent = list_entry(next, struct dentry, d_child);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if ((unsigned long)dent->d_fsdata == fpos) {
 			if (dent->d_inode)
 				dget(dent);
@@ -1033,6 +1037,7 @@ static int ncp_rmdir(struct inode *dir, struct dentry *dentry)
 	DPRINTK("ncp_rmdir: removing %s/%s\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
 
+<<<<<<< HEAD
 	/*
 	 * fail with EBUSY if there are still references to this
 	 * directory.
@@ -1042,6 +1047,8 @@ static int ncp_rmdir(struct inode *dir, struct dentry *dentry)
 	if (!d_unhashed(dentry))
 		goto out;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	len = sizeof(__name);
 	error = ncp_io2vol(server, __name, &len, dentry->d_name.name,
 			   dentry->d_name.len, !ncp_preserve_case(dir));

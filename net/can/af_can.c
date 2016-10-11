@@ -244,6 +244,12 @@ int can_send(struct sk_buff *skb, int loop)
 	}
 
 	skb->protocol = htons(ETH_P_CAN);
+<<<<<<< HEAD
+=======
+	skb->ip_summed = CHECKSUM_UNNECESSARY;
+
+	skb_reset_mac_header(skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	skb_reset_network_header(skb);
 	skb_reset_transport_header(skb);
 

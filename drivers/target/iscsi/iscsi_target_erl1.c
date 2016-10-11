@@ -824,7 +824,11 @@ static int iscsit_attach_ooo_cmdsn(
 		/*
 		 * CmdSN is greater than the tail of the list.
 		 */
+<<<<<<< HEAD
 		if (ooo_tail->cmdsn < ooo_cmdsn->cmdsn)
+=======
+		if (iscsi_sna_lt(ooo_tail->cmdsn, ooo_cmdsn->cmdsn))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			list_add_tail(&ooo_cmdsn->ooo_list,
 					&sess->sess_ooo_cmdsn_list);
 		else {
@@ -834,11 +838,20 @@ static int iscsit_attach_ooo_cmdsn(
 			 */
 			list_for_each_entry(ooo_tmp, &sess->sess_ooo_cmdsn_list,
 						ooo_list) {
+<<<<<<< HEAD
 				if (ooo_tmp->cmdsn < ooo_cmdsn->cmdsn)
 					continue;
 
 				list_add(&ooo_cmdsn->ooo_list,
 					&ooo_tmp->ooo_list);
+=======
+				if (iscsi_sna_lt(ooo_tmp->cmdsn, ooo_cmdsn->cmdsn))
+					continue;
+
+				/* Insert before this entry */
+				list_add(&ooo_cmdsn->ooo_list,
+					ooo_tmp->ooo_list.prev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				break;
 			}
 		}

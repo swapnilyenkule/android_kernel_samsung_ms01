@@ -26,7 +26,11 @@ CHECKFLAGS	+=
 PROCESSOR	:= unset
 UNIT		:= unset
 
+<<<<<<< HEAD
 KBUILD_CFLAGS	+= -mam33 -mmem-funcs -DCPU=AM33
+=======
+KBUILD_CFLAGS	+= -mam33 -DCPU=AM33 $(call cc-option,-mmem-funcs,)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 KBUILD_AFLAGS	+= -mam33 -DCPU=AM33
 
 ifeq ($(CONFIG_MN10300_CURRENT_IN_E2),y)

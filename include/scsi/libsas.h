@@ -163,6 +163,11 @@ enum ata_command_set {
         ATAPI_COMMAND_SET = 1,
 };
 
+<<<<<<< HEAD
+=======
+#define ATA_RESP_FIS_SIZE 24
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct sata_device {
         enum   ata_command_set command_set;
         struct smp_resp        rps_resp; /* report_phy_sata_resp */
@@ -171,7 +176,11 @@ struct sata_device {
 
 	struct ata_port *ap;
 	struct ata_host ata_host;
+<<<<<<< HEAD
 	struct ata_taskfile tf;
+=======
+	u8     fis[ATA_RESP_FIS_SIZE];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 enum {
@@ -537,7 +546,11 @@ enum exec_status {
  */
 struct ata_task_resp {
 	u16  frame_len;
+<<<<<<< HEAD
 	u8   ending_fis[24];	  /* dev to host or data-in */
+=======
+	u8   ending_fis[ATA_RESP_FIS_SIZE];	  /* dev to host or data-in */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #define SAS_STATUS_BUF_SIZE 96

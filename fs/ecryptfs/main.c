@@ -39,12 +39,15 @@
 #include <linux/magic.h>
 #include "ecryptfs_kernel.h"
 
+<<<<<<< HEAD
 
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 #include <linux/ctype.h>
 #endif
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * Module parameter that defines the ecryptfs_verbosity level.
  */
@@ -183,12 +186,15 @@ enum { ecryptfs_opt_sig, ecryptfs_opt_ecryptfs_sig,
        ecryptfs_opt_fn_cipher, ecryptfs_opt_fn_cipher_key_bytes,
        ecryptfs_opt_unlink_sigs, ecryptfs_opt_mount_auth_tok_only,
        ecryptfs_opt_check_dev_ruid,
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	ecryptfs_opt_enable_filtering,
 #endif
 #ifdef CONFIG_CRYPTO_FIPS
 	ecryptfs_opt_enable_cc,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
        ecryptfs_opt_err };
 
 static const match_table_t tokens = {
@@ -206,12 +212,15 @@ static const match_table_t tokens = {
 	{ecryptfs_opt_unlink_sigs, "ecryptfs_unlink_sigs"},
 	{ecryptfs_opt_mount_auth_tok_only, "ecryptfs_mount_auth_tok_only"},
 	{ecryptfs_opt_check_dev_ruid, "ecryptfs_check_dev_ruid"},
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	{ecryptfs_opt_enable_filtering, "ecryptfs_enable_filtering=%s"},
 #endif
 #ifdef CONFIG_CRYPTO_FIPS
 	{ecryptfs_opt_enable_cc, "ecryptfs_enable_cc"},
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ecryptfs_opt_err, NULL}
 };
 
@@ -252,6 +261,7 @@ static void ecryptfs_init_mount_crypt_stat(
 	mutex_init(&mount_crypt_stat->global_auth_tok_list_mutex);
 	mount_crypt_stat->flags |= ECRYPTFS_MOUNT_CRYPT_STAT_INITIALIZED;
 }
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 
 static int parse_enc_file_filter_parms(
@@ -303,6 +313,9 @@ static int parse_enc_filter_parms(
 	return 0;
 }
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * ecryptfs_parse_options
  * @sb: The ecryptfs super block
@@ -459,6 +472,7 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
 		case ecryptfs_opt_check_dev_ruid:
 			*check_ruid = 1;
 			break;
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 		case ecryptfs_opt_enable_filtering:
 			rc = parse_enc_filter_parms(mount_crypt_stat,
@@ -477,6 +491,8 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
             mount_crypt_stat->flags |= ECRYPTFS_ENABLE_CC;
 			break;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case ecryptfs_opt_err:
 		default:
 			printk(KERN_WARNING
@@ -523,6 +539,7 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
 	mutex_lock(&key_tfm_list_mutex);
 	if (!ecryptfs_tfm_exists(mount_crypt_stat->global_default_cipher_name,
 				 NULL)) {
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 		rc = ecryptfs_add_new_key_tfm(
 			NULL, mount_crypt_stat->global_default_cipher_name,
@@ -533,6 +550,11 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
 			NULL, mount_crypt_stat->global_default_cipher_name,
 			mount_crypt_stat->global_default_cipher_key_size);
 #endif
+=======
+		rc = ecryptfs_add_new_key_tfm(
+			NULL, mount_crypt_stat->global_default_cipher_name,
+			mount_crypt_stat->global_default_cipher_key_size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rc) {
 			printk(KERN_ERR "Error attempting to initialize "
 			       "cipher with name = [%s] and key size = [%td]; "
@@ -548,6 +570,7 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
 	if ((mount_crypt_stat->flags & ECRYPTFS_GLOBAL_ENCRYPT_FILENAMES)
 	    && !ecryptfs_tfm_exists(
 		    mount_crypt_stat->global_default_fn_cipher_name, NULL)) {
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 		rc = ecryptfs_add_new_key_tfm(
 			NULL, mount_crypt_stat->global_default_fn_cipher_name,
@@ -558,6 +581,11 @@ static int ecryptfs_parse_options(struct ecryptfs_sb_info *sbi, char *options,
 			NULL, mount_crypt_stat->global_default_fn_cipher_name,
 			mount_crypt_stat->global_default_fn_cipher_key_bytes);
 #endif
+=======
+		rc = ecryptfs_add_new_key_tfm(
+			NULL, mount_crypt_stat->global_default_fn_cipher_name,
+			mount_crypt_stat->global_default_fn_cipher_key_bytes);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (rc) {
 			printk(KERN_ERR "Error attempting to initialize "
 			       "cipher with name = [%s] and key size = [%td]; "
@@ -594,6 +622,10 @@ static struct dentry *ecryptfs_mount(struct file_system_type *fs_type, int flags
 {
 	struct super_block *s;
 	struct ecryptfs_sb_info *sbi;
+<<<<<<< HEAD
+=======
+	struct ecryptfs_mount_crypt_stat *mount_crypt_stat;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct ecryptfs_dentry_info *root_info;
 	const char *err = "Getting sb failed";
 	struct inode *inode;
@@ -612,6 +644,10 @@ static struct dentry *ecryptfs_mount(struct file_system_type *fs_type, int flags
 		err = "Error parsing options";
 		goto out;
 	}
+<<<<<<< HEAD
+=======
+	mount_crypt_stat = &sbi->mount_crypt_stat;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	s = sget(fs_type, NULL, set_anon_super, NULL);
 	if (IS_ERR(s)) {
@@ -657,11 +693,27 @@ static struct dentry *ecryptfs_mount(struct file_system_type *fs_type, int flags
 
 	/**
 	 * Set the POSIX ACL flag based on whether they're enabled in the lower
+<<<<<<< HEAD
 	 * mount. Force a read-only eCryptfs mount if the lower mount is ro.
 	 * Allow a ro eCryptfs mount even when the lower mount is rw.
 	 */
 	s->s_flags = flags & ~MS_POSIXACL;
 	s->s_flags |= path.dentry->d_sb->s_flags & (MS_RDONLY | MS_POSIXACL);
+=======
+	 * mount.
+	 */
+	s->s_flags = flags & ~MS_POSIXACL;
+	s->s_flags |= path.dentry->d_sb->s_flags & MS_POSIXACL;
+
+	/**
+	 * Force a read-only eCryptfs mount when:
+	 *   1) The lower mount is ro
+	 *   2) The ecryptfs_encrypted_view mount option is specified
+	 */
+	if (path.dentry->d_sb->s_flags & MS_RDONLY ||
+	    mount_crypt_stat->flags & ECRYPTFS_ENCRYPTED_VIEW_ENABLED)
+		s->s_flags |= MS_RDONLY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	s->s_maxbytes = path.dentry->d_sb->s_maxbytes;
 	s->s_blocksize = path.dentry->d_sb->s_blocksize;

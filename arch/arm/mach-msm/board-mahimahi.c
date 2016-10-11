@@ -31,10 +31,17 @@
 #include <mach/board.h>
 #include <mach/hardware.h>
 #include <mach/system.h>
+<<<<<<< HEAD
 #include <mach/proc_comm.h>
 
 #include "board-mahimahi.h"
 #include "devices.h"
+=======
+
+#include "board-mahimahi.h"
+#include "devices.h"
+#include "proc_comm.h"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static uint debug_uart;
 

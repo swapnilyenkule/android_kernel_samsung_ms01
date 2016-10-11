@@ -79,6 +79,10 @@ int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
 				run->dcr.dcrn = dcrn;
 				run->dcr.data =  0;
 				run->dcr.is_write = 0;
+<<<<<<< HEAD
+=======
+				vcpu->arch.dcr_is_write = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				vcpu->arch.io_gpr = rt;
 				vcpu->arch.dcr_needed = 1;
 				kvmppc_account_exit(vcpu, DCR_EXITS);
@@ -100,6 +104,10 @@ int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
 				run->dcr.dcrn = dcrn;
 				run->dcr.data = kvmppc_get_gpr(vcpu, rs);
 				run->dcr.is_write = 1;
+<<<<<<< HEAD
+=======
+				vcpu->arch.dcr_is_write = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				vcpu->arch.dcr_needed = 1;
 				kvmppc_account_exit(vcpu, DCR_EXITS);
 				emulated = EMULATE_DO_DCR;

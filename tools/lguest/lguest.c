@@ -1299,6 +1299,10 @@ static struct device *new_device(const char *name, u16 type)
 	dev->feature_len = 0;
 	dev->num_vq = 0;
 	dev->running = false;
+<<<<<<< HEAD
+=======
+	dev->next = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Append to device list.  Prepending to a single-linked list is

@@ -31,10 +31,13 @@
 #include <linux/kobject.h>
 #include <linux/ctype.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <linux/proc_avc.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* selinuxfs pseudo filesystem for exporting the security policy API.
    Based on the proc code and the fs/nfsd/nfsctl.c code. */
 
@@ -154,7 +157,11 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 		goto out;
 
 	/* No partial writes. */
+<<<<<<< HEAD
 	length = EINVAL;
+=======
+	length = -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (*ppos != 0)
 		goto out;
 
@@ -170,6 +177,7 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 	length = -EINVAL;
 	if (sscanf(page, "%d", &new_value) != 1)
 		goto out;
+<<<<<<< HEAD
 #ifdef CONFIG_ALWAYS_ENFORCE
 	// If build is user build and enforce option is set, selinux is always enforcing
 	new_value = 1;
@@ -184,6 +192,9 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 	selnl_notify_setenforce(new_value);
         selinux_status_update_setenforce(new_value);
 #else
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (new_value != selinux_enforcing) {
 		length = task_has_security(current, SECURITY__SETENFORCE);
 		if (length)
@@ -199,7 +210,10 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 		selnl_notify_setenforce(selinux_enforcing);
 		selinux_status_update_setenforce(selinux_enforcing);
 	}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	length = count;
 out:
 	free_page((unsigned long) page);
@@ -1209,7 +1223,11 @@ static void sel_remove_entries(struct dentry *de)
 	spin_lock(&de->d_lock);
 	node = de->d_subdirs.next;
 	while (node != &de->d_subdirs) {
+<<<<<<< HEAD
 		struct dentry *d = list_entry(node, struct dentry, d_u.d_child);
+=======
+		struct dentry *d = list_entry(node, struct dentry, d_child);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		spin_lock_nested(&d->d_lock, DENTRY_D_LOCK_NESTED);
 		list_del_init(node);
@@ -1250,6 +1268,10 @@ static int sel_make_bools(void)
 		kfree(bool_pending_names[i]);
 	kfree(bool_pending_names);
 	kfree(bool_pending_values);
+<<<<<<< HEAD
+=======
+	bool_num = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bool_pending_names = NULL;
 	bool_pending_values = NULL;
 
@@ -1711,12 +1733,20 @@ static void sel_remove_classes(void)
 
 	list_for_each(class_node, &class_dir->d_subdirs) {
 		struct dentry *class_subdir = list_entry(class_node,
+<<<<<<< HEAD
 					struct dentry, d_u.d_child);
+=======
+					struct dentry, d_child);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		struct list_head *class_subdir_node;
 
 		list_for_each(class_subdir_node, &class_subdir->d_subdirs) {
 			struct dentry *d = list_entry(class_subdir_node,
+<<<<<<< HEAD
 						struct dentry, d_u.d_child);
+=======
+						struct dentry, d_child);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			if (d->d_inode)
 				if (d->d_inode->i_mode & S_IFDIR)
@@ -1942,9 +1972,12 @@ static int __init init_sel_fs(void)
 {
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_ALWAYS_ENFORCE
 	selinux_enabled = 1;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!selinux_enabled)
 		return 0;
 

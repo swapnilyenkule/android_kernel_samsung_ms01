@@ -17,10 +17,13 @@
 #include <linux/gfp.h>
 #include <linux/suspend.h>
 
+<<<<<<< HEAD
 #include "smpboot.h"
 
 #include <trace/events/sched.h>
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SMP
 /* Serializes the updates to cpu_online_mask, cpu_present_mask */
 static DEFINE_MUTEX(cpu_add_remove_lock);
@@ -79,10 +82,13 @@ void put_online_cpus(void)
 	if (cpu_hotplug.active_writer == current)
 		return;
 	mutex_lock(&cpu_hotplug.lock);
+<<<<<<< HEAD
 
 	if (WARN_ON(!cpu_hotplug.refcount))
 		cpu_hotplug.refcount++; /* try to fix things up */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!--cpu_hotplug.refcount && unlikely(cpu_hotplug.active_writer))
 		wake_up_process(cpu_hotplug.active_writer);
 	mutex_unlock(&cpu_hotplug.lock);
@@ -132,6 +138,30 @@ static void cpu_hotplug_done(void)
 	mutex_unlock(&cpu_hotplug.lock);
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Wait for currently running CPU hotplug operations to complete (if any) and
+ * disable future CPU hotplug (from sysfs). The 'cpu_add_remove_lock' protects
+ * the 'cpu_hotplug_disabled' flag. The same lock is also acquired by the
+ * hotplug path before performing hotplug operations. So acquiring that lock
+ * guarantees mutual exclusion from any currently running hotplug operations.
+ */
+void cpu_hotplug_disable(void)
+{
+	cpu_maps_update_begin();
+	cpu_hotplug_disabled = 1;
+	cpu_maps_update_done();
+}
+
+void cpu_hotplug_enable(void)
+{
+	cpu_maps_update_begin();
+	cpu_hotplug_disabled = 0;
+	cpu_maps_update_done();
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else /* #if CONFIG_HOTPLUG_CPU */
 static void cpu_hotplug_begin(void) {}
 static void cpu_hotplug_done(void) {}
@@ -212,8 +242,11 @@ static int __ref take_cpu_down(void *_param)
 		return err;
 
 	cpu_notify(CPU_DYING | param->mod, param->hcpu);
+<<<<<<< HEAD
 	/* Park the stopper thread */
 	kthread_park(current);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -244,13 +277,21 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 				__func__, cpu);
 		goto out_release;
 	}
+<<<<<<< HEAD
 	smpboot_park_threads(cpu);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	err = __stop_machine(take_cpu_down, &tcd_param, cpumask_of(cpu));
 	if (err) {
 		/* CPU didn't die: tell everyone.  Can't complain. */
+<<<<<<< HEAD
 		smpboot_unpark_threads(cpu);
 		cpu_notify_nofail(CPU_DOWN_FAILED | mod, hcpu);
+=======
+		cpu_notify_nofail(CPU_DOWN_FAILED | mod, hcpu);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out_release;
 	}
 	BUG_ON(cpu_online(cpu));
@@ -275,7 +316,10 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 
 out_release:
 	cpu_hotplug_done();
+<<<<<<< HEAD
 	trace_sched_cpu_hotplug(cpu, err, 0);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!err)
 		cpu_notify_nofail(CPU_POST_DEAD | mod, hcpu);
 	return err;
@@ -307,12 +351,16 @@ static int __cpuinit _cpu_up(unsigned int cpu, int tasks_frozen)
 	int ret, nr_calls = 0;
 	void *hcpu = (void *)(long)cpu;
 	unsigned long mod = tasks_frozen ? CPU_TASKS_FROZEN : 0;
+<<<<<<< HEAD
 	struct task_struct *idle;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (cpu_online(cpu) || !cpu_present(cpu))
 		return -EINVAL;
 
 	cpu_hotplug_begin();
+<<<<<<< HEAD
 
 	idle = idle_thread_get(cpu);
 	if (IS_ERR(idle)) {
@@ -324,6 +372,8 @@ static int __cpuinit _cpu_up(unsigned int cpu, int tasks_frozen)
 	if (ret)
 		goto out;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = __cpu_notify(CPU_UP_PREPARE | mod, hcpu, -1, &nr_calls);
 	if (ret) {
 		nr_calls--;
@@ -333,23 +383,34 @@ static int __cpuinit _cpu_up(unsigned int cpu, int tasks_frozen)
 	}
 
 	/* Arch-specific enabling code. */
+<<<<<<< HEAD
 	ret = __cpu_up(cpu, idle);
+=======
+	ret = __cpu_up(cpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ret != 0)
 		goto out_notify;
 	BUG_ON(!cpu_online(cpu));
 
+<<<<<<< HEAD
 	/* Wake the per cpu threads */
 	smpboot_unpark_threads(cpu);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Now call notifier in preparation. */
 	cpu_notify(CPU_ONLINE | mod, hcpu);
 
 out_notify:
 	if (ret != 0)
 		__cpu_notify(CPU_UP_CANCELED | mod, hcpu, nr_calls, NULL);
+<<<<<<< HEAD
 out:
 	cpu_hotplug_done();
 	trace_sched_cpu_hotplug(cpu, ret, 1);
+=======
+	cpu_hotplug_done();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return ret;
 }
@@ -508,6 +569,7 @@ static int __init alloc_frozen_cpus(void)
 core_initcall(alloc_frozen_cpus);
 
 /*
+<<<<<<< HEAD
  * Prevent regular CPU hotplug from racing with the freezer, by disabling CPU
  * hotplug when tasks are about to be frozen. Also, don't allow the freezer
  * to continue until any currently running CPU hotplug operation gets
@@ -538,6 +600,8 @@ void cpu_hotplug_enable_after_thaw(void)
 }
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * When callbacks for CPU hotplug notifications are being executed, we must
  * ensure that the state of the system with respect to the tasks being frozen
  * or not, as reported by the notification, remains unchanged *throughout the
@@ -556,12 +620,20 @@ cpu_hotplug_pm_callback(struct notifier_block *nb,
 
 	case PM_SUSPEND_PREPARE:
 	case PM_HIBERNATION_PREPARE:
+<<<<<<< HEAD
 		cpu_hotplug_disable_before_freeze();
+=======
+		cpu_hotplug_disable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 
 	case PM_POST_SUSPEND:
 	case PM_POST_HIBERNATION:
+<<<<<<< HEAD
 		cpu_hotplug_enable_after_thaw();
+=======
+		cpu_hotplug_enable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 
 	default:
@@ -669,10 +741,19 @@ void set_cpu_present(unsigned int cpu, bool present)
 
 void set_cpu_online(unsigned int cpu, bool online)
 {
+<<<<<<< HEAD
 	if (online)
 		cpumask_set_cpu(cpu, to_cpumask(cpu_online_bits));
 	else
 		cpumask_clear_cpu(cpu, to_cpumask(cpu_online_bits));
+=======
+	if (online) {
+		cpumask_set_cpu(cpu, to_cpumask(cpu_online_bits));
+		cpumask_set_cpu(cpu, to_cpumask(cpu_active_bits));
+	} else {
+		cpumask_clear_cpu(cpu, to_cpumask(cpu_online_bits));
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void set_cpu_active(unsigned int cpu, bool active)
@@ -697,6 +778,7 @@ void init_cpu_online(const struct cpumask *src)
 {
 	cpumask_copy(to_cpumask(cpu_online_bits), src);
 }
+<<<<<<< HEAD
 
 static ATOMIC_NOTIFIER_HEAD(idle_notifier);
 
@@ -717,3 +799,5 @@ void idle_notifier_call_chain(unsigned long val)
 	atomic_notifier_call_chain(&idle_notifier, val, NULL);
 }
 EXPORT_SYMBOL_GPL(idle_notifier_call_chain);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

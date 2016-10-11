@@ -22,6 +22,7 @@ ip_no_pmtu_disc - BOOLEAN
 min_pmtu - INTEGER
 	default 552 - minimum discovered Path MTU
 
+<<<<<<< HEAD
 fwmark_reflect - BOOLEAN
 	Controls the fwmark of kernel-generated IPv4 reply packets that are not
 	associated with a socket for example, TCP RSTs or ICMP echo replies).
@@ -29,6 +30,8 @@ fwmark_reflect - BOOLEAN
 	fwmark of the packet they are replying to.
 	Default: 0
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 route/max_size - INTEGER
 	Maximum number of routes allowed in the kernel.  Increase
 	this when using large numbers of interfaces and/or routes.
@@ -1051,6 +1054,7 @@ conf/all/forwarding - BOOLEAN
 
 	This referred to as global forwarding.
 
+<<<<<<< HEAD
 proxy_ndp - INTEGER
 	Do proxy ndp.
 
@@ -1067,6 +1071,11 @@ fwmark_reflect - BOOLEAN
 	fwmark of the packet they are replying to.
 	Default: 0
 
+=======
+proxy_ndp - BOOLEAN
+	Do proxy ndp.
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 conf/interface/*:
 	Change special settings per interface.
 
@@ -1117,11 +1126,14 @@ accept_ra_rtr_pref - BOOLEAN
 	Functional default: enabled if accept_ra is enabled.
 			    disabled if accept_ra is disabled.
 
+<<<<<<< HEAD
 accept_ra_prefix_route - BOOLEAN
 	Set the prefix route for the autoconfigured interface address
 
 	Functional default: enabled
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 accept_redirects - BOOLEAN
 	Accept Redirects.
 
@@ -1209,6 +1221,7 @@ router_solicitations - INTEGER
 	routers are present.
 	Default: 3
 
+<<<<<<< HEAD
 use_oif_addrs_only - BOOLEAN
 	When enabled, the candidate source addresses for destinations
 	routed via this interface are restricted to the set of addresses
@@ -1216,6 +1229,8 @@ use_oif_addrs_only - BOOLEAN
 
 	Default: false
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 use_tempaddr - INTEGER
 	Preference for Privacy Extensions (RFC3041).
 	  <= 0 : disable Privacy Extensions
@@ -1291,6 +1306,7 @@ force_tllao - BOOLEAN
 	race condition where the sender deletes the cached link-layer address
 	prior to receiving a response to a previous solicitation."
 
+<<<<<<< HEAD
 optimistic_dad - BOOLEAN
 	Whether to perform Optimistic Duplicate Address Detection (RFC 4429).
 		0: disabled (default)
@@ -1304,6 +1320,8 @@ use_optimistic - BOOLEAN
 		0: disabled (default)
 		1: enabled
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 icmp/*:
 ratelimit - INTEGER
 	Limit the maximal rates for sending ICMPv6 packets.

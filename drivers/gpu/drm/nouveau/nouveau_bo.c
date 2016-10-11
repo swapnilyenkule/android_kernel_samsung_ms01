@@ -946,7 +946,11 @@ nouveau_ttm_io_mem_reserve(struct ttm_bo_device *bdev, struct ttm_mem_reg *mem)
 		if (dev_priv->gart_info.type == NOUVEAU_GART_AGP) {
 			mem->bus.offset = mem->start << PAGE_SHIFT;
 			mem->bus.base = dev_priv->gart_info.aper_base;
+<<<<<<< HEAD
 			mem->bus.is_iomem = true;
+=======
+			mem->bus.is_iomem = !dev->agp->cant_use_aperture;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 #endif
 		break;
@@ -1030,7 +1034,11 @@ nouveau_ttm_fault_reserve_notify(struct ttm_buffer_object *bo)
 
 	nvbo->placement.fpfn = 0;
 	nvbo->placement.lpfn = dev_priv->fb_mappable_pages;
+<<<<<<< HEAD
 	nouveau_bo_placement_set(nvbo, TTM_PL_VRAM, 0);
+=======
+	nouveau_bo_placement_set(nvbo, TTM_PL_FLAG_VRAM, 0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return nouveau_bo_validate(nvbo, false, true, false);
 }
 

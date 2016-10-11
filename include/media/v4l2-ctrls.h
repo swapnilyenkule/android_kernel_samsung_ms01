@@ -22,6 +22,10 @@
 #define _V4L2_CTRLS_H
 
 #include <linux/list.h>
+<<<<<<< HEAD
+=======
+#include <linux/mutex.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/videodev2.h>
 
 /* forward references */
@@ -33,7 +37,10 @@ struct v4l2_subdev;
 struct v4l2_subscribed_event;
 struct v4l2_fh;
 struct poll_table_struct;
+<<<<<<< HEAD
 struct file;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /** struct v4l2_ctrl_ops - The control operations that the driver has to provide.
   * @g_volatile_ctrl: Get a new value for this control. Generally only relevant

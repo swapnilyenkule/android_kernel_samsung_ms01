@@ -61,10 +61,13 @@ struct dma_buf_attachment;
  * 		   This Callback must not sleep.
  * @kmap: maps a page from the buffer into kernel address space.
  * @kunmap: [optional] unmaps a page from the buffer.
+<<<<<<< HEAD
  * @mmap: used to expose the backing storage to userspace. Note that the
  * 	  mapping needs to be coherent - if the exporter doesn't directly
  * 	  support this, it needs to fake coherency by shooting down any ptes
  * 	  when transitioning away from the cpu domain.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 struct dma_buf_ops {
 	int (*attach)(struct dma_buf *, struct device *,
@@ -96,8 +99,11 @@ struct dma_buf_ops {
 	void (*kunmap_atomic)(struct dma_buf *, unsigned long, void *);
 	void *(*kmap)(struct dma_buf *, unsigned long);
 	void (*kunmap)(struct dma_buf *, unsigned long, void *);
+<<<<<<< HEAD
 
 	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -173,9 +179,12 @@ void *dma_buf_kmap_atomic(struct dma_buf *, unsigned long);
 void dma_buf_kunmap_atomic(struct dma_buf *, unsigned long, void *);
 void *dma_buf_kmap(struct dma_buf *, unsigned long);
 void dma_buf_kunmap(struct dma_buf *, unsigned long, void *);
+<<<<<<< HEAD
 
 int dma_buf_mmap(struct dma_buf *, struct vm_area_struct *,
 		 unsigned long);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 
 static inline struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
@@ -257,6 +266,7 @@ static inline void dma_buf_kunmap(struct dma_buf *dmabuf,
 				  unsigned long pnum, void *vaddr)
 {
 }
+<<<<<<< HEAD
 
 static inline int dma_buf_mmap(struct dma_buf *dmabuf,
 			       struct vm_area_struct *vma,
@@ -264,6 +274,8 @@ static inline int dma_buf_mmap(struct dma_buf *dmabuf,
 {
 	return -ENODEV;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* CONFIG_DMA_SHARED_BUFFER */
 
 #endif /* __DMA_BUF_H__ */

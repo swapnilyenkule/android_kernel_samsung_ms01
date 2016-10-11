@@ -201,7 +201,11 @@ int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst, u8 tos,
 	struct net *net;
 
 	fl4.flowi4_oif = 0;
+<<<<<<< HEAD
 	fl4.flowi4_iif = oif ? : LOOPBACK_IFINDEX;
+=======
+	fl4.flowi4_iif = oif;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fl4.daddr = src;
 	fl4.saddr = dst;
 	fl4.flowi4_tos = tos;
@@ -481,7 +485,10 @@ const struct nla_policy rtm_ipv4_policy[RTA_MAX + 1] = {
 	[RTA_METRICS]		= { .type = NLA_NESTED },
 	[RTA_MULTIPATH]		= { .len = sizeof(struct rtnexthop) },
 	[RTA_FLOW]		= { .type = NLA_U32 },
+<<<<<<< HEAD
 	[RTA_UID]		= { .type = NLA_U32 },
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int rtm_to_fib_config(struct net *net, struct sk_buff *skb,

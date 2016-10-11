@@ -15,6 +15,7 @@
 #include <linux/workqueue.h>
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/hrtimer.h>
 
 #ifdef CONFIG_CPU_FREQ_LIMIT_USERSPACE
@@ -29,6 +30,11 @@
 
 #define MAX_BUF 100
 
+=======
+
+#include "power.h"
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 DEFINE_MUTEX(pm_mutex);
 
 #ifdef CONFIG_PM_SLEEP
@@ -37,6 +43,7 @@ DEFINE_MUTEX(pm_mutex);
 
 static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
 
+<<<<<<< HEAD
 static void touch_event_fn(struct work_struct *work);
 static DECLARE_WORK(touch_event_struct, touch_event_fn);
 
@@ -44,6 +51,8 @@ static struct hrtimer tc_ev_timer;
 static int tc_ev_processed;
 static ktime_t touch_evt_timer_val;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int register_pm_notifier(struct notifier_block *nb)
 {
 	return blocking_notifier_chain_register(&pm_chain_head, nb);
@@ -89,6 +98,7 @@ static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
 
 power_attr(pm_async);
 
+<<<<<<< HEAD
 static ssize_t
 touch_event_show(struct kobject *kobj,
 		 struct kobj_attribute *attr, char *buf)
@@ -164,6 +174,8 @@ static enum hrtimer_restart tc_ev_stop(struct hrtimer *hrtimer)
 	return HRTIMER_NORESTART;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_PM_DEBUG
 int pm_test_level = TEST_NONE;
 
@@ -362,6 +374,7 @@ static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
 	return (s - buf);
 }
 
+<<<<<<< HEAD
 static suspend_state_t decode_state(const char *buf, size_t n)
 {
 #ifdef CONFIG_SUSPEND
@@ -370,14 +383,26 @@ static suspend_state_t decode_state(const char *buf, size_t n)
 #else
 	suspend_state_t state = PM_SUSPEND_STANDBY;
 #endif
+=======
+static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
+			   const char *buf, size_t n)
+{
+#ifdef CONFIG_SUSPEND
+	suspend_state_t state = PM_SUSPEND_STANDBY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	const char * const *s;
 #endif
 	char *p;
 	int len;
+<<<<<<< HEAD
+=======
+	int error = -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	p = memchr(buf, '\n', n);
 	len = p ? p - buf : n;
 
+<<<<<<< HEAD
 	/* Check hibernation first. */
 	if (len == 4 && !strncmp(buf, "disk", len))
 		return PM_SUSPEND_MAX;
@@ -416,6 +441,24 @@ static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
 
  out:
 	pm_autosleep_unlock();
+=======
+	/* First, check if we are requested to hibernate */
+	if (len == 4 && !strncmp(buf, "disk", len)) {
+		error = hibernate();
+		goto Exit;
+	}
+
+#ifdef CONFIG_SUSPEND
+	for (s = &pm_states[state]; state < PM_SUSPEND_MAX; s++, state++) {
+		if (*s && len == strlen(*s) && !strncmp(buf, *s, len)) {
+			error = pm_suspend(state);
+			break;
+		}
+	}
+#endif
+
+ Exit:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return error ? error : n;
 }
 
@@ -456,8 +499,12 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
 {
 	unsigned int val;
 
+<<<<<<< HEAD
 	return pm_get_wakeup_count(&val, true) ?
 		sprintf(buf, "%u\n", val) : -EINTR;
+=======
+	return pm_get_wakeup_count(&val) ? sprintf(buf, "%u\n", val) : -EINTR;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static ssize_t wakeup_count_store(struct kobject *kobj,
@@ -465,6 +512,7 @@ static ssize_t wakeup_count_store(struct kobject *kobj,
 				const char *buf, size_t n)
 {
 	unsigned int val;
+<<<<<<< HEAD
 	int error;
 
 	error = pm_autosleep_lock();
@@ -750,6 +798,19 @@ out:
 
 #endif
 
+=======
+
+	if (sscanf(buf, "%u", &val) == 1) {
+		if (pm_save_wakeup_count(val))
+			return n;
+	}
+	return -EINVAL;
+}
+
+power_attr(wakeup_count);
+#endif /* CONFIG_PM_SLEEP */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_PM_TRACE
 int pm_trace_enabled;
 
@@ -792,6 +853,7 @@ power_attr(pm_trace_dev_match);
 
 #endif /* CONFIG_PM_TRACE */
 
+<<<<<<< HEAD
 #ifdef CONFIG_USER_WAKELOCK
 power_attr(wake_lock);
 power_attr(wake_unlock);
@@ -1003,6 +1065,9 @@ power_attr(cpufreq_min_limit);
 power_attr(cpufreq_table);
 #endif
 static struct attribute *g[] = {
+=======
+static struct attribute * g[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	&state_attr.attr,
 #ifdef CONFIG_PM_TRACE
 	&pm_trace_attr.attr,
@@ -1011,6 +1076,7 @@ static struct attribute *g[] = {
 #ifdef CONFIG_PM_SLEEP
 	&pm_async_attr.attr,
 	&wakeup_count_attr.attr,
+<<<<<<< HEAD
 #ifdef CONFIG_PM_AUTOSLEEP
 	&autosleep_attr.attr,
 #endif
@@ -1037,6 +1103,11 @@ static struct attribute *g[] = {
 	&cpufreq_min_limit_attr.attr,
 	&cpufreq_max_limit_attr.attr,
 	&cpufreq_table_attr.attr,
+=======
+#ifdef CONFIG_PM_DEBUG
+	&pm_test_attr.attr,
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 	NULL,
 };
@@ -1066,6 +1137,7 @@ static int __init pm_init(void)
 		return error;
 	hibernate_image_size_init();
 	hibernate_reserved_size_init();
+<<<<<<< HEAD
 
 	touch_evt_timer_val = ktime_set(2, 0);
 	hrtimer_init(&tc_ev_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
@@ -1084,6 +1156,12 @@ static int __init pm_init(void)
 	thermald_max_freq = MAX_FREQ_LIMIT;
 #endif
 	return pm_autosleep_init();
+=======
+	power_kobj = kobject_create_and_add("power", NULL);
+	if (!power_kobj)
+		return -ENOMEM;
+	return sysfs_create_group(power_kobj, &attr_group);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 core_initcall(pm_init);

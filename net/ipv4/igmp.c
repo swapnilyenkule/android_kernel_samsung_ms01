@@ -343,7 +343,11 @@ static struct sk_buff *igmpv3_newpack(struct net_device *dev, int size)
 	pip->saddr    = fl4.saddr;
 	pip->protocol = IPPROTO_IGMP;
 	pip->tot_len  = 0;	/* filled in later */
+<<<<<<< HEAD
 	ip_select_ident(pip, &rt->dst, NULL);
+=======
+	ip_select_ident(skb, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	((u8*)&pip[1])[0] = IPOPT_RA;
 	((u8*)&pip[1])[1] = 4;
 	((u8*)&pip[1])[2] = 0;
@@ -687,7 +691,11 @@ static int igmp_send_report(struct in_device *in_dev, struct ip_mc_list *pmc,
 	iph->daddr    = dst;
 	iph->saddr    = fl4.saddr;
 	iph->protocol = IPPROTO_IGMP;
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, NULL);
+=======
+	ip_select_ident(skb, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	((u8*)&iph[1])[0] = IPOPT_RA;
 	((u8*)&iph[1])[1] = 4;
 	((u8*)&iph[1])[2] = 0;
@@ -709,7 +717,11 @@ static void igmp_gq_timer_expire(unsigned long data)
 
 	in_dev->mr_gq_running = 0;
 	igmpv3_send_report(in_dev, NULL);
+<<<<<<< HEAD
 	__in_dev_put(in_dev);
+=======
+	in_dev_put(in_dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void igmp_ifc_timer_expire(unsigned long data)
@@ -721,7 +733,11 @@ static void igmp_ifc_timer_expire(unsigned long data)
 		in_dev->mr_ifc_count--;
 		igmp_ifc_start_timer(in_dev, IGMP_Unsolicited_Report_Interval);
 	}
+<<<<<<< HEAD
 	__in_dev_put(in_dev);
+=======
+	in_dev_put(in_dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void igmp_ifc_event(struct in_device *in_dev)
@@ -1218,6 +1234,7 @@ void ip_mc_inc_group(struct in_device *in_dev, __be32 addr)
 {
 	struct ip_mc_list *im;
 
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 	struct net_device *dev = in_dev->dev;
 	char buf[MAX_ADDR_LEN];
@@ -1227,14 +1244,19 @@ void ip_mc_inc_group(struct in_device *in_dev, __be32 addr)
 			,__func__, dev->name, addr);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ASSERT_RTNL();
 
 	for_each_pmc_rtnl(in_dev, im) {
 		if (im->multiaddr == addr) {
 			im->users++;
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 			printk("CONV_WIFI - %s: [%s] Users count increase. im->users[%d]\n",__func__, dev->name, im->users);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			ip_mc_add_src(in_dev, &addr, MCAST_EXCLUDE, 0, NULL, 0);
 			goto out;
 		}
@@ -1245,9 +1267,12 @@ void ip_mc_inc_group(struct in_device *in_dev, __be32 addr)
 		goto out;
 
 	im->users = 1;
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 	printk("CONV_WIFI - %s: [%s] Users count initilize. im->users[%d]\n",__func__, dev->name, im->users);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	im->interface = in_dev;
 	in_dev_hold(in_dev);
 	im->multiaddr = addr;
@@ -1314,6 +1339,7 @@ void ip_mc_dec_group(struct in_device *in_dev, __be32 addr)
 	struct ip_mc_list *i;
 	struct ip_mc_list __rcu **ip;
 
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 	struct net_device *dev = NULL;
 	if (in_dev)
@@ -1330,6 +1356,8 @@ void ip_mc_dec_group(struct in_device *in_dev, __be32 addr)
 	}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ASSERT_RTNL();
 
 	for (ip = &in_dev->mc_list;
@@ -1339,12 +1367,15 @@ void ip_mc_dec_group(struct in_device *in_dev, __be32 addr)
 			if (--i->users == 0) {
 				*ip = i->next_rcu;
 				in_dev->mc_count--;
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 				if (dev)
 					printk("CONV_WIFI - %s: [%s] Users count is zero. i->users[%d]\n",__func__, dev->name, i->users);
 				else
 					printk("CONV_WIFI - %s: [-] Users count is zero. i->users[%d]\n",__func__, i->users);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				igmp_group_dropped(i);
 				ip_mc_clear_src(i);
 
@@ -1354,12 +1385,15 @@ void ip_mc_dec_group(struct in_device *in_dev, __be32 addr)
 				ip_ma_put(i);
 				return;
 			}
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 			if (dev)
 				printk("CONV_WIFI - %s: [%s] Users count decrease. i->users[%d]\n",__func__, dev->name, i->users);
 			else
 				printk("CONV_WIFI - %s: [-] Users count decrease. i->users[%d]\n",__func__,  i->users);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 	}
@@ -1844,6 +1878,7 @@ int ip_mc_join_group(struct sock *sk , struct ip_mreqn *imr)
 		goto done;
 	}
 
+<<<<<<< HEAD
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 	if (in_dev) {
 		struct net_device *dev = in_dev->dev;
@@ -1853,6 +1888,8 @@ int ip_mc_join_group(struct sock *sk , struct ip_mreqn *imr)
 	}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = -EADDRINUSE;
 	ifindex = imr->imr_ifindex;
 	for_each_pmc_rtnl(inet, i) {
@@ -1918,6 +1955,7 @@ int ip_mc_leave_group(struct sock *sk, struct ip_mreqn *imr)
 
 	rtnl_lock();
 	in_dev = ip_mc_find_dev(net, imr);
+<<<<<<< HEAD
 	ifindex = imr->imr_ifindex;
 #ifdef CONFIG_WIFI_MULTICAST_LOG
 	if (in_dev) {
@@ -1927,6 +1965,13 @@ int ip_mc_leave_group(struct sock *sk, struct ip_mreqn *imr)
 		printk("CONV_WIFI - %s: [-] Igmp leave\n",__func__);
 	}
 #endif
+=======
+	if (!in_dev) {
+		ret = -ENODEV;
+		goto out;
+	}
+	ifindex = imr->imr_ifindex;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	for (imlp = &inet->mc_list;
 	     (iml = rtnl_dereference(*imlp)) != NULL;
 	     imlp = &iml->next_rcu) {
@@ -1943,16 +1988,24 @@ int ip_mc_leave_group(struct sock *sk, struct ip_mreqn *imr)
 
 		*imlp = iml->next_rcu;
 
+<<<<<<< HEAD
 		if (in_dev)
 			ip_mc_dec_group(in_dev, group);
+=======
+		ip_mc_dec_group(in_dev, group);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rtnl_unlock();
 		/* decrease mem now to avoid the memleak warning */
 		atomic_sub(sizeof(*iml), &sk->sk_omem_alloc);
 		kfree_rcu(iml, rcu);
 		return 0;
 	}
+<<<<<<< HEAD
 	if (!in_dev)
 		ret = -ENODEV;
+=======
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rtnl_unlock();
 	return ret;
 }

@@ -41,6 +41,10 @@
 
 #define PAGE_CACHE_SECTORS (PAGE_CACHE_SIZE >> SECTOR_SHIFT)
 #define PAGE_CACHE_SECTOR_SHIFT (PAGE_CACHE_SHIFT - SECTOR_SHIFT)
+<<<<<<< HEAD
+=======
+#define SECTOR_SIZE (1 << SECTOR_SHIFT)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct block_mount_id {
 	spinlock_t			bm_lock;    /* protects list */

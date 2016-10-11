@@ -125,7 +125,11 @@ my $ksource = $ARGV[0];
 my $kconfig = $ARGV[1];
 my $lsmod_file = $ENV{'LSMOD'};
 
+<<<<<<< HEAD
 my @makefiles = `find $ksource -name Makefile 2>/dev/null`;
+=======
+my @makefiles = `find $ksource -name Makefile -or -name Kbuild 2>/dev/null`;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 chomp @makefiles;
 
 my %depends;
@@ -463,6 +467,11 @@ while(<CIN>) {
 	if (defined($configs{$1})) {
 	    if ($localyesconfig) {
 	        $setconfigs{$1} = 'y';
+<<<<<<< HEAD
+=======
+		print "$1=y\n";
+		next;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    } else {
 	        $setconfigs{$1} = $2;
 	    }

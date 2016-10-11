@@ -86,6 +86,7 @@ void devm_iounmap(struct device *dev, void __iomem *addr)
 EXPORT_SYMBOL(devm_iounmap);
 
 /**
+<<<<<<< HEAD
  * devm_ioremap_resource() - check, request region, and ioremap resource
  * @dev: generic device to handle the resource for
  * @res: resource to be handled
@@ -104,6 +105,24 @@ EXPORT_SYMBOL(devm_iounmap);
  *		return PTR_ERR(base);
  */
 void __iomem *devm_ioremap_resource(struct device *dev, struct resource *res)
+=======
+ * devm_request_and_ioremap() - Check, request region, and ioremap resource
+ * @dev: Generic device to handle the resource for
+ * @res: resource to be handled
+ *
+ * Takes all necessary steps to ioremap a mem resource. Uses managed device, so
+ * everything is undone on driver detach. Checks arguments, so you can feed
+ * it the result from e.g. platform_get_resource() directly. Returns the
+ * remapped pointer or NULL on error. Usage example:
+ *
+ *	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ *	base = devm_request_and_ioremap(&pdev->dev, res);
+ *	if (!base)
+ *		return -EADDRNOTAVAIL;
+ */
+void __iomem *devm_request_and_ioremap(struct device *dev,
+			struct resource *res)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	resource_size_t size;
 	const char *name;
@@ -113,7 +132,11 @@ void __iomem *devm_ioremap_resource(struct device *dev, struct resource *res)
 
 	if (!res || resource_type(res) != IORESOURCE_MEM) {
 		dev_err(dev, "invalid resource\n");
+<<<<<<< HEAD
 		return ERR_PTR(-EINVAL);
+=======
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	size = resource_size(res);
@@ -121,7 +144,11 @@ void __iomem *devm_ioremap_resource(struct device *dev, struct resource *res)
 
 	if (!devm_request_mem_region(dev, res->start, size, name)) {
 		dev_err(dev, "can't request region for resource %pR\n", res);
+<<<<<<< HEAD
 		return ERR_PTR(-EBUSY);
+=======
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (res->flags & IORESOURCE_CACHEABLE)
@@ -132,11 +159,15 @@ void __iomem *devm_ioremap_resource(struct device *dev, struct resource *res)
 	if (!dest_ptr) {
 		dev_err(dev, "ioremap failed for resource %pR\n", res);
 		devm_release_mem_region(dev, res->start, size);
+<<<<<<< HEAD
 		dest_ptr = ERR_PTR(-ENOMEM);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return dest_ptr;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(devm_ioremap_resource);
 
 /**
@@ -165,6 +196,8 @@ void __iomem *devm_request_and_ioremap(struct device *device,
 
 	return dest_ptr;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL(devm_request_and_ioremap);
 
 #ifdef CONFIG_HAS_IOPORT

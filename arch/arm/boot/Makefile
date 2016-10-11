@@ -11,9 +11,12 @@
 # Copyright (C) 1995-2002 Russell King
 #
 
+<<<<<<< HEAD
 ifeq ($(CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK),y)
 MKFIPS          := $(srctree)/scripts/mk_fipsbinary.sh
 endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ifneq ($(MACHINE),)
 include $(srctree)/$(MACHINE)/Makefile.boot
 endif
@@ -30,6 +33,7 @@ export ZRELADDR INITRD_PHYS PARAMS_PHYS
 
 targets := Image zImage xipImage bootpImage uImage
 
+<<<<<<< HEAD
 DTB_NAMES := $(subst $\",,$(CONFIG_BUILD_ARM_APPENDED_DTB_IMAGE_NAMES))
 ifneq ($(DTB_NAMES),)
 DTB_LIST := $(addsuffix .dtb,$(DTB_NAMES))
@@ -38,6 +42,8 @@ DTB_LIST := $(dtb-y)
 endif
 DTB_OBJS := $(addprefix $(obj)/,$(DTB_LIST))
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ifeq ($(CONFIG_XIP_KERNEL),y)
 
 $(obj)/xipImage: vmlinux FORCE
@@ -64,6 +70,7 @@ $(obj)/compressed/vmlinux: $(obj)/Image FORCE
 
 $(obj)/zImage:	$(obj)/compressed/vmlinux FORCE
 	$(call if_changed,objcopy)
+<<<<<<< HEAD
 ifeq ($(CONFIG_CRYPTO_FIPS_OLD_INTEGRITY_CHECK),y)
 	$(MKFIPS) $(obj)/zImage
 endif
@@ -71,17 +78,27 @@ endif
 
 $(obj)/zImage-dtb:	$(obj)/zImage $(DTB_OBJS) FORCE
 	$(call if_changed,cat)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	@echo '  Kernel: $@ is ready'
 
 endif
 
+<<<<<<< HEAD
 targets += $(DTB_LIST)
+=======
+targets += $(dtb-y)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Rule to build device tree blobs
 $(obj)/%.dtb: $(src)/dts/%.dts FORCE
 	$(call if_changed_dep,dtc)
 
+<<<<<<< HEAD
 $(obj)/dtbs: $(DTB_OBJS)
+=======
+$(obj)/dtbs: $(addprefix $(obj)/, $(dtb-y))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 clean-files := *.dtb
 

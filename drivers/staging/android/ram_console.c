@@ -16,12 +16,19 @@
 #include <linux/console.h>
 #include <linux/init.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/persistent_ram.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/platform_device.h>
 #include <linux/proc_fs.h>
 #include <linux/string.h>
 #include <linux/uaccess.h>
 #include <linux/io.h>
+<<<<<<< HEAD
+=======
+#include "persistent_ram.h"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "ram_console.h"
 
 static struct persistent_ram_zone *ram_console_zone;
@@ -50,12 +57,19 @@ void ram_console_enable_console(int enabled)
 		ram_console.flags &= ~CON_ENABLED;
 }
 
+<<<<<<< HEAD
 static int __devinit ram_console_probe(struct platform_device *pdev)
+=======
+static int __init ram_console_probe(struct platform_device *pdev)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ram_console_platform_data *pdata = pdev->dev.platform_data;
 	struct persistent_ram_zone *prz;
 
+<<<<<<< HEAD
 	pdev->dev.init_name = "ram_console";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	prz = persistent_ram_init_ringbuffer(&pdev->dev, true);
 	if (IS_ERR(prz))
 		return PTR_ERR(prz);
@@ -75,6 +89,7 @@ static int __devinit ram_console_probe(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct of_device_id msm_match_table[] = {
 	{.compatible = "ram_console"},
 	{},
@@ -86,11 +101,21 @@ static struct platform_driver ram_console_driver = {
 		.of_match_table = msm_match_table,
 	},
 	.probe = ram_console_probe,
+=======
+static struct platform_driver ram_console_driver = {
+	.driver		= {
+		.name	= "ram_console",
+	},
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static int __init ram_console_module_init(void)
 {
+<<<<<<< HEAD
 	return platform_driver_register(&ram_console_driver);
+=======
+	return platform_driver_probe(&ram_console_driver, ram_console_probe);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifndef CONFIG_PRINTK

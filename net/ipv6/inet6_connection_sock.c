@@ -69,10 +69,16 @@ struct dst_entry *inet6_csk_route_req(struct sock *sk,
 	final_p = fl6_update_dst(&fl6, np->opt, &final);
 	fl6.saddr = treq->loc_addr;
 	fl6.flowi6_oif = sk->sk_bound_dev_if;
+<<<<<<< HEAD
 	fl6.flowi6_mark = inet_rsk(req)->ir_mark;
 	fl6.fl6_dport = inet_rsk(req)->rmt_port;
 	fl6.fl6_sport = inet_rsk(req)->loc_port;
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+	fl6.flowi6_mark = sk->sk_mark;
+	fl6.fl6_dport = inet_rsk(req)->rmt_port;
+	fl6.fl6_sport = inet_rsk(req)->loc_port;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	security_req_classify_flow(req, flowi6_to_flowi(&fl6));
 
 	dst = ip6_dst_lookup_flow(sk, &fl6, final_p, false);
@@ -224,7 +230,10 @@ int inet6_csk_xmit(struct sk_buff *skb, struct flowi *fl_unused)
 	fl6.flowi6_mark = sk->sk_mark;
 	fl6.fl6_sport = inet->inet_sport;
 	fl6.fl6_dport = inet->inet_dport;
+<<<<<<< HEAD
 	fl6.flowi6_uid = sock_i_uid(sk);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	security_sk_classify_flow(sk, flowi6_to_flowi(&fl6));
 
 	final_p = fl6_update_dst(&fl6, np->opt, &final);

@@ -8,7 +8,10 @@ ifdef CONFIG_DEBUG_FS
 endif
 
 obj-$(CONFIG_HID)		+= hid.o
+<<<<<<< HEAD
 obj-$(CONFIG_UHID)		+= uhid.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 hid-$(CONFIG_HIDRAW)		+= hidraw.o
 
@@ -69,7 +72,10 @@ obj-$(CONFIG_HID_ROCCAT)	+= hid-roccat.o hid-roccat-common.o \
 	hid-roccat-arvo.o hid-roccat-isku.o hid-roccat-kone.o \
 	hid-roccat-koneplus.o hid-roccat-kovaplus.o hid-roccat-pyra.o
 obj-$(CONFIG_HID_SAITEK)	+= hid-saitek.o
+<<<<<<< HEAD
 obj-$(CONFIG_HID_OVR)		+= hid-ovr.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_HID_SAMSUNG)	+= hid-samsung.o
 obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
 obj-$(CONFIG_HID_SONY)		+= hid-sony.o
@@ -81,13 +87,19 @@ obj-$(CONFIG_HID_TIVO)		+= hid-tivo.o
 obj-$(CONFIG_HID_TOPSEED)	+= hid-topseed.o
 obj-$(CONFIG_HID_TWINHAN)	+= hid-twinhan.o
 obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
+<<<<<<< HEAD
 obj-$(CONFIG_HID_ZAGG)		+= hid-zagg.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_HID_ZEROPLUS)	+= hid-zpff.o
 obj-$(CONFIG_HID_ZYDACRON)	+= hid-zydacron.o
 obj-$(CONFIG_HID_WACOM)		+= hid-wacom.o
 obj-$(CONFIG_HID_WALTOP)	+= hid-waltop.o
 obj-$(CONFIG_HID_WIIMOTE)	+= hid-wiimote.o
+<<<<<<< HEAD
 obj-$(CONFIG_HID_SYNAPTICS_BT)  += hid-synaptics-bt.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 obj-$(CONFIG_USB_HID)		+= usbhid/
 obj-$(CONFIG_USB_MOUSE)		+= usbhid/

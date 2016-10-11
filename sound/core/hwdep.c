@@ -100,8 +100,15 @@ static int snd_hwdep_open(struct inode *inode, struct file * file)
 	if (hw == NULL)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	if (!try_module_get(hw->card->module))
 		return -EFAULT;
+=======
+	if (!try_module_get(hw->card->module)) {
+		snd_card_unref(hw->card);
+		return -EFAULT;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	init_waitqueue_entry(&wait, current);
 	add_wait_queue(&hw->open_wait, &wait);
@@ -129,6 +136,13 @@ static int snd_hwdep_open(struct inode *inode, struct file * file)
 		mutex_unlock(&hw->open_mutex);
 		schedule();
 		mutex_lock(&hw->open_mutex);
+<<<<<<< HEAD
+=======
+		if (hw->card->shutdown) {
+			err = -ENODEV;
+			break;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (signal_pending(current)) {
 			err = -ERESTARTSYS;
 			break;
@@ -148,6 +162,10 @@ static int snd_hwdep_open(struct inode *inode, struct file * file)
 	mutex_unlock(&hw->open_mutex);
 	if (err < 0)
 		module_put(hw->card->module);
+<<<<<<< HEAD
+=======
+	snd_card_unref(hw->card);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return err;
 }
 
@@ -459,12 +477,21 @@ static int snd_hwdep_dev_disconnect(struct snd_device *device)
 		mutex_unlock(&register_mutex);
 		return -EINVAL;
 	}
+<<<<<<< HEAD
+=======
+	mutex_lock(&hwdep->open_mutex);
+	wake_up(&hwdep->open_wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_SND_OSSEMUL
 	if (hwdep->ossreg)
 		snd_unregister_oss_device(hwdep->oss_type, hwdep->card, hwdep->device);
 #endif
 	snd_unregister_device(SNDRV_DEVICE_TYPE_HWDEP, hwdep->card, hwdep->device);
 	list_del_init(&hwdep->list);
+<<<<<<< HEAD
+=======
+	mutex_unlock(&hwdep->open_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&register_mutex);
 	return 0;
 }

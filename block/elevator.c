@@ -34,7 +34,10 @@
 #include <linux/blktrace_api.h>
 #include <linux/hash.h>
 #include <linux/uaccess.h>
+<<<<<<< HEAD
 #include <linux/pm_runtime.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <trace/events/block.h>
 
@@ -73,6 +76,7 @@ static int elv_iosched_allow_merge(struct request *rq, struct bio *bio)
  */
 bool elv_rq_merge_ok(struct request *rq, struct bio *bio)
 {
+<<<<<<< HEAD
 	if (!rq_mergeable(rq))
 		return 0;
 
@@ -110,6 +114,9 @@ bool elv_rq_merge_ok(struct request *rq, struct bio *bio)
 	 * only merge integrity protected bio into ditto rq
 	 */
 	if (bio_integrity(bio) != blk_integrity_rq(rq))
+=======
+	if (!blk_rq_merge_ok(rq, bio))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	if (!elv_iosched_allow_merge(rq, bio))
@@ -569,6 +576,7 @@ void elv_bio_merged(struct request_queue *q, struct request *rq,
 		e->type->ops.elevator_bio_merged_fn(q, rq, bio);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_RUNTIME
 static void blk_pm_requeue_request(struct request *rq)
 {
@@ -590,6 +598,8 @@ static inline void blk_pm_add_request(struct request_queue *q,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void elv_requeue_request(struct request_queue *q, struct request *rq)
 {
 	/*
@@ -604,6 +614,7 @@ void elv_requeue_request(struct request_queue *q, struct request *rq)
 
 	rq->cmd_flags &= ~REQ_STARTED;
 
+<<<<<<< HEAD
 	blk_pm_requeue_request(rq);
 
 	__elv_add_request(q, rq, ELEVATOR_INSERT_REQUEUE);
@@ -644,6 +655,11 @@ int elv_reinsert_request(struct request_queue *q, struct request *rq)
 	return res;
 }
 
+=======
+	__elv_add_request(q, rq, ELEVATOR_INSERT_REQUEUE);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void elv_drain_elevator(struct request_queue *q)
 {
 	static int printed;
@@ -682,14 +698,21 @@ void __elv_add_request(struct request_queue *q, struct request *rq, int where)
 {
 	trace_block_rq_insert(q, rq);
 
+<<<<<<< HEAD
 	blk_pm_add_request(q, rq);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rq->q = q;
 
 	if (rq->cmd_flags & REQ_SOFTBARRIER) {
 		/* barriers are scheduling boundary, update end_sector */
 		if (rq->cmd_type == REQ_TYPE_FS ||
+<<<<<<< HEAD
 		    (rq->cmd_flags & (REQ_DISCARD | REQ_SANITIZE))) {
+=======
+		    (rq->cmd_flags & REQ_DISCARD)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			q->end_sector = rq_end_sector(rq);
 			q->boundary_rq = rq;
 		}
@@ -840,11 +863,14 @@ void elv_completed_request(struct request_queue *q, struct request *rq)
 {
 	struct elevator_queue *e = q->elevator;
 
+<<<<<<< HEAD
 	if (rq->cmd_flags & REQ_URGENT) {
 		q->notified_urgent = false;
 		WARN_ON(!q->dispatched_urgent);
 		q->dispatched_urgent = false;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * request is released from the driver, io must be done
 	 */
@@ -1063,7 +1089,11 @@ fail_register:
 /*
  * Switch this queue to the given IO scheduler.
  */
+<<<<<<< HEAD
 int elevator_change(struct request_queue *q, const char *name)
+=======
+static int __elevator_change(struct request_queue *q, const char *name)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	char elevator_name[ELV_NAME_MAX];
 	struct elevator_type *e;
@@ -1085,6 +1115,21 @@ int elevator_change(struct request_queue *q, const char *name)
 
 	return elevator_switch(q, e);
 }
+<<<<<<< HEAD
+=======
+
+int elevator_change(struct request_queue *q, const char *name)
+{
+	int ret;
+
+	/* Protect q->elevator from elevator_init() */
+	mutex_lock(&q->sysfs_lock);
+	ret = __elevator_change(q, name);
+	mutex_unlock(&q->sysfs_lock);
+
+	return ret;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL(elevator_change);
 
 ssize_t elv_iosched_store(struct request_queue *q, const char *name,
@@ -1095,7 +1140,11 @@ ssize_t elv_iosched_store(struct request_queue *q, const char *name,
 	if (!q->elevator)
 		return count;
 
+<<<<<<< HEAD
 	ret = elevator_change(q, name);
+=======
+	ret = __elevator_change(q, name);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!ret)
 		return count;
 

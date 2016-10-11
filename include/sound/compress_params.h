@@ -51,11 +51,17 @@
 #ifndef __SND_COMPRESS_PARAMS_H
 #define __SND_COMPRESS_PARAMS_H
 
+<<<<<<< HEAD
+=======
+#include <linux/types.h>
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* AUDIO CODECS SUPPORTED */
 #define MAX_NUM_CODECS 32
 #define MAX_NUM_CODEC_DESCRIPTORS 32
 #define MAX_NUM_BITRATES 32
 
+<<<<<<< HEAD
 /* compressed TX */
 #define MAX_NUM_FRAMES_PER_BUFFER 1
 #define COMPRESSED_META_DATA_MODE 0x10
@@ -65,6 +71,8 @@
 #define Q6_DTS		0x00010D88
 #define Q6_DTS_LBR	0x00010DBB
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Codecs are listed linearly to allow for extensibility */
 #define SND_AUDIOCODEC_PCM                   ((__u32) 0x00000001)
 #define SND_AUDIOCODEC_MP3                   ((__u32) 0x00000002)
@@ -79,6 +87,7 @@
 #define SND_AUDIOCODEC_IEC61937              ((__u32) 0x0000000B)
 #define SND_AUDIOCODEC_G723_1                ((__u32) 0x0000000C)
 #define SND_AUDIOCODEC_G729                  ((__u32) 0x0000000D)
+<<<<<<< HEAD
 #define SND_AUDIOCODEC_AC3                   ((__u32) 0x0000000E)
 #define SND_AUDIOCODEC_DTS                   ((__u32) 0x0000000F)
 #define SND_AUDIOCODEC_AC3_PASS_THROUGH      ((__u32) 0x00000010)
@@ -91,6 +100,8 @@
 #define SND_AUDIOCODEC_DTS_LBR_PASS_THROUGH  ((__u32) 0x00000017)
 #define SND_AUDIOCODEC_EAC3                  ((__u32) 0x00000018)
 #define SND_AUDIOCODEC_MAX  SND_AUDIOCODEC_EAC3
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Profile and modes are listed with bit masks. This allows for a
@@ -256,11 +267,14 @@
 
 struct snd_enc_wma {
 	__u32 super_block_align; /* WMA Type-specific data */
+<<<<<<< HEAD
 	__u32 bits_per_sample;
 	__u32 channelmask;
 	__u32 encodeopt;
 	__u32 encodeopt1;
 	__u32 encodeopt2;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 
@@ -336,6 +350,7 @@ struct snd_enc_generic {
 	__u32 bw;	/* encoder bandwidth */
 	__s32 reserved[15];
 };
+<<<<<<< HEAD
 struct snd_dec_dts {
 	__u32 modelIdLength;
 	__u8 *modelId;
@@ -346,14 +361,20 @@ struct snd_dec_ddp {
 	__u32 params_id[18];
 	__u32 params_value[18];
 };
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 union snd_codec_options {
 	struct snd_enc_wma wma;
 	struct snd_enc_vorbis vorbis;
 	struct snd_enc_real real;
 	struct snd_enc_flac flac;
 	struct snd_enc_generic generic;
+<<<<<<< HEAD
 	struct snd_dec_dts dts;
 	struct snd_dec_ddp ddp;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /** struct snd_codec_desc - description of codec capabilities
@@ -427,8 +448,11 @@ struct snd_codec {
 	__u32 ch_mode;
 	__u32 format;
 	__u32 align;
+<<<<<<< HEAD
 	__u32 transcode_dts;
 	struct snd_dec_dts dts;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	union snd_codec_options options;
 	__u32 reserved[3];
 };

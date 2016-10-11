@@ -20,6 +20,10 @@
 #include <linux/sh_dma.h>
 #include <linux/slab.h>
 #include <linux/module.h>
+<<<<<<< HEAD
+=======
+#include <linux/workqueue.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <sound/soc.h>
 #include <sound/sh_fsi.h>
 
@@ -199,7 +203,11 @@ struct fsi_stream {
 	 */
 	struct dma_chan		*chan;
 	struct sh_dmae_slave	slave; /* see fsi_handler_init() */
+<<<<<<< HEAD
 	struct tasklet_struct	tasklet;
+=======
+	struct work_struct	work;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dma_addr_t		dma;
 };
 
@@ -968,9 +976,15 @@ static dma_addr_t fsi_dma_get_area(struct fsi_stream *io)
 	return io->dma + samples_to_bytes(runtime, io->buff_sample_pos);
 }
 
+<<<<<<< HEAD
 static void fsi_dma_do_tasklet(unsigned long data)
 {
 	struct fsi_stream *io = (struct fsi_stream *)data;
+=======
+static void fsi_dma_do_work(struct work_struct *work)
+{
+	struct fsi_stream *io = container_of(work, struct fsi_stream, work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct fsi_priv *fsi = fsi_stream_to_priv(io);
 	struct dma_chan *chan;
 	struct snd_soc_dai *dai;
@@ -1023,7 +1037,11 @@ static void fsi_dma_do_tasklet(unsigned long data)
 	 * FIXME
 	 *
 	 * In DMAEngine case, codec and FSI cannot be started simultaneously
+<<<<<<< HEAD
 	 * since FSI is using tasklet.
+=======
+	 * since FSI is using the scheduler work queue.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Therefore, in capture case, probably FSI FIFO will have got
 	 * overflow error in this point.
 	 * in that case, DMA cannot start transfer until error was cleared.
@@ -1047,7 +1065,11 @@ static bool fsi_dma_filter(struct dma_chan *chan, void *param)
 
 static int fsi_dma_transfer(struct fsi_priv *fsi, struct fsi_stream *io)
 {
+<<<<<<< HEAD
 	tasklet_schedule(&io->tasklet);
+=======
+	schedule_work(&io->work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
@@ -1087,14 +1109,22 @@ static int fsi_dma_probe(struct fsi_priv *fsi, struct fsi_stream *io)
 	if (!io->chan)
 		return -EIO;
 
+<<<<<<< HEAD
 	tasklet_init(&io->tasklet, fsi_dma_do_tasklet, (unsigned long)io);
+=======
+	INIT_WORK(&io->work, fsi_dma_do_work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }
 
 static int fsi_dma_remove(struct fsi_priv *fsi, struct fsi_stream *io)
 {
+<<<<<<< HEAD
 	tasklet_kill(&io->tasklet);
+=======
+	cancel_work_sync(&io->work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	fsi_stream_stop(fsi, io);
 
@@ -1392,8 +1422,12 @@ static const struct snd_soc_dai_ops fsi_dai_ops = {
 static struct snd_pcm_hardware fsi_pcm_hardware = {
 	.info =		SNDRV_PCM_INFO_INTERLEAVED	|
 			SNDRV_PCM_INFO_MMAP		|
+<<<<<<< HEAD
 			SNDRV_PCM_INFO_MMAP_VALID	|
 			SNDRV_PCM_INFO_PAUSE,
+=======
+			SNDRV_PCM_INFO_MMAP_VALID,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.formats		= FSI_FMTS,
 	.rates			= FSI_RATES,
 	.rate_min		= 8000,

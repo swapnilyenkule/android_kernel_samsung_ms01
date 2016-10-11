@@ -48,9 +48,14 @@ dma_alloc_coherent(struct device *dev,size_t size,dma_addr_t *handle,gfp_t flag)
 
 	/* We currently don't support coherent memory outside KSEG */
 
+<<<<<<< HEAD
 	if (ret < XCHAL_KSEG_CACHED_VADDR
 	    || ret >= XCHAL_KSEG_CACHED_VADDR + XCHAL_KSEG_SIZE)
 		BUG();
+=======
+	BUG_ON(ret < XCHAL_KSEG_CACHED_VADDR ||
+	       ret > XCHAL_KSEG_CACHED_VADDR + XCHAL_KSEG_SIZE - 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 	if (ret != 0) {
@@ -66,10 +71,18 @@ dma_alloc_coherent(struct device *dev,size_t size,dma_addr_t *handle,gfp_t flag)
 void dma_free_coherent(struct device *hwdev, size_t size,
 			 void *vaddr, dma_addr_t dma_handle)
 {
+<<<<<<< HEAD
 	long addr=(long)vaddr+XCHAL_KSEG_CACHED_VADDR-XCHAL_KSEG_BYPASS_VADDR;
 
 	if (addr < 0 || addr >= XCHAL_KSEG_SIZE)
 		BUG();
+=======
+	unsigned long addr = (unsigned long)vaddr +
+		XCHAL_KSEG_CACHED_VADDR - XCHAL_KSEG_BYPASS_VADDR;
+
+	BUG_ON(addr < XCHAL_KSEG_CACHED_VADDR ||
+	       addr > XCHAL_KSEG_CACHED_VADDR + XCHAL_KSEG_SIZE - 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	free_pages(addr, get_order(size));
 }

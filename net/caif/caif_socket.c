@@ -360,8 +360,11 @@ static int caif_stream_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (flags&MSG_OOB)
 		goto out;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Lock the socket to prevent queue disordering
 	 * while sleeps in memcpy_tomsg
@@ -1014,7 +1017,11 @@ static void caif_sock_destructor(struct sock *sk)
 	caif_assert(sk_unhashed(sk));
 	caif_assert(!sk->sk_socket);
 	if (!sock_flag(sk, SOCK_DEAD)) {
+<<<<<<< HEAD
 		WARN(1, "Attempt to release alive CAIF socket: %p\n", sk);
+=======
+		pr_debug("Attempt to release alive CAIF socket: %p\n", sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 	sk_stream_kill_queues(&cf_sk->sk);

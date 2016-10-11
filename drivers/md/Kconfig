@@ -185,8 +185,17 @@ config MD_FAULTY
 
 	  In unsure, say N.
 
+<<<<<<< HEAD
 config BLK_DEV_DM
 	tristate "Device mapper support"
+=======
+config BLK_DEV_DM_BUILTIN
+	boolean
+
+config BLK_DEV_DM
+	tristate "Device mapper support"
+	select BLK_DEV_DM_BUILTIN
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	---help---
 	  Device-mapper is a low level volume manager.  It works by allowing
 	  people to specify mappings for ranges of logical sectors.  Various
@@ -326,7 +335,11 @@ config DM_MULTIPATH
 	# of SCSI_DH if the latter isn't defined but if
 	# it is, DM_MULTIPATH must depend on it.  We get a build
 	# error if SCSI_DH=m and DM_MULTIPATH=y
+<<<<<<< HEAD
 	depends on SCSI_DH || !SCSI_DH
+=======
+	depends on !SCSI_DH || SCSI
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	---help---
 	  Allow volume managers to support multipath hardware.
 

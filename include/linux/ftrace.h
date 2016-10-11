@@ -299,7 +299,10 @@ ssize_t ftrace_filter_write(struct file *file, const char __user *ubuf,
 			    size_t cnt, loff_t *ppos);
 ssize_t ftrace_notrace_write(struct file *file, const char __user *ubuf,
 			     size_t cnt, loff_t *ppos);
+<<<<<<< HEAD
 loff_t ftrace_regex_lseek(struct file *file, loff_t offset, int origin);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int ftrace_regex_release(struct inode *inode, struct file *file);
 
 void __init
@@ -375,6 +378,10 @@ extern int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr);
 extern int ftrace_arch_read_dyn_info(char *buf, int size);
 
 extern int skip_trace(unsigned long ip);
+<<<<<<< HEAD
+=======
+extern void ftrace_module_init(struct module *mod);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern void ftrace_disable_daemon(void);
 extern void ftrace_enable_daemon(void);
@@ -384,6 +391,10 @@ static inline int ftrace_force_update(void) { return 0; }
 static inline void ftrace_disable_daemon(void) { }
 static inline void ftrace_enable_daemon(void) { }
 static inline void ftrace_release_mod(struct module *mod) {}
+<<<<<<< HEAD
+=======
+static inline void ftrace_module_init(struct module *mod) {}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline int register_ftrace_command(struct ftrace_func_command *cmd)
 {
 	return -EINVAL;
@@ -420,6 +431,11 @@ static inline int
 ftrace_regex_release(struct inode *inode, struct file *file) { return -ENODEV; }
 #endif /* CONFIG_DYNAMIC_FTRACE */
 
+<<<<<<< HEAD
+=======
+loff_t ftrace_filter_lseek(struct file *file, loff_t offset, int whence);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* totally disable ftrace - can not re-enable after this */
 void ftrace_kill(void);
 

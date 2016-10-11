@@ -148,6 +148,7 @@ void rt2x00queue_align_frame(struct sk_buff *skb)
 	skb_trim(skb, frame_length);
 }
 
+<<<<<<< HEAD
 void rt2x00queue_insert_l2pad(struct sk_buff *skb, unsigned int header_length)
 {
 	unsigned int payload_length = skb->len - header_length;
@@ -192,11 +193,35 @@ void rt2x00queue_remove_l2pad(struct sk_buff *skb, unsigned int header_length)
 	 */
 	unsigned int l2pad = (skb->len > header_length) ?
 				L2PAD_SIZE(header_length) : 0;
+=======
+/*
+ * H/W needs L2 padding between the header and the paylod if header size
+ * is not 4 bytes aligned.
+ */
+void rt2x00queue_insert_l2pad(struct sk_buff *skb, unsigned int hdr_len)
+{
+	unsigned int l2pad = (skb->len > hdr_len) ? L2PAD_SIZE(hdr_len) : 0;
 
 	if (!l2pad)
 		return;
 
+	skb_push(skb, l2pad);
+	memmove(skb->data, skb->data + l2pad, hdr_len);
+}
+
+void rt2x00queue_remove_l2pad(struct sk_buff *skb, unsigned int hdr_len)
+{
+	unsigned int l2pad = (skb->len > hdr_len) ? L2PAD_SIZE(hdr_len) : 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
+
+	if (!l2pad)
+		return;
+
+<<<<<<< HEAD
 	memmove(skb->data + l2pad, skb->data, header_length);
+=======
+	memmove(skb->data + l2pad, skb->data, hdr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	skb_pull(skb, l2pad);
 }
 
@@ -207,6 +232,10 @@ static void rt2x00queue_create_tx_descriptor_seq(struct rt2x00_dev *rt2x00dev,
 	struct ieee80211_tx_info *tx_info = IEEE80211_SKB_CB(skb);
 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)skb->data;
 	struct rt2x00_intf *intf = vif_to_intf(tx_info->control.vif);
+<<<<<<< HEAD
+=======
+	u16 seqno;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!(tx_info->flags & IEEE80211_TX_CTL_ASSIGN_SEQ))
 		return;
@@ -227,6 +256,7 @@ static void rt2x00queue_create_tx_descriptor_seq(struct rt2x00_dev *rt2x00dev,
 	 * sequence counting per-frame, since those will override the
 	 * sequence counter given by mac80211.
 	 */
+<<<<<<< HEAD
 	spin_lock(&intf->seqlock);
 
 	if (test_bit(ENTRY_TXD_FIRST_FRAGMENT, &txdesc->flags))
@@ -236,6 +266,15 @@ static void rt2x00queue_create_tx_descriptor_seq(struct rt2x00_dev *rt2x00dev,
 
 	spin_unlock(&intf->seqlock);
 
+=======
+	if (test_bit(ENTRY_TXD_FIRST_FRAGMENT, &txdesc->flags))
+		seqno = atomic_add_return(0x10, &intf->seqno);
+	else
+		seqno = atomic_read(&intf->seqno);
+
+	hdr->seq_ctrl &= cpu_to_le16(IEEE80211_SCTL_FRAG);
+	hdr->seq_ctrl |= cpu_to_le16(seqno);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void rt2x00queue_create_tx_descriptor_plcp(struct rt2x00_dev *rt2x00dev,
@@ -857,6 +896,7 @@ void rt2x00queue_index_inc(struct queue_entry *entry, enum queue_index index)
 	spin_unlock_irqrestore(&queue->index_lock, irqflags);
 }
 
+<<<<<<< HEAD
 void rt2x00queue_pause_queue(struct data_queue *queue)
 {
 	if (!test_bit(DEVICE_STATE_PRESENT, &queue->rt2x00dev->flags) ||
@@ -864,6 +904,10 @@ void rt2x00queue_pause_queue(struct data_queue *queue)
 	    test_and_set_bit(QUEUE_PAUSED, &queue->flags))
 		return;
 
+=======
+void rt2x00queue_pause_queue_nocheck(struct data_queue *queue)
+{
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (queue->qid) {
 	case QID_AC_VO:
 	case QID_AC_VI:
@@ -879,6 +923,18 @@ void rt2x00queue_pause_queue(struct data_queue *queue)
 		break;
 	}
 }
+<<<<<<< HEAD
+=======
+void rt2x00queue_pause_queue(struct data_queue *queue)
+{
+	if (!test_bit(DEVICE_STATE_PRESENT, &queue->rt2x00dev->flags) ||
+	    !test_bit(QUEUE_STARTED, &queue->flags) ||
+	    test_and_set_bit(QUEUE_PAUSED, &queue->flags))
+		return;
+
+	rt2x00queue_pause_queue_nocheck(queue);
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL_GPL(rt2x00queue_pause_queue);
 
 void rt2x00queue_unpause_queue(struct data_queue *queue)
@@ -940,7 +996,11 @@ void rt2x00queue_stop_queue(struct data_queue *queue)
 		return;
 	}
 
+<<<<<<< HEAD
 	rt2x00queue_pause_queue(queue);
+=======
+	rt2x00queue_pause_queue_nocheck(queue);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	queue->rt2x00dev->ops->lib->stop_queue(queue);
 

@@ -268,6 +268,7 @@ config MWL8K
 	  To compile this driver as a module, choose M here: the module
 	  will be called mwl8k.  If unsure, say N.
 
+<<<<<<< HEAD
 config WIFI_CONTROL_FUNC
 	bool "Enable WiFi control function abstraction"
 	help
@@ -339,6 +340,11 @@ source "drivers/net/wireless/b43/Kconfig"
 source "drivers/net/wireless/b43legacy/Kconfig"
 source "drivers/net/wireless/bcmdhd/Kconfig"
 source "drivers/net/wireless/bcmdhd4354/Kconfig"
+=======
+source "drivers/net/wireless/ath/Kconfig"
+source "drivers/net/wireless/b43/Kconfig"
+source "drivers/net/wireless/b43legacy/Kconfig"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 source "drivers/net/wireless/brcm80211/Kconfig"
 source "drivers/net/wireless/hostap/Kconfig"
 source "drivers/net/wireless/ipw2x00/Kconfig"
@@ -354,6 +360,9 @@ source "drivers/net/wireless/wl1251/Kconfig"
 source "drivers/net/wireless/wl12xx/Kconfig"
 source "drivers/net/wireless/zd1211rw/Kconfig"
 source "drivers/net/wireless/mwifiex/Kconfig"
+<<<<<<< HEAD
 source "drivers/net/wireless/mwlan_aarp/Kconfig"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 endif # WLAN

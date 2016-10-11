@@ -68,11 +68,14 @@
  * until either the TLB entry is evicted under pressure, or a context
  * switch which changes the user space mapping occurs.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #include <asm/tlbflush.h>
 #include <asm/cp15.h>
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define PTRS_PER_PTE		512
 #define PTRS_PER_PMD		1
 #define PTRS_PER_PGD		2048
@@ -165,6 +168,7 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr)
 
 #define pmd_bad(pmd)		(pmd_val(pmd) & 2)
 
+<<<<<<< HEAD
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
 #if __GNUC__ >= 4 && __GNUC_MINOR__ >= 6
         asm(".arch_extension sec");
@@ -220,12 +224,15 @@ static inline void copy_pmd(pmd_t *pmdpd, pmd_t *pmdps)
 		tima_verify_state(pmd_base + 0x3000, pmdps[0], 1, 0);
 }
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define copy_pmd(pmdpd,pmdps)		\
 	do {				\
 		pmdpd[0] = pmdps[0];	\
 		pmdpd[1] = pmdps[1];	\
 		flush_pmd_entry(pmdpd);	\
 	} while (0)
+<<<<<<< HEAD
 #endif
 
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
@@ -275,12 +282,16 @@ static inline void pmd_clear(pmd_t *pmdp)
 		clean_pmd_entry(pmdp);
 }
 #else
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define pmd_clear(pmdp)			\
 	do {				\
 		pmdp[0] = __pmd(0);	\
 		pmdp[1] = __pmd(0);	\
 		clean_pmd_entry(pmdp);	\
 	} while (0)
+<<<<<<< HEAD
 #endif
 
 #ifdef CONFIG_TIMA_RKP_L2_GROUP 
@@ -290,10 +301,13 @@ extern void cpu_v7_timal2group_set_pte_commit(void *tima_l2group_entry_ptr,
 					unsigned long tima_l2group_entries_count);
 
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* we don't need complex calculations here as the pmd is folded into the pgd */
 #define pmd_addr_end(addr,end) (end)
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_TABLES
 static inline void set_pte_ext(pte_t *ptep,pte_t pte,unsigned int ext)
 {
@@ -313,6 +327,9 @@ static inline void set_pte_ext(pte_t *ptep,pte_t pte,unsigned int ext)
 #define TIMA_LAZY_MMU_STOP   1
 
 #endif
+=======
+#define set_pte_ext(ptep,pte,ext) cpu_set_pte_ext(ptep,pte,ext)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif /* __ASSEMBLY__ */
 

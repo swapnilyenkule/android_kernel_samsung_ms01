@@ -2882,7 +2882,11 @@ static noinline int mmc_ioctl_cdrom_read_data(struct cdrom_device_info *cdi,
 	if (lba < 0)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	cgc->buffer = kmalloc(blocksize, GFP_KERNEL);
+=======
+	cgc->buffer = kzalloc(blocksize, GFP_KERNEL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cgc->buffer == NULL)
 		return -ENOMEM;
 

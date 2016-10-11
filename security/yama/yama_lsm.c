@@ -138,7 +138,11 @@ static int yama_task_prctl(int option, unsigned long arg2, unsigned long arg3,
 		if (arg2 == 0) {
 			yama_ptracer_del(NULL, myself);
 			rc = 0;
+<<<<<<< HEAD
 		} else if (arg2 == PR_SET_PTRACER_ANY) {
+=======
+		} else if (arg2 == PR_SET_PTRACER_ANY || (int)arg2 == -1) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			rc = yama_ptracer_add(NULL, myself);
 		} else {
 			struct task_struct *tracer;

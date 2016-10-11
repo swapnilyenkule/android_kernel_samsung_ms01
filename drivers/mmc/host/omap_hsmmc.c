@@ -1969,7 +1969,11 @@ static int __devinit omap_hsmmc_probe(struct platform_device *pdev)
 		ret = request_threaded_irq(mmc_slot(host).card_detect_irq,
 					   NULL,
 					   omap_hsmmc_detect,
+<<<<<<< HEAD
 					   IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+=======
+					   IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					   mmc_hostname(mmc), host);
 		if (ret) {
 			dev_dbg(mmc_dev(host->mmc),
@@ -2097,8 +2101,12 @@ static int omap_hsmmc_suspend(struct device *dev)
 	if (ret) {
 		host->suspended = 0;
 		if (host->pdata->resume) {
+<<<<<<< HEAD
 			ret = host->pdata->resume(dev, host->slot_id);
 			if (ret)
+=======
+			if (host->pdata->resume(dev, host->slot_id))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				dev_dbg(dev, "Unmask interrupt failed\n");
 		}
 		goto err;

@@ -423,7 +423,10 @@ static int __init flow_cache_init(struct flow_cache *fc)
 	if (!fc->percpu)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	get_online_cpus();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	for_each_online_cpu(i) {
 		if (flow_cache_cpu_prepare(fc, i))
 			goto err;
@@ -432,7 +435,10 @@ static int __init flow_cache_init(struct flow_cache *fc)
 		.notifier_call = flow_cache_cpu,
 	};
 	register_hotcpu_notifier(&fc->hotcpu_notifier);
+<<<<<<< HEAD
 	put_online_cpus();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	setup_timer(&fc->rnd_timer, flow_cache_new_hashrnd,
 		    (unsigned long) fc);
@@ -442,7 +448,10 @@ static int __init flow_cache_init(struct flow_cache *fc)
 	return 0;
 
 err:
+<<<<<<< HEAD
 	put_online_cpus();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	for_each_possible_cpu(i) {
 		struct flow_cache_percpu *fcp = per_cpu_ptr(fc->percpu, i);
 		kfree(fcp->hash_table);

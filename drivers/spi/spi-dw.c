@@ -394,9 +394,12 @@ static void pump_transfers(unsigned long data)
 	chip = dws->cur_chip;
 	spi = message->spi;
 
+<<<<<<< HEAD
 	if (unlikely(!chip->clk_div))
 		chip->clk_div = dws->max_freq / chip->speed_hz;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (message->state == ERROR_STATE) {
 		message->status = -EIO;
 		goto early_exit;
@@ -438,7 +441,11 @@ static void pump_transfers(unsigned long data)
 	if (transfer->speed_hz) {
 		speed = chip->speed_hz;
 
+<<<<<<< HEAD
 		if (transfer->speed_hz != speed) {
+=======
+		if ((transfer->speed_hz != speed) || (!chip->clk_div)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			speed = transfer->speed_hz;
 			if (speed > dws->max_freq) {
 				printk(KERN_ERR "MRST SPI0: unsupported"
@@ -677,7 +684,10 @@ static int dw_spi_setup(struct spi_device *spi)
 		dev_err(&spi->dev, "No max speed HZ parameter\n");
 		return -EINVAL;
 	}
+<<<<<<< HEAD
 	chip->speed_hz = spi->max_speed_hz;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	chip->tmode = 0; /* Tx & Rx */
 	/* Default SPI mode is SCPOL = 0, SCPH = 0 */
@@ -784,13 +794,21 @@ static void spi_hw_init(struct dw_spi *dws)
 	 */
 	if (!dws->fifo_len) {
 		u32 fifo;
+<<<<<<< HEAD
 		for (fifo = 2; fifo <= 257; fifo++) {
+=======
+		for (fifo = 1; fifo < 256; fifo++) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			dw_writew(dws, DW_SPI_TXFLTR, fifo);
 			if (fifo != dw_readw(dws, DW_SPI_TXFLTR))
 				break;
 		}
 
+<<<<<<< HEAD
 		dws->fifo_len = (fifo == 257) ? 0 : fifo;
+=======
+		dws->fifo_len = (fifo == 1) ? 0 : fifo;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dw_writew(dws, DW_SPI_TXFLTR, 0);
 	}
 }

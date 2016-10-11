@@ -4,7 +4,10 @@
 #include <linux/device.h>
 #include <linux/workqueue.h>
 #include <linux/kfifo.h>
+<<<<<<< HEAD
 #include <linux/sched.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/mutex.h>
 
 #include "kfifo_buf.h"
@@ -37,7 +40,10 @@ static int iio_request_update_kfifo(struct iio_buffer *r)
 	kfifo_free(&buf->kf);
 	ret = __iio_allocate_kfifo(buf, buf->buffer.bytes_per_datum,
 				   buf->buffer.length);
+<<<<<<< HEAD
 	r->stufftoread = false;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 error_ret:
 	return ret;
 }
@@ -97,6 +103,7 @@ static int iio_store_to_kfifo(struct iio_buffer *r,
 {
 	int ret;
 	struct iio_kfifo *kf = iio_to_kfifo(r);
+<<<<<<< HEAD
 	if (kfifo_avail(&kf->kf) >= r->bytes_per_datum) {
 		ret = kfifo_in(&kf->kf, data, r->bytes_per_datum);
 		if (ret != r->bytes_per_datum)
@@ -107,6 +114,11 @@ static int iio_store_to_kfifo(struct iio_buffer *r,
 	r->stufftoread = true;
 	wake_up_interruptible(&r->pollq);
 
+=======
+	ret = kfifo_in(&kf->kf, data, r->bytes_per_datum);
+	if (ret != r->bytes_per_datum)
+		return -EBUSY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -122,12 +134,15 @@ static int iio_read_first_n_kfifo(struct iio_buffer *r,
 	n = rounddown(n, r->bytes_per_datum);
 	ret = kfifo_to_user(&kf->kf, buf, n, &copied);
 
+<<<<<<< HEAD
 	if (kfifo_is_empty(&kf->kf))
 		r->stufftoread = false;
 	/* verify it is still empty to avoid race */
 	if (!kfifo_is_empty(&kf->kf))
 		r->stufftoread = true;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return copied;
 }
 

@@ -271,6 +271,10 @@ struct esp_cmd_entry {
 #define ESP_CMD_FLAG_AUTOSENSE	0x04 /* Doing automatic REQUEST_SENSE */
 
 	u8			tag[2];
+<<<<<<< HEAD
+=======
+	u8			orig_tag[2];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	u8			status;
 	u8			message;

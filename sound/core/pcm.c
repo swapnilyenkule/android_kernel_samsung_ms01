@@ -24,6 +24,10 @@
 #include <linux/module.h>
 #include <linux/time.h>
 #include <linux/mutex.h>
+<<<<<<< HEAD
+=======
+#include <linux/device.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <sound/core.h>
 #include <sound/minors.h>
 #include <sound/pcm.h>
@@ -41,7 +45,10 @@ static DEFINE_MUTEX(register_mutex);
 static int snd_pcm_free(struct snd_pcm *pcm);
 static int snd_pcm_dev_free(struct snd_device *device);
 static int snd_pcm_dev_register(struct snd_device *device);
+<<<<<<< HEAD
 static int snd_pcm_dev_register_soc_be(struct snd_device *device);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int snd_pcm_dev_disconnect(struct snd_device *device);
 
 static struct snd_pcm *snd_pcm_get(struct snd_card *card, int device)
@@ -49,6 +56,11 @@ static struct snd_pcm *snd_pcm_get(struct snd_card *card, int device)
 	struct snd_pcm *pcm;
 
 	list_for_each_entry(pcm, &snd_pcm_devices, list) {
+<<<<<<< HEAD
+=======
+		if (pcm->internal)
+			continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (pcm->card == card && pcm->device == device)
 			return pcm;
 	}
@@ -60,6 +72,11 @@ static int snd_pcm_next(struct snd_card *card, int device)
 	struct snd_pcm *pcm;
 
 	list_for_each_entry(pcm, &snd_pcm_devices, list) {
+<<<<<<< HEAD
+=======
+		if (pcm->internal)
+			continue;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (pcm->card == card && pcm->device > device)
 			return pcm->device;
 		else if (pcm->card->number > card->number)
@@ -769,6 +786,7 @@ int snd_pcm_new(struct snd_card *card, const char *id, int device,
 }
 EXPORT_SYMBOL(snd_pcm_new);
 
+<<<<<<< HEAD
 static int snd_pcm_new_stream_soc_be(struct snd_pcm *pcm, int stream,
 	int substream_count)
 {
@@ -873,6 +891,8 @@ int snd_pcm_new_soc_be(struct snd_card *card, const char *id, int device,
 }
 
 EXPORT_SYMBOL(snd_pcm_new_soc_be);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * snd_pcm_new_internal - create a new internal PCM instance
  * @card: the card instance
@@ -1179,6 +1199,7 @@ static int snd_pcm_dev_register(struct snd_device *device)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int snd_pcm_dev_register_soc_be(struct snd_device *device)
 {
 	int err;
@@ -1202,6 +1223,8 @@ static int snd_pcm_dev_register_soc_be(struct snd_device *device)
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int snd_pcm_dev_disconnect(struct snd_device *device)
 {
 	struct snd_pcm *pcm = device->device_data;
@@ -1213,11 +1236,27 @@ static int snd_pcm_dev_disconnect(struct snd_device *device)
 	if (list_empty(&pcm->list))
 		goto unlock;
 
+<<<<<<< HEAD
 	list_del_init(&pcm->list);
 	for (cidx = 0; cidx < 2; cidx++)
 		for (substream = pcm->streams[cidx].substream; substream; substream = substream->next)
 			if (substream->runtime)
 				substream->runtime->status->state = SNDRV_PCM_STATE_DISCONNECTED;
+=======
+	mutex_lock(&pcm->open_mutex);
+	wake_up(&pcm->open_wait);
+	list_del_init(&pcm->list);
+	for (cidx = 0; cidx < 2; cidx++)
+		for (substream = pcm->streams[cidx].substream; substream; substream = substream->next) {
+			snd_pcm_stream_lock_irq(substream);
+			if (substream->runtime) {
+				substream->runtime->status->state = SNDRV_PCM_STATE_DISCONNECTED;
+				wake_up(&substream->runtime->sleep);
+				wake_up(&substream->runtime->tsleep);
+			}
+			snd_pcm_stream_unlock_irq(substream);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	list_for_each_entry(notify, &snd_pcm_notify_list, list) {
 		notify->n_disconnect(pcm);
 	}
@@ -1232,6 +1271,7 @@ static int snd_pcm_dev_disconnect(struct snd_device *device)
 			break;
 		}
 		snd_unregister_device(devtype, pcm->card, pcm->device);
+<<<<<<< HEAD
 		if (pcm->streams[cidx].chmap_kctl) {
 			snd_ctl_remove(pcm->card, pcm->streams[cidx].chmap_kctl);
 			pcm->streams[cidx].chmap_kctl = NULL;
@@ -1241,6 +1281,10 @@ static int snd_pcm_dev_disconnect(struct snd_device *device)
 			pcm->streams[cidx].vol_kctl = NULL;
 		}
 	}
+=======
+	}
+	mutex_unlock(&pcm->open_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  unlock:
 	mutex_unlock(&register_mutex);
 	return 0;

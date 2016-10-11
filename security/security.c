@@ -130,6 +130,7 @@ int __init register_security(struct security_operations *ops)
 
 /* Security operations */
 
+<<<<<<< HEAD
 int security_binder_set_context_mgr(struct task_struct *mgr)
 {
 	return security_ops->binder_set_context_mgr(mgr);
@@ -150,6 +151,8 @@ int security_binder_transfer_file(struct task_struct *from, struct task_struct *
 	return security_ops->binder_transfer_file(from, to, file);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int security_ptrace_access_check(struct task_struct *child, unsigned int mode)
 {
 	return security_ops->ptrace_access_check(child, mode);
@@ -280,8 +283,13 @@ int security_sb_statfs(struct dentry *dentry)
 	return security_ops->sb_statfs(dentry);
 }
 
+<<<<<<< HEAD
 int security_sb_mount(const char *dev_name, struct path *path,
                        const char *type, unsigned long flags, void *data)
+=======
+int security_sb_mount(char *dev_name, struct path *path,
+                       char *type, unsigned long flags, void *data)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	return security_ops->sb_mount(dev_name, path, type, flags, data);
 }
@@ -662,10 +670,13 @@ int security_file_permission(struct file *file, int mask)
 	return fsnotify_perm(file, mask);
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_VMWARE_MVP)
 EXPORT_SYMBOL_GPL(security_file_permission);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int security_file_alloc(struct file *file)
 {
 	return security_ops->file_alloc_security(file);

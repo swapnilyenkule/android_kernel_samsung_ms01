@@ -64,6 +64,10 @@
 #include <linux/nsproxy.h>
 #include <linux/virtio_net.h>
 #include <linux/rcupdate.h>
+<<<<<<< HEAD
+=======
+#include <net/ipv6.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/net_namespace.h>
 #include <net/netns/generic.h>
 #include <net/rtnetlink.h>
@@ -185,7 +189,10 @@ static void __tun_detach(struct tun_struct *tun)
 	netif_tx_lock_bh(tun->dev);
 	netif_carrier_off(tun->dev);
 	tun->tfile = NULL;
+<<<<<<< HEAD
 	tun->socket.file = NULL;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	netif_tx_unlock_bh(tun->dev);
 
 	/* Drop read queue */
@@ -358,6 +365,11 @@ static void tun_free_netdev(struct net_device *dev)
 {
 	struct tun_struct *tun = netdev_priv(dev);
 
+<<<<<<< HEAD
+=======
+	BUG_ON(!test_bit(SOCK_EXTERNALLY_ALLOCATED, &tun->socket.flags));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sk_release_kernel(tun->socket.sk);
 }
 
@@ -416,6 +428,11 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
 	 * for indefinite time. */
 	skb_orphan(skb);
 
+<<<<<<< HEAD
+=======
+	nf_reset(skb);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Enqueue packet */
 	skb_queue_tail(&tun->socket.sk->sk_receive_queue, skb);
 
@@ -612,8 +629,14 @@ static ssize_t tun_get_user(struct tun_struct *tun,
 	int offset = 0;
 
 	if (!(tun->flags & TUN_NO_PI)) {
+<<<<<<< HEAD
 		if ((len -= sizeof(pi)) > count)
 			return -EINVAL;
+=======
+		if (len < sizeof(pi))
+			return -EINVAL;
+		len -= sizeof(pi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (memcpy_fromiovecend((void *)&pi, iv, 0, sizeof(pi)))
 			return -EFAULT;
@@ -621,8 +644,14 @@ static ssize_t tun_get_user(struct tun_struct *tun,
 	}
 
 	if (tun->flags & TUN_VNET_HDR) {
+<<<<<<< HEAD
 		if ((len -= tun->vnet_hdr_sz) > count)
 			return -EINVAL;
+=======
+		if (len < tun->vnet_hdr_sz)
+			return -EINVAL;
+		len -= tun->vnet_hdr_sz;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (memcpy_fromiovecend((void *)&gso, iv, offset, sizeof(gso)))
 			return -EFAULT;
@@ -691,6 +720,11 @@ static ssize_t tun_get_user(struct tun_struct *tun,
 		break;
 	}
 
+<<<<<<< HEAD
+=======
+	skb_reset_network_header(skb);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (gso.gso_type != VIRTIO_NET_HDR_GSO_NONE) {
 		pr_debug("GSO!\n");
 		switch (gso.gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
@@ -702,6 +736,11 @@ static ssize_t tun_get_user(struct tun_struct *tun,
 			break;
 		case VIRTIO_NET_HDR_GSO_UDP:
 			skb_shinfo(skb)->gso_type = SKB_GSO_UDP;
+<<<<<<< HEAD
+=======
+			if (skb->protocol == htons(ETH_P_IPV6))
+				ipv6_proxy_select_ident(skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		default:
 			tun->dev->stats.rx_frame_errors++;
@@ -898,6 +937,11 @@ static ssize_t tun_chr_aio_read(struct kiocb *iocb, const struct iovec *iv,
 
 	ret = tun_do_read(tun, iocb, iv, len, file->f_flags & O_NONBLOCK);
 	ret = min_t(ssize_t, ret, len);
+<<<<<<< HEAD
+=======
+	if (ret > 0)
+		iocb->ki_pos = ret;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 out:
 	tun_put(tun);
 	return ret;
@@ -1115,6 +1159,10 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 		tun->flags = flags;
 		tun->txflt.count = 0;
 		tun->vnet_hdr_sz = sizeof(struct virtio_net_hdr);
+<<<<<<< HEAD
+=======
+		set_bit(SOCK_EXTERNALLY_ALLOCATED, &tun->socket.flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		err = -ENOMEM;
 		sk = sk_alloc(&init_net, AF_UNSPEC, GFP_KERNEL, &tun_proto);
@@ -1252,6 +1300,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 	int vnet_hdr_sz;
 	int ret;
 
+<<<<<<< HEAD
 #ifdef CONFIG_ANDROID_PARANOID_NETWORK
 	if (cmd != TUNGETIFF && !capable(CAP_NET_ADMIN)) {
 		return -EPERM;
@@ -1262,6 +1311,14 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
 		if (copy_from_user(&ifr, argp, ifreq_len))
 			return -EFAULT;
 
+=======
+	if (cmd == TUNSETIFF || _IOC_TYPE(cmd) == 0x89) {
+		if (copy_from_user(&ifr, argp, ifreq_len))
+			return -EFAULT;
+	} else {
+		memset(&ifr, 0, sizeof(ifr));
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cmd == TUNGETFEATURES) {
 		/* Currently this just means: "what IFF flags are valid?".
 		 * This is needed because we never checked for invalid flags on

@@ -74,7 +74,11 @@ static int r300_emit_cliprects(drm_radeon_private_t *dev_priv,
 		OUT_RING(CP_PACKET0(R300_RE_CLIPRECT_TL_0, nr * 2 - 1));
 
 		for (i = 0; i < nr; ++i) {
+<<<<<<< HEAD
 			if (DRM_COPY_FROM_USER_UNCHECKED
+=======
+			if (DRM_COPY_FROM_USER
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			    (&box, &cmdbuf->boxes[n + i], sizeof(box))) {
 				DRM_ERROR("copy cliprect faulted\n");
 				return -EFAULT;

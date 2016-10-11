@@ -505,11 +505,14 @@ int wiphy_register(struct wiphy *wiphy)
 			   ETH_ALEN)))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (WARN_ON(wiphy->max_acl_mac_addrs &&
 		    (!(wiphy->flags & WIPHY_FLAG_HAVE_AP_SME) ||
 		     !rdev->ops->set_mac_acl)))
 		return -EINVAL;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (wiphy->addresses)
 		memcpy(wiphy->perm_addr, wiphy->addresses[0].addr, ETH_ALEN);
 
@@ -557,8 +560,12 @@ int wiphy_register(struct wiphy *wiphy)
 		for (i = 0; i < sband->n_channels; i++) {
 			sband->channels[i].orig_flags =
 				sband->channels[i].flags;
+<<<<<<< HEAD
 			sband->channels[i].orig_mag =
 				sband->channels[i].max_antenna_gain;
+=======
+			sband->channels[i].orig_mag = INT_MAX;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			sband->channels[i].orig_mpwr =
 				sband->channels[i].max_power;
 			sband->channels[i].band = band;
@@ -980,6 +987,14 @@ static int cfg80211_netdev_notifier_call(struct notifier_block * nb,
 		 */
 		synchronize_rcu();
 		INIT_LIST_HEAD(&wdev->list);
+<<<<<<< HEAD
+=======
+		/*
+		 * Ensure that all events have been processed and
+		 * freed.
+		 */
+		cfg80211_process_wdev_events(wdev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 	case NETDEV_PRE_UP:
 		if (!(wdev->wiphy->interface_modes & BIT(wdev->iftype)))

@@ -34,11 +34,16 @@
 #include <linux/syscalls.h>
 #include <linux/buffer_head.h> /* __set_page_dirty_buffers */
 #include <linux/pagevec.h>
+<<<<<<< HEAD
 #include <linux/mm_inline.h>
 #include <trace/events/writeback.h>
 
 #include "internal.h"
 
+=======
+#include <trace/events/writeback.h>
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Sleep at most 200ms at a time in balance_dirty_pages().
  */
@@ -200,6 +205,10 @@ static unsigned long highmem_dirtyable_memory(unsigned long total)
 	 */
 	if ((long)x < 0)
 		x = 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Make sure that the number of highmem pages is never larger
 	 * than the number of the total dirtyable memory. This can only
@@ -260,6 +269,7 @@ void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty)
 	else
 		background = (dirty_background_ratio * available_memory) / 100;
 
+<<<<<<< HEAD
 #if defined(CONFIG_MIN_DIRTY_THRESH_PAGES) && CONFIG_MIN_DIRTY_THRESH_PAGES > 0
 	if (!vm_dirty_bytes && dirty < CONFIG_MIN_DIRTY_THRESH_PAGES) {
 		dirty = CONFIG_MIN_DIRTY_THRESH_PAGES;
@@ -274,6 +284,8 @@ void global_dirty_limits(unsigned long *pbackground, unsigned long *pdirty)
 	}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (background >= dirty)
 		background = dirty / 2;
 	tsk = current;
@@ -331,6 +343,7 @@ static unsigned long zone_dirty_limit(struct zone *zone)
 	else
 		dirty = vm_dirty_ratio * zone_memory / 100;
 
+<<<<<<< HEAD
 #if defined(CONFIG_MIN_DIRTY_THRESH_PAGES) && CONFIG_MIN_DIRTY_THRESH_PAGES > 0
 	if (!vm_dirty_bytes) {
 		unsigned long min_zone_dirty;
@@ -342,6 +355,8 @@ static unsigned long zone_dirty_limit(struct zone *zone)
 	}
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (tsk->flags & PF_LESS_THROTTLE || rt_task(tsk))
 		dirty += dirty / 4;
 
@@ -378,11 +393,14 @@ static int calc_period_shift(void)
 	else
 		dirty_total = (vm_dirty_ratio * global_dirtyable_memory()) /
 				100;
+<<<<<<< HEAD
 #if defined(CONFIG_MIN_DIRTY_THRESH_PAGES) && CONFIG_MIN_DIRTY_THRESH_PAGES > 0
 	if (!vm_dirty_bytes && dirty_total < CONFIG_MIN_DIRTY_THRESH_PAGES) 
 		dirty_total = CONFIG_MIN_DIRTY_THRESH_PAGES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 2 + ilog2(dirty_total - 1);
 }
 
@@ -748,7 +766,11 @@ static unsigned long bdi_position_ratio(struct backing_dev_info *bdi,
 	 * scale global setpoint to bdi's:
 	 *	bdi_setpoint = setpoint * bdi_thresh / thresh
 	 */
+<<<<<<< HEAD
 	x = div_u64((u64)bdi_thresh << 16, thresh + 1);
+=======
+	x = div_u64((u64)bdi_thresh << 16, thresh | 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bdi_setpoint = setpoint * (u64)x >> 16;
 	/*
 	 * Use span=(8*write_bw) in single bdi case as indicated by
@@ -798,8 +820,16 @@ static void bdi_update_write_bandwidth(struct backing_dev_info *bdi,
 	 *                   bw * elapsed + write_bandwidth * (period - elapsed)
 	 * write_bandwidth = ---------------------------------------------------
 	 *                                          period
+<<<<<<< HEAD
 	 */
 	bw = written - bdi->written_stamp;
+=======
+	 *
+	 * @written may have decreased due to account_page_redirty().
+	 * Avoid underflowing @bw calculation.
+	 */
+	bw = written - min(written, bdi->written_stamp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bw *= HZ;
 	if (unlikely(elapsed > period)) {
 		do_div(bw, elapsed);
@@ -863,7 +893,11 @@ static void global_update_bandwidth(unsigned long thresh,
 				    unsigned long now)
 {
 	static DEFINE_SPINLOCK(dirty_lock);
+<<<<<<< HEAD
 	static unsigned long update_time;
+=======
+	static unsigned long update_time = INITIAL_JIFFIES;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * check locklessly first to optimize away locking for the most time
@@ -1104,11 +1138,19 @@ static unsigned long dirty_poll_interval(unsigned long dirty,
 	return 1;
 }
 
+<<<<<<< HEAD
 static long bdi_max_pause(struct backing_dev_info *bdi,
 			  unsigned long bdi_dirty)
 {
 	long bw = bdi->avg_write_bandwidth;
 	long t;
+=======
+static unsigned long bdi_max_pause(struct backing_dev_info *bdi,
+				   unsigned long bdi_dirty)
+{
+	unsigned long bw = bdi->avg_write_bandwidth;
+	unsigned long t;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Limit pause time for small memory systems. If sleeping for too long
@@ -1120,7 +1162,11 @@ static long bdi_max_pause(struct backing_dev_info *bdi,
 	t = bdi_dirty / (1 + bw / roundup_pow_of_two(1 + HZ / 8));
 	t++;
 
+<<<<<<< HEAD
 	return min_t(long, t, MAX_PAUSE);
+=======
+	return min_t(unsigned long, t, MAX_PAUSE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static long bdi_min_pause(struct backing_dev_info *bdi,
@@ -1426,6 +1472,7 @@ pause:
 		bdi_start_background_writeback(bdi);
 }
 
+<<<<<<< HEAD
 void set_page_dirty_balance(struct page *page, int page_mkwrite)
 {
 	if (set_page_dirty(page) || page_mkwrite) {
@@ -1436,6 +1483,8 @@ void set_page_dirty_balance(struct page *page, int page_mkwrite)
 	}
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static DEFINE_PER_CPU(int, bdp_ratelimits);
 
 /*
@@ -2013,22 +2062,33 @@ EXPORT_SYMBOL(account_page_writeback);
  * page dirty in that case, but not all the buffers.  This is a "bottom-up"
  * dirtying, whereas __set_page_dirty_buffers() is a "top-down" dirtying.
  *
+<<<<<<< HEAD
  * Most callers have locked the page, which pins the address_space in memory.
  * But zap_pte_range() does not lock the page, however in that case the
  * mapping is pinned by the vma's ->vm_file reference.
  *
  * We take care to handle the case where the page was truncated from the
  * mapping by re-checking page_mapping() inside tree_lock.
+=======
+ * The caller must ensure this doesn't race with truncation.  Most will simply
+ * hold the page lock, but e.g. zap_pte_range() calls with the page mapped and
+ * the pte lock held, which also locks out truncat
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 int __set_page_dirty_nobuffers(struct page *page)
 {
 	if (!TestSetPageDirty(page)) {
 		struct address_space *mapping = page_mapping(page);
+<<<<<<< HEAD
 		struct address_space *mapping2;
+=======
+		unsigned long flags;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (!mapping)
 			return 1;
 
+<<<<<<< HEAD
 		spin_lock_irq(&mapping->tree_lock);
 		mapping2 = page_mapping(page);
 		if (mapping2) { /* Race with truncate? */
@@ -2039,6 +2099,15 @@ int __set_page_dirty_nobuffers(struct page *page)
 				page_index(page), PAGECACHE_TAG_DIRTY);
 		}
 		spin_unlock_irq(&mapping->tree_lock);
+=======
+		spin_lock_irqsave(&mapping->tree_lock, flags);
+		BUG_ON(page_mapping(page) != mapping);
+		WARN_ON_ONCE(!PagePrivate(page) && !PageUptodate(page));
+		account_page_dirtied(page, mapping);
+		radix_tree_tag_set(&mapping->page_tree, page_index(page),
+				   PAGECACHE_TAG_DIRTY);
+		spin_unlock_irqrestore(&mapping->tree_lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (mapping->host) {
 			/* !PageAnon && !swapper_space */
 			__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
@@ -2194,12 +2263,19 @@ int clear_page_dirty_for_io(struct page *page)
 		/*
 		 * We carefully synchronise fault handlers against
 		 * installing a dirty pte and marking the page dirty
+<<<<<<< HEAD
 		 * at this point. We do this by having them hold the
 		 * page lock at some point after installing their
 		 * pte, but before marking the page dirty.
 		 * Pages are always locked coming in here, so we get
 		 * the desired exclusion. See mm/memory.c:do_wp_page()
 		 * for more comments.
+=======
+		 * at this point.  We do this by having them hold the
+		 * page lock while dirtying the page, and pages are
+		 * always locked coming in here, so we get the desired
+		 * exclusion.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		 */
 		if (TestClearPageDirty(page)) {
 			dec_zone_page_state(page, NR_FILE_DIRTY);

@@ -42,6 +42,10 @@ void		svc_sock_update_bufs(struct svc_serv *serv);
 int		svc_sock_names(struct svc_serv *serv, char *buf,
 					const size_t buflen,
 					const char *toclose);
+<<<<<<< HEAD
+=======
+bool		svc_alien_sock(struct net *net, int fd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int		svc_addsock(struct svc_serv *serv, const int fd,
 					char *name_return, const size_t len);
 void		svc_init_xprt_sock(void);

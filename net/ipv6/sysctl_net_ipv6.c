@@ -48,6 +48,7 @@ static ctl_table ipv6_table_template[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec
 	},
+<<<<<<< HEAD
 	{
 		.procname	= "fwmark_reflect",
 		.data		= &init_net.ipv6.sysctl.fwmark_reflect,
@@ -55,6 +56,8 @@ static ctl_table ipv6_table_template[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec
 	},
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }
 };
 

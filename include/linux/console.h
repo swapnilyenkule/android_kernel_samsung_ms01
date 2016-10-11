@@ -77,7 +77,13 @@ extern const struct consw prom_con;	/* SPARC PROM console */
 int con_is_bound(const struct consw *csw);
 int register_con_driver(const struct consw *csw, int first, int last);
 int unregister_con_driver(const struct consw *csw);
+<<<<<<< HEAD
 int take_over_console(const struct consw *sw, int first, int last, int deflt);
+=======
+int do_unregister_con_driver(const struct consw *csw);
+int take_over_console(const struct consw *sw, int first, int last, int deflt);
+int do_take_over_console(const struct consw *sw, int first, int last, int deflt);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void give_up_console(const struct consw *sw);
 #ifdef CONFIG_HW_CONSOLE
 int con_debug_enter(struct vc_data *vc);

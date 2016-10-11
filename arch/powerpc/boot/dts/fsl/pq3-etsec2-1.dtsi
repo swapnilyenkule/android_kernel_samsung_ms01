@@ -50,6 +50,10 @@ ethernet@b1000 {
 	fsl,num_tx_queues = <0x8>;
 	fsl,magic-packet;
 	local-mac-address = [ 00 00 00 00 00 00 ];
+<<<<<<< HEAD
+=======
+	ranges;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	queue-group@b1000 {
 		#address-cells = <1>;

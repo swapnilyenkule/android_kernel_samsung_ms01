@@ -301,7 +301,10 @@ struct mlx4_en_cq {
 	struct mlx4_cq          mcq;
 	struct mlx4_hwq_resources wqres;
 	int                     ring;
+<<<<<<< HEAD
 	spinlock_t              lock;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct net_device      *dev;
 	struct napi_struct	napi;
 	/* Per-core Tx cq processing support */

@@ -30,4 +30,13 @@ extern char __vectors_start[], __vectors_end[];
 extern void kernel_thread_helper(void);
 
 extern void __init early_signal_init(void);
+<<<<<<< HEAD
+=======
+
+extern asmlinkage void __backtrace(void);
+extern asmlinkage void c_backtrace(unsigned long fp, int pmode);
+
+extern void __show_regs(struct pt_regs *);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

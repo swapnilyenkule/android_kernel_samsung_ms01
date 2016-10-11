@@ -138,11 +138,27 @@ struct blkif_request_discard {
 	uint8_t        _pad3;
 } __attribute__((__packed__));
 
+<<<<<<< HEAD
+=======
+struct blkif_request_other {
+	uint8_t      _pad1;
+	blkif_vdev_t _pad2;        /* only for read/write requests         */
+#ifdef CONFIG_X86_64
+	uint32_t     _pad3;        /* offsetof(blkif_req..,u.other.id)==8*/
+#endif
+	uint64_t     id;           /* private guest value, echoed in resp  */
+} __attribute__((__packed__));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct blkif_request {
 	uint8_t        operation;    /* BLKIF_OP_???                         */
 	union {
 		struct blkif_request_rw rw;
 		struct blkif_request_discard discard;
+<<<<<<< HEAD
+=======
+		struct blkif_request_other other;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} u;
 } __attribute__((__packed__));
 

@@ -271,7 +271,12 @@ static int crypto_ccm_auth(struct aead_request *req, struct scatterlist *plain,
 	}
 
 	/* compute plaintext into mac */
+<<<<<<< HEAD
 	get_data_to_compute(cipher, pctx, plain, cryptlen);
+=======
+	if (cryptlen)
+		get_data_to_compute(cipher, pctx, plain, cryptlen);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 out:
 	return err;

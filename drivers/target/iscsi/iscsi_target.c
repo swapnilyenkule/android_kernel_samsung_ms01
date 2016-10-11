@@ -50,7 +50,11 @@
 static LIST_HEAD(g_tiqn_list);
 static LIST_HEAD(g_np_list);
 static DEFINE_SPINLOCK(tiqn_lock);
+<<<<<<< HEAD
 static DEFINE_SPINLOCK(np_lock);
+=======
+static DEFINE_MUTEX(np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static struct idr tiqn_idr;
 struct idr sess_idr;
@@ -262,6 +266,12 @@ int iscsit_deaccess_np(struct iscsi_np *np, struct iscsi_portal_group *tpg)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Called with mutex np_lock held
+ */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct iscsi_np *iscsit_get_np(
 	struct __kernel_sockaddr_storage *sockaddr,
 	int network_transport)
@@ -272,11 +282,18 @@ static struct iscsi_np *iscsit_get_np(
 	int ip_match = 0;
 	u16 port;
 
+<<<<<<< HEAD
 	spin_lock_bh(&np_lock);
 	list_for_each_entry(np, &g_np_list, np_list) {
 		spin_lock(&np->np_thread_lock);
 		if (np->np_thread_state != ISCSI_NP_THREAD_ACTIVE) {
 			spin_unlock(&np->np_thread_lock);
+=======
+	list_for_each_entry(np, &g_np_list, np_list) {
+		spin_lock_bh(&np->np_thread_lock);
+		if (np->np_thread_state != ISCSI_NP_THREAD_ACTIVE) {
+			spin_unlock_bh(&np->np_thread_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			continue;
 		}
 
@@ -309,6 +326,7 @@ static struct iscsi_np *iscsit_get_np(
 			 * while iscsi_tpg_add_network_portal() is called.
 			 */
 			np->np_exports++;
+<<<<<<< HEAD
 			spin_unlock(&np->np_thread_lock);
 			spin_unlock_bh(&np_lock);
 			return np;
@@ -316,6 +334,13 @@ static struct iscsi_np *iscsit_get_np(
 		spin_unlock(&np->np_thread_lock);
 	}
 	spin_unlock_bh(&np_lock);
+=======
+			spin_unlock_bh(&np->np_thread_lock);
+			return np;
+		}
+		spin_unlock_bh(&np->np_thread_lock);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return NULL;
 }
@@ -329,16 +354,33 @@ struct iscsi_np *iscsit_add_np(
 	struct sockaddr_in6 *sock_in6;
 	struct iscsi_np *np;
 	int ret;
+<<<<<<< HEAD
+=======
+
+	mutex_lock(&np_lock);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Locate the existing struct iscsi_np if already active..
 	 */
 	np = iscsit_get_np(sockaddr, network_transport);
+<<<<<<< HEAD
 	if (np)
 		return np;
+=======
+	if (np) {
+		mutex_unlock(&np_lock);
+		return np;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	np = kzalloc(sizeof(struct iscsi_np), GFP_KERNEL);
 	if (!np) {
 		pr_err("Unable to allocate memory for struct iscsi_np\n");
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return ERR_PTR(-ENOMEM);
 	}
 
@@ -361,6 +403,10 @@ struct iscsi_np *iscsit_add_np(
 	ret = iscsi_target_setup_login_socket(np, sockaddr);
 	if (ret != 0) {
 		kfree(np);
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return ERR_PTR(ret);
 	}
 
@@ -369,6 +415,10 @@ struct iscsi_np *iscsit_add_np(
 		pr_err("Unable to create kthread: iscsi_np\n");
 		ret = PTR_ERR(np->np_thread);
 		kfree(np);
+<<<<<<< HEAD
+=======
+		mutex_unlock(&np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return ERR_PTR(ret);
 	}
 	/*
@@ -379,10 +429,17 @@ struct iscsi_np *iscsit_add_np(
 	 * point because iscsi_np has not been added to g_np_list yet.
 	 */
 	np->np_exports = 1;
+<<<<<<< HEAD
 
 	spin_lock_bh(&np_lock);
 	list_add_tail(&np->np_list, &g_np_list);
 	spin_unlock_bh(&np_lock);
+=======
+	np->np_thread_state = ISCSI_NP_THREAD_ACTIVE;
+
+	list_add_tail(&np->np_list, &g_np_list);
+	mutex_unlock(&np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pr_debug("CORE[0] - Added Network Portal: %s:%hu on %s\n",
 		np->np_ip, np->np_port, (np->np_network_transport == ISCSI_TCP) ?
@@ -427,6 +484,7 @@ int iscsit_reset_np_thread(
 
 int iscsit_del_np_comm(struct iscsi_np *np)
 {
+<<<<<<< HEAD
 	if (!np->np_socket)
 		return 0;
 
@@ -440,6 +498,10 @@ int iscsit_del_np_comm(struct iscsi_np *np)
 	}
 
 	sock_release(np->np_socket);
+=======
+	if (np->np_socket)
+		sock_release(np->np_socket);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -464,9 +526,15 @@ int iscsit_del_np(struct iscsi_np *np)
 	}
 	iscsit_del_np_comm(np);
 
+<<<<<<< HEAD
 	spin_lock_bh(&np_lock);
 	list_del(&np->np_list);
 	spin_unlock_bh(&np_lock);
+=======
+	mutex_lock(&np_lock);
+	list_del(&np->np_list);
+	mutex_unlock(&np_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pr_debug("CORE[0] - Removed Network Portal: %s:%hu on %s\n",
 		np->np_ip, np->np_port, (np->np_network_transport == ISCSI_TCP) ?
@@ -984,7 +1052,11 @@ done:
 		if (cmd->targ_xfer_tag == 0xFFFFFFFF)
 			cmd->targ_xfer_tag = conn->sess->targ_xfer_tag++;
 		spin_unlock_bh(&conn->sess->ttt_lock);
+<<<<<<< HEAD
 	} else if (hdr->flags & ISCSI_FLAG_CMD_WRITE)
+=======
+	} else
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		cmd->targ_xfer_tag = 0xFFFFFFFF;
 	cmd->cmd_sn		= hdr->cmdsn;
 	cmd->exp_stat_sn	= hdr->exp_statsn;
@@ -1016,8 +1088,18 @@ done:
 		send_check_condition = 1;
 		goto attach_cmd;
 	}
+<<<<<<< HEAD
 
 	transport_ret = target_setup_cmd_from_cdb(&cmd->se_cmd, hdr->cdb);
+=======
+	/*
+	 * The Initiator Node has access to the LUN (the addressing method
+	 * is handled inside of iscsit_get_lun_for_cmd()).  Now it's time to
+	 * allocate 1->N transport tasks (depending on sector count and
+	 * maximum request size the physical HBA(s) can handle.
+	 */
+	transport_ret = transport_generic_allocate_tasks(&cmd->se_cmd, hdr->cdb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (transport_ret == -ENOMEM) {
 		return iscsit_add_reject_from_cmd(
 				ISCSI_REASON_BOOKMARK_NO_RESOURCES,
@@ -2350,6 +2432,10 @@ static void iscsit_build_conn_drop_async_message(struct iscsi_conn *conn)
 {
 	struct iscsi_cmd *cmd;
 	struct iscsi_conn *conn_p;
+<<<<<<< HEAD
+=======
+	bool found = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Only send a Asynchronous Message on connections whos network
@@ -2358,14 +2444,25 @@ static void iscsit_build_conn_drop_async_message(struct iscsi_conn *conn)
 	list_for_each_entry(conn_p, &conn->sess->sess_conn_list, conn_list) {
 		if (conn_p->conn_state == TARG_CONN_STATE_LOGGED_IN) {
 			iscsit_inc_conn_usage_count(conn_p);
+<<<<<<< HEAD
+=======
+			found = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 	}
 
+<<<<<<< HEAD
 	if (!conn_p)
 		return;
 
 	cmd = iscsit_allocate_cmd(conn_p, GFP_KERNEL);
+=======
+	if (!found)
+		return;
+
+	cmd = iscsit_allocate_cmd(conn_p, GFP_ATOMIC);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!cmd) {
 		iscsit_dec_conn_usage_count(conn_p);
 		return;
@@ -3202,7 +3299,10 @@ static int iscsit_build_sendtargets_response(struct iscsi_cmd *cmd)
 		len += 1;
 
 		if ((len + payload_len) > buffer_len) {
+<<<<<<< HEAD
 			spin_unlock(&tiqn->tiqn_tpg_lock);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			end_of_buf = 1;
 			goto eob;
 		}
@@ -3355,6 +3455,10 @@ static int iscsit_send_reject(
 	hdr->opcode		= ISCSI_OP_REJECT;
 	hdr->flags		|= ISCSI_FLAG_CMD_FINAL;
 	hton24(hdr->dlength, ISCSI_HDR_LEN);
+<<<<<<< HEAD
+=======
+	hdr->ffffffff		= 0xffffffff;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	cmd->stat_sn		= conn->stat_sn++;
 	hdr->statsn		= cpu_to_be32(cmd->stat_sn);
 	hdr->exp_cmdsn	= cpu_to_be32(conn->sess->exp_cmd_sn);
@@ -3520,7 +3624,13 @@ restart:
 		 */
 		iscsit_thread_check_cpumask(conn, current, 1);
 
+<<<<<<< HEAD
 		schedule_timeout_interruptible(MAX_SCHEDULE_TIMEOUT);
+=======
+		wait_event_interruptible(conn->queues_wq,
+					 !iscsit_conn_all_queues_empty(conn) ||
+					 ts->status == ISCSI_THREAD_SET_RESET);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if ((ts->status == ISCSI_THREAD_SET_RESET) ||
 		     signal_pending(current))
@@ -4089,6 +4199,7 @@ int iscsit_close_connection(
 	kfree(conn->conn_ops);
 	conn->conn_ops = NULL;
 
+<<<<<<< HEAD
 	if (conn->sock) {
 		if (conn->conn_flags & CONNFLAG_SCTP_STRUCT_FILE) {
 			kfree(conn->sock->file);
@@ -4096,6 +4207,10 @@ int iscsit_close_connection(
 		}
 		sock_release(conn->sock);
 	}
+=======
+	if (conn->sock)
+		sock_release(conn->sock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	conn->thread_set = NULL;
 
 	pr_debug("Moving to TARG_CONN_STATE_FREE.\n");
@@ -4296,6 +4411,10 @@ static void iscsit_logout_post_handler_diffcid(
 {
 	struct iscsi_conn *l_conn;
 	struct iscsi_session *sess = conn->sess;
+<<<<<<< HEAD
+=======
+	bool conn_found = false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!sess)
 		return;
@@ -4304,12 +4423,20 @@ static void iscsit_logout_post_handler_diffcid(
 	list_for_each_entry(l_conn, &sess->sess_conn_list, conn_list) {
 		if (l_conn->cid == cid) {
 			iscsit_inc_conn_usage_count(l_conn);
+<<<<<<< HEAD
+=======
+			conn_found = true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		}
 	}
 	spin_unlock_bh(&sess->conn_lock);
 
+<<<<<<< HEAD
 	if (!l_conn)
+=======
+	if (!conn_found)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 
 	if (l_conn->sock)
@@ -4497,6 +4624,10 @@ int iscsit_release_sessions_for_tpg(struct iscsi_portal_group *tpg, int force)
 	struct iscsi_session *sess;
 	struct se_portal_group *se_tpg = &tpg->tpg_se_tpg;
 	struct se_session *se_sess, *se_sess_tmp;
+<<<<<<< HEAD
+=======
+	LIST_HEAD(free_list);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int session_count = 0;
 
 	spin_lock_bh(&se_tpg->session_lock);
@@ -4518,6 +4649,7 @@ int iscsit_release_sessions_for_tpg(struct iscsi_portal_group *tpg, int force)
 		}
 		atomic_set(&sess->session_reinstatement, 1);
 		spin_unlock(&sess->conn_lock);
+<<<<<<< HEAD
 		spin_unlock_bh(&se_tpg->session_lock);
 
 		iscsit_free_session(sess);
@@ -4526,6 +4658,19 @@ int iscsit_release_sessions_for_tpg(struct iscsi_portal_group *tpg, int force)
 		session_count++;
 	}
 	spin_unlock_bh(&se_tpg->session_lock);
+=======
+
+		list_move_tail(&se_sess->sess_list, &free_list);
+	}
+	spin_unlock_bh(&se_tpg->session_lock);
+
+	list_for_each_entry_safe(se_sess, se_sess_tmp, &free_list, sess_list) {
+		sess = (struct iscsi_session *)se_sess->fabric_sess_ptr;
+
+		iscsit_free_session(sess);
+		session_count++;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	pr_debug("Released %d iSCSI Session(s) from Target Portal"
 			" Group: %hu\n", session_count, tpg->tpgt);

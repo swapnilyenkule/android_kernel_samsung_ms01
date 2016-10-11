@@ -633,6 +633,32 @@ insert_above:
 	return ln;
 }
 
+<<<<<<< HEAD
+=======
+static void fib6_purge_rt(struct rt6_info *rt, struct fib6_node *fn,
+			  struct net *net)
+{
+	if (atomic_read(&rt->rt6i_ref) != 1) {
+		/* This route is used as dummy address holder in some split
+		 * nodes. It is not leaked, but it still holds other resources,
+		 * which must be released in time. So, scan ascendant nodes
+		 * and replace dummy references to this route with references
+		 * to still alive ones.
+		 */
+		while (fn) {
+			if (!(fn->fn_flags & RTN_RTINFO) && fn->leaf == rt) {
+				fn->leaf = fib6_find_prefix(net, fn);
+				atomic_inc(&fn->leaf->rt6i_ref);
+				rt6_release(rt);
+			}
+			fn = fn->parent;
+		}
+		/* No more references are possible at this point. */
+		BUG_ON(atomic_read(&rt->rt6i_ref) != 1);
+	}
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *	Insert routing information in a node.
  */
@@ -723,11 +749,19 @@ add:
 		rt->dst.rt6_next = iter->dst.rt6_next;
 		atomic_inc(&rt->rt6i_ref);
 		inet6_rt_notify(RTM_NEWROUTE, rt, info);
+<<<<<<< HEAD
 		rt6_release(iter);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!(fn->fn_flags & RTN_RTINFO)) {
 			info->nl_net->ipv6.rt6_stats->fib_route_nodes++;
 			fn->fn_flags |= RTN_RTINFO;
 		}
+<<<<<<< HEAD
+=======
+		fib6_purge_rt(iter, fn, info->nl_net);
+		rt6_release(iter);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return 0;
@@ -818,6 +852,13 @@ int fib6_add(struct fib6_node *root, struct rt6_info *rt, struct nl_info *info)
 					offsetof(struct rt6_info, rt6i_src),
 					allow_create, replace_required);
 
+<<<<<<< HEAD
+=======
+			if (IS_ERR(sn)) {
+				err = PTR_ERR(sn);
+				sn = NULL;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (!sn) {
 				/* If it is failed, discard just allocated
 				   root, and then (in st_failure) stale node
@@ -945,6 +986,7 @@ static struct fib6_node * fib6_lookup_1(struct fib6_node *root,
 
 			if (ipv6_prefix_equal(&key->addr, args->addr, key->plen)) {
 #ifdef CONFIG_IPV6_SUBTREES
+<<<<<<< HEAD
 				if (fn->subtree)
 					fn = fib6_lookup_1(fn->subtree, args + 1);
 #endif
@@ -953,6 +995,24 @@ static struct fib6_node * fib6_lookup_1(struct fib6_node *root,
 			}
 		}
 
+=======
+				if (fn->subtree) {
+					struct fib6_node *sfn;
+					sfn = fib6_lookup_1(fn->subtree,
+							    args + 1);
+					if (!sfn)
+						goto backtrack;
+					fn = sfn;
+				}
+#endif
+				if (fn->fn_flags & RTN_RTINFO)
+					return fn;
+			}
+		}
+#ifdef CONFIG_IPV6_SUBTREES
+backtrack:
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (fn->fn_flags & RTN_ROOT)
 			break;
 
@@ -1217,6 +1277,7 @@ static void fib6_del_route(struct fib6_node *fn, struct rt6_info **rtp,
 		fn = fib6_repair_tree(net, fn);
 	}
 
+<<<<<<< HEAD
 	if (atomic_read(&rt->rt6i_ref) != 1) {
 		/* This route is used as dummy address holder in some split
 		 * nodes. It is not leaked, but it still holds other resources,
@@ -1235,6 +1296,9 @@ static void fib6_del_route(struct fib6_node *fn, struct rt6_info **rtp,
 		/* No more references are possible at this point. */
 		BUG_ON(atomic_read(&rt->rt6i_ref) != 1);
 	}
+=======
+	fib6_purge_rt(rt, fn, net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	inet6_rt_notify(RTM_DELROUTE, rt, info);
 	rt6_release(rt);
@@ -1560,7 +1624,11 @@ static int fib6_age(struct rt6_info *rt, void *arg)
 				neigh_flags = neigh->flags;
 				neigh_release(neigh);
 			}
+<<<<<<< HEAD
 			if (neigh_flags & NTF_ROUTER) {
+=======
+			if (!(neigh_flags & NTF_ROUTER)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				RT6_TRACE("purging route %p via non-router but gateway\n",
 					  rt);
 				return -1;
@@ -1574,6 +1642,7 @@ static int fib6_age(struct rt6_info *rt, void *arg)
 
 static DEFINE_SPINLOCK(fib6_gc_lock);
 
+<<<<<<< HEAD
 void fib6_run_gc(unsigned long expires, struct net *net)
 {
 	if (expires != ~0UL) {
@@ -1587,6 +1656,18 @@ void fib6_run_gc(unsigned long expires, struct net *net)
 		}
 		gc_args.timeout = net->ipv6.sysctl.ip6_rt_gc_interval;
 	}
+=======
+void fib6_run_gc(unsigned long expires, struct net *net, bool force)
+{
+	if (force) {
+		spin_lock_bh(&fib6_gc_lock);
+	} else if (!spin_trylock_bh(&fib6_gc_lock)) {
+		mod_timer(&net->ipv6.ip6_fib_timer, jiffies + HZ);
+		return;
+	}
+	gc_args.timeout = expires ? (int)expires :
+			  net->ipv6.sysctl.ip6_rt_gc_interval;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	gc_args.more = icmp6_dst_gc();
 
@@ -1603,7 +1684,11 @@ void fib6_run_gc(unsigned long expires, struct net *net)
 
 static void fib6_gc_timer_cb(unsigned long arg)
 {
+<<<<<<< HEAD
 	fib6_run_gc(0, (struct net *)arg);
+=======
+	fib6_run_gc(0, (struct net *)arg, true);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int __net_init fib6_net_init(struct net *net)

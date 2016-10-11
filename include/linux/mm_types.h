@@ -56,8 +56,23 @@ struct page {
 		};
 
 		union {
+<<<<<<< HEAD
 			/* Used for cmpxchg_double in slub */
 			unsigned long counters;
+=======
+#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && \
+	defined(CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
+			/* Used for cmpxchg_double in slub */
+			unsigned long counters;
+#else
+			/*
+			 * Keep _count separate from slub cmpxchg_double data.
+			 * As the rest of the double word is protected by
+			 * slab_lock but _count is not.
+			 */
+			unsigned counters;
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			struct {
 
@@ -216,10 +231,13 @@ struct vm_area_struct {
 	 * linkage into the address_space->i_mmap prio tree, or
 	 * linkage to the list of like vmas hanging off its node, or
 	 * linkage of vma in the address_space->i_mmap_nonlinear list.
+<<<<<<< HEAD
 	 *
 	 * For private anonymous mappings, a pointer to a null terminated string
 	 * in the user process containing the name given to the vma, or NULL
 	 * if unnamed.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 */
 	union {
 		struct {
@@ -229,7 +247,10 @@ struct vm_area_struct {
 		} vm_set;
 
 		struct raw_prio_tree_node prio_tree_node;
+<<<<<<< HEAD
 		const char __user *anon_name;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} shared;
 
 	/*
@@ -301,6 +322,10 @@ struct mm_struct {
 	void (*unmap_area) (struct mm_struct *mm, unsigned long addr);
 #endif
 	unsigned long mmap_base;		/* base of mmap area */
+<<<<<<< HEAD
+=======
+	unsigned long mmap_legacy_base;         /* base of mmap area in bottom-up allocations */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long task_size;		/* size of task vm space */
 	unsigned long cached_hole_size; 	/* if non-zero, the largest hole below free_area_cache */
 	unsigned long free_area_cache;		/* first hole of size cached_hole_size or larger */
@@ -349,6 +374,20 @@ struct mm_struct {
 	/* Architecture-specific MM context */
 	mm_context_t context;
 
+<<<<<<< HEAD
+=======
+	/* Swap token stuff */
+	/*
+	 * Last value of global fault stamp as seen by this process.
+	 * In other words, this value gives an indication of how long
+	 * it has been since this task got the token.
+	 * Look at mm/thrash.c
+	 */
+	unsigned int faultstamp;
+	unsigned int token_priority;
+	unsigned int last_interval;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned long flags; /* Must use atomic bitops to access the bits */
 
 	struct core_state *core_state; /* coredumping support */
@@ -397,6 +436,7 @@ static inline cpumask_t *mm_cpumask(struct mm_struct *mm)
 	return mm->cpu_vm_mask_var;
 }
 
+<<<<<<< HEAD
 
 /* Return the name for an anonymous mapping or NULL for a file-backed mapping */
 static inline const char __user *vma_get_anon_name(struct vm_area_struct *vma)
@@ -407,4 +447,6 @@ static inline const char __user *vma_get_anon_name(struct vm_area_struct *vma)
 	return vma->shared.anon_name;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _LINUX_MM_TYPES_H */

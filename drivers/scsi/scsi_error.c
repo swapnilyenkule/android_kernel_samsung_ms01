@@ -42,6 +42,11 @@
 
 #include <trace/events/scsi.h>
 
+<<<<<<< HEAD
+=======
+static void scsi_eh_done(struct scsi_cmnd *scmd);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define SENSE_TIMEOUT		(10*HZ)
 
 /*
@@ -241,6 +246,17 @@ static int scsi_check_sense(struct scsi_cmnd *scmd)
 	if (! scsi_command_normalize_sense(scmd, &sshdr))
 		return FAILED;	/* no valid sense data */
 
+<<<<<<< HEAD
+=======
+	if (scmd->cmnd[0] == TEST_UNIT_READY && scmd->scsi_done != scsi_eh_done)
+		/*
+		 * nasty: for mid-layer issued TURs, we need to return the
+		 * actual sense data without any recovery attempt.  For eh
+		 * issued ones, we need to try to recover and interpret
+		 */
+		return SUCCESS;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (scsi_sense_is_deferred(&sshdr))
 		return NEEDS_RETRY;
 
@@ -906,6 +922,18 @@ int scsi_eh_get_sense(struct list_head *work_q,
 		    SCSI_SENSE_VALID(scmd))
 			continue;
 
+<<<<<<< HEAD
+=======
+		if (status_byte(scmd->result) != CHECK_CONDITION)
+			/*
+			 * don't request sense if there's no check condition
+			 * status because the error we're processing isn't one
+			 * that has a sense code (and some devices get
+			 * confused by sense requests out of the blue)
+			 */
+			continue;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		SCSI_LOG_ERROR_RECOVERY(2, scmd_printk(KERN_INFO, scmd,
 						  "%s: requesting sense\n",
 						  current->comm));
@@ -1660,8 +1688,15 @@ static void scsi_restart_operations(struct Scsi_Host *shost)
 	 * is no point trying to lock the door of an off-line device.
 	 */
 	shost_for_each_device(sdev, shost) {
+<<<<<<< HEAD
 		if (scsi_device_online(sdev) && sdev->locked)
 			scsi_eh_lock_door(sdev);
+=======
+		if (scsi_device_online(sdev) && sdev->was_reset && sdev->locked) {
+			scsi_eh_lock_door(sdev);
+			sdev->was_reset = 0;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	/*
@@ -1687,6 +1722,23 @@ static void scsi_restart_operations(struct Scsi_Host *shost)
 	 * requests are started.
 	 */
 	scsi_run_host_queues(shost);
+<<<<<<< HEAD
+=======
+
+	/*
+	 * if eh is active and host_eh_scheduled is pending we need to re-run
+	 * recovery.  we do this check after scsi_run_host_queues() to allow
+	 * everything pent up since the last eh run a chance to make forward
+	 * progress before we sync again.  Either we'll immediately re-run
+	 * recovery or scsi_device_unbusy() will wake us again when these
+	 * pending commands complete.
+	 */
+	spin_lock_irqsave(shost->host_lock, flags);
+	if (shost->host_eh_scheduled)
+		if (scsi_host_set_state(shost, SHOST_RECOVERY))
+			WARN_ON(scsi_host_set_state(shost, SHOST_CANCEL_RECOVERY));
+	spin_unlock_irqrestore(shost->host_lock, flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**

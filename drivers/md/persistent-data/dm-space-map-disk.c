@@ -290,7 +290,20 @@ struct dm_space_map *dm_sm_disk_create(struct dm_transaction_manager *tm,
 				       dm_block_t nr_blocks)
 {
 	struct dm_space_map *sm = dm_sm_disk_create_real(tm, nr_blocks);
+<<<<<<< HEAD
 	return dm_sm_checker_create_fresh(sm);
+=======
+	struct dm_space_map *smc;
+
+	if (IS_ERR_OR_NULL(sm))
+		return sm;
+
+	smc = dm_sm_checker_create_fresh(sm);
+	if (IS_ERR(smc))
+		dm_sm_destroy(sm);
+
+	return smc;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(dm_sm_disk_create);
 

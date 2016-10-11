@@ -6,6 +6,10 @@ config UNICORE32
 	select HAVE_DMA_ATTRS
 	select HAVE_KERNEL_GZIP
 	select HAVE_KERNEL_BZIP2
+<<<<<<< HEAD
+=======
+	select GENERIC_ATOMIC64
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select HAVE_KERNEL_LZO
 	select HAVE_KERNEL_LZMA
 	select GENERIC_FIND_FIRST_BIT

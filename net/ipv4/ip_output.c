@@ -161,7 +161,11 @@ int ip_build_and_send_pkt(struct sk_buff *skb, struct sock *sk,
 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
 	iph->saddr    = saddr;
 	iph->protocol = sk->sk_protocol;
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, sk);
+=======
+	ip_select_ident(skb, sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (opt && opt->opt.optlen) {
 		iph->ihl += opt->opt.optlen>>2;
@@ -403,8 +407,12 @@ packet_routed:
 		ip_options_build(skb, &inet_opt->opt, inet->inet_daddr, rt, 0);
 	}
 
+<<<<<<< HEAD
 	ip_select_ident_more(iph, &rt->dst, sk,
 			     (skb_shinfo(skb)->gso_segs ?: 1) - 1);
+=======
+	ip_select_ident_segs(skb, sk, skb_shinfo(skb)->gso_segs ?: 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	skb->priority = sk->sk_priority;
 	skb->mark = sk->sk_mark;
@@ -846,7 +854,11 @@ static int __ip_append_data(struct sock *sk,
 		csummode = CHECKSUM_PARTIAL;
 
 	cork->length += length;
+<<<<<<< HEAD
 	if (((length > mtu) || (skb && skb_is_gso(skb))) &&
+=======
+	if (((length > mtu) || (skb && skb_has_frags(skb))) &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	    (sk->sk_protocol == IPPROTO_UDP) &&
 	    (rt->dst.dev->features & NETIF_F_UFO) && !rt->dst.header_len) {
 		err = ip_ufo_append_data(sk, queue, getfrag, from, length,
@@ -1342,15 +1354,26 @@ struct sk_buff *__ip_make_skb(struct sock *sk,
 	else
 		ttl = ip_select_ttl(inet, &rt->dst);
 
+<<<<<<< HEAD
 	iph = (struct iphdr *)skb->data;
+=======
+	iph = ip_hdr(skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	iph->version = 4;
 	iph->ihl = 5;
 	iph->tos = inet->tos;
 	iph->frag_off = df;
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, sk);
 	iph->ttl = ttl;
 	iph->protocol = sk->sk_protocol;
 	ip_copy_addrs(iph, fl4);
+=======
+	iph->ttl = ttl;
+	iph->protocol = sk->sk_protocol;
+	ip_copy_addrs(iph, fl4);
+	ip_select_ident(skb, sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (opt) {
 		iph->ihl += opt->optlen>>2;
@@ -1500,14 +1523,22 @@ void ip_send_reply(struct sock *sk, struct sk_buff *skb, __be32 daddr,
 			daddr = replyopts.opt.opt.faddr;
 	}
 
+<<<<<<< HEAD
 	flowi4_init_output(&fl4, arg->bound_dev_if,
 			   IP4_REPLY_MARK(sock_net(sk), skb->mark),
+=======
+	flowi4_init_output(&fl4, arg->bound_dev_if, 0,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			   RT_TOS(arg->tos),
 			   RT_SCOPE_UNIVERSE, sk->sk_protocol,
 			   ip_reply_arg_flowi_flags(arg),
 			   daddr, rt->rt_spec_dst,
+<<<<<<< HEAD
 			   tcp_hdr(skb)->source, tcp_hdr(skb)->dest,
 			   arg->uid);
+=======
+			   tcp_hdr(skb)->source, tcp_hdr(skb)->dest);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	security_skb_classify_flow(skb, flowi4_to_flowi(&fl4));
 	rt = ip_route_output_key(sock_net(sk), &fl4);
 	if (IS_ERR(rt))

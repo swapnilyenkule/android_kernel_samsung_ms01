@@ -67,7 +67,11 @@ static int tpk_printk(const unsigned char *buf, int count)
 				tmp[tpk_curr + 1] = '\0';
 				printk(KERN_INFO "%s%s", tpk_tag, tmp);
 				tpk_curr = 0;
+<<<<<<< HEAD
 				if (buf[i + 1] == '\n')
+=======
+				if ((i + 1) < count && buf[i + 1] == '\n')
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					i++;
 				break;
 			case '\n':

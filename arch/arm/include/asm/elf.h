@@ -116,7 +116,11 @@ int dump_task_regs(struct task_struct *t, elf_gregset_t *elfregs);
    the loader.  We need to make sure that it is out of the way of the program
    that it will "exec", and that there is sufficient room for the brk.  */
 
+<<<<<<< HEAD
 #define ELF_ET_DYN_BASE	(2 * TASK_SIZE / 3)
+=======
+#define ELF_ET_DYN_BASE	(TASK_SIZE / 3 * 2)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* When the program starts, a1 contains a pointer to a function to be 
    registered with atexit, as per the SVR4 ABI.  A value of 0 means we 
@@ -130,10 +134,13 @@ struct mm_struct;
 extern unsigned long arch_randomize_brk(struct mm_struct *mm);
 #define arch_randomize_brk arch_randomize_brk
 
+<<<<<<< HEAD
 #ifdef CONFIG_MMU
 #define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
 struct linux_binprm;
 int arch_setup_additional_pages(struct linux_binprm *, int);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

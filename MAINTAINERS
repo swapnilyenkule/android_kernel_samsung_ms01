@@ -2627,7 +2627,11 @@ S:	Maintained
 F:	drivers/net/ethernet/i825xx/eexpress.*
 
 ETHERNET BRIDGE
+<<<<<<< HEAD
 M:	Stephen Hemminger <shemminger@vyatta.com>
+=======
+M:	Stephen Hemminger <stephen@networkplumber.org>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 L:	bridge@lists.linux-foundation.org
 L:	netdev@vger.kernel.org
 W:	http://www.linuxfoundation.org/en/Net:Bridge
@@ -2875,6 +2879,7 @@ F:	Documentation/power/freezing-of-tasks.txt
 F:	include/linux/freezer.h
 F:	kernel/freezer.c
 
+<<<<<<< HEAD
 FRONTSWAP API
 M:	Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 L:	linux-kernel@vger.kernel.org
@@ -2882,6 +2887,8 @@ S:	Maintained
 F:	mm/frontswap.c
 F:	include/linux/frontswap.h
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 FS-CACHE: LOCAL CACHING FOR NETWORK FILESYSTEMS
 M:	David Howells <dhowells@redhat.com>
 L:	linux-cachefs@redhat.com
@@ -4319,7 +4326,11 @@ S:	Maintained
 
 MARVELL GIGABIT ETHERNET DRIVERS (skge/sky2)
 M:	Mirko Lindner <mlindner@marvell.com>
+<<<<<<< HEAD
 M:	Stephen Hemminger <shemminger@vyatta.com>
+=======
+M:	Stephen Hemminger <stephen@networkplumber.org>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 L:	netdev@vger.kernel.org
 S:	Maintained
 F:	drivers/net/ethernet/marvell/sk*
@@ -4570,7 +4581,11 @@ S:	Supported
 F:	drivers/infiniband/hw/nes/
 
 NETEM NETWORK EMULATOR
+<<<<<<< HEAD
 M:	Stephen Hemminger <shemminger@vyatta.com>
+=======
+M:	Stephen Hemminger <stephen@networkplumber.org>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 L:	netem@lists.linux-foundation.org
 S:	Maintained
 F:	net/sched/sch_netem.c
@@ -5573,7 +5588,11 @@ F:	Documentation/blockdev/ramdisk.txt
 F:	drivers/block/brd.c
 
 RANDOM NUMBER DRIVER
+<<<<<<< HEAD
 M:	Matt Mackall <mpm@selenic.com>
+=======
+M:	Theodore Ts'o" <tytso@mit.edu>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 S:	Maintained
 F:	drivers/char/random.c
 
@@ -5944,6 +5963,7 @@ S:	Maintained
 F:	drivers/mmc/host/sdhci.*
 F:	drivers/mmc/host/sdhci-pltfm.[ch]
 
+<<<<<<< HEAD
 SECURE COMPUTING
 M:	Kees Cook <keescook@chromium.org>
 T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git seccomp
@@ -5954,6 +5974,8 @@ F:	include/linux/seccomp.h
 K:	\bsecure_computing
 K:	\bTIF_SECCOMP\b
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SECURE DIGITAL HOST CONTROLLER INTERFACE, OPEN FIRMWARE BINDINGS (SDHCI-OF)
 M:	Anton Vorontsov <avorontsov@ru.mvista.com>
 L:	linuxppc-dev@lists.ozlabs.org
@@ -6407,6 +6429,10 @@ STABLE BRANCH
 M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 L:	stable@vger.kernel.org
 S:	Supported
+<<<<<<< HEAD
+=======
+F:	Documentation/stable_kernel_rules.txt
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 STAGING SUBSYSTEM
 M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -6872,6 +6898,7 @@ S:	Maintained
 F:	Documentation/filesystems/ufs.txt
 F:	fs/ufs/
 
+<<<<<<< HEAD
 UHID USERSPACE HID IO DRIVER:
 M:	David Herrmann <dh.herrmann@googlemail.com>
 L:	linux-input@vger.kernel.org
@@ -6879,6 +6906,8 @@ S:	Maintained
 F:	drivers/hid/uhid.c
 F:	include/linux/uhid.h
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ULTRA-WIDEBAND (UWB) SUBSYSTEM:
 L:	linux-usb@vger.kernel.org
 S:	Orphan

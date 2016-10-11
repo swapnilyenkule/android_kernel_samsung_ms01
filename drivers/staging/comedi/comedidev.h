@@ -234,6 +234,10 @@ struct comedi_device_file_info {
 	struct comedi_device *device;
 	struct comedi_subdevice *read_subdevice;
 	struct comedi_subdevice *write_subdevice;
+<<<<<<< HEAD
+=======
+	struct device *hardware_device;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 #ifdef CONFIG_COMEDI_DEBUG

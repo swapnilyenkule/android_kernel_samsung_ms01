@@ -214,6 +214,10 @@ static int blktrans_open(struct block_device *bdev, fmode_t mode)
 		return -ERESTARTSYS; /* FIXME: busy loop! -arnd*/
 
 	mutex_lock(&dev->lock);
+<<<<<<< HEAD
+=======
+	mutex_lock(&mtd_table_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (dev->open)
 		goto unlock;
@@ -237,6 +241,10 @@ static int blktrans_open(struct block_device *bdev, fmode_t mode)
 
 unlock:
 	dev->open++;
+<<<<<<< HEAD
+=======
+	mutex_unlock(&mtd_table_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&dev->lock);
 	blktrans_dev_put(dev);
 	return ret;
@@ -247,6 +255,10 @@ error_release:
 error_put:
 	module_put(dev->tr->owner);
 	kref_put(&dev->ref, blktrans_dev_release);
+<<<<<<< HEAD
+=======
+	mutex_unlock(&mtd_table_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&dev->lock);
 	blktrans_dev_put(dev);
 	return ret;
@@ -261,6 +273,10 @@ static int blktrans_release(struct gendisk *disk, fmode_t mode)
 		return ret;
 
 	mutex_lock(&dev->lock);
+<<<<<<< HEAD
+=======
+	mutex_lock(&mtd_table_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (--dev->open)
 		goto unlock;
@@ -273,6 +289,10 @@ static int blktrans_release(struct gendisk *disk, fmode_t mode)
 		__put_mtd_device(dev->mtd);
 	}
 unlock:
+<<<<<<< HEAD
+=======
+	mutex_unlock(&mtd_table_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&dev->lock);
 	blktrans_dev_put(dev);
 	return ret;
@@ -426,6 +446,7 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
 		goto error3;
 
 	new->rq->queuedata = new;
+<<<<<<< HEAD
 
 	/*
 	 * Empirical measurements revealed that read ahead values larger than
@@ -433,6 +454,8 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
 	 */
 	new->rq->backing_dev_info.ra_pages = (4 * 1024) / PAGE_CACHE_SIZE;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	blk_queue_logical_block_size(new->rq, tr->blksize);
 
 	queue_flag_set_unlocked(QUEUE_FLAG_NONROT, new->rq);

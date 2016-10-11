@@ -14,13 +14,22 @@
 #include <asm/io.h>
 
 #include <mach/vreg.h>
+<<<<<<< HEAD
 #include <mach/proc_comm.h>
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <mach/mmc.h>
 
 #include "devices.h"
 
 #include "board-trout.h"
 
+<<<<<<< HEAD
+=======
+#include "proc_comm.h"
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DEBUG_SDSLOT_VDD 1
 
 /* ---- COMMON ---- */

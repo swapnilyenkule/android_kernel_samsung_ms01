@@ -170,10 +170,16 @@ static void fat12_ent_put(struct fat_entry *fatent, int new)
 	}
 	spin_unlock(&fat12_entry_lock);
 
+<<<<<<< HEAD
 	mark_buffer_dirty_inode_sync(fatent->bhs[0], fatent->fat_inode);
 	if (fatent->nr_bhs == 2){
 		mark_buffer_dirty_inode_sync(fatent->bhs[1], fatent->fat_inode);
 	}
+=======
+	mark_buffer_dirty_inode(fatent->bhs[0], fatent->fat_inode);
+	if (fatent->nr_bhs == 2)
+		mark_buffer_dirty_inode(fatent->bhs[1], fatent->fat_inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void fat16_ent_put(struct fat_entry *fatent, int new)
@@ -182,7 +188,11 @@ static void fat16_ent_put(struct fat_entry *fatent, int new)
 		new = EOF_FAT16;
 
 	*fatent->u.ent16_p = cpu_to_le16(new);
+<<<<<<< HEAD
 	mark_buffer_dirty_inode_sync(fatent->bhs[0], fatent->fat_inode);
+=======
+	mark_buffer_dirty_inode(fatent->bhs[0], fatent->fat_inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void fat32_ent_put(struct fat_entry *fatent, int new)
@@ -193,7 +203,11 @@ static void fat32_ent_put(struct fat_entry *fatent, int new)
 	WARN_ON(new & 0xf0000000);
 	new |= le32_to_cpu(*fatent->u.ent32_p) & ~0x0fffffff;
 	*fatent->u.ent32_p = cpu_to_le32(new);
+<<<<<<< HEAD
 	mark_buffer_dirty_inode_sync(fatent->bhs[0], fatent->fat_inode);
+=======
+	mark_buffer_dirty_inode(fatent->bhs[0], fatent->fat_inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int fat12_ent_next(struct fat_entry *fatent)
@@ -385,7 +399,11 @@ static int fat_mirror_bhs(struct super_block *sb, struct buffer_head **bhs,
 			}
 			memcpy(c_bh->b_data, bhs[n]->b_data, sb->s_blocksize);
 			set_buffer_uptodate(c_bh);
+<<<<<<< HEAD
 			mark_buffer_dirty_inode_sync(c_bh, sbi->fat_inode);
+=======
+			mark_buffer_dirty_inode(c_bh, sbi->fat_inode);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (sb->s_flags & MS_SYNCHRONOUS)
 				err = sync_dirty_buffer(c_bh);
 			brelse(c_bh);

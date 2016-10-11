@@ -7,6 +7,11 @@
 #define APEI_INTERNAL_H
 
 #include <linux/cper.h>
+<<<<<<< HEAD
+=======
+#include <linux/acpi.h>
+#include <linux/acpi_io.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct apei_exec_context;
 
@@ -68,6 +73,16 @@ static inline int apei_exec_run_optional(struct apei_exec_context *ctx, u8 actio
 /* IP has been set in instruction function */
 #define APEI_EXEC_SET_IP	1
 
+<<<<<<< HEAD
+=======
+int apei_map_generic_address(struct acpi_generic_address *reg);
+
+static inline void apei_unmap_generic_address(struct acpi_generic_address *reg)
+{
+	acpi_os_unmap_generic_address(reg);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int apei_read(u64 *val, struct acpi_generic_address *reg);
 int apei_write(u64 val, struct acpi_generic_address *reg);
 

@@ -271,7 +271,10 @@ static struct block2mtd_dev *add_device(char *devname, int erase_size)
 	dev->mtd.flags = MTD_CAP_RAM;
 	dev->mtd._erase = block2mtd_erase;
 	dev->mtd._write = block2mtd_write;
+<<<<<<< HEAD
 	dev->mtd._writev = mtd_writev;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->mtd._sync = block2mtd_sync;
 	dev->mtd._read = block2mtd_read;
 	dev->mtd.priv = dev;

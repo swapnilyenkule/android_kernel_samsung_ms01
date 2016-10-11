@@ -161,7 +161,10 @@ struct nand_flash_dev nand_flash_ids[] = {
 	 BBT_AUTO_REFRESH
 	},
 
+<<<<<<< HEAD
 	{"NAND 4GiB 1,8V 8-bit",       0xAC, 2048, 4096, 0x20000, 0},
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{NULL,}
 };
 

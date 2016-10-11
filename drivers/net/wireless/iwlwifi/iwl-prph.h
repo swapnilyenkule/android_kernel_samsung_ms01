@@ -224,6 +224,10 @@
 #define SCD_TXFACT		(SCD_BASE + 0x10)
 #define SCD_ACTIVE		(SCD_BASE + 0x14)
 #define SCD_QUEUECHAIN_SEL	(SCD_BASE + 0xe8)
+<<<<<<< HEAD
+=======
+#define SCD_CHAINEXT_EN		(SCD_BASE + 0x244)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define SCD_AGGR_SEL		(SCD_BASE + 0x248)
 #define SCD_INTERRUPT_MASK	(SCD_BASE + 0x108)
 

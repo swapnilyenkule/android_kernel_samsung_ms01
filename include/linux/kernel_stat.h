@@ -104,8 +104,18 @@ static inline unsigned int kstat_irqs(unsigned int irq)
 
 	return sum;
 }
+<<<<<<< HEAD
 #else
 extern unsigned int kstat_irqs(unsigned int irq);
+=======
+static inline unsigned int kstat_irqs_usr(unsigned int irq)
+{
+	return kstat_irqs(irq);
+}
+#else
+extern unsigned int kstat_irqs(unsigned int irq);
+extern unsigned int kstat_irqs_usr(unsigned int irq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 /*

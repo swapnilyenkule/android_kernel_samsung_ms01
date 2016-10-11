@@ -621,6 +621,7 @@
 		*(.initcall##level##.init)				\
 		*(.initcall##level##s.init)				\
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 #define DEFERRED_INITCALLS						\
 		VMLINUX_SYMBOL(__deferred_initcall_start) = .;		\
@@ -644,6 +645,8 @@
 		VMLINUX_SYMBOL(__initcall_end) = .;			\
 		DEFERRED_INITCALLS
 #else
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define INIT_CALLS							\
 		VMLINUX_SYMBOL(__initcall_start) = .;			\
 		*(.initcallearly.init)					\
@@ -657,7 +660,10 @@
 		INIT_CALLS_LEVEL(6)					\
 		INIT_CALLS_LEVEL(7)					\
 		VMLINUX_SYMBOL(__initcall_end) = .;
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define CON_INITCALL							\
 		VMLINUX_SYMBOL(__con_initcall_start) = .;		\
@@ -669,11 +675,14 @@
 		*(.security_initcall.init)				\
 		VMLINUX_SYMBOL(__security_initcall_end) = .;
 
+<<<<<<< HEAD
 #define COMPAT_EXPORTS							\
 		VMLINUX_SYMBOL(__compat_exports_start) = .;		\
 		*(.exportcompat.init)					\
 		VMLINUX_SYMBOL(__compat_exports_end) = .;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_BLK_DEV_INITRD
 #define INIT_RAM_FS							\
 	. = ALIGN(4);							\

@@ -347,7 +347,10 @@ ip6t_do_table(struct sk_buff *skb,
 	IP_NF_ASSERT(table->valid_hooks & (1 << hook));
 
 	local_bh_disable();
+<<<<<<< HEAD
 	get_reader(&(table->private_lock));
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	addend = xt_write_recseq_begin();
 	private = table->private;
 	cpu        = smp_processor_id();
@@ -434,7 +437,10 @@ ip6t_do_table(struct sk_buff *skb,
 	*stackptr = origptr;
 
  	xt_write_recseq_end(addend);
+<<<<<<< HEAD
 	put_reader(&(table->private_lock));
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  	local_bh_enable();
 
 #ifdef DEBUG_ALLOW_ALL
@@ -1238,8 +1244,15 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 
 	xt_free_table_info(oldinfo);
 	if (copy_to_user(counters_ptr, counters,
+<<<<<<< HEAD
 			 sizeof(struct xt_counters) * num_counters) != 0)
 		ret = -EFAULT;
+=======
+			 sizeof(struct xt_counters) * num_counters) != 0) {
+		/* Silent error, can't fail, new table is already in place */
+		net_warn_ratelimited("ip6tables: counters copy to user failed while replacing table\n");
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vfree(counters);
 	xt_table_unlock(t);
 	return ret;
@@ -2281,15 +2294,25 @@ static void __exit ip6_tables_fini(void)
  * "No next header".
  *
  * If target header is found, its offset is set in *offset and return protocol
+<<<<<<< HEAD
  * number. Otherwise, return -ENOENT or -EBADMSG.
+=======
+ * number. Otherwise, return -1.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * If the first fragment doesn't contain the final protocol header or
  * NEXTHDR_NONE it is considered invalid.
  *
  * Note that non-1st fragment is special case that "the protocol number
  * of last header" is "next header" field in Fragment header. In this case,
+<<<<<<< HEAD
  * *offset is meaningless. If fragoff is not NULL, the fragment offset is
  * stored in *fragoff; if it is NULL, return -EINVAL.
+=======
+ * *offset is meaningless and fragment offset is stored in *fragoff if fragoff
+ * isn't NULL.
+ *
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 int ipv6_find_hdr(const struct sk_buff *skb, unsigned int *offset,
 		  int target, unsigned short *fragoff)
@@ -2330,12 +2353,18 @@ int ipv6_find_hdr(const struct sk_buff *skb, unsigned int *offset,
 				if (target < 0 &&
 				    ((!ipv6_ext_hdr(hp->nexthdr)) ||
 				     hp->nexthdr == NEXTHDR_NONE)) {
+<<<<<<< HEAD
 					if (fragoff) {
 						*fragoff = _frag_off;
 						return hp->nexthdr;
 					} else {
 						return -EINVAL;
 					}
+=======
+					if (fragoff)
+						*fragoff = _frag_off;
+					return hp->nexthdr;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				}
 				return -ENOENT;
 			}

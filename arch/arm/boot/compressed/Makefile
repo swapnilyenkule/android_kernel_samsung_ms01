@@ -5,7 +5,10 @@
 #
 
 OBJS		=
+<<<<<<< HEAD
 plus_sec := $(call as-instr,.arch_extension sec,+sec)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Ensure that MMCIF loader code appears early in the image
 # to minimise that number of bocks that have to be read in
@@ -23,6 +26,7 @@ OBJS		+= sdhi-sh7372.o
 endif
 
 AFLAGS_head.o += -DTEXT_OFFSET=$(TEXT_OFFSET)
+<<<<<<< HEAD
 AFLAGS_head.o += -Wa,-march=armv7-a$(plus_sec)
 HEAD	= head.o
 
@@ -31,6 +35,10 @@ MISC = misc.o
 
 AFLAGS_decompress.o += -Wa,-march=armv7-a$(plus_sec)
 DECOMPRESS = decompress.o
+=======
+HEAD	= head.o
+OBJS	+= misc.o decompress.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 FONTC	= $(srctree)/drivers/video/console/font_acorn_8x8.c
 
 # string library code (-Os is enforced to keep it much smaller)
@@ -118,10 +126,17 @@ ifeq ($(CONFIG_ARM_ATAG_DTB_COMPAT),y)
 OBJS	+= $(libfdt_objs) atags_to_fdt.o
 endif
 
+<<<<<<< HEAD
 targets := vmlinux vmlinux.lds \
 		 piggy.$(suffix_y) piggy.$(suffix_y).o \
 		 lib1funcs.o lib1funcs.S ashldi3.o ashldi3.S \
 		 font.o font.c head.o misc.o decompress.o $(OBJS)
+=======
+targets       := vmlinux vmlinux.lds \
+		 piggy.$(suffix_y) piggy.$(suffix_y).o \
+		 lib1funcs.o lib1funcs.S ashldi3.o ashldi3.S \
+		 font.o font.c head.o misc.o $(OBJS)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Make sure files are removed during clean
 extra-y       += piggy.gzip piggy.lzo piggy.lzma piggy.xzkern \
@@ -133,7 +148,10 @@ KBUILD_CFLAGS = $(subst -pg, , $(ORIG_CFLAGS))
 endif
 
 ccflags-y := -fpic -fno-builtin -I$(obj)
+<<<<<<< HEAD
 asflags-y := -Wa,-march=all
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Supply kernel BSS size to the decompressor via a linker symbol.
 KBSS_SZ = $(shell $(CROSS_COMPILE)size $(obj)/../../../../vmlinux | \
@@ -156,14 +174,20 @@ LDFLAGS_vmlinux += -X
 LDFLAGS_vmlinux += -T
 
 # For __aeabi_uidivmod
+<<<<<<< HEAD
 AFLAGS_lib1funcs.o +=-Wa,-march=armv7-a$(plus_sec)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 lib1funcs = $(obj)/lib1funcs.o
 
 $(obj)/lib1funcs.S: $(srctree)/arch/$(SRCARCH)/lib/lib1funcs.S
 	$(call cmd,shipped)
 
 # For __aeabi_llsl
+<<<<<<< HEAD
 AFLAGS_ashldi3.o +=-Wa,-march=armv7-a$(plus_sec)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ashldi3 = $(obj)/ashldi3.o
 
 $(obj)/ashldi3.S: $(srctree)/arch/$(SRCARCH)/lib/ashldi3.S
@@ -189,7 +213,11 @@ if [ $(words $(ZRELADDR)) -gt 1 -a "$(CONFIG_AUTO_ZRELADDR)" = "" ]; then \
 	false; \
 fi
 
+<<<<<<< HEAD
 $(obj)/vmlinux: $(obj)/vmlinux.lds $(obj)/$(HEAD) $(obj)/$(MISC) $(obj)/$(DECOMPRESS) $(obj)/piggy.$(suffix_y).o \
+=======
+$(obj)/vmlinux: $(obj)/vmlinux.lds $(obj)/$(HEAD) $(obj)/piggy.$(suffix_y).o \
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		$(addprefix $(obj)/, $(OBJS)) $(lib1funcs) $(ashldi3) FORCE
 	@$(check_for_multiple_zreladdr)
 	$(call if_changed,ld)
@@ -198,7 +226,10 @@ $(obj)/vmlinux: $(obj)/vmlinux.lds $(obj)/$(HEAD) $(obj)/$(MISC) $(obj)/$(DECOMP
 $(obj)/piggy.$(suffix_y): $(obj)/../Image FORCE
 	$(call if_changed,$(suffix_y))
 
+<<<<<<< HEAD
 AFLAGS_piggy.$(suffix_y).o += -Wa,-march=armv7-a$(plus_sec)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 $(obj)/piggy.$(suffix_y).o:  $(obj)/piggy.$(suffix_y) FORCE
 
 CFLAGS_font.o := -Dstatic=

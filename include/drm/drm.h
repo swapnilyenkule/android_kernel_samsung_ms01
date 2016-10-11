@@ -36,7 +36,11 @@
 #ifndef _DRM_H_
 #define _DRM_H_
 
+<<<<<<< HEAD
 #if defined(__KERNEL__) || defined(_LINUX) || defined(__linux__)
+=======
+#if defined(__linux__)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <linux/types.h>
 #include <asm/ioctl.h>

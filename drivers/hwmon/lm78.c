@@ -94,6 +94,11 @@ static inline u8 FAN_TO_REG(long rpm, int div)
 {
 	if (rpm <= 0)
 		return 255;
+<<<<<<< HEAD
+=======
+	if (rpm > 1350000)
+		return 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return SENSORS_LIMIT((1350000 + rpm * div / 2) / (rpm * div), 1, 254);
 }
 

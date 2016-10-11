@@ -1081,6 +1081,11 @@ static void init_vmcb(struct vcpu_svm *svm)
 	set_exception_intercept(svm, PF_VECTOR);
 	set_exception_intercept(svm, UD_VECTOR);
 	set_exception_intercept(svm, MC_VECTOR);
+<<<<<<< HEAD
+=======
+	set_exception_intercept(svm, AC_VECTOR);
+	set_exception_intercept(svm, DB_VECTOR);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	set_intercept(svm, INTERCEPT_INTR);
 	set_intercept(svm, INTERCEPT_NMI);
@@ -1636,6 +1641,7 @@ static void svm_set_segment(struct kvm_vcpu *vcpu,
 	mark_dirty(svm->vmcb, VMCB_SEG);
 }
 
+<<<<<<< HEAD
 static void update_db_intercept(struct kvm_vcpu *vcpu)
 {
 	struct vcpu_svm *svm = to_svm(vcpu);
@@ -1650,6 +1656,15 @@ static void update_db_intercept(struct kvm_vcpu *vcpu)
 		if (vcpu->guest_debug &
 		    (KVM_GUESTDBG_SINGLESTEP | KVM_GUESTDBG_USE_HW_BP))
 			set_exception_intercept(svm, DB_VECTOR);
+=======
+static void update_bp_intercept(struct kvm_vcpu *vcpu)
+{
+	struct vcpu_svm *svm = to_svm(vcpu);
+
+	clr_exception_intercept(svm, BP_VECTOR);
+
+	if (vcpu->guest_debug & KVM_GUESTDBG_ENABLE) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (vcpu->guest_debug & KVM_GUESTDBG_USE_SW_BP)
 			set_exception_intercept(svm, BP_VECTOR);
 	} else
@@ -1667,7 +1682,11 @@ static void svm_guest_debug(struct kvm_vcpu *vcpu, struct kvm_guest_debug *dbg)
 
 	mark_dirty(svm->vmcb, VMCB_DR);
 
+<<<<<<< HEAD
 	update_db_intercept(vcpu);
+=======
+	update_bp_intercept(vcpu);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void new_asid(struct vcpu_svm *svm, struct svm_cpu_data *sd)
@@ -1741,7 +1760,10 @@ static int db_interception(struct vcpu_svm *svm)
 		if (!(svm->vcpu.guest_debug & KVM_GUESTDBG_SINGLESTEP))
 			svm->vmcb->save.rflags &=
 				~(X86_EFLAGS_TF | X86_EFLAGS_RF);
+<<<<<<< HEAD
 		update_db_intercept(&svm->vcpu);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (svm->vcpu.guest_debug &
@@ -1776,6 +1798,15 @@ static int ud_interception(struct vcpu_svm *svm)
 	return 1;
 }
 
+<<<<<<< HEAD
+=======
+static int ac_interception(struct vcpu_svm *svm)
+{
+	kvm_queue_exception_e(&svm->vcpu, AC_VECTOR, 0);
+	return 1;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void svm_fpu_activate(struct kvm_vcpu *vcpu)
 {
 	struct vcpu_svm *svm = to_svm(vcpu);
@@ -3007,10 +3038,15 @@ static int cr8_write_interception(struct vcpu_svm *svm)
 	u8 cr8_prev = kvm_get_cr8(&svm->vcpu);
 	/* instruction emulation calls kvm_set_cr8() */
 	r = cr_interception(svm);
+<<<<<<< HEAD
 	if (irqchip_in_kernel(svm->vcpu.kvm)) {
 		clr_cr_intercept(svm, INTERCEPT_CR8_WRITE);
 		return r;
 	}
+=======
+	if (irqchip_in_kernel(svm->vcpu.kvm))
+		return r;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (cr8_prev <= kvm_get_cr8(&svm->vcpu))
 		return r;
 	kvm_run->exit_reason = KVM_EXIT_SET_TPR;
@@ -3214,7 +3250,11 @@ static int wrmsr_interception(struct vcpu_svm *svm)
 
 
 	svm->next_rip = kvm_rip_read(&svm->vcpu) + 2;
+<<<<<<< HEAD
 	if (svm_set_msr(&svm->vcpu, ecx, data)) {
+=======
+	if (kvm_set_msr(&svm->vcpu, ecx, data)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		trace_kvm_msr_write_ex(ecx, data);
 		kvm_inject_gp(&svm->vcpu, 0);
 	} else {
@@ -3293,6 +3333,10 @@ static int (*svm_exit_handlers[])(struct vcpu_svm *svm) = {
 	[SVM_EXIT_EXCP_BASE + PF_VECTOR]	= pf_interception,
 	[SVM_EXIT_EXCP_BASE + NM_VECTOR]	= nm_interception,
 	[SVM_EXIT_EXCP_BASE + MC_VECTOR]	= mc_interception,
+<<<<<<< HEAD
+=======
+	[SVM_EXIT_EXCP_BASE + AC_VECTOR]	= ac_interception,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	[SVM_EXIT_INTR]				= intr_interception,
 	[SVM_EXIT_NMI]				= nmi_interception,
 	[SVM_EXIT_SMI]				= nop_on_interception,
@@ -3496,9 +3540,15 @@ static int handle_exit(struct kvm_vcpu *vcpu)
 
 	if (exit_code >= ARRAY_SIZE(svm_exit_handlers)
 	    || !svm_exit_handlers[exit_code]) {
+<<<<<<< HEAD
 		kvm_run->exit_reason = KVM_EXIT_UNKNOWN;
 		kvm_run->hw.hardware_exit_reason = exit_code;
 		return 0;
+=======
+		WARN_ONCE(1, "vmx: unexpected exit reason 0x%x\n", exit_code);
+		kvm_queue_exception(vcpu, UD_VECTOR);
+		return 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	return svm_exit_handlers[exit_code](svm);
@@ -3566,6 +3616,11 @@ static void update_cr8_intercept(struct kvm_vcpu *vcpu, int tpr, int irr)
 	if (is_guest_mode(vcpu) && (vcpu->arch.hflags & HF_VINTR_MASK))
 		return;
 
+<<<<<<< HEAD
+=======
+	clr_cr_intercept(svm, INTERCEPT_CR8_WRITE);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (irr == -1)
 		return;
 
@@ -3653,7 +3708,10 @@ static void enable_nmi_window(struct kvm_vcpu *vcpu)
 	 */
 	svm->nmi_singlestep = true;
 	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+<<<<<<< HEAD
 	update_db_intercept(vcpu);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int svm_set_tss_addr(struct kvm *kvm, unsigned int addr)

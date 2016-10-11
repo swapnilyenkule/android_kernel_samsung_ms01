@@ -124,10 +124,14 @@ static inline unsigned long is_key_possessed(const key_ref_t key_ref)
 struct key {
 	atomic_t		usage;		/* number of references */
 	key_serial_t		serial;		/* key serial number */
+<<<<<<< HEAD
 	union {
 		struct list_head graveyard_link;
 		struct rb_node	serial_node;
 	};
+=======
+	struct rb_node		serial_node;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct key_type		*type;		/* type of key */
 	struct rw_semaphore	sem;		/* change vs change sem */
 	struct key_user		*user;		/* owner of this key */

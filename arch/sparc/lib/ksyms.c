@@ -125,6 +125,7 @@ EXPORT_SYMBOL(___copy_from_user);
 EXPORT_SYMBOL(___copy_in_user);
 EXPORT_SYMBOL(__clear_user);
 
+<<<<<<< HEAD
 /* RW semaphores */
 EXPORT_SYMBOL(__down_read);
 EXPORT_SYMBOL(__down_read_trylock);
@@ -134,6 +135,8 @@ EXPORT_SYMBOL(__up_read);
 EXPORT_SYMBOL(__up_write);
 EXPORT_SYMBOL(__downgrade_write);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Atomic counter implementation. */
 EXPORT_SYMBOL(atomic_add);
 EXPORT_SYMBOL(atomic_add_ret);

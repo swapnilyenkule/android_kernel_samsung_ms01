@@ -6,6 +6,21 @@
 #include <linux/fs_struct.h>
 #include "internal.h"
 
+<<<<<<< HEAD
+=======
+static inline void path_get_longterm(struct path *path)
+{
+	path_get(path);
+	mnt_make_longterm(path->mnt);
+}
+
+static inline void path_put_longterm(struct path *path)
+{
+	mnt_make_shortterm(path->mnt);
+	path_put(path);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Replace the fs->{rootmnt,root} with {mnt,dentry}. Put the old values.
  * It can block.
@@ -14,7 +29,11 @@ void set_fs_root(struct fs_struct *fs, struct path *path)
 {
 	struct path old_root;
 
+<<<<<<< HEAD
 	path_get(path);
+=======
+	path_get_longterm(path);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock(&fs->lock);
 	write_seqcount_begin(&fs->seq);
 	old_root = fs->root;
@@ -22,7 +41,11 @@ void set_fs_root(struct fs_struct *fs, struct path *path)
 	write_seqcount_end(&fs->seq);
 	spin_unlock(&fs->lock);
 	if (old_root.dentry)
+<<<<<<< HEAD
 		path_put(&old_root);
+=======
+		path_put_longterm(&old_root);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -33,7 +56,11 @@ void set_fs_pwd(struct fs_struct *fs, struct path *path)
 {
 	struct path old_pwd;
 
+<<<<<<< HEAD
 	path_get(path);
+=======
+	path_get_longterm(path);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock(&fs->lock);
 	write_seqcount_begin(&fs->seq);
 	old_pwd = fs->pwd;
@@ -42,7 +69,11 @@ void set_fs_pwd(struct fs_struct *fs, struct path *path)
 	spin_unlock(&fs->lock);
 
 	if (old_pwd.dentry)
+<<<<<<< HEAD
 		path_put(&old_pwd);
+=======
+		path_put_longterm(&old_pwd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline int replace_path(struct path *p, const struct path *old, const struct path *new)
@@ -72,7 +103,11 @@ void chroot_fs_refs(struct path *old_root, struct path *new_root)
 			write_seqcount_end(&fs->seq);
 			while (hits--) {
 				count++;
+<<<<<<< HEAD
 				path_get(new_root);
+=======
+				path_get_longterm(new_root);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			}
 			spin_unlock(&fs->lock);
 		}
@@ -80,13 +115,22 @@ void chroot_fs_refs(struct path *old_root, struct path *new_root)
 	} while_each_thread(g, p);
 	read_unlock(&tasklist_lock);
 	while (count--)
+<<<<<<< HEAD
 		path_put(old_root);
+=======
+		path_put_longterm(old_root);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 void free_fs_struct(struct fs_struct *fs)
 {
+<<<<<<< HEAD
 	path_put(&fs->root);
 	path_put(&fs->pwd);
+=======
+	path_put_longterm(&fs->root);
+	path_put_longterm(&fs->pwd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kmem_cache_free(fs_cachep, fs);
 }
 
@@ -120,9 +164,15 @@ struct fs_struct *copy_fs_struct(struct fs_struct *old)
 
 		spin_lock(&old->lock);
 		fs->root = old->root;
+<<<<<<< HEAD
 		path_get(&fs->root);
 		fs->pwd = old->pwd;
 		path_get(&fs->pwd);
+=======
+		path_get_longterm(&fs->root);
+		fs->pwd = old->pwd;
+		path_get_longterm(&fs->pwd);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_unlock(&old->lock);
 	}
 	return fs;

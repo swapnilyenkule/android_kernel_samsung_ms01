@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ifeq ($(CONFIG_FB_MSM_MDSS_COMMON),y)
 obj-y += mdss/
 obj-$(CONFIG_VIDEO_MHL_SII8246) += mhl_v2/
@@ -197,3 +198,24 @@ obj-$(CONFIG_MSM_VIDC_1080P) += vidc/
 obj-$(CONFIG_MSM_VIDC_720P) += vidc/
 clean:
 	rm *.o .*cmd
+=======
+
+# core framebuffer
+#
+obj-y := msm_fb.o
+
+# MDP DMA/PPP engine
+#
+obj-y += mdp.o mdp_scale_tables.o mdp_ppp.o
+
+# MDDI interface
+#
+obj-y += mddi.o
+
+# MDDI client/panel drivers
+#
+obj-y += mddi_client_dummy.o
+obj-y += mddi_client_toshiba.o
+obj-y += mddi_client_nt35399.o
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

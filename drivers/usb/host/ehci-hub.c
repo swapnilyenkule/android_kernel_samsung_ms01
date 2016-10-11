@@ -254,6 +254,7 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 		if (t1 & PORT_OWNER)
 			set_bit(port, &ehci->owned_ports);
 		else if ((t1 & PORT_PE) && !(t1 & PORT_SUSPEND)) {
+<<<<<<< HEAD
 			/*clear RS bit before setting SUSP bit
 			* and wait for HCH to get set*/
 			if (ehci->susp_sof_bug) {
@@ -262,6 +263,8 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 				spin_lock_irq(&ehci->lock);
 			}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			t2 |= PORT_SUSPEND;
 			set_bit(port, &ehci->bus_suspended);
 		}
@@ -312,10 +315,15 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 	if (ehci->bus_suspended)
 		udelay(150);
 
+<<<<<<< HEAD
 	/*if this bit is set, controller is already haled*/
 	if (!ehci->susp_sof_bug)
 		ehci_halt(ehci); /* turn off now-idle HC */
 
+=======
+	/* turn off now-idle HC */
+	ehci_halt (ehci);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ehci->rh_state = EHCI_RH_SUSPENDED;
 
 	if (ehci->reclaim)
@@ -340,7 +348,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 
 
 /* caller has locked the root hub, and should reset/reinit on error */
+<<<<<<< HEAD
 static int __maybe_unused ehci_bus_resume(struct usb_hcd *hcd)
+=======
+static int ehci_bus_resume (struct usb_hcd *hcd)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ehci_hcd		*ehci = hcd_to_ehci (hcd);
 	u32			temp;
@@ -383,9 +395,12 @@ static int __maybe_unused ehci_bus_resume(struct usb_hcd *hcd)
 	ehci_writel(ehci, ehci->periodic_dma, &ehci->regs->frame_list);
 	ehci_writel(ehci, (u32) ehci->async->qh_dma, &ehci->regs->async_next);
 
+<<<<<<< HEAD
 	/*CMD_RUN will be set after, PORT_RESUME gets cleared*/
 	if (ehci->resume_sof_bug)
 		ehci->command &= ~CMD_RUN;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* restore CMD_RUN, framelist size, and irq threshold */
 	ehci_writel(ehci, ehci->command, &ehci->regs->command);
 	ehci->rh_state = EHCI_RH_RUNNING;
@@ -428,6 +443,7 @@ static int __maybe_unused ehci_bus_resume(struct usb_hcd *hcd)
 		ehci_writel(ehci, temp, &ehci->regs->port_status [i]);
 	}
 
+<<<<<<< HEAD
 	if (ehci->resume_sof_bug && resume_needed) {
 		/* root hub has only one port.
 		 * PORT_RESUME gets cleared automatically. */
@@ -439,6 +455,8 @@ static int __maybe_unused ehci_bus_resume(struct usb_hcd *hcd)
 		goto skip_clear_resume;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* msleep for 20ms only if code is trying to resume port */
 	if (resume_needed) {
 		spin_unlock_irq(&ehci->lock);
@@ -455,8 +473,11 @@ static int __maybe_unused ehci_bus_resume(struct usb_hcd *hcd)
 			ehci_vdbg (ehci, "resumed port %d\n", i + 1);
 		}
 	}
+<<<<<<< HEAD
 
 skip_clear_resume:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	(void) ehci_readl(ehci, &ehci->regs->command);
 
 	/* maybe re-activate the schedule(s) */
@@ -581,10 +602,13 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 	unsigned long	flags;
 	u32		ppcd = 0;
 
+<<<<<<< HEAD
 	/* if !USB_SUSPEND, root hub timers won't get shut down ... */
 	if (ehci->rh_state != EHCI_RH_RUNNING)
 		return 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* init status to no-changes */
 	buf [0] = 0;
 	ports = HCS_N_PORTS (ehci->hcs_params);
@@ -642,7 +666,15 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 			status = STS_PCD;
 		}
 	}
+<<<<<<< HEAD
 	/* FIXME autosuspend idle root hubs */
+=======
+
+	/* If a resume is in progress, make sure it can finish */
+	if (ehci->resuming_ports)
+		mod_timer(&hcd->rh_timer, jiffies + msecs_to_jiffies(25));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock_irqrestore (&ehci->lock, flags);
 	return status ? retval : 0;
 }
@@ -683,6 +715,7 @@ ehci_hub_descriptor (
 }
 
 /*-------------------------------------------------------------------------*/
+<<<<<<< HEAD
 #ifdef CONFIG_USB_EHCI_EHSET
 
 #define EHSET_TEST_SINGLE_STEP_SET_FEATURE 0x06
@@ -828,6 +861,8 @@ cleanup:
 }
 #endif
 /*-------------------------------------------------------------------------*/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static int ehci_hub_control (
 	struct usb_hcd	*hcd,
@@ -1153,6 +1188,7 @@ static int ehci_hub_control (
 			if ((temp & PORT_PE) == 0
 					|| (temp & PORT_RESET) != 0)
 				goto error;
+<<<<<<< HEAD
 			/*port gets suspended as part of bus suspend routine*/
 			if (!ehci->susp_sof_bug)
 				ehci_writel(ehci, temp | PORT_SUSPEND,
@@ -1165,17 +1201,24 @@ static int ehci_hub_control (
 				break;
 			}
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/* After above check the port must be connected.
 			 * Set appropriate bit thus could put phy into low power
 			 * mode if we have hostpc feature
 			 */
 			temp &= ~PORT_WKCONN_E;
 			temp |= PORT_WKDISC_E | PORT_WKOC_E;
+<<<<<<< HEAD
 			if (ehci->susp_sof_bug)
 				ehci_writel(ehci, temp, status_reg);
 			else
 				ehci_writel(ehci, temp | PORT_SUSPEND,
 						status_reg);
+=======
+			ehci_writel(ehci, temp | PORT_SUSPEND, status_reg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (hostpc_reg) {
 				spin_unlock_irqrestore(&ehci->lock, flags);
 				msleep(5);/* 5ms for HCD enter low pwr mode */
@@ -1221,6 +1264,7 @@ static int ehci_hub_control (
 				ehci->reset_done [wIndex] = jiffies
 						+ msecs_to_jiffies (50);
 			}
+<<<<<<< HEAD
 			if (ehci->reset_sof_bug && (temp & PORT_RESET) &&
 					hcd->driver->reset_sof_bug_handler) {
 				spin_unlock_irqrestore(&ehci->lock, flags);
@@ -1235,6 +1279,9 @@ static int ehci_hub_control (
 				msleep(ehci->reset_delay);
 				spin_lock_irqsave(&ehci->lock, flags);
 			}
+=======
+			ehci_writel(ehci, temp, status_reg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 
 		/* For downstream facing ports (these):  one hub port is put
@@ -1244,6 +1291,7 @@ static int ehci_hub_control (
 		 * about the EHCI-specific stuff.
 		 */
 		case USB_PORT_FEAT_TEST:
+<<<<<<< HEAD
 			if (selector && selector <= 5) {
 				ehci_quiesce(ehci);
 
@@ -1278,6 +1326,28 @@ static int ehci_hub_control (
 			else
 				goto error;
 			break;
+=======
+			if (!selector || selector > 5)
+				goto error;
+			ehci_quiesce(ehci);
+
+			/* Put all enabled ports into suspend */
+			while (ports--) {
+				u32 __iomem *sreg =
+						&ehci->regs->port_status[ports];
+
+				temp = ehci_readl(ehci, sreg) & ~PORT_RWC_BITS;
+				if (temp & PORT_PE)
+					ehci_writel(ehci, temp | PORT_SUSPEND,
+							sreg);
+			}
+			ehci_halt(ehci);
+			temp = ehci_readl(ehci, status_reg);
+			temp |= selector << 16;
+			ehci_writel(ehci, temp, status_reg);
+			break;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		default:
 			goto error;
 		}

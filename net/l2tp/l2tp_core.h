@@ -157,6 +157,10 @@ struct l2tp_tunnel_cfg {
 
 struct l2tp_tunnel {
 	int			magic;		/* Should be L2TP_TUNNEL_MAGIC */
+<<<<<<< HEAD
+=======
+	struct rcu_head rcu;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	rwlock_t		hlist_lock;	/* protect session_hlist */
 	struct hlist_head	session_hlist[L2TP_HASH_SIZE];
 						/* hashed list of sessions,

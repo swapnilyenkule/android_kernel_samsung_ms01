@@ -843,7 +843,11 @@ ath5k_txbuf_free_skb(struct ath5k_hw *ah, struct ath5k_buf *bf)
 		return;
 	dma_unmap_single(ah->dev, bf->skbaddr, bf->skb->len,
 			DMA_TO_DEVICE);
+<<<<<<< HEAD
 	dev_kfree_skb_any(bf->skb);
+=======
+	ieee80211_free_txskb(ah->hw, bf->skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bf->skb = NULL;
 	bf->skbaddr = 0;
 	bf->desc->ds_data = 0;
@@ -1570,7 +1574,11 @@ ath5k_tx_queue(struct ieee80211_hw *hw, struct sk_buff *skb,
 	return;
 
 drop_packet:
+<<<<<<< HEAD
 	dev_kfree_skb_any(skb);
+=======
+	ieee80211_free_txskb(hw, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void

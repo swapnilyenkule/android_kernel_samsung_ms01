@@ -57,12 +57,21 @@ s3c2412_sleep_enter1:
 	 * retry, as simply returning causes the system to lock.
 	*/
 
+<<<<<<< HEAD
 	ldrne	r9, [ r1 ]
 	strne	r9, [ r1 ]
 	ldrne	r9, [ r2 ]
 	strne	r9, [ r2 ]
 	ldrne	r9, [ r3 ]
 	strne	r9, [ r3 ]
+=======
+	ldrne	r9, [r1]
+	strne	r9, [r1]
+	ldrne	r9, [r2]
+	strne	r9, [r2]
+	ldrne	r9, [r3]
+	strne	r9, [r3]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bne	s3c2412_sleep_enter1
 
 	mov	pc, r14

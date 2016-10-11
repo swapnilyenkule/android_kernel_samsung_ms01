@@ -205,7 +205,10 @@ static void bit_putcs(struct vc_data *vc, struct fb_info *info,
 static void bit_clear_margins(struct vc_data *vc, struct fb_info *info,
 			      int bottom_only)
 {
+<<<<<<< HEAD
 	int bgshift = (vc->vc_hi_font_mask) ? 13 : 12;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned int cw = vc->vc_font.width;
 	unsigned int ch = vc->vc_font.height;
 	unsigned int rw = info->var.xres - (vc->vc_cols*cw);
@@ -214,7 +217,11 @@ static void bit_clear_margins(struct vc_data *vc, struct fb_info *info,
 	unsigned int bs = info->var.yres - bh;
 	struct fb_fillrect region;
 
+<<<<<<< HEAD
 	region.color = attr_bgcol_ec(bgshift, vc, info);
+=======
+	region.color = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	region.rop = ROP_COPY;
 
 	if (rw && !bottom_only) {

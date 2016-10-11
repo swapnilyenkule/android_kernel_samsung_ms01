@@ -40,9 +40,12 @@
 #include <linux/syscore_ops.h>
 #include <linux/version.h>
 #include <linux/ctype.h>
+<<<<<<< HEAD
 #include <linux/mm.h>
 #include <linux/mempolicy.h>
 #include <linux/sched.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <linux/compat.h>
 #include <linux/syscalls.h>
@@ -50,9 +53,12 @@
 #include <linux/user_namespace.h>
 
 #include <linux/kmsg_dump.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG
 #include <mach/sec_debug.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Move somewhere else to avoid recompiling? */
 #include <generated/utsrelease.h>
 
@@ -129,6 +135,7 @@ EXPORT_SYMBOL(cad_pid);
 
 void (*pm_power_off_prepare)(void);
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 int sec_check_execpath(struct mm_struct *mm, char *denypath);
 #if defined CONFIG_SEC_RESTRICT_ROOTING_LOG
@@ -177,6 +184,8 @@ out:
 }
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Returns true if current's euid is same as p's uid or euid,
  * or has CAP_SYS_NICE to p's user_ns.
@@ -374,7 +383,10 @@ void kernel_restart_prepare(char *cmd)
 	system_state = SYSTEM_RESTART;
 	usermodehelper_disable();
 	device_shutdown();
+<<<<<<< HEAD
 	syscore_shutdown();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /**
@@ -408,6 +420,32 @@ int unregister_reboot_notifier(struct notifier_block *nb)
 }
 EXPORT_SYMBOL(unregister_reboot_notifier);
 
+<<<<<<< HEAD
+=======
+/* Add backwards compatibility for stable trees. */
+#ifndef PF_NO_SETAFFINITY
+#define PF_NO_SETAFFINITY		PF_THREAD_BOUND
+#endif
+
+static void migrate_to_reboot_cpu(void)
+{
+	/* The boot cpu is always logical cpu 0 */
+	int cpu = 0;
+
+	cpu_hotplug_disable();
+
+	/* Make certain the cpu I'm about to reboot on is online */
+	if (!cpu_online(cpu))
+		cpu = cpumask_first(cpu_online_mask);
+
+	/* Prevent races with other tasks migrating this task */
+	current->flags |= PF_NO_SETAFFINITY;
+
+	/* Make certain I only run on the appropriate processor */
+	set_cpus_allowed_ptr(current, cpumask_of(cpu));
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  *	kernel_restart - reboot the system
  *	@cmd: pointer to buffer containing command to execute for restart
@@ -418,10 +456,16 @@ EXPORT_SYMBOL(unregister_reboot_notifier);
  */
 void kernel_restart(char *cmd)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_MONITOR_BATTERY_REMOVAL
 	kernel_sec_set_normal_pwroff(1);
 #endif
 	kernel_restart_prepare(cmd);
+=======
+	kernel_restart_prepare(cmd);
+	migrate_to_reboot_cpu();
+	syscore_shutdown();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!cmd)
 		printk(KERN_EMERG "Restarting system.\n");
 	else
@@ -447,6 +491,10 @@ static void kernel_shutdown_prepare(enum system_states state)
 void kernel_halt(void)
 {
 	kernel_shutdown_prepare(SYSTEM_HALT);
+<<<<<<< HEAD
+=======
+	migrate_to_reboot_cpu();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	syscore_shutdown();
 	printk(KERN_EMERG "System halted.\n");
 	kmsg_dump(KMSG_DUMP_HALT);
@@ -462,6 +510,7 @@ EXPORT_SYMBOL_GPL(kernel_halt);
  */
 void kernel_power_off(void)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_MONITOR_BATTERY_REMOVAL
 	kernel_sec_set_normal_pwroff(1);
 #endif
@@ -469,6 +518,12 @@ void kernel_power_off(void)
 	if (pm_power_off_prepare)
 		pm_power_off_prepare();
 	disable_nonboot_cpus();
+=======
+	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
+	if (pm_power_off_prepare)
+		pm_power_off_prepare();
+	migrate_to_reboot_cpu();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	syscore_shutdown();
 	printk(KERN_EMERG "Power down.\n");
 	kmsg_dump(KMSG_DUMP_POWEROFF);
@@ -617,6 +672,7 @@ SYSCALL_DEFINE2(setregid, gid_t, rgid, gid_t, egid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(rgid == 0 || egid == 0)
 	{
@@ -625,6 +681,8 @@ SYSCALL_DEFINE2(setregid, gid_t, rgid, gid_t, egid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -672,6 +730,7 @@ SYSCALL_DEFINE1(setgid, gid_t, gid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(gid == 0)
 	{
@@ -680,6 +739,8 @@ SYSCALL_DEFINE1(setgid, gid_t, gid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -750,6 +811,7 @@ SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(ruid == 0 || euid == 0)
 	{
@@ -758,6 +820,8 @@ SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -819,6 +883,7 @@ SYSCALL_DEFINE1(setuid, uid_t, uid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(uid == 0)
 	{
@@ -827,6 +892,8 @@ SYSCALL_DEFINE1(setuid, uid_t, uid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -868,6 +935,7 @@ SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(ruid == 0 || euid == 0 || suid == 0)
 	{
@@ -876,6 +944,8 @@ SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -941,6 +1011,7 @@ SYSCALL_DEFINE3(setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)
 	struct cred *new;
 	int retval;
 
+<<<<<<< HEAD
 #if defined CONFIG_SEC_RESTRICT_SETUID
 	if(rgid == 0 || egid == 0 || sgid == 0)
 	{
@@ -949,6 +1020,8 @@ SYSCALL_DEFINE3(setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)
 	}
 #endif // End of CONFIG_SEC_RESTRICT_SETUID
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new = prepare_creds();
 	if (!new)
 		return -ENOMEM;
@@ -1929,6 +2002,7 @@ static int prctl_set_mm(int opt, unsigned long addr,
 }
 #endif
 
+<<<<<<< HEAD
 
 static int prctl_update_vma_anon_name(struct vm_area_struct *vma,
 		struct vm_area_struct **prev,
@@ -2069,11 +2143,16 @@ static int prctl_set_vma(unsigned long opt, unsigned long start,
 	return error;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		unsigned long, arg4, unsigned long, arg5)
 {
 	struct task_struct *me = current;
+<<<<<<< HEAD
 	struct task_struct *tsk;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unsigned char comm[sizeof(me->comm)];
 	long error;
 
@@ -2159,7 +2238,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 			error = prctl_get_seccomp();
 			break;
 		case PR_SET_SECCOMP:
+<<<<<<< HEAD
 			error = prctl_set_seccomp(arg2, (char __user *)arg3);
+=======
+			error = prctl_set_seccomp(arg2);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		case PR_GET_TSC:
 			error = GET_TSC_CTL(arg2);
@@ -2230,6 +2313,7 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 			error = put_user(me->signal->is_child_subreaper,
 					 (int __user *) arg2);
 			break;
+<<<<<<< HEAD
 		case PR_SET_VMA:
 			error = prctl_set_vma(arg2, arg3, arg4, arg5);
 			break;
@@ -2263,6 +2347,8 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 			if (arg2 || arg3 || arg4 || arg5)
 				return -EINVAL;
 			return task_no_new_privs(current) ? 1 : 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		default:
 			error = -EINVAL;
 			break;

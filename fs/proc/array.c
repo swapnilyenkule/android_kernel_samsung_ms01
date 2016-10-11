@@ -142,7 +142,10 @@ static const char * const task_state_array[] = {
 	"x (dead)",		/*  64 */
 	"K (wakekill)",		/* 128 */
 	"W (waking)",		/* 256 */
+<<<<<<< HEAD
 	"P (parked)",		/* 512 */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static inline const char *get_task_state(struct task_struct *tsk)
@@ -205,7 +208,11 @@ static inline void task_state(struct seq_file *m, struct pid_namespace *ns,
 	group_info = cred->group_info;
 	task_unlock(p);
 
+<<<<<<< HEAD
 	for (g = 0; g < min(group_info->ngroups, NGROUPS_SMALL); g++)
+=======
+	for (g = 0; g < group_info->ngroups; g++)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		seq_printf(m, "%d ", GROUP_AT(group_info, g));
 	put_cred(cred);
 

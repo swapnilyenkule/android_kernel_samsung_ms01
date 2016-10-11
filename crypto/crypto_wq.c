@@ -33,7 +33,11 @@ static void __exit crypto_wq_exit(void)
 	destroy_workqueue(kcrypto_wq);
 }
 
+<<<<<<< HEAD
 module_init(crypto_wq_init);
+=======
+subsys_initcall(crypto_wq_init);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 module_exit(crypto_wq_exit);
 
 MODULE_LICENSE("GPL");

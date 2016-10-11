@@ -8,7 +8,11 @@ Supported adapters:
     Datasheet: Only available via NDA from ServerWorks
   * ATI IXP200, IXP300, IXP400, SB600, SB700 and SB800 southbridges
     Datasheet: Not publicly available
+<<<<<<< HEAD
   * AMD Hudson-2
+=======
+  * AMD Hudson-2, CZ
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
     Datasheet: Not publicly available
   * Standard Microsystems (SMSC) SLC90E66 (Victory66) southbridge
     Datasheet: Publicly available at the SMSC website http://www.smsc.com

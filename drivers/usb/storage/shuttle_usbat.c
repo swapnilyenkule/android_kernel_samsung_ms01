@@ -1846,7 +1846,11 @@ static int usbat_probe(struct usb_interface *intf,
 	us->transport_name = "Shuttle USBAT";
 	us->transport = usbat_flash_transport;
 	us->transport_reset = usb_stor_CB_reset;
+<<<<<<< HEAD
 	us->max_lun = 1;
+=======
+	us->max_lun = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	result = usb_stor_probe2(us);
 	return result;

@@ -24,10 +24,13 @@
 .align 16
 .Lbswap_mask:
 	.octa 0x000102030405060708090a0b0c0d0e0f
+<<<<<<< HEAD
 .Lpoly:
 	.octa 0xc2000000000000000000000000000001
 .Ltwo_one:
 	.octa 0x00000001000000000000000000000001
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define DATA	%xmm0
 #define SHASH	%xmm1
@@ -131,6 +134,7 @@ ENTRY(clmul_ghash_update)
 	movups DATA, (%rdi)
 .Lupdate_just_ret:
 	ret
+<<<<<<< HEAD
 
 /*
  * void clmul_ghash_setkey(be128 *shash, const u8 *key);
@@ -155,3 +159,5 @@ ENTRY(clmul_ghash_setkey)
 	pxor %xmm1, %xmm0
 	movups %xmm0, (%rdi)
 	ret
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

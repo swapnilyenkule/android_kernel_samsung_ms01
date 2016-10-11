@@ -9,7 +9,10 @@
 #include <linux/list.h>
 #include <linux/sysctl.h>
 
+<<<<<<< HEAD
 #include <net/flow.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <net/netns/core.h>
 #include <net/netns/mib.h>
 #include <net/netns/unix.h>
@@ -53,8 +56,11 @@ struct net {
 	struct list_head	cleanup_list;	/* namespaces on death row */
 	struct list_head	exit_list;	/* Use only net_mutex */
 
+<<<<<<< HEAD
 	unsigned int		proc_inum;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct proc_dir_entry 	*proc_net;
 	struct proc_dir_entry 	*proc_net_stat;
 
@@ -106,6 +112,10 @@ struct net {
 	struct netns_ipvs	*ipvs;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/seq_file_net.h>
 
 /* Init's network namespace */

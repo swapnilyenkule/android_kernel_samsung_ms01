@@ -62,11 +62,19 @@ of_get_fixed_voltage_config(struct device *dev)
 	config = devm_kzalloc(dev, sizeof(struct fixed_voltage_config),
 								 GFP_KERNEL);
 	if (!config)
+<<<<<<< HEAD
 		return ERR_PTR(-ENOMEM);
 
 	config->init_data = of_get_regulator_init_data(dev, dev->of_node);
 	if (!config->init_data)
 		return ERR_PTR(-EINVAL);
+=======
+		return NULL;
+
+	config->init_data = of_get_regulator_init_data(dev, dev->of_node);
+	if (!config->init_data)
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	init_data = config->init_data;
 	init_data->constraints.apply_uV = 0;
@@ -77,13 +85,18 @@ of_get_fixed_voltage_config(struct device *dev)
 	} else {
 		dev_err(dev,
 			 "Fixed regulator specified with variable voltages\n");
+<<<<<<< HEAD
 		return ERR_PTR(-EINVAL);
+=======
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (init_data->constraints.boot_on)
 		config->enabled_at_boot = true;
 
 	config->gpio = of_get_named_gpio(np, "gpio", 0);
+<<<<<<< HEAD
 	/*
 	 * of_get_named_gpio() currently returns ENODEV rather than
 	 * EPROBE_DEFER. This code attempts to be compatible with both
@@ -97,6 +110,8 @@ of_get_fixed_voltage_config(struct device *dev)
 	if ((config->gpio == -ENODEV) || (config->gpio == -EPROBE_DEFER))
 		return ERR_PTR(-EPROBE_DEFER);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	delay = of_get_property(np, "startup-delay-us", NULL);
 	if (delay)
 		config->startup_delay = be32_to_cpu(*delay);
@@ -104,9 +119,12 @@ of_get_fixed_voltage_config(struct device *dev)
 	if (of_find_property(np, "enable-active-high", NULL))
 		config->enable_high = true;
 
+<<<<<<< HEAD
 	if (of_find_property(np, "parent-supply", NULL))
 		init_data->supply_regulator = "parent";
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return config;
 }
 
@@ -184,6 +202,7 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 	struct fixed_voltage_data *drvdata;
 	int ret;
 
+<<<<<<< HEAD
 	if (pdev->dev.of_node) {
 		config = of_get_fixed_voltage_config(&pdev->dev);
 		if (IS_ERR(config))
@@ -191,6 +210,12 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 	} else {
 		config = pdev->dev.platform_data;
 	}
+=======
+	if (pdev->dev.of_node)
+		config = of_get_fixed_voltage_config(&pdev->dev);
+	else
+		config = pdev->dev.platform_data;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!config)
 		return -ENOMEM;

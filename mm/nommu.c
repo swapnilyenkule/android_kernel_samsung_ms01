@@ -807,7 +807,11 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
 	struct vm_area_struct *vma;
 
 	/* check the cache first */
+<<<<<<< HEAD
 	vma = mm->mmap_cache;
+=======
+	vma = ACCESS_ONCE(mm->mmap_cache);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (vma && vma->vm_start <= addr && vma->vm_end > addr)
 		return vma;
 
@@ -1856,6 +1860,19 @@ int remap_pfn_range(struct vm_area_struct *vma, unsigned long addr,
 }
 EXPORT_SYMBOL(remap_pfn_range);
 
+<<<<<<< HEAD
+=======
+int vm_iomap_memory(struct vm_area_struct *vma, phys_addr_t start, unsigned long len)
+{
+	unsigned long pfn = start >> PAGE_SHIFT;
+	unsigned long vm_len = vma->vm_end - vma->vm_start;
+
+	pfn += vma->vm_pgoff;
+	return io_remap_pfn_range(vma, vma->vm_start, pfn, vm_len, vma->vm_page_prot);
+}
+EXPORT_SYMBOL(vm_iomap_memory);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int remap_vmalloc_range(struct vm_area_struct *vma, void *addr,
 			unsigned long pgoff)
 {
@@ -1906,7 +1923,11 @@ EXPORT_SYMBOL(unmap_mapping_range);
  */
 int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 {
+<<<<<<< HEAD
 	unsigned long free, allowed;
+=======
+	long free, allowed;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	vm_acct_memory(pages);
 
@@ -1928,7 +1949,11 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 		 */
 		free -= global_page_state(NR_SHMEM);
 
+<<<<<<< HEAD
 		free += get_nr_swap_pages();
+=======
+		free += nr_swap_pages;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/*
 		 * Any slabs which are created with the

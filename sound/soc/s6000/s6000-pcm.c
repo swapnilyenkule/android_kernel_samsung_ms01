@@ -128,7 +128,13 @@ static irqreturn_t s6000_pcm_irq(int irq, void *data)
 		    substream->runtime &&
 		    snd_pcm_running(substream)) {
 			dev_dbg(pcm->dev, "xrun\n");
+<<<<<<< HEAD
 			snd_pcm_stop(substream, SNDRV_PCM_STATE_XRUN);
+=======
+			snd_pcm_stream_lock(substream);
+			snd_pcm_stop(substream, SNDRV_PCM_STATE_XRUN);
+			snd_pcm_stream_unlock(substream);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			ret = IRQ_HANDLED;
 		}
 

@@ -132,8 +132,11 @@ source "drivers/staging/ramster/Kconfig"
 
 source "drivers/staging/ozwpan/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/staging/vnswap/Kconfig"
 
 source "drivers/staging/prima/Kconfig"
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # STAGING

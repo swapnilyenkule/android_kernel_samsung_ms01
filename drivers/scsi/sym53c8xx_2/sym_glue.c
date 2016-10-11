@@ -1609,7 +1609,11 @@ sym_iomap_device(struct sym_device *device)
 	struct pci_bus_region bus_addr;
 	int i = 2;
 
+<<<<<<< HEAD
 	pcibios_resource_to_bus(pdev, &bus_addr, &pdev->resource[1]);
+=======
+	pcibios_resource_to_bus(pdev->bus, &bus_addr, &pdev->resource[1]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	device->mmio_base = bus_addr.start;
 
 	if (device->chip.features & FE_RAM) {
@@ -1619,7 +1623,12 @@ sym_iomap_device(struct sym_device *device)
 		 */
 		if (!pdev->resource[i].flags)
 			i++;
+<<<<<<< HEAD
 		pcibios_resource_to_bus(pdev, &bus_addr, &pdev->resource[i]);
+=======
+		pcibios_resource_to_bus(pdev->bus, &bus_addr,
+					&pdev->resource[i]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		device->ram_base = bus_addr.start;
 	}
 

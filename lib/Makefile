@@ -12,7 +12,11 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
 	 idr.o int_sqrt.o extable.o prio_tree.o \
 	 sha1.o md5.o irq_regs.o reciprocal_div.o argv_split.o \
 	 proportions.o prio_heap.o ratelimit.o show_mem.o \
+<<<<<<< HEAD
 	 is_single_threaded.o plist.o decompress.o memory_alloc.o
+=======
+	 is_single_threaded.o plist.o decompress.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 lib-$(CONFIG_MMU) += ioremap.o
 lib-$(CONFIG_SMP) += cpumask.o
@@ -41,6 +45,10 @@ obj-$(CONFIG_DEBUG_SPINLOCK) += spinlock_debug.o
 lib-$(CONFIG_RWSEM_GENERIC_SPINLOCK) += rwsem-spinlock.o
 lib-$(CONFIG_RWSEM_XCHGADD_ALGORITHM) += rwsem.o
 
+<<<<<<< HEAD
+=======
+GCOV_PROFILE_hweight.o := n
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 CFLAGS_hweight.o = $(subst $(quote),,$(CONFIG_ARCH_HWEIGHT_CFLAGS))
 obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
 
@@ -123,8 +131,11 @@ obj-$(CONFIG_SIGNATURE) += digsig.o
 
 obj-$(CONFIG_CLZ_TAB) += clz_tab.o
 
+<<<<<<< HEAD
 obj-$(CONFIG_QMI_ENCDEC) += qmi_encdec.o
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 hostprogs-y	:= gen_crc32table
 clean-files	:= crc32table.h
 

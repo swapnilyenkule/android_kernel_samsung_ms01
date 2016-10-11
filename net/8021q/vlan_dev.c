@@ -73,6 +73,11 @@ vlan_dev_get_egress_qos_mask(struct net_device *dev, struct sk_buff *skb)
 {
 	struct vlan_priority_tci_mapping *mp;
 
+<<<<<<< HEAD
+=======
+	smp_rmb(); /* coupled with smp_wmb() in vlan_dev_set_egress_priority() */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mp = vlan_dev_priv(dev)->egress_priority_map[(skb->priority & 0xF)];
 	while (mp) {
 		if (mp->priority == skb->priority) {
@@ -235,6 +240,14 @@ int vlan_dev_set_egress_priority(const struct net_device *dev,
 	np->next = mp;
 	np->priority = skb_prio;
 	np->vlan_qos = vlan_qos;
+<<<<<<< HEAD
+=======
+	/* Before inserting this element in hash table, make sure all its fields
+	 * are committed to memory.
+	 * coupled with smp_rmb() in vlan_dev_get_egress_qos_mask()
+	 */
+	smp_wmb();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vlan->egress_priority_map[skb_prio & 0xF] = np;
 	if (vlan_qos)
 		vlan->nr_egress_mappings++;
@@ -518,6 +531,29 @@ static const struct header_ops vlan_header_ops = {
 	.parse	 = eth_header_parse,
 };
 
+<<<<<<< HEAD
+=======
+static int vlan_passthru_hard_header(struct sk_buff *skb, struct net_device *dev,
+				     unsigned short type,
+				     const void *daddr, const void *saddr,
+				     unsigned int len)
+{
+	struct vlan_dev_priv *vlan = vlan_dev_priv(dev);
+	struct net_device *real_dev = vlan->real_dev;
+
+	if (saddr == NULL)
+		saddr = dev->dev_addr;
+
+	return dev_hard_header(skb, real_dev, type, daddr, saddr, len);
+}
+
+static const struct header_ops vlan_passthru_header_ops = {
+	.create	 = vlan_passthru_hard_header,
+	.rebuild = dev_rebuild_header,
+	.parse	 = eth_header_parse,
+};
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static const struct net_device_ops vlan_netdev_ops;
 
 static int vlan_dev_init(struct net_device *dev)
@@ -557,7 +593,11 @@ static int vlan_dev_init(struct net_device *dev)
 
 	dev->needed_headroom = real_dev->needed_headroom;
 	if (real_dev->features & NETIF_F_HW_VLAN_TX) {
+<<<<<<< HEAD
 		dev->header_ops      = real_dev->header_ops;
+=======
+		dev->header_ops      = &vlan_passthru_header_ops;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		dev->hard_header_len = real_dev->hard_header_len;
 	} else {
 		dev->header_ops      = &vlan_header_ops;
@@ -598,7 +638,11 @@ static netdev_features_t vlan_dev_fix_features(struct net_device *dev,
 	netdev_features_t features)
 {
 	struct net_device *real_dev = vlan_dev_priv(dev)->real_dev;
+<<<<<<< HEAD
 	u32 old_features = features;
+=======
+	netdev_features_t old_features = features;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	features &= real_dev->vlan_features;
 	features |= NETIF_F_RXCSUM;

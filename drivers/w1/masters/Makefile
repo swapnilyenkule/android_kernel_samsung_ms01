@@ -9,5 +9,8 @@ obj-$(CONFIG_W1_MASTER_MXC)		+= mxc_w1.o
 
 obj-$(CONFIG_W1_MASTER_DS1WM)		+= ds1wm.o
 obj-$(CONFIG_W1_MASTER_GPIO)		+= w1-gpio.o
+<<<<<<< HEAD
 obj-$(CONFIG_W1_MASTER_GPIO_MSM)	+= w1-gpio-msm.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_HDQ_MASTER_OMAP)		+= omap_hdq.o

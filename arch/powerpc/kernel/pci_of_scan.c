@@ -111,7 +111,11 @@ static void of_pci_parse_addrs(struct device_node *node, struct pci_dev *dev)
 		res->name = pci_name(dev);
 		region.start = base;
 		region.end = base + size - 1;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 
@@ -276,7 +280,11 @@ void __devinit of_scan_pci_bridge(struct pci_dev *dev)
 		res->flags = flags;
 		region.start = of_read_number(&ranges[1], 2);
 		region.end = region.start + size - 1;
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	sprintf(bus->name, "PCI Bus %04x:%02x", pci_domain_nr(bus),
 		bus->number);

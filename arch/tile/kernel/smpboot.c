@@ -222,7 +222,11 @@ void __cpuinit online_secondary(void)
 	cpu_idle();
 }
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	/* Wait 5s total for all CPUs for them to come online */
 	static int timeout;

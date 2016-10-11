@@ -199,7 +199,11 @@ void __init mxc_init_irq(void __iomem *irqbase)
 
 #ifdef CONFIG_FIQ
 	/* Initialize FIQ */
+<<<<<<< HEAD
 	init_FIQ(FIQ_START);
+=======
+	init_FIQ();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 	printk(KERN_INFO "MXC IRQ initialized\n");

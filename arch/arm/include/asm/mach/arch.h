@@ -14,12 +14,15 @@ struct tag;
 struct meminfo;
 struct sys_timer;
 struct pt_regs;
+<<<<<<< HEAD
 struct smp_operations;
 #ifdef CONFIG_SMP
 #define smp_ops(ops) (&(ops))
 #else
 #define smp_ops(ops) (struct smp_operations *)NULL
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct machine_desc {
 	unsigned int		nr;		/* architecture number	*/
@@ -41,12 +44,18 @@ struct machine_desc {
 	unsigned char		reserve_lp1 :1;	/* never has lp1	*/
 	unsigned char		reserve_lp2 :1;	/* never has lp2	*/
 	char			restart_mode;	/* default restart mode	*/
+<<<<<<< HEAD
 	struct smp_operations  *smp;    /* SMP operations  */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void			(*fixup)(struct tag *, char **,
 					 struct meminfo *);
 	void			(*reserve)(void);/* reserve mem blocks	*/
 	void			(*map_io)(void);/* IO mapping function	*/
+<<<<<<< HEAD
 	void			(*init_very_early)(void);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void			(*init_early)(void);
 	void			(*init_irq)(void);
 	struct sys_timer	*timer;		/* system tick timer	*/

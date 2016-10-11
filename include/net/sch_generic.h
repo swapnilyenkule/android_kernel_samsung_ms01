@@ -220,13 +220,24 @@ struct tcf_proto {
 
 struct qdisc_skb_cb {
 	unsigned int		pkt_len;
+<<<<<<< HEAD
 	unsigned char		data[24];
+=======
+	u16			bond_queue_mapping;
+	u16			_pad;
+	unsigned char		data[20];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
 {
 	struct qdisc_skb_cb *qcb;
+<<<<<<< HEAD
 	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(unsigned int) + sz);
+=======
+
+	BUILD_BUG_ON(sizeof(skb->cb) < offsetof(struct qdisc_skb_cb, data) + sz);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	BUILD_BUG_ON(sizeof(qcb->data) < sz);
 }
 

@@ -30,10 +30,13 @@
 #include <linux/time.h>
 #include <linux/fcntl.h>
 #include <linux/stat.h>
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 #include <linux/namei.h>
 #include <linux/dcache.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/string.h>
 #include <linux/quotaops.h>
 #include <linux/buffer_head.h>
@@ -589,11 +592,16 @@ static int htree_dirblock_to_tree(struct file *dir_file,
 		if (ext4_check_dir_entry(dir, NULL, de, bh,
 				(block<<EXT4_BLOCK_SIZE_BITS(dir->i_sb))
 					 + ((char *)de - bh->b_data))) {
+<<<<<<< HEAD
 			/* On error, skip the f_pos to the next block. */
 			dir_file->f_pos = (dir_file->f_pos |
 					(dir->i_sb->s_blocksize - 1)) + 1;
 			brelse(bh);
 			return count;
+=======
+			/* silently ignore the rest of the block */
+			break;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		ext4fs_dirhash(de->name, de->name_len, hinfo);
 		if ((hinfo->hash < start_hash) ||
@@ -801,6 +809,7 @@ static inline int ext4_match (int len, const char * const name,
 	return !memcmp(name, de->name, len);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 static inline int ext4_ci_match (int len, const char * const name,
 			      struct ext4_dir_entry_2 * de)
@@ -813,6 +822,8 @@ static inline int ext4_ci_match (int len, const char * const name,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Returns 0 if not found, -1 on failure, and 1 on success
  */
@@ -820,12 +831,16 @@ static inline int search_dirblock(struct buffer_head *bh,
 				  struct inode *dir,
 				  const struct qstr *d_name,
 				  unsigned int offset,
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 				  struct ext4_dir_entry_2 ** res_dir,
 				  char *ci_name_buf)
 #else
 				  struct ext4_dir_entry_2 ** res_dir)
 #endif
+=======
+				  struct ext4_dir_entry_2 ** res_dir)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ext4_dir_entry_2 * de;
 	char * dlimit;
@@ -839,6 +854,7 @@ static inline int search_dirblock(struct buffer_head *bh,
 		/* this code is executed quadratically often */
 		/* do minimal checking `by hand' */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 		if ((char *) de + namelen <= dlimit) {
 			if (ci_name_buf) {
@@ -864,13 +880,20 @@ static inline int search_dirblock(struct buffer_head *bh,
 #else
 		if ((char *) de + namelen <= dlimit &&
 			ext4_match (namelen, name, de)) {
+=======
+		if ((char *) de + namelen <= dlimit &&
+		    ext4_match (namelen, name, de)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/* found a match - just to be sure, do a full check */
 			if (ext4_check_dir_entry(dir, NULL, de, bh, offset))
 				return -1;
 			*res_dir = de;
 			return 1;
 		}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* prevent looping on a bad block */
 		de_len = ext4_rec_len_from_disk(de->rec_len,
 						dir->i_sb->s_blocksize);
@@ -896,12 +919,16 @@ static inline int search_dirblock(struct buffer_head *bh,
  */
 static struct buffer_head * ext4_find_entry (struct inode *dir,
 					const struct qstr *d_name,
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 					struct ext4_dir_entry_2 ** res_dir,
 					char *ci_name_buf)
 #else
 					struct ext4_dir_entry_2 ** res_dir)
 #endif
+=======
+					struct ext4_dir_entry_2 ** res_dir)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct super_block *sb;
 	struct buffer_head *bh_use[NAMEI_RA_SIZE];
@@ -914,7 +941,11 @@ static struct buffer_head * ext4_find_entry (struct inode *dir,
 				   buffer */
 	int num = 0;
 	ext4_lblk_t  nblocks;
+<<<<<<< HEAD
 	int i, err;
+=======
+	int i, err = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int namelen;
 
 	*res_dir = NULL;
@@ -939,7 +970,15 @@ static struct buffer_head * ext4_find_entry (struct inode *dir,
 		 * return.  Otherwise, fall back to doing a search the
 		 * old fashioned way.
 		 */
+<<<<<<< HEAD
 		if (bh || (err != ERR_BAD_DX_DIR))
+=======
+		if (err == -ENOENT)
+			return NULL;
+		if (err && err != ERR_BAD_DX_DIR)
+			return ERR_PTR(err);
+		if (bh)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return bh;
 		dxtrace(printk(KERN_DEBUG "ext4_find_entry: dx failed, "
 			       "falling back\n"));
@@ -970,6 +1009,14 @@ restart:
 				}
 				num++;
 				bh = ext4_getblk(NULL, dir, b++, 0, &err);
+<<<<<<< HEAD
+=======
+				if (unlikely(err)) {
+					if (ra_max == 0)
+						return ERR_PTR(err);
+					break;
+				}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				bh_use[ra_max] = bh;
 				if (bh)
 					ll_rw_block(READ | REQ_META | REQ_PRIO,
@@ -986,6 +1033,7 @@ restart:
 			brelse(bh);
 			goto next;
 		}
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 		i = search_dirblock(bh, dir, d_name,
 			    block << EXT4_BLOCK_SIZE_BITS(sb), res_dir,
@@ -994,6 +1042,10 @@ restart:
 		i = search_dirblock(bh, dir, d_name,
 			    block << EXT4_BLOCK_SIZE_BITS(sb), res_dir);
 #endif
+=======
+		i = search_dirblock(bh, dir, d_name,
+			    block << EXT4_BLOCK_SIZE_BITS(sb), res_dir);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (i == 1) {
 			EXT4_I(dir)->i_dir_start_lookup = block;
 			ret = bh;
@@ -1043,6 +1095,7 @@ static struct buffer_head * ext4_dx_find_entry(struct inode *dir, const struct q
 		if (!(bh = ext4_bread(NULL, dir, block, 0, err)))
 			goto errout;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 		retval = search_dirblock(bh, dir, d_name,
 					 block << EXT4_BLOCK_SIZE_BITS(sb),
@@ -1052,6 +1105,11 @@ static struct buffer_head * ext4_dx_find_entry(struct inode *dir, const struct q
 					 block << EXT4_BLOCK_SIZE_BITS(sb),
 					 res_dir);
 #endif
+=======
+		retval = search_dirblock(bh, dir, d_name,
+					 block << EXT4_BLOCK_SIZE_BITS(sb),
+					 res_dir);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (retval == 1) { 	/* Success! */
 			dx_release(frames);
 			return bh;
@@ -1086,14 +1144,18 @@ static struct dentry *ext4_lookup(struct inode *dir, struct dentry *dentry, stru
 	struct inode *inode;
 	struct ext4_dir_entry_2 *de;
 	struct buffer_head *bh;
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	struct qstr ci_name;
 	char ci_name_buf[EXT4_NAME_LEN+1];
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (dentry->d_name.len > EXT4_NAME_LEN)
 		return ERR_PTR(-ENAMETOOLONG);
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	ci_name_buf[0] = '\0';
 	if (nd && (nd->flags & LOOKUP_CASE_INSENSITIVE))
@@ -1135,6 +1197,34 @@ static struct dentry *ext4_lookup(struct inode *dir, struct dentry *dentry, stru
 #else
 	return d_splice_alias(inode, dentry);
 #endif
+=======
+	bh = ext4_find_entry(dir, &dentry->d_name, &de);
+	if (IS_ERR(bh))
+		return (struct dentry *) bh;
+	inode = NULL;
+	if (bh) {
+		__u32 ino = le32_to_cpu(de->inode);
+		brelse(bh);
+		if (!ext4_valid_inum(dir->i_sb, ino)) {
+			EXT4_ERROR_INODE(dir, "bad inode number: %u", ino);
+			return ERR_PTR(-EIO);
+		}
+		if (unlikely(ino == dir->i_ino)) {
+			EXT4_ERROR_INODE(dir, "'%.*s' linked to parent dir",
+					 dentry->d_name.len,
+					 dentry->d_name.name);
+			return ERR_PTR(-EIO);
+		}
+		inode = ext4_iget_normal(dir->i_sb, ino);
+		if (inode == ERR_PTR(-ESTALE)) {
+			EXT4_ERROR_INODE(dir,
+					 "deleted inode referenced: %u",
+					 ino);
+			return ERR_PTR(-EIO);
+		}
+	}
+	return d_splice_alias(inode, dentry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 
@@ -1148,11 +1238,17 @@ struct dentry *ext4_get_parent(struct dentry *child)
 	struct ext4_dir_entry_2 * de;
 	struct buffer_head *bh;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	bh = ext4_find_entry(child->d_inode, &dotdot, &de, NULL);
 #else
 	bh = ext4_find_entry(child->d_inode, &dotdot, &de);
 #endif
+=======
+	bh = ext4_find_entry(child->d_inode, &dotdot, &de);
+	if (IS_ERR(bh))
+		return (struct dentry *) bh;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!bh)
 		return ERR_PTR(-ENOENT);
 	ino = le32_to_cpu(de->inode);
@@ -1164,7 +1260,11 @@ struct dentry *ext4_get_parent(struct dentry *child)
 		return ERR_PTR(-EIO);
 	}
 
+<<<<<<< HEAD
 	return d_obtain_alias(ext4_iget(child->d_inode->i_sb, ino));
+=======
+	return d_obtain_alias(ext4_iget_normal(child->d_inode->i_sb, ino));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #define S_SHIFT 12
@@ -1498,12 +1598,17 @@ static int make_indexed_dir(handle_t *handle, struct dentry *dentry,
 		hinfo.hash_version += EXT4_SB(dir->i_sb)->s_hash_unsigned;
 	hinfo.seed = EXT4_SB(dir->i_sb)->s_hash_seed;
 	ext4fs_dirhash(name, namelen, &hinfo);
+<<<<<<< HEAD
+=======
+	memset(frames, 0, sizeof(frames));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	frame = frames;
 	frame->entries = entries;
 	frame->at = entries;
 	frame->bh = bh;
 	bh = bh2;
 
+<<<<<<< HEAD
 	ext4_handle_dirty_metadata(handle, dir, frame->bh);
 	ext4_handle_dirty_metadata(handle, dir, bh);
 
@@ -1517,12 +1622,36 @@ static int make_indexed_dir(handle_t *handle, struct dentry *dentry,
 		ext4_mark_inode_dirty(handle, dir);
 		dx_release(frames);
 		return retval;
+=======
+	retval = ext4_handle_dirty_metadata(handle, dir, frame->bh);
+	if (retval)
+		goto out_frames;
+	retval = ext4_handle_dirty_metadata(handle, dir, bh);
+	if (retval)
+		goto out_frames;
+
+	de = do_split(handle,dir, &bh, frame, &hinfo, &retval);
+	if (!de) {
+		goto out_frames;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	dx_release(frames);
 
 	retval = add_dirent_to_buf(handle, dentry, inode, de, bh);
 	brelse(bh);
 	return retval;
+<<<<<<< HEAD
+=======
+out_frames:
+	/*
+	 * Even if the block split failed, we have to properly write
+	 * out all the changes we did so far. Otherwise we can end up
+	 * with corrupted filesystem.
+	 */
+	ext4_mark_inode_dirty(handle, dir);
+	dx_release(frames);
+	return retval;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -1539,7 +1668,11 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 			  struct inode *inode)
 {
 	struct inode *dir = dentry->d_parent->d_inode;
+<<<<<<< HEAD
 	struct buffer_head *bh;
+=======
+	struct buffer_head *bh = NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct ext4_dir_entry_2 *de;
 	struct super_block *sb;
 	int	retval;
@@ -1554,7 +1687,11 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 	if (is_dx(dir)) {
 		retval = ext4_dx_add_entry(handle, dentry, inode);
 		if (!retval || (retval != ERR_BAD_DX_DIR))
+<<<<<<< HEAD
 			return retval;
+=======
+			goto out;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ext4_clear_inode_flag(dir, EXT4_INODE_INDEX);
 		dx_fallback++;
 		ext4_mark_inode_dirty(handle, dir);
@@ -1565,6 +1702,7 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 		if(!bh)
 			return retval;
 		retval = add_dirent_to_buf(handle, dentry, inode, NULL, bh);
+<<<<<<< HEAD
 		if (retval != -ENOSPC) {
 			brelse(bh);
 			return retval;
@@ -1573,6 +1711,17 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 		if (blocks == 1 && !dx_fallback &&
 		    EXT4_HAS_COMPAT_FEATURE(sb, EXT4_FEATURE_COMPAT_DIR_INDEX))
 			return make_indexed_dir(handle, dentry, inode, bh);
+=======
+		if (retval != -ENOSPC)
+			goto out;
+
+		if (blocks == 1 && !dx_fallback &&
+		    EXT4_HAS_COMPAT_FEATURE(sb, EXT4_FEATURE_COMPAT_DIR_INDEX)) {
+			retval = make_indexed_dir(handle, dentry, inode, bh);
+			bh = NULL; /* make_indexed_dir releases bh */
+			goto out;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		brelse(bh);
 	}
 	bh = ext4_append(handle, dir, &block, &retval);
@@ -1582,6 +1731,10 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 	de->inode = 0;
 	de->rec_len = ext4_rec_len_to_disk(blocksize, blocksize);
 	retval = add_dirent_to_buf(handle, dentry, inode, de, bh);
+<<<<<<< HEAD
+=======
+out:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	brelse(bh);
 	if (retval == 0)
 		ext4_set_inode_state(inode, EXT4_STATE_NEWENTRY);
@@ -1834,6 +1987,7 @@ static int ext4_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 {
 	handle_t *handle;
 	struct inode *inode;
+<<<<<<< HEAD
 	int err, credits, retries = 0;
 
 	dquot_initialize(dir);
@@ -1846,17 +2000,39 @@ retry:
 	inode = ext4_new_inode_start_handle(dir, mode, &dentry->d_name, 0,
 					    NULL, credits);
 	handle = ext4_journal_current_handle();
+=======
+	int err, retries = 0;
+
+	dquot_initialize(dir);
+
+retry:
+	handle = ext4_journal_start(dir, EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
+					EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3 +
+					EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb));
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+	inode = ext4_new_inode(handle, dir, mode, &dentry->d_name, 0, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = PTR_ERR(inode);
 	if (!IS_ERR(inode)) {
 		inode->i_op = &ext4_file_inode_operations;
 		inode->i_fop = &ext4_file_operations;
 		ext4_set_aops(inode);
 		err = ext4_add_nondir(handle, dentry, inode);
+<<<<<<< HEAD
 		if (!err && IS_DIRSYNC(dir))
 			ext4_handle_sync(handle);
 	}
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+	}
+	ext4_journal_stop(handle);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err == -ENOSPC && ext4_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
 	return err;
@@ -1867,13 +2043,18 @@ static int ext4_mknod(struct inode *dir, struct dentry *dentry,
 {
 	handle_t *handle;
 	struct inode *inode;
+<<<<<<< HEAD
 	int err, credits, retries = 0;
+=======
+	int err, retries = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!new_valid_dev(rdev))
 		return -EINVAL;
 
 	dquot_initialize(dir);
 
+<<<<<<< HEAD
 	credits = (EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
 		   EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3 +
 		   EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb));
@@ -1894,6 +2075,26 @@ retry:
 	}
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+retry:
+	handle = ext4_journal_start(dir, EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
+					EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3 +
+					EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb));
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+	inode = ext4_new_inode(handle, dir, mode, &dentry->d_name, 0, NULL);
+	err = PTR_ERR(inode);
+	if (!IS_ERR(inode)) {
+		init_special_inode(inode, inode->i_mode, rdev);
+		inode->i_op = &ext4_special_inode_operations;
+		err = ext4_add_nondir(handle, dentry, inode);
+	}
+	ext4_journal_stop(handle);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err == -ENOSPC && ext4_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
 	return err;
@@ -1906,13 +2107,18 @@ static int ext4_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 	struct buffer_head *dir_block = NULL;
 	struct ext4_dir_entry_2 *de;
 	unsigned int blocksize = dir->i_sb->s_blocksize;
+<<<<<<< HEAD
 	int err, credits, retries = 0;
+=======
+	int err, retries = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (EXT4_DIR_LINK_MAX(dir))
 		return -EMLINK;
 
 	dquot_initialize(dir);
 
+<<<<<<< HEAD
 	credits = (EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
 		   EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3 +
 		   EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb));
@@ -1922,6 +2128,20 @@ retry:
 					    &dentry->d_name,
 					    0, NULL, credits);
 	handle = ext4_journal_current_handle();
+=======
+retry:
+	handle = ext4_journal_start(dir, EXT4_DATA_TRANS_BLOCKS(dir->i_sb) +
+					EXT4_INDEX_EXTRA_TRANS_BLOCKS + 3 +
+					EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb));
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+	inode = ext4_new_inode(handle, dir, S_IFDIR | mode,
+			       &dentry->d_name, 0, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = PTR_ERR(inode);
 	if (IS_ERR(inode))
 		goto out_stop;
@@ -1973,12 +2193,18 @@ out_clear_inode:
 		goto out_clear_inode;
 	d_instantiate(dentry, inode);
 	unlock_new_inode(inode);
+<<<<<<< HEAD
 	if (IS_DIRSYNC(dir))
 		ext4_handle_sync(handle);
 out_stop:
 	brelse(dir_block);
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+out_stop:
+	brelse(dir_block);
+	ext4_journal_stop(handle);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err == -ENOSPC && ext4_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
 	return err;
@@ -2071,7 +2297,11 @@ int ext4_orphan_add(handle_t *handle, struct inode *inode)
 	struct ext4_iloc iloc;
 	int err = 0, rc;
 
+<<<<<<< HEAD
 	if (!ext4_handle_valid(handle))
+=======
+	if (!ext4_handle_valid(handle) || is_bad_inode(inode))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	mutex_lock(&EXT4_SB(sb)->s_orphan_lock);
@@ -2146,7 +2376,12 @@ int ext4_orphan_del(handle_t *handle, struct inode *inode)
 	int err = 0;
 
 	/* ext4_handle_valid() assumes a valid handle_t pointer */
+<<<<<<< HEAD
 	if (handle && !ext4_handle_valid(handle))
+=======
+	if (handle && !ext4_handle_valid(handle) &&
+	    !(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_ORPHAN_FS))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	mutex_lock(&EXT4_SB(inode->i_sb)->s_orphan_lock);
@@ -2215,13 +2450,18 @@ static int ext4_rmdir(struct inode *dir, struct dentry *dentry)
 	struct inode *inode;
 	struct buffer_head *bh;
 	struct ext4_dir_entry_2 *de;
+<<<<<<< HEAD
 	handle_t *handle = NULL;
+=======
+	handle_t *handle;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Initialize quotas before so that eventual writes go in
 	 * separate transaction */
 	dquot_initialize(dir);
 	dquot_initialize(dentry->d_inode);
 
+<<<<<<< HEAD
 	retval = -ENOENT;
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	bh = ext4_find_entry(dir, &dentry->d_name, &de, NULL);
@@ -2231,6 +2471,22 @@ static int ext4_rmdir(struct inode *dir, struct dentry *dentry)
 	if (!bh)
 		goto end_rmdir;
 
+=======
+	handle = ext4_journal_start(dir, EXT4_DELETE_TRANS_BLOCKS(dir->i_sb));
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	retval = -ENOENT;
+	bh = ext4_find_entry(dir, &dentry->d_name, &de);
+	if (IS_ERR(bh))
+		return PTR_ERR(bh);
+	if (!bh)
+		goto end_rmdir;
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	inode = dentry->d_inode;
 
 	retval = -EIO;
@@ -2241,6 +2497,7 @@ static int ext4_rmdir(struct inode *dir, struct dentry *dentry)
 	if (!empty_dir(inode))
 		goto end_rmdir;
 
+<<<<<<< HEAD
 	handle = ext4_journal_start(dir, EXT4_DELETE_TRANS_BLOCKS(dir->i_sb));
 	if (IS_ERR(handle)) {
 		retval = PTR_ERR(handle);
@@ -2251,6 +2508,8 @@ static int ext4_rmdir(struct inode *dir, struct dentry *dentry)
 	if (IS_DIRSYNC(dir))
 		ext4_handle_sync(handle);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	retval = ext4_delete_entry(handle, dir, de, bh);
 	if (retval)
 		goto end_rmdir;
@@ -2272,9 +2531,14 @@ static int ext4_rmdir(struct inode *dir, struct dentry *dentry)
 	ext4_mark_inode_dirty(handle, dir);
 
 end_rmdir:
+<<<<<<< HEAD
 	brelse(bh);
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+	ext4_journal_stop(handle);
+	brelse(bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return retval;
 }
 
@@ -2284,7 +2548,11 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	struct inode *inode;
 	struct buffer_head *bh;
 	struct ext4_dir_entry_2 *de;
+<<<<<<< HEAD
 	handle_t *handle = NULL;
+=======
+	handle_t *handle;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	trace_ext4_unlink_enter(dir, dentry);
 	/* Initialize quotas before so that eventual writes go
@@ -2292,12 +2560,26 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	dquot_initialize(dir);
 	dquot_initialize(dentry->d_inode);
 
+<<<<<<< HEAD
 	retval = -ENOENT;
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	bh = ext4_find_entry(dir, &dentry->d_name, &de, NULL);
 #else
 	bh = ext4_find_entry(dir, &dentry->d_name, &de);
 #endif
+=======
+	handle = ext4_journal_start(dir, EXT4_DELETE_TRANS_BLOCKS(dir->i_sb));
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+	retval = -ENOENT;
+	bh = ext4_find_entry(dir, &dentry->d_name, &de);
+	if (IS_ERR(bh))
+		return PTR_ERR(bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!bh)
 		goto end_unlink;
 
@@ -2307,6 +2589,7 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	if (le32_to_cpu(de->inode) != inode->i_ino)
 		goto end_unlink;
 
+<<<<<<< HEAD
 	handle = ext4_journal_start(dir, EXT4_DELETE_TRANS_BLOCKS(dir->i_sb));
 	if (IS_ERR(handle)) {
 		retval = PTR_ERR(handle);
@@ -2317,6 +2600,8 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	if (IS_DIRSYNC(dir))
 		ext4_handle_sync(handle);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!inode->i_nlink) {
 		ext4_warning(inode->i_sb,
 			     "Deleting nonexistent file (%lu), %d",
@@ -2337,9 +2622,14 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	retval = 0;
 
 end_unlink:
+<<<<<<< HEAD
 	brelse(bh);
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+	ext4_journal_stop(handle);
+	brelse(bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	trace_ext4_unlink_exit(dentry, retval);
 	return retval;
 }
@@ -2379,11 +2669,23 @@ static int ext4_symlink(struct inode *dir,
 			  EXT4_MAXQUOTAS_INIT_BLOCKS(dir->i_sb);
 	}
 retry:
+<<<<<<< HEAD
 	inode = ext4_new_inode_start_handle(dir, S_IFLNK|S_IRWXUGO,
 					    &dentry->d_name, 0, NULL,
 					    credits);
 	handle = ext4_journal_current_handle();
 
+=======
+	handle = ext4_journal_start(dir, credits);
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(dir))
+		ext4_handle_sync(handle);
+
+	inode = ext4_new_inode(handle, dir, S_IFLNK|S_IRWXUGO,
+			       &dentry->d_name, 0, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = PTR_ERR(inode);
 	if (IS_ERR(inode))
 		goto out_stop;
@@ -2436,11 +2738,16 @@ retry:
 	}
 	EXT4_I(inode)->i_disksize = inode->i_size;
 	err = ext4_add_nondir(handle, dentry, inode);
+<<<<<<< HEAD
 	if (!err && IS_DIRSYNC(dir))
 		ext4_handle_sync(handle);
 out_stop:
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+out_stop:
+	ext4_journal_stop(handle);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (err == -ENOSPC && ext4_should_retry_alloc(dir->i_sb, &retries))
 		goto retry;
 	return err;
@@ -2499,7 +2806,11 @@ retry:
 static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
 		       struct inode *new_dir, struct dentry *new_dentry)
 {
+<<<<<<< HEAD
 	handle_t *handle = NULL;
+=======
+	handle_t *handle;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct inode *old_inode, *new_inode;
 	struct buffer_head *old_bh, *new_bh, *dir_bh;
 	struct ext4_dir_entry_2 *old_de, *new_de;
@@ -2514,12 +2825,27 @@ static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
 	 * in separate transaction */
 	if (new_dentry->d_inode)
 		dquot_initialize(new_dentry->d_inode);
+<<<<<<< HEAD
 
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	old_bh = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de, NULL);
 #else
 	old_bh = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de);
 #endif
+=======
+	handle = ext4_journal_start(old_dir, 2 *
+					EXT4_DATA_TRANS_BLOCKS(old_dir->i_sb) +
+					EXT4_INDEX_EXTRA_TRANS_BLOCKS + 2);
+	if (IS_ERR(handle))
+		return PTR_ERR(handle);
+
+	if (IS_DIRSYNC(old_dir) || IS_DIRSYNC(new_dir))
+		ext4_handle_sync(handle);
+
+	old_bh = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de);
+	if (IS_ERR(old_bh))
+		return PTR_ERR(old_bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 *  Check for inode number is _not_ due to possible IO errors.
 	 *  We might rmdir the source, keep it as pwd of some process
@@ -2532,17 +2858,27 @@ static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
 		goto end_rename;
 
 	new_inode = new_dentry->d_inode;
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 	new_bh = ext4_find_entry(new_dir, &new_dentry->d_name, &new_de, NULL);
 #else
 	new_bh = ext4_find_entry(new_dir, &new_dentry->d_name, &new_de);
 #endif
+=======
+	new_bh = ext4_find_entry(new_dir, &new_dentry->d_name, &new_de);
+	if (IS_ERR(new_bh)) {
+		retval = PTR_ERR(new_bh);
+		new_bh = NULL;
+		goto end_rename;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (new_bh) {
 		if (!new_inode) {
 			brelse(new_bh);
 			new_bh = NULL;
 		}
 	}
+<<<<<<< HEAD
 
 	handle = ext4_journal_start(old_dir,
 		(2 * EXT4_DATA_TRANS_BLOCKS(old_dir->i_sb) +
@@ -2553,6 +2889,8 @@ static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
 	if (IS_DIRSYNC(old_dir) || IS_DIRSYNC(new_dir))
 		ext4_handle_sync(handle);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (S_ISDIR(old_inode->i_mode)) {
 		if (new_inode) {
 			retval = -ENOTEMPTY;
@@ -2624,12 +2962,19 @@ static int ext4_rename(struct inode *old_dir, struct dentry *old_dentry,
 		struct buffer_head *old_bh2;
 		struct ext4_dir_entry_2 *old_de2;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SDCARD_FS_CI_SEARCH
 		old_bh2 = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de2, NULL);
 #else
 		old_bh2 = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de2);
 #endif
 		if (old_bh2) {
+=======
+		old_bh2 = ext4_find_entry(old_dir, &old_dentry->d_name, &old_de2);
+		if (IS_ERR(old_bh2)) {
+			retval = PTR_ERR(old_bh2);
+		} else if (old_bh2) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			retval = ext4_delete_entry(handle, old_dir,
 						   old_de2, old_bh2);
 			brelse(old_bh2);
@@ -2681,8 +3026,12 @@ end_rename:
 	brelse(dir_bh);
 	brelse(old_bh);
 	brelse(new_bh);
+<<<<<<< HEAD
 	if (handle)
 		ext4_journal_stop(handle);
+=======
+	ext4_journal_stop(handle);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (retval == 0 && force_da_alloc)
 		ext4_alloc_da_blocks(old_inode);
 	return retval;

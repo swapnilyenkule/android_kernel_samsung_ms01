@@ -1361,11 +1361,21 @@ static int functionfs_bind(struct ffs_data *ffs, struct usb_composite_dev *cdev)
 	ffs->ep0req->context = ffs;
 
 	lang = ffs->stringtabs;
+<<<<<<< HEAD
 	for (lang = ffs->stringtabs; *lang; ++lang) {
 		struct usb_string *str = (*lang)->strings;
 		int id = first_id;
 		for (; str->s; ++id, ++str)
 			str->id = id;
+=======
+	if (lang) {
+		for (; *lang; ++lang) {
+			struct usb_string *str = (*lang)->strings;
+			int id = first_id;
+			for (; str->s; ++id, ++str)
+				str->id = id;
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	ffs->gadget = cdev->gadget;

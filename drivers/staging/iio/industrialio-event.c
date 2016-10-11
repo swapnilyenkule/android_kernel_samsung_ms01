@@ -35,9 +35,12 @@
  */
 struct iio_event_interface {
 	wait_queue_head_t	wait;
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	struct mutex		read_lock;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	DECLARE_KFIFO(det_events, struct iio_event_data, 16);
 
 	struct list_head	dev_attr_list;
@@ -98,18 +101,24 @@ static ssize_t iio_event_chrdev_read(struct file *filep,
 
 	if (count < sizeof(struct iio_event_data))
 		return -EINVAL;
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	if (mutex_lock_interruptible(&ev_int->read_lock))
 		return -ERESTARTSYS;
 #else
 	spin_lock(&ev_int->wait.lock);
 #endif
+=======
+
+	spin_lock(&ev_int->wait.lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (kfifo_is_empty(&ev_int->det_events)) {
 		if (filep->f_flags & O_NONBLOCK) {
 			ret = -EAGAIN;
 			goto error_unlock;
 		}
 		/* Blocking on device; waiting for something to be there */
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 		ret = wait_event_interruptible(ev_int->wait,
 					!kfifo_is_empty(&ev_int->det_events));
@@ -117,6 +126,10 @@ static ssize_t iio_event_chrdev_read(struct file *filep,
 		ret = wait_event_interruptible_locked(ev_int->wait,
 					!kfifo_is_empty(&ev_int->det_events));
 #endif
+=======
+		ret = wait_event_interruptible_locked(ev_int->wait,
+					!kfifo_is_empty(&ev_int->det_events));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ret)
 			goto error_unlock;
 		/* Single access device so no one else can get the data */
@@ -125,12 +138,16 @@ static ssize_t iio_event_chrdev_read(struct file *filep,
 	ret = kfifo_to_user(&ev_int->det_events, buf, count, &copied);
 
 error_unlock:
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	mutex_unlock(&ev_int->read_lock);
 #else
 		spin_unlock(&ev_int->wait.lock);
 #endif
 
+=======
+	spin_unlock(&ev_int->wait.lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return ret ? ret : copied;
 }
@@ -393,9 +410,12 @@ static void iio_setup_ev_int(struct iio_event_interface *ev_int)
 {
 	INIT_KFIFO(ev_int->det_events);
 	init_waitqueue_head(&ev_int->wait);
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	mutex_init(&ev_int->read_lock);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *iio_event_group_name = "events";
@@ -457,9 +477,12 @@ int iio_device_register_eventset(struct iio_dev *indio_dev)
 
 error_free_setup_event_lines:
 	__iio_remove_event_config_attrs(indio_dev);
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	mutex_destroy(&indio_dev->event_interface->read_lock);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(indio_dev->event_interface);
 error_ret:
 
@@ -471,9 +494,12 @@ void iio_device_unregister_eventset(struct iio_dev *indio_dev)
 	if (indio_dev->event_interface == NULL)
 		return;
 	__iio_remove_event_config_attrs(indio_dev);
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_KOR_FRESCO)
 	mutex_destroy(&indio_dev->event_interface->read_lock);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(indio_dev->event_interface->group.attrs);
 	kfree(indio_dev->event_interface);
 }

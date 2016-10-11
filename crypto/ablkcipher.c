@@ -52,11 +52,14 @@ void __ablkcipher_walk_complete(struct ablkcipher_walk *walk)
 {
 	struct ablkcipher_buffer *p, *tmp;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	list_for_each_entry_safe(p, tmp, &walk->buffers, entry) {
 		ablkcipher_buffer_write(p);
 		list_del(&p->entry);
@@ -119,11 +122,14 @@ int ablkcipher_walk_done(struct ablkcipher_request *req,
 	struct crypto_tfm *tfm = req->base.tfm;
 	unsigned int nbytes = 0;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (likely(err >= 0)) {
 		unsigned int n = walk->nbytes - err;
 
@@ -398,9 +404,15 @@ static int crypto_ablkcipher_report(struct sk_buff *skb, struct crypto_alg *alg)
 {
 	struct crypto_report_blkcipher rblkcipher;
 
+<<<<<<< HEAD
 	snprintf(rblkcipher.type, CRYPTO_MAX_ALG_NAME, "%s", "ablkcipher");
 	snprintf(rblkcipher.geniv, CRYPTO_MAX_ALG_NAME, "%s",
 		 alg->cra_ablkcipher.geniv ?: "<default>");
+=======
+	strncpy(rblkcipher.type, "ablkcipher", sizeof(rblkcipher.type));
+	strncpy(rblkcipher.geniv, alg->cra_ablkcipher.geniv ?: "<default>",
+		sizeof(rblkcipher.geniv));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rblkcipher.blocksize = alg->cra_blocksize;
 	rblkcipher.min_keysize = alg->cra_ablkcipher.min_keysize;
@@ -479,9 +491,15 @@ static int crypto_givcipher_report(struct sk_buff *skb, struct crypto_alg *alg)
 {
 	struct crypto_report_blkcipher rblkcipher;
 
+<<<<<<< HEAD
 	snprintf(rblkcipher.type, CRYPTO_MAX_ALG_NAME, "%s", "givcipher");
 	snprintf(rblkcipher.geniv, CRYPTO_MAX_ALG_NAME, "%s",
 		 alg->cra_ablkcipher.geniv ?: "<built-in>");
+=======
+	strncpy(rblkcipher.type, "givcipher", sizeof(rblkcipher.type));
+	strncpy(rblkcipher.geniv, alg->cra_ablkcipher.geniv ?: "<built-in>",
+		sizeof(rblkcipher.geniv));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rblkcipher.blocksize = alg->cra_blocksize;
 	rblkcipher.min_keysize = alg->cra_ablkcipher.min_keysize;
@@ -669,11 +687,14 @@ int crypto_grab_skcipher(struct crypto_skcipher_spawn *spawn, const char *name,
 	struct crypto_alg *alg;
 	int err;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EACCES;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	type = crypto_skcipher_type(type);
 	mask = crypto_skcipher_mask(mask);
 
@@ -715,7 +736,11 @@ struct crypto_ablkcipher *crypto_alloc_ablkcipher(const char *alg_name,
 err:
 		if (err != -EAGAIN)
 			break;
+<<<<<<< HEAD
 		if (signal_pending(current)) {
+=======
+		if (fatal_signal_pending(current)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			err = -EINTR;
 			break;
 		}

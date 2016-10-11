@@ -82,8 +82,11 @@ static void  __attribute__ ((noreturn)) usage(void)
 	fprintf(stderr, "\t\tSet the physical boot cpu\n");
 	fprintf(stderr, "\t-f\n");
 	fprintf(stderr, "\t\tForce - try to produce output even if the input tree has errors\n");
+<<<<<<< HEAD
 	fprintf(stderr, "\t-i\n");
 	fprintf(stderr, "\t\tAdd a path to search for include files\n");
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	fprintf(stderr, "\t-s\n");
 	fprintf(stderr, "\t\tSort nodes and properties before outputting (only useful for\n\t\tcomparing trees)\n");
 	fprintf(stderr, "\t-v\n");
@@ -93,9 +96,12 @@ static void  __attribute__ ((noreturn)) usage(void)
 	fprintf(stderr, "\t\t\tlegacy - \"linux,phandle\" properties only\n");
 	fprintf(stderr, "\t\t\tepapr - \"phandle\" properties only\n");
 	fprintf(stderr, "\t\t\tboth - Both \"linux,phandle\" and \"phandle\" properties\n");
+<<<<<<< HEAD
 	fprintf(stderr, "\t-W [no-]<checkname>\n");
 	fprintf(stderr, "\t-E [no-]<checkname>\n");
 	fprintf(stderr, "\t\t\tenable or disable warnings and errors\n");
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	exit(3);
 }
 
@@ -118,7 +124,11 @@ int main(int argc, char *argv[])
 	minsize    = 0;
 	padsize    = 0;
 
+<<<<<<< HEAD
 	while ((opt = getopt(argc, argv, "hI:O:o:V:d:R:S:p:fqb:i:vH:sW:E:"))
+=======
+	while ((opt = getopt(argc, argv, "hI:O:o:V:d:R:S:p:fcqb:vH:s"))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			!= EOF) {
 		switch (opt) {
 		case 'I':
@@ -154,9 +164,12 @@ int main(int argc, char *argv[])
 		case 'b':
 			cmdline_boot_cpuid = strtoll(optarg, NULL, 0);
 			break;
+<<<<<<< HEAD
 		case 'i':
 			srcfile_add_search_path(optarg);
 			break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case 'v':
 			printf("Version: %s\n", DTC_VERSION);
 			exit(0);
@@ -176,6 +189,7 @@ int main(int argc, char *argv[])
 			sort = 1;
 			break;
 
+<<<<<<< HEAD
 		case 'W':
 			parse_checks_option(true, false, optarg);
 			break;
@@ -184,6 +198,8 @@ int main(int argc, char *argv[])
 			parse_checks_option(false, true, optarg);
 			break;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case 'h':
 		default:
 			usage();
@@ -204,6 +220,12 @@ int main(int argc, char *argv[])
 	if (minsize)
 		fprintf(stderr, "DTC: Use of \"-S\" is deprecated; it will be removed soon, use \"-p\" instead\n");
 
+<<<<<<< HEAD
+=======
+	fprintf(stderr, "DTC: %s->%s  on file \"%s\"\n",
+		inform, outform, arg);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (depname) {
 		depfile = fopen(depname, "w");
 		if (!depfile)

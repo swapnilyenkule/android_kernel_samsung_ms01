@@ -457,12 +457,19 @@ static int __devexit spear_rtc_remove(struct platform_device *pdev)
 	clk_disable(config->clk);
 	clk_put(config->clk);
 	iounmap(config->ioaddr);
+<<<<<<< HEAD
 	kfree(config);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (res)
 		release_mem_region(res->start, resource_size(res));
 	platform_set_drvdata(pdev, NULL);
 	rtc_device_unregister(config->rtc);
+<<<<<<< HEAD
+=======
+	kfree(config);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }

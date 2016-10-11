@@ -1030,6 +1030,7 @@ static int tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n, void *arg)
 }
 
 /*
+<<<<<<< HEAD
  * enable/disable flow on qdisc.
  */
 void
@@ -1059,6 +1060,8 @@ tc_qdisc_flow_control(struct net_device *dev, u32 tcm_handle, int enable_flow)
 EXPORT_SYMBOL(tc_qdisc_flow_control);
 
 /*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Create/change qdisc.
  */
 

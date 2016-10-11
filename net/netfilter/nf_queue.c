@@ -255,7 +255,11 @@ int nf_queue(struct sk_buff *skb,
 	 * returned by nf_queue.  For instance, callers rely on -ECANCELED to mean
 	 * 'ignore this hook'.
 	 */
+<<<<<<< HEAD
 	if (IS_ERR(segs))
+=======
+	if (IS_ERR_OR_NULL(segs))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out_err;
 	queued = 0;
 	err = 0;

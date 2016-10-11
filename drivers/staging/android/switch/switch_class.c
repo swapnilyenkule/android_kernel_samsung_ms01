@@ -151,8 +151,13 @@ void switch_dev_unregister(struct switch_dev *sdev)
 {
 	device_remove_file(sdev->dev, &dev_attr_name);
 	device_remove_file(sdev->dev, &dev_attr_state);
+<<<<<<< HEAD
 	dev_set_drvdata(sdev->dev, NULL);
 	device_destroy(switch_class, MKDEV(0, sdev->index));
+=======
+	device_destroy(switch_class, MKDEV(0, sdev->index));
+	dev_set_drvdata(sdev->dev, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(switch_dev_unregister);
 

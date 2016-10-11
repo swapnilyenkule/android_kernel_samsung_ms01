@@ -416,11 +416,17 @@ i2c_davinci_xfer_msg(struct i2c_adapter *adap, struct i2c_msg *msg, int stop)
 	if (dev->cmd_err & DAVINCI_I2C_STR_NACK) {
 		if (msg->flags & I2C_M_IGNORE_NAK)
 			return msg->len;
+<<<<<<< HEAD
 		if (stop) {
 			w = davinci_i2c_read_reg(dev, DAVINCI_I2C_MDR_REG);
 			w |= DAVINCI_I2C_MDR_STP;
 			davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, w);
 		}
+=======
+		w = davinci_i2c_read_reg(dev, DAVINCI_I2C_MDR_REG);
+		w |= DAVINCI_I2C_MDR_STP;
+		davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, w);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EREMOTEIO;
 	}
 	return -EIO;
@@ -755,7 +761,11 @@ static int davinci_i2c_remove(struct platform_device *pdev)
 	dev->clk = NULL;
 
 	davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
+<<<<<<< HEAD
 	free_irq(IRQ_I2C, dev);
+=======
+	free_irq(dev->irq, dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	iounmap(dev->base);
 	kfree(dev);
 

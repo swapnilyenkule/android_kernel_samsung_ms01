@@ -45,8 +45,11 @@ obj-$(CONFIG_SPI_PL022)			+= spi-pl022.o
 obj-$(CONFIG_SPI_PPC4xx)		+= spi-ppc4xx.o
 obj-$(CONFIG_SPI_PXA2XX)		+= spi-pxa2xx.o
 obj-$(CONFIG_SPI_PXA2XX_PCI)		+= spi-pxa2xx-pci.o
+<<<<<<< HEAD
 obj-$(CONFIG_SPI_QSD)			+= spi_qsd.o
 obj-$(CONFIG_SPI_QUP)			+= spi_qsd.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_SPI_RSPI)			+= spi-rspi.o
 obj-$(CONFIG_SPI_S3C24XX)		+= spi-s3c24xx-hw.o
 spi-s3c24xx-hw-y			:= spi-s3c24xx.o

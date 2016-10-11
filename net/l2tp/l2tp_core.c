@@ -1253,11 +1253,18 @@ static void l2tp_tunnel_free(struct l2tp_tunnel *tunnel)
 	/* Remove from tunnel list */
 	spin_lock_bh(&pn->l2tp_tunnel_list_lock);
 	list_del_rcu(&tunnel->list);
+<<<<<<< HEAD
 	spin_unlock_bh(&pn->l2tp_tunnel_list_lock);
 	synchronize_rcu();
 
 	atomic_dec(&l2tp_tunnel_count);
 	kfree(tunnel);
+=======
+	kfree_rcu(tunnel, rcu);
+	spin_unlock_bh(&pn->l2tp_tunnel_list_lock);
+
+	atomic_dec(&l2tp_tunnel_count);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Create a socket for the tunnel, if one isn't set up by

@@ -24,6 +24,11 @@
 
 /* Bluetooth kernel library. */
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) "Bluetooth: " fmt
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/module.h>
 
 #include <linux/kernel.h>
@@ -59,7 +64,11 @@ char *batostr(bdaddr_t *ba)
 EXPORT_SYMBOL(batostr);
 
 /* Bluetooth error codes to Unix errno mapping */
+<<<<<<< HEAD
 int bt_err(__u16 code)
+=======
+int bt_to_errno(__u16 code)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	switch (code) {
 	case 0:
@@ -149,4 +158,45 @@ int bt_err(__u16 code)
 		return ENOSYS;
 	}
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(bt_to_errno);
+
+int bt_info(const char *format, ...)
+{
+	struct va_format vaf;
+	va_list args;
+	int r;
+
+	va_start(args, format);
+
+	vaf.fmt = format;
+	vaf.va = &args;
+
+	r = pr_info("%pV", &vaf);
+
+	va_end(args);
+
+	return r;
+}
+EXPORT_SYMBOL(bt_info);
+
+int bt_err(const char *format, ...)
+{
+	struct va_format vaf;
+	va_list args;
+	int r;
+
+	va_start(args, format);
+
+	vaf.fmt = format;
+	vaf.va = &args;
+
+	r = pr_err("%pV", &vaf);
+
+	va_end(args);
+
+	return r;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXPORT_SYMBOL(bt_err);

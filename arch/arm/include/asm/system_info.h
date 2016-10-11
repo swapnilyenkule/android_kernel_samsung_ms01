@@ -19,12 +19,15 @@ extern unsigned int system_rev;
 extern unsigned int system_serial_low;
 extern unsigned int system_serial_high;
 extern unsigned int mem_fclk_21285;
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 extern const char *unit_name;
 extern int boost_uv;
 extern int speed_bin;
 extern int pvs_bin;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern int __pure cpu_architecture(void);
 

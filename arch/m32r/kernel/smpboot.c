@@ -347,7 +347,11 @@ static void __init do_boot_cpu(int phys_id)
 	}
 }
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu_id, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu_id)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int timeout;
 

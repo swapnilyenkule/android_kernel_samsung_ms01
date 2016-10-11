@@ -208,10 +208,13 @@ int cfg80211_validate_key_settings(struct cfg80211_registered_device *rdev,
 		if (params->key_len != WLAN_KEY_LEN_AES_CMAC)
 			return -EINVAL;
 		break;
+<<<<<<< HEAD
 	case WLAN_CIPHER_SUITE_SMS4:
 		if (params->key_len != WLAN_KEY_LEN_WAPI_SMS4)
 			return -EINVAL;
 		break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		/*
 		 * We don't know anything about this algorithm,
@@ -294,23 +297,38 @@ unsigned int ieee80211_get_hdrlen_from_skb(const struct sk_buff *skb)
 }
 EXPORT_SYMBOL(ieee80211_get_hdrlen_from_skb);
 
+<<<<<<< HEAD
 static int ieee80211_get_mesh_hdrlen(struct ieee80211s_hdr *meshhdr)
 {
 	int ae = meshhdr->flags & MESH_FLAGS_AE;
 	/* 7.1.3.5a.2 */
 	switch (ae) {
+=======
+unsigned int ieee80211_get_mesh_hdrlen(struct ieee80211s_hdr *meshhdr)
+{
+	int ae = meshhdr->flags & MESH_FLAGS_AE;
+	/* 802.11-2012, 8.2.4.7.3 */
+	switch (ae) {
+	default:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case 0:
 		return 6;
 	case MESH_FLAGS_AE_A4:
 		return 12;
 	case MESH_FLAGS_AE_A5_A6:
 		return 18;
+<<<<<<< HEAD
 	case (MESH_FLAGS_AE_A4 | MESH_FLAGS_AE_A5_A6):
 		return 24;
 	default:
 		return 6;
 	}
 }
+=======
+	}
+}
+EXPORT_SYMBOL(ieee80211_get_mesh_hdrlen);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int ieee80211_data_to_8023(struct sk_buff *skb, const u8 *addr,
 			   enum nl80211_iftype iftype)
@@ -358,6 +376,11 @@ int ieee80211_data_to_8023(struct sk_buff *skb, const u8 *addr,
 			/* make sure meshdr->flags is on the linear part */
 			if (!pskb_may_pull(skb, hdrlen + 1))
 				return -1;
+<<<<<<< HEAD
+=======
+			if (meshdr->flags & MESH_FLAGS_AE_A4)
+				return -1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (meshdr->flags & MESH_FLAGS_AE_A5_A6) {
 				skb_copy_bits(skb, hdrlen +
 					offsetof(struct ieee80211s_hdr, eaddr1),
@@ -382,6 +405,11 @@ int ieee80211_data_to_8023(struct sk_buff *skb, const u8 *addr,
 			/* make sure meshdr->flags is on the linear part */
 			if (!pskb_may_pull(skb, hdrlen + 1))
 				return -1;
+<<<<<<< HEAD
+=======
+			if (meshdr->flags & MESH_FLAGS_AE_A5_A6)
+				return -1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (meshdr->flags & MESH_FLAGS_AE_A4)
 				skb_copy_bits(skb, hdrlen +
 					offsetof(struct ieee80211s_hdr, eaddr1),
@@ -721,7 +749,11 @@ void cfg80211_upload_connect_keys(struct wireless_dev *wdev)
 	wdev->connect_keys = NULL;
 }
 
+<<<<<<< HEAD
 static void cfg80211_process_wdev_events(struct wireless_dev *wdev)
+=======
+void cfg80211_process_wdev_events(struct wireless_dev *wdev)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct cfg80211_event *ev;
 	unsigned long flags;
@@ -809,7 +841,11 @@ int cfg80211_change_iface(struct cfg80211_registered_device *rdev,
 	     ntype == NL80211_IFTYPE_P2P_CLIENT))
 		return -EBUSY;
 
+<<<<<<< HEAD
 	if (ntype != otype) {
+=======
+	if (ntype != otype && netif_running(dev)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		err = cfg80211_can_change_interface(rdev, dev->ieee80211_ptr,
 						    ntype);
 		if (err)
@@ -876,6 +912,7 @@ int cfg80211_change_iface(struct cfg80211_registered_device *rdev,
 	return err;
 }
 
+<<<<<<< HEAD
 static u32 cfg80211_calculate_bitrate_vht(struct rate_info *rate)
 {
 	static const u32 base[4][10] = {
@@ -945,10 +982,13 @@ static u32 cfg80211_calculate_bitrate_vht(struct rate_info *rate)
 	return (bitrate + 50000) / 100000;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 u16 cfg80211_calculate_bitrate(struct rate_info *rate)
 {
 	int modulation, streams, bitrate;
 
+<<<<<<< HEAD
 	if (!(rate->flags & RATE_INFO_FLAGS_MCS) &&
 	    !(rate->flags & RATE_INFO_FLAGS_VHT_MCS))
 		return rate->legacy;
@@ -956,6 +996,11 @@ u16 cfg80211_calculate_bitrate(struct rate_info *rate)
 	if (rate->flags & RATE_INFO_FLAGS_VHT_MCS)
 		return cfg80211_calculate_bitrate_vht(rate);
 
+=======
+	if (!(rate->flags & RATE_INFO_FLAGS_MCS))
+		return rate->legacy;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* the formula below does only work for MCS values smaller than 32 */
 	if (rate->mcs >= 32)
 		return 0;
@@ -1013,6 +1058,10 @@ int cfg80211_can_change_interface(struct cfg80211_registered_device *rdev,
 				  enum nl80211_iftype iftype)
 {
 	struct wireless_dev *wdev_iter;
+<<<<<<< HEAD
+=======
+	u32 used_iftypes = BIT(iftype);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int num[NUM_NL80211_IFTYPES];
 	int total = 1;
 	int i, j;
@@ -1046,12 +1095,26 @@ int cfg80211_can_change_interface(struct cfg80211_registered_device *rdev,
 
 		num[wdev_iter->iftype]++;
 		total++;
+<<<<<<< HEAD
 	}
 	mutex_unlock(&rdev->devlist_mtx);
 
 	for (i = 0; i < rdev->wiphy.n_iface_combinations; i++) {
 		const struct ieee80211_iface_combination *c;
 		struct ieee80211_iface_limit *limits;
+=======
+		used_iftypes |= BIT(wdev_iter->iftype);
+	}
+	mutex_unlock(&rdev->devlist_mtx);
+
+	if (total == 1)
+		return 0;
+
+	for (i = 0; i < rdev->wiphy.n_iface_combinations; i++) {
+		const struct ieee80211_iface_combination *c;
+		struct ieee80211_iface_limit *limits;
+		u32 all_iftypes = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		c = &rdev->wiphy.iface_combinations[i];
 
@@ -1066,6 +1129,10 @@ int cfg80211_can_change_interface(struct cfg80211_registered_device *rdev,
 			if (rdev->wiphy.software_iftypes & BIT(iftype))
 				continue;
 			for (j = 0; j < c->n_limits; j++) {
+<<<<<<< HEAD
+=======
+				all_iftypes |= limits[j].types;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				if (!(limits[j].types & BIT(iftype)))
 					continue;
 				if (limits[j].max < num[iftype])
@@ -1073,7 +1140,24 @@ int cfg80211_can_change_interface(struct cfg80211_registered_device *rdev,
 				limits[j].max -= num[iftype];
 			}
 		}
+<<<<<<< HEAD
 		/* yay, it fits */
+=======
+
+		/*
+		 * Finally check that all iftypes that we're currently
+		 * using are actually part of this combination. If they
+		 * aren't then we can't use this combination and have
+		 * to continue to the next.
+		 */
+		if ((all_iftypes & used_iftypes) != used_iftypes)
+			goto cont;
+
+		/*
+		 * This combination covered all interface types and
+		 * supported the requested numbers, so we're good.
+		 */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(limits);
 		return 0;
  cont:

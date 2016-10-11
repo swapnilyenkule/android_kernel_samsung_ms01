@@ -17,28 +17,44 @@ static struct ctl_table llc2_timeout_table[] = {
 	{
 		.procname	= "ack",
 		.data		= &sysctl_llc2_ack_timeout,
+<<<<<<< HEAD
 		.maxlen		= sizeof(sysctl_llc2_ack_timeout),
+=======
+		.maxlen		= sizeof(long),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.mode		= 0644,
 		.proc_handler   = proc_dointvec_jiffies,
 	},
 	{
 		.procname	= "busy",
 		.data		= &sysctl_llc2_busy_timeout,
+<<<<<<< HEAD
 		.maxlen		= sizeof(sysctl_llc2_busy_timeout),
+=======
+		.maxlen		= sizeof(long),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.mode		= 0644,
 		.proc_handler   = proc_dointvec_jiffies,
 	},
 	{
 		.procname	= "p",
 		.data		= &sysctl_llc2_p_timeout,
+<<<<<<< HEAD
 		.maxlen		= sizeof(sysctl_llc2_p_timeout),
+=======
+		.maxlen		= sizeof(long),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.mode		= 0644,
 		.proc_handler   = proc_dointvec_jiffies,
 	},
 	{
 		.procname	= "rej",
 		.data		= &sysctl_llc2_rej_timeout,
+<<<<<<< HEAD
 		.maxlen		= sizeof(sysctl_llc2_rej_timeout),
+=======
+		.maxlen		= sizeof(long),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.mode		= 0644,
 		.proc_handler   = proc_dointvec_jiffies,
 	},

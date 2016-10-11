@@ -145,7 +145,11 @@ static const u8 regtempmin[] = { 0x3a, 0x3e, 0x2c, 0x2e, 0x30, 0x32 };
  */
 static inline u8 FAN_TO_REG(long rpm, int div)
 {
+<<<<<<< HEAD
 	if (rpm == 0)
+=======
+	if (rpm <= 0 || rpm > 1310720)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 	return SENSORS_LIMIT(1310720 / (rpm * div), 1, 255);
 }

@@ -272,11 +272,14 @@ v6_dma_clean_range:
  *	- end     - virtual end address of region
  */
 ENTRY(v6_dma_flush_range)
+<<<<<<< HEAD
 #ifdef CONFIG_CACHE_FLUSH_RANGE_LIMIT
 	sub	r2, r1, r0
 	cmp	r2, #CONFIG_CACHE_FLUSH_RANGE_LIMIT
 	bhi	v6_dma_flush_dcache_all
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_DMA_CACHE_RWFO
 	ldrb	r2, [r0]		@ read for ownership
 	strb	r2, [r0]		@ write for ownership
@@ -299,6 +302,7 @@ ENTRY(v6_dma_flush_range)
 	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
 	mov	pc, lr
 
+<<<<<<< HEAD
 #ifdef CONFIG_CACHE_FLUSH_RANGE_LIMIT
 v6_dma_flush_dcache_all:
 	mov	r0, #0
@@ -311,6 +315,8 @@ v6_dma_flush_dcache_all:
 	mov	pc, lr
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *	dma_map_area(start, size, dir)
  *	- start	- kernel virtual start address
@@ -345,9 +351,12 @@ ENTRY(v6_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(v6_dma_unmap_area)
 
+<<<<<<< HEAD
 	.globl	v6_flush_kern_cache_louis
 	.equ	v6_flush_kern_cache_louis, v6_flush_kern_cache_all
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__INITDATA
 
 	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)

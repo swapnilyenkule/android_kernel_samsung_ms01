@@ -130,7 +130,11 @@ static const unsigned armv7_a8_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= HW_OP_UNSUPPORTED,
 };
 
+<<<<<<< HEAD
 static unsigned armv7_a8_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static const unsigned armv7_a8_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					  [PERF_COUNT_HW_CACHE_OP_MAX]
 					  [PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -254,7 +258,11 @@ static const unsigned armv7_a9_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= ARMV7_A9_PERFCTR_STALL_DISPATCH,
 };
 
+<<<<<<< HEAD
 static unsigned armv7_a9_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static const unsigned armv7_a9_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					  [PERF_COUNT_HW_CACHE_OP_MAX]
 					  [PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -378,7 +386,11 @@ static const unsigned armv7_a5_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= HW_OP_UNSUPPORTED,
 };
 
+<<<<<<< HEAD
 static unsigned armv7_a5_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static const unsigned armv7_a5_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					[PERF_COUNT_HW_CACHE_OP_MAX]
 					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -500,7 +512,11 @@ static const unsigned armv7_a15_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= HW_OP_UNSUPPORTED,
 };
 
+<<<<<<< HEAD
 static unsigned armv7_a15_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static const unsigned armv7_a15_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					[PERF_COUNT_HW_CACHE_OP_MAX]
 					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -624,7 +640,11 @@ static const unsigned armv7_a7_perf_map[PERF_COUNT_HW_MAX] = {
 	[PERF_COUNT_HW_STALLED_CYCLES_BACKEND]	= HW_OP_UNSUPPORTED,
 };
 
+<<<<<<< HEAD
 static unsigned armv7_a7_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+=======
+static const unsigned armv7_a7_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					[PERF_COUNT_HW_CACHE_OP_MAX]
 					[PERF_COUNT_HW_CACHE_RESULT_MAX] = {
 	[C(L1D)] = {
@@ -775,7 +795,11 @@ static unsigned armv7_a7_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
 /*
  * PMXEVTYPER: Event selection reg
  */
+<<<<<<< HEAD
 #define	ARMV7_EVTYPE_MASK	0xc00000ff	/* Mask for writable bits */
+=======
+#define	ARMV7_EVTYPE_MASK	0xc80000ff	/* Mask for writable bits */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define	ARMV7_EVTYPE_EVENT	0xff		/* Mask for EVENT bits */
 
 /*
@@ -993,11 +1017,18 @@ static void armv7_pmnc_dump_regs(void)
 }
 #endif
 
+<<<<<<< HEAD
 static void armv7pmu_enable_event(struct hw_perf_event *hwc, int idx, int cpu)
 {
 	unsigned long flags;
 	struct pmu_hw_events *events = cpu_pmu->get_hw_events();
 	unsigned long long prev_count = local64_read(&hwc->prev_count);
+=======
+static void armv7pmu_enable_event(struct hw_perf_event *hwc, int idx)
+{
+	unsigned long flags;
+	struct pmu_hw_events *events = cpu_pmu->get_hw_events();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Enable counter and interrupt, and set the counter to count
@@ -1023,9 +1054,12 @@ static void armv7pmu_enable_event(struct hw_perf_event *hwc, int idx, int cpu)
 	 */
 	armv7_pmnc_enable_intens(idx);
 
+<<<<<<< HEAD
 	/* Restore prev val */
 	armv7pmu_write_counter(idx, prev_count & 0xffffffff);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Enable counter
 	 */

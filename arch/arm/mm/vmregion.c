@@ -46,8 +46,13 @@ arm_vmregion_alloc(struct arm_vmregion_head *head, size_t align,
 	struct arm_vmregion *c, *new;
 
 	if (head->vm_end - head->vm_start < size) {
+<<<<<<< HEAD
 		printk(KERN_WARNING "%s: allocation too big (requested %#x, end:%lx, start:%lx)\n",
 			__func__, size, head->vm_end, head->vm_start);
+=======
+		printk(KERN_WARNING "%s: allocation too big (requested %#x)\n",
+			__func__, size);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 

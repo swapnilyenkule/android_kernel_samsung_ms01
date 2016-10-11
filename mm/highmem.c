@@ -94,6 +94,22 @@ static DECLARE_WAIT_QUEUE_HEAD(pkmap_map_wait);
 		do { spin_unlock(&kmap_lock); (void)(flags); } while (0)
 #endif
 
+<<<<<<< HEAD
+=======
+struct page *kmap_to_page(void *vaddr)
+{
+	unsigned long addr = (unsigned long)vaddr;
+
+	if (addr >= PKMAP_ADDR(0) && addr < PKMAP_ADDR(LAST_PKMAP)) {
+		int i = (addr - PKMAP_ADDR(0)) >> PAGE_SHIFT;
+		return pte_page(pkmap_page_table[i]);
+	}
+
+	return virt_to_page(addr);
+}
+EXPORT_SYMBOL(kmap_to_page);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void flush_all_zero_pkmaps(void)
 {
 	int i;

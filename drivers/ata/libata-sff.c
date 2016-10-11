@@ -1333,7 +1333,23 @@ void ata_sff_flush_pio_task(struct ata_port *ap)
 	DPRINTK("ENTER\n");
 
 	cancel_delayed_work_sync(&ap->sff_pio_task);
+<<<<<<< HEAD
 	ap->hsm_task_state = HSM_ST_IDLE;
+=======
+
+	/*
+	 * We wanna reset the HSM state to IDLE.  If we do so without
+	 * grabbing the port lock, critical sections protected by it which
+	 * expect the HSM state to stay stable may get surprised.  For
+	 * example, we may set IDLE in between the time
+	 * __ata_sff_port_intr() checks for HSM_ST_IDLE and before it calls
+	 * ata_sff_hsm_move() causing ata_sff_hsm_move() to BUG().
+	 */
+	spin_lock_irq(ap->lock);
+	ap->hsm_task_state = HSM_ST_IDLE;
+	spin_unlock_irq(ap->lock);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ap->sff_pio_task_link = NULL;
 
 	if (ata_msg_ctl(ap))
@@ -2008,6 +2024,7 @@ static int ata_bus_softreset(struct ata_port *ap, unsigned int devmask,
 
 	DPRINTK("ata%u: bus reset via SRST\n", ap->print_id);
 
+<<<<<<< HEAD
 	/* software reset.  causes dev0 to be selected */
 	iowrite8(ap->ctl, ioaddr->ctl_addr);
 	udelay(20);	/* FIXME: flush */
@@ -2015,6 +2032,17 @@ static int ata_bus_softreset(struct ata_port *ap, unsigned int devmask,
 	udelay(20);	/* FIXME: flush */
 	iowrite8(ap->ctl, ioaddr->ctl_addr);
 	ap->last_ctl = ap->ctl;
+=======
+	if (ap->ioaddr.ctl_addr) {
+		/* software reset.  causes dev0 to be selected */
+		iowrite8(ap->ctl, ioaddr->ctl_addr);
+		udelay(20);	/* FIXME: flush */
+		iowrite8(ap->ctl | ATA_SRST, ioaddr->ctl_addr);
+		udelay(20);	/* FIXME: flush */
+		iowrite8(ap->ctl, ioaddr->ctl_addr);
+		ap->last_ctl = ap->ctl;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* wait the port to become ready */
 	return ata_sff_wait_after_reset(&ap->link, devmask, deadline);
@@ -2215,10 +2243,13 @@ void ata_sff_error_handler(struct ata_port *ap)
 
 	spin_unlock_irqrestore(ap->lock, flags);
 
+<<<<<<< HEAD
 	/* ignore ata_sff_softreset if ctl isn't accessible */
 	if (softreset == ata_sff_softreset && !ap->ioaddr.ctl_addr)
 		softreset = NULL;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* ignore built-in hardresets if SCR access is not available */
 	if ((hardreset == sata_std_hardreset ||
 	     hardreset == sata_sff_hardreset) && !sata_scr_valid(&ap->link))

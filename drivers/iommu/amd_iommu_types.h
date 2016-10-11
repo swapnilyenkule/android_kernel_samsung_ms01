@@ -99,6 +99,10 @@
 #define PASID_MASK		0x000fffff
 
 /* MMIO status bits */
+<<<<<<< HEAD
+=======
+#define MMIO_STATUS_EVT_INT_MASK	(1 << 1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define MMIO_STATUS_COM_WAIT_INT_MASK	(1 << 2)
 #define MMIO_STATUS_PPR_INT_MASK	(1 << 6)
 
@@ -276,6 +280,10 @@
 #define IOMMU_PTE_IR (1ULL << 61)
 #define IOMMU_PTE_IW (1ULL << 62)
 
+<<<<<<< HEAD
+=======
+#define DTE_FLAG_MASK	(0x3ffULL << 32)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define DTE_FLAG_IOTLB	(0x01UL << 32)
 #define DTE_FLAG_GV	(0x01ULL << 55)
 #define DTE_GLX_SHIFT	(56)
@@ -481,6 +489,12 @@ struct amd_iommu {
 	/* Pointer to PCI device of this IOMMU */
 	struct pci_dev *dev;
 
+<<<<<<< HEAD
+=======
+	/* Cache pdev to root device for resume quirks */
+	struct pci_dev *root_pdev;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* physical address of MMIO space */
 	u64 mmio_phys;
 	/* virtual address of MMIO space */

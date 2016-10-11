@@ -263,9 +263,12 @@ static void flatten_tree(struct node *tree, struct emitter *emit,
 	struct node *child;
 	int seen_name_prop = 0;
 
+<<<<<<< HEAD
 	if (tree->deleted)
 		return;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	emit->beginnode(etarget, tree->labels);
 
 	if (vi->flags & FTF_FULLPATH)

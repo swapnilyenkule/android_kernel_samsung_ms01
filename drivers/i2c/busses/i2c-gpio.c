@@ -85,12 +85,20 @@ static int i2c_gpio_getscl(void *data)
 	return gpio_get_value(pdata->scl_pin);
 }
 
+<<<<<<< HEAD
 static int __devinit of_i2c_gpio_probe(struct platform_device *pdev,
 			     struct i2c_gpio_platform_data *pdata)
 {
 	u32 reg;
 	struct device_node *np = pdev->dev.of_node; 
 	
+=======
+static int __devinit of_i2c_gpio_probe(struct device_node *np,
+			     struct i2c_gpio_platform_data *pdata)
+{
+	u32 reg;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (of_gpio_count(np) < 2)
 		return -ENODEV;
 
@@ -115,8 +123,11 @@ static int __devinit of_i2c_gpio_probe(struct platform_device *pdev,
 	pdata->scl_is_output_only =
 		of_property_read_bool(np, "i2c-gpio,scl-output-only");
 
+<<<<<<< HEAD
 	of_property_read_u32(np, "cell-index", &pdev->id);
 	
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -136,7 +147,11 @@ static int __devinit i2c_gpio_probe(struct platform_device *pdev)
 	pdata = &priv->pdata;
 
 	if (pdev->dev.of_node) {
+<<<<<<< HEAD
 		ret = of_i2c_gpio_probe(pdev, pdata);
+=======
+		ret = of_i2c_gpio_probe(pdev->dev.of_node, pdata);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (ret)
 			return ret;
 	} else {

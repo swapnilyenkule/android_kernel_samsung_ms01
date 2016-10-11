@@ -10,7 +10,11 @@ obj-y     = fork.o exec_domain.o panic.o printk.o \
 	    kthread.o wait.o kfifo.o sys_ni.o posix-cpu-timers.o mutex.o \
 	    hrtimer.o rwsem.o nsproxy.o srcu.o semaphore.o \
 	    notifier.o ksysfs.o cred.o \
+<<<<<<< HEAD
 	    async.o range.o groups.o smpboot.o lglock.o
+=======
+	    async.o range.o groups.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 ifdef CONFIG_FUNCTION_TRACER
 # Do not trace debug files and internal ftrace files

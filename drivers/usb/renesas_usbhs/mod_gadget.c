@@ -672,6 +672,12 @@ static int __usbhsg_ep_set_halt_wedge(struct usb_ep *ep, int halt, int wedge)
 	struct device *dev = usbhsg_gpriv_to_dev(gpriv);
 	unsigned long flags;
 
+<<<<<<< HEAD
+=======
+	if (!pipe)
+		return -EINVAL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	usbhsg_pipe_disable(uep);
 
 	dev_dbg(dev, "set halt %d (pipe %d)\n",

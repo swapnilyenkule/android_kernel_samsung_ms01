@@ -2,10 +2,13 @@
 # Cryptographic API
 #
 
+<<<<<<< HEAD
 #Keep this on the top
 obj-$(CONFIG_CRYPTO_FIPS) += first_file.o
 obj-$(CONFIG_CRYPTO_FIPS) += fips_integrity.o
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_CRYPTO) += crypto.o
 crypto-y := api.o cipher.o compress.o
 
@@ -100,7 +103,10 @@ obj-$(CONFIG_CRYPTO_USER_API_SKCIPHER) += algif_skcipher.o
 #
 obj-$(CONFIG_XOR_BLOCKS) += xor.o
 obj-$(CONFIG_ASYNC_CORE) += async_tx/
+<<<<<<< HEAD
 obj-$(CONFIG_CRYPTO_ABLK_HELPER) += ablk_helper.o
 
 #Keep this at the bottom
 obj-$(CONFIG_CRYPTO_FIPS) += last_file.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

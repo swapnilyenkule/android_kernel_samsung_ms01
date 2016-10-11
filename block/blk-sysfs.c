@@ -200,6 +200,11 @@ queue_store_##name(struct request_queue *q, const char *page, size_t count) \
 	unsigned long val;						\
 	ssize_t ret;							\
 	ret = queue_var_store(&val, page, count);			\
+<<<<<<< HEAD
+=======
+	if (ret < 0)							\
+		 return ret;						\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (neg)							\
 		val = !val;						\
 									\

@@ -123,6 +123,7 @@ void __ref put_page_bootmem(struct page *page)
 
 static void register_page_bootmem_info_section(unsigned long start_pfn)
 {
+<<<<<<< HEAD
 	unsigned long *usemap, mapsize, page_mapsize, section_nr, i, j;
 	struct mem_section *ms;
 	struct page *page, *memmap, *page_page;
@@ -130,6 +131,11 @@ static void register_page_bootmem_info_section(unsigned long start_pfn)
 
 	if (!pfn_valid(start_pfn))
 		return;
+=======
+	unsigned long *usemap, mapsize, section_nr, i;
+	struct mem_section *ms;
+	struct page *page, *memmap;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	section_nr = pfn_to_section_nr(start_pfn);
 	ms = __nr_to_section(section_nr);
@@ -145,6 +151,7 @@ static void register_page_bootmem_info_section(unsigned long start_pfn)
 	mapsize = sizeof(struct page) * PAGES_PER_SECTION;
 	mapsize = PAGE_ALIGN(mapsize) >> PAGE_SHIFT;
 
+<<<<<<< HEAD
 	page_mapsize = PAGE_SIZE/sizeof(struct page);
 
 	/* remember memmap's page, except those that reference only holes */
@@ -160,6 +167,11 @@ static void register_page_bootmem_info_section(unsigned long start_pfn)
 		if (memmap_page_valid)
 			get_page_bootmem(section_nr, page, SECTION_INFO);
 	}
+=======
+	/* remember memmap's page */
+	for (i = 0; i < mapsize; i++, page++)
+		get_page_bootmem(section_nr, page, SECTION_INFO);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	usemap = __nr_to_section(section_nr)->pageblock_flags;
 	page = virt_to_page(usemap);
@@ -201,9 +213,22 @@ void register_page_bootmem_info_node(struct pglist_data *pgdat)
 	end_pfn = pfn + pgdat->node_spanned_pages;
 
 	/* register_section info */
+<<<<<<< HEAD
 	for (; pfn < end_pfn; pfn += PAGES_PER_SECTION)
 		register_page_bootmem_info_section(pfn);
 
+=======
+	for (; pfn < end_pfn; pfn += PAGES_PER_SECTION) {
+		/*
+		 * Some platforms can assign the same pfn to multiple nodes - on
+		 * node0 as well as nodeN.  To avoid registering a pfn against
+		 * multiple nodes we check that this pfn does not already
+		 * reside in some other node.
+		 */
+		if (pfn_valid(pfn) && (pfn_to_nid(pfn) == node))
+			register_page_bootmem_info_section(pfn);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #endif /* !CONFIG_SPARSEMEM_VMEMMAP */
 
@@ -423,11 +448,14 @@ void __online_page_set_limits(struct page *page)
 {
 	unsigned long pfn = page_to_pfn(page);
 
+<<<<<<< HEAD
 	totalram_pages++;
 #ifdef CONFIG_FIX_MOVABLE_ZONE
 	if (zone_idx(page_zone(page)) != ZONE_MOVABLE)
 		total_unmovable_pages++;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (pfn >= num_physpages)
 		num_physpages = pfn + 1;
 }
@@ -529,20 +557,35 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages)
 
 	zone->present_pages += onlined_pages;
 	zone->zone_pgdat->node_present_pages += onlined_pages;
+<<<<<<< HEAD
 	drain_all_pages();
 	if (need_zonelists_rebuild)
 		build_all_zonelists(zone);
 	else
 		zone_pcp_update(zone);
+=======
+	if (onlined_pages) {
+		node_set_state(zone_to_nid(zone), N_HIGH_MEMORY);
+		if (need_zonelists_rebuild)
+			build_all_zonelists(zone);
+		else
+			zone_pcp_update(zone);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	mutex_unlock(&zonelists_mutex);
 
 	init_per_zone_wmark_min();
 
+<<<<<<< HEAD
 	if (onlined_pages) {
 		kswapd_run(zone_to_nid(zone));
 		node_set_state(zone_to_nid(zone), N_HIGH_MEMORY);
 	}
+=======
+	if (onlined_pages)
+		kswapd_run(zone_to_nid(zone));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	vm_total_pages = nr_free_pagecache_pages();
 
@@ -677,6 +720,7 @@ out:
 }
 EXPORT_SYMBOL_GPL(add_memory);
 
+<<<<<<< HEAD
 int __ref physical_remove_memory(u64 start, u64 size)
 {
 	int ret;
@@ -725,6 +769,8 @@ int __ref physical_low_power_memory(u64 start, u64 size)
 }
 EXPORT_SYMBOL_GPL(physical_low_power_memory);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MEMORY_HOTREMOVE
 /*
  * A free page on the buddy free lists (not the per-cpu lists) has PageBuddy
@@ -821,8 +867,12 @@ static struct page *
 hotremove_migrate_alloc(struct page *page, unsigned long private, int **x)
 {
 	/* This should be improooooved!! */
+<<<<<<< HEAD
 	return alloc_page(GFP_HIGHUSER_MOVABLE | __GFP_NORETRY | __GFP_NOWARN |
 				__GFP_NOMEMALLOC);
+=======
+	return alloc_page(GFP_HIGHUSER_MOVABLE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #define NR_OFFLINE_AT_ONCE_PAGES	(256)
@@ -959,7 +1009,11 @@ static int __ref offline_pages(unsigned long start_pfn,
 	nr_pages = end_pfn - start_pfn;
 
 	/* set above range as isolated */
+<<<<<<< HEAD
 	ret = start_isolate_page_range(start_pfn, end_pfn, MIGRATE_MOVABLE);
+=======
+	ret = start_isolate_page_range(start_pfn, end_pfn);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (ret)
 		goto out;
 
@@ -1024,6 +1078,7 @@ repeat:
 	   We cannot do rollback at this point. */
 	offline_isolated_pages(start_pfn, end_pfn);
 	/* reset pagetype flags and makes migrate type to be MOVABLE */
+<<<<<<< HEAD
 	undo_isolate_page_range(start_pfn, end_pfn, MIGRATE_MOVABLE);
 	/* removal success */
 	if (offlined_pages > zone->present_pages)
@@ -1037,6 +1092,14 @@ repeat:
 	if (zone_idx(zone) != ZONE_MOVABLE)
 		total_unmovable_pages -= offlined_pages;
 #endif
+=======
+	undo_isolate_page_range(start_pfn, end_pfn);
+	/* removal success */
+	zone->present_pages -= offlined_pages;
+	zone->zone_pgdat->node_present_pages -= offlined_pages;
+	totalram_pages -= offlined_pages;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	init_per_zone_wmark_min();
 
 	if (!node_present_pages(node)) {
@@ -1056,7 +1119,11 @@ failed_removal:
 		start_pfn, end_pfn);
 	memory_notify(MEM_CANCEL_OFFLINE, &arg);
 	/* pushback to free area */
+<<<<<<< HEAD
 	undo_isolate_page_range(start_pfn, end_pfn, MIGRATE_MOVABLE);
+=======
+	undo_isolate_page_range(start_pfn, end_pfn);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 out:
 	unlock_memory_hotplug();
@@ -1071,7 +1138,10 @@ int remove_memory(u64 start, u64 size)
 	end_pfn = start_pfn + PFN_DOWN(size);
 	return offline_pages(start_pfn, end_pfn, 120 * HZ);
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 int remove_memory(u64 start, u64 size)
 {

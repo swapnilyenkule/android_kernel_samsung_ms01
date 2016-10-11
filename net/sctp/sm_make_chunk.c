@@ -1366,8 +1366,13 @@ static void sctp_chunk_destroy(struct sctp_chunk *chunk)
 	BUG_ON(!list_empty(&chunk->list));
 	list_del_init(&chunk->transmitted_list);
 
+<<<<<<< HEAD
 	/* Free the chunk skb data and the SCTP_chunk stub itself. */
 	dev_kfree_skb(chunk->skb);
+=======
+	consume_skb(chunk->skb);
+	consume_skb(chunk->auth_chunk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	SCTP_DBG_OBJCNT_DEC(chunk);
 	kmem_cache_free(sctp_chunk_cachep, chunk);
@@ -2569,7 +2574,14 @@ do_addr_param:
 
 		addr_param = param.v + sizeof(sctp_addip_param_t);
 
+<<<<<<< HEAD
 		af = sctp_get_af_specific(param_type2af(param.p->type));
+=======
+		af = sctp_get_af_specific(param_type2af(addr_param->p.type));
+		if (af == NULL)
+			break;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		af->from_addr_param(&addr, addr_param,
 				    htons(asoc->peer.port), 0);
 
@@ -3068,6 +3080,7 @@ static __be16 sctp_process_asconf_param(struct sctp_association *asoc,
 	return SCTP_ERROR_NO_ERROR;
 }
 
+<<<<<<< HEAD
 /* Verify the ASCONF packet before we process it.  */
 int sctp_verify_asconf(const struct sctp_association *asoc,
 		       struct sctp_paramhdr *param_hdr, void *chunk_end,
@@ -3094,10 +3107,49 @@ int sctp_verify_asconf(const struct sctp_association *asoc,
 			if (plen < sizeof(sctp_addip_param_t) +
 			    sizeof(sctp_paramhdr_t))
 				return 0;
+=======
+/* Verify the ASCONF packet before we process it. */
+bool sctp_verify_asconf(const struct sctp_association *asoc,
+			struct sctp_chunk *chunk, bool addr_param_needed,
+			struct sctp_paramhdr **errp)
+{
+	sctp_addip_chunk_t *addip = (sctp_addip_chunk_t *) chunk->chunk_hdr;
+	union sctp_params param;
+	bool addr_param_seen = false;
+
+	sctp_walk_params(param, addip, addip_hdr.params) {
+		size_t length = ntohs(param.p->length);
+
+		*errp = param.p;
+		switch (param.p->type) {
+		case SCTP_PARAM_ERR_CAUSE:
+			break;
+		case SCTP_PARAM_IPV4_ADDRESS:
+			if (length != sizeof(sctp_ipv4addr_param_t))
+				return false;
+			addr_param_seen = true;
+			break;
+		case SCTP_PARAM_IPV6_ADDRESS:
+			if (length != sizeof(sctp_ipv6addr_param_t))
+				return false;
+			addr_param_seen = true;
+			break;
+		case SCTP_PARAM_ADD_IP:
+		case SCTP_PARAM_DEL_IP:
+		case SCTP_PARAM_SET_PRIMARY:
+			/* In ASCONF chunks, these need to be first. */
+			if (addr_param_needed && !addr_param_seen)
+				return false;
+			length = ntohs(param.addip->param_hdr.length);
+			if (length < sizeof(sctp_addip_param_t) +
+				     sizeof(sctp_paramhdr_t))
+				return false;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			break;
 		case SCTP_PARAM_SUCCESS_REPORT:
 		case SCTP_PARAM_ADAPTATION_LAYER_IND:
 			if (length != sizeof(sctp_addip_param_t))
+<<<<<<< HEAD
 				return 0;
 
 			break;
@@ -3112,6 +3164,25 @@ int sctp_verify_asconf(const struct sctp_association *asoc,
 		return 0;
 
 	return 1;
+=======
+				return false;
+			break;
+		default:
+			/* This is unkown to us, reject! */
+			return false;
+		}
+	}
+
+	/* Remaining sanity checks. */
+	if (addr_param_needed && !addr_param_seen)
+		return false;
+	if (!addr_param_needed && addr_param_seen)
+		return false;
+	if (param.v != chunk->chunk_end)
+		return false;
+
+	return true;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /* Process an incoming ASCONF chunk with the next expected serial no. and
@@ -3120,16 +3191,28 @@ int sctp_verify_asconf(const struct sctp_association *asoc,
 struct sctp_chunk *sctp_process_asconf(struct sctp_association *asoc,
 				       struct sctp_chunk *asconf)
 {
+<<<<<<< HEAD
+=======
+	sctp_addip_chunk_t *addip = (sctp_addip_chunk_t *) asconf->chunk_hdr;
+	bool all_param_pass = true;
+	union sctp_params param;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sctp_addiphdr_t		*hdr;
 	union sctp_addr_param	*addr_param;
 	sctp_addip_param_t	*asconf_param;
 	struct sctp_chunk	*asconf_ack;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__be16	err_code;
 	int	length = 0;
 	int	chunk_len;
 	__u32	serial;
+<<<<<<< HEAD
 	int	all_param_pass = 1;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	chunk_len = ntohs(asconf->chunk_hdr->length) - sizeof(sctp_chunkhdr_t);
 	hdr = (sctp_addiphdr_t *)asconf->skb->data;
@@ -3157,9 +3240,20 @@ struct sctp_chunk *sctp_process_asconf(struct sctp_association *asoc,
 		goto done;
 
 	/* Process the TLVs contained within the ASCONF chunk. */
+<<<<<<< HEAD
 	while (chunk_len > 0) {
 		err_code = sctp_process_asconf_param(asoc, asconf,
 						     asconf_param);
+=======
+	sctp_walk_params(param, addip, addip_hdr.params) {
+		/* Skip preceeding address parameters. */
+		if (param.p->type == SCTP_PARAM_IPV4_ADDRESS ||
+		    param.p->type == SCTP_PARAM_IPV6_ADDRESS)
+			continue;
+
+		err_code = sctp_process_asconf_param(asoc, asconf,
+						     param.addip);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* ADDIP 4.1 A7)
 		 * If an error response is received for a TLV parameter,
 		 * all TLVs with no response before the failed TLV are
@@ -3167,6 +3261,7 @@ struct sctp_chunk *sctp_process_asconf(struct sctp_association *asoc,
 		 * the failed response are considered unsuccessful unless
 		 * a specific success indication is present for the parameter.
 		 */
+<<<<<<< HEAD
 		if (SCTP_ERROR_NO_ERROR != err_code)
 			all_param_pass = 0;
 
@@ -3174,12 +3269,20 @@ struct sctp_chunk *sctp_process_asconf(struct sctp_association *asoc,
 			sctp_add_asconf_response(asconf_ack,
 						 asconf_param->crr_id, err_code,
 						 asconf_param);
+=======
+		if (err_code != SCTP_ERROR_NO_ERROR)
+			all_param_pass = false;
+		if (!all_param_pass)
+			sctp_add_asconf_response(asconf_ack, param.addip->crr_id,
+						 err_code, param.addip);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* ADDIP 4.3 D11) When an endpoint receiving an ASCONF to add
 		 * an IP address sends an 'Out of Resource' in its response, it
 		 * MUST also fail any subsequent add or delete requests bundled
 		 * in the ASCONF.
 		 */
+<<<<<<< HEAD
 		if (SCTP_ERROR_RSRC_LOW == err_code)
 			goto done;
 
@@ -3189,6 +3292,11 @@ struct sctp_chunk *sctp_process_asconf(struct sctp_association *asoc,
 		chunk_len -= length;
 	}
 
+=======
+		if (err_code == SCTP_ERROR_RSRC_LOW)
+			goto done;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 done:
 	asoc->peer.addip_serial++;
 

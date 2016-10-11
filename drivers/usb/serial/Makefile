@@ -62,4 +62,7 @@ obj-$(CONFIG_USB_SERIAL_WHITEHEAT)		+= whiteheat.o
 obj-$(CONFIG_USB_SERIAL_XIRCOM)			+= keyspan_pda.o
 obj-$(CONFIG_USB_SERIAL_VIVOPAY_SERIAL)		+= vivopay-serial.o
 obj-$(CONFIG_USB_SERIAL_ZIO)			+= zio.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_SERIAL_CSVT)			+= csvt.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

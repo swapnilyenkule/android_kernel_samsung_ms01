@@ -323,6 +323,7 @@ UniToupper(register wchar_t uc)
 /*
  * UniStrupr:  Upper case a unicode string
  */
+<<<<<<< HEAD
 static inline wchar_t *
 UniStrupr(register wchar_t *upin)
 {
@@ -331,6 +332,16 @@ UniStrupr(register wchar_t *upin)
 	up = upin;
 	while (*up) {		/* For all characters */
 		*up = UniToupper(*up);
+=======
+static inline __le16 *
+UniStrupr(register __le16 *upin)
+{
+	register __le16 *up;
+
+	up = upin;
+	while (*up) {		/* For all characters */
+		*up = cpu_to_le16(UniToupper(le16_to_cpu(*up)));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		up++;
 	}
 	return upin;		/* Return input pointer */

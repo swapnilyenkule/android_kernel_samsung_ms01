@@ -51,10 +51,18 @@ static void radeon_hotplug_work_func(struct work_struct *work)
 	struct drm_mode_config *mode_config = &dev->mode_config;
 	struct drm_connector *connector;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&mode_config->mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (mode_config->num_connector) {
 		list_for_each_entry(connector, &mode_config->connector_list, head)
 			radeon_connector_hotplug(connector);
 	}
+<<<<<<< HEAD
+=======
+	mutex_unlock(&mode_config->mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Just fire off a uevent and let userspace tell us what to do */
 	drm_helper_hpd_irq_event(dev);
 }
@@ -147,6 +155,19 @@ static bool radeon_msi_ok(struct radeon_device *rdev)
 	    (rdev->pdev->subsystem_device == 0x01fd))
 		return true;
 
+<<<<<<< HEAD
+=======
+	/* Gateway RS690 only seems to work with MSIs. */
+	if ((rdev->pdev->device == 0x791f) &&
+	    (rdev->pdev->subsystem_vendor == 0x107b) &&
+	    (rdev->pdev->subsystem_device == 0x0185))
+		return true;
+
+	/* try and enable MSIs by default on all RS690s */
+	if (rdev->family == CHIP_RS690)
+		return true;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* RV515 seems to have MSI issues where it loses
 	 * MSI rearms occasionally. This leads to lockups and freezes.
 	 * disable it by default.

@@ -79,10 +79,13 @@ struct dentry *debugfs_create_x64(const char *name, umode_t mode,
 				  struct dentry *parent, u64 *value);
 struct dentry *debugfs_create_size_t(const char *name, umode_t mode,
 				     struct dentry *parent, size_t *value);
+<<<<<<< HEAD
 #ifdef CONFIG_ZSWAP					 
 struct dentry *debugfs_create_atomic_t(const char *name, umode_t mode,
 				     struct dentry *parent, atomic_t *value);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct dentry *debugfs_create_bool(const char *name, umode_t mode,
 				  struct dentry *parent, u32 *value);
 

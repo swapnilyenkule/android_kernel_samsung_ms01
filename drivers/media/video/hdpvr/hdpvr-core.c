@@ -309,6 +309,14 @@ static int hdpvr_probe(struct usb_interface *interface,
 
 	dev->workqueue = 0;
 
+<<<<<<< HEAD
+=======
+	/* init video transfer queues first of all */
+	/* to prevent oops in hdpvr_delete() on error paths */
+	INIT_LIST_HEAD(&dev->free_buff_list);
+	INIT_LIST_HEAD(&dev->rec_buff_list);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* register v4l2_device early so it can be used for printks */
 	if (v4l2_device_register(&interface->dev, &dev->v4l2_dev)) {
 		err("v4l2_device_register failed");
@@ -331,10 +339,13 @@ static int hdpvr_probe(struct usb_interface *interface,
 	if (!dev->workqueue)
 		goto error;
 
+<<<<<<< HEAD
 	/* init video transfer queues */
 	INIT_LIST_HEAD(&dev->free_buff_list);
 	INIT_LIST_HEAD(&dev->rec_buff_list);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->options = hdpvr_default_options;
 
 	if (default_video_input < HDPVR_VIDEO_INPUTS)
@@ -385,12 +396,15 @@ static int hdpvr_probe(struct usb_interface *interface,
 	}
 	mutex_unlock(&dev->io_mutex);
 
+<<<<<<< HEAD
 	if (hdpvr_register_videodev(dev, &interface->dev,
 				    video_nr[atomic_inc_return(&dev_nr)])) {
 		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
 		goto error;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #if defined(CONFIG_I2C) || defined(CONFIG_I2C_MODULE)
 	retval = hdpvr_register_i2c_adapter(dev);
 	if (retval < 0) {
@@ -411,6 +425,16 @@ static int hdpvr_probe(struct usb_interface *interface,
 	}
 #endif
 
+<<<<<<< HEAD
+=======
+	retval = hdpvr_register_videodev(dev, &interface->dev,
+				    video_nr[atomic_inc_return(&dev_nr)]);
+	if (retval < 0) {
+		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
+		goto reg_fail;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* let the user know what node this device is now attached to */
 	v4l2_info(&dev->v4l2_dev, "device now attached to %s\n",
 		  video_device_node_name(dev->video_dev));

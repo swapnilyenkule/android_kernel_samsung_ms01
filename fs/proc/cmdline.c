@@ -2,6 +2,7 @@
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/module.h>
 
 static int cmdline_proc_show(struct seq_file *m, void *v)
@@ -20,6 +21,12 @@ static int cmdline_proc_show(struct seq_file *m, void *v)
 	seq_printf(m, "%s\n", temp_saved_command_line);
 
 	kfree(temp_saved_command_line);
+=======
+
+static int cmdline_proc_show(struct seq_file *m, void *v)
+{
+	seq_printf(m, "%s\n", saved_command_line);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 

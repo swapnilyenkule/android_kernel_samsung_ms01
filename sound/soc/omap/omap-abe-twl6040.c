@@ -181,7 +181,11 @@ static int omap_abe_twl6040_init(struct snd_soc_pcm_runtime *rtd)
 	twl6040_disconnect_pin(dapm, pdata->has_hf, "Ext Spk");
 	twl6040_disconnect_pin(dapm, pdata->has_ep, "Earphone Spk");
 	twl6040_disconnect_pin(dapm, pdata->has_aux, "Line Out");
+<<<<<<< HEAD
 	twl6040_disconnect_pin(dapm, pdata->has_vibra, "Vinrator");
+=======
+	twl6040_disconnect_pin(dapm, pdata->has_vibra, "Vibrator");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	twl6040_disconnect_pin(dapm, pdata->has_hsmic, "Headset Mic");
 	twl6040_disconnect_pin(dapm, pdata->has_mainmic, "Main Handset Mic");
 	twl6040_disconnect_pin(dapm, pdata->has_submic, "Sub Handset Mic");

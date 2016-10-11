@@ -254,10 +254,17 @@ void * devres_get(struct device *dev, void *new_res,
 	if (!dr) {
 		add_dr(dev, &new_dr->node);
 		dr = new_dr;
+<<<<<<< HEAD
 		new_dr = NULL;
 	}
 	spin_unlock_irqrestore(&dev->devres_lock, flags);
 	devres_free(new_dr);
+=======
+		new_res = NULL;
+	}
+	spin_unlock_irqrestore(&dev->devres_lock, flags);
+	devres_free(new_res);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return dr->data;
 }

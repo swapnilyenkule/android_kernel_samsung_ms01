@@ -154,9 +154,12 @@ struct input_keymap_entry {
 
 #define EVIOCGRAB		_IOW('E', 0x90, int)			/* Grab/Release device */
 
+<<<<<<< HEAD
 #define EVIOCGSUSPENDBLOCK	_IOR('E', 0x91, int)			/* get suspend block enable */
 #define EVIOCSSUSPENDBLOCK	_IOW('E', 0x91, int)			/* set suspend block enable */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define EVIOCSCLOCKID		_IOW('E', 0xa0, int)			/* Set clockid to be used for timestamps */
 
 /*
@@ -167,7 +170,10 @@ struct input_keymap_entry {
 #define INPUT_PROP_DIRECT		0x01	/* direct input devices */
 #define INPUT_PROP_BUTTONPAD		0x02	/* has button(s) under pad */
 #define INPUT_PROP_SEMI_MT		0x03	/* touch rectangle only */
+<<<<<<< HEAD
 #define INPUT_PROP_NO_DUMMY_RELEASE	0x04	/* no dummy event */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define INPUT_PROP_MAX			0x1f
 #define INPUT_PROP_CNT			(INPUT_PROP_MAX + 1)
@@ -412,8 +418,11 @@ struct input_keymap_entry {
 #define KEY_F23			193
 #define KEY_F24			194
 
+<<<<<<< HEAD
 #define KEY_VOICE_WAKEUP_LPSD	198	/* Samsung Voice Wakeup LPSD - Baby cry */
 #define KEY_VOICE_WAKEUP	199	/* Samsung Voice Wakeup */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define KEY_PLAYCD		200
 #define KEY_PAUSECD		201
 #define KEY_PROG3		202
@@ -465,6 +474,7 @@ struct input_keymap_entry {
 #define KEY_VIDEO_NEXT		241	/* drive next video source */
 #define KEY_VIDEO_PREV		242	/* drive previous video source */
 #define KEY_BRIGHTNESS_CYCLE	243	/* brightness up, after max is min */
+<<<<<<< HEAD
 #define KEY_BRIGHTNESS_AUTO	244	/* Set Auto Brightness: manual
 					  brightness control is off,
 					  rely on ambient */
@@ -473,10 +483,17 @@ struct input_keymap_entry {
 
 #define KEY_WWAN		246	/* Wireless WAN (LTE, UMTS, GSM, etc.) */
 #define KEY_WIMAX		KEY_WWAN
+=======
+#define KEY_BRIGHTNESS_ZERO	244	/* brightness off, use ambient */
+#define KEY_DISPLAY_OFF		245	/* display device to off state */
+
+#define KEY_WIMAX		246
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define KEY_RFKILL		247	/* Key that controls all radios */
 
 #define KEY_MICMUTE		248	/* Mute / unmute the microphone */
 
+<<<<<<< HEAD
 #define KEY_DUMMY_HOME1		249	/* Dummy Touchkey : HOME1*/
 #define KEY_DUMMY_HOME2		250	/* Dummy Touchkey : HOME2*/
 #define KEY_DUMMY_MENU		251	/* Dummy Touchkey : MENU*/
@@ -484,6 +501,8 @@ struct input_keymap_entry {
 #define KEY_DUMMY_BACK		253	/* Dummy Touchkey : BACK*/
 #define KEY_RECENT	254	/* Key recent */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Code 255 is reserved for special needs of AT keyboard driver */
 
 #define BTN_MISC		0x100
@@ -524,6 +543,7 @@ struct input_keymap_entry {
 #define BTN_DEAD		0x12f
 
 #define BTN_GAMEPAD		0x130
+<<<<<<< HEAD
 #define BTN_SOUTH		0x130
 #define BTN_A			BTN_SOUTH
 #define BTN_EAST		0x131
@@ -533,6 +553,13 @@ struct input_keymap_entry {
 #define BTN_X			BTN_NORTH
 #define BTN_WEST		0x134
 #define BTN_Y			BTN_WEST
+=======
+#define BTN_A			0x130
+#define BTN_B			0x131
+#define BTN_C			0x132
+#define BTN_X			0x133
+#define BTN_Y			0x134
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define BTN_Z			0x135
 #define BTN_TL			0x136
 #define BTN_TR			0x137
@@ -543,7 +570,10 @@ struct input_keymap_entry {
 #define BTN_MODE		0x13c
 #define BTN_THUMBL		0x13d
 #define BTN_THUMBR		0x13e
+<<<<<<< HEAD
 #define BTN_GAME		0x13f	/* Add game button for samsung bluetooth keypad */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define BTN_DIGI		0x140
 #define BTN_TOOL_PEN		0x140
@@ -646,7 +676,10 @@ struct input_keymap_entry {
 #define KEY_ADDRESSBOOK		0x1ad	/* AL Contacts/Address Book */
 #define KEY_MESSENGER		0x1ae	/* AL Instant Messaging */
 #define KEY_DISPLAYTOGGLE	0x1af	/* Turn display (LCD) on and off */
+<<<<<<< HEAD
 #define KEY_BRIGHTNESS_TOGGLE	KEY_DISPLAYTOGGLE
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define KEY_SPELLCHECK		0x1b0   /* AL Spell Check */
 #define KEY_LOGOFF		0x1b1   /* AL Logoff */
 
@@ -711,7 +744,11 @@ struct input_keymap_entry {
 #define KEY_NUMERIC_9		0x209
 #define KEY_NUMERIC_STAR	0x20a
 #define KEY_NUMERIC_POUND	0x20b
+<<<<<<< HEAD
 #define KEY_CAMERA_SNAPSHOT	0x2fe
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define KEY_CAMERA_FOCUS	0x210
 #define KEY_WPS_BUTTON		0x211	/* WiFi Protected Setup key */
 
@@ -726,6 +763,7 @@ struct input_keymap_entry {
 #define KEY_CAMERA_LEFT		0x219
 #define KEY_CAMERA_RIGHT	0x21a
 
+<<<<<<< HEAD
 #define KEY_DMB_ANT_DET_UP		0x21b
 #define KEY_DMB_ANT_DET_DOWN		0x21c
 
@@ -755,13 +793,19 @@ struct input_keymap_entry {
 #define KEY_BRIGHTNESS_MIN		0x250	/* Set Brightness to Minimum */
 #define KEY_BRIGHTNESS_MAX		0x251	/* Set Brightness to Maximum */
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define BTN_TRIGGER_HAPPY		0x2c0
 #define BTN_TRIGGER_HAPPY1		0x2c0
 #define BTN_TRIGGER_HAPPY2		0x2c1
 #define BTN_TRIGGER_HAPPY3		0x2c2
 #define BTN_TRIGGER_HAPPY4		0x2c3
 #define BTN_TRIGGER_HAPPY5		0x2c4
+<<<<<<< HEAD
 #define BTN_TRIGGER_HAPPY6		0x2c5 /* For Samsung S Action Mouse button */
+=======
+#define BTN_TRIGGER_HAPPY6		0x2c5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define BTN_TRIGGER_HAPPY7		0x2c6
 #define BTN_TRIGGER_HAPPY8		0x2c7
 #define BTN_TRIGGER_HAPPY9		0x2c8
@@ -797,6 +841,7 @@ struct input_keymap_entry {
 #define BTN_TRIGGER_HAPPY39		0x2e6
 #define BTN_TRIGGER_HAPPY40		0x2e7
 
+<<<<<<< HEAD
 /* SAMSUNG
  * 0	 3
  * 1	 4
@@ -812,6 +857,8 @@ struct input_keymap_entry {
 #define KEY_SIDE_TOUCH_7		0x2ef
 #define KEY_SIDE_CAMERA_DETECTED	0x2f0
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* We avoid low common keys in module aliases so they don't get huge. */
 #define KEY_MIN_INTERESTING	KEY_MUTE
 #define KEY_MAX			0x2ff
@@ -880,15 +927,22 @@ struct input_keymap_entry {
 #define ABS_MT_TRACKING_ID	0x39	/* Unique ID of initiated contact */
 #define ABS_MT_PRESSURE		0x3a	/* Pressure on contact area */
 #define ABS_MT_DISTANCE		0x3b	/* Contact hover distance */
+<<<<<<< HEAD
 #define ABS_MT_ANGLE		0x3c	/* touch angle */
 #define ABS_MT_PALM		0x3d	/* palm touch */
 #define ABS_MT_COMPONENT	0x3e	/* touch component */
 #define ABS_MT_SUMSIZE		0x3f	/* touch sumsize */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef __KERNEL__
 /* Implementation details, userspace should not care about these */
 #define ABS_MT_FIRST		ABS_MT_TOUCH_MAJOR
+<<<<<<< HEAD
 #define ABS_MT_LAST		ABS_MT_SUMSIZE
+=======
+#define ABS_MT_LAST		ABS_MT_DISTANCE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 #define ABS_MAX			0x3f
@@ -914,6 +968,7 @@ struct input_keymap_entry {
 #define SW_FRONT_PROXIMITY	0x0b  /* set = front proximity sensor active */
 #define SW_ROTATE_LOCK		0x0c  /* set = rotate locked/disabled */
 #define SW_LINEIN_INSERT	0x0d  /* set = inserted */
+<<<<<<< HEAD
 #define SW_HPHL_OVERCURRENT    0x0e  /* set = over current on left hph */
 #define SW_HPHR_OVERCURRENT    0x0f  /* set = over current on right hph */
 #define SW_UNSUPPORT_INSERT	0x10  /* set = unsupported device inserted */
@@ -929,6 +984,9 @@ struct input_keymap_entry {
 #define SW_MUTE_DEVICE		0x0e  /* set = device disabled */
 #define SW_MAX			0x20
 
+=======
+#define SW_MAX			0x0f
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define SW_CNT			(SW_MAX+1)
 
 /*
@@ -1392,9 +1450,13 @@ struct input_dev {
 	struct mutex mutex;
 
 	unsigned int users;
+<<<<<<< HEAD
 	unsigned int users_private;
 	bool going_away;
 	bool disabled;
+=======
+	bool going_away;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	bool sync;
 

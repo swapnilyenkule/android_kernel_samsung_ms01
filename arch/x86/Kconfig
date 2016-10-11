@@ -31,7 +31,10 @@ config X86
 	select ARCH_WANT_OPTIONAL_GPIOLIB
 	select ARCH_WANT_FRAME_POINTERS
 	select HAVE_DMA_ATTRS
+<<<<<<< HEAD
 	select HAVE_DMA_CONTIGUOUS if !SWIOTLB
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select HAVE_KRETPROBES
 	select HAVE_OPTPROBES
 	select HAVE_FTRACE_MCOUNT_RECORD
@@ -82,10 +85,14 @@ config X86
 	select CLKEVT_I8253
 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
 	select GENERIC_IOMAP
+<<<<<<< HEAD
 	select DCACHE_WORD_ACCESS if !DEBUG_PAGEALLOC
 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
 	select HAVE_ARCH_SECCOMP_FILTER
+=======
+	select DCACHE_WORD_ACCESS
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config INSTRUCTION_DECODER
 	def_bool (KPROBES || PERF_EVENTS)
@@ -129,6 +136,7 @@ config HAVE_LATENCYTOP_SUPPORT
 config MMU
 	def_bool y
 
+<<<<<<< HEAD
 config ARCH_MMAP_RND_BITS_MIN
 	default 28 if 64BIT
 	default 8
@@ -143,11 +151,17 @@ config ARCH_MMAP_RND_COMPAT_BITS_MIN
 config ARCH_MMAP_RND_COMPAT_BITS_MAX
 	default 16
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SBUS
 	bool
 
 config NEED_DMA_MAP_STATE
+<<<<<<< HEAD
        def_bool (X86_64 || INTEL_IOMMU || DMA_API_DEBUG)
+=======
+       def_bool (X86_64 || INTEL_IOMMU || DMA_API_DEBUG || SWIOTLB)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config NEED_SG_DMA_LENGTH
 	def_bool y
@@ -933,10 +947,34 @@ config VM86
 	default y
 	depends on X86_32
 	---help---
+<<<<<<< HEAD
 	  This option is required by programs like DOSEMU to run 16-bit legacy
 	  code on X86 processors. It also may be needed by software like
 	  XFree86 to initialize some video cards via BIOS. Disabling this
 	  option saves about 6k.
+=======
+	  This option is required by programs like DOSEMU to run
+	  16-bit real mode legacy code on x86 processors. It also may
+	  be needed by software like XFree86 to initialize some video
+	  cards via BIOS. Disabling this option saves about 6K.
+
+config X86_16BIT
+	bool "Enable support for 16-bit segments" if EXPERT
+	default y
+	---help---
+	  This option is required by programs like Wine to run 16-bit
+	  protected mode legacy code on x86 processors.  Disabling
+	  this option saves about 300 bytes on i386, or around 6K text
+	  plus 16K runtime memory on x86-64,
+
+config X86_ESPFIX32
+	def_bool y
+	depends on X86_16BIT && X86_32
+
+config X86_ESPFIX64
+	def_bool y
+	depends on X86_16BIT && X86_64
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 config TOSHIBA
 	tristate "Toshiba Laptop support"
@@ -1261,10 +1299,13 @@ config HAVE_ARCH_BOOTMEM
 	def_bool y
 	depends on X86_32 && NUMA
 
+<<<<<<< HEAD
 config HAVE_ARCH_ALLOC_REMAP
 	def_bool y
 	depends on X86_32 && NUMA
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config ARCH_HAVE_MEMORY_PRESENT
 	def_bool y
 	depends on X86_32 && DISCONTIGMEM
@@ -2179,6 +2220,10 @@ source "fs/Kconfig.binfmt"
 config IA32_EMULATION
 	bool "IA32 Emulation"
 	depends on X86_64
+<<<<<<< HEAD
+=======
+	select BINFMT_ELF
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select COMPAT_BINFMT_ELF
 	---help---
 	  Include code to run legacy 32-bit programs under a

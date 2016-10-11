@@ -42,9 +42,12 @@ static unsigned int __blk_recalc_rq_segments(struct request_queue *q,
 					goto new_segment;
 				if (!BIOVEC_SEG_BOUNDARY(q, bvprv, bv))
 					goto new_segment;
+<<<<<<< HEAD
 				if ((bvprv->bv_page != bv->bv_page) &&
 				    (bvprv->bv_page + 1) != bv->bv_page)
 					goto new_segment;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 				seg_size += bv->bv_len;
 				bvprv = bv;
@@ -144,9 +147,12 @@ int blk_rq_map_sg(struct request_queue *q, struct request *rq,
 				goto new_segment;
 			if (!BIOVEC_SEG_BOUNDARY(q, bvprv, bvec))
 				goto new_segment;
+<<<<<<< HEAD
 			if ((bvprv->bv_page != bvec->bv_page) &&
 			    ((bvprv->bv_page + 1) != bvec->bv_page))
 				goto new_segment;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 			sg->length += nbytes;
 		} else {
@@ -389,12 +395,15 @@ static int attempt_merge(struct request_queue *q, struct request *req,
 		return 0;
 
 	/*
+<<<<<<< HEAD
 	 * Don't merge file system requests and sanitize requests
 	 */
 	if ((req->cmd_flags & REQ_SANITIZE) != (next->cmd_flags & REQ_SANITIZE))
 		return 0;
 
 	/*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * not contiguous
 	 */
 	if (blk_rq_pos(req) + blk_rq_sectors(req) != blk_rq_pos(next))

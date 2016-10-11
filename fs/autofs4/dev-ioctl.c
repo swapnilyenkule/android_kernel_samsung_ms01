@@ -95,7 +95,11 @@ static int check_dev_ioctl_version(int cmd, struct autofs_dev_ioctl *param)
  */
 static struct autofs_dev_ioctl *copy_dev_ioctl(struct autofs_dev_ioctl __user *in)
 {
+<<<<<<< HEAD
 	struct autofs_dev_ioctl tmp;
+=======
+	struct autofs_dev_ioctl tmp, *res;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (copy_from_user(&tmp, in, sizeof(tmp)))
 		return ERR_PTR(-EFAULT);
@@ -103,7 +107,18 @@ static struct autofs_dev_ioctl *copy_dev_ioctl(struct autofs_dev_ioctl __user *i
 	if (tmp.size < sizeof(tmp))
 		return ERR_PTR(-EINVAL);
 
+<<<<<<< HEAD
 	return memdup_user(in, tmp.size);
+=======
+	if (tmp.size > (PATH_MAX + sizeof(tmp)))
+		return ERR_PTR(-ENAMETOOLONG);
+
+	res = memdup_user(in, tmp.size);
+	if (!IS_ERR(res))
+		res->size = tmp.size;
+
+	return res;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void free_dev_ioctl(struct autofs_dev_ioctl *param)

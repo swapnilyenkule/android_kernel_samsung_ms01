@@ -426,9 +426,13 @@ xip_file_write(struct file *filp, const char __user *buf, size_t len,
 	if (ret)
 		goto out_backing;
 
+<<<<<<< HEAD
 	ret = file_update_time(filp);
 	if (ret)
 		goto out_backing;
+=======
+	file_update_time(filp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ret = __xip_file_write (filp, buf, count, pos, ppos);
 

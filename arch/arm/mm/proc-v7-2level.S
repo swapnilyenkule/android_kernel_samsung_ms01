@@ -27,12 +27,15 @@
 #define TTB_FLAGS_SMP	TTB_IRGN_WBWA|TTB_S|TTB_NOS|TTB_RGN_OC_WBWA
 #define PMD_FLAGS_SMP	PMD_SECT_WBWA|PMD_SECT_S
 
+<<<<<<< HEAD
 #ifdef        CONFIG_TIMA_RKP
 #if __GNUC__ >= 4 && __GNUC_MINOR__ >= 6
         .arch_extension sec
 #endif
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *	cpu_v7_switch_mm(pgd_phys, tsk)
  *
@@ -55,6 +58,7 @@ ENTRY(cpu_v7_switch_mm)
 #ifdef CONFIG_ARM_ERRATA_754322
 	dsb
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_PID_IN_CONTEXTIDR
 	mrc     p15, 0, r2, c13, c0, 1          @ read current context ID
 	bic     r2, r2, #0xff                   @ extract the PID
@@ -84,6 +88,11 @@ ENTRY(cpu_v7_switch_mm)
 #endif
 #endif
 
+=======
+	mcr	p15, 0, r2, c13, c0, 1		@ set reserved context ID
+	isb
+1:	mcr	p15, 0, r0, c2, c0, 0		@ set TTB 0
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	isb
 #ifdef CONFIG_ARM_ERRATA_754322
 	dsb
@@ -94,6 +103,7 @@ ENTRY(cpu_v7_switch_mm)
 	mov	pc, lr
 ENDPROC(cpu_v7_switch_mm)
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 /* 
  * Pass the pointer to the group buffer and its length to TZ side. 
@@ -219,6 +229,8 @@ ENTRY(cpu_v7_tima_iommu_opt)
 ENDPROC(cpu_v7_tima_iommu_opt)
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  *	cpu_v7_set_pte_ext(ptep, pte)
  *
@@ -229,6 +241,7 @@ ENDPROC(cpu_v7_tima_iommu_opt)
  *	- pte   - PTE value to store
  *	- ext	- value for extended PTE bits
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_TABLES
 ENTRY(cpu_v7_tima_set_pte_ext)
 # ifdef CONFIG_MMU
@@ -345,6 +358,12 @@ ENDPROC(cpu_v7_tima_set_pte_ext)
 ENTRY(cpu_v7_set_pte_ext)
 #ifdef CONFIG_MMU
 	str	r1, [r0]			@ linux version
+=======
+ENTRY(cpu_v7_set_pte_ext)
+#ifdef CONFIG_MMU
+	str	r1, [r0]			@ linux version
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bic	r3, r1, #0x000003f0
 	bic	r3, r3, #PTE_TYPE_MASK
 	orr	r3, r3, r2
@@ -378,9 +397,12 @@ ENTRY(cpu_v7_set_pte_ext)
 	mcr	p15, 0, r0, c7, c10, 1		@ flush_pte
 #endif
 	mov	pc, lr
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP
 cpu_v7_set_pte_ext_proc_end:
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ENDPROC(cpu_v7_set_pte_ext)
 
 	/*
@@ -412,23 +434,31 @@ ENDPROC(cpu_v7_set_pte_ext)
 	 *   NOS = PRRR[24+n] = 1	- not outer shareable
 	 */
 .equ	PRRR,	0xff0a81a8
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MSM_SCORPIONMP
 .equ	NMRR,	0x40e080e0
 #else
 .equ	NMRR,	0x40e040e0
 #endif
+=======
+.equ	NMRR,	0x40e040e0
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Macro for setting up the TTBRx and TTBCR registers.
 	 * - \ttb0 and \ttb1 updated with the corresponding flags.
 	 */
 	.macro	v7_ttb_setup, zero, ttbr0, ttbr1, tmp
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_EMUL_CP15_INSTR 
 	ldr	r0, =0x3f805221
 	smc	#1
 #else 
 	mcr	p15, 0, \zero, c2, c0, 2	@ TTB control register
 #endif
+=======
+	mcr	p15, 0, \zero, c2, c0, 2	@ TTB control register
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ALT_SMP(orr	\ttbr0, \ttbr0, #TTB_FLAGS_SMP)
 	ALT_UP(orr	\ttbr0, \ttbr0, #TTB_FLAGS_UP)
 	ALT_SMP(orr	\ttbr1, \ttbr1, #TTB_FLAGS_SMP)

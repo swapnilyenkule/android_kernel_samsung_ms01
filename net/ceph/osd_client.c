@@ -52,7 +52,11 @@ static int op_has_extent(int op)
 		op == CEPH_OSD_OP_WRITE);
 }
 
+<<<<<<< HEAD
 void ceph_calc_raw_layout(struct ceph_osd_client *osdc,
+=======
+int ceph_calc_raw_layout(struct ceph_osd_client *osdc,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			struct ceph_file_layout *layout,
 			u64 snapid,
 			u64 off, u64 *plen, u64 *bno,
@@ -62,12 +66,23 @@ void ceph_calc_raw_layout(struct ceph_osd_client *osdc,
 	struct ceph_osd_request_head *reqhead = req->r_request->front.iov_base;
 	u64 orig_len = *plen;
 	u64 objoff, objlen;    /* extent in object */
+<<<<<<< HEAD
+=======
+	int r;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	reqhead->snapid = cpu_to_le64(snapid);
 
 	/* object extent? */
+<<<<<<< HEAD
 	ceph_calc_file_object_mapping(layout, off, plen, bno,
 				      &objoff, &objlen);
+=======
+	r = ceph_calc_file_object_mapping(layout, off, plen, bno,
+					  &objoff, &objlen);
+	if (r < 0)
+		return r;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (*plen < orig_len)
 		dout(" skipping last %llu, final file extent %llu~%llu\n",
 		     orig_len - *plen, off, *plen);
@@ -83,7 +98,11 @@ void ceph_calc_raw_layout(struct ceph_osd_client *osdc,
 
 	dout("calc_layout bno=%llx %llu~%llu (%d pages)\n",
 	     *bno, objoff, objlen, req->r_num_pages);
+<<<<<<< HEAD
 
+=======
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL(ceph_calc_raw_layout);
 
@@ -112,6 +131,7 @@ EXPORT_SYMBOL(ceph_calc_raw_layout);
  *
  * fill osd op in request message.
  */
+<<<<<<< HEAD
 static void calc_layout(struct ceph_osd_client *osdc,
 			struct ceph_vino vino,
 			struct ceph_file_layout *layout,
@@ -126,6 +146,27 @@ static void calc_layout(struct ceph_osd_client *osdc,
 
 	snprintf(req->r_oid, sizeof(req->r_oid), "%llx.%08llx", vino.ino, bno);
 	req->r_oid_len = strlen(req->r_oid);
+=======
+static int calc_layout(struct ceph_osd_client *osdc,
+		       struct ceph_vino vino,
+		       struct ceph_file_layout *layout,
+		       u64 off, u64 *plen,
+		       struct ceph_osd_request *req,
+		       struct ceph_osd_req_op *op)
+{
+	u64 bno;
+	int r;
+
+	r = ceph_calc_raw_layout(osdc, layout, vino.snap, off,
+				 plen, &bno, req, op);
+	if (r < 0)
+		return r;
+
+	snprintf(req->r_oid, sizeof(req->r_oid), "%llx.%08llx", vino.ino, bno);
+	req->r_oid_len = strlen(req->r_oid);
+
+	return r;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -139,6 +180,7 @@ void ceph_osdc_release_request(struct kref *kref)
 
 	if (req->r_request)
 		ceph_msg_put(req->r_request);
+<<<<<<< HEAD
 	if (req->r_reply)
 		ceph_msg_put(req->r_reply);
 	if (req->r_con_filling_msg) {
@@ -148,6 +190,16 @@ void ceph_osdc_release_request(struct kref *kref)
 				      req->r_reply);
 		ceph_con_put(req->r_con_filling_msg);
 	}
+=======
+	if (req->r_con_filling_msg) {
+		dout("%s revoking pages %p from con %p\n", __func__,
+		     req->r_pages, req->r_con_filling_msg);
+		ceph_msg_revoke_incoming(req->r_reply);
+		req->r_con_filling_msg->ops->put(req->r_con_filling_msg);
+	}
+	if (req->r_reply)
+		ceph_msg_put(req->r_reply);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (req->r_own_pages)
 		ceph_release_page_vector(req->r_pages,
 					 req->r_num_pages);
@@ -214,6 +266,10 @@ struct ceph_osd_request *ceph_osdc_alloc_request(struct ceph_osd_client *osdc,
 	kref_init(&req->r_kref);
 	init_completion(&req->r_completion);
 	init_completion(&req->r_safe_completion);
+<<<<<<< HEAD
+=======
+	RB_CLEAR_NODE(&req->r_node);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	INIT_LIST_HEAD(&req->r_unsafe_item);
 	INIT_LIST_HEAD(&req->r_linger_item);
 	INIT_LIST_HEAD(&req->r_linger_osd);
@@ -243,6 +299,10 @@ struct ceph_osd_request *ceph_osdc_alloc_request(struct ceph_osd_client *osdc,
 		}
 		ceph_pagelist_init(req->r_trail);
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* create request message; allow space for oid */
 	msg_size += MAX_OBJ_NAME_SIZE;
 	if (snapc)
@@ -256,7 +316,10 @@ struct ceph_osd_request *ceph_osdc_alloc_request(struct ceph_osd_client *osdc,
 		return NULL;
 	}
 
+<<<<<<< HEAD
 	msg->hdr.type = cpu_to_le16(CEPH_MSG_OSD_OP);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	memset(msg->front.iov_base, 0, msg->front.iov_len);
 
 	req->r_request = msg;
@@ -278,7 +341,11 @@ static void osd_req_encode_op(struct ceph_osd_request *req,
 {
 	dst->op = cpu_to_le16(src->op);
 
+<<<<<<< HEAD
 	switch (dst->op) {
+=======
+	switch (src->op) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case CEPH_OSD_OP_READ:
 	case CEPH_OSD_OP_WRITE:
 		dst->extent.offset =
@@ -454,6 +521,10 @@ struct ceph_osd_request *ceph_osdc_new_request(struct ceph_osd_client *osdc,
 {
 	struct ceph_osd_req_op ops[3];
 	struct ceph_osd_request *req;
+<<<<<<< HEAD
+=======
+	int r;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	ops[0].op = opcode;
 	ops[0].extent.truncate_seq = truncate_seq;
@@ -472,10 +543,19 @@ struct ceph_osd_request *ceph_osdc_new_request(struct ceph_osd_client *osdc,
 					 use_mempool,
 					 GFP_NOFS, NULL, NULL);
 	if (!req)
+<<<<<<< HEAD
 		return NULL;
 
 	/* calculate max write size */
 	calc_layout(osdc, vino, layout, off, plen, req, ops);
+=======
+		return ERR_PTR(-ENOMEM);
+
+	/* calculate max write size */
+	r = calc_layout(osdc, vino, layout, off, plen, req, ops);
+	if (r < 0)
+		return ERR_PTR(r);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	req->r_file_layout = *layout;  /* keep a copy */
 
 	/* in case it differs from natural (file) alignment that
@@ -568,7 +648,11 @@ static void __kick_osd_requests(struct ceph_osd_client *osdc,
 
 	dout("__kick_osd_requests osd%d\n", osd->o_osd);
 	err = __reset_osd(osdc, osd);
+<<<<<<< HEAD
 	if (err == -EAGAIN)
+=======
+	if (err)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 
 	list_for_each_entry(req, &osd->o_requests, r_osd_item) {
@@ -595,6 +679,7 @@ static void __kick_osd_requests(struct ceph_osd_client *osdc,
 	}
 }
 
+<<<<<<< HEAD
 static void kick_osd_requests(struct ceph_osd_client *osdc,
 			      struct ceph_osd *kickosd)
 {
@@ -603,6 +688,8 @@ static void kick_osd_requests(struct ceph_osd_client *osdc,
 	mutex_unlock(&osdc->request_mutex);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * If the osd connection drops, we need to resubmit all requests.
  */
@@ -616,7 +703,13 @@ static void osd_reset(struct ceph_connection *con)
 	dout("osd_reset osd%d\n", osd->o_osd);
 	osdc = osd->o_osdc;
 	down_read(&osdc->map_sem);
+<<<<<<< HEAD
 	kick_osd_requests(osdc, osd);
+=======
+	mutex_lock(&osdc->request_mutex);
+	__kick_osd_requests(osdc, osd);
+	mutex_unlock(&osdc->request_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	send_queued(osdc);
 	up_read(&osdc->map_sem);
 }
@@ -624,7 +717,11 @@ static void osd_reset(struct ceph_connection *con)
 /*
  * Track open sessions with osds.
  */
+<<<<<<< HEAD
 static struct ceph_osd *create_osd(struct ceph_osd_client *osdc)
+=======
+static struct ceph_osd *create_osd(struct ceph_osd_client *osdc, int onum)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ceph_osd *osd;
 
@@ -634,15 +731,24 @@ static struct ceph_osd *create_osd(struct ceph_osd_client *osdc)
 
 	atomic_set(&osd->o_ref, 1);
 	osd->o_osdc = osdc;
+<<<<<<< HEAD
+=======
+	osd->o_osd = onum;
+	RB_CLEAR_NODE(&osd->o_node);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	INIT_LIST_HEAD(&osd->o_requests);
 	INIT_LIST_HEAD(&osd->o_linger_requests);
 	INIT_LIST_HEAD(&osd->o_osd_lru);
 	osd->o_incarnation = 1;
 
+<<<<<<< HEAD
 	ceph_con_init(osdc->client->msgr, &osd->o_con);
 	osd->o_con.private = osd;
 	osd->o_con.ops = &osd_con_ops;
 	osd->o_con.peer_name.type = CEPH_ENTITY_TYPE_OSD;
+=======
+	ceph_con_init(&osd->o_con, osd, &osd_con_ops, &osdc->client->msgr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	INIT_LIST_HEAD(&osd->o_keepalive_item);
 	return osd;
@@ -664,11 +770,18 @@ static void put_osd(struct ceph_osd *osd)
 {
 	dout("put_osd %p %d -> %d\n", osd, atomic_read(&osd->o_ref),
 	     atomic_read(&osd->o_ref) - 1);
+<<<<<<< HEAD
 	if (atomic_dec_and_test(&osd->o_ref)) {
 		struct ceph_auth_client *ac = osd->o_osdc->client->monc.auth;
 
 		if (osd->o_authorizer)
 			ac->ops->destroy_authorizer(ac, osd->o_authorizer);
+=======
+	if (atomic_dec_and_test(&osd->o_ref) && osd->o_auth.authorizer) {
+		struct ceph_auth_client *ac = osd->o_osdc->client->monc.auth;
+
+		ceph_auth_destroy_authorizer(ac, osd->o_auth.authorizer);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(osd);
 	}
 }
@@ -740,6 +853,10 @@ static int __reset_osd(struct ceph_osd_client *osdc, struct ceph_osd *osd)
 	if (list_empty(&osd->o_requests) &&
 	    list_empty(&osd->o_linger_requests)) {
 		__remove_osd(osdc, osd);
+<<<<<<< HEAD
+=======
+		ret = -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else if (memcmp(&osdc->osdmap->osd_addr[osd->o_osd],
 			  &osd->o_con.peer_addr,
 			  sizeof(osd->o_con.peer_addr)) == 0 &&
@@ -752,7 +869,12 @@ static int __reset_osd(struct ceph_osd_client *osdc, struct ceph_osd *osd)
 		ret = -EAGAIN;
 	} else {
 		ceph_con_close(&osd->o_con);
+<<<<<<< HEAD
 		ceph_con_open(&osd->o_con, &osdc->osdmap->osd_addr[osd->o_osd]);
+=======
+		ceph_con_open(&osd->o_con, CEPH_ENTITY_TYPE_OSD, osd->o_osd,
+			      &osdc->osdmap->osd_addr[osd->o_osd]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		osd->o_incarnation++;
 	}
 	return ret;
@@ -841,13 +963,26 @@ static void register_request(struct ceph_osd_client *osdc,
 static void __unregister_request(struct ceph_osd_client *osdc,
 				 struct ceph_osd_request *req)
 {
+<<<<<<< HEAD
+=======
+	if (RB_EMPTY_NODE(&req->r_node)) {
+		dout("__unregister_request %p tid %lld not registered\n",
+			req, req->r_tid);
+		return;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dout("__unregister_request %p tid %lld\n", req, req->r_tid);
 	rb_erase(&req->r_node, &osdc->requests);
 	osdc->num_requests--;
 
 	if (req->r_osd) {
 		/* make sure the original request isn't in flight. */
+<<<<<<< HEAD
 		ceph_con_revoke(&req->r_osd->o_con, req->r_request);
+=======
+		ceph_msg_revoke(req->r_request);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		list_del_init(&req->r_osd_item);
 		if (list_empty(&req->r_osd->o_requests) &&
@@ -859,9 +994,15 @@ static void __unregister_request(struct ceph_osd_client *osdc,
 			req->r_osd = NULL;
 	}
 
+<<<<<<< HEAD
 	ceph_osdc_put_request(req);
 
 	list_del_init(&req->r_req_lru_item);
+=======
+	list_del_init(&req->r_req_lru_item);
+	ceph_osdc_put_request(req);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (osdc->num_requests == 0) {
 		dout(" no requests, canceling timeout\n");
 		__cancel_osd_timeout(osdc);
@@ -874,7 +1015,11 @@ static void __unregister_request(struct ceph_osd_client *osdc,
 static void __cancel_request(struct ceph_osd_request *req)
 {
 	if (req->r_sent && req->r_osd) {
+<<<<<<< HEAD
 		ceph_con_revoke(&req->r_osd->o_con, req->r_request);
+=======
+		ceph_msg_revoke(req->r_request);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		req->r_sent = 0;
 	}
 }
@@ -884,15 +1029,26 @@ static void __register_linger_request(struct ceph_osd_client *osdc,
 {
 	dout("__register_linger_request %p\n", req);
 	list_add_tail(&req->r_linger_item, &osdc->req_linger);
+<<<<<<< HEAD
 	list_add_tail(&req->r_linger_osd, &req->r_osd->o_linger_requests);
+=======
+	if (req->r_osd)
+		list_add_tail(&req->r_linger_osd,
+			      &req->r_osd->o_linger_requests);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void __unregister_linger_request(struct ceph_osd_client *osdc,
 					struct ceph_osd_request *req)
 {
 	dout("__unregister_linger_request %p\n", req);
+<<<<<<< HEAD
 	if (req->r_osd) {
 		list_del_init(&req->r_linger_item);
+=======
+	list_del_init(&req->r_linger_item);
+	if (req->r_osd) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		list_del_init(&req->r_linger_osd);
 
 		if (list_empty(&req->r_osd->o_requests) &&
@@ -992,18 +1148,30 @@ static int __map_request(struct ceph_osd_client *osdc,
 	req->r_osd = __lookup_osd(osdc, o);
 	if (!req->r_osd && o >= 0) {
 		err = -ENOMEM;
+<<<<<<< HEAD
 		req->r_osd = create_osd(osdc);
+=======
+		req->r_osd = create_osd(osdc, o);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!req->r_osd) {
 			list_move(&req->r_req_lru_item, &osdc->req_notarget);
 			goto out;
 		}
 
 		dout("map_request osd %p is osd%d\n", req->r_osd, o);
+<<<<<<< HEAD
 		req->r_osd->o_osd = o;
 		req->r_osd->o_con.peer_name.num = cpu_to_le64(o);
 		__insert_osd(osdc, req->r_osd);
 
 		ceph_con_open(&req->r_osd->o_con, &osdc->osdmap->osd_addr[o]);
+=======
+		__insert_osd(osdc, req->r_osd);
+
+		ceph_con_open(&req->r_osd->o_con,
+			      CEPH_ENTITY_TYPE_OSD, o,
+			      &osdc->osdmap->osd_addr[o]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (req->r_osd) {
@@ -1071,12 +1239,19 @@ static void handle_timeout(struct work_struct *work)
 {
 	struct ceph_osd_client *osdc =
 		container_of(work, struct ceph_osd_client, timeout_work.work);
+<<<<<<< HEAD
 	struct ceph_osd_request *req, *last_req = NULL;
 	struct ceph_osd *osd;
 	unsigned long timeout = osdc->client->options->osd_timeout * HZ;
 	unsigned long keepalive =
 		osdc->client->options->osd_keepalive_timeout * HZ;
 	unsigned long last_stamp = 0;
+=======
+	struct ceph_osd_request *req;
+	struct ceph_osd *osd;
+	unsigned long keepalive =
+		osdc->client->options->osd_keepalive_timeout * HZ;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct list_head slow_osds;
 	dout("timeout\n");
 	down_read(&osdc->map_sem);
@@ -1086,6 +1261,7 @@ static void handle_timeout(struct work_struct *work)
 	mutex_lock(&osdc->request_mutex);
 
 	/*
+<<<<<<< HEAD
 	 * reset osds that appear to be _really_ unresponsive.  this
 	 * is a failsafe measure.. we really shouldn't be getting to
 	 * this point if the system is working properly.  the monitors
@@ -1117,6 +1293,8 @@ static void handle_timeout(struct work_struct *work)
 	}
 
 	/*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * ping osds that are a bit slow.  this ensures that if there
 	 * is a break in the TCP connection we will notice, and reopen
 	 * a connection with that osd (from the fault callback).
@@ -1210,7 +1388,11 @@ static void handle_reply(struct ceph_osd_client *osdc, struct ceph_msg *msg,
 	if (req->r_con_filling_msg == con && req->r_reply == msg) {
 		dout(" dropping con_filling_msg ref %p\n", con);
 		req->r_con_filling_msg = NULL;
+<<<<<<< HEAD
 		ceph_con_put(con);
+=======
+		con->ops->put(con);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (!req->r_got_reply) {
@@ -1287,30 +1469,79 @@ static void reset_changed_osds(struct ceph_osd_client *osdc)
  * Requeue requests whose mapping to an OSD has changed.  If requests map to
  * no osd, request a new map.
  *
+<<<<<<< HEAD
  * Caller should hold map_sem for read and request_mutex.
  */
 static void kick_requests(struct ceph_osd_client *osdc, int force_resend)
+=======
+ * Caller should hold map_sem for read.
+ */
+static void kick_requests(struct ceph_osd_client *osdc, bool force_resend,
+			  bool force_resend_writes)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ceph_osd_request *req, *nreq;
 	struct rb_node *p;
 	int needmap = 0;
 	int err;
+<<<<<<< HEAD
 
 	dout("kick_requests %s\n", force_resend ? " (force resend)" : "");
 	mutex_lock(&osdc->request_mutex);
 	for (p = rb_first(&osdc->requests); p; p = rb_next(p)) {
 		req = rb_entry(p, struct ceph_osd_request, r_node);
 		err = __map_request(osdc, req, force_resend);
+=======
+	bool force_resend_req;
+
+	dout("kick_requests %s %s\n", force_resend ? " (force resend)" : "",
+		force_resend_writes ? " (force resend writes)" : "");
+	mutex_lock(&osdc->request_mutex);
+	for (p = rb_first(&osdc->requests); p; ) {
+		req = rb_entry(p, struct ceph_osd_request, r_node);
+		p = rb_next(p);
+
+		/*
+		 * For linger requests that have not yet been
+		 * registered, move them to the linger list; they'll
+		 * be sent to the osd in the loop below.  Unregister
+		 * the request before re-registering it as a linger
+		 * request to ensure the __map_request() below
+		 * will decide it needs to be sent.
+		 */
+		if (req->r_linger && list_empty(&req->r_linger_item)) {
+			dout("%p tid %llu restart on osd%d\n",
+			     req, req->r_tid,
+			     req->r_osd ? req->r_osd->o_osd : -1);
+			__unregister_request(osdc, req);
+			__register_linger_request(osdc, req);
+			continue;
+		}
+
+		force_resend_req = force_resend ||
+			(force_resend_writes &&
+				req->r_flags & CEPH_OSD_FLAG_WRITE);
+		err = __map_request(osdc, req, force_resend_req);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err < 0)
 			continue;  /* error */
 		if (req->r_osd == NULL) {
 			dout("%p tid %llu maps to no osd\n", req, req->r_tid);
 			needmap++;  /* request a newer map */
 		} else if (err > 0) {
+<<<<<<< HEAD
 			dout("%p tid %llu requeued on osd%d\n", req, req->r_tid,
 			     req->r_osd ? req->r_osd->o_osd : -1);
 			if (!req->r_linger)
 				req->r_flags |= CEPH_OSD_FLAG_RETRY;
+=======
+			if (!req->r_linger) {
+				dout("%p tid %llu requeued on osd%d\n", req,
+				     req->r_tid,
+				     req->r_osd ? req->r_osd->o_osd : -1);
+				req->r_flags |= CEPH_OSD_FLAG_RETRY;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -1318,7 +1549,13 @@ static void kick_requests(struct ceph_osd_client *osdc, int force_resend)
 				 r_linger_item) {
 		dout("linger req=%p req->r_osd=%p\n", req, req->r_osd);
 
+<<<<<<< HEAD
 		err = __map_request(osdc, req, force_resend);
+=======
+		err = __map_request(osdc, req,
+				    force_resend || force_resend_writes);
+		dout("__map_request returned %d\n", err);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (err == 0)
 			continue;  /* no change and no osd was specified */
 		if (err < 0)
@@ -1331,9 +1568,16 @@ static void kick_requests(struct ceph_osd_client *osdc, int force_resend)
 
 		dout("kicking lingering %p tid %llu osd%d\n", req, req->r_tid,
 		     req->r_osd ? req->r_osd->o_osd : -1);
+<<<<<<< HEAD
 		__unregister_linger_request(osdc, req);
 		__register_request(osdc, req);
 	}
+=======
+		__register_request(osdc, req);
+		__unregister_linger_request(osdc, req);
+	}
+	reset_changed_osds(osdc);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&osdc->request_mutex);
 
 	if (needmap) {
@@ -1358,6 +1602,10 @@ void ceph_osdc_handle_map(struct ceph_osd_client *osdc, struct ceph_msg *msg)
 	struct ceph_osdmap *newmap = NULL, *oldmap;
 	int err;
 	struct ceph_fsid fsid;
+<<<<<<< HEAD
+=======
+	bool was_full;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	dout("handle_map have %u\n", osdc->osdmap ? osdc->osdmap->epoch : 0);
 	p = msg->front.iov_base;
@@ -1371,6 +1619,11 @@ void ceph_osdc_handle_map(struct ceph_osd_client *osdc, struct ceph_msg *msg)
 
 	down_write(&osdc->map_sem);
 
+<<<<<<< HEAD
+=======
+	was_full = ceph_osdmap_flag(osdc->osdmap, CEPH_OSDMAP_FULL);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* incremental maps */
 	ceph_decode_32_safe(&p, end, nr_maps, bad);
 	dout(" %d inc maps\n", nr_maps);
@@ -1385,7 +1638,11 @@ void ceph_osdc_handle_map(struct ceph_osd_client *osdc, struct ceph_msg *msg)
 			     epoch, maplen);
 			newmap = osdmap_apply_incremental(&p, next,
 							  osdc->osdmap,
+<<<<<<< HEAD
 							  osdc->client->msgr);
+=======
+							  &osdc->client->msgr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			if (IS_ERR(newmap)) {
 				err = PTR_ERR(newmap);
 				goto bad;
@@ -1395,8 +1652,15 @@ void ceph_osdc_handle_map(struct ceph_osd_client *osdc, struct ceph_msg *msg)
 				ceph_osdmap_destroy(osdc->osdmap);
 				osdc->osdmap = newmap;
 			}
+<<<<<<< HEAD
 			kick_requests(osdc, 0);
 			reset_changed_osds(osdc);
+=======
+			was_full = was_full ||
+				ceph_osdmap_flag(osdc->osdmap,
+						 CEPH_OSDMAP_FULL);
+			kick_requests(osdc, 0, was_full);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		} else {
 			dout("ignoring incremental map %u len %d\n",
 			     epoch, maplen);
@@ -1439,7 +1703,14 @@ void ceph_osdc_handle_map(struct ceph_osd_client *osdc, struct ceph_msg *msg)
 					skipped_map = 1;
 				ceph_osdmap_destroy(oldmap);
 			}
+<<<<<<< HEAD
 			kick_requests(osdc, skipped_map);
+=======
+			was_full = was_full ||
+				ceph_osdmap_flag(osdc->osdmap,
+						 CEPH_OSDMAP_FULL);
+			kick_requests(osdc, skipped_map, was_full);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		p += maplen;
 		nr_maps--;
@@ -1566,6 +1837,10 @@ int ceph_osdc_create_event(struct ceph_osd_client *osdc,
 	event->data = data;
 	event->osdc = osdc;
 	INIT_LIST_HEAD(&event->osd_node);
+<<<<<<< HEAD
+=======
+	RB_CLEAR_NODE(&event->node);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kref_init(&event->kref);   /* one ref for us */
 	kref_get(&event->kref);    /* one ref for the caller */
 	init_completion(&event->completion);
@@ -1718,6 +1993,11 @@ int ceph_osdc_start_request(struct ceph_osd_client *osdc,
 				dout("osdc_start_request failed map, "
 				     " will retry %lld\n", req->r_tid);
 				rc = 0;
+<<<<<<< HEAD
+=======
+			} else {
+				__unregister_request(osdc, req);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			}
 			goto out_unlock;
 		}
@@ -1833,11 +2113,20 @@ int ceph_osdc_init(struct ceph_osd_client *osdc, struct ceph_client *client)
 	if (!osdc->req_mempool)
 		goto out;
 
+<<<<<<< HEAD
 	err = ceph_msgpool_init(&osdc->msgpool_op, OSD_OP_FRONT_LEN, 10, true,
 				"osd_op");
 	if (err < 0)
 		goto out_mempool;
 	err = ceph_msgpool_init(&osdc->msgpool_op_reply,
+=======
+	err = ceph_msgpool_init(&osdc->msgpool_op, CEPH_MSG_OSD_OP,
+				OSD_OP_FRONT_LEN, 10, true,
+				"osd_op");
+	if (err < 0)
+		goto out_mempool;
+	err = ceph_msgpool_init(&osdc->msgpool_op_reply, CEPH_MSG_OSD_OPREPLY,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				OSD_OPREPLY_FRONT_LEN, 10, true,
 				"osd_op_reply");
 	if (err < 0)
@@ -1896,8 +2185,13 @@ int ceph_osdc_readpages(struct ceph_osd_client *osdc,
 				    CEPH_OSD_OP_READ, CEPH_OSD_FLAG_READ,
 				    NULL, 0, truncate_seq, truncate_size, NULL,
 				    false, 1, page_align);
+<<<<<<< HEAD
 	if (!req)
 		return -ENOMEM;
+=======
+	if (IS_ERR(req))
+		return PTR_ERR(req);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* it may be a short read due to an object boundary */
 	req->r_pages = pages;
@@ -1939,8 +2233,13 @@ int ceph_osdc_writepages(struct ceph_osd_client *osdc, struct ceph_vino vino,
 				    snapc, do_sync,
 				    truncate_seq, truncate_size, mtime,
 				    nofail, 1, page_align);
+<<<<<<< HEAD
 	if (!req)
 		return -ENOMEM;
+=======
+	if (IS_ERR(req))
+		return PTR_ERR(req);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* it may be a short write due to an object boundary */
 	req->r_pages = pages;
@@ -2019,10 +2318,17 @@ static struct ceph_msg *get_reply(struct ceph_connection *con,
 	}
 
 	if (req->r_con_filling_msg) {
+<<<<<<< HEAD
 		dout("get_reply revoking msg %p from old con %p\n",
 		     req->r_reply, req->r_con_filling_msg);
 		ceph_con_revoke_message(req->r_con_filling_msg, req->r_reply);
 		ceph_con_put(req->r_con_filling_msg);
+=======
+		dout("%s revoking msg %p from old con %p\n", __func__,
+		     req->r_reply, req->r_con_filling_msg);
+		ceph_msg_revoke_incoming(req->r_reply);
+		req->r_con_filling_msg->ops->put(req->r_con_filling_msg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		req->r_con_filling_msg = NULL;
 	}
 
@@ -2057,7 +2363,11 @@ static struct ceph_msg *get_reply(struct ceph_connection *con,
 #endif
 	}
 	*skip = 0;
+<<<<<<< HEAD
 	req->r_con_filling_msg = ceph_con_get(con);
+=======
+	req->r_con_filling_msg = con->ops->get(con);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dout("get_reply tid %lld %p\n", tid, m);
 
 out:
@@ -2074,6 +2384,10 @@ static struct ceph_msg *alloc_msg(struct ceph_connection *con,
 	int type = le16_to_cpu(hdr->type);
 	int front = le32_to_cpu(hdr->front_len);
 
+<<<<<<< HEAD
+=======
+	*skip = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	switch (type) {
 	case CEPH_MSG_OSD_MAP:
 	case CEPH_MSG_WATCH_NOTIFY:
@@ -2108,13 +2422,23 @@ static void put_osd_con(struct ceph_connection *con)
 /*
  * authentication
  */
+<<<<<<< HEAD
 static int get_authorizer(struct ceph_connection *con,
 			  void **buf, int *len, int *proto,
 			  void **reply_buf, int *reply_len, int force_new)
+=======
+/*
+ * Note: returned pointer is the address of a structure that's
+ * managed separately.  Caller must *not* attempt to free it.
+ */
+static struct ceph_auth_handshake *get_authorizer(struct ceph_connection *con,
+					int *proto, int force_new)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ceph_osd *o = con->private;
 	struct ceph_osd_client *osdc = o->o_osdc;
 	struct ceph_auth_client *ac = osdc->client->monc.auth;
+<<<<<<< HEAD
 	int ret = 0;
 
 	if (force_new && o->o_authorizer) {
@@ -2139,6 +2463,28 @@ static int get_authorizer(struct ceph_connection *con,
 	*reply_buf = o->o_authorizer_reply_buf;
 	*reply_len = o->o_authorizer_reply_buf_len;
 	return 0;
+=======
+	struct ceph_auth_handshake *auth = &o->o_auth;
+
+	if (force_new && auth->authorizer) {
+		ceph_auth_destroy_authorizer(ac, auth->authorizer);
+		auth->authorizer = NULL;
+	}
+	if (!auth->authorizer) {
+		int ret = ceph_auth_create_authorizer(ac, CEPH_ENTITY_TYPE_OSD,
+						      auth);
+		if (ret)
+			return ERR_PTR(ret);
+	} else {
+		int ret = ceph_auth_update_authorizer(ac, CEPH_ENTITY_TYPE_OSD,
+						     auth);
+		if (ret)
+			return ERR_PTR(ret);
+	}
+	*proto = ac->protocol;
+
+	return auth;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 
@@ -2148,7 +2494,11 @@ static int verify_authorizer_reply(struct ceph_connection *con, int len)
 	struct ceph_osd_client *osdc = o->o_osdc;
 	struct ceph_auth_client *ac = osdc->client->monc.auth;
 
+<<<<<<< HEAD
 	return ac->ops->verify_authorizer_reply(ac, o->o_authorizer, len);
+=======
+	return ceph_auth_verify_authorizer_reply(ac, o->o_auth.authorizer, len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int invalidate_authorizer(struct ceph_connection *con)
@@ -2157,9 +2507,13 @@ static int invalidate_authorizer(struct ceph_connection *con)
 	struct ceph_osd_client *osdc = o->o_osdc;
 	struct ceph_auth_client *ac = osdc->client->monc.auth;
 
+<<<<<<< HEAD
 	if (ac->ops->invalidate_authorizer)
 		ac->ops->invalidate_authorizer(ac, CEPH_ENTITY_TYPE_OSD);
 
+=======
+	ceph_auth_invalidate_authorizer(ac, CEPH_ENTITY_TYPE_OSD);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ceph_monc_validate_auth(&osdc->client->monc);
 }
 

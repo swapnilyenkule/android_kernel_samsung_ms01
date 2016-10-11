@@ -87,7 +87,11 @@ SIGN1(sys32_io_submit, compat_sys_io_submit, %o1)
 SIGN1(sys32_mq_open, compat_sys_mq_open, %o1)
 SIGN1(sys32_select, compat_sys_select, %o0)
 SIGN1(sys32_mkdir, sys_mkdir, %o1)
+<<<<<<< HEAD
 SIGN3(sys32_futex, compat_sys_futex, %o1, %o2, %o5)
+=======
+SIGN1(sys32_futex, compat_sys_futex, %o1)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 SIGN1(sys32_sysfs, compat_sys_sysfs, %o0)
 SIGN2(sys32_sendfile, compat_sys_sendfile, %o0, %o1)
 SIGN2(sys32_sendfile64, compat_sys_sendfile64, %o0, %o1)

@@ -22,6 +22,7 @@
 
 static struct map_desc cns3xxx_io_desc[] __initdata = {
 	{
+<<<<<<< HEAD
 		.virtual	= CNS3XXX_TC11MP_TWD_BASE_VIRT,
 		.pfn		= __phys_to_pfn(CNS3XXX_TC11MP_TWD_BASE),
 		.length		= SZ_4K,
@@ -35,6 +36,11 @@ static struct map_desc cns3xxx_io_desc[] __initdata = {
 		.virtual	= CNS3XXX_TC11MP_GIC_DIST_BASE_VIRT,
 		.pfn		= __phys_to_pfn(CNS3XXX_TC11MP_GIC_DIST_BASE),
 		.length		= SZ_4K,
+=======
+		.virtual	= CNS3XXX_TC11MP_SCU_BASE_VIRT,
+		.pfn		= __phys_to_pfn(CNS3XXX_TC11MP_SCU_BASE),
+		.length		= SZ_8K,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		.type		= MT_DEVICE,
 	}, {
 		.virtual	= CNS3XXX_TIMER1_2_3_BASE_VIRT,

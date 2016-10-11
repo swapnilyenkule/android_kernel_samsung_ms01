@@ -29,9 +29,12 @@
 #define STACK_TOP_MAX	TASK_SIZE
 #endif
 
+<<<<<<< HEAD
 extern unsigned int boot_reason;
 extern unsigned int cold_boot;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct debug_info {
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
 	struct perf_event	*hbp[ARM_MAX_HBP_SLOTS];
@@ -57,7 +60,10 @@ struct thread_struct {
 
 #define start_thread(regs,pc,sp)					\
 ({									\
+<<<<<<< HEAD
 	unsigned long *stack = (unsigned long *)sp;			\
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	memset(regs->uregs, 0, sizeof(regs->uregs));			\
 	if (current->personality & ADDR_LIMIT_32BIT)			\
 		regs->ARM_cpsr = USR_MODE;				\
@@ -68,9 +74,12 @@ struct thread_struct {
 	regs->ARM_cpsr |= PSR_ENDSTATE;					\
 	regs->ARM_pc = pc & ~1;		/* pc */			\
 	regs->ARM_sp = sp;		/* sp */			\
+<<<<<<< HEAD
 	regs->ARM_r2 = stack[2];	/* r2 (envp) */			\
 	regs->ARM_r1 = stack[1];	/* r1 (argv) */			\
 	regs->ARM_r0 = stack[0];	/* r0 (argc) */			\
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	nommu_start_thread(regs);					\
 })
 

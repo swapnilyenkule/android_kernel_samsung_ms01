@@ -8,7 +8,11 @@
 
 #ifndef CONFIG_64BIT
 OUTPUT_FORMAT("elf32-s390", "elf32-s390", "elf32-s390")
+<<<<<<< HEAD
 OUTPUT_ARCH(s390)
+=======
+OUTPUT_ARCH(s390:31-bit)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ENTRY(startup)
 jiffies = jiffies_64 + 4;
 #else

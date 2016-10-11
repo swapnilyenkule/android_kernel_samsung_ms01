@@ -156,6 +156,7 @@ static struct file_system_type proc_fs_type = {
 	.kill_sb	= proc_kill_sb,
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 extern void do_deferred_initcalls(void);
 
@@ -188,6 +189,8 @@ static const struct file_operations deferred_initcalls_fops = {
 };
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void __init proc_root_init(void)
 {
 	int err;
@@ -202,9 +205,12 @@ void __init proc_root_init(void)
 		return;
 	}
 
+<<<<<<< HEAD
 #ifdef CONFIG_DEFERRED_INITCALLS
 	proc_create("deferred_initcalls", 0, NULL, &deferred_initcalls_fops);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	proc_symlink("mounts", NULL, "self/mounts");
 
 	proc_net_init();

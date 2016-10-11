@@ -956,6 +956,10 @@ int isci_task_abort_task(struct sas_task *task)
 	int                       ret = TMF_RESP_FUNC_FAILED;
 	unsigned long             flags;
 	int                       perform_termination = 0;
+<<<<<<< HEAD
+=======
+	int                       target_done_already = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Get the isci_request reference from the task.  Note that
 	 * this check does not depend on the pending request list
@@ -970,9 +974,17 @@ int isci_task_abort_task(struct sas_task *task)
 	/* If task is already done, the request isn't valid */
 	if (!(task->task_state_flags & SAS_TASK_STATE_DONE) &&
 	    (task->task_state_flags & SAS_TASK_AT_INITIATOR) &&
+<<<<<<< HEAD
 	    old_request)
 		isci_device = isci_lookup_device(task->dev);
 
+=======
+	    old_request) {
+		isci_device = isci_lookup_device(task->dev);
+		target_done_already = test_bit(IREQ_COMPLETE_IN_TARGET,
+					       &old_request->flags);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock(&task->task_state_lock);
 	spin_unlock_irqrestore(&isci_host->scic_lock, flags);
 
@@ -1031,7 +1043,11 @@ int isci_task_abort_task(struct sas_task *task)
 	}
 	if (task->task_proto == SAS_PROTOCOL_SMP ||
 	    sas_protocol_ata(task->task_proto) ||
+<<<<<<< HEAD
 	    test_bit(IREQ_COMPLETE_IN_TARGET, &old_request->flags)) {
+=======
+	    target_done_already) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		spin_unlock_irqrestore(&isci_host->scic_lock, flags);
 
@@ -1312,7 +1328,11 @@ int isci_task_I_T_nexus_reset(struct domain_device *dev)
 		/* XXX: need to cleanup any ireqs targeting this
 		 * domain_device
 		 */
+<<<<<<< HEAD
 		ret = TMF_RESP_FUNC_COMPLETE;
+=======
+		ret = -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 

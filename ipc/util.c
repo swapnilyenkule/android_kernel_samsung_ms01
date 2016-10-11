@@ -264,6 +264,13 @@ int ipc_addid(struct ipc_ids* ids, struct kern_ipc_perm* new, int size)
 	rcu_read_lock();
 	spin_lock(&new->lock);
 
+<<<<<<< HEAD
+=======
+	current_euid_egid(&euid, &egid);
+	new->cuid = new->uid = euid;
+	new->gid = new->cgid = egid;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = idr_get_new(&ids->ipcs_idr, new, &id);
 	if (err) {
 		spin_unlock(&new->lock);
@@ -273,10 +280,13 @@ int ipc_addid(struct ipc_ids* ids, struct kern_ipc_perm* new, int size)
 
 	ids->in_use++;
 
+<<<<<<< HEAD
 	current_euid_egid(&euid, &egid);
 	new->cuid = new->uid = euid;
 	new->gid = new->cgid = egid;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	new->seq = ids->seq++;
 	if(ids->seq > ids->seq_max)
 		ids->seq = 0;

@@ -9,7 +9,10 @@ Required properties:
 - compatible : should be one of
 	"arm,cortex-a9-pmu"
 	"arm,cortex-a8-pmu"
+<<<<<<< HEAD
 	"arm,cortex-a7-pmu"
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	"arm,arm1176-pmu"
 	"arm,arm1136-pmu"
 - interrupts : 1 combined interrupt or 1 per core.

@@ -40,13 +40,23 @@ void __init orion_ge00_init(struct mv643xx_eth_platform_data *eth_data,
 			    unsigned long mapbase,
 			    unsigned long irq,
 			    unsigned long irq_err,
+<<<<<<< HEAD
 			    int tclk);
+=======
+			    int tclk,
+			    unsigned int tx_csum_limit);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void __init orion_ge01_init(struct mv643xx_eth_platform_data *eth_data,
 			    unsigned long mapbase,
 			    unsigned long irq,
 			    unsigned long irq_err,
+<<<<<<< HEAD
 			    int tclk);
+=======
+			    int tclk,
+			    unsigned int tx_csum_limit);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 void __init orion_ge10_init(struct mv643xx_eth_platform_data *eth_data,
 			    unsigned long mapbase,

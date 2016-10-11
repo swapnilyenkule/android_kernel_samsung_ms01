@@ -16,7 +16,10 @@
 #include <linux/msg.h>
 #include <linux/ipc_namespace.h>
 #include <linux/utsname.h>
+<<<<<<< HEAD
 #include <linux/proc_fs.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/uaccess.h>
 
 #include "util.h"
@@ -31,7 +34,10 @@ DEFINE_SPINLOCK(mq_lock);
 struct ipc_namespace init_ipc_ns = {
 	.count		= ATOMIC_INIT(1),
 	.user_ns = &init_user_ns,
+<<<<<<< HEAD
 	.proc_inum = PROC_IPC_INIT_INO,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 atomic_t nr_ipc_ns = ATOMIC_INIT(1);
@@ -41,15 +47,26 @@ struct msg_msgseg {
 	/* the next part of the message follows immediately */
 };
 
+<<<<<<< HEAD
 #define DATALEN_MSG	(PAGE_SIZE-sizeof(struct msg_msg))
 #define DATALEN_SEG	(PAGE_SIZE-sizeof(struct msg_msgseg))
 
 struct msg_msg *load_msg(const void __user *src, int len)
+=======
+#define DATALEN_MSG	((size_t)PAGE_SIZE-sizeof(struct msg_msg))
+#define DATALEN_SEG	((size_t)PAGE_SIZE-sizeof(struct msg_msgseg))
+
+struct msg_msg *load_msg(const void __user *src, size_t len)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct msg_msg *msg;
 	struct msg_msgseg **pseg;
 	int err;
+<<<<<<< HEAD
 	int alen;
+=======
+	size_t alen;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	alen = len;
 	if (alen > DATALEN_MSG)
@@ -103,9 +120,15 @@ out_err:
 	return ERR_PTR(err);
 }
 
+<<<<<<< HEAD
 int store_msg(void __user *dest, struct msg_msg *msg, int len)
 {
 	int alen;
+=======
+int store_msg(void __user *dest, struct msg_msg *msg, size_t len)
+{
+	size_t alen;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct msg_msgseg *seg;
 
 	alen = len;

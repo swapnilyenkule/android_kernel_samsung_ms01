@@ -35,6 +35,10 @@
 #include <sys/mount.h>
 #include <sys/statfs.h>
 #include "../../include/linux/magic.h"
+<<<<<<< HEAD
+=======
+#include "../../include/linux/kernel-page-flags.h"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 
 #ifndef MAX_PATH
@@ -73,6 +77,7 @@
 #define KPF_BYTES		8
 #define PROC_KPAGEFLAGS		"/proc/kpageflags"
 
+<<<<<<< HEAD
 /* copied from kpageflags_read() */
 #define KPF_LOCKED		0
 #define KPF_ERROR		1
@@ -100,6 +105,8 @@
 #define KPF_KSM			21
 #define KPF_THP			22
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* [32-] kernel hacking assistances */
 #define KPF_RESERVED		32
 #define KPF_MLOCKED		33

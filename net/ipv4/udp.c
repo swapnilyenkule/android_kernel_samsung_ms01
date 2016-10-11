@@ -768,7 +768,11 @@ send:
 /*
  * Push out all pending data as one UDP datagram. Socket is locked.
  */
+<<<<<<< HEAD
 static int udp_push_pending_frames(struct sock *sk)
+=======
+int udp_push_pending_frames(struct sock *sk)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct udp_sock  *up = udp_sk(sk);
 	struct inet_sock *inet = inet_sk(sk);
@@ -787,6 +791,10 @@ out:
 	up->pending = 0;
 	return err;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(udp_push_pending_frames);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		size_t len)
@@ -931,8 +939,12 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		flowi4_init_output(fl4, ipc.oif, sk->sk_mark, tos,
 				   RT_SCOPE_UNIVERSE, sk->sk_protocol,
 				   inet_sk_flowi_flags(sk)|FLOWI_FLAG_CAN_SLEEP,
+<<<<<<< HEAD
 				   faddr, saddr, dport, inet->inet_sport,
 				   sock_i_uid(sk));
+=======
+				   faddr, saddr, dport, inet->inet_sport);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		security_sk_classify_flow(sk, flowi4_to_flowi(fl4));
 		rt = ip_route_output_flow(net, fl4, sk);
@@ -940,7 +952,11 @@ int udp_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 			err = PTR_ERR(rt);
 			rt = NULL;
 			if (err == -ENETUNREACH)
+<<<<<<< HEAD
 				IP_INC_STATS_BH(net, IPSTATS_MIB_OUTNOROUTES);
+=======
+				IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto out;
 		}
 
@@ -1039,6 +1055,12 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
 	struct udp_sock *up = udp_sk(sk);
 	int ret;
 
+<<<<<<< HEAD
+=======
+	if (flags & MSG_SENDPAGE_NOTLAST)
+		flags |= MSG_MORE;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!up->pending) {
 		struct msghdr msg = {	.msg_flags = flags|MSG_MORE };
 
@@ -1174,6 +1196,7 @@ int udp_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 	int is_udplite = IS_UDPLITE(sk);
 	bool slow;
 
+<<<<<<< HEAD
 	/*
 	 *	Check any passed addresses
 	 */
@@ -1182,6 +1205,10 @@ int udp_recvmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 
 	if (flags & MSG_ERRQUEUE)
 		return ip_recv_error(sk, msg, len);
+=======
+	if (flags & MSG_ERRQUEUE)
+		return ip_recv_error(sk, msg, len, addr_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 try_again:
 	skb = __skb_recv_datagram(sk, flags | (noblock ? MSG_DONTWAIT : 0),
@@ -1213,7 +1240,11 @@ try_again:
 	else {
 		err = skb_copy_and_csum_datagram_iovec(skb,
 						       sizeof(struct udphdr),
+<<<<<<< HEAD
 						       msg->msg_iov, copied);
+=======
+						       msg->msg_iov);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (err == -EINVAL)
 			goto csum_copy_err;
@@ -1234,6 +1265,10 @@ try_again:
 		sin->sin_port = udp_hdr(skb)->source;
 		sin->sin_addr.s_addr = ip_hdr(skb)->saddr;
 		memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
+<<<<<<< HEAD
+=======
+		*addr_len = sizeof(*sin);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	if (inet->cmsg_flags)
 		ip_cmsg_recv(msg, skb);
@@ -1254,7 +1289,11 @@ csum_copy_err:
 	unlock_sock_fast(sk, slow);
 
 	/* starting over for a new packet, but check if we need to yield */
+<<<<<<< HEAD
         cond_resched();
+=======
+	cond_resched();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	msg->msg_flags &= ~MSG_TRUNC;
 	goto try_again;
 }

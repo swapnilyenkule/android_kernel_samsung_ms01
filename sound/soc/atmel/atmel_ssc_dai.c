@@ -341,7 +341,10 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 	struct atmel_pcm_dma_params *dma_params;
 	int dir, channels, bits;
 	u32 tfmr, rfmr, tcmr, rcmr;
+<<<<<<< HEAD
 	int start_event;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int ret;
 
 	/*
@@ -460,6 +463,7 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 		 * The SSC transmit clock is obtained from the BCLK signal on
 		 * on the TK line, and the SSC receive clock is
 		 * generated from the transmit clock.
+<<<<<<< HEAD
 		 *
 		 *  For single channel data, one sample is transferred
 		 * on the falling edge of the LRC clock.
@@ -473,6 +477,12 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 		rcmr =	  SSC_BF(RCMR_PERIOD, 0)
 			| SSC_BF(RCMR_STTDLY, START_DELAY)
 			| SSC_BF(RCMR_START, start_event)
+=======
+		 */
+		rcmr =	  SSC_BF(RCMR_PERIOD, 0)
+			| SSC_BF(RCMR_STTDLY, START_DELAY)
+			| SSC_BF(RCMR_START, SSC_START_FALLING_RF)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			| SSC_BF(RCMR_CKI, SSC_CKI_RISING)
 			| SSC_BF(RCMR_CKO, SSC_CKO_NONE)
 			| SSC_BF(RCMR_CKS, SSC_CKS_CLOCK);
@@ -480,14 +490,22 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 		rfmr =	  SSC_BF(RFMR_FSEDGE, SSC_FSEDGE_POSITIVE)
 			| SSC_BF(RFMR_FSOS, SSC_FSOS_NONE)
 			| SSC_BF(RFMR_FSLEN, 0)
+<<<<<<< HEAD
 			| SSC_BF(RFMR_DATNB, 0)
+=======
+			| SSC_BF(RFMR_DATNB, (channels - 1))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			| SSC_BIT(RFMR_MSBF)
 			| SSC_BF(RFMR_LOOP, 0)
 			| SSC_BF(RFMR_DATLEN, (bits - 1));
 
 		tcmr =	  SSC_BF(TCMR_PERIOD, 0)
 			| SSC_BF(TCMR_STTDLY, START_DELAY)
+<<<<<<< HEAD
 			| SSC_BF(TCMR_START, start_event)
+=======
+			| SSC_BF(TCMR_START, SSC_START_FALLING_RF)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			| SSC_BF(TCMR_CKI, SSC_CKI_FALLING)
 			| SSC_BF(TCMR_CKO, SSC_CKO_NONE)
 			| SSC_BF(TCMR_CKS, SSC_CKS_PIN);
@@ -496,7 +514,11 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 			| SSC_BF(TFMR_FSDEN, 0)
 			| SSC_BF(TFMR_FSOS, SSC_FSOS_NONE)
 			| SSC_BF(TFMR_FSLEN, 0)
+<<<<<<< HEAD
 			| SSC_BF(TFMR_DATNB, 0)
+=======
+			| SSC_BF(TFMR_DATNB, (channels - 1))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			| SSC_BIT(TFMR_MSBF)
 			| SSC_BF(TFMR_DATDEF, 0)
 			| SSC_BF(TFMR_DATLEN, (bits - 1));

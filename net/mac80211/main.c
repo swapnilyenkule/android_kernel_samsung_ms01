@@ -673,7 +673,11 @@ int ieee80211_register_hw(struct ieee80211_hw *hw)
 	int result, i;
 	enum ieee80211_band band;
 	int channels, max_bitrates;
+<<<<<<< HEAD
 	bool supp_ht, supp_vht;
+=======
+	bool supp_ht;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	static const u32 cipher_suites[] = {
 		/* keep WEP first, it may be removed below */
 		WLAN_CIPHER_SUITE_WEP40,
@@ -706,7 +710,10 @@ int ieee80211_register_hw(struct ieee80211_hw *hw)
 	channels = 0;
 	max_bitrates = 0;
 	supp_ht = false;
+<<<<<<< HEAD
 	supp_vht = false;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	for (band = 0; band < IEEE80211_NUM_BANDS; band++) {
 		struct ieee80211_supported_band *sband;
 
@@ -724,7 +731,10 @@ int ieee80211_register_hw(struct ieee80211_hw *hw)
 		if (max_bitrates < sband->n_bitrates)
 			max_bitrates = sband->n_bitrates;
 		supp_ht = supp_ht || sband->ht_cap.ht_supported;
+<<<<<<< HEAD
 		supp_vht = supp_vht || sband->vht_cap.vht_supported;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	local->int_scan_req = kzalloc(sizeof(*local->int_scan_req) +
@@ -800,10 +810,13 @@ int ieee80211_register_hw(struct ieee80211_hw *hw)
 	if (supp_ht)
 		local->scan_ies_len += 2 + sizeof(struct ieee80211_ht_cap);
 
+<<<<<<< HEAD
 	if (supp_vht)
 		local->scan_ies_len +=
 			2 + sizeof(struct ieee80211_vht_cap);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!local->ops->hw_scan) {
 		/* For hw_scan, driver needs to set these up. */
 		local->hw.wiphy->max_scan_ssids = 4;

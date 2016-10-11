@@ -45,7 +45,11 @@ static inline int pmu_to_irq(int pin)
 
 static inline int irq_to_pmu(int irq)
 {
+<<<<<<< HEAD
 	if (IRQ_DOVE_PMU_START < irq && irq < NR_IRQS)
+=======
+	if (IRQ_DOVE_PMU_START <= irq && irq < NR_IRQS)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return irq - IRQ_DOVE_PMU_START;
 
 	return -EINVAL;

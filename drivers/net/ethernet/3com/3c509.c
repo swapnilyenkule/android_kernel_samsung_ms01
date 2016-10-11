@@ -309,6 +309,10 @@ static int __devinit el3_isa_match(struct device *pdev,
 	if (!dev)
 		return -ENOMEM;
 
+<<<<<<< HEAD
+=======
+	SET_NETDEV_DEV(dev, pdev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	netdev_boot_setup_check(dev);
 
 	if (!request_region(ioaddr, EL3_IO_EXTENT, "3c509-isa")) {
@@ -704,6 +708,10 @@ static int __init el3_eisa_probe (struct device *device)
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
+=======
+	SET_NETDEV_DEV(dev, device);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	netdev_boot_setup_check(dev);
 
 	el3_dev_fill(dev, phys_addr, ioaddr, irq, if_port, EL3_EISA);

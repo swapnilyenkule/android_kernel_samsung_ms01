@@ -370,15 +370,22 @@ static void mlx4_en_netpoll(struct net_device *dev)
 {
 	struct mlx4_en_priv *priv = netdev_priv(dev);
 	struct mlx4_en_cq *cq;
+<<<<<<< HEAD
 	unsigned long flags;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int i;
 
 	for (i = 0; i < priv->rx_ring_num; i++) {
 		cq = &priv->rx_cq[i];
+<<<<<<< HEAD
 		spin_lock_irqsave(&cq->lock, flags);
 		napi_synchronize(&cq->napi);
 		mlx4_en_process_rx_cq(dev, cq, 0);
 		spin_unlock_irqrestore(&cq->lock, flags);
+=======
+		napi_schedule(&cq->napi);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 #endif

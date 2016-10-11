@@ -19,17 +19,21 @@
 #include <linux/sched.h>
 #include <linux/highmem.h>
 #include <linux/perf_event.h>
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 #include <linux/io.h>
 #include <linux/slab.h>
 #include <linux/spinlock_types.h>
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/exception.h>
 #include <asm/pgtable.h>
 #include <asm/system_misc.h>
 #include <asm/system_info.h>
 #include <asm/tlbflush.h>
+<<<<<<< HEAD
 #include <asm/cputype.h>
 #if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
 #include <asm/io.h>
@@ -41,6 +45,11 @@
 #define CREATE_TRACE_POINTS
 #include <trace/events/exception.h>
 
+=======
+
+#include "fault.h"
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MMU
 
 #ifdef CONFIG_KPROBES
@@ -123,15 +132,22 @@ void show_pte(struct mm_struct *mm, unsigned long addr)
 			break;
 
 		pte = pte_offset_map(pmd, addr);
+<<<<<<< HEAD
 #ifndef CONFIG_TIMA_RKP
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		printk(", *pte=%08llx", (long long)pte_val(*pte));
 #ifndef CONFIG_ARM_LPAE
 		printk(", *ppte=%08llx",
 		       (long long)pte_val(pte[PTE_HWTABLE_PTRS]));
 #endif
+<<<<<<< HEAD
 #endif
 		pte_unmap(pte);
 
+=======
+		pte_unmap(pte);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} while(0);
 
 	printk("\n");
@@ -141,6 +157,7 @@ void show_pte(struct mm_struct *mm, unsigned long addr)
 { }
 #endif					/* CONFIG_MMU */
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 inline void tima_dump_log2()
 {
@@ -458,6 +475,8 @@ static unsigned int rkp_fixup(unsigned long addr, struct pt_regs *regs) {
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Oops.  The kernel tried to access some page that wasn't present.
  */
@@ -470,6 +489,7 @@ __do_kernel_fault(struct mm_struct *mm, unsigned long addr, unsigned int fsr,
 	 */
 	if (fixup_exception(regs))
 		return;
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP
 	if (addr >= 0xc0000000 && (fsr & FSR_WRITE)) {
 		if (rkp_fixup(addr, regs)) {
@@ -477,6 +497,8 @@ __do_kernel_fault(struct mm_struct *mm, unsigned long addr, unsigned int fsr,
 		}
 	}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * No handler, we'll have to terminate things with extreme prejudice.
@@ -488,12 +510,15 @@ __do_kernel_fault(struct mm_struct *mm, unsigned long addr, unsigned int fsr,
 		"paging request", addr);
 
 	show_pte(mm, addr);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 	if (tima_is_pg_protected(addr) == 1) {
 		printk(KERN_ERR"RKP ==> Address %lx is RO by RKP\n", addr);
 	}
 	tima_send_cmd(addr, 0x3f80e221);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	die("Oops", regs, fsr);
 	bust_spinlocks(0);
 	do_exit(SIGKILL);
@@ -510,8 +535,11 @@ __do_user_fault(struct task_struct *tsk, unsigned long addr,
 {
 	struct siginfo si;
 
+<<<<<<< HEAD
 	trace_user_fault(tsk, addr, fsr);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_DEBUG_USER
 	if (((user_debug & UDBG_SEGV) && (sig == SIGSEGV)) ||
 	    ((user_debug & UDBG_BUS)  && (sig == SIGBUS))) {
@@ -857,6 +885,7 @@ do_bad(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
 	return 1;
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
 #define __str(x) #x
 #define MRC(x, v1, v2, v4, v5, v6) do {					\
@@ -900,6 +929,8 @@ do_imprecise_ext(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
 	return 1;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct fsr_info {
 	int	(*fn)(unsigned long addr, unsigned int fsr, struct pt_regs *regs);
 	int	sig;
@@ -927,6 +958,7 @@ hook_fault_code(int nr, int (*fn)(unsigned long, unsigned int, struct pt_regs *)
 	fsr_info[nr].name = name;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_MSM_KRAIT_TBB_ABORT_HANDLER
 static int krait_tbb_fixup(unsigned int fsr, struct pt_regs *regs)
 {
@@ -996,6 +1028,8 @@ static int krait_tbb_fixup(unsigned int fsr, struct pt_regs *regs)
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Dispatch a data abort to the relevant handler.
  */
@@ -1005,11 +1039,14 @@ do_DataAbort(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
 	const struct fsr_info *inf = fsr_info + fsr_fs(fsr);
 	struct siginfo info;
 
+<<<<<<< HEAD
 #ifdef CONFIG_MSM_KRAIT_TBB_ABORT_HANDLER
 	if (krait_tbb_fixup(fsr, regs))
 		return;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!inf->fn(addr, fsr & ~FSR_LNX_PF, regs))
 		return;
 

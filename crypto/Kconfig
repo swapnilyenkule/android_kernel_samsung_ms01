@@ -30,6 +30,7 @@ config CRYPTO_FIPS
 	  certification.  You should say no unless you know what
 	  this is.
 
+<<<<<<< HEAD
 config CRYPTO_FIPS_INTEG_COPY_ADDRESS
 	hex "FIPS integrity check zImage offset"
 		default 0x8A008000
@@ -41,6 +42,8 @@ config CRYPTO_FIPS_INTEG_COPY_ADDRESS
 	  If you need to change this value, change in device
 	  specific configuration file instead of here.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CRYPTO_ALGAPI
 	tristate
 	select CRYPTO_ALGAPI2
@@ -111,10 +114,13 @@ config CRYPTO_MANAGER2
 	select CRYPTO_BLKCIPHER2
 	select CRYPTO_PCOMP2
 
+<<<<<<< HEAD
 config CRYPTO_ABLK_HELPER
 	tristate
 	select CRYPTO_CRYPTD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CRYPTO_USER
 	tristate "Userspace cryptographic algorithm configuration"
 	depends on NET
@@ -184,7 +190,11 @@ config CRYPTO_AUTHENC
 
 config CRYPTO_TEST
 	tristate "Testing module"
+<<<<<<< HEAD
 	default n
+=======
+	depends on m
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	select CRYPTO_MANAGER
 	help
 	  Quick & dirty crypto test module.
@@ -438,6 +448,7 @@ config CRYPTO_SHA1_SSSE3
 	  using Supplemental SSE3 (SSSE3) instructions or Advanced Vector
 	  Extensions (AVX), when available.
 
+<<<<<<< HEAD
 config CRYPTO_SHA1_ARM
 	tristate "SHA1 digest algorithm (ARM-asm)"
 	depends on ARM
@@ -459,6 +470,8 @@ config CRYPTO_SHA1_ARM_NEON
 	  using optimized ARM NEON assembly, when NEON instructions are
 	  available.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CRYPTO_SHA256
 	tristate "SHA224 and SHA256 digest algorithm"
 	select CRYPTO_HASH
@@ -483,6 +496,7 @@ config CRYPTO_SHA512
 	  This code also includes SHA-384, a 384 bit hash with 192 bits
 	  of security against collision attacks.
 
+<<<<<<< HEAD
 config CRYPTO_SHA512_ARM_NEON
 	tristate "SHA384 and SHA512 digest algorithm (ARM NEON)"
 	depends on ARM && KERNEL_MODE_NEON && !CPU_BIG_ENDIAN
@@ -498,6 +512,8 @@ config CRYPTO_SHA512_ARM_NEON
 	  This code also includes SHA-384, a 384 bit hash with 192 bits
 	  of security against collision attacks.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CRYPTO_TGR192
 	tristate "Tiger digest algorithms"
 	select CRYPTO_HASH
@@ -628,6 +644,7 @@ config CRYPTO_AES_NI_INTEL
 	  ECB, CBC, LRW, PCBC, XTS. The 64 bit version has additional
 	  acceleration for CTR.
 
+<<<<<<< HEAD
 config CRYPTO_AES_ARM
 	tristate "AES cipher algorithms (ARM-asm)"
 	depends on ARM
@@ -669,6 +686,8 @@ config CRYPTO_AES_ARM_BS
 	  This implementation does not rely on any lookup tables so it is
 	  believed to be invulnerable to cache timing attacks.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config CRYPTO_ANUBIS
 	tristate "Anubis cipher algorithm"
 	select CRYPTO_ALGAPI

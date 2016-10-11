@@ -18,9 +18,12 @@
 #ifndef MULTI_CPU
 EXPORT_SYMBOL(cpu_dcache_clean_area);
 EXPORT_SYMBOL(cpu_set_pte_ext);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_TABLES
 EXPORT_SYMBOL(cpu_tima_set_pte_ext);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else
 EXPORT_SYMBOL(processor);
 #endif

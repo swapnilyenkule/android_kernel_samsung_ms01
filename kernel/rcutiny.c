@@ -279,6 +279,14 @@ static void __rcu_process_callbacks(struct rcu_ctrlblk *rcp)
 
 	/* Move the ready-to-invoke callbacks to a local list. */
 	local_irq_save(flags);
+<<<<<<< HEAD
+=======
+	if (rcp->donetail == &rcp->rcucblist) {
+		/* No callbacks ready, so just leave. */
+		local_irq_restore(flags);
+		return;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	RCU_TRACE(trace_rcu_batch_start(rcp->name, 0, rcp->qlen, -1));
 	list = rcp->rcucblist;
 	rcp->rcucblist = *rcp->donetail;

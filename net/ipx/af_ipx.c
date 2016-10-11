@@ -1835,8 +1835,11 @@ static int ipx_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (skb->tstamp.tv64)
 		sk->sk_stamp = skb->tstamp;
 
+<<<<<<< HEAD
 	msg->msg_namelen = sizeof(*sipx);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (sipx) {
 		sipx->sipx_family	= AF_IPX;
 		sipx->sipx_port		= ipx->ipx_source.sock;
@@ -1844,6 +1847,10 @@ static int ipx_recvmsg(struct kiocb *iocb, struct socket *sock,
 		sipx->sipx_network	= IPX_SKB_CB(skb)->ipx_source_net;
 		sipx->sipx_type 	= ipx->ipx_type;
 		sipx->sipx_zero		= 0;
+<<<<<<< HEAD
+=======
+		msg->msg_namelen	= sizeof(*sipx);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	rc = copied;
 

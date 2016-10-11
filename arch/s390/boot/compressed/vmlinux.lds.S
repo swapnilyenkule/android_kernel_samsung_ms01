@@ -5,7 +5,11 @@ OUTPUT_FORMAT("elf64-s390", "elf64-s390", "elf64-s390")
 OUTPUT_ARCH(s390:64-bit)
 #else
 OUTPUT_FORMAT("elf32-s390", "elf32-s390", "elf32-s390")
+<<<<<<< HEAD
 OUTPUT_ARCH(s390)
+=======
+OUTPUT_ARCH(s390:31-bit)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 ENTRY(startup)

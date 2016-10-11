@@ -1,7 +1,11 @@
 /*
  * Qualcomm Serial USB driver
  *
+<<<<<<< HEAD
  *	Copyright (c) 2008, 2012 The Linux Foundation. All rights reserved.
+=======
+ *	Copyright (c) 2008 QUALCOMM Incorporated.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *	Copyright (c) 2009 Greg Kroah-Hartman <gregkh@suse.de>
  *	Copyright (c) 2009 Novell Inc.
  *
@@ -37,7 +41,17 @@ static const struct usb_device_id id_table[] = {
 	{DEVICE_G1K(0x04da, 0x250c)},	/* Panasonic Gobi QDL device */
 	{DEVICE_G1K(0x413c, 0x8172)},	/* Dell Gobi Modem device */
 	{DEVICE_G1K(0x413c, 0x8171)},	/* Dell Gobi QDL device */
+<<<<<<< HEAD
 	{DEVICE_G1K(0x1410, 0xa001)},	/* Novatel Gobi Modem device */
+=======
+	{DEVICE_G1K(0x1410, 0xa001)},	/* Novatel/Verizon USB-1000 */
+	{DEVICE_G1K(0x1410, 0xa002)},	/* Novatel Gobi Modem device */
+	{DEVICE_G1K(0x1410, 0xa003)},	/* Novatel Gobi Modem device */
+	{DEVICE_G1K(0x1410, 0xa004)},	/* Novatel Gobi Modem device */
+	{DEVICE_G1K(0x1410, 0xa005)},	/* Novatel Gobi Modem device */
+	{DEVICE_G1K(0x1410, 0xa006)},	/* Novatel Gobi Modem device */
+	{DEVICE_G1K(0x1410, 0xa007)},	/* Novatel Gobi Modem device */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{DEVICE_G1K(0x1410, 0xa008)},	/* Novatel Gobi QDL device */
 	{DEVICE_G1K(0x0b05, 0x1776)},	/* Asus Gobi Modem device */
 	{DEVICE_G1K(0x0b05, 0x1774)},	/* Asus Gobi QDL device */
@@ -55,6 +69,10 @@ static const struct usb_device_id id_table[] = {
 	{DEVICE_G1K(0x05c6, 0x9221)},	/* Generic Gobi QDL device */
 	{DEVICE_G1K(0x05c6, 0x9231)},	/* Generic Gobi QDL device */
 	{DEVICE_G1K(0x1f45, 0x0001)},	/* Unknown Gobi QDL device */
+<<<<<<< HEAD
+=======
+	{DEVICE_G1K(0x1bc7, 0x900e)},	/* Telit Gobi QDL device */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Gobi 2000 devices */
 	{USB_DEVICE(0x1410, 0xa010)},	/* Novatel Gobi 2000 QDL device */
@@ -105,17 +123,33 @@ static const struct usb_device_id id_table[] = {
 	{USB_DEVICE(0x1410, 0xa021)},	/* Novatel Gobi 3000 Composite */
 	{USB_DEVICE(0x413c, 0x8193)},	/* Dell Gobi 3000 QDL */
 	{USB_DEVICE(0x413c, 0x8194)},	/* Dell Gobi 3000 Composite */
+<<<<<<< HEAD
 	{USB_DEVICE(0x1199, 0x9013)},	/* Sierra Wireless Gobi 3000 Modem device (MC8355) */
 	{USB_DEVICE(0x12D1, 0x14F0)},	/* Sony Gobi 3000 QDL */
 	{USB_DEVICE(0x12D1, 0x14F1)},	/* Sony Gobi 3000 Composite */
 	{USB_DEVICE(0x05c6, 0x9048)},	/* MDM9x15 device */
 	{USB_DEVICE(0x05c6, 0x904C)},	/* MDM9x15 device */
+=======
+	{USB_DEVICE(0x1199, 0x9010)},	/* Sierra Wireless Gobi 3000 QDL */
+	{USB_DEVICE(0x1199, 0x9012)},	/* Sierra Wireless Gobi 3000 QDL */
+	{USB_DEVICE(0x1199, 0x9013)},	/* Sierra Wireless Gobi 3000 Modem device (MC8355) */
+	{USB_DEVICE(0x1199, 0x9014)},	/* Sierra Wireless Gobi 3000 QDL */
+	{USB_DEVICE(0x1199, 0x9015)},	/* Sierra Wireless Gobi 3000 Modem device */
+	{USB_DEVICE(0x1199, 0x9018)},	/* Sierra Wireless Gobi 3000 QDL */
+	{USB_DEVICE(0x1199, 0x9019)},	/* Sierra Wireless Gobi 3000 Modem device */
+	{USB_DEVICE(0x12D1, 0x14F0)},	/* Sony Gobi 3000 QDL */
+	{USB_DEVICE(0x12D1, 0x14F1)},	/* Sony Gobi 3000 Composite */
+	{USB_DEVICE(0x0AF0, 0x8120)},	/* Option GTM681W */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ }				/* Terminating entry */
 };
 MODULE_DEVICE_TABLE(usb, id_table);
 
+<<<<<<< HEAD
 #define EFS_SYNC_IFC_NUM	2
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct usb_driver qcdriver = {
 	.name			= "qcserial",
 	.probe			= usb_serial_probe,
@@ -237,6 +271,7 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
 		}
 		break;
 
+<<<<<<< HEAD
 	case 9:
 		if (ifnum != EFS_SYNC_IFC_NUM) {
 			kfree(data);
@@ -245,6 +280,8 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
 
 		retval = 0;
 		break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		dev_err(&serial->dev->dev,
 			"unknown number of interfaces: %d\n", nintf);
@@ -284,8 +321,11 @@ static struct usb_serial_driver qcdevice = {
 	.write		     = usb_wwan_write,
 	.write_room	     = usb_wwan_write_room,
 	.chars_in_buffer     = usb_wwan_chars_in_buffer,
+<<<<<<< HEAD
 	.throttle            = usb_wwan_throttle,
 	.unthrottle          = usb_wwan_unthrottle,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.attach		     = usb_wwan_startup,
 	.disconnect	     = usb_wwan_disconnect,
 	.release	     = qc_release,

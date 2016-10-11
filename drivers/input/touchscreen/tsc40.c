@@ -107,7 +107,10 @@ static int tsc_connect(struct serio *serio, struct serio_driver *drv)
 	__set_bit(BTN_TOUCH, input_dev->keybit);
 	input_set_abs_params(ptsc->dev, ABS_X, 0, 0x3ff, 0, 0);
 	input_set_abs_params(ptsc->dev, ABS_Y, 0, 0x3ff, 0, 0);
+<<<<<<< HEAD
 	input_set_abs_params(ptsc->dev, ABS_PRESSURE, 0, 0, 0, 0);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	serio_set_drvdata(serio, ptsc);
 

@@ -18,6 +18,10 @@
 #include <asm/hypervisor.h>
 #include <asm/nmi.h>
 #include <asm/x86_init.h>
+<<<<<<< HEAD
+=======
+#include <asm/geode.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 unsigned int __read_mostly cpu_khz;	/* TSC clocks / usec, not used here */
 EXPORT_SYMBOL(cpu_khz);
@@ -800,6 +804,7 @@ EXPORT_SYMBOL_GPL(mark_tsc_unstable);
 
 static void __init check_system_tsc_reliable(void)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_MGEODE_LX
 	/* RTSC counts during suspend */
 #define RTSC_SUSP 0x100
@@ -809,6 +814,19 @@ static void __init check_system_tsc_reliable(void)
 	/* Geode_LX - the OLPC CPU has a very reliable TSC */
 	if (res_low & RTSC_SUSP)
 		tsc_clocksource_reliable = 1;
+=======
+#if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+	if (is_geode_lx()) {
+		/* RTSC counts during suspend */
+#define RTSC_SUSP 0x100
+		unsigned long res_low, res_high;
+
+		rdmsr_safe(MSR_GEODE_BUSCONT_CONF0, &res_low, &res_high);
+		/* Geode_LX - the OLPC CPU has a very reliable TSC */
+		if (res_low & RTSC_SUSP)
+			tsc_clocksource_reliable = 1;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
 		tsc_clocksource_reliable = 1;
@@ -959,14 +977,25 @@ void __init tsc_init(void)
 
 	x86_init.timers.tsc_pre_init();
 
+<<<<<<< HEAD
 	if (!cpu_has_tsc)
 		return;
+=======
+	if (!cpu_has_tsc) {
+		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
+		return;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	tsc_khz = x86_platform.calibrate_tsc();
 	cpu_khz = tsc_khz;
 
 	if (!tsc_khz) {
 		mark_tsc_unstable("could not calculate TSC khz");
+<<<<<<< HEAD
+=======
+		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return;
 	}
 

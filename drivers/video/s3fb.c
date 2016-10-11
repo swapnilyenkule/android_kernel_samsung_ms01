@@ -1172,7 +1172,11 @@ static int __devinit s3_pci_probe(struct pci_dev *dev, const struct pci_device_i
 
 	vga_res.flags = IORESOURCE_IO;
 
+<<<<<<< HEAD
 	pcibios_bus_to_resource(dev, &vga_res, &bus_reg);
+=======
+	pcibios_bus_to_resource(dev->bus, &vga_res, &bus_reg);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	par->state.vgabase = (void __iomem *) vga_res.start;
 

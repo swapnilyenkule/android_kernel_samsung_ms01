@@ -279,6 +279,11 @@ enum vmcs_field {
 #define EXIT_REASON_APIC_ACCESS         44
 #define EXIT_REASON_EPT_VIOLATION       48
 #define EXIT_REASON_EPT_MISCONFIG       49
+<<<<<<< HEAD
+=======
+#define EXIT_REASON_INVEPT              50
+#define EXIT_REASON_INVVPID		53
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define EXIT_REASON_WBINVD		54
 #define EXIT_REASON_XSETBV		55
 

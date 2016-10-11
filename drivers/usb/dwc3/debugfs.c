@@ -36,7 +36,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include <linux/module.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/ptrace.h>
@@ -57,7 +60,11 @@
 #define dump_register(nm)				\
 {							\
 	.name	= __stringify(nm),			\
+<<<<<<< HEAD
 	.offset	= DWC3_ ##nm - DWC3_GLOBALS_REGS_START,	\
+=======
+	.offset	= DWC3_ ##nm,				\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const struct debugfs_reg32 dwc3_regs[] = {
@@ -653,6 +660,7 @@ static const struct file_operations dwc3_link_state_fops = {
 	.release		= single_release,
 };
 
+<<<<<<< HEAD
 static int ep_num;
 static ssize_t dwc3_store_ep_num(struct file *file, const char __user *ubuf,
 				 size_t count, loff_t *ppos)
@@ -1053,6 +1061,8 @@ const struct file_operations dwc3_gadget_dbg_data_fops = {
 	.release		= single_release,
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int __devinit dwc3_debugfs_init(struct dwc3 *dwc)
 {
 	struct dentry		*root;
@@ -1095,6 +1105,7 @@ int __devinit dwc3_debugfs_init(struct dwc3 *dwc)
 		goto err1;
 	}
 
+<<<<<<< HEAD
 	file = debugfs_create_file("trbs", S_IRUGO | S_IWUSR, root,
 			dwc, &dwc3_ep_trb_list_fops);
 	if (!file) {
@@ -1122,6 +1133,8 @@ int __devinit dwc3_debugfs_init(struct dwc3 *dwc)
 		ret = -ENOMEM;
 		goto err1;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 
 err1:

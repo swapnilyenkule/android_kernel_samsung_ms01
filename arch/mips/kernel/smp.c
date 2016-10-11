@@ -105,10 +105,17 @@ asmlinkage __cpuinit void start_secondary(void)
 	if ((read_c0_tcbind() & TCBIND_CURTC) == 0)
 #endif /* CONFIG_MIPS_MT_SMTC */
 	cpu_probe();
+<<<<<<< HEAD
 	cpu_report();
 	per_cpu_trap_init();
 	mips_clockevent_init();
 	mp_ops->init_secondary();
+=======
+	per_cpu_trap_init();
+	mips_clockevent_init();
+	mp_ops->init_secondary();
+	cpu_report();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * XXX parity protection should be folded in here when it's converted
@@ -209,7 +216,11 @@ static void __cpuinit do_fork_idle(struct work_struct *work)
 	complete(&c_idle->done);
 }
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct task_struct *idle;
 

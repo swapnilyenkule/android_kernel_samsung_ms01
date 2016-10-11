@@ -95,7 +95,11 @@ struct inode *ialloc(struct inode *parent, umode_t mode)
 
 	if (insert_inode_locked(inode) < 0) {
 		rc = -EINVAL;
+<<<<<<< HEAD
 		goto fail_unlock;
+=======
+		goto fail_put;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	inode_init_owner(inode, parent, mode);
@@ -156,7 +160,10 @@ struct inode *ialloc(struct inode *parent, umode_t mode)
 fail_drop:
 	dquot_drop(inode);
 	inode->i_flags |= S_NOQUOTA;
+<<<<<<< HEAD
 fail_unlock:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	clear_nlink(inode);
 	unlock_new_inode(inode);
 fail_put:

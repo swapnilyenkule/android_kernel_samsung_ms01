@@ -1313,6 +1313,10 @@ irqreturn_t cppi_interrupt(int irq, void *dev_id)
 
 	return IRQ_HANDLED;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(cppi_interrupt);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Instantiate a software object representing a DMA controller. */
 struct dma_controller *__init

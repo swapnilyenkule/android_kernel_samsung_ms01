@@ -80,7 +80,11 @@ ext4_unaligned_aio(struct inode *inode, const struct iovec *iov,
 	size_t count = iov_length(iov, nr_segs);
 	loff_t final_size = pos + count;
 
+<<<<<<< HEAD
 	if (pos >= inode->i_size)
+=======
+	if (pos >= i_size_read(inode))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return 0;
 
 	if ((pos & blockmask) || (final_size & blockmask))
@@ -153,6 +157,7 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
 	if (!mapping->a_ops->readpage)
 		return -ENOEXEC;
 	file_accessed(file);
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP
 	if (vma->vm_end - vma->vm_start) {
 		/* iommu optimization- needs to be turned ON from
@@ -165,6 +170,8 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
 		"isb\n");
 	}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	vma->vm_ops = &ext4_file_vm_ops;
 	vma->vm_flags |= VM_CAN_NONLINEAR;
 	return 0;

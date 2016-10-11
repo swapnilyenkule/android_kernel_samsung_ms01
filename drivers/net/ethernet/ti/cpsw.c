@@ -249,7 +249,11 @@ void cpsw_tx_handler(void *token, int len, int status)
 	struct cpsw_priv	*priv = netdev_priv(ndev);
 
 	if (unlikely(netif_queue_stopped(ndev)))
+<<<<<<< HEAD
 		netif_start_queue(ndev);
+=======
+		netif_wake_queue(ndev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	priv->stats.tx_packets++;
 	priv->stats.tx_bytes += len;
 	dev_kfree_skb_any(skb);

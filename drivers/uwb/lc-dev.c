@@ -441,16 +441,29 @@ void uwbd_dev_onair(struct uwb_rc *rc, struct uwb_beca_e *bce)
 	uwb_dev->mac_addr = *bce->mac_addr;
 	uwb_dev->dev_addr = bce->dev_addr;
 	dev_set_name(&uwb_dev->dev, macbuf);
+<<<<<<< HEAD
+=======
+
+	/* plug the beacon cache */
+	bce->uwb_dev = uwb_dev;
+	uwb_dev->bce = bce;
+	uwb_bce_get(bce);		/* released in uwb_dev_sys_release() */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	result = uwb_dev_add(uwb_dev, &rc->uwb_dev.dev, rc);
 	if (result < 0) {
 		dev_err(dev, "new device %s: cannot instantiate device\n",
 			macbuf);
 		goto error_dev_add;
 	}
+<<<<<<< HEAD
 	/* plug the beacon cache */
 	bce->uwb_dev = uwb_dev;
 	uwb_dev->bce = bce;
 	uwb_bce_get(bce);		/* released in uwb_dev_sys_release() */
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev_info(dev, "uwb device (mac %s dev %s) connected to %s %s\n",
 		 macbuf, devbuf, rc->uwb_dev.dev.parent->bus->name,
 		 dev_name(rc->uwb_dev.dev.parent));
@@ -458,6 +471,11 @@ void uwbd_dev_onair(struct uwb_rc *rc, struct uwb_beca_e *bce)
 	return;
 
 error_dev_add:
+<<<<<<< HEAD
+=======
+	bce->uwb_dev = NULL;
+	uwb_bce_put(bce);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(uwb_dev);
 	return;
 }

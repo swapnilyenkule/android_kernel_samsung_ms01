@@ -26,6 +26,10 @@
 #include <linux/i2c.h>
 #include <linux/i2c/pxa-i2c.h>
 #include <linux/io.h>
+<<<<<<< HEAD
+=======
+#include <linux/regulator/machine.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/spi/spi.h>
 #include <linux/spi/ads7846.h>
 #include <linux/spi/corgi_lcd.h>
@@ -711,6 +715,11 @@ static void __init corgi_init(void)
 		sharpsl_nand_partitions[1].size = 53 * 1024 * 1024;
 
 	platform_add_devices(devices, ARRAY_SIZE(devices));
+<<<<<<< HEAD
+=======
+
+	regulator_has_full_constraints();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void __init fixup_corgi(struct tag *tags, char **cmdline,

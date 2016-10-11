@@ -48,6 +48,7 @@ DEFINE_EVENT(cpu, cpu_frequency,
 	TP_ARGS(frequency, cpu_id)
 );
 
+<<<<<<< HEAD
 TRACE_EVENT(cpu_frequency_switch_start,
 
 	TP_PROTO(unsigned int start_freq, unsigned int end_freq,
@@ -90,6 +91,8 @@ TRACE_EVENT(cpu_frequency_switch_end,
 	TP_printk("cpu_id=%lu", (unsigned long)__entry->cpu_id)
 );
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 TRACE_EVENT(machine_suspend,
 
 	TP_PROTO(unsigned int state),
@@ -107,6 +110,7 @@ TRACE_EVENT(machine_suspend,
 	TP_printk("state=%lu", (unsigned long)__entry->state)
 );
 
+<<<<<<< HEAD
 DECLARE_EVENT_CLASS(wakeup_source,
 
 	TP_PROTO(const char *name, unsigned int state),
@@ -141,6 +145,8 @@ DEFINE_EVENT(wakeup_source, wakeup_source_deactivate,
 	TP_ARGS(name, state)
 );
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_EVENT_POWER_TRACING_DEPRECATED
 
 /*
@@ -280,6 +286,7 @@ DEFINE_EVENT(clock, clock_set_rate,
 	TP_ARGS(name, state, cpu_id)
 );
 
+<<<<<<< HEAD
 TRACE_EVENT(clock_set_parent,
 
 	TP_PROTO(const char *name, const char *parent_name),
@@ -299,6 +306,8 @@ TRACE_EVENT(clock_set_parent,
 	TP_printk("%s parent=%s", __get_str(name), __get_str(parent_name))
 );
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * The power domain events are used for power domains transitions
  */
@@ -330,6 +339,7 @@ DEFINE_EVENT(power_domain, power_domain_target,
 
 	TP_ARGS(name, state, cpu_id)
 );
+<<<<<<< HEAD
 
 TRACE_EVENT(bus_update_request,
 
@@ -370,6 +380,8 @@ TRACE_EVENT(bus_update_request,
 		(unsigned long long)__entry->ab,
 		(unsigned long long)__entry->ib)
 );
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* _TRACE_POWER_H */
 
 /* This part must be outside protection */

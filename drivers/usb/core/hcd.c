@@ -897,9 +897,12 @@ static void usb_bus_init (struct usb_bus *bus)
 	bus->bandwidth_isoc_reqs = 0;
 
 	INIT_LIST_HEAD (&bus->bus_list);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_OTG
 	INIT_DELAYED_WORK(&bus->hnp_polling, usb_hnp_polling_work);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*-------------------------------------------------------------------------*/
@@ -929,11 +932,14 @@ static int usb_register_bus(struct usb_bus *bus)
 	/* Add it to the local list of buses */
 	list_add (&bus->bus_list, &usb_bus_list);
 	mutex_unlock(&usb_bus_list_lock);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_OTG
 	/* Obvioulsy HNP is supported on B-host */
 	if (bus->is_b_host)
 		bus->hnp_support = 1;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	usb_notify_add_bus(bus);
 
@@ -1010,10 +1016,14 @@ static int register_root_hub(struct usb_hcd *hcd)
 	if (retval) {
 		dev_err (parent_dev, "can't register root hub for %s, %d\n",
 				dev_name(&usb_dev->dev), retval);
+<<<<<<< HEAD
 	}
 	mutex_unlock(&usb_bus_list_lock);
 
 	if (retval == 0) {
+=======
+	} else {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		spin_lock_irq (&hcd_root_hub_lock);
 		hcd->rh_registered = 1;
 		spin_unlock_irq (&hcd_root_hub_lock);
@@ -1022,6 +1032,10 @@ static int register_root_hub(struct usb_hcd *hcd)
 		if (HCD_DEAD(hcd))
 			usb_hc_died (hcd);	/* This time clean up */
 	}
+<<<<<<< HEAD
+=======
+	mutex_unlock(&usb_bus_list_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return retval;
 }
@@ -1473,8 +1487,11 @@ int usb_hcd_submit_urb (struct urb *urb, gfp_t mem_flags)
 	atomic_inc(&urb->use_count);
 	atomic_inc(&urb->dev->urbnum);
 	usbmon_urb_submit(&hcd->self, urb);
+<<<<<<< HEAD
 	if (hcd->driver->log_urb)
 		hcd->driver->log_urb(urb, "S", urb->status);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* NOTE requirements on root-hub callers (usbfs and the hub
 	 * driver, for now):  URBs' urb->transfer_buffer must be
@@ -1497,8 +1514,11 @@ int usb_hcd_submit_urb (struct urb *urb, gfp_t mem_flags)
 
 	if (unlikely(status)) {
 		usbmon_urb_submit_error(&hcd->self, urb, status);
+<<<<<<< HEAD
 		if (hcd->driver->log_urb)
 			hcd->driver->log_urb(urb, "E", status);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		urb->hcpriv = NULL;
 		INIT_LIST_HEAD(&urb->urb_list);
 		atomic_dec(&urb->use_count);
@@ -1542,6 +1562,10 @@ static int unlink1(struct usb_hcd *hcd, struct urb *urb, int status)
 int usb_hcd_unlink_urb (struct urb *urb, int status)
 {
 	struct usb_hcd		*hcd;
+<<<<<<< HEAD
+=======
+	struct usb_device	*udev = urb->dev;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int			retval = -EIDRM;
 	unsigned long		flags;
 
@@ -1553,12 +1577,17 @@ int usb_hcd_unlink_urb (struct urb *urb, int status)
 	spin_lock_irqsave(&hcd_urb_unlink_lock, flags);
 	if (atomic_read(&urb->use_count) > 0) {
 		retval = 0;
+<<<<<<< HEAD
 		usb_get_dev(urb->dev);
+=======
+		usb_get_dev(udev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	spin_unlock_irqrestore(&hcd_urb_unlink_lock, flags);
 	if (retval == 0) {
 		hcd = bus_to_hcd(urb->dev->bus);
 		retval = unlink1(hcd, urb, status);
+<<<<<<< HEAD
 		usb_put_dev(urb->dev);
 	}
 
@@ -1567,6 +1596,15 @@ int usb_hcd_unlink_urb (struct urb *urb, int status)
 	else if (retval != -EIDRM && retval != -EBUSY)
 		dev_dbg(&urb->dev->dev, "hcd_unlink_urb %p fail %d\n",
 				urb, retval);
+=======
+		if (retval == 0)
+			retval = -EINPROGRESS;
+		else if (retval != -EIDRM && retval != -EBUSY)
+			dev_dbg(&udev->dev, "hcd_unlink_urb %p fail %d\n",
+					urb, retval);
+		usb_put_dev(udev);
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return retval;
 }
 
@@ -1601,8 +1639,11 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
 
 	unmap_urb_for_dma(hcd, urb);
 	usbmon_urb_complete(&hcd->self, urb, status);
+<<<<<<< HEAD
 	if (hcd->driver->log_urb)
 		hcd->driver->log_urb(urb, "C", status);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	usb_unanchor_urb(urb);
 
 	/* pass ownership to the completion handler */
@@ -1898,6 +1939,11 @@ int usb_alloc_streams(struct usb_interface *interface,
 		return -EINVAL;
 	if (dev->speed != USB_SPEED_SUPER)
 		return -EINVAL;
+<<<<<<< HEAD
+=======
+	if (dev->state < USB_STATE_CONFIGURED)
+		return -ENODEV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Streams only apply to bulk endpoints. */
 	for (i = 0; i < num_eps; i++)

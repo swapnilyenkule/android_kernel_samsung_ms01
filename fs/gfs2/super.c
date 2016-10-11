@@ -1298,11 +1298,19 @@ static int gfs2_show_options(struct seq_file *s, struct dentry *root)
 	if (is_ancestor(root, sdp->sd_master_dir))
 		seq_printf(s, ",meta");
 	if (args->ar_lockproto[0])
+<<<<<<< HEAD
 		seq_printf(s, ",lockproto=%s", args->ar_lockproto);
 	if (args->ar_locktable[0])
 		seq_printf(s, ",locktable=%s", args->ar_locktable);
 	if (args->ar_hostdata[0])
 		seq_printf(s, ",hostdata=%s", args->ar_hostdata);
+=======
+		seq_show_option(s, "lockproto", args->ar_lockproto);
+	if (args->ar_locktable[0])
+		seq_show_option(s, "locktable", args->ar_locktable);
+	if (args->ar_hostdata[0])
+		seq_show_option(s, "hostdata", args->ar_hostdata);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (args->ar_spectator)
 		seq_printf(s, ",spectator");
 	if (args->ar_localflocks)

@@ -25,6 +25,10 @@
 #include "u_ether.h"
 #include "rndis.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * This function is an RNDIS Ethernet port -- a Microsoft protocol that's
  * been promoted instead of the standard CDC Ethernet.  The published RNDIS
@@ -66,6 +70,7 @@
  *   - MS-Windows drivers sometimes emit undocumented requests.
  */
 
+<<<<<<< HEAD
 static unsigned int rndis_dl_max_pkt_per_xfer = 3;
 module_param(rndis_dl_max_pkt_per_xfer, uint, S_IRUGO | S_IWUSR);
 MODULE_PARM_DESC(rndis_dl_max_pkt_per_xfer,
@@ -76,12 +81,17 @@ module_param(rndis_ul_max_pkt_per_xfer, uint, S_IRUGO | S_IWUSR);
 MODULE_PARM_DESC(rndis_ul_max_pkt_per_xfer,
 	"Maximum packets per transfer for UL aggregation");
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct f_rndis {
 	struct gether			port;
 	u8				ctrl_id, data_id;
 	u8				ethaddr[ETH_ALEN];
+<<<<<<< HEAD
 	u32				vendorID;
 	const char			*manufacturer;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int				config;
 
 	struct usb_ep			*notify;
@@ -154,6 +164,7 @@ static struct usb_cdc_acm_descriptor rndis_acm_descriptor = {
 	.bmCapabilities =	0x00,
 };
 
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_MILLETLTE_VZW) || defined(CONFIG_MACH_MATISSELTE_VZW) \
 || defined(CONFIG_MACH_KLTE_VZW)
 /* In VZW Models size of MTU is fixed using Devguru AVD Descriptor */
@@ -188,6 +199,8 @@ static struct usb_rndis_mtu_avd_descriptor rndis_avd_descriptor = {
     .bDAU2_Value        =   0x01,           /* Rndis5.1 */
 };
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static struct usb_cdc_union_desc rndis_union_desc = {
 	.bLength =		sizeof(rndis_union_desc),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
@@ -267,10 +280,13 @@ static struct usb_descriptor_header *eth_fs_function[] = {
 	(struct usb_descriptor_header *) &rndis_data_intf,
 	(struct usb_descriptor_header *) &fs_in_desc,
 	(struct usb_descriptor_header *) &fs_out_desc,
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_MILLETLTE_VZW) || defined(CONFIG_MACH_MATISSELTE_VZW) \
 || defined(CONFIG_MACH_KLTE_VZW)
 	(struct usb_descriptor_header *) &rndis_avd_descriptor,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NULL,
 };
 
@@ -319,10 +335,13 @@ static struct usb_descriptor_header *eth_hs_function[] = {
 	(struct usb_descriptor_header *) &rndis_data_intf,
 	(struct usb_descriptor_header *) &hs_in_desc,
 	(struct usb_descriptor_header *) &hs_out_desc,
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_MILLETLTE_VZW) || defined(CONFIG_MACH_MATISSELTE_VZW) \
 || defined(CONFIG_MACH_KLTE_VZW)
 	(struct usb_descriptor_header *) &rndis_avd_descriptor,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NULL,
 };
 
@@ -393,10 +412,13 @@ static struct usb_descriptor_header *eth_ss_function[] = {
 	(struct usb_descriptor_header *) &ss_bulk_comp_desc,
 	(struct usb_descriptor_header *) &ss_out_desc,
 	(struct usb_descriptor_header *) &ss_bulk_comp_desc,
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_MILLETLTE_VZW) || defined(CONFIG_MACH_MATISSELTE_VZW) \
 || defined(CONFIG_MACH_KLTE_VZW)
 	(struct usb_descriptor_header *) &rndis_avd_descriptor,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NULL,
 };
 
@@ -425,6 +447,7 @@ static struct sk_buff *rndis_add_header(struct gether *port,
 					struct sk_buff *skb)
 {
 	struct sk_buff *skb2;
+<<<<<<< HEAD
 	struct rndis_packet_msg_type *header = NULL;
 	struct f_rndis *rndis = func_to_rndis(&port->func);
 
@@ -454,6 +477,15 @@ static struct sk_buff *rndis_add_header(struct gether *port,
 		dev_kfree_skb_any(skb);
 		return skb2;
 	}
+=======
+
+	skb2 = skb_realloc_headroom(skb, sizeof(struct rndis_packet_msg_type));
+	if (skb2)
+		rndis_add_hdr(skb2);
+
+	dev_kfree_skb_any(skb);
+	return skb2;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void rndis_response_available(void *_rndis)
@@ -485,6 +517,7 @@ static void rndis_response_available(void *_rndis)
 static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
 {
 	struct f_rndis			*rndis = req->context;
+<<<<<<< HEAD
 	struct usb_composite_dev	*cdev;
 	int				status = req->status;
 
@@ -493,6 +526,11 @@ static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
 	else
 		cdev = rndis->port.func.config->cdev;
 
+=======
+	struct usb_composite_dev	*cdev = rndis->port.func.config->cdev;
+	int				status = req->status;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* after TX:
 	 *  - USB_CDC_GET_ENCAPSULATED_RESPONSE (ep0/control)
 	 *  - RNDIS_RESPONSE_AVAILABLE (status/irq)
@@ -529,6 +567,7 @@ static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
 static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 {
 	struct f_rndis			*rndis = req->context;
+<<<<<<< HEAD
 	struct usb_composite_dev	*cdev;
 	int				status;
 	rndis_init_msg_type		*buf;
@@ -537,6 +576,10 @@ static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 		return;
 	else
 		cdev = rndis->port.func.config->cdev;
+=======
+	struct usb_composite_dev	*cdev = rndis->port.func.config->cdev;
+	int				status;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* received RNDIS command from USB_CDC_SEND_ENCAPSULATED_COMMAND */
 //	spin_lock(&dev->lock);
@@ -544,6 +587,7 @@ static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 	if (status < 0)
 		ERROR(cdev, "RNDIS command error %d, %d/%d\n",
 			status, req->actual, req->length);
+<<<<<<< HEAD
 
 	buf = (rndis_init_msg_type *)req->buf;
 
@@ -559,6 +603,8 @@ static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 		if (rndis_dl_max_pkt_per_xfer <= 1)
 			rndis->port.multi_pkt_xfer = 0;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 //	spin_unlock(&dev->lock);
 }
 
@@ -872,12 +918,22 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 
 	rndis_set_param_medium(rndis->config, NDIS_MEDIUM_802_3, 0);
 	rndis_set_host_mac(rndis->config, rndis->ethaddr);
+<<<<<<< HEAD
 	rndis_set_max_pkt_xfer(rndis->config, rndis_ul_max_pkt_per_xfer);
 
 	if (rndis->manufacturer && rndis->vendorID &&
 			rndis_set_param_vendor(rndis->config, rndis->vendorID,
 					       rndis->manufacturer))
 		goto fail;
+=======
+
+#if 0
+// FIXME
+	if (rndis_set_param_vendor(rndis->config, vendorID,
+				manufacturer))
+		goto fail0;
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* NOTE:  all that is done without knowing or caring about
 	 * the network link ... which is unavailable to this code
@@ -907,9 +963,15 @@ fail:
 	/* we might as well release our claims on endpoints */
 	if (rndis->notify)
 		rndis->notify->driver_data = NULL;
+<<<<<<< HEAD
 	if (rndis->port.out_ep->desc)
 		rndis->port.out_ep->driver_data = NULL;
 	if (rndis->port.in_ep->desc)
+=======
+	if (rndis->port.out_ep)
+		rndis->port.out_ep->driver_data = NULL;
+	if (rndis->port.in_ep)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		rndis->port.in_ep->driver_data = NULL;
 
 	ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);
@@ -959,6 +1021,7 @@ static inline bool can_support_rndis(struct usb_configuration *c)
 int
 rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 {
+<<<<<<< HEAD
 	return rndis_bind_config_vendor(c, ethaddr, 0, NULL);
 }
 
@@ -966,12 +1029,15 @@ int
 rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 				u32 vendorID, const char *manufacturer)
 {
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct f_rndis	*rndis;
 	int		status;
 
 	if (!can_support_rndis(c) || !ethaddr)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	/* setup RNDIS itself */
 	status = rndis_init();
 	if (status < 0)
@@ -980,6 +1046,16 @@ rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 	/* maybe allocate device-global string IDs */
 	if (rndis_string_defs[0].id == 0) {
 
+=======
+	/* maybe allocate device-global string IDs */
+	if (rndis_string_defs[0].id == 0) {
+
+		/* ... and setup RNDIS itself */
+		status = rndis_init();
+		if (status < 0)
+			return status;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* control interface label */
 		status = usb_string_id(c->cdev);
 		if (status < 0)
@@ -1009,8 +1085,11 @@ rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 		goto fail;
 
 	memcpy(rndis->ethaddr, ethaddr, ETH_ALEN);
+<<<<<<< HEAD
 	rndis->vendorID = vendorID;
 	rndis->manufacturer = manufacturer;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* RNDIS activates when the host changes this filter */
 	rndis->port.cdc_filter = 0;
@@ -1019,8 +1098,11 @@ rndis_bind_config_vendor(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 	rndis->port.header_len = sizeof(struct rndis_packet_msg_type);
 	rndis->port.wrap = rndis_add_header;
 	rndis->port.unwrap = rndis_rm_hdr;
+<<<<<<< HEAD
 	rndis->port.ul_max_pkts_per_xfer = rndis_ul_max_pkt_per_xfer;
 	rndis->port.dl_max_pkts_per_xfer = rndis_dl_max_pkt_per_xfer;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rndis->port.func.name = "rndis";
 	rndis->port.func.strings = rndis_strings;

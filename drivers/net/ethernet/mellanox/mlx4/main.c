@@ -92,8 +92,11 @@ MODULE_PARM_DESC(log_num_mgm_entry_size, "log mgm size, that defines the num"
 					 " 10 gives 248.range: 9<="
 					 " log_num_mgm_entry_size <= 12");
 
+<<<<<<< HEAD
 #define MLX4_VF                                        (1 << 0)
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define HCA_GLOBAL_CAP_MASK            0
 #define PF_CONTEXT_BEHAVIOUR_MASK      0
 
@@ -1526,6 +1529,7 @@ static void mlx4_enable_msi_x(struct mlx4_dev *dev)
 	int i;
 
 	if (msi_x) {
+<<<<<<< HEAD
 		/* In multifunction mode each function gets 2 msi-X vectors
 		 * one for data path completions anf the other for asynch events
 		 * or command completions */
@@ -1535,6 +1539,10 @@ static void mlx4_enable_msi_x(struct mlx4_dev *dev)
 			nreq = min_t(int, dev->caps.num_eqs -
 				     dev->caps.reserved_eqs, nreq);
 		}
+=======
+		nreq = min_t(int, dev->caps.num_eqs - dev->caps.reserved_eqs,
+			     nreq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		entries = kcalloc(nreq, sizeof *entries, GFP_KERNEL);
 		if (!entries)
@@ -1738,7 +1746,11 @@ static void mlx4_free_ownership(struct mlx4_dev *dev)
 	iounmap(owner);
 }
 
+<<<<<<< HEAD
 static int __mlx4_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
+=======
+static int __mlx4_init_one(struct pci_dev *pdev, int pci_dev_data)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct mlx4_priv *priv;
 	struct mlx4_dev *dev;
@@ -1761,12 +1773,20 @@ static int __mlx4_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	/*
 	 * Check for BARs.
 	 */
+<<<<<<< HEAD
 	if (((id == NULL) || !(id->driver_data & MLX4_VF)) &&
 	    !(pci_resource_flags(pdev, 0) & IORESOURCE_MEM)) {
 		dev_err(&pdev->dev, "Missing DCS, aborting."
 			"(id == 0X%p, id->driver_data: 0x%lx,"
 			" pci_resource_flags(pdev, 0):0x%lx)\n", id,
 			id ? id->driver_data : 0, pci_resource_flags(pdev, 0));
+=======
+	if (!(pci_dev_data & MLX4_PCI_DEV_IS_VF) &&
+	    !(pci_resource_flags(pdev, 0) & IORESOURCE_MEM)) {
+		dev_err(&pdev->dev, "Missing DCS, aborting."
+			"(driver_data: 0x%x, pci_resource_flags(pdev, 0):0x%lx)\n",
+			pci_dev_data, pci_resource_flags(pdev, 0));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		err = -ENODEV;
 		goto err_disable_pdev;
 	}
@@ -1808,6 +1828,7 @@ static int __mlx4_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	/* Allow large DMA segments, up to the firmware limit of 1 GB */
 	dma_set_max_seg_size(&pdev->dev, 1024 * 1024 * 1024);
 
+<<<<<<< HEAD
 	priv = kzalloc(sizeof *priv, GFP_KERNEL);
 	if (!priv) {
 		dev_err(&pdev->dev, "Device struct alloc failed, "
@@ -1817,6 +1838,10 @@ static int __mlx4_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	}
 
 	dev       = &priv->dev;
+=======
+	dev       = pci_get_drvdata(pdev);
+	priv      = mlx4_priv(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->pdev = pdev;
 	INIT_LIST_HEAD(&priv->ctx_list);
 	spin_lock_init(&priv->ctx_lock);
@@ -1831,7 +1856,11 @@ static int __mlx4_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 
 	dev->rev_id = pdev->revision;
 	/* Detect if this device is a virtual function */
+<<<<<<< HEAD
 	if (id && id->driver_data & MLX4_VF) {
+=======
+	if (pci_dev_data & MLX4_PCI_DEV_IS_VF) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/* When acting as pf, we normally skip vfs unless explicitly
 		 * requested to probe them. */
 		if (num_vfs && extended_func_num(pdev) > probe_vf) {
@@ -1977,7 +2006,11 @@ slave_start:
 	mlx4_sense_init(dev);
 	mlx4_start_sense(dev);
 
+<<<<<<< HEAD
 	pci_set_drvdata(pdev, dev);
+=======
+	priv->removed = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 
@@ -2044,6 +2077,7 @@ err_disable_pdev:
 static int __devinit mlx4_init_one(struct pci_dev *pdev,
 				   const struct pci_device_id *id)
 {
+<<<<<<< HEAD
 	printk_once(KERN_INFO "%s", mlx4_version);
 
 	return __mlx4_init_one(pdev, id);
@@ -2111,12 +2145,118 @@ static void mlx4_remove_one(struct pci_dev *pdev)
 		pci_disable_device(pdev);
 		pci_set_drvdata(pdev, NULL);
 	}
+=======
+	struct mlx4_priv *priv;
+	struct mlx4_dev *dev;
+
+	printk_once(KERN_INFO "%s", mlx4_version);
+
+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+	if (!priv)
+		return -ENOMEM;
+
+	dev       = &priv->dev;
+	pci_set_drvdata(pdev, dev);
+	priv->pci_dev_data = id->driver_data;
+
+	return __mlx4_init_one(pdev, id->driver_data);
+}
+
+static void __mlx4_remove_one(struct pci_dev *pdev)
+{
+	struct mlx4_dev  *dev  = pci_get_drvdata(pdev);
+	struct mlx4_priv *priv = mlx4_priv(dev);
+	int               pci_dev_data;
+	int p;
+
+	if (priv->removed)
+		return;
+
+	pci_dev_data = priv->pci_dev_data;
+
+	/* in SRIOV it is not allowed to unload the pf's
+	 * driver while there are alive vf's */
+	if (mlx4_is_master(dev)) {
+		if (mlx4_how_many_lives_vf(dev))
+			printk(KERN_ERR "Removing PF when there are assigned VF's !!!\n");
+	}
+	mlx4_stop_sense(dev);
+	mlx4_unregister_device(dev);
+
+	for (p = 1; p <= dev->caps.num_ports; p++) {
+		mlx4_cleanup_port_info(&priv->port[p]);
+		mlx4_CLOSE_PORT(dev, p);
+	}
+
+	mlx4_cleanup_counters_table(dev);
+	mlx4_cleanup_mcg_table(dev);
+	mlx4_cleanup_qp_table(dev);
+	mlx4_cleanup_srq_table(dev);
+	mlx4_cleanup_cq_table(dev);
+	mlx4_cmd_use_polling(dev);
+	mlx4_cleanup_eq_table(dev);
+	mlx4_cleanup_mr_table(dev);
+	mlx4_cleanup_xrcd_table(dev);
+	mlx4_cleanup_pd_table(dev);
+
+	if (mlx4_is_master(dev))
+		mlx4_free_resource_tracker(dev);
+
+	iounmap(priv->kar);
+	mlx4_uar_free(dev, &priv->driver_uar);
+	mlx4_cleanup_uar_table(dev);
+	if (!mlx4_is_slave(dev))
+		mlx4_clear_steering(dev);
+	mlx4_free_eq_table(dev);
+	if (mlx4_is_master(dev))
+		mlx4_multi_func_cleanup(dev);
+	mlx4_close_hca(dev);
+	if (mlx4_is_slave(dev))
+		mlx4_multi_func_cleanup(dev);
+	mlx4_cmd_cleanup(dev);
+
+	if (dev->flags & MLX4_FLAG_MSI_X)
+		pci_disable_msix(pdev);
+	if (num_vfs && (dev->flags & MLX4_FLAG_SRIOV)) {
+		mlx4_warn(dev, "Disabling sriov\n");
+		pci_disable_sriov(pdev);
+	}
+
+	if (!mlx4_is_slave(dev))
+		mlx4_free_ownership(dev);
+
+	pci_release_regions(pdev);
+	pci_disable_device(pdev);
+	memset(priv, 0, sizeof(*priv));
+	priv->pci_dev_data = pci_dev_data;
+	priv->removed = 1;
+}
+
+static void mlx4_remove_one(struct pci_dev *pdev)
+{
+	struct mlx4_dev  *dev  = pci_get_drvdata(pdev);
+	struct mlx4_priv *priv = mlx4_priv(dev);
+
+	__mlx4_remove_one(pdev);
+	kfree(priv);
+	pci_set_drvdata(pdev, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 int mlx4_restart_one(struct pci_dev *pdev)
 {
+<<<<<<< HEAD
 	mlx4_remove_one(pdev);
 	return __mlx4_init_one(pdev, NULL);
+=======
+	struct mlx4_dev	 *dev  = pci_get_drvdata(pdev);
+	struct mlx4_priv *priv = mlx4_priv(dev);
+	int		  pci_dev_data;
+
+	pci_dev_data = priv->pci_dev_data;
+	__mlx4_remove_one(pdev);
+	return __mlx4_init_one(pdev, pci_dev_data);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static DEFINE_PCI_DEVICE_TABLE(mlx4_pci_table) = {
@@ -2145,11 +2285,19 @@ static DEFINE_PCI_DEVICE_TABLE(mlx4_pci_table) = {
 	/* MT26478 ConnectX2 40GigE PCIe gen2 */
 	{ PCI_VDEVICE(MELLANOX, 0x676e), 0 },
 	/* MT25400 Family [ConnectX-2 Virtual Function] */
+<<<<<<< HEAD
 	{ PCI_VDEVICE(MELLANOX, 0x1002), MLX4_VF },
 	/* MT27500 Family [ConnectX-3] */
 	{ PCI_VDEVICE(MELLANOX, 0x1003), 0 },
 	/* MT27500 Family [ConnectX-3 Virtual Function] */
 	{ PCI_VDEVICE(MELLANOX, 0x1004), MLX4_VF },
+=======
+	{ PCI_VDEVICE(MELLANOX, 0x1002), MLX4_PCI_DEV_IS_VF },
+	/* MT27500 Family [ConnectX-3] */
+	{ PCI_VDEVICE(MELLANOX, 0x1003), 0 },
+	/* MT27500 Family [ConnectX-3 Virtual Function] */
+	{ PCI_VDEVICE(MELLANOX, 0x1004), MLX4_PCI_DEV_IS_VF },
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ PCI_VDEVICE(MELLANOX, 0x1005), 0 }, /* MT27510 Family */
 	{ PCI_VDEVICE(MELLANOX, 0x1006), 0 }, /* MT27511 Family */
 	{ PCI_VDEVICE(MELLANOX, 0x1007), 0 }, /* MT27520 Family */

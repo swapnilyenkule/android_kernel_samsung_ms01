@@ -25,7 +25,11 @@ MODULE_DESCRIPTION("IS89C35 802.11bg WLAN USB Driver");
 MODULE_LICENSE("GPL");
 MODULE_VERSION("0.1");
 
+<<<<<<< HEAD
 static const struct usb_device_id wb35_table[] __devinitconst = {
+=======
+static const struct usb_device_id wb35_table[] = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	{ USB_DEVICE(0x0416, 0x0035) },
 	{ USB_DEVICE(0x18E8, 0x6201) },
 	{ USB_DEVICE(0x18E8, 0x6206) },

@@ -124,6 +124,10 @@ struct ports_device {
 	 * notification
 	 */
 	struct work_struct control_work;
+<<<<<<< HEAD
+=======
+	struct work_struct config_work;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	struct list_head ports;
 
@@ -131,7 +135,12 @@ struct ports_device {
 	spinlock_t ports_lock;
 
 	/* To protect the vq operations for the control channel */
+<<<<<<< HEAD
 	spinlock_t cvq_lock;
+=======
+	spinlock_t c_ivq_lock;
+	spinlock_t c_ovq_lock;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* The current config space is stored here */
 	struct virtio_console_config config;
@@ -256,9 +265,18 @@ static struct port *find_port_by_devt_in_portdev(struct ports_device *portdev,
 	unsigned long flags;
 
 	spin_lock_irqsave(&portdev->ports_lock, flags);
+<<<<<<< HEAD
 	list_for_each_entry(port, &portdev->ports, list)
 		if (port->cdev->dev == dev)
 			goto out;
+=======
+	list_for_each_entry(port, &portdev->ports, list) {
+		if (port->cdev->dev == dev) {
+			kref_get(&port->kref);
+			goto out;
+		}
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	port = NULL;
 out:
 	spin_unlock_irqrestore(&portdev->ports_lock, flags);
@@ -457,11 +475,20 @@ static ssize_t __send_control_msg(struct ports_device *portdev, u32 port_id,
 	vq = portdev->c_ovq;
 
 	sg_init_one(sg, &cpkt, sizeof(cpkt));
+<<<<<<< HEAD
+=======
+
+	spin_lock(&portdev->c_ovq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (virtqueue_add_buf(vq, sg, 1, 0, &cpkt, GFP_ATOMIC) >= 0) {
 		virtqueue_kick(vq);
 		while (!virtqueue_get_buf(vq, &len))
 			cpu_relax();
 	}
+<<<<<<< HEAD
+=======
+	spin_unlock(&portdev->c_ovq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 
@@ -630,6 +657,13 @@ static ssize_t port_fops_read(struct file *filp, char __user *ubuf,
 
 	port = filp->private_data;
 
+<<<<<<< HEAD
+=======
+	/* Port is hot-unplugged. */
+	if (!port->guest_connected)
+		return -ENODEV;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!port_has_data(port)) {
 		/*
 		 * If nothing's connected on the host just return 0 in
@@ -646,7 +680,11 @@ static ssize_t port_fops_read(struct file *filp, char __user *ubuf,
 		if (ret < 0)
 			return ret;
 	}
+<<<<<<< HEAD
 	/* Port got hot-unplugged. */
+=======
+	/* Port got hot-unplugged while we were waiting above. */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!port->guest_connected)
 		return -ENODEV;
 	/*
@@ -789,6 +827,7 @@ static int port_fops_open(struct inode *inode, struct file *filp)
 	struct port *port;
 	int ret;
 
+<<<<<<< HEAD
 	port = find_port_by_devt(cdev->dev);
 	filp->private_data = port;
 
@@ -797,6 +836,16 @@ static int port_fops_open(struct inode *inode, struct file *filp)
 	kref_get(&port->kref);
 	spin_unlock_irq(&port->portdev->ports_lock);
 
+=======
+	/* We get the port with a kref here */
+	port = find_port_by_devt(cdev->dev);
+	if (!port) {
+		/* Port was unplugged before we could proceed */
+		return -ENXIO;
+	}
+	filp->private_data = port;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Don't allow opening of console port devices -- that's done
 	 * via /dev/hvc
@@ -1254,6 +1303,7 @@ static void remove_port(struct kref *kref)
 
 	port = container_of(kref, struct port, kref);
 
+<<<<<<< HEAD
 	sysfs_remove_group(&port->dev->kobj, &port_attribute_group);
 	device_destroy(pdrvdata.class, port->dev->devt);
 	cdev_del(port->cdev);
@@ -1262,6 +1312,8 @@ static void remove_port(struct kref *kref)
 
 	debugfs_remove(port->debugfs_file);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(port);
 }
 
@@ -1291,12 +1343,23 @@ static void unplug_port(struct port *port)
 	spin_unlock_irq(&port->portdev->ports_lock);
 
 	if (port->guest_connected) {
+<<<<<<< HEAD
 		port->guest_connected = false;
 		port->host_connected = false;
 		wake_up_interruptible(&port->waitqueue);
 
 		/* Let the app know the port is going down. */
 		send_sigio_to_port(port);
+=======
+		/* Let the app know the port is going down. */
+		send_sigio_to_port(port);
+
+		/* Do this after sigio is actually sent */
+		port->guest_connected = false;
+		port->host_connected = false;
+
+		wake_up_interruptible(&port->waitqueue);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	if (is_console_port(port)) {
@@ -1315,6 +1378,17 @@ static void unplug_port(struct port *port)
 	 */
 	port->portdev = NULL;
 
+<<<<<<< HEAD
+=======
+	sysfs_remove_group(&port->dev->kobj, &port_attribute_group);
+	device_destroy(pdrvdata.class, port->dev->devt);
+	cdev_del(port->cdev);
+
+	kfree(port->name);
+
+	debugfs_remove(port->debugfs_file);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Locks around here are not necessary - a port can't be
 	 * opened after we removed the port struct from ports_list
@@ -1465,23 +1539,37 @@ static void control_work_handler(struct work_struct *work)
 	portdev = container_of(work, struct ports_device, control_work);
 	vq = portdev->c_ivq;
 
+<<<<<<< HEAD
 	spin_lock(&portdev->cvq_lock);
 	while ((buf = virtqueue_get_buf(vq, &len))) {
 		spin_unlock(&portdev->cvq_lock);
+=======
+	spin_lock(&portdev->c_ivq_lock);
+	while ((buf = virtqueue_get_buf(vq, &len))) {
+		spin_unlock(&portdev->c_ivq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		buf->len = len;
 		buf->offset = 0;
 
 		handle_control_message(portdev, buf);
 
+<<<<<<< HEAD
 		spin_lock(&portdev->cvq_lock);
+=======
+		spin_lock(&portdev->c_ivq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (add_inbuf(portdev->c_ivq, buf) < 0) {
 			dev_warn(&portdev->vdev->dev,
 				 "Error adding buffer to queue\n");
 			free_buf(buf);
 		}
 	}
+<<<<<<< HEAD
 	spin_unlock(&portdev->cvq_lock);
+=======
+	spin_unlock(&portdev->c_ivq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void out_intr(struct virtqueue *vq)
@@ -1542,10 +1630,28 @@ static void config_intr(struct virtio_device *vdev)
 
 	portdev = vdev->priv;
 
+<<<<<<< HEAD
 	if (!use_multiport(portdev)) {
 		struct port *port;
 		u16 rows, cols;
 
+=======
+	if (!use_multiport(portdev))
+		schedule_work(&portdev->config_work);
+}
+
+static void config_work_handler(struct work_struct *work)
+{
+	struct ports_device *portdev;
+
+	portdev = container_of(work, struct ports_device, control_work);
+	if (!use_multiport(portdev)) {
+		struct virtio_device *vdev;
+		struct port *port;
+		u16 rows, cols;
+
+		vdev = portdev->vdev;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		vdev->config->get(vdev,
 				  offsetof(struct virtio_console_config, cols),
 				  &cols, sizeof(u16));
@@ -1739,6 +1845,7 @@ static int __devinit virtcons_probe(struct virtio_device *vdev)
 	spin_lock_init(&portdev->ports_lock);
 	INIT_LIST_HEAD(&portdev->ports);
 
+<<<<<<< HEAD
 	if (multiport) {
 		unsigned int nr_added_bufs;
 
@@ -1746,6 +1853,19 @@ static int __devinit virtcons_probe(struct virtio_device *vdev)
 		INIT_WORK(&portdev->control_work, &control_work_handler);
 
 		nr_added_bufs = fill_queue(portdev->c_ivq, &portdev->cvq_lock);
+=======
+	INIT_WORK(&portdev->config_work, &config_work_handler);
+	INIT_WORK(&portdev->control_work, &control_work_handler);
+
+	if (multiport) {
+		unsigned int nr_added_bufs;
+
+		spin_lock_init(&portdev->c_ivq_lock);
+		spin_lock_init(&portdev->c_ovq_lock);
+
+		nr_added_bufs = fill_queue(portdev->c_ivq,
+					   &portdev->c_ivq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!nr_added_bufs) {
 			dev_err(&vdev->dev,
 				"Error allocating buffers for control queue\n");
@@ -1808,7 +1928,14 @@ static void virtcons_remove(struct virtio_device *vdev)
 	/* Disable interrupts for vqs */
 	vdev->config->reset(vdev);
 	/* Finish up work that's lined up */
+<<<<<<< HEAD
 	cancel_work_sync(&portdev->control_work);
+=======
+	if (use_multiport(portdev))
+		cancel_work_sync(&portdev->control_work);
+	else
+		cancel_work_sync(&portdev->config_work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	list_for_each_entry_safe(port, port2, &portdev->ports, list)
 		unplug_port(port);
@@ -1850,6 +1977,10 @@ static int virtcons_freeze(struct virtio_device *vdev)
 
 	virtqueue_disable_cb(portdev->c_ivq);
 	cancel_work_sync(&portdev->control_work);
+<<<<<<< HEAD
+=======
+	cancel_work_sync(&portdev->config_work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Once more: if control_work_handler() was running, it would
 	 * enable the cb as the last step.
@@ -1885,7 +2016,11 @@ static int virtcons_restore(struct virtio_device *vdev)
 		return ret;
 
 	if (use_multiport(portdev))
+<<<<<<< HEAD
 		fill_queue(portdev->c_ivq, &portdev->cvq_lock);
+=======
+		fill_queue(portdev->c_ivq, &portdev->c_ivq_lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	list_for_each_entry(port, &portdev->ports, list) {
 		port->in_vq = portdev->in_vqs[port->id];

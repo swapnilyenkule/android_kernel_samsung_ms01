@@ -245,13 +245,24 @@ static ssize_t store_drivers_probe(struct bus_type *bus,
 				   const char *buf, size_t count)
 {
 	struct device *dev;
+<<<<<<< HEAD
+=======
+	int err = -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	dev = bus_find_device_by_name(bus, NULL, buf);
 	if (!dev)
 		return -ENODEV;
+<<<<<<< HEAD
 	if (bus_rescan_devices_helper(dev, NULL) != 0)
 		return -EINVAL;
 	return count;
+=======
+	if (bus_rescan_devices_helper(dev, NULL) == 0)
+		err = count;
+	put_device(dev);
+	return err;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #endif
 
@@ -294,7 +305,11 @@ int bus_for_each_dev(struct bus_type *bus, struct device *start,
 	struct device *dev;
 	int error = 0;
 
+<<<<<<< HEAD
 	if (!bus)
+=======
+	if (!bus || !bus->p)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -EINVAL;
 
 	klist_iter_init_node(&bus->p->klist_devices, &i,
@@ -328,7 +343,11 @@ struct device *bus_find_device(struct bus_type *bus,
 	struct klist_iter i;
 	struct device *dev;
 
+<<<<<<< HEAD
 	if (!bus)
+=======
+	if (!bus || !bus->p)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return NULL;
 
 	klist_iter_init_node(&bus->p->klist_devices, &i,
@@ -715,12 +734,19 @@ int bus_add_driver(struct device_driver *drv)
 	if (error)
 		goto out_unregister;
 
+<<<<<<< HEAD
 	klist_add_tail(&priv->knode_bus, &bus->p->klist_drivers);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (drv->bus->p->drivers_autoprobe) {
 		error = driver_attach(drv);
 		if (error)
 			goto out_unregister;
 	}
+<<<<<<< HEAD
+=======
+	klist_add_tail(&priv->knode_bus, &bus->p->klist_drivers);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	module_add_driver(drv->owner, drv);
 
 	error = driver_create_file(drv, &driver_attr_uevent);

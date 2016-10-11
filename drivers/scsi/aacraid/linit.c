@@ -777,6 +777,11 @@ static long aac_compat_do_ioctl(struct aac_dev *dev, unsigned cmd, unsigned long
 static int aac_compat_ioctl(struct scsi_device *sdev, int cmd, void __user *arg)
 {
 	struct aac_dev *dev = (struct aac_dev *)sdev->host->hostdata;
+<<<<<<< HEAD
+=======
+	if (!capable(CAP_SYS_RAWIO))
+		return -EPERM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return aac_compat_do_ioctl(dev, cmd, (unsigned long)arg);
 }
 

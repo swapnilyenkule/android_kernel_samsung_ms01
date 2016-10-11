@@ -205,7 +205,12 @@ static rx_handler_result_t macvlan_handle_frame(struct sk_buff **pskb)
 	}
 
 	if (port->passthru)
+<<<<<<< HEAD
 		vlan = list_first_entry(&port->vlans, struct macvlan_dev, list);
+=======
+		vlan = list_first_or_null_rcu(&port->vlans,
+					      struct macvlan_dev, list);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	else
 		vlan = macvlan_hash_lookup(port, eth->h_dest);
 	if (vlan == NULL)
@@ -236,11 +241,17 @@ static int macvlan_queue_xmit(struct sk_buff *skb, struct net_device *dev)
 	const struct macvlan_dev *vlan = netdev_priv(dev);
 	const struct macvlan_port *port = vlan->port;
 	const struct macvlan_dev *dest;
+<<<<<<< HEAD
 	__u8 ip_summed = skb->ip_summed;
 
 	if (vlan->mode == MACVLAN_MODE_BRIDGE) {
 		const struct ethhdr *eth = (void *)skb->data;
 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+=======
+
+	if (vlan->mode == MACVLAN_MODE_BRIDGE) {
+		const struct ethhdr *eth = (void *)skb->data;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* send to other bridge ports directly */
 		if (is_multicast_ether_addr(eth->h_dest)) {
@@ -258,7 +269,10 @@ static int macvlan_queue_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 
 xmit_world:
+<<<<<<< HEAD
 	skb->ip_summed = ip_summed;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	skb->dev = vlan->lowerdev;
 	return dev_queue_xmit(skb);
 }
@@ -457,6 +471,10 @@ static int macvlan_init(struct net_device *dev)
 				  (lowerdev->state & MACVLAN_STATE_MASK);
 	dev->features 		= lowerdev->features & MACVLAN_FEATURES;
 	dev->features		|= NETIF_F_LLTX;
+<<<<<<< HEAD
+=======
+	dev->vlan_features	= lowerdev->vlan_features & MACVLAN_FEATURES;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->gso_max_size	= lowerdev->gso_max_size;
 	dev->iflink		= lowerdev->ifindex;
 	dev->hard_header_len	= lowerdev->hard_header_len;
@@ -584,6 +602,10 @@ void macvlan_common_setup(struct net_device *dev)
 	ether_setup(dev);
 
 	dev->priv_flags	       &= ~(IFF_XMIT_DST_RELEASE | IFF_TX_SKB_SHARING);
+<<<<<<< HEAD
+=======
+	dev->priv_flags	       |= IFF_UNICAST_FLT;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->netdev_ops		= &macvlan_netdev_ops;
 	dev->destructor		= free_netdev;
 	dev->header_ops		= &macvlan_hard_header_ops,
@@ -723,7 +745,11 @@ int macvlan_common_newlink(struct net *src_net, struct net_device *dev,
 	if (err < 0)
 		goto destroy_port;
 
+<<<<<<< HEAD
 	list_add_tail(&vlan->list, &port->vlans);
+=======
+	list_add_tail_rcu(&vlan->list, &port->vlans);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	netif_stacked_transfer_operstate(lowerdev, dev);
 
 	return 0;
@@ -749,7 +775,11 @@ void macvlan_dellink(struct net_device *dev, struct list_head *head)
 {
 	struct macvlan_dev *vlan = netdev_priv(dev);
 
+<<<<<<< HEAD
 	list_del(&vlan->list);
+=======
+	list_del_rcu(&vlan->list);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	unregister_netdevice_queue(dev, head);
 }
 EXPORT_SYMBOL_GPL(macvlan_dellink);

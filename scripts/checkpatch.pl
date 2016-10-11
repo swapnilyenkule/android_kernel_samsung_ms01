@@ -7,6 +7,7 @@
 
 use strict;
 
+<<<<<<< HEAD
 use constant BEFORE_SHORTTEXT => 0;
 use constant IN_SHORTTEXT_BLANKLINE => 1;
 use constant IN_SHORTTEXT => 2;
@@ -14,6 +15,8 @@ use constant AFTER_SHORTTEXT => 3;
 use constant CHECK_NEXT_SHORTTEXT => 4;
 use constant SHORTTEXT_LIMIT => 75;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 my $P = $0;
 $P =~ s@.*/@@g;
 
@@ -1342,6 +1345,7 @@ sub check_absolute_file {
 	}
 }
 
+<<<<<<< HEAD
 sub cleanup_continuation_headers {
 	# Collapse any header-continuation lines into a single line so they
 	# can be parsed meaningfully, as the parser only has one line
@@ -1369,6 +1373,8 @@ sub cleanup_continuation_headers {
 	} while ($again);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 sub pos_last_openparen {
 	my ($line) = @_;
 
@@ -1407,8 +1413,11 @@ sub process {
 	my $prevrawline="";
 	my $stashline="";
 	my $stashrawline="";
+<<<<<<< HEAD
 	my $subjectline="";
 	my $sublinenr="";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	my $length;
 	my $indent;
@@ -1452,6 +1461,7 @@ sub process {
 	my @setup_docs = ();
 	my $setup_docs = 0;
 
+<<<<<<< HEAD
 	my $exec_file = "";
 
 	my $shorttext = BEFORE_SHORTTEXT;
@@ -1462,6 +1472,10 @@ sub process {
 	cleanup_continuation_headers();
 	my $line;
 
+=======
+	sanitise_line_reset();
+	my $line;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	foreach my $rawline (@rawlines) {
 		$linenr++;
 		$line = $rawline;
@@ -1600,7 +1614,10 @@ sub process {
 			$realfile = $1;
 			$realfile =~ s@^([^/]*)/@@;
 			$in_commit_log = 0;
+<<<<<<< HEAD
 			$exec_file = $realfile;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		} elsif ($line =~ /^\+\+\+\s+(\S+)/) {
 			$realfile = $1;
 			$realfile =~ s@^([^/]*)/@@;
@@ -1617,6 +1634,7 @@ sub process {
 				ERROR("MODIFIED_INCLUDE_ASM",
 				      "do not modify files in include/asm, change architecture specific files in include/asm-<architecture>\n" . "$here$rawline\n");
 			}
+<<<<<<< HEAD
 			$exec_file = "";
 			next;
 		}
@@ -1640,12 +1658,18 @@ sub process {
 				  "Source file has +x permissions: " .
 			    "$exec_file\n");
 		}
+=======
+			next;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		$here .= "FILE: $realfile:$realline:" if ($realcnt != 0);
 
 		my $hereline = "$here\n$rawline\n";
 		my $herecurr = "$here\n$rawline\n";
 		my $hereprev = "$here\n$prevrawline\n$rawline\n";
 
+<<<<<<< HEAD
 		if ($shorttext != AFTER_SHORTTEXT) {
 			if ($shorttext == IN_SHORTTEXT_BLANKLINE && $line=~/\S/) {
 				# the subject line was just processed,
@@ -1749,6 +1773,8 @@ sub process {
 			}
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		$cnt_lines++ if ($realcnt != 0);
 
 # Check for incorrect file permissions
@@ -1806,6 +1832,7 @@ sub process {
 					     "email address '$email' might be better as '$suggested_email$comment'\n" . $herecurr);
 				}
 			}
+<<<<<<< HEAD
 			if ($line =~ /^\s*signed-off-by:.*(quicinc|qualcomm)\.com/i) {
 				WARN("BAD_SIGN_OFF",
 				     "invalid Signed-off-by identity\n" . $line );
@@ -1815,6 +1842,8 @@ sub process {
 #check the patch for invalid author credentials
 		if ($line =~ /^From:.*(quicinc|qualcomm)\.com/) {
 			WARN("BAD_AUTHOR", "invalid author identity\n" . $line );
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 # Check for wrappage within a valid hunk of the file
@@ -1943,7 +1972,10 @@ sub process {
 		    $rawline !~ /^.\s*\*\s*\@$Ident\s/ &&
 		    !($line =~ /^\+\s*$logFunctions\s*\(\s*(?:(KERN_\S+\s*|[^"]*))?"[X\t]*"\s*(?:|,|\)\s*;)\s*$/ ||
 		    $line =~ /^\+\s*"[^"]*"\s*(?:\s*|,|\)\s*;)\s*$/) &&
+<<<<<<< HEAD
 		    $realfile ne "scripts/checkpatch.pl" &&
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		    $length > 80)
 		{
 			WARN("LONG_LINE",
@@ -2856,9 +2888,15 @@ sub process {
 
 # check spacing on parentheses
 		if ($line =~ /\(\s/ && $line !~ /\(\s*(?:\\)?$/ &&
+<<<<<<< HEAD
 		    $line !~ /for\s*\(\s+;/ && $line !~ /^\+\s*[A-Z_][A-Z\d_]*\(\s*\d+(\,.*)?\)\,?$/) {
 			ERROR("SPACING",
 				  "space prohibited after that open parenthesis '('\n" . $herecurr);
+=======
+		    $line !~ /for\s*\(\s+;/) {
+			ERROR("SPACING",
+			      "space prohibited after that open parenthesis '('\n" . $herecurr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		if ($line =~ /(\s+)\)/ && $line !~ /^.\s*\)/ &&
 		    $line !~ /for\s*\(.*;\s+\)/ &&
@@ -3070,7 +3108,11 @@ sub process {
 		if ($realfile !~ m@/vmlinux.lds.h$@ &&
 		    $line =~ /^.\s*\#\s*define\s*$Ident(\()?/) {
 			my $ln = $linenr;
+<<<<<<< HEAD
 			my $cnt = $realcnt - 1;
+=======
+			my $cnt = $realcnt;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			my ($off, $dstat, $dcond, $rest);
 			my $ctx = '';
 			($dstat, $dcond, $ln, $cnt, $off) =
@@ -3092,12 +3134,15 @@ sub process {
 			{
 			}
 
+<<<<<<< HEAD
 			# Extremely long macros may fall off the end of the
 			# available context without closing.  Give a dangling
 			# backslash the benefit of the doubt and allow it
 			# to gobble any hanging open-parens.
 			$dstat =~ s/\(.+\\$/1/;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			# Flatten any obvious string concatentation.
 			while ($dstat =~ s/("X*")\s*$Ident/$1/ ||
 			       $dstat =~ s/$Ident\s*("X*")/$1/)
@@ -3110,7 +3155,10 @@ sub process {
 				MODULE_PARAM_DESC|
 				DECLARE_PER_CPU|
 				DEFINE_PER_CPU|
+<<<<<<< HEAD
 				CLK_[A-Z\d_]+|
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				__typeof__\(|
 				union|
 				struct|
@@ -3300,6 +3348,7 @@ sub process {
 			     "Use of volatile is usually wrong: see Documentation/volatile-considered-harmful.txt\n" . $herecurr);
 		}
 
+<<<<<<< HEAD
 # sys_open/read/write/close are not allowed in the kernel
 		if ($line =~ /\b(sys_(?:open|read|write|close))\b/) {
 			ERROR("FILE_OPS", "$1 is inappropriate in kernel code.\n" .
@@ -3385,6 +3434,13 @@ sub process {
 			WARN("IF_1",
 			     "if this code is required consider removing"
 				. " #if 1\n" .  $herecurr);
+=======
+# warn about #if 0
+		if ($line =~ /^.\s*\#\s*if\s+0\b/) {
+			CHK("REDUNDANT_CODE",
+			    "if this code is redundant consider removing it\n" .
+				$herecurr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 # check for needless kfree() checks
@@ -3421,12 +3477,15 @@ sub process {
 			}
 		}
 
+<<<<<<< HEAD
 # check the patch for use of mdelay
 		if ($line =~ /\bmdelay\s*\(/) {
 			WARN("MDELAY",
 			     "use of mdelay() found: msleep() is the preferred API.\n" . $line );
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # warn about #ifdefs in C files
 #		if ($line =~ /^.\s*\#\s*if(|n)def/ && ($realfile =~ /\.c$/)) {
 #			print "#ifdef in C files should be avoided\n";
@@ -3612,12 +3671,15 @@ sub process {
 			 "Statements terminations use 1 semicolon\n" . $herecurr);
 		}
 
+<<<<<<< HEAD
 # check for return codes on error paths
 		if ($line =~ /\breturn\s+-\d+/) {
 			ERROR("NO_ERROR_CODE",
 			      "illegal return value, please use an error code\n" . $herecurr);
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # check for gcc specific __FUNCTION__
 		if ($line =~ /__FUNCTION__/) {
 			WARN("USE_FUNC",

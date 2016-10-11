@@ -264,6 +264,7 @@ ehci_urb_done(struct ehci_hcd *ehci, struct urb *urb, int status)
 __releases(ehci->lock)
 __acquires(ehci->lock)
 {
+<<<<<<< HEAD
 	if (likely (urb->hcpriv != NULL)) {
 		struct ehci_qh	*qh = (struct ehci_qh *) urb->hcpriv;
 
@@ -276,6 +277,16 @@ __acquires(ehci->lock)
 		qh_put (qh);
 	}
 
+=======
+	if (usb_pipetype(urb->pipe) == PIPE_INTERRUPT) {
+		/* ... update hc-wide periodic stats */
+		ehci_to_hcd(ehci)->self.bandwidth_int_reqs--;
+	}
+
+	if (usb_pipetype(urb->pipe) != PIPE_ISOCHRONOUS)
+		qh_put((struct ehci_qh *) urb->hcpriv);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (unlikely(urb->unlinked)) {
 		COUNT(ehci->stats.unlink);
 	} else {
@@ -637,8 +648,12 @@ qh_urb_transaction (
 	qtd->urb = urb;
 
 	token = QTD_STS_ACTIVE;
+<<<<<<< HEAD
 	if (!ehci->disable_cerr)
 		token |= (EHCI_TUNE_CERR << 10);
+=======
+	token |= (EHCI_TUNE_CERR << 10);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* for split transactions, SplitXState initialized to zero */
 
 	len = urb->transfer_buffer_length;
@@ -1164,6 +1179,7 @@ submit_async (
 }
 
 /*-------------------------------------------------------------------------*/
+<<<<<<< HEAD
 /* This function creates the qtds and submits them for the
  * SINGLE_STEP_SET_FEATURE Test.
  * This is done in two parts: first SETUP req for GetDesc is sent then
@@ -1269,6 +1285,8 @@ cleanup:
 #endif
 
 /*-------------------------------------------------------------------------*/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* the async qh for the qtds being reclaimed are now unlinked from the HC */
 

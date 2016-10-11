@@ -314,6 +314,7 @@ static ssize_t wakeup_active_count_show(struct device *dev,
 
 static DEVICE_ATTR(wakeup_active_count, 0444, wakeup_active_count_show, NULL);
 
+<<<<<<< HEAD
 static ssize_t wakeup_abort_count_show(struct device *dev,
 					struct device_attribute *attr,
 					char *buf)
@@ -335,20 +336,32 @@ static DEVICE_ATTR(wakeup_abort_count, 0444, wakeup_abort_count_show, NULL);
 static ssize_t wakeup_expire_count_show(struct device *dev,
 					struct device_attribute *attr,
 					char *buf)
+=======
+static ssize_t wakeup_hit_count_show(struct device *dev,
+				struct device_attribute *attr, char *buf)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long count = 0;
 	bool enabled = false;
 
 	spin_lock_irq(&dev->power.lock);
 	if (dev->power.wakeup) {
+<<<<<<< HEAD
 		count = dev->power.wakeup->expire_count;
+=======
+		count = dev->power.wakeup->hit_count;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		enabled = true;
 	}
 	spin_unlock_irq(&dev->power.lock);
 	return enabled ? sprintf(buf, "%lu\n", count) : sprintf(buf, "\n");
 }
 
+<<<<<<< HEAD
 static DEVICE_ATTR(wakeup_expire_count, 0444, wakeup_expire_count_show, NULL);
+=======
+static DEVICE_ATTR(wakeup_hit_count, 0444, wakeup_hit_count_show, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static ssize_t wakeup_active_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
@@ -417,6 +430,7 @@ static ssize_t wakeup_last_time_show(struct device *dev,
 }
 
 static DEVICE_ATTR(wakeup_last_time_ms, 0444, wakeup_last_time_show, NULL);
+<<<<<<< HEAD
 
 #ifdef CONFIG_PM_AUTOSLEEP
 static ssize_t wakeup_prevent_sleep_time_show(struct device *dev,
@@ -438,6 +452,8 @@ static ssize_t wakeup_prevent_sleep_time_show(struct device *dev,
 static DEVICE_ATTR(wakeup_prevent_sleep_time_ms, 0444,
 		   wakeup_prevent_sleep_time_show, NULL);
 #endif /* CONFIG_PM_AUTOSLEEP */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* CONFIG_PM_SLEEP */
 
 #ifdef CONFIG_PM_ADVANCED_DEBUG
@@ -526,15 +542,22 @@ static struct attribute *wakeup_attrs[] = {
 	&dev_attr_wakeup.attr,
 	&dev_attr_wakeup_count.attr,
 	&dev_attr_wakeup_active_count.attr,
+<<<<<<< HEAD
 	&dev_attr_wakeup_abort_count.attr,
 	&dev_attr_wakeup_expire_count.attr,
+=======
+	&dev_attr_wakeup_hit_count.attr,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	&dev_attr_wakeup_active.attr,
 	&dev_attr_wakeup_total_time_ms.attr,
 	&dev_attr_wakeup_max_time_ms.attr,
 	&dev_attr_wakeup_last_time_ms.attr,
+<<<<<<< HEAD
 #ifdef CONFIG_PM_AUTOSLEEP
 	&dev_attr_wakeup_prevent_sleep_time_ms.attr,
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 	NULL,
 };

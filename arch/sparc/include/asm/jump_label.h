@@ -9,7 +9,11 @@
 
 static __always_inline bool arch_static_branch(struct static_key *key)
 {
+<<<<<<< HEAD
 		asm goto("1:\n\t"
+=======
+		asm_volatile_goto("1:\n\t"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			 "nop\n\t"
 			 "nop\n\t"
 			 ".pushsection __jump_table,  \"aw\"\n\t"

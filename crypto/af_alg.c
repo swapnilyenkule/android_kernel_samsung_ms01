@@ -21,6 +21,10 @@
 #include <linux/module.h>
 #include <linux/net.h>
 #include <linux/rwsem.h>
+<<<<<<< HEAD
+=======
+#include <linux/security.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct alg_type_list {
 	const struct af_alg_type *type;
@@ -243,6 +247,10 @@ int af_alg_accept(struct sock *sk, struct socket *newsock)
 
 	sock_init_data(newsock, sk2);
 	sock_graft(sk2, newsock);
+<<<<<<< HEAD
+=======
+	security_sk_clone(sk, sk2);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	err = type->accept(ask->private, sk2);
 	if (err) {
@@ -447,6 +455,12 @@ void af_alg_complete(struct crypto_async_request *req, int err)
 {
 	struct af_alg_completion *completion = req->data;
 
+<<<<<<< HEAD
+=======
+	if (err == -EINPROGRESS)
+		return;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	completion->err = err;
 	complete(&completion->completion);
 }

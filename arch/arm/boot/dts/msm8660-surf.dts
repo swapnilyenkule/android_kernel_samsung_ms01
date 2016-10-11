@@ -4,7 +4,11 @@
 
 / {
 	model = "Qualcomm MSM8660 SURF";
+<<<<<<< HEAD
 	compatible = "qcom,msm8660-surf", "qcom,msm8660", "qcom,surf";
+=======
+	compatible = "qcom,msm8660-surf", "qcom,msm8660";
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	interrupt-parent = <&intc>;
 
 	intc: interrupt-controller@02080000 {

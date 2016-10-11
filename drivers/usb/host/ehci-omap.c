@@ -242,6 +242,7 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
 
 	ehci_reset(omap_ehci);
 
+<<<<<<< HEAD
 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
 	if (ret) {
 		dev_err(dev, "failed to add hcd with err %d\n", ret);
@@ -251,6 +252,8 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
 	/* root ports should always stay powered */
 	ehci_port_power(omap_ehci, 1);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (pdata->phy_reset) {
 		/* Hold the PHY in RESET for enough time till
 		 * PHY is settled and ready
@@ -264,6 +267,18 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
 			gpio_set_value(pdata->reset_gpio_port[1], 1);
 	}
 
+<<<<<<< HEAD
+=======
+	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+	if (ret) {
+		dev_err(dev, "failed to add hcd with err %d\n", ret);
+		goto err_add_hcd;
+	}
+
+	/* root ports should always stay powered */
+	ehci_port_power(omap_ehci, 1);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 
 err_add_hcd:
@@ -371,7 +386,11 @@ static const struct hc_driver ehci_omap_hc_driver = {
 	.clear_tt_buffer_complete = ehci_clear_tt_buffer_complete,
 };
 
+<<<<<<< HEAD
 MODULE_ALIAS("platform:omap-ehci");
+=======
+MODULE_ALIAS("platform:ehci-omap");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 MODULE_AUTHOR("Texas Instruments, Inc.");
 MODULE_AUTHOR("Felipe Balbi <felipe.balbi@nokia.com>");
 

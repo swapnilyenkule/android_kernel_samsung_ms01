@@ -110,7 +110,10 @@ void machine_kexec(struct kimage *image)
 	unsigned long reboot_code_buffer_phys;
 	void *reboot_code_buffer;
 
+<<<<<<< HEAD
 	arch_kexec();
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	page_list = image->head & PAGE_MASK;
 
@@ -139,3 +142,13 @@ void machine_kexec(struct kimage *image)
 
 	soft_restart(reboot_code_buffer_phys);
 }
+<<<<<<< HEAD
+=======
+
+void arch_crash_save_vmcoreinfo(void)
+{
+#ifdef CONFIG_ARM_LPAE
+	VMCOREINFO_CONFIG(ARM_LPAE);
+#endif
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

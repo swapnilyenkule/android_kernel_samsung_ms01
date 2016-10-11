@@ -124,7 +124,11 @@ static void __init qnap_ts219_init(void)
 static int __init ts219_pci_init(void)
 {
 	if (machine_is_ts219())
+<<<<<<< HEAD
 		kirkwood_pcie_init(KW_PCIE0);
+=======
+		kirkwood_pcie_init(KW_PCIE1 | KW_PCIE0);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	return 0;
 }

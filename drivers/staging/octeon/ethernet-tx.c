@@ -345,7 +345,11 @@ int cvm_oct_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 	if (unlikely
 	    (skb->truesize !=
+<<<<<<< HEAD
 	     sizeof(*skb) + skb_end_pointer(skb) - skb->head)) {
+=======
+	     sizeof(*skb) + skb_end_offset(skb))) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/*
 		   printk("TX buffer truesize has been changed\n");
 		 */

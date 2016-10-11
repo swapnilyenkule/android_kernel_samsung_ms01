@@ -34,7 +34,10 @@
 #include <linux/syscalls.h>
 #include <linux/hugetlb.h>
 #include <linux/gfp.h>
+<<<<<<< HEAD
 #include <trace/events/kmem.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/tlbflush.h>
 
@@ -140,13 +143,25 @@ static int remove_migration_pte(struct page *new, struct vm_area_struct *vma,
 
 	get_page(new);
 	pte = pte_mkold(mk_pte(new, vma->vm_page_prot));
+<<<<<<< HEAD
 	if (is_write_migration_entry(entry))
 		pte = pte_mkwrite(pte);
+=======
+
+	/* Recheck VMA as permissions can change since migration started  */
+	if (is_write_migration_entry(entry))
+		pte = maybe_mkwrite(pte, vma);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_HUGETLB_PAGE
 	if (PageHuge(new))
 		pte = pte_mkhuge(pte);
 #endif
+<<<<<<< HEAD
 	flush_cache_page(vma, addr, pte_pfn(pte));
+=======
+	flush_dcache_page(new);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	set_pte_at(mm, addr, ptep, pte);
 
 	if (PageHuge(new)) {
@@ -181,6 +196,7 @@ static void remove_migration_ptes(struct page *old, struct page *new)
  * get to the page and wait until migration is finished.
  * When we return from this function the fault will be retried.
  */
+<<<<<<< HEAD
 void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 				unsigned long address)
 {
@@ -190,6 +206,16 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 	struct page *page;
 
 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+=======
+static void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+				spinlock_t *ptl)
+{
+	pte_t pte;
+	swp_entry_t entry;
+	struct page *page;
+
+	spin_lock(ptl);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pte = *ptep;
 	if (!is_swap_pte(pte))
 		goto out;
@@ -217,6 +243,23 @@ out:
 	pte_unmap_unlock(ptep, ptl);
 }
 
+<<<<<<< HEAD
+=======
+void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+				unsigned long address)
+{
+	spinlock_t *ptl = pte_lockptr(mm, pmd);
+	pte_t *ptep = pte_offset_map(pmd, address);
+	__migration_entry_wait(mm, ptep, ptl);
+}
+
+void migration_entry_wait_huge(struct mm_struct *mm, pte_t *pte)
+{
+	spinlock_t *ptl = &(mm)->page_table_lock;
+	__migration_entry_wait(mm, pte, ptl);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_BLOCK
 /* Returns true if all buffers are successfully locked */
 static bool buffer_migrate_lock_buffers(struct buffer_head *head,
@@ -969,14 +1012,20 @@ int migrate_pages(struct list_head *from,
 {
 	int retry = 1;
 	int nr_failed = 0;
+<<<<<<< HEAD
 	int nr_succeeded = 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int pass = 0;
 	struct page *page;
 	struct page *page2;
 	int swapwrite = current->flags & PF_SWAPWRITE;
 	int rc;
 
+<<<<<<< HEAD
 	trace_migrate_pages_start(mode);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!swapwrite)
 		current->flags |= PF_SWAPWRITE;
 
@@ -995,10 +1044,15 @@ int migrate_pages(struct list_head *from,
 				goto out;
 			case -EAGAIN:
 				retry++;
+<<<<<<< HEAD
 				trace_migrate_retry(retry);
 				break;
 			case 0:
 				nr_succeeded++;
+=======
+				break;
+			case 0:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				break;
 			default:
 				/* Permanent failure */
@@ -1009,6 +1063,7 @@ int migrate_pages(struct list_head *from,
 	}
 	rc = 0;
 out:
+<<<<<<< HEAD
 	if (nr_succeeded)
 		count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
 	if (nr_failed)
@@ -1017,6 +1072,11 @@ out:
 		current->flags &= ~PF_SWAPWRITE;
 
 	trace_migrate_pages_end(mode);
+=======
+	if (!swapwrite)
+		current->flags &= ~PF_SWAPWRITE;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (rc)
 		return rc;
 

@@ -25,12 +25,18 @@ snd-soc-dmic-objs := dmic.o
 snd-soc-jz4740-codec-objs := jz4740.o
 snd-soc-l3-objs := l3.o
 snd-soc-lm4857-objs := lm4857.o
+<<<<<<< HEAD
 snd-soc-max98088-objs := max98088.o
 snd-soc-max98095-objs := max98095.o
 snd-soc-max98504-objs := max98504.o
 snd-soc-max98504a-objs := max98504a.o
 snd-soc-max98505-objs := max98505.o
 snd-soc-maxim-dsm-objs := maxim_dsm.o
+=======
+snd-soc-max9768-objs := max9768.o
+snd-soc-max98088-objs := max98088.o
+snd-soc-max98095-objs := max98095.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 snd-soc-max9850-objs := max9850.o
 snd-soc-pcm3008-objs := pcm3008.o
 snd-soc-rt5631-objs := rt5631.o
@@ -52,6 +58,7 @@ snd-soc-twl4030-objs := twl4030.o
 snd-soc-twl6040-objs := twl6040.o
 snd-soc-uda134x-objs := uda134x.o
 snd-soc-uda1380-objs := uda1380.o
+<<<<<<< HEAD
 snd-soc-wcd9304-objs := wcd9304.o wcd9304-tables.o
 snd-soc-wcd9310-objs := wcd9310.o wcd9310-tables.o
 snd-soc-cs8427-objs := cs8427.o
@@ -63,6 +70,12 @@ snd-soc-es325_atlantic-objs := es325_atlantic.o
 snd-soc-wl1273-objs := wl1273.o
 snd-soc-wm1250-ev1-objs := wm1250-ev1.o
 snd-soc-wm2000-objs := wm2000.o
+=======
+snd-soc-wl1273-objs := wl1273.o
+snd-soc-wm1250-ev1-objs := wm1250-ev1.o
+snd-soc-wm2000-objs := wm2000.o
+snd-soc-wm2200-objs := wm2200.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 snd-soc-wm5100-objs := wm5100.o wm5100-tables.o
 snd-soc-wm8350-objs := wm8350.o
 snd-soc-wm8400-objs := wm8400.o
@@ -108,10 +121,13 @@ snd-soc-wm9712-objs := wm9712.o
 snd-soc-wm9713-objs := wm9713.o
 snd-soc-wm-hubs-objs := wm_hubs.o
 
+<<<<<<< HEAD
 snd-soc-timpani-objs := timpani.o
 snd-soc-msm-stub-objs := msm_stub.o
 obj-$(CONFIG_SND_SOC_MSM_HDMI_CODEC_RX) := msm_hdmi_codec_rx.o
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 # Amp
 snd-soc-max9877-objs := max9877.o
 snd-soc-tpa6130a2-objs := tpa6130a2.o
@@ -145,12 +161,18 @@ obj-$(CONFIG_SND_SOC_DMIC)	+= snd-soc-dmic.o
 obj-$(CONFIG_SND_SOC_L3)	+= snd-soc-l3.o
 obj-$(CONFIG_SND_SOC_LM4857)	+= snd-soc-lm4857.o
 obj-$(CONFIG_SND_SOC_JZ4740_CODEC)	+= snd-soc-jz4740-codec.o
+<<<<<<< HEAD
 obj-$(CONFIG_SND_SOC_MAX98088)	+= snd-soc-max98088.o
 obj-$(CONFIG_SND_SOC_MAX98095)	+= snd-soc-max98095.o
 obj-$(CONFIG_SND_SOC_MAX98504)	+= snd-soc-max98504.o
 obj-$(CONFIG_SND_SOC_MAX98504A)	+= snd-soc-max98504a.o
 obj-$(CONFIG_SND_SOC_MAX98505)	+= snd-soc-max98505.o
 obj-$(CONFIG_SND_SOC_MAXIM_DSM)	+= snd-soc-maxim-dsm.o
+=======
+obj-$(CONFIG_SND_SOC_MAX9768)	+= snd-soc-max9768.o
+obj-$(CONFIG_SND_SOC_MAX98088)	+= snd-soc-max98088.o
+obj-$(CONFIG_SND_SOC_MAX98095)	+= snd-soc-max98095.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_SND_SOC_MAX9850)	+= snd-soc-max9850.o
 obj-$(CONFIG_SND_SOC_PCM3008)	+= snd-soc-pcm3008.o
 obj-$(CONFIG_SND_SOC_RT5631)	+= snd-soc-rt5631.o
@@ -170,6 +192,7 @@ obj-$(CONFIG_SND_SOC_TWL4030)	+= snd-soc-twl4030.o
 obj-$(CONFIG_SND_SOC_TWL6040)	+= snd-soc-twl6040.o
 obj-$(CONFIG_SND_SOC_UDA134X)	+= snd-soc-uda134x.o
 obj-$(CONFIG_SND_SOC_UDA1380)	+= snd-soc-uda1380.o
+<<<<<<< HEAD
 obj-$(CONFIG_SND_SOC_WCD9304)	+= snd-soc-wcd9304.o
 obj-$(CONFIG_SND_SOC_WCD9310)	+= snd-soc-wcd9310.o
 obj-$(CONFIG_SND_SOC_CS8427)	+= snd-soc-cs8427.o
@@ -181,6 +204,12 @@ obj-$(CONFIG_SND_SOC_ES325_ATLANTIC)	+= snd-soc-es325_atlantic.o
 obj-$(CONFIG_SND_SOC_WL1273)	+= snd-soc-wl1273.o
 obj-$(CONFIG_SND_SOC_WM1250_EV1) += snd-soc-wm1250-ev1.o
 obj-$(CONFIG_SND_SOC_WM2000)	+= snd-soc-wm2000.o
+=======
+obj-$(CONFIG_SND_SOC_WL1273)	+= snd-soc-wl1273.o
+obj-$(CONFIG_SND_SOC_WM1250_EV1) += snd-soc-wm1250-ev1.o
+obj-$(CONFIG_SND_SOC_WM2000)	+= snd-soc-wm2000.o
+obj-$(CONFIG_SND_SOC_WM2200)	+= snd-soc-wm2200.o
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 obj-$(CONFIG_SND_SOC_WM5100)	+= snd-soc-wm5100.o
 obj-$(CONFIG_SND_SOC_WM8350)	+= snd-soc-wm8350.o
 obj-$(CONFIG_SND_SOC_WM8400)	+= snd-soc-wm8400.o
@@ -225,11 +254,17 @@ obj-$(CONFIG_SND_SOC_WM9705)	+= snd-soc-wm9705.o
 obj-$(CONFIG_SND_SOC_WM9712)	+= snd-soc-wm9712.o
 obj-$(CONFIG_SND_SOC_WM9713)	+= snd-soc-wm9713.o
 obj-$(CONFIG_SND_SOC_WM_HUBS)	+= snd-soc-wm-hubs.o
+<<<<<<< HEAD
 obj-$(CONFIG_SND_SOC_MSM_STUB)  += snd-soc-msm-stub.o
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Amp
 obj-$(CONFIG_SND_SOC_MAX9877)	+= snd-soc-max9877.o
 obj-$(CONFIG_SND_SOC_TPA6130A2)	+= snd-soc-tpa6130a2.o
+<<<<<<< HEAD
 # Audience
 obj-$(CONFIG_SND_SOC_ES_515)	+= audience/
 obj-$(CONFIG_SND_SOC_ES705)	+= audience/
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

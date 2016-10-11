@@ -163,6 +163,10 @@ void __init rpc_init_irq(void)
 		}
 	}
 
+<<<<<<< HEAD
 	init_FIQ(FIQ_START);
+=======
+	init_FIQ();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 

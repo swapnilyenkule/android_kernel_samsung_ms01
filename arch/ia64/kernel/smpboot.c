@@ -793,7 +793,11 @@ set_cpu_sibling_map(int cpu)
 }
 
 int __cpuinit
+<<<<<<< HEAD
 __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+__cpu_up (unsigned int cpu)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int ret;
 	int sapicid;

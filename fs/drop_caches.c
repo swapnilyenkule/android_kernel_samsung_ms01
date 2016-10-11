@@ -13,7 +13,11 @@
 /* A global variable is a bit ugly, but it keeps the code simple */
 int sysctl_drop_caches;
 
+<<<<<<< HEAD
 void drop_pagecache_sb(struct super_block *sb, void *unused)
+=======
+static void drop_pagecache_sb(struct super_block *sb, void *unused)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct inode *inode, *toput_inode = NULL;
 
@@ -37,7 +41,11 @@ void drop_pagecache_sb(struct super_block *sb, void *unused)
 	iput(toput_inode);
 }
 
+<<<<<<< HEAD
 void drop_slab(void)
+=======
+static void drop_slab(void)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	int nr_objects;
 	struct shrink_control shrink = {

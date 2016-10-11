@@ -611,7 +611,12 @@ static struct sock *dccp_v6_request_recv_sock(struct sock *sk,
 	newinet->inet_rcv_saddr = LOOPBACK4_IPV6;
 
 	if (__inet_inherit_port(sk, newsk) < 0) {
+<<<<<<< HEAD
 		sock_put(newsk);
+=======
+		inet_csk_prepare_forced_close(newsk);
+		dccp_done(newsk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		goto out;
 	}
 	__inet6_hash(newsk, NULL);

@@ -81,6 +81,10 @@ _GLOBAL(relocate)
 
 6:	blr
 
+<<<<<<< HEAD
+=======
+.balign 8
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 p_dyn:	.llong	__dynamic_start - 0b
 p_rela:	.llong	__rela_dyn_start - 0b
 p_st:	.llong	_stext - 0b

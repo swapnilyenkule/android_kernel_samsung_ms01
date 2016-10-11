@@ -116,8 +116,13 @@ static const struct {
 	.header = {
 		.magic = cpu_to_le32(FUNCTIONFS_DESCRIPTORS_MAGIC),
 		.length = cpu_to_le32(sizeof descriptors),
+<<<<<<< HEAD
 		.fs_count = 3,
 		.hs_count = 3,
+=======
+		.fs_count = cpu_to_le32(3),
+		.hs_count = cpu_to_le32(3),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	},
 	.fs_descs = {
 		.intf = {
@@ -297,7 +302,11 @@ static void *start_thread_helper(void *arg)
 
 		ret = t->in(t, t->buf, t->buf_size);
 		if (ret > 0) {
+<<<<<<< HEAD
 			ret = t->out(t, t->buf, t->buf_size);
+=======
+			ret = t->out(t, t->buf, ret);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			name = out_name;
 			op = "write";
 		} else {

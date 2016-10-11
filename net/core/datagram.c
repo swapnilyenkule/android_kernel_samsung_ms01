@@ -127,6 +127,38 @@ out_noerr:
 	goto out;
 }
 
+<<<<<<< HEAD
+=======
+static int skb_set_peeked(struct sk_buff *skb)
+{
+	struct sk_buff *nskb;
+
+	if (skb->peeked)
+		return 0;
+
+	/* We have to unshare an skb before modifying it. */
+	if (!skb_shared(skb))
+		goto done;
+
+	nskb = skb_clone(skb, GFP_ATOMIC);
+	if (!nskb)
+		return -ENOMEM;
+
+	skb->prev->next = nskb;
+	skb->next->prev = nskb;
+	nskb->prev = skb->prev;
+	nskb->next = skb->next;
+
+	consume_skb(skb);
+	skb = nskb;
+
+done:
+	skb->peeked = 1;
+
+	return 0;
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  *	__skb_recv_datagram - Receive a datagram skbuff
  *	@sk: socket
@@ -161,7 +193,13 @@ out_noerr:
 struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 				    int *peeked, int *off, int *err)
 {
+<<<<<<< HEAD
 	struct sk_buff *skb;
+=======
+	struct sk_buff_head *queue = &sk->sk_receive_queue;
+	struct sk_buff *skb;
+	unsigned long cpu_flags;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	long timeo;
 	/*
 	 * Caller is allowed not to check sk->sk_err before skb_recv_datagram()
@@ -180,18 +218,33 @@ struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 		 * Look at current nfs client by the way...
 		 * However, this function was correct in any case. 8)
 		 */
+<<<<<<< HEAD
 		unsigned long cpu_flags;
 		struct sk_buff_head *queue = &sk->sk_receive_queue;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		spin_lock_irqsave(&queue->lock, cpu_flags);
 		skb_queue_walk(queue, skb) {
 			*peeked = skb->peeked;
 			if (flags & MSG_PEEK) {
+<<<<<<< HEAD
 				if (*off >= skb->len) {
 					*off -= skb->len;
 					continue;
 				}
 				skb->peeked = 1;
+=======
+				if (*off >= skb->len && skb->len) {
+					*off -= skb->len;
+					continue;
+				}
+
+				error = skb_set_peeked(skb);
+				if (error)
+					goto unlock_err;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				atomic_inc(&skb->users);
 			} else
 				__skb_unlink(skb, queue);
@@ -210,6 +263,11 @@ struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 
 	return NULL;
 
+<<<<<<< HEAD
+=======
+unlock_err:
+	spin_unlock_irqrestore(&queue->lock, cpu_flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 no_packet:
 	*err = error;
 	return NULL;
@@ -677,7 +735,10 @@ EXPORT_SYMBOL(__skb_checksum_complete);
  *	@skb: skbuff
  *	@hlen: hardware length
  *	@iov: io vector
+<<<<<<< HEAD
  *	@len: amount of data to copy from skb to iov
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  *	Caller _must_ check that skb will fit to this iovec.
  *
@@ -687,14 +748,21 @@ EXPORT_SYMBOL(__skb_checksum_complete);
  *			   can be modified!
  */
 int skb_copy_and_csum_datagram_iovec(struct sk_buff *skb,
+<<<<<<< HEAD
 				     int hlen, struct iovec *iov, int len)
+=======
+				     int hlen, struct iovec *iov)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	__wsum csum;
 	int chunk = skb->len - hlen;
 
+<<<<<<< HEAD
 	if (chunk > len)
 		chunk = len;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!chunk)
 		return 0;
 

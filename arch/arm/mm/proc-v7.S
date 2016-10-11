@@ -56,9 +56,12 @@ ENTRY(cpu_v7_reset)
 	bic	r1, r1, #0x1			@ ...............m
  THUMB(	bic	r1, r1, #1 << 30 )		@ SCTLR.TE (Thumb exceptions)
 	mcr	p15, 0, r1, c1, c0, 0		@ disable MMU
+<<<<<<< HEAD
 	mcr     p15, 0, ip, c8, c7, 0           @ invalidate I & D,flush TLB
 	mcr     p15, 0, ip, c7, c5, 6           @ flush BTC
 	dsb
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	isb
 	mov	pc, r0
 ENDPROC(cpu_v7_reset)
@@ -120,13 +123,18 @@ ENTRY(cpu_v7_do_resume)
 	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mcr	p15, 0, r5, c13, c0, 3	@ User r/o thread ID
 	ldmia	r0, {r6 - r11}
+<<<<<<< HEAD
 #ifndef CONFIG_TIMA_RKP_EMUL_CP15_INSTR
 	mcr	p15, 0, r6, c3, c0, 0	@ Domain ID
 #endif
+=======
+	mcr	p15, 0, r6, c3, c0, 0	@ Domain ID
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef CONFIG_ARM_LPAE
 	ALT_SMP(orr	r1, r1, #TTB_FLAGS_SMP)
 	ALT_UP(orr	r1, r1, #TTB_FLAGS_UP)
 #endif
+<<<<<<< HEAD
 #ifndef	CONFIG_TIMA_RKP_EMUL_CP15_INSTR
 	mcr	p15, 0, r1, c2, c0, 0	@ TTB 0
 #endif
@@ -145,6 +153,11 @@ ENTRY(cpu_v7_do_resume)
 	dsb
 #endif
 
+=======
+	mcr	p15, 0, r1, c2, c0, 0	@ TTB 0
+	mcr	p15, 0, r7, c2, c0, 1	@ TTB 1
+	mcr	p15, 0, r11, c2, c0, 2	@ TTB control register
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mrc	p15, 0, r4, c1, c0, 1	@ Read Auxiliary control register
 	teq	r4, r9			@ Is it already set?
 	mcrne	p15, 0, r9, c1, c0, 1	@ No, so write it
@@ -266,7 +279,10 @@ __v7_setup:
 
 3:	mov	r10, #0
 	mcr	p15, 0, r10, c7, c5, 0		@ I+BTB cache invalidate
+<<<<<<< HEAD
 	dsb
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MMU
 	mcr	p15, 0, r10, c8, c7, 0		@ invalidate I + D TLBs
 	v7_ttb_setup r10, r4, r8, r5		@ TTBCR, TTBRx setup
@@ -275,6 +291,7 @@ __v7_setup:
 	mcr	p15, 0, r5, c10, c2, 0		@ write PRRR
 	mcr	p15, 0, r6, c10, c2, 1		@ write NMRR
 #endif
+<<<<<<< HEAD
 
 #if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
 	mov     r0, #0x33
@@ -300,6 +317,9 @@ __v7_setup:
 	mcr     p15, 3, r0, c15, c0, 2
 #endif
 
+=======
+	dsb					@ Complete invalidations
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifndef CONFIG_ARM_THUMBEE
 	mrc	p15, 0, r0, c0, c1, 0		@ read ID_PFR0 for ThumbEE
 	and	r0, r0, #(0xf << 12)		@ ThumbEE enabled field
@@ -410,6 +430,7 @@ __v7_ca15mp_proc_info:
 	.size	__v7_ca15mp_proc_info, . - __v7_ca15mp_proc_info
 
 	/*
+<<<<<<< HEAD
 	 * Qualcomm Inc. Krait processors.
 	 */
 	.type	__krait_proc_info, #object
@@ -420,6 +441,8 @@ __krait_proc_info:
 	.size	__krait_proc_info, . - __krait_proc_info
 
 	/*
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 * Match any ARMv7 processor core.
 	 */
 	.type	__v7_proc_info, #object

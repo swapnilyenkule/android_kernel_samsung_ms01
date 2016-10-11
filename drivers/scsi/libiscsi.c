@@ -718,11 +718,27 @@ __iscsi_conn_send_pdu(struct iscsi_conn *conn, struct iscsi_hdr *hdr,
 			return NULL;
 		}
 
+<<<<<<< HEAD
+=======
+		if (data_size > ISCSI_DEF_MAX_RECV_SEG_LEN) {
+			iscsi_conn_printk(KERN_ERR, conn, "Invalid buffer len of %u for login task. Max len is %u\n", data_size, ISCSI_DEF_MAX_RECV_SEG_LEN);
+			return NULL;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		task = conn->login_task;
 	} else {
 		if (session->state != ISCSI_STATE_LOGGED_IN)
 			return NULL;
 
+<<<<<<< HEAD
+=======
+		if (data_size != 0) {
+			iscsi_conn_printk(KERN_ERR, conn, "Can not send data buffer of len %u for op 0x%x\n", data_size, opcode);
+			return NULL;
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		BUG_ON(conn->c_stage == ISCSI_CONN_INITIAL_STAGE);
 		BUG_ON(conn->c_stage == ISCSI_CONN_STOPPED);
 
@@ -2897,10 +2913,17 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
 {
 	struct iscsi_conn *conn = cls_conn->dd_data;
 	struct iscsi_session *session = conn->session;
+<<<<<<< HEAD
 	unsigned long flags;
 
 	del_timer_sync(&conn->transport_timer);
 
+=======
+
+	del_timer_sync(&conn->transport_timer);
+
+	mutex_lock(&session->eh_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_lock_bh(&session->lock);
 	conn->c_stage = ISCSI_CONN_CLEANUP_WAIT;
 	if (session->leadconn == conn) {
@@ -2912,6 +2935,7 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
 	}
 	spin_unlock_bh(&session->lock);
 
+<<<<<<< HEAD
 	/*
 	 * Block until all in-progress commands for this connection
 	 * time out or fail.
@@ -2934,6 +2958,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
 		wake_up(&conn->ehwait);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* flush queued up work because we free the connection below */
 	iscsi_suspend_tx(conn);
 
@@ -2946,6 +2972,10 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
 	if (session->leadconn == conn)
 		session->leadconn = NULL;
 	spin_unlock_bh(&session->lock);
+<<<<<<< HEAD
+=======
+	mutex_unlock(&session->eh_mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	iscsi_destroy_conn(cls_conn);
 }

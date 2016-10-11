@@ -1386,9 +1386,17 @@ static int __devinit saa7164_initdev(struct pci_dev *pci_dev,
 		if (fw_debug) {
 			dev->kthread = kthread_run(saa7164_thread_function, dev,
 				"saa7164 debug");
+<<<<<<< HEAD
 			if (!dev->kthread)
 				printk(KERN_ERR "%s() Failed to create "
 					"debug kernel thread\n", __func__);
+=======
+			if (IS_ERR(dev->kthread)) {
+				dev->kthread = NULL;
+				printk(KERN_ERR "%s() Failed to create "
+					"debug kernel thread\n", __func__);
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 	} /* != BOARD_UNKNOWN */

@@ -1426,11 +1426,19 @@ megasas_build_ldio_fusion(struct megasas_instance *instance,
 			fp_possible = io_info.fpOkForIo;
 	}
 
+<<<<<<< HEAD
 	/* Use smp_processor_id() for now until cmd->request->cpu is CPU
 	   id by default, not CPU group id, otherwise all MSI-X queues won't
 	   be utilized */
 	cmd->request_desc->SCSIIO.MSIxIndex = instance->msix_vectors ?
 		smp_processor_id() % instance->msix_vectors : 0;
+=======
+	/* Use raw_smp_processor_id() for now until cmd->request->cpu is CPU
+	   id by default, not CPU group id, otherwise all MSI-X queues won't
+	   be utilized */
+	cmd->request_desc->SCSIIO.MSIxIndex = instance->msix_vectors ?
+		raw_smp_processor_id() % instance->msix_vectors : 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (fp_possible) {
 		megasas_set_pd_lba(io_request, scp->cmd_len, &io_info, scp,

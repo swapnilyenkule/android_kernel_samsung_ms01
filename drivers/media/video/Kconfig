@@ -66,12 +66,15 @@ config VIDEOBUF2_DMA_SG
 	select VIDEOBUF2_CORE
 	select VIDEOBUF2_MEMOPS
 	tristate
+<<<<<<< HEAD
 
 config VIDEOBUF2_MSM_MEM
 	tristate "MSM videobuf2 extensions"
 	select VIDEOBUF2_DMA_SG
 	select VIDEOBUF2_DMA_CONTIG
 	select VIDEOBUF2_VMALLOC
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #
 # Multimedia Video device configuration
 #
@@ -1166,8 +1169,11 @@ config VIDEO_S5P_MIPI_CSIS
 
 source "drivers/media/video/s5p-tv/Kconfig"
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 endif # V4L_PLATFORM_DRIVERS
 endif # VIDEO_CAPTURE_DRIVERS
 

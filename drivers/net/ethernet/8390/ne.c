@@ -813,6 +813,10 @@ static int __init ne_drv_probe(struct platform_device *pdev)
 		dev->irq = irq[this_dev];
 		dev->mem_end = bad[this_dev];
 	}
+<<<<<<< HEAD
+=======
+	SET_NETDEV_DEV(dev, &pdev->dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	err = do_ne_probe(dev);
 	if (err) {
 		free_netdev(dev);

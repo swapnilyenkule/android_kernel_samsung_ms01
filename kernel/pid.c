@@ -78,7 +78,10 @@ struct pid_namespace init_pid_ns = {
 	.last_pid = 0,
 	.level = 0,
 	.child_reaper = &init_task,
+<<<<<<< HEAD
 	.proc_inum = PROC_PID_INIT_INO,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 EXPORT_SYMBOL_GPL(init_pid_ns);
 
@@ -431,7 +434,10 @@ struct task_struct *find_task_by_vpid(pid_t vnr)
 {
 	return find_task_by_pid_ns(vnr, current->nsproxy->pid_ns);
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL_GPL(find_task_by_vpid);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct pid *get_task_pid(struct task_struct *task, enum pid_type type)
 {

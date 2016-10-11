@@ -664,8 +664,13 @@ static void ieee80211_sta_merge_ibss(struct ieee80211_sub_if_data *sdata)
 	printk(KERN_DEBUG "%s: No active IBSS STAs - trying to scan for other "
 	       "IBSS networks with same SSID (merge)\n", sdata->name);
 
+<<<<<<< HEAD
 	ieee80211_request_internal_scan(sdata,
 			ifibss->ssid, ifibss->ssid_len, NULL);
+=======
+	ieee80211_request_ibss_scan(sdata, ifibss->ssid, ifibss->ssid_len,
+				    NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void ieee80211_sta_create_ibss(struct ieee80211_sub_if_data *sdata)
@@ -772,9 +777,14 @@ static void ieee80211_sta_find_ibss(struct ieee80211_sub_if_data *sdata)
 		printk(KERN_DEBUG "%s: Trigger new scan to find an IBSS to "
 		       "join\n", sdata->name);
 
+<<<<<<< HEAD
 		ieee80211_request_internal_scan(sdata,
 				ifibss->ssid, ifibss->ssid_len,
 				ifibss->fixed_channel ? ifibss->channel : NULL);
+=======
+		ieee80211_request_ibss_scan(sdata, ifibss->ssid,
+					    ifibss->ssid_len, chan);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 		int interval = IEEE80211_SCAN_INTERVAL;
 
@@ -1110,7 +1120,11 @@ int ieee80211_ibss_join(struct ieee80211_sub_if_data *sdata,
 	sdata->u.ibss.state = IEEE80211_IBSS_MLME_SEARCH;
 	sdata->u.ibss.ibss_join_req = jiffies;
 
+<<<<<<< HEAD
 	memcpy(sdata->u.ibss.ssid, params->ssid, IEEE80211_MAX_SSID_LEN);
+=======
+	memcpy(sdata->u.ibss.ssid, params->ssid, params->ssid_len);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sdata->u.ibss.ssid_len = params->ssid_len;
 
 	mutex_unlock(&sdata->u.ibss.mtx);
@@ -1153,10 +1167,13 @@ int ieee80211_ibss_leave(struct ieee80211_sub_if_data *sdata)
 
 	mutex_lock(&sdata->u.ibss.mtx);
 
+<<<<<<< HEAD
 	sdata->u.ibss.state = IEEE80211_IBSS_MLME_SEARCH;
 	memset(sdata->u.ibss.bssid, 0, ETH_ALEN);
 	sdata->u.ibss.ssid_len = 0;
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	active_ibss = ieee80211_sta_active_ibss(sdata);
 
 	if (!active_ibss && !is_zero_ether_addr(ifibss->bssid)) {
@@ -1177,6 +1194,13 @@ int ieee80211_ibss_leave(struct ieee80211_sub_if_data *sdata)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	ifibss->state = IEEE80211_IBSS_MLME_SEARCH;
+	memset(ifibss->bssid, 0, ETH_ALEN);
+	ifibss->ssid_len = 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sta_info_flush(sdata->local, sdata);
 
 	spin_lock_bh(&ifibss->incomplete_lock);

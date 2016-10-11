@@ -45,12 +45,20 @@ static void resume_irqs(bool want_early)
 	struct irq_desc *desc;
 	int irq;
 
+<<<<<<< HEAD
 	for_each_irq_desc_reverse(irq, desc) {
+=======
+	for_each_irq_desc(irq, desc) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		unsigned long flags;
 		bool is_early = desc->action &&
 			desc->action->flags & IRQF_EARLY_RESUME;
 
+<<<<<<< HEAD
 		if (is_early != want_early)
+=======
+		if (!is_early && want_early)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			continue;
 
 		raw_spin_lock_irqsave(&desc->lock, flags);
@@ -104,6 +112,7 @@ int check_wakeup_irqs(void)
 
 	for_each_irq_desc(irq, desc) {
 		if (irqd_is_wakeup_set(&desc->irq_data)) {
+<<<<<<< HEAD
 			if (desc->istate & IRQS_PENDING) {
 				pr_info("Wakeup IRQ %d %s pending, suspend aborted\n",
 					irq,
@@ -111,6 +120,10 @@ int check_wakeup_irqs(void)
 					desc->action->name : "");
 				return -EBUSY;
 			}
+=======
+			if (desc->istate & IRQS_PENDING)
+				return -EBUSY;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			continue;
 		}
 		/*

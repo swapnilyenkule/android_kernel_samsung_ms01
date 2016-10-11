@@ -30,7 +30,10 @@
 #include <mach/system.h>
 #include <mach/vreg.h>
 #include <mach/board.h>
+<<<<<<< HEAD
 #include <mach/proc_comm.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/io.h>
 #include <asm/delay.h>
@@ -41,6 +44,10 @@
 
 #include "gpio_chip.h"
 #include "board-sapphire.h"
+<<<<<<< HEAD
+=======
+#include "proc_comm.h"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include "devices.h"
 
 void msm_init_irq(void);

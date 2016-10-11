@@ -39,6 +39,7 @@ config NFC_WILINK
 	  into the kernel or say M to compile it as module.
 
 endmenu
+<<<<<<< HEAD
 
 config NFC_QNCI
 	bool "Qualcomm NCI based NFC Controller Driver for qca199x"
@@ -48,3 +49,5 @@ config NFC_QNCI
 	  This enables the NFC driver for QCA199x based devices.
 	  This is for i2c connected version. NCI protocol logic
 	  resides in the usermode and it has no other NFC dependencies.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

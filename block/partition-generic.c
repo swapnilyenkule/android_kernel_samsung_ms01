@@ -17,7 +17,10 @@
 #include <linux/ctype.h>
 #include <linux/genhd.h>
 #include <linux/blktrace_api.h>
+<<<<<<< HEAD
 #include <linux/stlog.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include "partitions/check.h"
 
@@ -212,11 +215,16 @@ static const struct attribute_group *part_attr_groups[] = {
 static void part_release(struct device *dev)
 {
 	struct hd_struct *p = dev_to_part(dev);
+<<<<<<< HEAD
+=======
+	blk_free_devt(dev->devt);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	free_part_stats(p);
 	free_part_info(p);
 	kfree(p);
 }
 
+<<<<<<< HEAD
 static int part_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	struct hd_struct *part = dev_to_part(dev);
@@ -227,11 +235,16 @@ static int part_uevent(struct device *dev, struct kobj_uevent_env *env)
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct device_type part_type = {
 	.name		= "partition",
 	.groups		= part_attr_groups,
 	.release	= part_release,
+<<<<<<< HEAD
 	.uevent		= part_uevent,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 static void delete_partition_rcu_cb(struct rcu_head *head)
@@ -254,10 +267,13 @@ void delete_partition(struct gendisk *disk, int partno)
 	struct disk_part_tbl *ptbl = disk->part_tbl;
 	struct hd_struct *part;
 
+<<<<<<< HEAD
 	#ifdef CONFIG_STLOG
 	struct device *dev;
 	#endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (partno >= ptbl->len)
 		return;
 
@@ -265,6 +281,7 @@ void delete_partition(struct gendisk *disk, int partno)
 	if (!part)
 		return;
 
+<<<<<<< HEAD
 	blk_free_devt(part_devt(part));
 	rcu_assign_pointer(ptbl->part[partno], NULL);
 	rcu_assign_pointer(ptbl->last_lookup, NULL);
@@ -274,6 +291,11 @@ void delete_partition(struct gendisk *disk, int partno)
 	ST_LOG("<%s> KOBJ_REMOVE %d:%d %s",
 	__func__,MAJOR(dev->devt),MINOR(dev->devt),dev->kobj.name);
 	#endif	
+=======
+	rcu_assign_pointer(ptbl->part[partno], NULL);
+	rcu_assign_pointer(ptbl->last_lookup, NULL);
+	kobject_put(part->holder_dir);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	device_del(part_to_dev(part));
 
 	hd_struct_put(part);

@@ -252,14 +252,20 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 	static const char * const header_mode[] = {
 		"Separate Buffer",
 		"Joined With 1st Frame",
+<<<<<<< HEAD
 		"Joined With I-Frames",
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		NULL,
 	};
 	static const char * const multi_slice[] = {
 		"Single",
 		"Max Macroblocks",
 		"Max Bytes",
+<<<<<<< HEAD
 		"GOB",
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		NULL,
 	};
 	static const char * const entropy_mode[] = {
@@ -284,7 +290,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 		"4.2",
 		"5",
 		"5.1",
+<<<<<<< HEAD
 		"5.2",
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		NULL,
 	};
 	static const char * const h264_loop_filter[] = {
@@ -310,7 +319,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 		"Scalable High",
 		"Scalable High Intra",
 		"Multiview High",
+<<<<<<< HEAD
 		"Constrained High",
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		NULL,
 	};
 	static const char * const vui_sar_idc[] = {
@@ -375,6 +387,7 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 		"Gray",
 		NULL,
 	};
+<<<<<<< HEAD
 	static const char *const mpeg_video_intra_refresh_mode[] = {
 		"No Intra Refresh",
 		"AIR MBS",
@@ -382,6 +395,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 		"CIR MBS",
 		NULL
 	};
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	switch (id) {
 	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
@@ -449,8 +464,12 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
 		return mpeg4_profile;
 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
 		return jpeg_chroma_subsampling;
+<<<<<<< HEAD
 	case V4L2_CID_MPEG_VIDC_VIDEO_INTRA_REFRESH_MODE:
 		return mpeg_video_intra_refresh_mode;
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		return NULL;
 	}
@@ -581,14 +600,18 @@ const char *v4l2_ctrl_get_name(u32 id)
 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:			return "MPEG4 Level";
 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:			return "MPEG4 Profile";
 	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:			return "Quarter Pixel Search Enable";
+<<<<<<< HEAD
 	case V4L2_CID_QCOM_VIDEO_SYNC_FRAME_SEQ_HDR:
 		return "CodecConfig with sync frame";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES:		return "Maximum Bytes in a Slice";
 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB:		return "Number of MBs in a Slice";
 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE:		return "Slice Partitioning Method";
 	case V4L2_CID_MPEG_VIDEO_VBV_SIZE:			return "VBV Buffer Size";
 	case V4L2_CID_MPEG_VIDEO_DEC_PTS:			return "Video Decoder PTS";
 	case V4L2_CID_MPEG_VIDEO_DEC_FRAME:			return "Video Decoder Frame Count";
+<<<<<<< HEAD
 	case V4L2_CID_MPEG_VIDC_VIDEO_ROTATION: return "Rotation";
 	case V4L2_CID_MPEG_VIDC_VIDEO_RATE_CONTROL: return "Rate Control";
 	case V4L2_CID_MPEG_VIDC_VIDEO_H264_CABAC_MODEL: return "CABAC Model";
@@ -601,6 +624,8 @@ const char *v4l2_ctrl_get_name(u32 id)
 		return "VP8 Profile Level";
 	case V4L2_CID_MPEG_VIDC_VIDEO_DEINTERLACE:
 		return "Deinterlace for encoder";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* CAMERA controls */
 	/* Keep the order of the 'case's the same as in videodev2.h! */
@@ -759,9 +784,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
+<<<<<<< HEAD
 	case V4L2_CID_MPEG_VIDC_VIDEO_ROTATION:
 	case V4L2_CID_MPEG_VIDC_VIDEO_RATE_CONTROL:
 	case V4L2_CID_MPEG_VIDC_VIDEO_H264_CABAC_MODEL:
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		*type = V4L2_CTRL_TYPE_MENU;
 		break;
 	case V4L2_CID_RDS_TX_PS_NAME:
@@ -780,12 +808,16 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
 		*min = *max = *step = *def = 0;
 		break;
 	case V4L2_CID_BG_COLOR:
+<<<<<<< HEAD
 	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_QP:
 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_QP:
 	case V4L2_CID_MPEG_VIDEO_H264_B_FRAME_QP:
 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_BYTES:
 	case V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB:
 	*type = V4L2_CTRL_TYPE_INTEGER;
+=======
+		*type = V4L2_CTRL_TYPE_INTEGER;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		*step = 1;
 		*min = 0;
 		/* Max is calculated as RGB888 that is 2^24 */
@@ -805,6 +837,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
 		*type = V4L2_CTRL_TYPE_INTEGER64;
 		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE;
 		break;
+<<<<<<< HEAD
 	case V4L2_CID_QCOM_VIDEO_SYNC_FRAME_SEQ_HDR:
 		*type = V4L2_CTRL_TYPE_BOOLEAN;
 		*min = 0;
@@ -820,6 +853,8 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
 		*min = 0;
 		*max = *step = 1;
 		break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		*type = V4L2_CTRL_TYPE_INTEGER;
 		break;

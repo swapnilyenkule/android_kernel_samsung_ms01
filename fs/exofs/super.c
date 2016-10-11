@@ -745,7 +745,10 @@ static int exofs_fill_super(struct super_block *sb, void *data, int silent)
 	sbi->one_comp.obj.partition = opts->pid;
 	sbi->one_comp.obj.id = 0;
 	exofs_make_credential(sbi->one_comp.cred, &sbi->one_comp.obj);
+<<<<<<< HEAD
 	sbi->oc.numdevs = 1;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sbi->oc.single_comp = EC_SINGLE_COMP;
 	sbi->oc.comps = &sbi->one_comp;
 
@@ -804,6 +807,10 @@ static int exofs_fill_super(struct super_block *sb, void *data, int silent)
 			goto free_sbi;
 
 		ore_comp_set_dev(&sbi->oc, 0, od);
+<<<<<<< HEAD
+=======
+		sbi->oc.numdevs = 1;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 	__sbi_read_stats(sbi);

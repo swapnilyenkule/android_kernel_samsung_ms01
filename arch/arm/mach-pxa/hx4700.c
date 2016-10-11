@@ -881,6 +881,11 @@ static void __init hx4700_init(void)
 	mdelay(10);
 	gpio_set_value(GPIO71_HX4700_ASIC3_nRESET, 1);
 	mdelay(10);
+<<<<<<< HEAD
+=======
+
+	regulator_has_full_constraints();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 MACHINE_START(H4700, "HP iPAQ HX4700")

@@ -55,6 +55,11 @@ static struct irq_chip mips_cpu_irq_controller = {
 	.irq_mask_ack	= mask_mips_irq,
 	.irq_unmask	= unmask_mips_irq,
 	.irq_eoi	= unmask_mips_irq,
+<<<<<<< HEAD
+=======
+	.irq_disable	= mask_mips_irq,
+	.irq_enable	= unmask_mips_irq,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /*
@@ -91,6 +96,11 @@ static struct irq_chip mips_mt_cpu_irq_controller = {
 	.irq_mask_ack	= mips_mt_cpu_irq_ack,
 	.irq_unmask	= unmask_mips_irq,
 	.irq_eoi	= unmask_mips_irq,
+<<<<<<< HEAD
+=======
+	.irq_disable	= mask_mips_irq,
+	.irq_enable	= unmask_mips_irq,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 void __init mips_cpu_irq_init(void)

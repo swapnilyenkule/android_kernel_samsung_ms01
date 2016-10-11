@@ -87,7 +87,11 @@
 	(memcmp(addr1, addr2, length >> 3) == 0)
 
 /* local link, i.e. FE80::/10 */
+<<<<<<< HEAD
 #define is_addr_link_local(a) (((a)->s6_addr16[0]) == 0x80FE)
+=======
+#define is_addr_link_local(a) (((a)->s6_addr16[0]) == htons(0xFE80))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * check whether we can compress the IID to 16 bits,

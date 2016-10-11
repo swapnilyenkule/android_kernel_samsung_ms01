@@ -4,7 +4,10 @@
  *  Copyright (C) 2008 Intel Corp
  *  Copyright (C) 2008 Zhang Rui <rui.zhang@intel.com>
  *  Copyright (C) 2008 Sujith Thomas <sujith.thomas@intel.com>
+<<<<<<< HEAD
  *  Copyright (c) 2013, The Linux Foundation. All rights reserved.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
@@ -61,6 +64,7 @@ static LIST_HEAD(thermal_tz_list);
 static LIST_HEAD(thermal_cdev_list);
 static DEFINE_MUTEX(thermal_list_lock);
 
+<<<<<<< HEAD
 static LIST_HEAD(sensor_info_list);
 static DEFINE_MUTEX(sensor_list_lock);
 
@@ -386,6 +390,8 @@ int sensor_init(struct thermal_zone_device *tz)
 	return 0;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int get_idr(struct idr *idr, struct mutex *lock, int *id)
 {
 	int err;
@@ -512,12 +518,15 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
 		return sprintf(buf, "critical\n");
 	case THERMAL_TRIP_HOT:
 		return sprintf(buf, "hot\n");
+<<<<<<< HEAD
 	case THERMAL_TRIP_CONFIGURABLE_HI:
 		return sprintf(buf, "configurable_hi\n");
 	case THERMAL_TRIP_CONFIGURABLE_LOW:
 		return sprintf(buf, "configurable_low\n");
 	case THERMAL_TRIP_CRITICAL_LOW:
 		return sprintf(buf, "critical_low\n");
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case THERMAL_TRIP_PASSIVE:
 		return sprintf(buf, "passive\n");
 	case THERMAL_TRIP_ACTIVE:
@@ -528,6 +537,7 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
 }
 
 static ssize_t
+<<<<<<< HEAD
 trip_point_type_activate(struct device *dev, struct device_attribute *attr,
 		const char *buf, size_t count)
 {
@@ -573,6 +583,8 @@ trip_activate_exit:
 }
 
 static ssize_t
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 trip_point_temp_show(struct device *dev, struct device_attribute *attr,
 		     char *buf)
 {
@@ -595,6 +607,7 @@ trip_point_temp_show(struct device *dev, struct device_attribute *attr,
 }
 
 static ssize_t
+<<<<<<< HEAD
 trip_point_temp_set(struct device *dev, struct device_attribute *attr,
 		     const char *buf, size_t count)
 {
@@ -620,6 +633,8 @@ trip_point_temp_set(struct device *dev, struct device_attribute *attr,
 }
 
 static ssize_t
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 passive_store(struct device *dev, struct device_attribute *attr,
 		    const char *buf, size_t count)
 {
@@ -686,6 +701,7 @@ static DEVICE_ATTR(mode, 0644, mode_show, mode_store);
 static DEVICE_ATTR(passive, S_IRUGO | S_IWUSR, passive_show, passive_store);
 
 static struct device_attribute trip_point_attrs[] = {
+<<<<<<< HEAD
 	__ATTR(trip_point_0_type, 0644, trip_point_type_show,
 					trip_point_type_activate),
 	__ATTR(trip_point_0_temp, 0644, trip_point_temp_show,
@@ -734,6 +750,32 @@ static struct device_attribute trip_point_attrs[] = {
 					trip_point_type_activate),
 	__ATTR(trip_point_11_temp, 0644, trip_point_temp_show,
 					trip_point_temp_set),
+=======
+	__ATTR(trip_point_0_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_0_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_1_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_1_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_2_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_2_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_3_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_3_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_4_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_4_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_5_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_5_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_6_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_6_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_7_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_7_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_8_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_8_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_9_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_9_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_10_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_10_temp, 0444, trip_point_temp_show, NULL),
+	__ATTR(trip_point_11_type, 0444, trip_point_type_show, NULL),
+	__ATTR(trip_point_11_temp, 0444, trip_point_temp_show, NULL),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /* sys I/F for cooling device */
@@ -839,7 +881,11 @@ struct thermal_hwmon_device {
 
 struct thermal_hwmon_attr {
 	struct device_attribute attr;
+<<<<<<< HEAD
 	char name[THERMAL_NAME_LENGTH];
+=======
+	char name[16];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /* one temperature input for each thermal zone */
@@ -1475,6 +1521,7 @@ void thermal_zone_device_update(struct thermal_zone_device *tz)
 				if (tz->ops->notify)
 					tz->ops->notify(tz, count, trip_type);
 			break;
+<<<<<<< HEAD
 		case THERMAL_TRIP_CONFIGURABLE_HI:
 			if (temp >= trip_temp)
 				if (tz->ops->notify)
@@ -1498,6 +1545,8 @@ void thermal_zone_device_update(struct thermal_zone_device *tz)
 				}
 			}
 			break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case THERMAL_TRIP_ACTIVE:
 			list_for_each_entry(instance, &tz->cooling_devices,
 					    node) {
@@ -1657,7 +1706,10 @@ struct thermal_zone_device *thermal_zone_device_register(char *type,
 		if (result)
 			break;
 		}
+<<<<<<< HEAD
 	sensor_init(tz);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_unlock(&thermal_list_lock);
 
 	INIT_DELAYED_WORK(&(tz->poll_queue), thermal_zone_device_check);
@@ -1717,10 +1769,13 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
 				   &trip_point_attrs[count * 2 + 1]);
 	}
 	thermal_remove_hwmon_sysfs(tz);
+<<<<<<< HEAD
 	flush_work(&tz->sensor.work);
 	mutex_lock(&thermal_list_lock);
 	list_del(&tz->sensor.sensor_list);
 	mutex_unlock(&thermal_list_lock);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	release_idr(&thermal_tz_idr, &thermal_idr_lock, tz->id);
 	idr_destroy(&tz->idr);
 	mutex_destroy(&tz->lock);
@@ -1837,6 +1892,10 @@ static int __init thermal_init(void)
 		idr_destroy(&thermal_cdev_idr);
 		mutex_destroy(&thermal_idr_lock);
 		mutex_destroy(&thermal_list_lock);
+<<<<<<< HEAD
+=======
+		return result;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	result = genetlink_init();
 	return result;

@@ -77,7 +77,11 @@ void show_mem(unsigned int filter)
 	printk("Mem-info:\n");
 	show_free_areas(filter);
 	printk("Free swap:       %6ldkB\n",
+<<<<<<< HEAD
 	       get_nr_swap_pages() << (PAGE_SHIFT-10));
+=======
+	       nr_swap_pages << (PAGE_SHIFT-10));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	printk("%ld pages of RAM\n", totalram_pages);
 	printk("%ld free pages\n", nr_free_pages());
 #if 0 /* undefined pgtable_cache_size, pgd_cache_size */

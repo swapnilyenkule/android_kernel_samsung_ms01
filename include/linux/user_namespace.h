@@ -14,7 +14,10 @@ struct user_namespace {
 	struct hlist_head	uidhash_table[UIDHASH_SZ];
 	struct user_struct	*creator;
 	struct work_struct	destroyer;
+<<<<<<< HEAD
 	unsigned int		proc_inum;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 extern struct user_namespace init_user_ns;

@@ -190,8 +190,12 @@ static int cfg80211_conn_do_work(struct wireless_dev *wdev)
 					    prev_bssid,
 					    params->ssid, params->ssid_len,
 					    params->ie, params->ie_len,
+<<<<<<< HEAD
 					    params->mfp != NL80211_MFP_NO,
 					    &params->crypto,
+=======
+					    false, &params->crypto,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 					    params->flags, &params->ht_capa,
 					    &params->ht_capa_mask);
 		if (err)
@@ -223,6 +227,12 @@ void cfg80211_conn_work(struct work_struct *work)
 	mutex_lock(&rdev->devlist_mtx);
 
 	list_for_each_entry(wdev, &rdev->netdev_list, list) {
+<<<<<<< HEAD
+=======
+		if (!wdev->netdev)
+			continue;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		wdev_lock(wdev);
 		if (!netif_running(wdev->netdev)) {
 			wdev_unlock(wdev);
@@ -690,10 +700,15 @@ void __cfg80211_disconnected(struct net_device *dev, const u8 *ie,
 		    wdev->iftype != NL80211_IFTYPE_P2P_CLIENT))
 		return;
 
+<<<<<<< HEAD
 #ifndef CONFIG_CFG80211_ALLOW_RECONNECT
 	if (wdev->sme_state != CFG80211_SME_CONNECTED)
 		return;
 #endif
+=======
+	if (wdev->sme_state != CFG80211_SME_CONNECTED)
+		return;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (wdev->current_bss) {
 		cfg80211_unhold_bss(wdev->current_bss);
@@ -770,14 +785,20 @@ int __cfg80211_connect(struct cfg80211_registered_device *rdev,
 
 	ASSERT_WDEV_LOCK(wdev);
 
+<<<<<<< HEAD
 #ifndef CONFIG_CFG80211_ALLOW_RECONNECT
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (wdev->sme_state != CFG80211_SME_IDLE)
 		return -EALREADY;
 
 	if (WARN_ON(wdev->connect_keys)) {
+<<<<<<< HEAD
 #else
 	if (wdev->connect_keys) {
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		kfree(wdev->connect_keys);
 		wdev->connect_keys = NULL;
 	}

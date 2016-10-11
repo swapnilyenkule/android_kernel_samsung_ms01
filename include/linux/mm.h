@@ -31,9 +31,12 @@ extern unsigned long max_mapnr;
 
 extern unsigned long num_physpages;
 extern unsigned long totalram_pages;
+<<<<<<< HEAD
 #ifdef CONFIG_FIX_MOVABLE_ZONE
 extern unsigned long total_unmovable_pages;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void * high_memory;
 extern int page_cluster;
 
@@ -43,6 +46,7 @@ extern int sysctl_legacy_va_layout;
 #define sysctl_legacy_va_layout 0
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_HAVE_ARCH_MMAP_RND_BITS
 extern const int mmap_rnd_bits_min;
 extern const int mmap_rnd_bits_max;
@@ -54,6 +58,8 @@ extern const int mmap_rnd_compat_bits_max;
 extern int mmap_rnd_compat_bits __read_mostly;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/page.h>
 #include <asm/pgtable.h>
 #include <asm/processor.h>
@@ -263,6 +269,7 @@ struct inode;
 #define page_private(page)		((page)->private)
 #define set_page_private(page, v)	((page)->private = (v))
 
+<<<<<<< HEAD
 /* It's valid only if the page is free path or free_list */
 static inline void set_freepage_migratetype(struct page *page, int migratetype)
 {
@@ -275,6 +282,8 @@ static inline int get_freepage_migratetype(struct page *page)
 	return page->index;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * FIXME: take this include out, include page-flags.h in
  * files which need it (119 of them)
@@ -325,6 +334,7 @@ unsigned long vmalloc_to_pfn(const void *addr);
  * On nommu, vmalloc/vfree wrap through kmalloc/kfree directly, so there
  * is no special casing required.
  */
+<<<<<<< HEAD
 
 #ifdef CONFIG_MMU
 extern int is_vmalloc_addr(const void *x);
@@ -335,6 +345,18 @@ static inline int is_vmalloc_addr(const void *x)
 }
 #endif
 
+=======
+static inline int is_vmalloc_addr(const void *x)
+{
+#ifdef CONFIG_MMU
+	unsigned long addr = (unsigned long)x;
+
+	return addr >= VMALLOC_START && addr < VMALLOC_END;
+#else
+	return 0;
+#endif
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #ifdef CONFIG_MMU
 extern int is_vmalloc_or_module_addr(const void *x);
 #else
@@ -829,6 +851,7 @@ static inline void *page_rmapping(struct page *page)
 	return (void *)((unsigned long)page->mapping & ~PAGE_MAPPING_FLAGS);
 }
 
+<<<<<<< HEAD
 extern struct address_space *__page_file_mapping(struct page *);
 
 static inline
@@ -840,6 +863,8 @@ struct address_space *page_file_mapping(struct page *page)
 	return page->mapping;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline int PageAnon(struct page *page)
 {
 	return ((unsigned long)page->mapping & PAGE_MAPPING_ANON) != 0;
@@ -856,6 +881,7 @@ static inline pgoff_t page_index(struct page *page)
 	return page->index;
 }
 
+<<<<<<< HEAD
 extern pgoff_t __page_file_index(struct page *page);
 
 /*
@@ -870,6 +896,8 @@ static inline pgoff_t page_file_index(struct page *page)
 	return page->index;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * Return true if this page is mapped into pagetables.
  */
@@ -892,6 +920,10 @@ static inline int page_mapped(struct page *page)
 #define VM_FAULT_WRITE	0x0008	/* Special case for get_user_pages */
 #define VM_FAULT_HWPOISON 0x0010	/* Hit poisoned small page */
 #define VM_FAULT_HWPOISON_LARGE 0x0020  /* Hit poisoned large page. Index encoded in upper bits */
+<<<<<<< HEAD
+=======
+#define VM_FAULT_SIGSEGV 0x0040
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define VM_FAULT_NOPAGE	0x0100	/* ->fault installed the pte, not return page */
 #define VM_FAULT_LOCKED	0x0200	/* ->fault locked the returned page */
@@ -899,8 +931,13 @@ static inline int page_mapped(struct page *page)
 
 #define VM_FAULT_HWPOISON_LARGE_MASK 0xf000 /* encodes hpage index for large hwpoison */
 
+<<<<<<< HEAD
 #define VM_FAULT_ERROR	(VM_FAULT_OOM | VM_FAULT_SIGBUS | VM_FAULT_HWPOISON | \
 			 VM_FAULT_HWPOISON_LARGE)
+=======
+#define VM_FAULT_ERROR	(VM_FAULT_OOM | VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV | \
+			 VM_FAULT_HWPOISON | VM_FAULT_HWPOISON_LARGE)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* Encode hstate index for a hwpoisoned large page */
 #define VM_FAULT_SET_HINDEX(x) ((x) << 12)
@@ -917,14 +954,22 @@ extern void pagefault_out_of_memory(void);
  * Flags passed to show_mem() and show_free_areas() to suppress output in
  * various contexts.
  */
+<<<<<<< HEAD
 #define SHOW_MEM_FILTER_NODES	(0x0001u)	/* filter disallowed nodes */
+=======
+#define SHOW_MEM_FILTER_NODES		(0x0001u)	/* disallowed nodes */
+#define SHOW_MEM_FILTER_PAGE_COUNT	(0x0002u)	/* page type count */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 extern void show_free_areas(unsigned int flags);
 extern bool skip_free_areas_node(unsigned int flags, int nid);
 
 int shmem_lock(struct file *file, int lock, struct user_struct *user);
 struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags);
+<<<<<<< HEAD
 void shmem_set_file(struct vm_area_struct *vma, struct file *file);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int shmem_zero_setup(struct vm_area_struct *);
 
 extern int can_do_mlock(void);
@@ -1004,6 +1049,10 @@ static inline void unmap_shared_mapping_range(struct address_space *mapping,
 
 extern void truncate_pagecache(struct inode *inode, loff_t old, loff_t new);
 extern void truncate_setsize(struct inode *inode, loff_t newsize);
+<<<<<<< HEAD
+=======
+void pagecache_isize_extended(struct inode *inode, loff_t from, loff_t to);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int vmtruncate(struct inode *inode, loff_t offset);
 extern int vmtruncate_range(struct inode *inode, loff_t offset, loff_t end);
 void truncate_pagecache_range(struct inode *inode, loff_t offset, loff_t end);
@@ -1174,11 +1223,14 @@ static inline void update_hiwater_vm(struct mm_struct *mm)
 		mm->hiwater_vm = mm->total_vm;
 }
 
+<<<<<<< HEAD
 static inline void reset_mm_hiwater_rss(struct mm_struct *mm)
 {
 	mm->hiwater_rss = get_mm_rss(mm);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline void setmax_mm_hiwater_rss(unsigned long *maxrss,
 					 struct mm_struct *mm)
 {
@@ -1422,7 +1474,11 @@ extern int vma_adjust(struct vm_area_struct *vma, unsigned long start,
 extern struct vm_area_struct *vma_merge(struct mm_struct *,
 	struct vm_area_struct *prev, unsigned long addr, unsigned long end,
 	unsigned long vm_flags, struct anon_vma *, struct file *, pgoff_t,
+<<<<<<< HEAD
 	struct mempolicy *, const char __user *);
+=======
+	struct mempolicy *);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern struct anon_vma *find_mergeable_anon_vma(struct vm_area_struct *);
 extern int split_vma(struct mm_struct *,
 	struct vm_area_struct *, unsigned long addr, int new_below);
@@ -1478,8 +1534,13 @@ int write_one_page(struct page *page, int wait);
 void task_dirty_inc(struct task_struct *tsk);
 
 /* readahead.c */
+<<<<<<< HEAD
 #define VM_MAX_READAHEAD	512	/* kbytes */
 #define VM_MIN_READAHEAD	32	/* kbytes (includes current page) */
+=======
+#define VM_MAX_READAHEAD	128	/* kbytes */
+#define VM_MIN_READAHEAD	16	/* kbytes (includes current page) */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int force_page_cache_readahead(struct address_space *mapping, struct file *filp,
 			pgoff_t offset, unsigned long nr_to_read);
@@ -1511,7 +1572,11 @@ extern int expand_downwards(struct vm_area_struct *vma,
 #if VM_GROWSUP
 extern int expand_upwards(struct vm_area_struct *vma, unsigned long address);
 #else
+<<<<<<< HEAD
   #define expand_upwards(vma, address) do { } while (0)
+=======
+  #define expand_upwards(vma, address) (0)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 
 /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
@@ -1616,6 +1681,7 @@ int in_gate_area_no_mm(unsigned long addr);
 #define in_gate_area(mm, addr) ({(void)mm; in_gate_area_no_mm(addr);})
 #endif	/* __HAVE_ARCH_GATE_AREA */
 
+<<<<<<< HEAD
 #ifdef CONFIG_USE_USER_ACCESSIBLE_TIMERS
 static inline int use_user_accessible_timers(void) { return 1; }
 extern int in_user_timers_area(struct mm_struct *mm, unsigned long addr);
@@ -1642,6 +1708,8 @@ static inline int get_user_timer_page(struct vm_area_struct *vma,
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int drop_caches_sysctl_handler(struct ctl_table *, int,
 					void __user *, size_t *, loff_t *);
 unsigned long shrink_slab(struct shrink_control *shrink,
@@ -1680,6 +1748,10 @@ void vmemmap_populate_print_last(void);
 enum mf_flags {
 	MF_COUNT_INCREASED = 1 << 0,
 	MF_ACTION_REQUIRED = 1 << 1,
+<<<<<<< HEAD
+=======
+	MF_MUST_KILL = 1 << 2,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 extern int memory_failure(unsigned long pfn, int trapno, int flags);
 extern void memory_failure_queue(unsigned long pfn, int trapno, int flags);

@@ -13,11 +13,17 @@
 #ifndef _ASM_X86_SYSCALL_H
 #define _ASM_X86_SYSCALL_H
 
+<<<<<<< HEAD
 #include <linux/audit.h>
 #include <linux/sched.h>
 #include <linux/err.h>
 #include <asm/asm-offsets.h>	/* For NR_syscalls */
 #include <asm/thread_info.h>	/* for TS_COMPAT */
+=======
+#include <linux/sched.h>
+#include <linux/err.h>
+#include <asm/asm-offsets.h>	/* For NR_syscalls */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <asm/unistd.h>
 
 extern const unsigned long sys_call_table[];
@@ -29,13 +35,21 @@ extern const unsigned long sys_call_table[];
  */
 static inline int syscall_get_nr(struct task_struct *task, struct pt_regs *regs)
 {
+<<<<<<< HEAD
 	return regs->orig_ax & __SYSCALL_MASK;
+=======
+	return regs->orig_ax;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline void syscall_rollback(struct task_struct *task,
 				    struct pt_regs *regs)
 {
+<<<<<<< HEAD
 	regs->ax = regs->orig_ax & __SYSCALL_MASK;
+=======
+	regs->ax = regs->orig_ax;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline long syscall_get_error(struct task_struct *task,
@@ -90,12 +104,15 @@ static inline void syscall_set_arguments(struct task_struct *task,
 	memcpy(&regs->bx + i, args, n * sizeof(args[0]));
 }
 
+<<<<<<< HEAD
 static inline int syscall_get_arch(struct task_struct *task,
 				   struct pt_regs *regs)
 {
 	return AUDIT_ARCH_I386;
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #else	 /* CONFIG_X86_64 */
 
 static inline void syscall_get_arguments(struct task_struct *task,
@@ -220,6 +237,7 @@ static inline void syscall_set_arguments(struct task_struct *task,
 		}
 }
 
+<<<<<<< HEAD
 static inline int syscall_get_arch(struct task_struct *task,
 				   struct pt_regs *regs)
 {
@@ -239,6 +257,8 @@ static inline int syscall_get_arch(struct task_struct *task,
 	/* Both x32 and x86_64 are considered "64-bit". */
 	return AUDIT_ARCH_X86_64;
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif	/* CONFIG_X86_32 */
 
 #endif	/* _ASM_X86_SYSCALL_H */

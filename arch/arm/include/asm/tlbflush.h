@@ -215,10 +215,13 @@
 
 #include <linux/sched.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
 extern void flush_tlb_l2_page(pmd_t *pmd);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct cpu_tlb_fns {
 	void (*flush_user_range)(unsigned long, unsigned long, struct vm_area_struct *);
 	void (*flush_kern_range)(unsigned long, unsigned long);
@@ -413,7 +416,11 @@ local_flush_tlb_page(struct vm_area_struct *vma, unsigned long uaddr)
 	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", uaddr);
 	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", uaddr);
 	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", uaddr);
+<<<<<<< HEAD
 #if defined(CONFIG_ARM_ERRATA_720789) || defined(CONFIG_ARCH_MSM8X60)
+=======
+#ifdef CONFIG_ARM_ERRATA_720789
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", uaddr & PAGE_MASK);
 #else
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", uaddr);
@@ -443,11 +450,15 @@ static inline void local_flush_tlb_kernel_page(unsigned long kaddr)
 	tlb_op(TLB_V6_U_PAGE, "c8, c7, 1", kaddr);
 	tlb_op(TLB_V6_D_PAGE, "c8, c6, 1", kaddr);
 	tlb_op(TLB_V6_I_PAGE, "c8, c5, 1", kaddr);
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MSM8X60
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 3", kaddr);
 #else
 	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
 #endif
+=======
+	tlb_op(TLB_V7_UIS_PAGE, "c8, c3, 1", kaddr);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (tlb_flag(TLB_BARRIER)) {
 		dsb();

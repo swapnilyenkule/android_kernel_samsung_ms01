@@ -18,6 +18,10 @@
 #include <linux/timer.h>
 #include <linux/proc_fs.h>
 #include <linux/if_bonding.h>
+<<<<<<< HEAD
+=======
+#include <linux/etherdevice.h>
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/cpumask.h>
 #include <linux/in6.h>
 #include <linux/netpoll.h>
@@ -450,6 +454,21 @@ static inline void bond_destroy_proc_dir(struct bond_net *bn)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+static inline struct slave *bond_slave_has_mac(struct bonding *bond,
+					       const u8 *mac)
+{
+	int i = 0;
+	struct slave *tmp;
+
+	bond_for_each_slave(bond, tmp, i)
+		if (!compare_ether_addr_64bits(mac, tmp->dev->dev_addr))
+			return tmp;
+
+	return NULL;
+}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* exported from bond_main.c */
 extern int bond_net_id;

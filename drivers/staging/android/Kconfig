@@ -25,6 +25,7 @@ config ANDROID_LOGGER
 	tristate "Android log driver"
 	default n
 
+<<<<<<< HEAD
 config LOGCAT_SIZE
 	int "Adjust android log buffer sizes"
 	default 512
@@ -33,6 +34,8 @@ config LOGCAT_SIZE
 	  Set logger buffer size. Enter a number greater than zero.
 	  Any value less than 256 is recommended. Reduce value to save kernel static memory size.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config ANDROID_PERSISTENT_RAM
 	bool
 	depends on HAVE_MEMBLOCK
@@ -46,6 +49,7 @@ config ANDROID_RAM_CONSOLE
 	select ANDROID_PERSISTENT_RAM
 	default n
 
+<<<<<<< HEAD
 config PERSISTENT_TRACER
 	bool "Persistent function tracer"
 	depends on HAVE_FUNCTION_TRACER
@@ -60,6 +64,8 @@ config PERSISTENT_TRACER
 
 	  If unsure, say N.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config ANDROID_TIMED_OUTPUT
 	bool "Timed output class driver"
 	default y
@@ -75,6 +81,7 @@ config ANDROID_LOW_MEMORY_KILLER
 	---help---
 	  Register processes to be killed when memory is low
 
+<<<<<<< HEAD
 config ANDROID_LOW_MEMORY_KILLER_AUTODETECT_OOM_ADJ_VALUES
 	bool "Android Low Memory Killer: detect oom_adj values"
 	depends on ANDROID_LOW_MEMORY_KILLER
@@ -111,12 +118,18 @@ config SEC_DEBUG_LMK_COUNT_INFO
 source "drivers/staging/android/switch/Kconfig"
 
 config ANDROID_INTF_ALARM_DEV
+=======
+source "drivers/staging/android/switch/Kconfig"
+
+config ANDROID_INTF_ALARM
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	bool "Android alarm driver"
 	depends on RTC_CLASS
 	default n
 	help
 	  Provides non-wakeup and rtc backed wakeup alarms based on rtc or
 	  elapsed realtime, and a non-wakeup alarm on the monotonic clock.
+<<<<<<< HEAD
 	  Also exports the alarm interface to user-space.
 
 config RUNTIME_COMPCACHE
@@ -132,6 +145,26 @@ config KSWAPD_NOSWAP
 	default n
 	help
 	  This option controls swap action in kswapd
+=======
+	  Also provides an interface to set the wall time which must be used
+	  for elapsed realtime to work.
+
+config ANDROID_INTF_ALARM_DEV
+	bool "Android alarm device"
+	depends on ANDROID_INTF_ALARM
+	default y
+	help
+	  Exports the alarm interface to user-space.
+
+config ANDROID_ALARM_OLDDRV_COMPAT
+	bool "Android Alarm compatability with old drivers"
+	depends on ANDROID_INTF_ALARM
+	default n
+	help
+	  Provides preprocessor alias to aid compatability with
+	  older out-of-tree drivers that use the Android Alarm
+	  in-kernel API. This will be removed eventually.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 endif # if ANDROID
 

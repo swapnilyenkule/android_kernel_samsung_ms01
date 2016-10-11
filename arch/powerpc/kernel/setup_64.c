@@ -76,7 +76,11 @@
 #endif
 
 int boot_cpuid = 0;
+<<<<<<< HEAD
 int __initdata spinning_secondaries;
+=======
+int spinning_secondaries;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 u64 ppc64_pft_size;
 
 /* Pick defaults since we might want to patch instructions

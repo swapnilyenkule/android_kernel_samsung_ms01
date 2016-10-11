@@ -36,18 +36,24 @@ char *op_name_from_perf_id(void)
 		return "arm/armv6";
 	case ARM_PERF_PMU_ID_V6MP:
 		return "arm/mpcore";
+<<<<<<< HEAD
 	case ARM_PERF_PMU_ID_CA5:
 		return "arm/armv7";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case ARM_PERF_PMU_ID_CA8:
 		return "arm/armv7";
 	case ARM_PERF_PMU_ID_CA9:
 		return "arm/armv7-ca9";
+<<<<<<< HEAD
 	case ARM_PERF_PMU_ID_SCORPION:
 		return "arm/armv7-scorpion";
 	case ARM_PERF_PMU_ID_SCORPIONMP:
 		return "arm/armv7-scorpionmp";
 	case ARM_PERF_PMU_ID_KRAIT:
 		return "arm/armv7-krait";
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	default:
 		return NULL;
 	}

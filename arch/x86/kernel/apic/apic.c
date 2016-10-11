@@ -1229,7 +1229,11 @@ void __cpuinit setup_local_APIC(void)
 	unsigned int value, queued;
 	int i, j, acked = 0;
 	unsigned long long tsc = 0, ntsc;
+<<<<<<< HEAD
 	long long max_loops = cpu_khz;
+=======
+	long long max_loops = cpu_khz ? cpu_khz : 1000000;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (cpu_has_tsc)
 		rdtscll(tsc);
@@ -1325,7 +1329,11 @@ void __cpuinit setup_local_APIC(void)
 			       acked);
 			break;
 		}
+<<<<<<< HEAD
 		if (cpu_has_tsc) {
+=======
+		if (cpu_has_tsc && cpu_khz) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			rdtscll(ntsc);
 			max_loops = (cpu_khz << 10) - (ntsc - tsc);
 		} else

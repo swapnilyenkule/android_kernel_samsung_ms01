@@ -103,8 +103,12 @@ static void ieee80211_offchannel_ps_disable(struct ieee80211_sub_if_data *sdata)
 	ieee80211_sta_reset_conn_monitor(sdata);
 }
 
+<<<<<<< HEAD
 void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local,
 				    bool offchannel_ps_enable)
+=======
+void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ieee80211_sub_if_data *sdata;
 
@@ -129,8 +133,12 @@ void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local,
 
 		if (sdata->vif.type != NL80211_IFTYPE_MONITOR) {
 			netif_tx_stop_all_queues(sdata->dev);
+<<<<<<< HEAD
 			if (offchannel_ps_enable &&
 			    (sdata->vif.type == NL80211_IFTYPE_STATION) &&
+=======
+			if (sdata->vif.type == NL80211_IFTYPE_STATION &&
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			    sdata->u.mgd.associated)
 				ieee80211_offchannel_ps_enable(sdata, true);
 		}
@@ -138,8 +146,12 @@ void ieee80211_offchannel_stop_vifs(struct ieee80211_local *local,
 	mutex_unlock(&local->iflist_mtx);
 }
 
+<<<<<<< HEAD
 void ieee80211_offchannel_return(struct ieee80211_local *local,
 				 bool offchannel_ps_disable)
+=======
+void ieee80211_offchannel_return(struct ieee80211_local *local)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct ieee80211_sub_if_data *sdata;
 
@@ -152,11 +164,17 @@ void ieee80211_offchannel_return(struct ieee80211_local *local,
 			continue;
 
 		/* Tell AP we're back */
+<<<<<<< HEAD
 		if (offchannel_ps_disable &&
 		    sdata->vif.type == NL80211_IFTYPE_STATION) {
 			if (sdata->u.mgd.associated)
 				ieee80211_offchannel_ps_disable(sdata);
 		}
+=======
+		if (sdata->vif.type == NL80211_IFTYPE_STATION &&
+		    sdata->u.mgd.associated)
+			ieee80211_offchannel_ps_disable(sdata);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (sdata->vif.type != NL80211_IFTYPE_MONITOR) {
 			/*
@@ -234,6 +252,25 @@ static void ieee80211_hw_roc_done(struct work_struct *work)
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	/* was never transmitted */
+	if (local->hw_roc_skb) {
+		u64 cookie;
+
+		cookie = local->hw_roc_cookie ^ 2;
+
+		cfg80211_mgmt_tx_status(local->hw_roc_dev, cookie,
+					local->hw_roc_skb->data,
+					local->hw_roc_skb->len, false,
+					GFP_KERNEL);
+
+		kfree_skb(local->hw_roc_skb);
+		local->hw_roc_skb = NULL;
+		local->hw_roc_skb_for_status = NULL;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!local->hw_roc_for_tx)
 		cfg80211_remain_on_channel_expired(local->hw_roc_dev,
 						   local->hw_roc_cookie,

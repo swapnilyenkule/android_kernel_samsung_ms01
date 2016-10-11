@@ -35,5 +35,9 @@
 #define MAIN_IRQ_MASK		(ORION5X_BRIDGE_VIRT_BASE | 0x204)
 
 #define TIMER_VIRT_BASE		(ORION5X_BRIDGE_VIRT_BASE | 0x300)
+<<<<<<< HEAD
 
+=======
+#define TIMER_PHYS_BASE		(ORION5X_BRIDGE_PHYS_BASE | 0x300)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif

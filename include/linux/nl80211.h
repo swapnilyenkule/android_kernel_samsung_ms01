@@ -170,9 +170,12 @@
  *	%NL80211_ATTR_CIPHER_GROUP, %NL80211_ATTR_WPA_VERSIONS,
  *	%NL80211_ATTR_AKM_SUITES, %NL80211_ATTR_PRIVACY,
  *	%NL80211_ATTR_AUTH_TYPE and %NL80211_ATTR_INACTIVITY_TIMEOUT.
+<<<<<<< HEAD
  *	%NL80211_ATTR_ACL_POLICY and %NL80211_ATTR_MAC_ADDRS.
  *	The channel to use can be set on the interface or be given using the
  *	%NL80211_ATTR_WIPHY_FREQ and the attributes determining channel width.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @NL80211_CMD_NEW_BEACON: old alias for %NL80211_CMD_START_AP
  * @NL80211_CMD_STOP_AP: Stop AP operation on the given interface
  * @NL80211_CMD_DEL_BEACON: old alias for %NL80211_CMD_STOP_AP
@@ -368,8 +371,13 @@
  *	requests to connect to a specified network but without separating
  *	auth and assoc steps. For this, you need to specify the SSID in a
  *	%NL80211_ATTR_SSID attribute, and can optionally specify the association
+<<<<<<< HEAD
  *	IEs in %NL80211_ATTR_IE, %NL80211_ATTR_AUTH_TYPE, %NL80211_ATTR_USE_MFP,
  *	%NL80211_ATTR_MAC, %NL80211_ATTR_WIPHY_FREQ, %NL80211_ATTR_CONTROL_PORT,
+=======
+ *	IEs in %NL80211_ATTR_IE, %NL80211_ATTR_AUTH_TYPE, %NL80211_ATTR_MAC,
+ *	%NL80211_ATTR_WIPHY_FREQ, %NL80211_ATTR_CONTROL_PORT,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *	%NL80211_ATTR_CONTROL_PORT_ETHERTYPE and
  *	%NL80211_ATTR_CONTROL_PORT_NO_ENCRYPT.
  *	Background scan period can optionally be
@@ -517,12 +525,15 @@
  *	of PMKSA caching dandidates.
  *
  * @NL80211_CMD_TDLS_OPER: Perform a high-level TDLS command (e.g. link setup).
+<<<<<<< HEAD
  *	In addition, this can be used as an event to request userspace to take
  *	actions on TDLS links (set up a new link or tear down an existing one).
  *	In such events, %NL80211_ATTR_TDLS_OPERATION indicates the requested
  *	operation, %NL80211_ATTR_MAC contains the peer MAC address, and
  *	%NL80211_ATTR_REASON_CODE the reason code to be used (only with
  *	%NL80211_TDLS_TEARDOWN).
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @NL80211_CMD_TDLS_MGMT: Send a TDLS management frame.
  *
  * @NL80211_CMD_UNEXPECTED_FRAME: Used by an application controlling an AP
@@ -557,6 +568,7 @@
  * @NL80211_CMD_SET_NOACK_MAP: sets a bitmap for the individual TIDs whether
  *      No Acknowledgement Policy should be applied.
  *
+<<<<<<< HEAD
  * @NL80211_CMD_CH_SWITCH_NOTIFY: An AP or GO may decide to switch channels
  *	independently of the userspace SME, send this event indicating
  *	%NL80211_ATTR_IFINDEX is now on %NL80211_ATTR_WIPHY_FREQ and the
@@ -637,6 +649,8 @@
  *	(&struct nl80211_vendor_cmd_info) of the supported vendor commands.
  *	This may also be sent as an event with the same attributes.
  *
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @NL80211_CMD_MAX: highest used command number
  * @__NL80211_CMD_AFTER_LAST: internal use
  */
@@ -778,6 +792,7 @@ enum nl80211_commands {
 
 	NL80211_CMD_SET_NOACK_MAP,
 
+<<<<<<< HEAD
 
 	NL80211_CMD_CH_SWITCH_NOTIFY,
 
@@ -807,6 +822,8 @@ enum nl80211_commands {
 
 	NL80211_CMD_VENDOR,
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* add new commands above here */
 
 	/* used to define NL80211_CMD_MAX below */
@@ -1007,7 +1024,11 @@ enum nl80211_commands {
  * @NL80211_ATTR_USE_MFP: Whether management frame protection (IEEE 802.11w) is
  *	used for the association (&enum nl80211_mfp, represented as a u32);
  *	this attribute can be used
+<<<<<<< HEAD
  *	with %NL80211_CMD_ASSOCIATE and %NL80211_CMD_CONNECT requests
+=======
+ *	with %NL80211_CMD_ASSOCIATE request
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * @NL80211_ATTR_STA_FLAGS2: Attribute containing a
  *	&struct nl80211_sta_flag_update.
@@ -1333,6 +1354,7 @@ enum nl80211_commands {
  * @NL80211_ATTR_BG_SCAN_PERIOD: Background scan period in seconds
  *      or 0 to disable background scan.
  *
+<<<<<<< HEAD
  * @NL80211_ATTR_USER_REG_HINT_TYPE: type of regulatory hint passed from
  *	userspace. If unset it is assumed the hint comes directly from
  *	a user. If set code could specify exactly what type of source
@@ -1446,6 +1468,8 @@ enum nl80211_commands {
  * @NL80211_ATTR_VENDOR_EVENTS: used for event list advertising in the wiphy
  *	info, containing a nested array of possible events
  *
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @NL80211_ATTR_MAX: highest attribute number currently defined
  * @__NL80211_ATTR_AFTER_LAST: internal use
  */
@@ -1697,6 +1721,7 @@ enum nl80211_attrs {
 
 	NL80211_ATTR_BG_SCAN_PERIOD,
 
+<<<<<<< HEAD
 	NL80211_ATTR_WDEV,
 
 	NL80211_ATTR_USER_REG_HINT_TYPE,
@@ -1773,6 +1798,8 @@ enum nl80211_attrs {
 
 	NL80211_ATTR_VENDOR_EVENTS,
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* add attributes here, update the policy in nl80211.c */
 
 	__NL80211_ATTR_AFTER_LAST,
@@ -1816,9 +1843,14 @@ enum nl80211_attrs {
 #define NL80211_TKIP_DATA_OFFSET_TX_MIC_KEY	16
 #define NL80211_TKIP_DATA_OFFSET_RX_MIC_KEY	24
 #define NL80211_HT_CAPABILITY_LEN		26
+<<<<<<< HEAD
 #define NL80211_VHT_CAPABILITY_LEN		12
 
 #define NL80211_MAX_NR_CIPHER_SUITES		6
+=======
+
+#define NL80211_MAX_NR_CIPHER_SUITES		5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define NL80211_MAX_NR_AKM_SUITES		2
 
 /**
@@ -1916,6 +1948,7 @@ struct nl80211_sta_flag_update {
  * @__NL80211_RATE_INFO_INVALID: attribute number 0 is reserved
  * @NL80211_RATE_INFO_BITRATE: total bitrate (u16, 100kbit/s)
  * @NL80211_RATE_INFO_MCS: mcs index for 802.11n (u8)
+<<<<<<< HEAD
  * @NL80211_RATE_INFO_40_MHZ_WIDTH: 40 MHz dualchannel bitrate
  * @NL80211_RATE_INFO_SHORT_GI: 400ns guard interval
  * @NL80211_RATE_INFO_MAX: highest rate_info number currently defined
@@ -1924,6 +1957,11 @@ struct nl80211_sta_flag_update {
  * @NL80211_RATE_INFO_80_MHZ_WIDTH: 80 MHz VHT rate
  * @NL80211_RATE_INFO_80P80_MHZ_WIDTH: 80+80 MHz VHT rate
  * @NL80211_RATE_INFO_160_MHZ_WIDTH: 160 MHz VHT rate
+=======
+ * @NL80211_RATE_INFO_40_MHZ_WIDTH: 40 Mhz dualchannel bitrate
+ * @NL80211_RATE_INFO_SHORT_GI: 400ns guard interval
+ * @NL80211_RATE_INFO_MAX: highest rate_info number currently defined
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @__NL80211_RATE_INFO_AFTER_LAST: internal use
  */
 enum nl80211_rate_info {
@@ -1932,11 +1970,14 @@ enum nl80211_rate_info {
 	NL80211_RATE_INFO_MCS,
 	NL80211_RATE_INFO_40_MHZ_WIDTH,
 	NL80211_RATE_INFO_SHORT_GI,
+<<<<<<< HEAD
 	NL80211_RATE_INFO_VHT_MCS,
 	NL80211_RATE_INFO_VHT_NSS,
 	NL80211_RATE_INFO_80_MHZ_WIDTH,
 	NL80211_RATE_INFO_80P80_MHZ_WIDTH,
 	NL80211_RATE_INFO_160_MHZ_WIDTH,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* keep last */
 	__NL80211_RATE_INFO_AFTER_LAST,
@@ -2095,9 +2136,12 @@ enum nl80211_mpath_info {
  * @NL80211_BAND_ATTR_HT_CAPA: HT capabilities, as in the HT information IE
  * @NL80211_BAND_ATTR_HT_AMPDU_FACTOR: A-MPDU factor, as in 11n
  * @NL80211_BAND_ATTR_HT_AMPDU_DENSITY: A-MPDU density, as in 11n
+<<<<<<< HEAD
  * @NL80211_BAND_ATTR_VHT_MCS_SET: 32-byte attribute containing the MCS set as
  *	defined in 802.11ac
  * @NL80211_BAND_ATTR_VHT_CAPA: VHT capabilities, as in the HT information IE
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * @NL80211_BAND_ATTR_MAX: highest band attribute currently defined
  * @__NL80211_BAND_ATTR_AFTER_LAST: internal use
  */
@@ -2111,9 +2155,12 @@ enum nl80211_band_attr {
 	NL80211_BAND_ATTR_HT_AMPDU_FACTOR,
 	NL80211_BAND_ATTR_HT_AMPDU_DENSITY,
 
+<<<<<<< HEAD
 	NL80211_BAND_ATTR_VHT_MCS_SET,
 	NL80211_BAND_ATTR_VHT_CAPA,
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* keep last */
 	__NL80211_BAND_ATTR_AFTER_LAST,
 	NL80211_BAND_ATTR_MAX = __NL80211_BAND_ATTR_AFTER_LAST - 1
@@ -2699,7 +2746,10 @@ enum nl80211_mfp {
 enum nl80211_wpa_versions {
 	NL80211_WPA_VERSION_1 = 1 << 0,
 	NL80211_WPA_VERSION_2 = 1 << 1,
+<<<<<<< HEAD
 	NL80211_WAPI_VERSION_1 = 1 << 2,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /**
@@ -3188,6 +3238,7 @@ enum nl80211_probe_resp_offload_support_attr {
 	NL80211_PROBE_RESP_OFFLOAD_SUPPORT_80211U =	1<<3,
 };
 
+<<<<<<< HEAD
 /**
  * enum nl80211_connect_failed_reason - connection request failed reasons
  * @NL80211_CONN_FAIL_MAX_CLIENTS: Maximum number of clients that can be
@@ -3257,4 +3308,6 @@ struct nl80211_vendor_cmd_info {
 	__u32 subcmd;
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif /* __LINUX_NL80211_H */

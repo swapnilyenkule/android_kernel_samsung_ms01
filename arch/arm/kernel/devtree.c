@@ -26,6 +26,7 @@
 
 void __init early_init_dt_add_memory_arch(u64 base, u64 size)
 {
+<<<<<<< HEAD
 #ifndef CONFIG_ARM_LPAE
 	if (base > ((phys_addr_t)~0)) {
 		pr_crit("Ignoring memory at 0x%08llx due to lack of LPAE support\n",
@@ -38,6 +39,8 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
 
 	/* arm_add_memory() already checks for the case of base + size > 4GB */
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	arm_add_memory(base, size);
 }
 

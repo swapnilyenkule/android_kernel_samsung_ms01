@@ -874,23 +874,45 @@ static void pcie_shutdown_notification(struct controller *ctrl)
 static int pcie_init_slot(struct controller *ctrl)
 {
 	struct slot *slot;
+<<<<<<< HEAD
+=======
+	char name[32];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	slot = kzalloc(sizeof(*slot), GFP_KERNEL);
 	if (!slot)
 		return -ENOMEM;
 
+<<<<<<< HEAD
+=======
+	snprintf(name, sizeof(name), "pciehp-%u", PSN(ctrl));
+	slot->wq = alloc_workqueue(name, 0, 0);
+	if (!slot->wq)
+		goto abort;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	slot->ctrl = ctrl;
 	mutex_init(&slot->lock);
 	INIT_DELAYED_WORK(&slot->work, pciehp_queue_pushbutton_work);
 	ctrl->slot = slot;
 	return 0;
+<<<<<<< HEAD
+=======
+abort:
+	kfree(slot);
+	return -ENOMEM;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void pcie_cleanup_slot(struct controller *ctrl)
 {
 	struct slot *slot = ctrl->slot;
 	cancel_delayed_work(&slot->work);
+<<<<<<< HEAD
 	flush_workqueue(pciehp_wq);
+=======
+	destroy_workqueue(slot->wq);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	kfree(slot);
 }
 

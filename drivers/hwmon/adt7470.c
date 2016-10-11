@@ -215,7 +215,11 @@ static inline int adt7470_write_word_data(struct i2c_client *client, u8 reg,
 					  u16 value)
 {
 	return i2c_smbus_write_byte_data(client, reg, value & 0xFF)
+<<<<<<< HEAD
 	       && i2c_smbus_write_byte_data(client, reg + 1, value >> 8);
+=======
+	       || i2c_smbus_write_byte_data(client, reg + 1, value >> 8);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static void adt7470_init_client(struct i2c_client *client)

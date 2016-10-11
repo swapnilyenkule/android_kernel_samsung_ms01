@@ -81,7 +81,10 @@ __setup("fpe=", fpe_setup);
 extern void paging_init(struct machine_desc *desc);
 extern void sanity_check_meminfo(void);
 extern void reboot_setup(char *str);
+<<<<<<< HEAD
 extern void setup_dma_zone(struct machine_desc *desc);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 unsigned int processor_id;
 EXPORT_SYMBOL(processor_id);
@@ -104,11 +107,14 @@ EXPORT_SYMBOL(system_serial_high);
 unsigned int elf_hwcap __read_mostly;
 EXPORT_SYMBOL(elf_hwcap);
 
+<<<<<<< HEAD
 unsigned int boot_reason;
 EXPORT_SYMBOL(boot_reason);
 
 unsigned int cold_boot;
 EXPORT_SYMBOL(cold_boot);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef MULTI_CPU
 struct processor processor __read_mostly;
@@ -150,11 +156,14 @@ static const char *machine_name;
 static char __initdata cmd_line[COMMAND_LINE_SIZE];
 struct machine_desc *machine_desc __initdata;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 const char *unit_name;
 EXPORT_SYMBOL(unit_name);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static char default_command_line[COMMAND_LINE_SIZE] __initdata = CONFIG_CMDLINE;
 static union { char c[4]; unsigned long l; } endian_test __initdata = { { 'l', '?', '?', 'b' } };
 #define ENDIANNESS ((char)endian_test.l)
@@ -518,7 +527,11 @@ void __init dump_machine_table(void)
 		/* can't use cpu_relax() here as it may require MMU setup */;
 }
 
+<<<<<<< HEAD
 int __init arm_add_memory(phys_addr_t start, phys_addr_t size)
+=======
+int __init arm_add_memory(phys_addr_t start, unsigned long size)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct membank *bank = &meminfo.bank[meminfo.nr_banks];
 
@@ -548,7 +561,11 @@ int __init arm_add_memory(phys_addr_t start, phys_addr_t size)
 	}
 #endif
 
+<<<<<<< HEAD
 	bank->size = size & ~(phys_addr_t)(PAGE_SIZE - 1);
+=======
+	bank->size = size & PAGE_MASK;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * Check whether this memory region has non-zero size or
@@ -568,7 +585,11 @@ int __init arm_add_memory(phys_addr_t start, phys_addr_t size)
 static int __init early_mem(char *p)
 {
 	static int usermem __initdata = 0;
+<<<<<<< HEAD
 	phys_addr_t size;
+=======
+	unsigned long size;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	phys_addr_t start;
 	char *endp;
 
@@ -593,6 +614,7 @@ static int __init early_mem(char *p)
 }
 early_param("mem", early_mem);
 
+<<<<<<< HEAD
 static int __init msm_hw_rev_setup(char *p)
 {
 	system_rev = memparse(p, NULL);
@@ -600,6 +622,8 @@ static int __init msm_hw_rev_setup(char *p)
 }
 early_param("samsung.board_rev", msm_hw_rev_setup);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void __init
 setup_ramdisk(int doload, int prompt, int image_start, unsigned int rd_sz)
 {
@@ -735,6 +759,7 @@ static int __init parse_tag_serialnr(const struct tag *tag)
 
 __tagtable(ATAG_SERIAL, parse_tag_serialnr);
 
+<<<<<<< HEAD
 static int __init msm_serialnr_setup(char *p)
 {
 #ifdef CONFIG_EXTEND_SERIAL_NUM_16
@@ -751,6 +776,8 @@ static int __init msm_serialnr_setup(char *p)
 }
 early_param("androidboot.serialno", msm_serialnr_setup);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int __init parse_tag_revision(const struct tag *tag)
 {
 	system_rev = tag->u.revision.rev;
@@ -972,12 +999,22 @@ void __init setup_arch(char **cmdline_p)
 		mdesc = setup_machine_tags(machine_arch_type);
 	machine_desc = mdesc;
 	machine_name = mdesc->name;
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_SUBSYS
 	unit_name = machine_name;
 #endif
 
 	setup_dma_zone(mdesc);
 
+=======
+
+#ifdef CONFIG_ZONE_DMA
+	if (mdesc->dma_zone_size) {
+		extern unsigned long arm_dma_zone_size;
+		arm_dma_zone_size = mdesc->dma_zone_size;
+	}
+#endif
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (mdesc->restart_mode)
 		reboot_setup(&mdesc->restart_mode);
 
@@ -992,9 +1029,12 @@ void __init setup_arch(char **cmdline_p)
 
 	parse_early_param();
 
+<<<<<<< HEAD
 	if (mdesc->init_very_early)
 		mdesc->init_very_early();
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	sort(&meminfo.bank, meminfo.nr_banks, sizeof(meminfo.bank[0]), meminfo_cmp, NULL);
 	sanity_check_meminfo();
 	arm_memblock_init(&meminfo, mdesc);
@@ -1008,10 +1048,15 @@ void __init setup_arch(char **cmdline_p)
 	unflatten_device_tree();
 
 #ifdef CONFIG_SMP
+<<<<<<< HEAD
 	if (is_smp()) {
 		smp_set_ops(mdesc->smp);
 		smp_init_cpus();
 	}
+=======
+	if (is_smp())
+		smp_init_cpus();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 	reserve_crashkernel();
 
@@ -1092,7 +1137,11 @@ static int c_show(struct seq_file *m, void *v)
 		   cpu_name, read_cpuid_id() & 15, elf_platform);
 
 #if defined(CONFIG_SMP)
+<<<<<<< HEAD
 	for_each_present_cpu(i) {
+=======
+	for_each_online_cpu(i) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		/*
 		 * glibc reads /proc/cpuinfo to determine the number of
 		 * online processors, looking for lines beginning with

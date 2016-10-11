@@ -254,6 +254,10 @@ __create_page_tables:
 	/*
 	 * Then map boot params address in r2 or the first 1MB (2MB with LPAE)
 	 * of ram if boot params address is not specified.
+<<<<<<< HEAD
+=======
+	 * We map 2 sections in case the ATAGs/DTB crosses a section boundary.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	 */
 	mov	r0, r2, lsr #SECTION_SHIFT
 	movs	r0, r0, lsl #SECTION_SHIFT
@@ -262,6 +266,11 @@ __create_page_tables:
 	add	r3, r3, #PAGE_OFFSET
 	add	r3, r4, r3, lsr #(SECTION_SHIFT - PMD_ORDER)
 	orr	r6, r7, r0
+<<<<<<< HEAD
+=======
+	str	r6, [r3], #1 << PMD_ORDER
+	add	r6, r6, #1 << SECTION_SHIFT
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	str	r6, [r3]
 
 #ifdef CONFIG_DEBUG_LL
@@ -426,6 +435,7 @@ __enable_mmu:
 		      domain_val(DOMAIN_KERNEL, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_TABLE, DOMAIN_MANAGER) | \
 		      domain_val(DOMAIN_IO, DOMAIN_CLIENT))
+<<<<<<< HEAD
 #ifdef	CONFIG_TIMA_RKP_30
 #ifndef CONFIG_TIMA_RKP_EMUL_CP15_INSTR
 	mcr	p15, 0, r5, c3, c0, 0		@ load domain access register
@@ -446,6 +456,10 @@ __enable_mmu:
 	mcr	p15, 0, r5, c3, c0, 0		@ load domain access register
 	mcr	p15, 0, r4, c2, c0, 0		@ load page table pointer
 #endif  /* CONFIG_TIMA_RKP_30 */
+=======
+	mcr	p15, 0, r5, c3, c0, 0		@ load domain access register
+	mcr	p15, 0, r4, c2, c0, 0		@ load page table pointer
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif
 	b	__turn_mmu_on
 ENDPROC(__enable_mmu)
@@ -473,6 +487,7 @@ ENTRY(__turn_mmu_on)
 	mrc	p15, 0, r3, c0, c0, 0		@ read id reg
 	instr_sync
 	mov	r3, r3
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MSM_KRAIT
 	movw	r3, 0xfc00
 	movt	r3, 0xff00
@@ -484,6 +499,8 @@ ENTRY(__turn_mmu_on)
 	biceq	r3, r3, #0x400
 	mcreq	p15, 7, r3, c15, c0, 2
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mov	r3, r13
 	mov	pc, r3
 __turn_mmu_on_end:

@@ -407,8 +407,14 @@ struct dt282x_private {
 			}					\
 			udelay(5);				\
 		}						\
+<<<<<<< HEAD
 		if (_i)						\
 			b					\
+=======
+		if (_i) {					\
+			b					\
+		}						\
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} while (0)
 
 static int dt282x_attach(struct comedi_device *dev,

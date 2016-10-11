@@ -27,6 +27,7 @@
 #include <linux/slab.h>
 #include <linux/fips.h>
 
+<<<<<<< HEAD
 /*
  * Use this only for FIPS Functional Test with CMT Lab.
  * FIPS_FUNC_TEST 1 will make self algorithm test (ecb aes) fail
@@ -48,6 +49,8 @@
 #define FIPS_FUNC_TEST 0
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Crypto notification events. */
 enum {
 	CRYPTO_MSG_ALG_REQUEST,
@@ -72,6 +75,7 @@ extern struct rw_semaphore crypto_alg_sem;
 extern struct blocking_notifier_head crypto_chain;
 
 #ifdef CONFIG_PROC_FS
+<<<<<<< HEAD
 
 #ifdef CONFIG_CRYPTO_FIPS
 bool in_fips_err(void);
@@ -82,6 +86,9 @@ int testmgr_crypto_proc_init(void);
 #else
 void __init crypto_init_proc(void);
 #endif
+=======
+void __init crypto_init_proc(void);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void __exit crypto_exit_proc(void);
 #else
 static inline void crypto_init_proc(void)

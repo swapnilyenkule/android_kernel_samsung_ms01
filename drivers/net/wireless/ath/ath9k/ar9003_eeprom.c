@@ -3592,7 +3592,11 @@ static u16 ar9003_hw_ant_ctrl_chain_get(struct ath_hw *ah,
 static void ar9003_hw_ant_ctrl_apply(struct ath_hw *ah, bool is2ghz)
 {
 	int chain;
+<<<<<<< HEAD
 	u32 regval;
+=======
+	u32 regval, value;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	u32 ant_div_ctl1;
 	static const u32 switch_chain_reg[AR9300_MAX_CHAINS] = {
 			AR_PHY_SWITCH_CHAIN_0,
@@ -3600,7 +3604,15 @@ static void ar9003_hw_ant_ctrl_apply(struct ath_hw *ah, bool is2ghz)
 			AR_PHY_SWITCH_CHAIN_2,
 	};
 
+<<<<<<< HEAD
 	u32 value = ar9003_hw_ant_ctrl_common_get(ah, is2ghz);
+=======
+	if (AR_SREV_9485(ah) && (ar9003_hw_get_rx_gain_idx(ah) == 0))
+		ath9k_hw_cfg_output(ah, AR9300_EXT_LNA_CTL_GPIO_AR9485,
+				    AR_GPIO_OUTPUT_MUX_AS_PCIE_ATTENTION_LED);
+
+	value = ar9003_hw_ant_ctrl_common_get(ah, is2ghz);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (AR_SREV_9462(ah)) {
 		REG_RMW_FIELD(ah, AR_PHY_SWITCH_COM,

@@ -1279,6 +1279,11 @@ restart:
 				}
 				spin_unlock(&state->state_lock);
 				nfs4_put_open_state(state);
+<<<<<<< HEAD
+=======
+				clear_bit(NFS_STATE_RECLAIM_NOGRACE,
+					&state->flags);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				goto restart;
 			}
 		}
@@ -1298,6 +1303,7 @@ restart:
 				/* Mark the file as being 'closed' */
 				state->state = 0;
 				break;
+<<<<<<< HEAD
 			case -EKEYEXPIRED:
 				/*
 				 * User RPCSEC_GSS context has expired.
@@ -1306,6 +1312,8 @@ restart:
 				 * proceed.
 				 */
 				break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			case -NFS4ERR_ADMIN_REVOKED:
 			case -NFS4ERR_STALE_STATEID:
 			case -NFS4ERR_BAD_STATEID:
@@ -1458,6 +1466,7 @@ static void nfs4_state_start_reclaim_nograce(struct nfs_client *clp)
 	nfs4_state_mark_reclaim_helper(clp, nfs4_state_mark_reclaim_nograce);
 }
 
+<<<<<<< HEAD
 static void nfs4_warn_keyexpired(const char *s)
 {
 	printk_ratelimited(KERN_WARNING "Error: state manager"
@@ -1466,6 +1475,8 @@ static void nfs4_warn_keyexpired(const char *s)
 			s);
 }
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int nfs4_recovery_handle_error(struct nfs_client *clp, int error)
 {
 	switch (error) {
@@ -1497,10 +1508,13 @@ static int nfs4_recovery_handle_error(struct nfs_client *clp, int error)
 			set_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state);
 			/* Zero session reset errors */
 			break;
+<<<<<<< HEAD
 		case -EKEYEXPIRED:
 			/* Nothing we can do */
 			nfs4_warn_keyexpired(clp->cl_hostname);
 			break;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		default:
 			return error;
 	}
@@ -1535,7 +1549,12 @@ restart:
 			if (status < 0) {
 				set_bit(ops->owner_flag_bit, &sp->so_flags);
 				nfs4_put_state_owner(sp);
+<<<<<<< HEAD
 				return nfs4_recovery_handle_error(clp, status);
+=======
+				status = nfs4_recovery_handle_error(clp, status);
+				return (status != 0) ? status : -EAGAIN;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			}
 
 			nfs4_put_state_owner(sp);
@@ -1544,7 +1563,11 @@ restart:
 		spin_unlock(&clp->cl_lock);
 	}
 	rcu_read_unlock();
+<<<<<<< HEAD
 	return status;
+=======
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static int nfs4_check_lease(struct nfs_client *clp)
@@ -1671,8 +1694,23 @@ static int nfs4_reset_session(struct nfs_client *clp)
 
 	nfs4_begin_drain_session(clp);
 	status = nfs4_proc_destroy_session(clp->cl_session);
+<<<<<<< HEAD
 	if (status && status != -NFS4ERR_BADSESSION &&
 	    status != -NFS4ERR_DEADSESSION) {
+=======
+	switch (status) {
+	case 0:
+	case -NFS4ERR_BADSESSION:
+	case -NFS4ERR_DEADSESSION:
+		break;
+	case -NFS4ERR_BACK_CHAN_BUSY:
+	case -NFS4ERR_DELAY:
+		set_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state);
+		status = 0;
+		ssleep(1);
+		goto out;
+	default:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		status = nfs4_recovery_handle_error(clp, status);
 		goto out;
 	}
@@ -1745,7 +1783,10 @@ static void nfs4_set_lease_expired(struct nfs_client *clp, int status)
 		break;
 
 	case -EKEYEXPIRED:
+<<<<<<< HEAD
 		nfs4_warn_keyexpired(clp->cl_hostname);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	case -NFS4ERR_NOT_SAME: /* FixMe: implement recovery
 				 * in nfs4_exchange_id */
 	default:
@@ -1807,6 +1848,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
 		if (test_bit(NFS4CLNT_RECLAIM_REBOOT, &clp->cl_state)) {
 			status = nfs4_do_reclaim(clp,
 				clp->cl_mvops->reboot_recovery_ops);
+<<<<<<< HEAD
 			if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state) ||
 			    test_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state))
 				continue;
@@ -1815,15 +1857,26 @@ static void nfs4_state_manager(struct nfs_client *clp)
 				continue;
 			if (status < 0)
 				goto out_error;
+=======
+			if (status == -EAGAIN)
+				continue;
+			if (status < 0)
+				goto out_error;
+			nfs4_state_end_reclaim_reboot(clp);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 		/* Now recover expired state... */
 		if (test_and_clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state)) {
 			status = nfs4_do_reclaim(clp,
 				clp->cl_mvops->nograce_recovery_ops);
+<<<<<<< HEAD
 			if (test_bit(NFS4CLNT_LEASE_EXPIRED, &clp->cl_state) ||
 			    test_bit(NFS4CLNT_SESSION_RESET, &clp->cl_state) ||
 			    test_bit(NFS4CLNT_RECLAIM_REBOOT, &clp->cl_state))
+=======
+			if (status == -EAGAIN)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				continue;
 			if (status < 0)
 				goto out_error;

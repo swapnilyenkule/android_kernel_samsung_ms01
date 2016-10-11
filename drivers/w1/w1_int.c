@@ -32,11 +32,14 @@
 #include "w1_netlink.h"
 #include "w1_int.h"
 
+<<<<<<< HEAD
 
 #ifdef CONFIG_W1_WORKQUEUE
 struct w1_master *w1_gdev;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int w1_search_count = -1; /* Default is continual scan */
 module_param_named(search_count, w1_search_count, int, 0);
 
@@ -166,6 +169,7 @@ int w1_add_master_device(struct w1_bus_master *master)
 
 	dev->initialized = 1;
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_WORKQUEUE
 	pr_info("%s : W1 workqueue will start\n", __func__);
 	INIT_DELAYED_WORK(&dev->w1_dwork, w1_work);
@@ -173,6 +177,8 @@ int w1_add_master_device(struct w1_bus_master *master)
 	schedule_delayed_work(&dev->w1_dwork, HZ / 20);
 #else
 	pr_info("%s : W1 thread will start\n", __func__);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->thread = kthread_run(&w1_process, dev, "%s", dev->name);
 	if (IS_ERR(dev->thread)) {
 		retval = PTR_ERR(dev->thread);
@@ -182,7 +188,11 @@ int w1_add_master_device(struct w1_bus_master *master)
 		mutex_unlock(&w1_mlock);
 		goto err_out_rm_attr;
 	}
+<<<<<<< HEAD
 #endif
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	list_add(&dev->w1_master_entry, &w1_masters);
 	mutex_unlock(&w1_mlock);
 
@@ -191,20 +201,28 @@ int w1_add_master_device(struct w1_bus_master *master)
 	msg.type = W1_MASTER_ADD;
 	w1_netlink_send(dev, &msg);
 
+<<<<<<< HEAD
 #ifdef CONFIG_W1_WORKQUEUE
 	w1_gdev = dev;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 
 #if 0 /* Thread cleanup code, not required currently. */
 err_out_kill_thread:
 	kthread_stop(dev->thread);
 #endif
+<<<<<<< HEAD
 #ifndef CONFIG_W1_WORKQUEUE
 err_out_rm_attr:
 	w1_destroy_master_attributes(dev);
 #endif
+=======
+err_out_rm_attr:
+	w1_destroy_master_attributes(dev);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 err_out_free_dev:
 	w1_free_dev(dev);
 

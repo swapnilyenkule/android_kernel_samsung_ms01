@@ -1761,7 +1761,11 @@ static struct dst_entry *make_blackhole(struct net *net, u16 family,
 
 	if (!afinfo) {
 		dst_release(dst_orig);
+<<<<<<< HEAD
 		ret = ERR_PTR(-EINVAL);
+=======
+		return ERR_PTR(-EINVAL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else {
 		ret = afinfo->blackhole_route(net, dst_orig);
 	}
@@ -1919,6 +1923,12 @@ no_transform:
 	}
 ok:
 	xfrm_pols_put(pols, drop_pols);
+<<<<<<< HEAD
+=======
+	if (dst && dst->xfrm &&
+	    dst->xfrm->props.mode == XFRM_MODE_TUNNEL)
+		dst->flags |= DST_XFRM_TUNNEL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return dst;
 
 nopol:

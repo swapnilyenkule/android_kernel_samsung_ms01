@@ -1194,7 +1194,11 @@ static inline int needs_idle_maps(void)
 	/* Query intel_iommu to see if we need the workaround. Presumably that
 	 * was loaded first.
 	 */
+<<<<<<< HEAD
 	if ((gpu_devid == PCI_DEVICE_ID_INTEL_IRONLAKE_M_HB ||
+=======
+	if ((gpu_devid == PCI_DEVICE_ID_INTEL_IRONLAKE_D_IG ||
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	     gpu_devid == PCI_DEVICE_ID_INTEL_IRONLAKE_M_IG) &&
 	     intel_iommu_gfx_mapped)
 		return 1;

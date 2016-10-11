@@ -436,6 +436,7 @@ slower clock delays the rising edge of SCK, and the I2C master adjusts its
 signaling rate accordingly.
 
 
+<<<<<<< HEAD
 GPIO controllers and the pinctrl subsystem
 ------------------------------------------
 
@@ -478,6 +479,8 @@ exact name string of pinctrl device has to be passed as one of the
 argument to this routine.
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 What do these conventions omit?
 ===============================
 One of the biggest things these conventions omit is pin multiplexing, since

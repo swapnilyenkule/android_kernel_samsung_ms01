@@ -86,7 +86,10 @@ static int xfrm4_fill_dst(struct xfrm_dst *xdst, struct net_device *dev,
 	xdst->u.rt.rt_iif = fl4->flowi4_iif;
 	xdst->u.rt.rt_oif = fl4->flowi4_oif;
 	xdst->u.rt.rt_mark = fl4->flowi4_mark;
+<<<<<<< HEAD
 	xdst->u.rt.rt_uid = fl4->flowi4_uid;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	xdst->u.dst.dev = dev;
 	dev_hold(dev);

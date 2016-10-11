@@ -101,6 +101,10 @@
 #define E1000_RXD_ERR_SEQ       0x04    /* Sequence Error */
 #define E1000_RXD_ERR_CXE       0x10    /* Carrier Extension Error */
 #define E1000_RXD_ERR_TCPE      0x20    /* TCP/UDP Checksum Error */
+<<<<<<< HEAD
+=======
+#define E1000_RXD_ERR_IPE       0x40    /* IP Checksum Error */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define E1000_RXD_ERR_RXE       0x80    /* Rx Data Error */
 #define E1000_RXD_SPC_VLAN_MASK 0x0FFF  /* VLAN ID is in lower 12 bits */
 

@@ -184,9 +184,15 @@ static void do_catch_up(struct spk_synth *synth)
 	int full_time_val;
 	int jiffy_delta_val;
 
+<<<<<<< HEAD
 	jiffy_delta = get_var(JIFFY);
 	delay_time = get_var(DELAY);
 	full_time = get_var(FULL);
+=======
+	jiffy_delta = spk_get_var(JIFFY);
+	delay_time = spk_get_var(DELAY);
+	full_time = spk_get_var(FULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 spk_lock(flags);
 	jiffy_delta_val = jiffy_delta->u.n.value;
 	spk_unlock(flags);

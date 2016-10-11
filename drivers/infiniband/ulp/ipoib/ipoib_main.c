@@ -148,7 +148,11 @@ static int ipoib_stop(struct net_device *dev)
 
 	netif_stop_queue(dev);
 
+<<<<<<< HEAD
 	ipoib_ib_dev_down(dev, 0);
+=======
+	ipoib_ib_dev_down(dev, 1);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ipoib_ib_dev_stop(dev, 0);
 
 	if (!test_bit(IPOIB_FLAG_SUBINTERFACE, &priv->flags)) {

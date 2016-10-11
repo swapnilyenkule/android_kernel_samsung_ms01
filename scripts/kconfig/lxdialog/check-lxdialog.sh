@@ -38,7 +38,11 @@ trap "rm -f $tmp" 0 1 2 3 15
 
 # Check if we can link to ncurses
 check() {
+<<<<<<< HEAD
         $cc -xc - -o $tmp 2>/dev/null <<'EOF'
+=======
+        $cc -x c - -o $tmp 2>/dev/null <<'EOF'
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include CURSES_LOC
 main() {}
 EOF

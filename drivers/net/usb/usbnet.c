@@ -86,10 +86,13 @@ static u8	node_id [ETH_ALEN];
 
 static const char driver_name [] = "usbnet";
 
+<<<<<<< HEAD
 struct workqueue_struct	*usbnet_wq;
 
 static DECLARE_WAIT_QUEUE_HEAD(unlink_wakeup);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* use ethtool to change the level for any given device */
 static int msg_level = -1;
 module_param (msg_level, int, 0);
@@ -236,9 +239,13 @@ void usbnet_skb_return (struct usbnet *dev, struct sk_buff *skb)
 		return;
 	}
 
+<<<<<<< HEAD
 	if (!skb->protocol)
 		skb->protocol = eth_type_trans(skb, dev->net);
 
+=======
+	skb->protocol = eth_type_trans (skb, dev->net);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dev->net->stats.rx_packets++;
 	dev->net->stats.rx_bytes += skb->len;
 
@@ -249,7 +256,11 @@ void usbnet_skb_return (struct usbnet *dev, struct sk_buff *skb)
 	if (skb_defer_rx_timestamp(skb))
 		return;
 
+<<<<<<< HEAD
 	status = netif_rx_ni(skb);
+=======
+	status = netif_rx (skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (status != NET_RX_SUCCESS)
 		netif_dbg(dev, rx_err, dev->net,
 			  "netif_rx status %d\n", status);
@@ -319,7 +330,11 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
 	spin_lock(&dev->done.lock);
 	__skb_queue_tail(&dev->done, skb);
 	if (dev->done.qlen == 1)
+<<<<<<< HEAD
 		queue_work(usbnet_wq, &dev->bh_w);
+=======
+		tasklet_schedule(&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	spin_unlock_irqrestore(&dev->done.lock, flags);
 	return old_state;
 }
@@ -332,22 +347,37 @@ static enum skb_state defer_bh(struct usbnet *dev, struct sk_buff *skb,
 void usbnet_defer_kevent (struct usbnet *dev, int work)
 {
 	set_bit (work, &dev->flags);
+<<<<<<< HEAD
 	if (!schedule_work (&dev->kevent)) {
 		if (net_ratelimit())
 			netdev_err(dev->net, "kevent %d may have been dropped\n", work);
 	} else {
 		netdev_dbg(dev->net, "kevent %d scheduled\n", work);
 	}
+=======
+	if (!schedule_work (&dev->kevent))
+		netdev_err(dev->net, "kevent %d may have been dropped\n", work);
+	else
+		netdev_dbg(dev->net, "kevent %d scheduled\n", work);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
 
 /*-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
+=======
+static void rx_complete (struct urb *urb);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 {
 	struct sk_buff		*skb;
 	struct skb_data		*entry;
+<<<<<<< HEAD
 	usb_complete_t		complete_fn;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int			retval = 0;
 	unsigned long		lockflags;
 	size_t			size = dev->rx_urb_size;
@@ -365,6 +395,7 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 	entry->dev = dev;
 	entry->length = 0;
 
+<<<<<<< HEAD
 	if (dev->driver_info->rx_complete)
 		complete_fn = dev->driver_info->rx_complete;
 	else
@@ -372,6 +403,10 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 
 	usb_fill_bulk_urb (urb, dev->udev, dev->in,
 		skb->data, size, complete_fn, skb);
+=======
+	usb_fill_bulk_urb (urb, dev->udev, dev->in,
+		skb->data, size, rx_complete, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	spin_lock_irqsave (&dev->rxq.lock, lockflags);
 
@@ -396,10 +431,16 @@ static int rx_submit (struct usbnet *dev, struct urb *urb, gfp_t flags)
 		default:
 			netif_dbg(dev, rx_err, dev->net,
 				  "rx submit, %d\n", retval);
+<<<<<<< HEAD
 			queue_work(usbnet_wq, &dev->bh_w);
 			break;
 		case 0:
 			usb_mark_last_busy(dev->udev);
+=======
+			tasklet_schedule (&dev->bh);
+			break;
+		case 0:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			__usbnet_queue_skb(&dev->rxq, skb, rx_start);
 		}
 	} else {
@@ -428,6 +469,7 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
 	}
 	// else network stack removes extra byte if we forced a short packet
 
+<<<<<<< HEAD
 	if (skb->len) {
 		/* all data was already cloned from skb inside the driver */
 		if (dev->driver_info->flags & FLAG_MULTI_PACKET)
@@ -439,13 +481,32 @@ static inline void rx_process (struct usbnet *dev, struct sk_buff *skb)
 
 	netif_dbg(dev, rx_err, dev->net, "drop\n");
 	dev->net->stats.rx_errors++;
+=======
+	/* all data was already cloned from skb inside the driver */
+	if (dev->driver_info->flags & FLAG_MULTI_PACKET)
+		goto done;
+
+	if (skb->len < ETH_HLEN) {
+		dev->net->stats.rx_errors++;
+		dev->net->stats.rx_length_errors++;
+		netif_dbg(dev, rx_err, dev->net, "rx length %d\n", skb->len);
+	} else {
+		usbnet_skb_return(dev, skb);
+		return;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 done:
 	skb_queue_tail(&dev->done, skb);
 }
 
 /*-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 void rx_complete(struct urb *urb)
+=======
+static void rx_complete (struct urb *urb)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct sk_buff		*skb = (struct sk_buff *) urb->context;
 	struct skb_data		*entry = (struct skb_data *) skb->cb;
@@ -460,6 +521,7 @@ void rx_complete(struct urb *urb)
 	switch (urb_status) {
 	/* success */
 	case 0:
+<<<<<<< HEAD
 		if (skb->len < dev->net->hard_header_len) {
 			state = rx_cleanup;
 			dev->net->stats.rx_errors++;
@@ -467,6 +529,8 @@ void rx_complete(struct urb *urb)
 			netif_dbg(dev, rx_err, dev->net,
 				  "rx length %d\n", skb->len);
 		}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		break;
 
 	/* stalls need manual reset. this is rare ... except that
@@ -531,7 +595,10 @@ block:
 	}
 	netif_dbg(dev, rx_err, dev->net, "no read resubmitted\n");
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL_GPL(rx_complete);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 static void intr_complete (struct urb *urb)
 {
@@ -590,7 +657,11 @@ void usbnet_resume_rx(struct usbnet *dev)
 		num++;
 	}
 
+<<<<<<< HEAD
 	queue_work(usbnet_wq, &dev->bh_w);
+=======
+	tasklet_schedule(&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	netif_dbg(dev, rx_status, dev->net,
 		  "paused rx queue disabled, %d skbs requeued\n", num);
@@ -659,7 +730,11 @@ void usbnet_unlink_rx_urbs(struct usbnet *dev)
 {
 	if (netif_running(dev->net)) {
 		(void) unlink_urbs (dev, &dev->rxq);
+<<<<<<< HEAD
 		queue_work(usbnet_wq, &dev->bh_w);
+=======
+		tasklet_schedule(&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 EXPORT_SYMBOL_GPL(usbnet_unlink_rx_urbs);
@@ -667,8 +742,14 @@ EXPORT_SYMBOL_GPL(usbnet_unlink_rx_urbs);
 /*-------------------------------------------------------------------------*/
 
 // precondition: never called in_interrupt
+<<<<<<< HEAD
 void usbnet_terminate_urbs(struct usbnet *dev)
 {
+=======
+static void usbnet_terminate_urbs(struct usbnet *dev)
+{
+	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(unlink_wakeup);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	DECLARE_WAITQUEUE(wait, current);
 	int temp;
 
@@ -692,7 +773,10 @@ void usbnet_terminate_urbs(struct usbnet *dev)
 	dev->wait = NULL;
 	remove_wait_queue(&unlink_wakeup, &wait);
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL_GPL(usbnet_terminate_urbs);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 int usbnet_stop (struct net_device *net)
 {
@@ -733,7 +817,11 @@ int usbnet_stop (struct net_device *net)
 	 */
 	dev->flags = 0;
 	del_timer_sync (&dev->delay);
+<<<<<<< HEAD
 	cancel_work_sync(&dev->bh_w);
+=======
+	tasklet_kill (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (info->manage_power)
 		info->manage_power(dev, 0);
 	else
@@ -806,7 +894,11 @@ int usbnet_open (struct net_device *net)
 		   "simple");
 
 	// delay posting reads until we're fully open
+<<<<<<< HEAD
 	queue_work(usbnet_wq, &dev->bh_w);
+=======
+	tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (info->manage_power) {
 		retval = info->manage_power(dev, 1);
 		if (retval < 0)
@@ -976,7 +1068,11 @@ fail_halt:
 					   status);
 		} else {
 			clear_bit (EVENT_RX_HALT, &dev->flags);
+<<<<<<< HEAD
 			queue_work(usbnet_wq, &dev->bh_w);
+=======
+			tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -1001,7 +1097,11 @@ fail_halt:
 			usb_autopm_put_interface(dev->intf);
 fail_lowmem:
 			if (resched)
+<<<<<<< HEAD
 				queue_work(usbnet_wq, &dev->bh_w);
+=======
+				tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 
@@ -1087,7 +1187,11 @@ void usbnet_tx_timeout (struct net_device *net)
 	struct usbnet		*dev = netdev_priv(net);
 
 	unlink_urbs (dev, &dev->txq);
+<<<<<<< HEAD
 	queue_work(usbnet_wq, &dev->bh_w);
+=======
+	tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	// FIXME: device recovery -- reset?
 }
@@ -1246,7 +1350,11 @@ static void usbnet_bh (unsigned long param)
 	// waiting for all pending urbs to complete?
 	if (dev->wait) {
 		if ((dev->txq.qlen + dev->rxq.qlen + dev->done.qlen) == 0) {
+<<<<<<< HEAD
 			wake_up(&unlink_wakeup);
+=======
+			wake_up (dev->wait);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 
 	// or are we maybe short a few urbs?
@@ -1275,13 +1383,18 @@ static void usbnet_bh (unsigned long param)
 					  "rxqlen %d --> %d\n",
 					  temp, dev->rxq.qlen);
 			if (dev->rxq.qlen < qlen)
+<<<<<<< HEAD
 				queue_work(usbnet_wq, &dev->bh_w);
+=======
+				tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 		if (dev->txq.qlen < TX_QLEN (dev))
 			netif_wake_queue (dev->net);
 	}
 }
 
+<<<<<<< HEAD
 static void usbnet_bh_w(struct work_struct *work)
 {
 	struct usbnet		*dev =
@@ -1290,6 +1403,8 @@ static void usbnet_bh_w(struct work_struct *work)
 
 	usbnet_bh(param);
 }
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*-------------------------------------------------------------------------
  *
@@ -1410,7 +1525,12 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
 	skb_queue_head_init (&dev->txq);
 	skb_queue_head_init (&dev->done);
 	skb_queue_head_init(&dev->rxq_pause);
+<<<<<<< HEAD
 	INIT_WORK(&dev->bh_w, usbnet_bh_w);
+=======
+	dev->bh.func = usbnet_bh;
+	dev->bh.data = (unsigned long) dev;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	INIT_WORK (&dev->kevent, kevent);
 	init_usb_anchor(&dev->deferred);
 	dev->delay.function = usbnet_bh;
@@ -1536,7 +1656,10 @@ int usbnet_suspend (struct usb_interface *intf, pm_message_t message)
 		spin_lock_irq(&dev->txq.lock);
 		/* don't autosuspend while transmitting */
 		if (dev->txq.qlen && PMSG_IS_AUTO(message)) {
+<<<<<<< HEAD
 			dev->suspend_count--;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			spin_unlock_irq(&dev->txq.lock);
 			return -EBUSY;
 		} else {
@@ -1595,7 +1718,11 @@ int usbnet_resume (struct usb_interface *intf)
 		if (test_bit(EVENT_DEV_OPEN, &dev->flags)) {
 			if (!(dev->txq.qlen >= TX_QLEN(dev)))
 				netif_tx_wake_all_queues(dev->net);
+<<<<<<< HEAD
 			queue_work(usbnet_wq, &dev->bh_w);
+=======
+			tasklet_schedule (&dev->bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		}
 	}
 	return 0;
@@ -1612,6 +1739,7 @@ static int __init usbnet_init(void)
 		FIELD_SIZEOF(struct sk_buff, cb) < sizeof(struct skb_data));
 
 	random_ether_addr(node_id);
+<<<<<<< HEAD
 
 	usbnet_wq  = create_singlethread_workqueue("usbnet");
 	if (!usbnet_wq) {
@@ -1619,13 +1747,18 @@ static int __init usbnet_init(void)
 		return -ENOMEM;
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 module_init(usbnet_init);
 
 static void __exit usbnet_exit(void)
 {
+<<<<<<< HEAD
 	destroy_workqueue(usbnet_wq);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 module_exit(usbnet_exit);
 

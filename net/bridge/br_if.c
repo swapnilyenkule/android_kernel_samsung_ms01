@@ -170,6 +170,11 @@ void br_dev_delete(struct net_device *dev, struct list_head *head)
 		del_nbp(p);
 	}
 
+<<<<<<< HEAD
+=======
+	br_fdb_delete_by_port(br, NULL, 1);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	del_timer_sync(&br->gc_timer);
 
 	br_sysfs_delbr(br->dev);
@@ -240,6 +245,10 @@ int br_add_bridge(struct net *net, const char *name)
 		return -ENOMEM;
 
 	dev_net_set(dev, net);
+<<<<<<< HEAD
+=======
+	dev->rtnl_link_ops = &br_link_ops;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	res = register_netdev(dev);
 	if (res)

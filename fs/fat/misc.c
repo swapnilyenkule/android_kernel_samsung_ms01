@@ -25,19 +25,27 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
 	struct fat_mount_options *opts = &MSDOS_SB(sb)->options;
 	va_list args;
 	struct va_format vaf;
+<<<<<<< HEAD
 	struct block_device *bdev = sb->s_bdev;
 	dev_t bd_dev = bdev ? bdev->bd_dev : 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (report) {
 		va_start(args, fmt);
 		vaf.fmt = fmt;
 		vaf.va = &args;
+<<<<<<< HEAD
 		printk(KERN_ERR "FAT-fs (%s[%d:%d]): error, %pV\n", 
 				sb->s_id, MAJOR(bd_dev), MINOR(bd_dev), &vaf);
+=======
+		printk(KERN_ERR "FAT-fs (%s): error, %pV\n", sb->s_id, &vaf);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		va_end(args);
 	}
 
 	if (opts->errors == FAT_ERRORS_PANIC)
+<<<<<<< HEAD
 		panic("FAT-fs (%s[%d:%d]): fs panic from previous error\n", 
 				sb->s_id, MAJOR(bd_dev), MINOR(bd_dev));
 	else if (opts->errors == FAT_ERRORS_RO && !(sb->s_flags & MS_RDONLY)) {
@@ -45,6 +53,13 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
 		printk(KERN_ERR "FAT-fs (%s[%d:%d]): Filesystem has been "
 				"set read-only\n", 
 				sb->s_id, MAJOR(bd_dev), MINOR(bd_dev));
+=======
+		panic("FAT-fs (%s): fs panic from previous error\n", sb->s_id);
+	else if (opts->errors == FAT_ERRORS_RO && !(sb->s_flags & MS_RDONLY)) {
+		sb->s_flags |= MS_RDONLY;
+		printk(KERN_ERR "FAT-fs (%s): Filesystem has been "
+				"set read-only\n", sb->s_id);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 }
 EXPORT_SYMBOL_GPL(__fat_fs_error);
@@ -57,18 +72,25 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
 {
 	struct va_format vaf;
 	va_list args;
+<<<<<<< HEAD
 	struct block_device *bdev = sb->s_bdev;
 	dev_t bd_dev = bdev ? bdev->bd_dev : 0;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	va_start(args, fmt);
 	vaf.fmt = fmt;
 	vaf.va = &args;
+<<<<<<< HEAD
 	if (!strncmp(level, KERN_ERR, sizeof(KERN_ERR)))
 		printk_ratelimited("%sFAT-fs (%s[%d:%d]): %pV\n", level,
 				sb->s_id, MAJOR(bd_dev), MINOR(bd_dev), &vaf);
 	else
 		printk("%sFAT-fs (%s[%d:%d]): %pV\n", level,
 				sb->s_id, MAJOR(bd_dev), MINOR(bd_dev), &vaf);
+=======
+	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	va_end(args);
 }
 
@@ -102,7 +124,11 @@ int fat_clusters_flush(struct super_block *sb)
 			fsinfo->free_clusters = cpu_to_le32(sbi->free_clusters);
 		if (sbi->prev_free != -1)
 			fsinfo->next_cluster = cpu_to_le32(sbi->prev_free);
+<<<<<<< HEAD
 		mark_buffer_dirty_sync(bh);
+=======
+		mark_buffer_dirty(bh);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	brelse(bh);
 
@@ -279,7 +305,11 @@ int fat_sync_bhs(struct buffer_head **bhs, int nr_bhs)
 	int i, err = 0;
 
 	for (i = 0; i < nr_bhs; i++)
+<<<<<<< HEAD
 		write_dirty_buffer(bhs[i], WRITE_SYNC);
+=======
+		write_dirty_buffer(bhs[i], WRITE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	for (i = 0; i < nr_bhs; i++) {
 		wait_on_buffer(bhs[i]);

@@ -96,10 +96,13 @@ static inline enum bug_trap_type report_bug(unsigned long bug_addr,
 }
 
 #endif	/* CONFIG_GENERIC_BUG */
+<<<<<<< HEAD
 
 #ifdef CONFIG_PANIC_ON_DATA_CORRUPTION
 #define PANIC_CORRUPTION 1
 #else
 #define PANIC_CORRUPTION 0
 #endif  /* CONFIG_PANIC_ON_DATA_CORRUPTION */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #endif	/* _LINUX_BUG_H */

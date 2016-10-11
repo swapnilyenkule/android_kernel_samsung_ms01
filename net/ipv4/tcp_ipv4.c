@@ -81,7 +81,10 @@
 #include <linux/stddef.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/inetdevice.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <linux/crypto.h>
 #include <linux/scatterlist.h>
@@ -177,7 +180,11 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
 	if (IS_ERR(rt)) {
 		err = PTR_ERR(rt);
 		if (err == -ENETUNREACH)
+<<<<<<< HEAD
 			IP_INC_STATS_BH(sock_net(sk), IPSTATS_MIB_OUTNOROUTES);
+=======
+			IP_INC_STATS(sock_net(sk), IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return err;
 	}
 
@@ -679,10 +686,18 @@ static void tcp_v4_send_reset(struct sock *sk, struct sk_buff *skb)
 	arg.csumoffset = offsetof(struct tcphdr, check) / 2;
 	arg.flags = (sk && inet_sk(sk)->transparent) ? IP_REPLY_ARG_NOSRCCHECK : 0;
 	/* When socket is gone, all binding information is lost.
+<<<<<<< HEAD
 	 * routing might fail in this case. using iif for oif to
 	 * make sure we can deliver it
 	 */
 	arg.bound_dev_if = sk ? sk->sk_bound_dev_if : inet_iif(skb);
+=======
+	 * routing might fail in this case. No choice here, if we choose to force
+	 * input interface, we will misroute in case of asymmetric route.
+	 */
+	if (sk)
+		arg.bound_dev_if = sk->sk_bound_dev_if;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	net = dev_net(skb_dst(skb)->dev);
 	arg.tos = ip_hdr(skb)->tos;
@@ -974,7 +989,11 @@ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct tcp_md5sig_info *md5sig;
 
+<<<<<<< HEAD
 	key = tcp_md5_do_lookup(sk, (union tcp_md5_addr *)&addr, AF_INET);
+=======
+	key = tcp_md5_do_lookup(sk, addr, family);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (key) {
 		/* Pre-existing entry - just update that one. */
 		memcpy(key->key, newkey, newkeylen);
@@ -1019,7 +1038,11 @@ int tcp_md5_do_del(struct sock *sk, const union tcp_md5_addr *addr, int family)
 	struct tcp_md5sig_key *key;
 	struct tcp_md5sig_info *md5sig;
 
+<<<<<<< HEAD
 	key = tcp_md5_do_lookup(sk, (union tcp_md5_addr *)&addr, AF_INET);
+=======
+	key = tcp_md5_do_lookup(sk, addr, family);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!key)
 		return -ENOENT;
 	hlist_del_rcu(&key->node);
@@ -1351,7 +1374,10 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 	ireq->rmt_addr = saddr;
 	ireq->no_srccheck = inet_sk(sk)->transparent;
 	ireq->opt = tcp_v4_save_options(sk, skb);
+<<<<<<< HEAD
 	ireq->ir_mark = inet_request_mark(sk, skb);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (security_inet_conn_request(sk, skb, req))
 		goto drop_and_free;
@@ -1525,10 +1551,15 @@ exit:
 	NET_INC_STATS_BH(sock_net(sk), LINUX_MIB_LISTENDROPS);
 	return NULL;
 put_and_exit:
+<<<<<<< HEAD
 	tcp_clear_xmit_timers(newsk);
 	tcp_cleanup_congestion_control(newsk);
 	bh_unlock_sock(newsk);
 	sock_put(newsk);
+=======
+	inet_csk_prepare_forced_close(newsk);
+	tcp_done(newsk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	goto exit;
 }
 EXPORT_SYMBOL(tcp_v4_syn_recv_sock);
@@ -1670,9 +1701,12 @@ int tcp_v4_rcv(struct sk_buff *skb)
 	struct sock *sk;
 	int ret;
 	struct net *net = dev_net(skb->dev);
+<<<<<<< HEAD
 #if !defined(CONFIG_SEC_LOCALE_CHN)
 	struct in_device *in_dev;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (skb->pkt_type != PACKET_HOST)
 		goto discard_it;
@@ -1763,6 +1797,7 @@ no_tcp_socket:
 bad_packet:
 		TCP_INC_STATS_BH(net, TCP_MIB_INERRS);
 	} else {
+<<<<<<< HEAD
 #if defined(CONFIG_SEC_LOCALE_CHN)
 		tcp_v4_send_reset(NULL, skb);
 #else
@@ -1774,6 +1809,9 @@ bad_packet:
 		} else
 			tcp_v4_send_reset(NULL, skb);
 #endif
+=======
+		tcp_v4_send_reset(NULL, skb);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 
 discard_it:
@@ -2667,7 +2705,10 @@ struct proto tcp_prot = {
 	.destroy_cgroup		= tcp_destroy_cgroup,
 	.proto_cgroup		= tcp_proto_cgroup,
 #endif
+<<<<<<< HEAD
 	.diag_destroy		= tcp_abort,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 EXPORT_SYMBOL(tcp_prot);
 

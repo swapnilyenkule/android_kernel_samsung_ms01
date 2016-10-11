@@ -570,6 +570,11 @@ static int sfb_dump(struct Qdisc *sch, struct sk_buff *skb)
 
 	sch->qstats.backlog = q->qdisc->qstats.backlog;
 	opts = nla_nest_start(skb, TCA_OPTIONS);
+<<<<<<< HEAD
+=======
+	if (opts == NULL)
+		goto nla_put_failure;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	NLA_PUT(skb, TCA_SFB_PARMS, sizeof(opt), &opt);
 	return nla_nest_end(skb, opts);
 

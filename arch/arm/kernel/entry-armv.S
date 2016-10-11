@@ -244,6 +244,22 @@ svc_preempt:
 	b	1b
 #endif
 
+<<<<<<< HEAD
+=======
+__und_fault:
+	@ Correct the PC such that it is pointing at the instruction
+	@ which caused the fault.  If the faulting instruction was ARM
+	@ the PC will be pointing at the next instruction, and have to
+	@ subtract 4.  Otherwise, it is Thumb, and the PC will be
+	@ pointing at the second half of the Thumb instruction.  We
+	@ have to subtract 2.
+	ldr	r2, [r0, #S_PC]
+	sub	r2, r2, r1
+	str	r2, [r0, #S_PC]
+	b	do_undefinstr
+ENDPROC(__und_fault)
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.align	5
 __und_svc:
 #ifdef CONFIG_KPROBES
@@ -261,6 +277,7 @@ __und_svc:
 	@
 	@  r0 - instruction
 	@
+<<<<<<< HEAD
 #ifndef	CONFIG_THUMB2_KERNEL
 	ldr	r0, [r4, #-4]
 #else
@@ -275,11 +292,38 @@ __und_svc:
 
 	mov	r0, sp				@ struct pt_regs *regs
 	bl	do_undefinstr
+=======
+#ifndef CONFIG_THUMB2_KERNEL
+	ldr	r0, [r4, #-4]
+#else
+	mov	r1, #2
+	ldrh	r0, [r4, #-2]			@ Thumb instruction at LR - 2
+	cmp	r0, #0xe800			@ 32-bit instruction if xx >= 0
+	blo	__und_svc_fault
+	ldrh	r9, [r4]			@ bottom 16 bits
+	add	r4, r4, #2
+	str	r4, [sp, #S_PC]
+	orr	r0, r9, r0, lsl #16
+#endif
+	adr	r9, BSYM(__und_svc_finish)
+	mov	r2, r4
+	bl	call_fpe
+
+	mov	r1, #4				@ PC correction to apply
+__und_svc_fault:
+	mov	r0, sp				@ struct pt_regs *regs
+	bl	__und_fault
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	@
 	@ IRQs off again before pulling preserved data off the stack
 	@
+<<<<<<< HEAD
 1:	disable_irq_notrace
+=======
+__und_svc_finish:
+	disable_irq_notrace
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	@
 	@ restore SPSR and restart the instruction
@@ -423,6 +467,7 @@ __und_usr:
 	mov	r2, r4
 	mov	r3, r5
 
+<<<<<<< HEAD
 	@
 	@ fall through to the emulation code, which returns using r9 if
 	@ it has emulated the instruction, or the more conventional lr
@@ -442,6 +487,35 @@ __und_usr:
 #endif
 	beq	call_fpe
 	@ Thumb instruction
+=======
+	@ r2 = regs->ARM_pc, which is either 2 or 4 bytes ahead of the
+	@      faulting instruction depending on Thumb mode.
+	@ r3 = regs->ARM_cpsr
+	@
+	@ The emulation code returns using r9 if it has emulated the
+	@ instruction, or the more conventional lr if we are to treat
+	@ this as a real undefined instruction
+	@
+	adr	r9, BSYM(ret_from_exception)
+
+	tst	r3, #PSR_T_BIT			@ Thumb mode?
+	bne	__und_usr_thumb
+	sub	r4, r2, #4			@ ARM instr at LR - 4
+1:	ldrt	r0, [r4]
+#ifdef CONFIG_CPU_ENDIAN_BE8
+	rev	r0, r0				@ little endian instruction
+#endif
+	@ r0 = 32-bit ARM instruction which caused the exception
+	@ r2 = PC value for the following instruction (:= regs->ARM_pc)
+	@ r4 = PC value for the faulting instruction
+	@ lr = 32-bit undefined instruction function
+	adr	lr, BSYM(__und_usr_fault_32)
+	b	call_fpe
+
+__und_usr_thumb:
+	@ Thumb instruction
+	sub	r4, r2, #2			@ First half of thumb instr at LR - 2
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #if CONFIG_ARM_THUMB && __LINUX_ARM_ARCH__ >= 6 && CONFIG_CPU_V7
 /*
  * Thumb-2 instruction handling.  Note that because pre-v6 and >= v6 platforms
@@ -455,7 +529,11 @@ __und_usr:
 	ldr	r5, .LCcpu_architecture
 	ldr	r5, [r5]
 	cmp	r5, #CPU_ARCH_ARMv7
+<<<<<<< HEAD
 	blo	__und_usr_unknown
+=======
+	blo	__und_usr_fault_16		@ 16bit undefined instruction
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * The following code won't get run unless the running CPU really is v7, so
  * coding round the lack of ldrht on older arches is pointless.  Temporarily
@@ -463,6 +541,7 @@ __und_usr:
  */
 	.arch	armv6t2
 #endif
+<<<<<<< HEAD
 2:
  ARM(	ldrht	r5, [r4], #2	)
  THUMB(	ldrht	r5, [r4]	)
@@ -472,6 +551,20 @@ __und_usr:
 3:	ldrht	r0, [r4]
 	add	r2, r2, #2			@ r2 is PC + 2, make it PC + 4
 	orr	r0, r0, r5, lsl #16
+=======
+2:	ldrht	r5, [r4]
+	cmp	r5, #0xe800			@ 32bit instruction if xx != 0
+	blo	__und_usr_fault_16		@ 16bit undefined instruction
+3:	ldrht	r0, [r2]
+	add	r2, r2, #2			@ r2 is PC + 2, make it PC + 4
+	str	r2, [sp, #S_PC]			@ it's a 2x16bit instr, update
+	orr	r0, r0, r5, lsl #16
+	adr	lr, BSYM(__und_usr_fault_32)
+	@ r0 = the two 16-bit Thumb instructions which caused the exception
+	@ r2 = PC value for the following Thumb instruction (:= regs->ARM_pc)
+	@ r4 = PC value for the first 16-bit Thumb instruction
+	@ lr = 32bit undefined instruction function
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #if __LINUX_ARM_ARCH__ < 7
 /* If the target arch was overridden, change it back: */
@@ -482,6 +575,7 @@ __und_usr:
 #endif
 #endif /* __LINUX_ARM_ARCH__ < 7 */
 #else /* !(CONFIG_ARM_THUMB && __LINUX_ARM_ARCH__ >= 6 && CONFIG_CPU_V7) */
+<<<<<<< HEAD
 	b	__und_usr_unknown
 #endif
  UNWIND(.fnend		)
@@ -493,6 +587,15 @@ ENDPROC(__und_usr)
 
 /*
  * The out of line fixup for the ldrt above.
+=======
+	b	__und_usr_fault_16
+#endif
+ UNWIND(.fnend)
+ENDPROC(__und_usr)
+
+/*
+ * The out of line fixup for the ldrt instructions above.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 	.pushsection .fixup, "ax"
 4:	mov	pc, r9
@@ -523,11 +626,20 @@ ENDPROC(__und_usr)
  * NEON handler code.
  *
  * Emulators may wish to make use of the following registers:
+<<<<<<< HEAD
  *  r0  = instruction opcode.
  *  r2  = PC+4
  *  r9  = normal "successful" return address
  *  r10 = this threads thread_info structure.
  *  lr  = unrecognised instruction return address
+=======
+ *  r0  = instruction opcode (32-bit ARM or two 16-bit Thumb)
+ *  r2  = PC value to resume execution after successful emulation
+ *  r9  = normal "successful" return address
+ *  r10 = this threads thread_info structure
+ *  lr  = unrecognised instruction return address
+ * IRQs disabled, FIQs enabled.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  */
 	@
 	@ Fall-through from Thumb-2 __und_usr
@@ -662,12 +774,26 @@ ENTRY(no_fp)
 	mov	pc, lr
 ENDPROC(no_fp)
 
+<<<<<<< HEAD
 __und_usr_unknown:
 	enable_irq
 	mov	r0, sp
 	adr	lr, BSYM(ret_from_exception)
 	b	do_undefinstr
 ENDPROC(__und_usr_unknown)
+=======
+__und_usr_fault_32:
+	mov	r1, #4
+	b	1f
+__und_usr_fault_16:
+	mov	r1, #2
+1:	enable_irq
+	mov	r0, sp
+	adr	lr, BSYM(ret_from_exception)
+	b	__und_fault
+ENDPROC(__und_usr_fault_32)
+ENDPROC(__und_usr_fault_16)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.align	5
 __pabt_usr:
@@ -698,16 +824,27 @@ ENTRY(__switch_to)
  UNWIND(.fnstart	)
  UNWIND(.cantunwind	)
 	add	ip, r1, #TI_CPU_SAVE
+<<<<<<< HEAD
+=======
+	ldr	r3, [r2, #TI_TP_VALUE]
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  ARM(	stmia	ip!, {r4 - sl, fp, sp, lr} )	@ Store most regs on stack
  THUMB(	stmia	ip!, {r4 - sl, fp}	   )	@ Store most regs on stack
  THUMB(	str	sp, [ip], #4		   )
  THUMB(	str	lr, [ip], #4		   )
+<<<<<<< HEAD
 	ldr	r4, [r2, #TI_TP_VALUE]
 	ldr	r5, [r2, #TI_TP_VALUE + 4]
 #ifdef CONFIG_CPU_USE_DOMAINS
 	ldr	r6, [r2, #TI_CPU_DOMAIN]
 #endif
 	switch_tls r1, r4, r5, r3, r7
+=======
+#ifdef CONFIG_CPU_USE_DOMAINS
+	ldr	r6, [r2, #TI_CPU_DOMAIN]
+#endif
+	set_tls	r3, r4, r5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #if defined(CONFIG_CC_STACKPROTECTOR) && !defined(CONFIG_SMP)
 	ldr	r7, [r2, #TI_TASK]
 	ldr	r8, =__stack_chk_guard
@@ -755,6 +892,7 @@ ENDPROC(__switch_to)
 #endif
 	.endm
 
+<<<<<<< HEAD
 	.macro	kuser_pad, sym, size
 	.if	(. - \sym) & 3
 	.rept	4 - (. - \sym) & 3
@@ -861,6 +999,11 @@ __kuser_gtod_timeval:  @0xffff0f40
 	.word	0
 	.align	5
 #endif
+=======
+	.align	5
+	.globl	__kuser_helper_start
+__kuser_helper_start:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /*
  * Due to the length of some sequences, __kuser_cmpxchg64 spans 2 regular
@@ -948,13 +1091,26 @@ kuser_cmpxchg64_fixup:
 #error "incoherent kernel configuration"
 #endif
 
+<<<<<<< HEAD
 	kuser_pad __kuser_cmpxchg64, 64
+=======
+	/* pad to next slot */
+	.rept	(16 - (. - __kuser_cmpxchg64)/4)
+	.word	0
+	.endr
+
+	.align	5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 __kuser_memory_barrier:				@ 0xffff0fa0
 	smp_dmb	arm
 	usr_ret	lr
 
+<<<<<<< HEAD
 	kuser_pad __kuser_memory_barrier, 32
+=======
+	.align	5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 __kuser_cmpxchg:				@ 0xffff0fc0
 
@@ -1027,14 +1183,22 @@ kuser_cmpxchg32_fixup:
 
 #endif
 
+<<<<<<< HEAD
 	kuser_pad __kuser_cmpxchg, 32
+=======
+	.align	5
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 __kuser_get_tls:				@ 0xffff0fe0
 	ldr	r0, [pc, #(16 - 8)]	@ read TLS, set in kuser_get_tls_init
 	usr_ret	lr
 	mrc	p15, 0, r0, c13, c0, 3	@ 0xffff0fe8 hardware TLS code
+<<<<<<< HEAD
 	kuser_pad __kuser_get_tls, 16
 	.rep	3
+=======
+	.rep	4
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.word	0			@ 0xffff0ff0 software TLS value, then
 	.endr				@ pad up to __kuser_helper_version
 
@@ -1044,16 +1208,25 @@ __kuser_helper_version:				@ 0xffff0ffc
 	.globl	__kuser_helper_end
 __kuser_helper_end:
 
+<<<<<<< HEAD
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  THUMB(	.thumb	)
 
 /*
  * Vector stubs.
  *
+<<<<<<< HEAD
  * This code is copied to 0xffff1000 so we can use branches in the
  * vectors, rather than ldr's.  Note that this code must not exceed
  * a page size.
+=======
+ * This code is copied to 0xffff0200 so we can use branches in the
+ * vectors, rather than ldr's.  Note that this code must not
+ * exceed 0x300 bytes.
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * Common stub entry macro:
  *   Enter in IRQ mode, spsr = SVC/USR CPSR, lr = SVC/USR PC
@@ -1061,7 +1234,11 @@ __kuser_helper_end:
  * SP points to a minimal amount of processor-private memory, the address
  * of which is copied into r0 for the mode specific abort handler.
  */
+<<<<<<< HEAD
 	.macro	vector_stub, name, mode, fixup, correction=0
+=======
+	.macro	vector_stub, name, mode, correction=0
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.align	5
 
 vector_\name:
@@ -1090,6 +1267,7 @@ vector_\name:
 	and	lr, lr, #0x0f
  THUMB(	adr	r0, 1f			)
  THUMB(	ldr	lr, [r0, lr, lsl #2]	)
+<<<<<<< HEAD
 	.if	\fixup
 #ifdef CONFIG_MSM_KRAIT_WFE_FIXUP
 	ldr	r0, .krait_fixup
@@ -1102,6 +1280,8 @@ vector_\name:
 10:	isb
 #endif
 	.endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mov	r0, sp
  ARM(	ldr	lr, [pc, lr, lsl #2]	)
 	movs	pc, lr			@ branch to handler in SVC mode
@@ -1112,6 +1292,7 @@ ENDPROC(vector_\name)
 1:
 	.endm
 
+<<<<<<< HEAD
 	.section .stubs, "ax", %progbits
 __stubs_start:
 	@ This must be the first word
@@ -1127,6 +1308,14 @@ vector_rst:
  * Interrupt dispatcher
  */
 	vector_stub	irq, IRQ_MODE, 1, 4
+=======
+	.globl	__stubs_start
+__stubs_start:
+/*
+ * Interrupt dispatcher
+ */
+	vector_stub	irq, IRQ_MODE, 4
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.long	__irq_usr			@  0  (USR_26 / USR_32)
 	.long	__irq_invalid			@  1  (FIQ_26 / FIQ_32)
@@ -1149,7 +1338,11 @@ vector_rst:
  * Data abort dispatcher
  * Enter in ABT mode, spsr = USR CPSR, lr = USR PC
  */
+<<<<<<< HEAD
 	vector_stub	dabt, ABT_MODE, 0, 8
+=======
+	vector_stub	dabt, ABT_MODE, 8
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.long	__dabt_usr			@  0  (USR_26 / USR_32)
 	.long	__dabt_invalid			@  1  (FIQ_26 / FIQ_32)
@@ -1172,7 +1365,11 @@ vector_rst:
  * Prefetch abort dispatcher
  * Enter in ABT mode, spsr = USR CPSR, lr = USR PC
  */
+<<<<<<< HEAD
 	vector_stub	pabt, ABT_MODE, 0, 4
+=======
+	vector_stub	pabt, ABT_MODE, 4
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.long	__pabt_usr			@  0 (USR_26 / USR_32)
 	.long	__pabt_invalid			@  1 (FIQ_26 / FIQ_32)
@@ -1195,7 +1392,11 @@ vector_rst:
  * Undef instr entry dispatcher
  * Enter in UND mode, spsr = SVC/USR CPSR, lr = SVC/USR PC
  */
+<<<<<<< HEAD
 	vector_stub	und, UND_MODE, 0
+=======
+	vector_stub	und, UND_MODE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.long	__und_usr			@  0 (USR_26 / USR_32)
 	.long	__und_invalid			@  1 (FIQ_26 / FIQ_32)
@@ -1217,6 +1418,7 @@ vector_rst:
 	.align	5
 
 /*=============================================================================
+<<<<<<< HEAD
  * Address exception handler
  *-----------------------------------------------------------------------------
  * These aren't too critical.
@@ -1227,6 +1429,8 @@ vector_addrexcptn:
 	b	vector_addrexcptn
 
 /*=============================================================================
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * Undefined FIQs
  *-----------------------------------------------------------------------------
  * Enter in FIQ mode, spsr = ANY CPSR, lr = ANY PC
@@ -1239,6 +1443,7 @@ vector_addrexcptn:
 vector_fiq:
 	subs	pc, lr, #4
 
+<<<<<<< HEAD
 .krait_fixup:
 	.word	msm_krait_need_wfe_fixup
 
@@ -1255,6 +1460,47 @@ __vectors_start:
 	W(b)	vector_addrexcptn
 	W(b)	vector_irq
 	W(b)	vector_fiq
+=======
+/*=============================================================================
+ * Address exception handler
+ *-----------------------------------------------------------------------------
+ * These aren't too critical.
+ * (they're not supposed to happen, and won't happen in 32-bit data mode).
+ */
+
+vector_addrexcptn:
+	b	vector_addrexcptn
+
+/*
+ * We group all the following data together to optimise
+ * for CPUs with separate I & D caches.
+ */
+	.align	5
+
+.LCvswi:
+	.word	vector_swi
+
+	.globl	__stubs_end
+__stubs_end:
+
+	.equ	stubs_offset, __vectors_start + 0x200 - __stubs_start
+
+	.globl	__vectors_start
+__vectors_start:
+ ARM(	swi	SYS_ERROR0	)
+ THUMB(	svc	#0		)
+ THUMB(	nop			)
+	W(b)	vector_und + stubs_offset
+	W(ldr)	pc, .LCvswi + stubs_offset
+	W(b)	vector_pabt + stubs_offset
+	W(b)	vector_dabt + stubs_offset
+	W(b)	vector_addrexcptn + stubs_offset
+	W(b)	vector_irq + stubs_offset
+	W(b)	vector_fiq + stubs_offset
+
+	.globl	__vectors_end
+__vectors_end:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	.data
 

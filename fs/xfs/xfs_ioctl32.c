@@ -361,7 +361,12 @@ xfs_compat_attrlist_by_handle(
 	if (copy_from_user(&al_hreq, arg,
 			   sizeof(compat_xfs_fsop_attrlist_handlereq_t)))
 		return -XFS_ERROR(EFAULT);
+<<<<<<< HEAD
 	if (al_hreq.buflen > XATTR_LIST_MAX)
+=======
+	if (al_hreq.buflen < sizeof(struct attrlist) ||
+	    al_hreq.buflen > XATTR_LIST_MAX)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -XFS_ERROR(EINVAL);
 
 	/*

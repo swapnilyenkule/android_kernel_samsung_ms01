@@ -24,6 +24,7 @@
 
 #include "u_ether.h"
 
+<<<<<<< HEAD
 #undef DBG
 #undef VDBG
 #undef ERROR
@@ -39,6 +40,8 @@
 	dev_warn(&(d)->gadget->dev , fmt , ## args)
 #define INFO(d, fmt, args...) \
 	dev_info(&(d)->gadget->dev , fmt , ## args)
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * This function is a "CDC Network Control Model" (CDC NCM) Ethernet link.
  * NCM is intended to be used with high-speed network attachments.
@@ -73,10 +76,13 @@ struct f_ncm {
 
 	struct ndp_parser_opts		*parser_opts;
 	bool				is_crc;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 	uint16_t    dgramsize;
 	struct net_device* net;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/*
 	 * for notification, it is accessed from both
@@ -107,6 +113,7 @@ static inline unsigned ncm_bitrate(struct usb_gadget *g)
  * If the host can group frames, allow it to do that, 16K is selected,
  * because it's used by default by the current linux host driver
  */
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 #define NTB_DEFAULT_IN_SIZE	16384
 #define NCM_MAX_DGRAM_SIZE	9014
@@ -119,6 +126,9 @@ static inline unsigned ncm_bitrate(struct usb_gadget *g)
 #else
 #define NTB_DEFAULT_IN_SIZE	USB_CDC_NCM_NTB_MIN_IN_SIZE
 #endif
+=======
+#define NTB_DEFAULT_IN_SIZE	USB_CDC_NCM_NTB_MIN_IN_SIZE
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define NTB_OUT_SIZE		16384
 
 /*
@@ -154,7 +164,11 @@ static struct usb_cdc_ncm_ntb_parameters ntb_parameters = {
 #define LOG2_STATUS_INTERVAL_MSEC	5	/* 1 << 5 == 32 msec */
 #define NCM_STATUS_BYTECOUNT		16	/* 8 byte header + data */
 
+<<<<<<< HEAD
 static struct usb_interface_assoc_descriptor ncm_iad_desc = {
+=======
+static struct usb_interface_assoc_descriptor ncm_iad_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_iad_desc,
 	.bDescriptorType =	USB_DT_INTERFACE_ASSOCIATION,
 
@@ -168,7 +182,11 @@ static struct usb_interface_assoc_descriptor ncm_iad_desc = {
 
 /* interface descriptor: */
 
+<<<<<<< HEAD
 static struct usb_interface_descriptor ncm_control_intf = {
+=======
+static struct usb_interface_descriptor ncm_control_intf __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_control_intf,
 	.bDescriptorType =	USB_DT_INTERFACE,
 
@@ -180,7 +198,11 @@ static struct usb_interface_descriptor ncm_control_intf = {
 	/* .iInterface = DYNAMIC */
 };
 
+<<<<<<< HEAD
 static struct usb_cdc_header_desc ncm_header_desc = {
+=======
+static struct usb_cdc_header_desc ncm_header_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_header_desc,
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_HEADER_TYPE,
@@ -188,7 +210,11 @@ static struct usb_cdc_header_desc ncm_header_desc = {
 	.bcdCDC =		cpu_to_le16(0x0110),
 };
 
+<<<<<<< HEAD
 static struct usb_cdc_union_desc ncm_union_desc = {
+=======
+static struct usb_cdc_union_desc ncm_union_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof(ncm_union_desc),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_UNION_TYPE,
@@ -196,23 +222,33 @@ static struct usb_cdc_union_desc ncm_union_desc = {
 	/* .bSlaveInterface0 =	DYNAMIC */
 };
 
+<<<<<<< HEAD
 static struct usb_cdc_ether_desc necm_desc = {
 	.bLength =		sizeof necm_desc,
+=======
+static struct usb_cdc_ether_desc ecm_desc __initdata = {
+	.bLength =		sizeof ecm_desc,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_ETHERNET_TYPE,
 
 	/* this descriptor actually adds value, surprise! */
 	/* .iMACAddress = DYNAMIC */
 	.bmEthernetStatistics =	cpu_to_le32(0), /* no statistics */
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 	.wMaxSegmentSize =	cpu_to_le16(NCM_MAX_DGRAM_SIZE),
 #else
 	.wMaxSegmentSize =	cpu_to_le16(ETH_FRAME_LEN),
 #endif
+=======
+	.wMaxSegmentSize =	cpu_to_le16(ETH_FRAME_LEN),
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.wNumberMCFilters =	cpu_to_le16(0),
 	.bNumberPowerFilters =	0,
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 #define NCAPS	(USB_CDC_NCM_NCAP_ETH_FILTER |USB_CDC_NCM_NCAP_MAX_DATAGRAM_SIZE)
 #else
@@ -220,6 +256,11 @@ static struct usb_cdc_ether_desc necm_desc = {
 #endif
 
 static struct usb_cdc_ncm_desc ncm_desc = {
+=======
+#define NCAPS	(USB_CDC_NCM_NCAP_ETH_FILTER | USB_CDC_NCM_NCAP_CRC_MODE)
+
+static struct usb_cdc_ncm_desc ncm_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_desc,
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_NCM_TYPE,
@@ -231,7 +272,11 @@ static struct usb_cdc_ncm_desc ncm_desc = {
 
 /* the default data interface has no endpoints ... */
 
+<<<<<<< HEAD
 static struct usb_interface_descriptor ncm_data_nop_intf = {
+=======
+static struct usb_interface_descriptor ncm_data_nop_intf __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_data_nop_intf,
 	.bDescriptorType =	USB_DT_INTERFACE,
 
@@ -246,7 +291,11 @@ static struct usb_interface_descriptor ncm_data_nop_intf = {
 
 /* ... but the "real" data interface has two bulk endpoints */
 
+<<<<<<< HEAD
 static struct usb_interface_descriptor ncm_data_intf = {
+=======
+static struct usb_interface_descriptor ncm_data_intf __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		sizeof ncm_data_intf,
 	.bDescriptorType =	USB_DT_INTERFACE,
 
@@ -261,7 +310,11 @@ static struct usb_interface_descriptor ncm_data_intf = {
 
 /* full speed support: */
 
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor fs_ncm_notify_desc = {
+=======
+static struct usb_endpoint_descriptor fs_ncm_notify_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -271,7 +324,11 @@ static struct usb_endpoint_descriptor fs_ncm_notify_desc = {
 	.bInterval =		1 << LOG2_STATUS_INTERVAL_MSEC,
 };
 
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor fs_ncm_in_desc = {
+=======
+static struct usb_endpoint_descriptor fs_ncm_in_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -279,7 +336,11 @@ static struct usb_endpoint_descriptor fs_ncm_in_desc = {
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 };
 
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor fs_ncm_out_desc = {
+=======
+static struct usb_endpoint_descriptor fs_ncm_out_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -287,13 +348,21 @@ static struct usb_endpoint_descriptor fs_ncm_out_desc = {
 	.bmAttributes =		USB_ENDPOINT_XFER_BULK,
 };
 
+<<<<<<< HEAD
 static struct usb_descriptor_header *ncm_fs_function[] = {
+=======
+static struct usb_descriptor_header *ncm_fs_function[] __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	(struct usb_descriptor_header *) &ncm_iad_desc,
 	/* CDC NCM control descriptors */
 	(struct usb_descriptor_header *) &ncm_control_intf,
 	(struct usb_descriptor_header *) &ncm_header_desc,
 	(struct usb_descriptor_header *) &ncm_union_desc,
+<<<<<<< HEAD
 	(struct usb_descriptor_header *) &necm_desc,
+=======
+	(struct usb_descriptor_header *) &ecm_desc,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	(struct usb_descriptor_header *) &ncm_desc,
 	(struct usb_descriptor_header *) &fs_ncm_notify_desc,
 	/* data interface, altsettings 0 and 1 */
@@ -306,7 +375,11 @@ static struct usb_descriptor_header *ncm_fs_function[] = {
 
 /* high speed support: */
 
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor hs_ncm_notify_desc = {
+=======
+static struct usb_endpoint_descriptor hs_ncm_notify_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -315,7 +388,11 @@ static struct usb_endpoint_descriptor hs_ncm_notify_desc = {
 	.wMaxPacketSize =	cpu_to_le16(NCM_STATUS_BYTECOUNT),
 	.bInterval =		LOG2_STATUS_INTERVAL_MSEC + 4,
 };
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor hs_ncm_in_desc = {
+=======
+static struct usb_endpoint_descriptor hs_ncm_in_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -324,7 +401,11 @@ static struct usb_endpoint_descriptor hs_ncm_in_desc = {
 	.wMaxPacketSize =	cpu_to_le16(512),
 };
 
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor hs_ncm_out_desc = {
+=======
+static struct usb_endpoint_descriptor hs_ncm_out_desc __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.bLength =		USB_DT_ENDPOINT_SIZE,
 	.bDescriptorType =	USB_DT_ENDPOINT,
 
@@ -333,13 +414,21 @@ static struct usb_endpoint_descriptor hs_ncm_out_desc = {
 	.wMaxPacketSize =	cpu_to_le16(512),
 };
 
+<<<<<<< HEAD
 static struct usb_descriptor_header *ncm_hs_function[] = {
+=======
+static struct usb_descriptor_header *ncm_hs_function[] __initdata = {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	(struct usb_descriptor_header *) &ncm_iad_desc,
 	/* CDC NCM control descriptors */
 	(struct usb_descriptor_header *) &ncm_control_intf,
 	(struct usb_descriptor_header *) &ncm_header_desc,
 	(struct usb_descriptor_header *) &ncm_union_desc,
+<<<<<<< HEAD
 	(struct usb_descriptor_header *) &necm_desc,
+=======
+	(struct usb_descriptor_header *) &ecm_desc,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	(struct usb_descriptor_header *) &ncm_desc,
 	(struct usb_descriptor_header *) &hs_ncm_notify_desc,
 	/* data interface, altsettings 0 and 1 */
@@ -354,13 +443,21 @@ static struct usb_descriptor_header *ncm_hs_function[] = {
 
 #define STRING_CTRL_IDX	0
 #define STRING_MAC_IDX	1
+<<<<<<< HEAD
 #define NCM_STRING_DATA_IDX	2
+=======
+#define STRING_DATA_IDX	2
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define STRING_IAD_IDX	3
 
 static struct usb_string ncm_string_defs[] = {
 	[STRING_CTRL_IDX].s = "CDC Network Control Model (NCM)",
 	[STRING_MAC_IDX].s = NULL /* DYNAMIC */,
+<<<<<<< HEAD
 	[NCM_STRING_DATA_IDX].s = "CDC Network Data",
+=======
+	[STRING_DATA_IDX].s = "CDC Network Data",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	[STRING_IAD_IDX].s = "CDC NCM",
 	{  } /* end of list */
 };
@@ -480,11 +577,14 @@ static inline void ncm_reset_values(struct f_ncm *ncm)
 
 	ncm->port.fixed_out_len = le32_to_cpu(ntb_parameters.dwNtbOutMaxSize);
 	ncm->port.fixed_in_len = NTB_DEFAULT_IN_SIZE;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 	// Revisit issue for the case of Toyota Head Unit
 	ncm->dgramsize = NCM_MAX_DGRAM_SIZE;//ETH_FRAME_LEN;
 	ncm->net = NULL;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 /*
@@ -629,6 +729,7 @@ invalid:
 	return;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 static void ncm_setdgram_complete(struct usb_ep *ep, struct usb_request *req)
 {
@@ -673,6 +774,8 @@ invalid:
 }
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static int ncm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 {
 	struct f_ncm		*ncm = func_to_ncm(f);
@@ -824,6 +927,7 @@ static int ncm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 		value = 0;
 		break;
 	}
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8)
 		| USB_CDC_GET_MAX_DATAGRAM_SIZE:
@@ -850,6 +954,8 @@ static int ncm_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 		break;
 	}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* and disabled in ncm descriptor: */
 	/* case USB_CDC_GET_NET_ADDRESS: */
@@ -911,6 +1017,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 		if (alt > 1)
 			goto fail;
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 		if (alt > 0) {
 #endif
@@ -923,6 +1030,13 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 		}
 #endif
+=======
+		if (ncm->port.in_ep->driver_data) {
+			DBG(cdev, "reset ncm\n");
+			gether_disconnect(&ncm->port);
+			ncm_reset_values(ncm);
+		}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/*
 		 * CDC Network only sends data in non-default altsettings.
@@ -952,6 +1066,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 				gadget_is_musbhdrc(cdev->gadget)
 				);
 			ncm->port.cdc_filter = DEFAULT_FILTER;
+<<<<<<< HEAD
 #ifndef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 			DBG(cdev, "activate ncm\n");
 #endif
@@ -975,6 +1090,17 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 		ncm_notify(ncm);
 		spin_unlock(&ncm->lock);
 #endif
+=======
+			DBG(cdev, "activate ncm\n");
+			net = gether_connect(&ncm->port);
+			if (IS_ERR(net))
+				return PTR_ERR(net);
+		}
+
+		spin_lock(&ncm->lock);
+		ncm_notify(ncm);
+		spin_unlock(&ncm->lock);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	} else
 		goto fail;
 
@@ -1030,6 +1156,7 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
 			       max_size - skb->len - ncb_len - crc_len,
 			       GFP_ATOMIC);
 	dev_kfree_skb_any(skb);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_NCM_SUPPORT_MTU_CHANGE
 	if (!skb2) {
 		printk(KERN_ERR"Dropped skb \n");
@@ -1039,6 +1166,11 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
 	if (!skb2)
 		return NULL;
 #endif
+=======
+	if (!skb2)
+		return NULL;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	skb = skb2;
 
 	tmp = (void *) skb_push(skb, ncb_len);
@@ -1082,6 +1214,7 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
 	put_ncm(&tmp, opts->dgram_item_len, skb->len - ncb_len);
 	/* (d)wDatagramIndex[1] and  (d)wDatagramLength[1] already zeroed */
 
+<<<<<<< HEAD
 	/* Incase of Higher MTU size we do not need to expand and zero off the remaining
 	   In packet size to max_size . This saves bandwidth . e.g for 16K In size max mtu is 9k 
 	*/
@@ -1092,6 +1225,12 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
 		printk(KERN_ERR"usb:%s Expanding the buffer %d \n",__func__,skb->len);
 	}
 #endif
+=======
+	if (skb->len > MAX_TX_NONFIXED)
+		memset(skb_put(skb, max_size - skb->len),
+		       0, max_size - skb->len);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return skb;
 }
 
@@ -1294,7 +1433,11 @@ static void ncm_close(struct gether *geth)
 
 /* ethernet function driver setup/binding */
 
+<<<<<<< HEAD
 static int
+=======
+static int __init
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ncm_bind(struct usb_configuration *c, struct usb_function *f)
 {
 	struct usb_composite_dev *cdev = c->cdev;
@@ -1405,9 +1548,15 @@ fail:
 	/* we might as well release our claims on endpoints */
 	if (ncm->notify)
 		ncm->notify->driver_data = NULL;
+<<<<<<< HEAD
 	if (ncm->port.out_ep->desc)
 		ncm->port.out_ep->driver_data = NULL;
 	if (ncm->port.in_ep->desc)
+=======
+	if (ncm->port.out_ep)
+		ncm->port.out_ep->driver_data = NULL;
+	if (ncm->port.in_ep)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ncm->port.in_ep->driver_data = NULL;
 
 	ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);
@@ -1445,7 +1594,11 @@ ncm_unbind(struct usb_configuration *c, struct usb_function *f)
  * Caller must have called @gether_setup().  Caller is also responsible
  * for calling @gether_cleanup() before module unload.
  */
+<<<<<<< HEAD
 int ncm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
+=======
+int __init ncm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	struct f_ncm	*ncm;
 	int		status;
@@ -1467,7 +1620,11 @@ int ncm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 		status = usb_string_id(c->cdev);
 		if (status < 0)
 			return status;
+<<<<<<< HEAD
 		ncm_string_defs[NCM_STRING_DATA_IDX].id = status;
+=======
+		ncm_string_defs[STRING_DATA_IDX].id = status;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		ncm_data_nop_intf.iInterface = status;
 		ncm_data_intf.iInterface = status;
 
@@ -1476,7 +1633,11 @@ int ncm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 		if (status < 0)
 			return status;
 		ncm_string_defs[STRING_MAC_IDX].id = status;
+<<<<<<< HEAD
 		necm_desc.iMACAddress = status;
+=======
+		ecm_desc.iMACAddress = status;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		/* IAD */
 		status = usb_string_id(c->cdev);
@@ -1502,11 +1663,15 @@ int ncm_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 	ncm_reset_values(ncm);
 	ncm->port.is_fixed = true;
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
 	ncm->port.func.name = "ncm";
 #else
 	ncm->port.func.name = "cdc_network";
 #endif
+=======
+	ncm->port.func.name = "cdc_network";
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ncm->port.func.strings = ncm_strings;
 	/* descriptors are per-instance copies */
 	ncm->port.func.bind = ncm_bind;

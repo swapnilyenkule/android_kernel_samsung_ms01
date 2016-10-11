@@ -400,6 +400,10 @@ unsigned int speedstep_get_freqs(enum speedstep_processor processor,
 
 	pr_debug("previous speed is %u\n", prev_speed);
 
+<<<<<<< HEAD
+=======
+	preempt_disable();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	local_irq_save(flags);
 
 	/* switch to low state */
@@ -464,6 +468,11 @@ unsigned int speedstep_get_freqs(enum speedstep_processor processor,
 
 out:
 	local_irq_restore(flags);
+<<<<<<< HEAD
+=======
+	preempt_enable();
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return ret;
 }
 EXPORT_SYMBOL_GPL(speedstep_get_freqs);

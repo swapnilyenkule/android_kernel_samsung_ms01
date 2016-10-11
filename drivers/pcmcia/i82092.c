@@ -610,7 +610,11 @@ static int i82092aa_set_mem_map(struct pcmcia_socket *socket, struct pccard_mem_
 	
 	enter("i82092aa_set_mem_map");
 
+<<<<<<< HEAD
 	pcibios_resource_to_bus(sock_info->dev, &region, mem->res);
+=======
+	pcibios_resource_to_bus(sock_info->dev->bus, &region, mem->res);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	
 	map = mem->map;
 	if (map > 4) {

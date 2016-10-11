@@ -26,7 +26,10 @@
 */
 
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/interrupt.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/slab.h>
 
 #include <linux/socket.h>

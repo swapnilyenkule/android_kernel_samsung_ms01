@@ -1860,7 +1860,11 @@ static int max98095_put_eq_enum(struct snd_kcontrol *kcontrol,
 	struct max98095_pdata *pdata = max98095->pdata;
 	int channel = max98095_get_eq_channel(kcontrol->id.name);
 	struct max98095_cdata *cdata;
+<<<<<<< HEAD
 	int sel = ucontrol->value.integer.value[0];
+=======
+	unsigned int sel = ucontrol->value.integer.value[0];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct max98095_eq_cfg *coef_set;
 	int fs, best, best_val, i;
 	int regmask, regsave;
@@ -2013,7 +2017,11 @@ static int max98095_put_bq_enum(struct snd_kcontrol *kcontrol,
 	struct max98095_pdata *pdata = max98095->pdata;
 	int channel = max98095_get_bq_channel(codec, kcontrol->id.name);
 	struct max98095_cdata *cdata;
+<<<<<<< HEAD
 	int sel = ucontrol->value.integer.value[0];
+=======
+	unsigned int sel = ucontrol->value.integer.value[0];
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct max98095_biquad_cfg *coef_set;
 	int fs, best, best_val, i;
 	int regmask, regsave;

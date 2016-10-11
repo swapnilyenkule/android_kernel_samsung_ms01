@@ -86,6 +86,16 @@ static async_cookie_t  __lowest_in_progress(struct list_head *running)
 {
 	struct async_entry *entry;
 
+<<<<<<< HEAD
+=======
+	if (!running) { /* just check the entry count */
+		if (atomic_read(&entry_count))
+			return 0; /* smaller than any cookie */
+		else
+			return next_cookie;
+	}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!list_empty(running)) {
 		entry = list_first_entry(running,
 			struct async_entry, list);
@@ -236,9 +246,13 @@ EXPORT_SYMBOL_GPL(async_schedule_domain);
  */
 void async_synchronize_full(void)
 {
+<<<<<<< HEAD
 	do {
 		async_synchronize_cookie(next_cookie);
 	} while (!list_empty(&async_running) || !list_empty(&async_pending));
+=======
+	async_synchronize_cookie_domain(next_cookie, NULL);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(async_synchronize_full);
 
@@ -258,7 +272,11 @@ EXPORT_SYMBOL_GPL(async_synchronize_full_domain);
 /**
  * async_synchronize_cookie_domain - synchronize asynchronous function calls within a certain domain with cookie checkpointing
  * @cookie: async_cookie_t to use as checkpoint
+<<<<<<< HEAD
  * @running: running list to synchronize on
+=======
+ * @running: running list to synchronize on, NULL indicates all lists
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  *
  * This function waits until all asynchronous function calls for the
  * synchronization domain specified by the running list @list submitted

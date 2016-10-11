@@ -323,6 +323,7 @@ config N_GSM
 	  This line discipline provides support for the GSM MUX protocol and
 	  presents the mux as a set of 61 individual tty devices.
 
+<<<<<<< HEAD
 config N_SMUX
 	tristate "SMUX line discipline support"
 	depends on NET && SERIAL_MSM_HS
@@ -342,6 +343,8 @@ config SMUX_CTL
 	help
 	  Support for SMUX control driver on top of serial MUX.
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config TRACE_ROUTER
 	tristate "Trace data router for MIPI P1149.7 cJTAG standard"
 	depends on TRACE_SINK

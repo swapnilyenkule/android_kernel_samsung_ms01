@@ -466,7 +466,11 @@ static void vmbus_on_msg_dpc(unsigned long data)
 		 * will not deliver any more messages since there is
 		 * no empty slot
 		 */
+<<<<<<< HEAD
 		smp_mb();
+=======
+		mb();
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 		if (msg->header.message_flags.msg_pending) {
 			/*
@@ -681,7 +685,11 @@ int vmbus_device_register(struct hv_device *child_device_obj)
 	if (ret)
 		pr_err("Unable to register child device\n");
 	else
+<<<<<<< HEAD
 		pr_info("child device %s registered\n",
+=======
+		pr_debug("child device %s registered\n",
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			dev_name(&child_device_obj->device));
 
 	return ret;
@@ -693,14 +701,23 @@ int vmbus_device_register(struct hv_device *child_device_obj)
  */
 void vmbus_device_unregister(struct hv_device *device_obj)
 {
+<<<<<<< HEAD
+=======
+	pr_debug("child device %s unregistered\n",
+		dev_name(&device_obj->device));
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Kick off the process of unregistering the device.
 	 * This will call vmbus_remove() and eventually vmbus_device_release()
 	 */
 	device_unregister(&device_obj->device);
+<<<<<<< HEAD
 
 	pr_info("child device %s unregistered\n",
 		dev_name(&device_obj->device));
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 

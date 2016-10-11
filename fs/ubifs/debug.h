@@ -170,7 +170,11 @@ struct ubifs_global_debug_info {
 #define ubifs_dbg_msg(type, fmt, ...) \
 	pr_debug("UBIFS DBG " type ": " fmt "\n", ##__VA_ARGS__)
 
+<<<<<<< HEAD
 #define DBG_KEY_BUF_LEN 32
+=======
+#define DBG_KEY_BUF_LEN 48
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define ubifs_dbg_msg_key(type, key, fmt, ...) do {                            \
 	char __tmp_key_buf[DBG_KEY_BUF_LEN];                                   \
 	pr_debug("UBIFS DBG " type ": " fmt "%s\n", ##__VA_ARGS__,             \

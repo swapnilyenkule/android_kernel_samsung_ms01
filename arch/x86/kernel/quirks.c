@@ -525,7 +525,11 @@ static void __init quirk_amd_nb_node(struct pci_dev *dev)
 		return;
 
 	pci_read_config_dword(nb_ht, 0x60, &val);
+<<<<<<< HEAD
 	node = val & 7;
+=======
+	node = pcibus_to_node(dev->bus) | (val & 7);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/*
 	 * Some hardware may return an invalid node ID,
 	 * so check it first:

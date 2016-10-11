@@ -455,7 +455,11 @@ static int __init ring_buffer_benchmark_init(void)
 
 	if (producer_fifo >= 0) {
 		struct sched_param param = {
+<<<<<<< HEAD
 			.sched_priority = consumer_fifo
+=======
+			.sched_priority = producer_fifo
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		};
 		sched_setscheduler(producer, SCHED_FIFO, &param);
 	} else

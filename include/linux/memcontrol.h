@@ -66,6 +66,10 @@ struct lruvec *mem_cgroup_zone_lruvec(struct zone *, struct mem_cgroup *);
 struct lruvec *mem_cgroup_lru_add_list(struct zone *, struct page *,
 				       enum lru_list);
 void mem_cgroup_lru_del_list(struct page *, enum lru_list);
+<<<<<<< HEAD
+=======
+void mem_cgroup_lru_del(struct page *);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 struct lruvec *mem_cgroup_lru_move_lists(struct zone *, struct page *,
 					 enum lru_list, enum lru_list);
 
@@ -78,8 +82,11 @@ extern void mem_cgroup_uncharge_cache_page(struct page *page);
 
 extern void mem_cgroup_out_of_memory(struct mem_cgroup *memcg, gfp_t gfp_mask,
 				     int order);
+<<<<<<< HEAD
 bool __mem_cgroup_same_or_subtree(const struct mem_cgroup *root_memcg,
 				  struct mem_cgroup *memcg);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 int task_in_mem_cgroup(struct task_struct *task, const struct mem_cgroup *memcg);
 
 extern struct mem_cgroup *try_get_mem_cgroup_from_page(struct page *page);
@@ -93,6 +100,7 @@ static inline
 int mm_match_cgroup(const struct mm_struct *mm, const struct mem_cgroup *cgroup)
 {
 	struct mem_cgroup *memcg;
+<<<<<<< HEAD
 	int match;
 
 	rcu_read_lock();
@@ -100,6 +108,12 @@ int mm_match_cgroup(const struct mm_struct *mm, const struct mem_cgroup *cgroup)
 	match = __mem_cgroup_same_or_subtree(cgroup, memcg);
 	rcu_read_unlock();
 	return match;
+=======
+	rcu_read_lock();
+	memcg = mem_cgroup_from_task(rcu_dereference((mm)->owner));
+	rcu_read_unlock();
+	return cgroup == memcg;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 extern struct cgroup_subsys_state *mem_cgroup_css(struct mem_cgroup *memcg);
@@ -266,6 +280,13 @@ static inline void mem_cgroup_lru_del_list(struct page *page, enum lru_list lru)
 {
 }
 
+<<<<<<< HEAD
+=======
+static inline void mem_cgroup_lru_del(struct page *page)
+{
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline struct lruvec *mem_cgroup_lru_move_lists(struct zone *zone,
 						       struct page *page,
 						       enum lru_list from,

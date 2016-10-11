@@ -10,6 +10,12 @@ Required properties:
 	- "ns16850"
 	- "nvidia,tegra20-uart"
 	- "ibm,qpace-nwp-serial"
+<<<<<<< HEAD
+=======
+	- "altr,16550-FIFO32"
+	- "altr,16550-FIFO64"
+	- "altr,16550-FIFO128"
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	- "serial" if the port type is unknown.
 - reg : offset and length of the register set for the device.
 - interrupts : should contain uart interrupt.

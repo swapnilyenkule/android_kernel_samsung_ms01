@@ -11,10 +11,18 @@
 struct ceph_msgpool {
 	const char *name;
 	mempool_t *pool;
+<<<<<<< HEAD
 	int front_len;          /* preallocated payload size */
 };
 
 extern int ceph_msgpool_init(struct ceph_msgpool *pool,
+=======
+	int type;               /* preallocated message type */
+	int front_len;          /* preallocated payload size */
+};
+
+extern int ceph_msgpool_init(struct ceph_msgpool *pool, int type,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			     int front_len, int size, bool blocking,
 			     const char *name);
 extern void ceph_msgpool_destroy(struct ceph_msgpool *pool);

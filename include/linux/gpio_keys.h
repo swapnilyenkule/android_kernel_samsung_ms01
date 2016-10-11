@@ -1,5 +1,6 @@
 #ifndef _GPIO_KEYS_H
 #define _GPIO_KEYS_H
+<<<<<<< HEAD
 /* DVFS feature : HOME_KEY BOOSTER */
 #ifdef CONFIG_SEC_DVFS
 #define KEY_BOOSTER
@@ -10,6 +11,8 @@
 #define KEY_BOOSTER_CHG_TIME	130
 #endif
 extern struct class *sec_class;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct device;
 
@@ -36,6 +39,7 @@ struct gpio_keys_platform_data {
 	int (*enable)(struct device *dev);
 	void (*disable)(struct device *dev);
 	const char *name;		/* input device name */
+<<<<<<< HEAD
 #ifdef CONFIG_SENSORS_HALL
 	int gpio_flip_cover;
 #endif
@@ -53,5 +57,8 @@ enum state {
 	enable
 };
 #endif
+=======
+};
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #endif

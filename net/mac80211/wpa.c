@@ -106,7 +106,12 @@ ieee80211_rx_h_michael_mic_verify(struct ieee80211_rx_data *rx)
 		if (status->flag & RX_FLAG_MMIC_ERROR)
 			goto mic_fail;
 
+<<<<<<< HEAD
 		if (!(status->flag & RX_FLAG_IV_STRIPPED) && rx->key)
+=======
+		if (!(status->flag & RX_FLAG_IV_STRIPPED) && rx->key &&
+		    rx->key->conf.cipher == WLAN_CIPHER_SUITE_TKIP)
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			goto update_iv;
 
 		return RX_CONTINUE;

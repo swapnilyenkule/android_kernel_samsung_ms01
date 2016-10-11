@@ -126,14 +126,18 @@ static int _get_more_prng_bytes(struct prng_context *ctx, int cont_test)
 			output = ctx->rand_data;
 			break;
 		case 2:
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 			if (unlikely(in_fips_err()))
 				return -EINVAL;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			/*
 			 * First check that we didn't produce the same
 			 * random data that we did last time around through this
 			 */
+<<<<<<< HEAD
 #if FIPS_FUNC_TEST == 5
             memcpy(ctx->rand_data, ctx->last_rand_data, DEFAULT_BLK_SZ);
 #endif
@@ -145,6 +149,13 @@ static int _get_more_prng_bytes(struct prng_context *ctx, int cont_test)
 #else
 					panic("cprng %p Failed repetition check!\n", ctx);					
 #endif
+=======
+			if (!memcmp(ctx->rand_data, ctx->last_rand_data,
+					DEFAULT_BLK_SZ)) {
+				if (cont_test) {
+					panic("cprng %p Failed repetition check!\n",
+						ctx);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				}
 
 				printk(KERN_ERR
@@ -382,11 +393,14 @@ static int cprng_reset(struct crypto_rng *tfm, u8 *seed, unsigned int slen)
 	if (slen < DEFAULT_PRNG_KSZ + DEFAULT_BLK_SZ)
 		return -EINVAL;
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (!memcmp(key, seed, DEFAULT_PRNG_KSZ))
 		return -EINVAL;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (slen >= (2 * DEFAULT_BLK_SZ + DEFAULT_PRNG_KSZ))
 		dt = key + DEFAULT_PRNG_KSZ;
 
@@ -423,11 +437,14 @@ static int fips_cprng_get_random(struct crypto_rng *tfm, u8 *rdata,
 {
 	struct prng_context *prng = crypto_rng_ctx(tfm);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
 	if (unlikely(in_fips_err()))
 		return -EINVAL;
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return get_prng_bytes(rdata, dlen, prng, 1);
 }
 

@@ -13,6 +13,11 @@
 #ifndef __ASM_ARCH_COLLIE_H
 #define __ASM_ARCH_COLLIE_H
 
+<<<<<<< HEAD
+=======
+#include "hardware.h" /* Gives GPIO_MAX */
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern void locomolcd_power(int on);
 
 #define COLLIE_SCOOP_GPIO_BASE	(GPIO_MAX + 1)

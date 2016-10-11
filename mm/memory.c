@@ -49,7 +49,10 @@
 #include <linux/rmap.h>
 #include <linux/export.h>
 #include <linux/delayacct.h>
+<<<<<<< HEAD
 #include <linux/delay.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #include <linux/init.h>
 #include <linux/writeback.h>
 #include <linux/memcontrol.h>
@@ -58,7 +61,10 @@
 #include <linux/swapops.h>
 #include <linux/elf.h>
 #include <linux/gfp.h>
+<<<<<<< HEAD
 #include <linux/bug.h>
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #include <asm/io.h>
 #include <asm/pgalloc.h>
@@ -154,11 +160,14 @@ static void add_mm_counter_fast(struct mm_struct *mm, int member, int val)
 
 /* sync counter once per 64 page faults */
 #define TASK_RSS_EVENTS_THRESH	(64)
+<<<<<<< HEAD
 
 #if defined(CONFIG_VMWARE_MVP)
 EXPORT_SYMBOL_GPL(get_mm_counter);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static void check_sync_rss_stat(struct task_struct *task)
 {
 	if (unlikely(task != current))
@@ -189,10 +198,20 @@ static int tlb_next_batch(struct mmu_gather *tlb)
 		return 1;
 	}
 
+<<<<<<< HEAD
+=======
+	if (tlb->batch_count == MAX_GATHER_BATCH_COUNT)
+		return 0;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	batch = (void *)__get_free_pages(GFP_NOWAIT | __GFP_NOWARN, 0);
 	if (!batch)
 		return 0;
 
+<<<<<<< HEAD
+=======
+	tlb->batch_count++;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	batch->next = NULL;
 	batch->nr   = 0;
 	batch->max  = MAX_GATHER_BATCH;
@@ -219,6 +238,10 @@ void tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm, bool fullmm)
 	tlb->local.nr   = 0;
 	tlb->local.max  = ARRAY_SIZE(tlb->__pages);
 	tlb->active     = &tlb->local;
+<<<<<<< HEAD
+=======
+	tlb->batch_count = 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_HAVE_RCU_TABLE_FREE
 	tlb->batch = NULL;
@@ -711,9 +734,12 @@ static void print_bad_pte(struct vm_area_struct *vma, unsigned long addr,
 	if (vma->vm_file && vma->vm_file->f_op)
 		print_symbol(KERN_ALERT "vma->vm_file->f_op->mmap: %s\n",
 				(unsigned long)vma->vm_file->f_op->mmap);
+<<<<<<< HEAD
 
 	BUG_ON(PANIC_CORRUPTION);
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	dump_stack();
 	add_taint(TAINT_BAD_PAGE);
 }
@@ -832,6 +858,7 @@ out:
 	return pfn_to_page(pfn);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 /* redefining the original function for L2 group
  * Original function is is asm-generic.
@@ -860,11 +887,14 @@ static inline void tima_l2group_ptep_set_wrprotect(struct mm_struct *mm,
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /*
  * copy one vm_area from one task to the other. Assumes the page tables
  * already present in the new task to be cleared in the whole range
  * covered by this vma.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 static inline unsigned long
 tima_l2group_copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
@@ -875,11 +905,17 @@ tima_l2group_copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 		unsigned long *tima_l2group_buffer_index,
 		unsigned long tima_l2group_flag)
 #else
+=======
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 static inline unsigned long
 copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 		pte_t *dst_pte, pte_t *src_pte, struct vm_area_struct *vma,
 		unsigned long addr, int *rss)
+<<<<<<< HEAD
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */		
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 {
 	unsigned long vm_flags = vma->vm_flags;
 	pte_t pte = *src_pte;
@@ -890,6 +926,7 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 		if (!pte_file(pte)) {
 			swp_entry_t entry = pte_to_swp_entry(pte);
 
+<<<<<<< HEAD
 			if (swap_duplicate(entry) < 0)
 				return entry.val;
 
@@ -904,6 +941,22 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 			if (likely(!non_swap_entry(entry)))
 				rss[MM_SWAPENTS]++;
 			else if (is_migration_entry(entry)) {
+=======
+			if (likely(!non_swap_entry(entry))) {
+				if (swap_duplicate(entry) < 0)
+					return entry.val;
+
+				/* make sure dst_mm is on swapoff's mmlist. */
+				if (unlikely(list_empty(&dst_mm->mmlist))) {
+					spin_lock(&mmlist_lock);
+					if (list_empty(&dst_mm->mmlist))
+						list_add(&dst_mm->mmlist,
+							 &src_mm->mmlist);
+					spin_unlock(&mmlist_lock);
+				}
+				rss[MM_SWAPENTS]++;
+			} else if (is_migration_entry(entry)) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				page = migration_entry_to_page(entry);
 
 				if (PageAnon(page))
@@ -931,6 +984,7 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 	 * in the parent and the child
 	 */
 	if (is_cow_mapping(vm_flags)) {
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 		if (tima_l2group_flag) {
 			tima_l2group_ptep_set_wrprotect(src_mm, addr, src_pte,
@@ -941,6 +995,9 @@ copy_one_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 #else
 		ptep_set_wrprotect(src_mm, addr, src_pte);
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
+=======
+		ptep_set_wrprotect(src_mm, addr, src_pte);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		pte = pte_wrprotect(pte);
 	}
 
@@ -977,6 +1034,7 @@ int copy_pte_range(struct mm_struct *dst_mm, struct mm_struct *src_mm,
 	int progress = 0;
 	int rss[NR_MM_COUNTERS];
 	swp_entry_t entry = (swp_entry_t){0};
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
         unsigned long tima_l2group_flag = 0;
         tima_l2group_entry_t *tima_l2group_buffer1 = NULL;
@@ -984,6 +1042,8 @@ int copy_pte_range(struct mm_struct *dst_mm, struct mm_struct *src_mm,
         unsigned long tima_l2group_numb_entries = ((end-addr) >> PAGE_SHIFT);
         unsigned long tima_l2group_buffer_index = 0;
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 again:
 	init_rss_vec(rss);
@@ -997,6 +1057,7 @@ again:
 	orig_src_pte = src_pte;
 	orig_dst_pte = dst_pte;
 	arch_enter_lazy_mmu_mode();
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 	/* Re-Initialize all L2_GROUP variables */
 	tima_l2group_flag= 0;
@@ -1011,6 +1072,8 @@ again:
 				&tima_l2group_flag, &tima_l2group_buffer_index,
 				&tima_l2group_buffer1, &tima_l2group_buffer2);
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	do {
 		/*
@@ -1027,6 +1090,7 @@ again:
 			progress++;
 			continue;
 		}
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 		/* function tima_l2group_copy_one_pte() increments
 		 * tima_l2group_buffer_index. Do not increment
@@ -1043,11 +1107,16 @@ again:
 		entry.val = copy_one_pte(dst_mm, src_mm, dst_pte, src_pte,
 							vma, addr, rss);
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */						
+=======
+		entry.val = copy_one_pte(dst_mm, src_mm, dst_pte, src_pte,
+							vma, addr, rss);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (entry.val)
 			break;
 		progress += 8;
 	} while (dst_pte++, src_pte++, addr += PAGE_SIZE, addr != end);
 
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_L2_GROUP
 	if (tima_l2group_flag) {
 		/*First: Flush the cache of the buffer to be read by the TZ side
@@ -1062,6 +1131,8 @@ again:
 			&tima_l2group_buffer1, &tima_l2group_buffer2);
 	}
 #endif /* CONFIG_TIMA_RKP_L2_GROUP */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	arch_leave_lazy_mmu_mode();
 	spin_unlock(src_ptl);
 	pte_unmap(orig_src_pte);
@@ -1265,8 +1336,15 @@ again:
 			if (unlikely(page_mapcount(page) < 0))
 				print_bad_pte(vma, addr, ptent, page);
 			force_flush = !__tlb_remove_page(tlb, page);
+<<<<<<< HEAD
 			if (force_flush)
 				break;
+=======
+			if (force_flush) {
+				addr += PAGE_SIZE;
+				break;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			continue;
 		}
 		/*
@@ -1832,6 +1910,7 @@ int __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
 			goto next_page;
 		}
 
+<<<<<<< HEAD
 		if (use_user_accessible_timers()) {
 			if (!vma && in_user_timers_area(mm, start)) {
 				int goto_next_page = 0;
@@ -1845,6 +1924,8 @@ int __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
 			}
 		}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		if (!vma ||
 		    (vma->vm_flags & (VM_IO | VM_PFNMAP)) ||
 		    !(vm_flags & vma->vm_flags))
@@ -1899,7 +1980,11 @@ int __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
 						else
 							return -EFAULT;
 					}
+<<<<<<< HEAD
 					if (ret & VM_FAULT_SIGBUS)
+=======
+					if (ret & (VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 						return i ? i : -EFAULT;
 					BUG();
 				}
@@ -1986,19 +2071,34 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
 		     unsigned long address, unsigned int fault_flags)
 {
 	struct vm_area_struct *vma;
+<<<<<<< HEAD
+=======
+	vm_flags_t vm_flags;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int ret;
 
 	vma = find_extend_vma(mm, address);
 	if (!vma || address < vma->vm_start)
 		return -EFAULT;
 
+<<<<<<< HEAD
+=======
+	vm_flags = (fault_flags & FAULT_FLAG_WRITE) ? VM_WRITE : VM_READ;
+	if (!(vm_flags & vma->vm_flags))
+		return -EFAULT;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	ret = handle_mm_fault(mm, vma, address, fault_flags);
 	if (ret & VM_FAULT_ERROR) {
 		if (ret & VM_FAULT_OOM)
 			return -ENOMEM;
 		if (ret & (VM_FAULT_HWPOISON | VM_FAULT_HWPOISON_LARGE))
 			return -EHWPOISON;
+<<<<<<< HEAD
 		if (ret & VM_FAULT_SIGBUS)
+=======
+		if (ret & (VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV))
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return -EFAULT;
 		BUG();
 	}
@@ -2788,6 +2888,7 @@ reuse:
 		if (!dirty_page)
 			return ret;
 
+<<<<<<< HEAD
 		/*
 		 * Yes, Virginia, this is actually required to prevent a race
 		 * with clear_page_dirty_for_io() from clearing the page dirty
@@ -2800,6 +2901,27 @@ reuse:
 			wait_on_page_locked(dirty_page);
 			set_page_dirty_balance(dirty_page, page_mkwrite);
 		}
+=======
+		if (!page_mkwrite) {
+			struct address_space *mapping;
+			int dirtied;
+
+			lock_page(dirty_page);
+			dirtied = set_page_dirty(dirty_page);
+			VM_BUG_ON(dirty_page);
+			mapping = dirty_page->mapping;
+			unlock_page(dirty_page);
+
+			if (dirtied && mapping) {
+				/*
+				 * Some device drivers do not set page.mapping
+				 * but still dirty their pages
+				 */
+				balance_dirty_pages_ratelimited(mapping);
+			}
+		}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		put_page(dirty_page);
 		if (page_mkwrite) {
 			struct address_space *mapping = dirty_page->mapping;
@@ -3065,6 +3187,7 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	entry = pte_to_swp_entry(orig_pte);
 	if (unlikely(non_swap_entry(entry))) {
 		if (is_migration_entry(entry)) {
+<<<<<<< HEAD
 #ifdef CONFIG_CMA
 			/*
 			 * FIXME: mszyprow: cruel, brute-force method for
@@ -3075,6 +3198,8 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 			 */
 			mdelay(10);
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			migration_entry_wait(mm, pmd, address);
 		} else if (is_hwpoison_entry(entry)) {
 			ret = VM_FAULT_HWPOISON;
@@ -3087,6 +3212,10 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	delayacct_set_flag(DELAYACCT_PF_SWAPIN);
 	page = lookup_swap_cache(entry);
 	if (!page) {
+<<<<<<< HEAD
+=======
+		grab_swap_token(mm); /* Contend for token _before_ read-in */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		page = swapin_readahead(entry,
 					GFP_HIGHUSER_MOVABLE, vma, address);
 		if (!page) {
@@ -3116,7 +3245,10 @@ static int do_swap_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	}
 
 	locked = lock_page_or_retry(page, mm, flags);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	delayacct_clear_flag(DELAYACCT_PF_SWAPIN);
 	if (!locked) {
 		ret |= VM_FAULT_RETRY;
@@ -3254,7 +3386,11 @@ static inline int check_stack_guard_page(struct vm_area_struct *vma, unsigned lo
 		if (prev && prev->vm_end == address)
 			return prev->vm_flags & VM_GROWSDOWN ? 0 : -ENOMEM;
 
+<<<<<<< HEAD
 		expand_downwards(vma, address - PAGE_SIZE);
+=======
+		return expand_downwards(vma, address - PAGE_SIZE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	if ((vma->vm_flags & VM_GROWSUP) && address + PAGE_SIZE == vma->vm_end) {
 		struct vm_area_struct *next = vma->vm_next;
@@ -3263,7 +3399,11 @@ static inline int check_stack_guard_page(struct vm_area_struct *vma, unsigned lo
 		if (next && next->vm_start == address + PAGE_SIZE)
 			return next->vm_flags & VM_GROWSUP ? 0 : -ENOMEM;
 
+<<<<<<< HEAD
 		expand_upwards(vma, address + PAGE_SIZE);
+=======
+		return expand_upwards(vma, address + PAGE_SIZE);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	}
 	return 0;
 }
@@ -3283,9 +3423,23 @@ static int do_anonymous_page(struct mm_struct *mm, struct vm_area_struct *vma,
 
 	pte_unmap(page_table);
 
+<<<<<<< HEAD
 	/* Check if we need to add a guard page to the stack */
 	if (check_stack_guard_page(vma, address) < 0)
 		return VM_FAULT_SIGBUS;
+=======
+	/* File mapping without ->vm_ops ? */
+	if (vma->vm_flags & VM_SHARED)
+		return VM_FAULT_SIGBUS;
+
+	/* File mapping without ->vm_ops ? */
+	if (vma->vm_flags & VM_SHARED)
+		return VM_FAULT_SIGBUS;
+
+	/* Check if we need to add a guard page to the stack */
+	if (check_stack_guard_page(vma, address) < 0)
+		return VM_FAULT_SIGSEGV;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	/* Use the zero-page for reads */
 	if (!(flags & FAULT_FLAG_WRITE)) {
@@ -3542,6 +3696,12 @@ static int do_linear_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 			- vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
 
 	pte_unmap(page_table);
+<<<<<<< HEAD
+=======
+	/* The VMA was not fully populated on mmap() or missing VM_DONTEXPAND */
+	if (!vma->vm_ops->fault)
+		return VM_FAULT_SIGBUS;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return __do_fault(mm, vma, address, pmd, pgoff, flags, orig_pte);
 }
 
@@ -3600,11 +3760,17 @@ int handle_pte_fault(struct mm_struct *mm,
 	entry = *pte;
 	if (!pte_present(entry)) {
 		if (pte_none(entry)) {
+<<<<<<< HEAD
 			if (vma->vm_ops) {
 				if (likely(vma->vm_ops->fault))
 					return do_linear_fault(mm, vma, address,
 						pte, pmd, flags, entry);
 			}
+=======
+			if (vma->vm_ops)
+				return do_linear_fault(mm, vma, address,
+						pte, pmd, flags, entry);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return do_anonymous_page(mm, vma, address,
 						 pte, pmd, flags);
 		}
@@ -3665,6 +3831,10 @@ int handle_mm_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 	if (unlikely(is_vm_hugetlb_page(vma)))
 		return hugetlb_fault(mm, vma, address, flags);
 
+<<<<<<< HEAD
+=======
+retry:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pgd = pgd_offset(mm, address);
 	pud = pud_alloc(mm, pgd, address);
 	if (!pud)
@@ -3678,13 +3848,33 @@ int handle_mm_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 							  pmd, flags);
 	} else {
 		pmd_t orig_pmd = *pmd;
+<<<<<<< HEAD
+=======
+		int ret;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		barrier();
 		if (pmd_trans_huge(orig_pmd)) {
 			if (flags & FAULT_FLAG_WRITE &&
 			    !pmd_write(orig_pmd) &&
+<<<<<<< HEAD
 			    !pmd_trans_splitting(orig_pmd))
 				return do_huge_pmd_wp_page(mm, vma, address,
 							   pmd, orig_pmd);
+=======
+			    !pmd_trans_splitting(orig_pmd)) {
+				ret = do_huge_pmd_wp_page(mm, vma, address, pmd,
+							  orig_pmd);
+				/*
+				 * If COW results in an oom, the huge pmd will
+				 * have been split, so retry the fault on the
+				 * pte for a smaller charge.
+				 */
+				if (unlikely(ret & VM_FAULT_OOM))
+					goto retry;
+				return ret;
+			}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return 0;
 		}
 	}
@@ -3943,7 +4133,11 @@ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
 	if (follow_phys(vma, addr, write, &prot, &phys_addr))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	maddr = ioremap_prot(phys_addr, PAGE_SIZE, prot);
+=======
+	maddr = ioremap_prot(phys_addr, PAGE_ALIGN(len + offset), prot);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (write)
 		memcpy_toio(maddr + offset, buf, len);
 	else

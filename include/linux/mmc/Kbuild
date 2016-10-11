@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 header-y += core.h
 header-y += ioctl.h
 header-y += mmc.h
+=======
+header-y += ioctl.h
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4

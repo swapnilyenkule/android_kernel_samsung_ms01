@@ -65,7 +65,11 @@ static int crypto_rng_report(struct sk_buff *skb, struct crypto_alg *alg)
 {
 	struct crypto_report_rng rrng;
 
+<<<<<<< HEAD
 	snprintf(rrng.type, CRYPTO_MAX_ALG_NAME, "%s", "rng");
+=======
+	strncpy(rrng.type, "rng", sizeof(rrng.type));
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	rrng.seedsize = alg->cra_rng.seedsize;
 

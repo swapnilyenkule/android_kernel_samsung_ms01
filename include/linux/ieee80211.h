@@ -1074,6 +1074,7 @@ struct ieee80211_ht_info {
 #define WLAN_HT_SMPS_CONTROL_STATIC	1
 #define WLAN_HT_SMPS_CONTROL_DYNAMIC	3
 
+<<<<<<< HEAD
 /**
  * struct ieee80211_vht_mcs_info - VHT MCS information
  * @rx_mcs_map: RX MCS map 2 bits for each stream, total 8 streams
@@ -1158,6 +1159,8 @@ struct ieee80211_vht_operation {
 #define IEEE80211_VHT_CAP_RX_ANTENNA_PATTERN                  0x10000000
 #define IEEE80211_VHT_CAP_TX_ANTENNA_PATTERN                  0x20000000
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /* Authentication algorithms */
 #define WLAN_AUTH_OPEN 0
 #define WLAN_AUTH_SHARED_KEY 1
@@ -1418,9 +1421,12 @@ enum ieee80211_eid {
 	WLAN_EID_DSE_REGISTERED_LOCATION = 58,
 	WLAN_EID_SUPPORTED_REGULATORY_CLASSES = 59,
 	WLAN_EID_EXT_CHANSWITCH_ANN = 60,
+<<<<<<< HEAD
 
 	WLAN_EID_VHT_CAPABILITY = 191,
 	WLAN_EID_VHT_OPERATION = 192,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /* Action category code */
@@ -1495,7 +1501,10 @@ enum ieee80211_key_len {
 	WLAN_KEY_LEN_CCMP = 16,
 	WLAN_KEY_LEN_TKIP = 32,
 	WLAN_KEY_LEN_AES_CMAC = 16,
+<<<<<<< HEAD
 	WLAN_KEY_LEN_WAPI_SMS4 = 32,
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 };
 
 /* Public action codes */
@@ -1648,16 +1657,26 @@ enum ieee80211_sa_query_action {
 #define WLAN_CIPHER_SUITE_USE_GROUP	0x000FAC00
 #define WLAN_CIPHER_SUITE_WEP40		0x000FAC01
 #define WLAN_CIPHER_SUITE_TKIP		0x000FAC02
+<<<<<<< HEAD
 /* reserved:				0x000FAC03 */
 #define WLAN_CIPHER_SUITE_CCMP		0x000FAC04
 #define WLAN_CIPHER_SUITE_WEP104	0x000FAC05
 #define WLAN_CIPHER_SUITE_AES_CMAC	0x000FAC06
 #define WLAN_CIPHER_SUITE_SMS4		0x00147201 /* WAPI */
 #define WLAN_CIPHER_SUITE_PMK		0x00904C00 /* 802.11r */
+=======
+/* reserved: 				0x000FAC03 */
+#define WLAN_CIPHER_SUITE_CCMP		0x000FAC04
+#define WLAN_CIPHER_SUITE_WEP104	0x000FAC05
+#define WLAN_CIPHER_SUITE_AES_CMAC	0x000FAC06
+
+#define WLAN_CIPHER_SUITE_SMS4		0x00147201
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 /* AKM suite selectors */
 #define WLAN_AKM_SUITE_8021X		0x000FAC01
 #define WLAN_AKM_SUITE_PSK		0x000FAC02
+<<<<<<< HEAD
 #define WLAN_AKM_SUITE_FT_8021X		0x000FAC03 /* 802.11r */
 #define WLAN_AKM_SUITE_FT_PSK		0x000FAC04 /* 802.11r */
 #define WLAN_AKM_SUITE_SAE			0x000FAC08
@@ -1665,6 +1684,10 @@ enum ieee80211_sa_query_action {
 #define WLAN_AKM_SUITE_WAPI_PSK		0x000FAC11  /* WAPI */
 #define WLAN_AKM_SUITE_WAPI_CERT	0x000FAC12  /* WAPI */
 #define WLAN_AKM_SUITE_CCKM		0x00409600  /* CCKM */
+=======
+#define WLAN_AKM_SUITE_SAE			0x000FAC08
+#define WLAN_AKM_SUITE_FT_OVER_SAE	0x000FAC09
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #define WLAN_MAX_KEY_LEN		32
 

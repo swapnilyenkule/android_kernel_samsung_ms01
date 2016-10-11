@@ -547,6 +547,11 @@ int savage_driver_load(struct drm_device *dev, unsigned long chipset)
 
 	dev_priv->chipset = (enum savage_family)chipset;
 
+<<<<<<< HEAD
+=======
+	pci_set_master(dev->pdev);
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return 0;
 }
 

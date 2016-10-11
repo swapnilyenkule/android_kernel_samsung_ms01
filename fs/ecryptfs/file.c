@@ -33,6 +33,7 @@
 #include <linux/fs_stack.h>
 #include "ecryptfs_kernel.h"
 
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 #include <linux/ctype.h>
 #define ECRYPTFS_IOCTL_GET_ATTRIBUTES	_IOR('l', 0x10, __u32)
@@ -41,6 +42,8 @@
 #endif
 
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * ecryptfs_read_update_atime
  *
@@ -158,6 +161,7 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	crypt_stat = &ecryptfs_inode_to_private(inode)->crypt_stat;
 	mount_crypt_stat = &ecryptfs_superblock_to_private(
 						inode->i_sb)->mount_crypt_stat;
+<<<<<<< HEAD
 
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	if (crypt_stat->flags & ECRYPTFS_STRUCT_INITIALIZED
@@ -199,6 +203,8 @@ static int read_or_initialize_metadata(struct dentry *dentry)
 	mutex_unlock(&crypt_stat->cs_mutex);
 #endif
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	mutex_lock(&crypt_stat->cs_mutex);
 
 	if (crypt_stat->flags & ECRYPTFS_POLICY_APPLIED &&
@@ -244,13 +250,17 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 {
 	int rc = 0;
 	struct ecryptfs_crypt_stat *crypt_stat = NULL;
+<<<<<<< HEAD
 	struct ecryptfs_mount_crypt_stat *mount_crypt_stat;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct dentry *ecryptfs_dentry = file->f_path.dentry;
 	/* Private value of ecryptfs_dentry allocated in
 	 * ecryptfs_lookup() */
 	struct dentry *lower_dentry;
 	struct ecryptfs_file_info *file_info;
 
+<<<<<<< HEAD
 	mount_crypt_stat = &ecryptfs_superblock_to_private(
 		ecryptfs_dentry->d_sb)->mount_crypt_stat;
 	if ((mount_crypt_stat->flags & ECRYPTFS_ENCRYPTED_VIEW_ENABLED)
@@ -262,6 +272,8 @@ static int ecryptfs_open(struct inode *inode, struct file *file)
 		rc = -EPERM;
 		goto out;
 	}
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Released in ecryptfs_release or end of function if failure */
 	file_info = kmem_cache_zalloc(ecryptfs_file_info_cache, GFP_KERNEL);
 	ecryptfs_set_file_private(file, file_info);
@@ -364,6 +376,7 @@ ecryptfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct file *lower_file = NULL;
 	long rc = -ENOTTY;
+<<<<<<< HEAD
 #ifdef CONFIG_WTL_ENCRYPTION_FILTER
 	if (cmd == ECRYPTFS_IOCTL_GET_ATTRIBUTES) {
 		u32 __user *user_attr = (u32 __user *)arg;
@@ -407,6 +420,27 @@ ecryptfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	if (lower_file && lower_file->f_op && lower_file->f_op->unlocked_ioctl)
 		rc = lower_file->f_op->unlocked_ioctl(lower_file, cmd, arg);
 	return rc;
+=======
+
+	if (ecryptfs_file_to_private(file))
+		lower_file = ecryptfs_file_to_lower(file);
+	if (!(lower_file && lower_file->f_op && lower_file->f_op->unlocked_ioctl))
+		return rc;
+
+	switch (cmd) {
+	case FITRIM:
+	case FS_IOC_GETFLAGS:
+	case FS_IOC_SETFLAGS:
+	case FS_IOC_GETVERSION:
+	case FS_IOC_SETVERSION:
+		rc = lower_file->f_op->unlocked_ioctl(lower_file, cmd, arg);
+		fsstack_copy_attr_all(file->f_path.dentry->d_inode,
+				      lower_file->f_path.dentry->d_inode);
+		return rc;
+	default:
+		return rc;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 #ifdef CONFIG_COMPAT
@@ -418,6 +452,7 @@ ecryptfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 
 	if (ecryptfs_file_to_private(file))
 		lower_file = ecryptfs_file_to_lower(file);
+<<<<<<< HEAD
 	if (lower_file && lower_file->f_op && lower_file->f_op->compat_ioctl)
 		rc = lower_file->f_op->compat_ioctl(lower_file, cmd, arg);
 	return rc;
@@ -503,6 +538,24 @@ int is_file_ext_match(struct ecryptfs_mount_crypt_stat *mcs, char *str)
 			return 1;
 	}
 	return 0;
+=======
+	if (!(lower_file && lower_file->f_op && lower_file->f_op->compat_ioctl))
+		return rc;
+
+	switch (cmd) {
+	case FITRIM:
+	case FS_IOC32_GETFLAGS:
+	case FS_IOC32_SETFLAGS:
+	case FS_IOC32_GETVERSION:
+	case FS_IOC32_SETVERSION:
+		rc = lower_file->f_op->compat_ioctl(lower_file, cmd, arg);
+		fsstack_copy_attr_all(file->f_path.dentry->d_inode,
+				      lower_file->f_path.dentry->d_inode);
+		return rc;
+	default:
+		return rc;
+	}
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 #endif
 

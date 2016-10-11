@@ -207,7 +207,12 @@ udf_get_lb_pblock(struct super_block *sb, struct kernel_lb_addr *loc,
 }
 
 /* unicode.c */
+<<<<<<< HEAD
 extern int udf_get_filename(struct super_block *, uint8_t *, uint8_t *, int);
+=======
+extern int udf_get_filename(struct super_block *, uint8_t *, int, uint8_t *,
+			    int);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 extern int udf_put_filename(struct super_block *, const uint8_t *, uint8_t *,
 			    int);
 extern int udf_build_ustr(struct ustr *, dstring *, int);

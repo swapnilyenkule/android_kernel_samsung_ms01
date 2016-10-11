@@ -86,6 +86,10 @@ int main(int argc, char **argv)
 		case 'j':
 			include_jump = 1;
 			break;
+<<<<<<< HEAD
+=======
+		default:
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 			return usage();
 		}
 	}

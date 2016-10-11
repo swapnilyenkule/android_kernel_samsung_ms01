@@ -836,14 +836,27 @@ static const struct u300_pin_group u300_pin_groups[] = {
 	},
 };
 
+<<<<<<< HEAD
 static int u300_get_groups_count(struct pinctrl_dev *pctldev)
 {
 	return ARRAY_SIZE(u300_pin_groups);
+=======
+static int u300_list_groups(struct pinctrl_dev *pctldev, unsigned selector)
+{
+	if (selector >= ARRAY_SIZE(u300_pin_groups))
+		return -EINVAL;
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *u300_get_group_name(struct pinctrl_dev *pctldev,
 				       unsigned selector)
 {
+<<<<<<< HEAD
+=======
+	if (selector >= ARRAY_SIZE(u300_pin_groups))
+		return NULL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return u300_pin_groups[selector].name;
 }
 
@@ -851,6 +864,11 @@ static int u300_get_group_pins(struct pinctrl_dev *pctldev, unsigned selector,
 			       const unsigned **pins,
 			       unsigned *num_pins)
 {
+<<<<<<< HEAD
+=======
+	if (selector >= ARRAY_SIZE(u300_pin_groups))
+		return -EINVAL;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	*pins = u300_pin_groups[selector].pins;
 	*num_pins = u300_pin_groups[selector].num_pins;
 	return 0;
@@ -863,7 +881,11 @@ static void u300_pin_dbg_show(struct pinctrl_dev *pctldev, struct seq_file *s,
 }
 
 static struct pinctrl_ops u300_pctrl_ops = {
+<<<<<<< HEAD
 	.get_groups_count = u300_get_groups_count,
+=======
+	.list_groups = u300_list_groups,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_group_name = u300_get_group_name,
 	.get_group_pins = u300_get_group_pins,
 	.pin_dbg_show = u300_pin_dbg_show,
@@ -985,9 +1007,17 @@ static void u300_pmx_disable(struct pinctrl_dev *pctldev, unsigned selector,
 	u300_pmx_endisable(upmx, selector, false);
 }
 
+<<<<<<< HEAD
 static int u300_pmx_get_funcs_count(struct pinctrl_dev *pctldev)
 {
 	return ARRAY_SIZE(u300_pmx_functions);
+=======
+static int u300_pmx_list_funcs(struct pinctrl_dev *pctldev, unsigned selector)
+{
+	if (selector >= ARRAY_SIZE(u300_pmx_functions))
+		return -EINVAL;
+	return 0;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static const char *u300_pmx_get_func_name(struct pinctrl_dev *pctldev,
@@ -1006,7 +1036,11 @@ static int u300_pmx_get_groups(struct pinctrl_dev *pctldev, unsigned selector,
 }
 
 static struct pinmux_ops u300_pmx_ops = {
+<<<<<<< HEAD
 	.get_functions_count = u300_pmx_get_funcs_count,
+=======
+	.list_functions = u300_pmx_list_funcs,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.get_function_name = u300_pmx_get_func_name,
 	.get_function_groups = u300_pmx_get_groups,
 	.enable = u300_pmx_enable,
@@ -1177,6 +1211,11 @@ static int __devexit u300_pmx_remove(struct platform_device *pdev)
 	struct u300_pmx *upmx = platform_get_drvdata(pdev);
 	int i;
 
+<<<<<<< HEAD
+=======
+	for (i = 0; i < ARRAY_SIZE(u300_gpio_ranges); i++)
+		pinctrl_remove_gpio_range(upmx->pctl, &u300_gpio_ranges[i]);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	pinctrl_unregister(upmx->pctl);
 	iounmap(upmx->virtbase);
 	release_mem_region(upmx->phybase, upmx->physize);

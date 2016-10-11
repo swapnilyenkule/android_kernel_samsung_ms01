@@ -110,6 +110,7 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
 	pud_t *pud;
 	pmd_t *pmd;
 	pgtable_t pte;
+<<<<<<< HEAD
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
 	unsigned long cmd_id = 0x3f80b221;
 	unsigned long pmd_base;
@@ -117,6 +118,8 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
         __asm__ __volatile__(".arch_extension sec\n");
 #endif
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (!pgd_base)
 		return;
@@ -162,6 +165,7 @@ no_pgd:
 		pud_free(mm, pud);
 	}
 #endif
+<<<<<<< HEAD
 #ifdef  CONFIG_TIMA_RKP_L1_TABLES
 	if (tima_is_pg_protected((unsigned long) pgd) != 0) {
 	__asm__ __volatile__ (
@@ -184,5 +188,7 @@ no_pgd:
 	tima_verify_state(pmd_base + 0x3000, 0, 0, 3);
 	}
 #endif
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	__pgd_free(pgd_base);
 }

@@ -232,9 +232,15 @@ struct netdev_hw_addr {
 #define NETDEV_HW_ADDR_T_SLAVE		3
 #define NETDEV_HW_ADDR_T_UNICAST	4
 #define NETDEV_HW_ADDR_T_MULTICAST	5
+<<<<<<< HEAD
 	bool			synced;
 	bool			global_use;
 	int			refcount;
+=======
+	bool			global_use;
+	int			refcount;
+	int			synced;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct rcu_head		rcu_head;
 };
 
@@ -1279,6 +1285,11 @@ struct net_device {
 	/* for setting kernel sock attribute on TCP connection setup */
 #define GSO_MAX_SIZE		65536
 	unsigned int		gso_max_size;
+<<<<<<< HEAD
+=======
+#define GSO_MAX_SEGS		65535
+	u16			gso_max_segs;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 #ifdef CONFIG_DCB
 	/* Data Center Bridging netlink ops */
@@ -1494,6 +1505,11 @@ struct packet_type {
 	struct sk_buff		**(*gro_receive)(struct sk_buff **head,
 					       struct sk_buff *skb);
 	int			(*gro_complete)(struct sk_buff *skb);
+<<<<<<< HEAD
+=======
+	bool			(*id_match)(struct packet_type *ptype,
+					    struct sock *sk);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	void			*af_packet_priv;
 	struct list_head	list;
 };
@@ -1698,6 +1714,18 @@ static inline int dev_parse_header(const struct sk_buff *skb,
 	return dev->header_ops->parse(skb, haddr);
 }
 
+<<<<<<< HEAD
+=======
+static inline int dev_rebuild_header(struct sk_buff *skb)
+{
+	const struct net_device *dev = skb->dev;
+
+	if (!dev->header_ops || !dev->header_ops->rebuild)
+		return 0;
+	return dev->header_ops->rebuild(skb);
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 typedef int gifconf_func_t(struct net_device * dev, char __user * bufptr, int len);
 extern int		register_gifconf(unsigned int family, gifconf_func_t * gifconf);
 static inline int unregister_gifconf(unsigned int family)

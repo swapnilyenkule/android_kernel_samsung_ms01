@@ -269,7 +269,11 @@ static inline struct tmem_oid oswiz(unsigned type, u32 ind)
 }
 
 /* returns 0 if the page was successfully put into frontswap, -1 if not */
+<<<<<<< HEAD
 static int tmem_frontswap_store(unsigned type, pgoff_t offset,
+=======
+static int tmem_frontswap_put_page(unsigned type, pgoff_t offset,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				   struct page *page)
 {
 	u64 ind64 = (u64)offset;
@@ -295,7 +299,11 @@ static int tmem_frontswap_store(unsigned type, pgoff_t offset,
  * returns 0 if the page was successfully gotten from frontswap, -1 if
  * was not present (should never happen!)
  */
+<<<<<<< HEAD
 static int tmem_frontswap_load(unsigned type, pgoff_t offset,
+=======
+static int tmem_frontswap_get_page(unsigned type, pgoff_t offset,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 				   struct page *page)
 {
 	u64 ind64 = (u64)offset;
@@ -362,8 +370,13 @@ static int __init no_frontswap(char *s)
 __setup("nofrontswap", no_frontswap);
 
 static struct frontswap_ops __initdata tmem_frontswap_ops = {
+<<<<<<< HEAD
 	.store = tmem_frontswap_store,
 	.load = tmem_frontswap_load,
+=======
+	.put_page = tmem_frontswap_put_page,
+	.get_page = tmem_frontswap_get_page,
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	.invalidate_page = tmem_frontswap_flush_page,
 	.invalidate_area = tmem_frontswap_flush_area,
 	.init = tmem_frontswap_init

@@ -49,7 +49,10 @@ struct ceph_options {
 	struct ceph_entity_addr my_addr;
 	int mount_timeout;
 	int osd_idle_ttl;
+<<<<<<< HEAD
 	int osd_timeout;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	int osd_keepalive_timeout;
 
 	/*
@@ -69,7 +72,10 @@ struct ceph_options {
  * defaults
  */
 #define CEPH_MOUNT_TIMEOUT_DEFAULT  60
+<<<<<<< HEAD
 #define CEPH_OSD_TIMEOUT_DEFAULT    60  /* seconds */
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define CEPH_OSD_KEEPALIVE_DEFAULT  5
 #define CEPH_OSD_IDLE_TTL_DEFAULT    60
 
@@ -132,7 +138,11 @@ struct ceph_client {
 	u32 supported_features;
 	u32 required_features;
 
+<<<<<<< HEAD
 	struct ceph_messenger *msgr;   /* messenger instance */
+=======
+	struct ceph_messenger msgr;   /* messenger instance */
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	struct ceph_mon_client monc;
 	struct ceph_osd_client osdc;
 

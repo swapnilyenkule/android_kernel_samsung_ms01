@@ -799,6 +799,13 @@ static irqreturn_t ssp_int(int irq, void *dev_id)
 	if (!(sccr1_reg & SSCR1_TIE))
 		mask &= ~SSSR_TFS;
 
+<<<<<<< HEAD
+=======
+	/* Ignore RX timeout interrupt if it is disabled */
+	if (!(sccr1_reg & SSCR1_TINTE))
+		mask &= ~SSSR_TINT;
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	if (!(status & mask))
 		return IRQ_NONE;
 

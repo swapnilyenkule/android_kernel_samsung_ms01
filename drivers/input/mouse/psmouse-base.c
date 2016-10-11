@@ -1477,7 +1477,12 @@ static int psmouse_reconnect(struct serio *serio)
 	int rc = -1;
 
 	if (!drv || !psmouse) {
+<<<<<<< HEAD
 		printk(KERN_DEBUG "psmouse: reconnect request, but serio is disconnected, ignoring...\n");
+=======
+		psmouse_dbg(psmouse,
+			    "reconnect request, but serio is disconnected, ignoring...\n");
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		return -1;
 	}
 

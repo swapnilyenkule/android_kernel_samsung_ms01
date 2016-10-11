@@ -80,6 +80,18 @@ struct attribute_group {
 
 #define __ATTR_NULL { .attr = { .name = NULL } }
 
+<<<<<<< HEAD
+=======
+#define ATTRIBUTE_GROUPS(name)					\
+static const struct attribute_group name##_group = {		\
+	.attrs = name##_attrs,					\
+};								\
+static const struct attribute_group *name##_groups[] = {	\
+	&name##_group,						\
+	NULL,							\
+}
+
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 #define attr_name(_attr) (_attr).attr.name
 
 struct file;
@@ -134,8 +146,11 @@ int __must_check sysfs_create_files(struct kobject *kobj,
 				   const struct attribute **attr);
 int __must_check sysfs_chmod_file(struct kobject *kobj,
 				  const struct attribute *attr, umode_t mode);
+<<<<<<< HEAD
 int __must_check sysfs_chown_file(struct kobject *kobj, 
 				  const struct attribute *attr, uid_t uid, gid_t gid);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 void sysfs_remove_file(struct kobject *kobj, const struct attribute *attr);
 void sysfs_remove_files(struct kobject *kobj, const struct attribute **attr);
 

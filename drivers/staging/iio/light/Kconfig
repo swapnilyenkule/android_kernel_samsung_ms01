@@ -3,6 +3,7 @@
 #
 menu "Light sensors"
 
+<<<<<<< HEAD
 config SENSORS_GP2A_IIO
 	tristate "Sharp Light Sensor"
 	depends on I2C && GPIOLIB
@@ -20,6 +21,8 @@ config SENSORS_GP2A_IIO_PROX
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called gp2a030a.
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 config SENSORS_ISL29018
         tristate "ISL 29018 light and proximity sensor"
         depends on I2C

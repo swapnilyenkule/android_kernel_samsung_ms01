@@ -20,6 +20,7 @@
 #include <linux/export.h>
 #include <trace/events/asoc.h>
 
+<<<<<<< HEAD
 #include <linux/switch.h>
 
 #define SEC_JACK_NO_DEVICE		0
@@ -35,6 +36,8 @@ struct switch_dev android_switch = {
 	.name = "h2w",
 };
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 /**
  * snd_soc_jack_new - Create a new jack
  * @card:  ASoC card
@@ -51,16 +54,22 @@ struct switch_dev android_switch = {
 int snd_soc_jack_new(struct snd_soc_codec *codec, const char *id, int type,
 		     struct snd_soc_jack *jack)
 {
+<<<<<<< HEAD
 	mutex_init(&jack->mutex);
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	jack->codec = codec;
 	INIT_LIST_HEAD(&jack->pins);
 	INIT_LIST_HEAD(&jack->jack_zones);
 	BLOCKING_INIT_NOTIFIER_HEAD(&jack->notifier);
 
+<<<<<<< HEAD
 	if(!strcmp(id, "Headset Jack")) {
 		switch_dev_register(&android_switch);
 	}
 
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	return snd_jack_new(codec->card->snd_card, id, type, &jack->jack);
 }
 EXPORT_SYMBOL_GPL(snd_soc_jack_new);
@@ -95,7 +104,11 @@ void snd_soc_jack_report(struct snd_soc_jack *jack, int status, int mask)
 	codec = jack->codec;
 	dapm =  &codec->dapm;
 
+<<<<<<< HEAD
 	mutex_lock(&jack->mutex);
+=======
+	mutex_lock(&codec->mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	oldstatus = jack->status;
 
@@ -129,11 +142,16 @@ void snd_soc_jack_report(struct snd_soc_jack *jack, int status, int mask)
 	snd_jack_report(jack->jack, jack->status);
 
 out:
+<<<<<<< HEAD
 	mutex_unlock(&jack->mutex);
+=======
+	mutex_unlock(&codec->mutex);
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 EXPORT_SYMBOL_GPL(snd_soc_jack_report);
 
 /**
+<<<<<<< HEAD
  * snd_soc_jack_report_no_dapm - Report the current status for a jack
  *				 without DAPM sync
  * @jack:   the jack
@@ -160,6 +178,8 @@ void snd_soc_jack_report_no_dapm(struct snd_soc_jack *jack, int status,
 EXPORT_SYMBOL_GPL(snd_soc_jack_report_no_dapm);
 
 /**
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
  * snd_soc_jack_add_zones - Associate voltage zones with jack
  *
  * @jack:  ASoC jack

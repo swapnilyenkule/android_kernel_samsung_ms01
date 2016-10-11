@@ -23,7 +23,10 @@
 
 extern FILE *yyin;
 extern int yyparse(void);
+<<<<<<< HEAD
 extern YYLTYPE yylloc;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 struct boot_info *the_boot_info;
 int treesource_error;
@@ -35,7 +38,10 @@ struct boot_info *dt_from_source(const char *fname)
 
 	srcfile_push(fname);
 	yyin = current_srcfile->f;
+<<<<<<< HEAD
 	yylloc.file = current_srcfile;
+=======
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 	if (yyparse() != 0)
 		die("Unable to parse input tree\n");

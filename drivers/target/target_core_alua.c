@@ -351,9 +351,17 @@ int target_emulate_set_target_port_groups(struct se_task *task)
 
 out:
 	transport_kunmap_data_sg(cmd);
+<<<<<<< HEAD
 	task->task_scsi_status = GOOD;
 	transport_complete_task(task, 1);
 	return 0;
+=======
+	if (!rc) {
+		task->task_scsi_status = GOOD;
+		transport_complete_task(task, 1);
+	}
+	return rc;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 }
 
 static inline int core_alua_state_nonoptimized(
@@ -390,8 +398,14 @@ static inline int core_alua_state_standby(
 	case REPORT_LUNS:
 	case RECEIVE_DIAGNOSTIC:
 	case SEND_DIAGNOSTIC:
+<<<<<<< HEAD
 	case MAINTENANCE_IN:
 		switch (cdb[1]) {
+=======
+		return 0;
+	case MAINTENANCE_IN:
+		switch (cdb[1] & 0x1f) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case MI_REPORT_TARGET_PGS:
 			return 0;
 		default:
@@ -432,8 +446,14 @@ static inline int core_alua_state_unavailable(
 	switch (cdb[0]) {
 	case INQUIRY:
 	case REPORT_LUNS:
+<<<<<<< HEAD
 	case MAINTENANCE_IN:
 		switch (cdb[1]) {
+=======
+		return 0;
+	case MAINTENANCE_IN:
+		switch (cdb[1] & 0x1f) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case MI_REPORT_TARGET_PGS:
 			return 0;
 		default:
@@ -472,8 +492,14 @@ static inline int core_alua_state_transition(
 	switch (cdb[0]) {
 	case INQUIRY:
 	case REPORT_LUNS:
+<<<<<<< HEAD
 	case MAINTENANCE_IN:
 		switch (cdb[1]) {
+=======
+		return 0;
+	case MAINTENANCE_IN:
+		switch (cdb[1] & 0x1f) {
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 		case MI_REPORT_TARGET_PGS:
 			return 0;
 		default:

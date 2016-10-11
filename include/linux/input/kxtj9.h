@@ -46,7 +46,11 @@ struct kxtj9_platform_data {
 	/* Output resolution: 8-bit valid or 12-bit valid */
 	#define RES_8BIT		0
 	#define RES_12BIT		(1 << 6)
+<<<<<<< HEAD
 	u8 res_ctl;
+=======
+	u8 res_12bit;
+>>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 	/* Output g-range: +/-2g, 4g, or 8g */
 	#define KXTJ9_G_2G		0
 	#define KXTJ9_G_4G		(1 << 3)
