@@ -1,10 +1,6 @@
 VERSION = 3
 PATCHLEVEL = 4
-<<<<<<< HEAD
-SUBLEVEL = 0
-=======
 SUBLEVEL = 112
->>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 EXTRAVERSION =
 NAME = Saber-toothed Squirrel
 
@@ -199,10 +195,6 @@ export KBUILD_BUILDHOST := $(SUBARCH)
 <<<<<<< HEAD
 ARCH		?=arm
 CROSS_COMPILE	?=/opt/toolchains/arm-eabi-4.9/bin/arm-eabi-
-=======
-ARCH		?= $(SUBARCH)
-CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
->>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -390,11 +382,7 @@ KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 KBUILD_AFLAGS_MODULE  := -DMODULE
-<<<<<<< HEAD
 KBUILD_CFLAGS_MODULE  := -DMODULE -fno-pic
-=======
-KBUILD_CFLAGS_MODULE  := -DMODULE
->>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -580,11 +568,7 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-<<<<<<< HEAD
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
-=======
-KBUILD_CFLAGS	+= -Os
->>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 else
 KBUILD_CFLAGS	+= -O2
 endif
@@ -617,11 +601,6 @@ KBUILD_CFLAGS	+= -fomit-frame-pointer
 endif
 endif
 
-<<<<<<< HEAD
-=======
-KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
-
->>>>>>> 343a5fbeef08baf2097b8cf4e26137cebe3cfef4
 ifdef CONFIG_DEBUG_INFO
 KBUILD_CFLAGS	+= -g
 KBUILD_AFLAGS	+= -gdwarf-2
