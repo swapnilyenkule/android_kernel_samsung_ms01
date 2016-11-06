@@ -13,6 +13,10 @@
 
 #include <mach/regs-ost.h>
 #include <mach/reset.h>
+<<<<<<< HEAD
+=======
+#include <mach/smemc.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 unsigned int reset_status;
 EXPORT_SYMBOL(reset_status);
@@ -80,6 +84,15 @@ static void do_hw_reset(void)
 	OWER = OWER_WME;
 	OSSR = OSSR_M3;
 	OSMR3 = OSCR + 368640;	/* ... in 100 ms */
+<<<<<<< HEAD
+=======
+	/*
+	 * SDRAM hangs on watchdog reset on Marvell PXA270 (erratum 71)
+	 * we put SDRAM into self-refresh to prevent that
+	 */
+	while (1)
+		writel_relaxed(MDREFR_SLFRSH, MDREFR);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 void pxa_restart(char mode, const char *cmd)
@@ -103,4 +116,7 @@ void pxa_restart(char mode, const char *cmd)
 		break;
 	}
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

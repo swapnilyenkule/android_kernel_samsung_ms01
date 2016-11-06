@@ -309,9 +309,13 @@ void do_rt_sigreturn(struct pt_regs *regs)
 		err |= restore_fpu_state(regs, fpu_save);
 
 	err |= __copy_from_user(&set, &sf->mask, sizeof(sigset_t));
+<<<<<<< HEAD
 	err |= do_sigaltstack(&sf->stack, NULL, (unsigned long)sf);
 
 	if (err)
+=======
+	if (err || do_sigaltstack(&sf->stack, NULL, (unsigned long)sf) == -EFAULT)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto segv;
 
 	err |= __get_user(rwin_save, &sf->rwin_save);

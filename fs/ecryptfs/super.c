@@ -33,6 +33,12 @@
 #include <linux/statfs.h>
 #include <linux/magic.h>
 #include "ecryptfs_kernel.h"
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+#include "ecryptfs_dek.h"
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 struct kmem_cache *ecryptfs_inode_info_cache;
 
@@ -60,6 +66,13 @@ static struct inode *ecryptfs_alloc_inode(struct super_block *sb)
 	mutex_init(&inode_info->lower_file_mutex);
 	atomic_set(&inode_info->lower_file_count, 0);
 	inode_info->lower_file = NULL;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+	// get userid from super block
+	inode_info->crypt_stat.engine_id = -1;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	inode = &inode_info->vfs_inode;
 out:
 	return inode;
@@ -159,6 +172,19 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 		else
 			seq_printf(m, ",ecryptfs_sig=%s", walker->sig);
 	}
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+	seq_printf(m, ",userid=%d", mount_crypt_stat->userid);
+
+	if (mount_crypt_stat->flags & ECRYPTFS_MOUNT_SDP_ENABLED){
+		seq_printf(m, ",sdp_enabled");
+	}
+	if (mount_crypt_stat->partition_id >= 0){
+	    seq_printf(m, ",partition_id=%d", mount_crypt_stat->partition_id);
+	}
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_unlock(&mount_crypt_stat->global_auth_tok_list_mutex);
 
 	seq_printf(m, ",ecryptfs_cipher=%s",
@@ -171,7 +197,11 @@ static int ecryptfs_show_options(struct seq_file *m, struct dentry *root)
 	if (mount_crypt_stat->flags & ECRYPTFS_ENABLE_FILTERING)
 		seq_printf(m, ",ecryptfs_enable_filtering");
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_CRYPTO_FIPS
+=======
+#if defined(CONFIG_CRYPTO_FIPS) && !defined(CONFIG_FORCE_DISABLE_FIPS)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (mount_crypt_stat->flags & ECRYPTFS_ENABLE_CC)
 		seq_printf(m, ",ecryptfs_enable_cc");
 #endif

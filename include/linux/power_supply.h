@@ -250,6 +250,10 @@ extern void power_supply_changed(struct power_supply *psy);
 extern int power_supply_am_i_supplied(struct power_supply *psy);
 extern int power_supply_set_battery_charged(struct power_supply *psy);
 extern int power_supply_set_current_limit(struct power_supply *psy, int limit);
+<<<<<<< HEAD
+=======
+extern int power_supply_set_voltage_limit(struct power_supply *psy, int limit);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int power_supply_set_online(struct power_supply *psy, bool enable);
 extern int power_supply_set_health_state(struct power_supply *psy, int health);
 extern int power_supply_set_present(struct power_supply *psy, bool enable);
@@ -270,6 +274,12 @@ static inline int power_supply_am_i_supplied(struct power_supply *psy)
 							{ return -ENOSYS; }
 static inline int power_supply_set_battery_charged(struct power_supply *psy)
 							{ return -ENOSYS; }
+<<<<<<< HEAD
+=======
+static inline int power_supply_set_voltage_limit(struct power_supply *psy,
+							int limit)
+							{ return -ENOSYS; }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline int power_supply_set_current_limit(struct power_supply *psy,
 							int limit)
 							{ return -ENOSYS; }

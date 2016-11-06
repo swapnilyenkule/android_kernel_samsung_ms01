@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -596,7 +600,15 @@ static int get_args(uint32_t kernel, uint32_t sc, remote_arg_t *pra,
 		rpra[i].buf.len = pra[i].buf.len;
 		if (!rpra[i].buf.len)
 			continue;
+<<<<<<< HEAD
 		if (me->channel[cid].smmu.enabled && fds && (fds[i] >= 0)) {
+=======
+		if (list[i].num) {
+			rpra[i].buf.pv = pra[i].buf.pv;
+			continue;
+		} else if (me->channel[cid].smmu.enabled &&
+					fds && (fds[i] >= 0)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			len = buf_page_size(pra[i].buf.len);
 			handles[i] = ion_import_dma_buf(me->iclient, fds[i]);
 			VERIFY(err, 0 == IS_ERR_OR_NULL(handles[i]));
@@ -612,9 +624,12 @@ static int get_args(uint32_t kernel, uint32_t sc, remote_arg_t *pra,
 			pages[list[i].pgidx].addr = iova;
 			pages[list[i].pgidx].size = len;
 			continue;
+<<<<<<< HEAD
 		} else if (list[i].num) {
 			rpra[i].buf.pv = pra[i].buf.pv;
 			continue;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 		if (rlen < pra[i].buf.len) {
 			struct fastrpc_buf *b;

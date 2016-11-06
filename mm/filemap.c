@@ -36,6 +36,13 @@
 #include <linux/cleancache.h>
 #include "internal.h"
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+#include <sdp/cache_cleanup.h>
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * FIXME: remove all knowledge of the buffer layer from the core VM
  */
@@ -114,6 +121,14 @@ void __delete_from_page_cache(struct page *page)
 {
 	struct address_space *mapping = page->mapping;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+	if(mapping_sensitive(mapping))
+		sdp_page_cleanup(page);
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * if we're uptodate, flush out into the cleancache, otherwise
 	 * invalidate any existing cleancache entries.  We can't leave
@@ -1092,6 +1107,14 @@ static void do_generic_file_read(struct file *filp, loff_t *ppos,
 	unsigned int prev_offset;
 	int error;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
+	//struct scfs_sb_info *sbi;
+	int is_sequential = (ra->prev_pos == *ppos) ? 1 : 0;
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	index = *ppos >> PAGE_CACHE_SHIFT;
 	prev_index = ra->prev_pos >> PAGE_CACHE_SHIFT;
 	prev_offset = ra->prev_pos & (PAGE_CACHE_SIZE-1);
@@ -1197,6 +1220,7 @@ page_ok:
 		prev_offset = offset;
 
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
+<<<<<<< HEAD
 #if 1
 		{
 			extern u64 scfs_lowerpage_total_count;
@@ -1214,6 +1238,29 @@ page_ok:
 		}
 		else if (filp->f_flags & O_SCFSLOWER)
 			SetPageScfslower(page);
+=======
+		if (filp->f_flags & O_SCFSLOWER) {
+			/*
+			   sbi = ;
+
+			   if (!PageScfslower(page) && !PageNocache(page))
+			   sbi->scfs_lowerpage_total_count++;
+			 */
+
+			/* Internal pages except first and last ones ||
+			 * page was sequentially referenced before due to preceding cluster access ||
+			 * first or last pages: random read
+			 */
+			if ((ret == PAGE_CACHE_SIZE) ||
+					(PageScfslower(page) && !offset) || !is_sequential) {
+				SetPageNocache(page);
+
+				if (PageLRU(page))
+					deactivate_page(page);
+			} else
+				SetPageScfslower(page);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 		page_cache_release(page);
@@ -2559,9 +2606,13 @@ ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 	if (err)
 		goto out;
 
+<<<<<<< HEAD
 	err = file_update_time(file);
 	if (err)
 		goto out;
+=======
+	file_update_time(file);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* coalesce the iovecs and go direct-to-BIO for O_DIRECT */
 	if (unlikely(file->f_flags & O_DIRECT)) {

@@ -801,7 +801,14 @@ void iwl_chswitch_done(struct iwl_priv *priv, bool is_success)
 	if (test_bit(STATUS_EXIT_PENDING, &priv->status))
 		return;
 
+<<<<<<< HEAD
 	if (test_and_clear_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status))
+=======
+	if (!test_and_clear_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status))
+		return;
+
+	if (ctx->vif)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ieee80211_chswitch_done(ctx->vif, is_success);
 }
 

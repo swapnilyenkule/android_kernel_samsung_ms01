@@ -673,6 +673,7 @@ static int pci_platform_power_transition(struct pci_dev *dev, pci_power_t state)
 		error = platform_pci_set_power_state(dev, state);
 		if (!error)
 			pci_update_current_state(dev, state);
+<<<<<<< HEAD
 		/* Fall back to PCI_D0 if native PM is not supported */
 		if (!dev->pm_cap)
 			dev->current_state = PCI_D0;
@@ -682,6 +683,13 @@ static int pci_platform_power_transition(struct pci_dev *dev, pci_power_t state)
 		if (!dev->pm_cap)
 			dev->current_state = PCI_D0;
 	}
+=======
+	} else
+		error = -ENODEV;
+
+	if (error && !dev->pm_cap) /* Fall back to PCI_D0 */
+		dev->current_state = PCI_D0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return error;
 }
@@ -1988,10 +1996,13 @@ void pci_enable_ari(struct pci_dev *dev)
 	if (pcie_ari_disabled || !pci_is_pcie(dev) || dev->devfn)
 		return;
 
+<<<<<<< HEAD
 	pos = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_ARI);
 	if (!pos)
 		return;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	bridge = dev->bus->self;
 	if (!bridge || !pci_is_pcie(bridge))
 		return;
@@ -2010,10 +2021,21 @@ void pci_enable_ari(struct pci_dev *dev)
 		return;
 
 	pci_read_config_word(bridge, pos + PCI_EXP_DEVCTL2, &ctrl);
+<<<<<<< HEAD
 	ctrl |= PCI_EXP_DEVCTL2_ARI;
 	pci_write_config_word(bridge, pos + PCI_EXP_DEVCTL2, ctrl);
 
 	bridge->ari_enabled = 1;
+=======
+	if (pci_find_ext_capability(dev, PCI_EXT_CAP_ID_ARI)) {
+		ctrl |= PCI_EXP_DEVCTL2_ARI;
+		bridge->ari_enabled = 1;
+	} else {
+		ctrl &= ~PCI_EXP_DEVCTL2_ARI;
+		bridge->ari_enabled = 0;
+	}
+	pci_write_config_word(bridge, pos + PCI_EXP_DEVCTL2, ctrl);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -3614,7 +3636,11 @@ int pci_set_vga_state(struct pci_dev *dev, bool decode,
 	u16 cmd;
 	int rc;
 
+<<<<<<< HEAD
 	WARN_ON((flags & PCI_VGA_STATE_CHANGE_DECODES) & (command_bits & ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY)));
+=======
+	WARN_ON((flags & PCI_VGA_STATE_CHANGE_DECODES) && (command_bits & ~(PCI_COMMAND_IO|PCI_COMMAND_MEMORY)));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* ARCH specific VGA enables */
 	rc = pci_set_vga_state_arch(dev, decode, command_bits, flags);

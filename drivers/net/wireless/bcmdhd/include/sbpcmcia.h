@@ -1,7 +1,11 @@
 /*
  * BCM43XX Sonics SiliconBackplane PCMCIA core hardware definitions.
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,15 +25,30 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: sbpcmcia.h 381094 2013-01-25 04:45:06Z $
+=======
+ * $Id: sbpcmcia.h 427964 2013-10-07 07:13:33Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef	_SBPCMCIA_H
 #define	_SBPCMCIA_H
 
+<<<<<<< HEAD
 
 
 
+=======
+/* All the addresses that are offsets in attribute space are divided
+ * by two to account for the fact that odd bytes are invalid in
+ * attribute space and our read/write routines make the space appear
+ * as if they didn't exist. Still we want to show the original numbers
+ * as documented in the hnd_pcmcia core manual.
+ */
+
+/* PCMCIA Function Configuration Registers */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	PCMCIA_FCR		(0x700 / 2)
 
 #define	FCR0_OFF		0
@@ -42,7 +61,11 @@
 #define	PCMCIA_FCR2		(0x780 / 2)
 #define	PCMCIA_FCR3		(0x7c0 / 2)
 
+<<<<<<< HEAD
 
+=======
+/* Standard PCMCIA FCR registers */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define	PCMCIA_COR		0
 
@@ -65,12 +88,20 @@
 #define F2_MEMOFF		0x3000
 #define F3_MEMOFF		0x4000
 
+<<<<<<< HEAD
 
+=======
+/* Memory base in the function fcr's */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define MEM_ADDR0		(0x728 / 2)
 #define MEM_ADDR1		(0x72a / 2)
 #define MEM_ADDR2		(0x72c / 2)
 
+<<<<<<< HEAD
 
+=======
+/* PCMCIA base plus Srom access in fcr0: */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define PCMCIA_ADDR0		(0x072e / 2)
 #define PCMCIA_ADDR1		(0x0730 / 2)
 #define PCMCIA_ADDR2		(0x0732 / 2)
@@ -81,10 +112,17 @@
 #define SROM_DATAH		(0x073a / 2)
 #define SROM_ADDRL		(0x073c / 2)
 #define SROM_ADDRH		(0x073e / 2)
+<<<<<<< HEAD
 #define	SROM_INFO2		(0x0772 / 2)	
 #define	SROM_INFO		(0x07be / 2)	
 
 
+=======
+#define	SROM_INFO2		(0x0772 / 2)	/* Corerev >= 2 && <= 5 */
+#define	SROM_INFO		(0x07be / 2)	/* Corerev >= 6 */
+
+/*  Values for srom_cs: */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define SROM_IDLE		0
 #define SROM_WRITE		1
 #define SROM_READ		2
@@ -92,12 +130,17 @@
 #define SROM_WDS		7
 #define SROM_DONE		8
 
+<<<<<<< HEAD
 
+=======
+/* Fields in srom_info: */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	SRI_SZ_MASK		0x03
 #define	SRI_BLANK		0x04
 #define	SRI_OTP			0x80
 
 
+<<<<<<< HEAD
 
 #define SBTML_INT_ACK		0x40000		
 #define SBTML_INT_EN		0x20000		
@@ -106,3 +149,13 @@
 #define SBTMH_INT_STATUS	0x40000		
 
 #endif	
+=======
+/* sbtmstatelow */
+#define SBTML_INT_ACK		0x40000		/* ack the sb interrupt */
+#define SBTML_INT_EN		0x20000		/* enable sb interrupt */
+
+/* sbtmstatehigh */
+#define SBTMH_INT_STATUS	0x40000		/* sb interrupt status */
+
+#endif	/* _SBPCMCIA_H */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

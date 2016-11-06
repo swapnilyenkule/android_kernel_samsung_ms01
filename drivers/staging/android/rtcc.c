@@ -41,7 +41,11 @@ static struct task_struct *krtccd;
 static unsigned long prev_jiffy;
 static unsigned long boost_end_jiffy;
 
+<<<<<<< HEAD
 #define BOOSTMODE_TIMEOUT		(350*HZ)
+=======
+#define BOOSTMODE_TIMEOUT		(60*HZ)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define DEF_RECLAIM_INTERVAL	(10*HZ)
 #define RTCC_MSG_ASYNC			1
 #define RTCC_MSG_SYNC			2
@@ -67,11 +71,19 @@ static int rtcc_boost_mode = 1;
 static int rtcc_reclaim_interval = DEF_RECLAIM_INTERVAL;
 static int rtcc_grade_size = RTCC_GRADE_NUM;
 static int rtcc_grade[RTCC_GRADE_NUM] = {
+<<<<<<< HEAD
 	256 * RTCC_GRADE_MULTI,
 	384 * RTCC_GRADE_MULTI,
 	512 * RTCC_GRADE_MULTI,
 	1024 * RTCC_GRADE_MULTI,
 	4096 * RTCC_GRADE_MULTI,
+=======
+	128 * RTCC_GRADE_MULTI,
+	192 * RTCC_GRADE_MULTI,
+	256 * RTCC_GRADE_MULTI,
+	512 * RTCC_GRADE_MULTI,
+	1024 * RTCC_GRADE_MULTI,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 // These values will be changed when system is booting up
 static int rtcc_minfree[RTCC_GRADE_NUM] = {
@@ -92,11 +104,14 @@ static inline unsigned long get_anon_pages(void)
 	return global_page_state(NR_INACTIVE_ANON) + global_page_state(NR_ACTIVE_ANON);
 }
 
+<<<<<<< HEAD
 static inline unsigned long get_file_pages(void)
 {
 	return global_page_state(NR_FILE_PAGES) - global_page_state(NR_SHMEM);
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Decide the rtcc grade based on free memory and free swap
  */
@@ -147,6 +162,7 @@ static int get_reclaim_count(void)
 }
 
 /*
+<<<<<<< HEAD
  * Decide the ratio of anon and file pages in one reclaim 
  */
 static int get_reclaim_swappiness(void)
@@ -166,12 +182,17 @@ static int get_reclaim_swappiness(void)
 }
 
 /*
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * RTCC thread entry
  */
 static int rtcc_thread(void * nothing)
 {
 	unsigned long nr_to_reclaim, nr_reclaimed, nr_swapped;
+<<<<<<< HEAD
 	int swappiness;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #if RTCC_DBG
 	unsigned long dt;
 	struct timeval tv1, tv2;
@@ -192,10 +213,16 @@ static int rtcc_thread(void * nothing)
 			swap_toplimit = min(swap_toplimit, total_swap_pages);
 
 			nr_to_reclaim = get_reclaim_count();
+<<<<<<< HEAD
 			swappiness = get_reclaim_swappiness();
 			nr_swapped = 0;
 
 			nr_reclaimed = rtcc_reclaim_pages(nr_to_reclaim, swappiness, &nr_swapped);
+=======
+			nr_swapped = 0;
+
+			nr_reclaimed = rtcc_reclaim_pages(nr_to_reclaim, 200, &nr_swapped);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			nr_krtccd_swapped += nr_swapped;
 
 			printk("reclaimed %ld (swapped %ld) pages.\n", nr_reclaimed, nr_swapped);
@@ -204,8 +231,13 @@ static int rtcc_thread(void * nothing)
 				if (get_rtcc_grade() <= 0) {
 					// If free memory is enough, cancel reclaim
 					atomic_set(&need_to_reclaim, 0);
+<<<<<<< HEAD
 				} else if (swappiness <= 1 && get_file_pages() <= rtcc_minfree[RTCC_GRADE_NUM-2]) {
 					// If swap space is full and file pages is few, also cancel reclaim
+=======
+				} else if (get_swapped_pages() >= get_anon_pages()) {
+					// If swap space is more than anon, also cancel reclaim
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					atomic_set(&need_to_reclaim, 0);
 				}
 			} else if (get_anon_pages() < swap_toplimit / 4) {
@@ -222,7 +254,10 @@ static int rtcc_thread(void * nothing)
 			do_gettimeofday(&tv2);
 			dt = tv2.tv_sec*1000000 + tv2.tv_usec - tv1.tv_sec*1000000 - tv1.tv_usec;
 			printk("cost %ldms, %ldus one page, ", dt/1000, dt/nr_reclaimed);
+<<<<<<< HEAD
 			printk("expect=%ld, swappiness=%d \n", (nr_reclaimed*swappiness/200), swappiness);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 		}
 

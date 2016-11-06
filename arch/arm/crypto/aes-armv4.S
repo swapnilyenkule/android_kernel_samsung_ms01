@@ -1086,4 +1086,7 @@ _armv4_AES_decrypt:
 .size	_armv4_AES_decrypt,.-_armv4_AES_decrypt
 .asciz	"AES for ARMv4, CRYPTOGAMS by <appro@openssl.org>"
 .align	2
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

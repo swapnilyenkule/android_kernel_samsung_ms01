@@ -544,6 +544,10 @@ static int ad198x_build_pcms(struct hda_codec *codec)
 	if (spec->multiout.dig_out_nid) {
 		info++;
 		codec->num_pcms++;
+<<<<<<< HEAD
+=======
+		codec->spdif_status_reset = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		info->name = "AD198x Digital";
 		info->pcm_type = HDA_PCM_TYPE_SPDIF;
 		info->stream[SNDRV_PCM_STREAM_PLAYBACK] = ad198x_pcm_digital_playback;

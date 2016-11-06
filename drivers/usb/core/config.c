@@ -201,6 +201,20 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
 			if (n == 0)
 				n = 9;	/* 32 ms = 2^(9-1) uframes */
 			j = 16;
+<<<<<<< HEAD
+=======
+
+			/*
+			 * Adjust bInterval for quirked devices.
+			 * This quirk fixes bIntervals reported in
+			 * linear microframes.
+			 */
+			if (to_usb_device(ddev)->quirks &
+				USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL) {
+				n = clamp(fls(d->bInterval), i, j);
+				i = j = n;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		default:		/* USB_SPEED_FULL or _LOW */
 			/* For low-speed, 10 ms is the official minimum.
@@ -424,7 +438,12 @@ static int usb_parse_configuration(struct usb_device *dev, int cfgidx,
 
 	memcpy(&config->desc, buffer, USB_DT_CONFIG_SIZE);
 	if (config->desc.bDescriptorType != USB_DT_CONFIG ||
+<<<<<<< HEAD
 	    config->desc.bLength < USB_DT_CONFIG_SIZE) {
+=======
+	    config->desc.bLength < USB_DT_CONFIG_SIZE ||
+	    config->desc.bLength > size) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dev_err(ddev, "invalid descriptor for config index %d: "
 		    "type = 0x%X, length = %d\n", cfgidx,
 		    config->desc.bDescriptorType, config->desc.bLength);
@@ -650,10 +669,13 @@ void usb_destroy_configuration(struct usb_device *dev)
  *
  * hub-only!! ... and only in reset path, or usb_new_device()
  * (used by real hubs and virtual root hubs)
+<<<<<<< HEAD
  *
  * NOTE: if this is a WUSB device and is not authorized, we skip the
  *       whole thing. A non-authorized USB device has no
  *       configurations.
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 int usb_get_configuration(struct usb_device *dev)
 {
@@ -665,8 +687,11 @@ int usb_get_configuration(struct usb_device *dev)
 	struct usb_config_descriptor *desc;
 
 	cfgno = 0;
+<<<<<<< HEAD
 	if (dev->authorized == 0)	/* Not really an error */
 		goto out_not_authorized;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	result = -ENOMEM;
 	if (ncfg > USB_MAXCONFIG) {
 		dev_warn(ddev, "too many configurations: %d, "
@@ -748,7 +773,10 @@ int usb_get_configuration(struct usb_device *dev)
 
 err:
 	kfree(desc);
+<<<<<<< HEAD
 out_not_authorized:
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dev->descriptor.bNumConfigurations = cfgno;
 err2:
 	if (result == -ENOMEM)

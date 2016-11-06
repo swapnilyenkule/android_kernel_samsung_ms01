@@ -165,7 +165,11 @@ config AUDIO_OCMEM
 
 config DOLBY_DAP
 	bool "Enable Dolby DAP"
+<<<<<<< HEAD
 	depends on SND_SOC_MSM8974 || SND_SOC_MSM8226
+=======
+	depends on SND_SOC_MSM8974
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	help
 	 To add support for dolby DAP post processing.
 	 This support is to configure the post processing parameters

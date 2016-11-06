@@ -735,7 +735,18 @@ static void ilo_remove(struct pci_dev *pdev)
 	free_irq(pdev->irq, ilo_hw);
 	ilo_unmap_device(pdev, ilo_hw);
 	pci_release_regions(pdev);
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+	/*
+	 * pci_disable_device(pdev) used to be here. But this PCI device has
+	 * two functions with interrupt lines connected to a single pin. The
+	 * other one is a USB host controller. So when we disable the PIN here
+	 * e.g. by rmmod hpilo, the controller stops working. It is because
+	 * the interrupt link is disabled in ACPI since it is not refcounted
+	 * yet. See acpi_pci_link_free_irq called from acpi_pci_irq_disable.
+	 */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(ilo_hw);
 	ilo_hwdev[(minor / MAX_CCB)] = 0;
 }
@@ -820,7 +831,11 @@ unmap:
 free_regions:
 	pci_release_regions(pdev);
 disable:
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+/*	pci_disable_device(pdev);  see comment in ilo_remove */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 free:
 	kfree(ilo_hw);
 out:

@@ -385,14 +385,24 @@ static inline __u8 uac_processing_unit_iProcessing(struct uac_processing_unit_de
 						   int protocol)
 {
 	__u8 control_size = uac_processing_unit_bControlSize(desc, protocol);
+<<<<<<< HEAD
 	return desc->baSourceID[desc->bNrInPins + control_size];
+=======
+	return *(uac_processing_unit_bmControls(desc, protocol)
+			+ control_size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline __u8 *uac_processing_unit_specific(struct uac_processing_unit_descriptor *desc,
 						 int protocol)
 {
 	__u8 control_size = uac_processing_unit_bControlSize(desc, protocol);
+<<<<<<< HEAD
 	return &desc->baSourceID[desc->bNrInPins + control_size + 1];
+=======
+	return uac_processing_unit_bmControls(desc, protocol)
+			+ control_size + 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* 4.5.2 Class-Specific AS Interface Descriptor */

@@ -33,6 +33,13 @@
 static char klog_buf[256];
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SEC_BSP
+#include <mach/sec_bsp.h>
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifndef CONFIG_LOGCAT_SIZE
 #define CONFIG_LOGCAT_SIZE 256
 #endif
@@ -448,6 +455,13 @@ static ssize_t do_write_log_from_user(struct logger_log *log,
 		else
 			memcpy(klog_buf, log->buffer + log->w_off, 255);
 		klog_buf[255] = 0;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SEC_BSP
+		if (strncmp(klog_buf, "!@Boot", 6) == 0)
+			sec_boot_stat_add(klog_buf);
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 #endif
 

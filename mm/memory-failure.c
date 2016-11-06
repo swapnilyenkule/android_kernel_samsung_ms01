@@ -208,9 +208,15 @@ static int kill_proc(struct task_struct *t, unsigned long addr, int trapno,
 #endif
 	si.si_addr_lsb = compound_trans_order(compound_head(page)) + PAGE_SHIFT;
 
+<<<<<<< HEAD
 	if ((flags & MF_ACTION_REQUIRED) && t == current) {
 		si.si_code = BUS_MCEERR_AR;
 		ret = force_sig_info(SIGBUS, &si, t);
+=======
+	if ((flags & MF_ACTION_REQUIRED) && t->mm == current->mm) {
+		si.si_code = BUS_MCEERR_AR;
+		ret = force_sig_info(SIGBUS, &si, current);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		/*
 		 * Don't use force here, it's convenient if the signal
@@ -253,6 +259,10 @@ void shake_page(struct page *p, int access)
 				.gfp_mask = GFP_KERNEL,
 			};
 
+<<<<<<< HEAD
+=======
+			shrink.priority = DEF_PRIORITY;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			nr = shrink_slab(&shrink, 1000, 1000);
 			if (page_count(p) == 1)
 				break;
@@ -345,14 +355,22 @@ static void add_to_kill(struct task_struct *tsk, struct page *p,
  * Also when FAIL is set do a force kill because something went
  * wrong earlier.
  */
+<<<<<<< HEAD
 static void kill_procs(struct list_head *to_kill, int doit, int trapno,
+=======
+static void kill_procs(struct list_head *to_kill, int forcekill, int trapno,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			  int fail, struct page *page, unsigned long pfn,
 			  int flags)
 {
 	struct to_kill *tk, *next;
 
 	list_for_each_entry_safe (tk, next, to_kill, nd) {
+<<<<<<< HEAD
 		if (doit) {
+=======
+		if (forcekill) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			/*
 			 * In case something went wrong with munmapping
 			 * make sure the process doesn't catch the
@@ -382,10 +400,19 @@ static void kill_procs(struct list_head *to_kill, int doit, int trapno,
 	}
 }
 
+<<<<<<< HEAD
 static int task_early_kill(struct task_struct *tsk)
 {
 	if (!tsk->mm)
 		return 0;
+=======
+static int task_early_kill(struct task_struct *tsk, int force_early)
+{
+	if (!tsk->mm)
+		return 0;
+	if (force_early)
+		return 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (tsk->flags & PF_MCE_PROCESS)
 		return !!(tsk->flags & PF_MCE_EARLY);
 	return sysctl_memory_failure_early_kill;
@@ -395,7 +422,11 @@ static int task_early_kill(struct task_struct *tsk)
  * Collect processes when the error hit an anonymous page.
  */
 static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+<<<<<<< HEAD
 			      struct to_kill **tkc)
+=======
+			      struct to_kill **tkc, int force_early)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct vm_area_struct *vma;
 	struct task_struct *tsk;
@@ -409,7 +440,11 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
 	for_each_process (tsk) {
 		struct anon_vma_chain *vmac;
 
+<<<<<<< HEAD
 		if (!task_early_kill(tsk))
+=======
+		if (!task_early_kill(tsk, force_early))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 		list_for_each_entry(vmac, &av->head, same_anon_vma) {
 			vma = vmac->vma;
@@ -427,7 +462,11 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
  * Collect processes when the error hit a file mapped page.
  */
 static void collect_procs_file(struct page *page, struct list_head *to_kill,
+<<<<<<< HEAD
 			      struct to_kill **tkc)
+=======
+			      struct to_kill **tkc, int force_early)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct vm_area_struct *vma;
 	struct task_struct *tsk;
@@ -439,7 +478,11 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
 	for_each_process(tsk) {
 		pgoff_t pgoff = page->index << (PAGE_CACHE_SHIFT - PAGE_SHIFT);
 
+<<<<<<< HEAD
 		if (!task_early_kill(tsk))
+=======
+		if (!task_early_kill(tsk, force_early))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 
 		vma_prio_tree_foreach(vma, &iter, &mapping->i_mmap, pgoff,
@@ -465,7 +508,12 @@ static void collect_procs_file(struct page *page, struct list_head *to_kill,
  * First preallocate one tokill structure outside the spin locks,
  * so that we can kill at least one process reasonably reliable.
  */
+<<<<<<< HEAD
 static void collect_procs(struct page *page, struct list_head *tokill)
+=======
+static void collect_procs(struct page *page, struct list_head *tokill,
+				int force_early)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct to_kill *tk;
 
@@ -476,9 +524,15 @@ static void collect_procs(struct page *page, struct list_head *tokill)
 	if (!tk)
 		return;
 	if (PageAnon(page))
+<<<<<<< HEAD
 		collect_procs_anon(page, tokill, &tk);
 	else
 		collect_procs_file(page, tokill, &tk);
+=======
+		collect_procs_anon(page, tokill, &tk, force_early);
+	else
+		collect_procs_file(page, tokill, &tk, force_early);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(tk);
 }
 
@@ -858,7 +912,11 @@ static int hwpoison_user_mappings(struct page *p, unsigned long pfn,
 	struct address_space *mapping;
 	LIST_HEAD(tokill);
 	int ret;
+<<<<<<< HEAD
 	int kill = 1;
+=======
+	int kill = 1, forcekill;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct page *hpage = compound_head(p);
 	struct page *ppage;
 
@@ -888,7 +946,11 @@ static int hwpoison_user_mappings(struct page *p, unsigned long pfn,
 	 * be called inside page lock (it's recommended but not enforced).
 	 */
 	mapping = page_mapping(hpage);
+<<<<<<< HEAD
 	if (!PageDirty(hpage) && mapping &&
+=======
+	if (!(flags & MF_MUST_KILL) && !PageDirty(hpage) && mapping &&
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	    mapping_cap_writeback_dirty(mapping)) {
 		if (page_mkclean(hpage)) {
 			SetPageDirty(hpage);
@@ -948,7 +1010,11 @@ static int hwpoison_user_mappings(struct page *p, unsigned long pfn,
 	 * there's nothing that can be done.
 	 */
 	if (kill)
+<<<<<<< HEAD
 		collect_procs(ppage, &tokill);
+=======
+		collect_procs(ppage, &tokill, flags & MF_ACTION_REQUIRED);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (hpage != ppage)
 		lock_page(ppage);
@@ -965,12 +1031,22 @@ static int hwpoison_user_mappings(struct page *p, unsigned long pfn,
 	 * Now that the dirty bit has been propagated to the
 	 * struct page and all unmaps done we can decide if
 	 * killing is needed or not.  Only kill when the page
+<<<<<<< HEAD
 	 * was dirty, otherwise the tokill list is merely
+=======
+	 * was dirty or the process is not restartable,
+	 * otherwise the tokill list is merely
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * freed.  When there was a problem unmapping earlier
 	 * use a more force-full uncatchable kill to prevent
 	 * any accesses to the poisoned memory.
 	 */
+<<<<<<< HEAD
 	kill_procs(&tokill, !!PageDirty(ppage), trapno,
+=======
+	forcekill = PageDirty(ppage) || (flags & MF_MUST_KILL);
+	kill_procs(&tokill, forcekill, trapno,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		      ret != SWAP_SUCCESS, p, pfn, flags);
 
 	return ret;
@@ -1059,6 +1135,7 @@ int memory_failure(unsigned long pfn, int trapno, int flags)
 			return 0;
 		} else if (PageHuge(hpage)) {
 			/*
+<<<<<<< HEAD
 			 * Check "just unpoisoned", "filter hit", and
 			 * "race with other subpage."
 			 */
@@ -1068,6 +1145,18 @@ int memory_failure(unsigned long pfn, int trapno, int flags)
 			    || (p != hpage && TestSetPageHWPoison(hpage))) {
 				atomic_long_sub(nr_pages, &mce_bad_pages);
 				return 0;
+=======
+			 * Check "filter hit" and "race with other subpage."
+			 */
+			lock_page(hpage);
+			if (PageHWPoison(hpage)) {
+				if ((hwpoison_filter(p) && TestClearPageHWPoison(p))
+				    || (p != hpage && TestSetPageHWPoison(hpage))) {
+					atomic_long_sub(nr_pages, &mce_bad_pages);
+					unlock_page(hpage);
+					return 0;
+				}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			set_page_hwpoison_huge_page(hpage);
 			res = dequeue_hwpoisoned_huge_page(hpage);
@@ -1089,10 +1178,17 @@ int memory_failure(unsigned long pfn, int trapno, int flags)
 	 * The check (unnecessarily) ignores LRU pages being isolated and
 	 * walked by the page reclaim code, however that's not a big loss.
 	 */
+<<<<<<< HEAD
 	if (!PageHuge(p) && !PageTransTail(p)) {
 		if (!PageLRU(p))
 			shake_page(p, 0);
 		if (!PageLRU(p)) {
+=======
+	if (!PageHuge(p)) {
+		if (!PageLRU(hpage))
+			shake_page(hpage, 0);
+		if (!PageLRU(hpage)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			/*
 			 * shake_page could have turned it free.
 			 */
@@ -1119,6 +1215,11 @@ int memory_failure(unsigned long pfn, int trapno, int flags)
 	 */
 	if (!PageHWPoison(p)) {
 		printk(KERN_ERR "MCE %#lx: just unpoisoned\n", pfn);
+<<<<<<< HEAD
+=======
+		atomic_long_sub(nr_pages, &mce_bad_pages);
+		put_page(hpage);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		res = 0;
 		goto out;
 	}
@@ -1431,8 +1532,13 @@ static int soft_offline_huge_page(struct page *page, int flags)
 	/* Keep page count to indicate a given hugepage is isolated. */
 
 	list_add(&hpage->lru, &pagelist);
+<<<<<<< HEAD
 	ret = migrate_huge_pages(&pagelist, new_page, MPOL_MF_MOVE_ALL, 0,
 				true);
+=======
+	ret = migrate_huge_pages(&pagelist, new_page, MPOL_MF_MOVE_ALL, false,
+				MIGRATE_SYNC);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (ret) {
 		struct page *page1, *page2;
 		list_for_each_entry_safe(page1, page2, &pagelist, lru)
@@ -1445,10 +1551,25 @@ static int soft_offline_huge_page(struct page *page, int flags)
 		return ret;
 	}
 done:
+<<<<<<< HEAD
 	if (!PageHWPoison(hpage))
 		atomic_long_add(1 << compound_trans_order(hpage), &mce_bad_pages);
 	set_page_hwpoison_huge_page(hpage);
 	dequeue_hwpoisoned_huge_page(hpage);
+=======
+	/* overcommit hugetlb page will be freed to buddy */
+	if (PageHuge(hpage)) {
+		if (!PageHWPoison(hpage))
+			atomic_long_add(1 << compound_trans_order(hpage),
+					&mce_bad_pages);
+		set_page_hwpoison_huge_page(hpage);
+		dequeue_hwpoisoned_huge_page(hpage);
+	} else {
+		SetPageHWPoison(page);
+		atomic_long_inc(&mce_bad_pages);
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* keep elevated page count for bad page */
 	return ret;
 }
@@ -1479,9 +1600,23 @@ int soft_offline_page(struct page *page, int flags)
 {
 	int ret;
 	unsigned long pfn = page_to_pfn(page);
+<<<<<<< HEAD
 
 	if (PageHuge(page))
 		return soft_offline_huge_page(page, flags);
+=======
+	struct page *hpage = compound_trans_head(page);
+
+	if (PageHuge(page))
+		return soft_offline_huge_page(page, flags);
+	if (PageTransHuge(hpage)) {
+		if (PageAnon(hpage) && unlikely(split_huge_page(hpage))) {
+			pr_info("soft offline: %#lx: failed to split THP\n",
+				pfn);
+			return -EBUSY;
+		}
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ret = get_any_page(page, pfn, flags);
 	if (ret < 0)
@@ -1561,7 +1696,11 @@ int soft_offline_page(struct page *page, int flags)
 					    page_is_file_cache(page));
 		list_add(&page->lru, &pagelist);
 		ret = migrate_pages(&pagelist, new_page, MPOL_MF_MOVE_ALL,
+<<<<<<< HEAD
 							0, MIGRATE_SYNC);
+=======
+							false, MIGRATE_SYNC);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret) {
 			putback_lru_pages(&pagelist);
 			pr_info("soft offline: %#lx: migration failed %d, type %lx\n",

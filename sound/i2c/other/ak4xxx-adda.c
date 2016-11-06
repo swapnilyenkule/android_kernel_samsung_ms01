@@ -571,7 +571,11 @@ static int ak4xxx_capture_source_info(struct snd_kcontrol *kcontrol,
 	struct snd_akm4xxx *ak = snd_kcontrol_chip(kcontrol);
 	int mixer_ch = AK_GET_SHIFT(kcontrol->private_value);
 	const char **input_names;
+<<<<<<< HEAD
 	int  num_names, idx;
+=======
+	unsigned int num_names, idx;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	num_names = ak4xxx_capture_num_inputs(ak, mixer_ch);
 	if (!num_names)

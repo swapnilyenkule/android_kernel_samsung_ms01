@@ -29,7 +29,11 @@ struct msm_audio_ion_private {
 	bool smmu_enabled;
 	bool audioheap_enabled;
 	struct iommu_group *group;
+<<<<<<< HEAD
 	u32 domain_id;
+=======
+	int32_t domain_id;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct iommu_domain *domain;
 };
 

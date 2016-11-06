@@ -80,7 +80,11 @@ extern struct mutex sched_domains_mutex;
 struct cfs_rq;
 struct rt_rq;
 
+<<<<<<< HEAD
 static LIST_HEAD(task_groups);
+=======
+extern struct list_head task_groups;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 struct cfs_bandwidth {
 #ifdef CONFIG_CFS_BANDWIDTH
@@ -538,6 +542,7 @@ DECLARE_PER_CPU(int, sd_llc_id);
 /*
  * Return the group to which this tasks belongs.
  *
+<<<<<<< HEAD
  * We use task_subsys_state_check() and extend the RCU verification with
  * pi->lock and rq->lock because cpu_cgroup_attach() holds those locks for each
  * task it moves into the cgroup. Therefore by holding either of those locks,
@@ -554,6 +559,21 @@ static inline struct task_group *task_group(struct task_struct *p)
 	tg = container_of(css, struct task_group, css);
 
 	return autogroup_task_group(p, tg);
+=======
+ * We cannot use task_subsys_state() and friends because the cgroup
+ * subsystem changes that value before the cgroup_subsys::attach() method
+ * is called, therefore we cannot pin it and might observe the wrong value.
+ *
+ * The same is true for autogroup's p->signal->autogroup->tg, the autogroup
+ * core changes this before calling sched_move_task().
+ *
+ * Instead we use a 'copy' which is updated from sched_move_task() while
+ * holding both task_struct::pi_lock and rq::lock.
+ */
+static inline struct task_group *task_group(struct task_struct *p)
+{
+	return p->sched_task_group;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline bool task_notify_on_migrate(struct task_struct *p)
@@ -888,7 +908,11 @@ extern void resched_cpu(int cpu);
 extern struct rt_bandwidth def_rt_bandwidth;
 extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);
 
+<<<<<<< HEAD
 extern void update_cpu_load(struct rq *this_rq);
+=======
+extern void update_idle_cpu_load(struct rq *this_rq);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #ifdef CONFIG_CGROUP_CPUACCT
 #include <linux/cgroup.h>
@@ -1158,7 +1182,12 @@ extern void print_rt_stats(struct seq_file *m, int cpu);
 extern void init_cfs_rq(struct cfs_rq *cfs_rq);
 extern void init_rt_rq(struct rt_rq *rt_rq, struct rq *rq);
 
+<<<<<<< HEAD
 extern void account_cfs_bandwidth_used(int enabled, int was_enabled);
+=======
+extern void cfs_bandwidth_usage_inc(void);
+extern void cfs_bandwidth_usage_dec(void);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #ifdef CONFIG_NO_HZ
 enum rq_nohz_flag_bits {

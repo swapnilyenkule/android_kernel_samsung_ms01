@@ -6,7 +6,11 @@ ath9k-y +=	beacon.o \
 		xmit.o
 
 ath9k-$(CONFIG_ATH9K_BTCOEX_SUPPORT) += mci.o
+<<<<<<< HEAD
 ath9k-$(CONFIG_ATH9K_RATE_CONTROL) += rc.o
+=======
+ath9k-$(CONFIG_ATH9K_LEGACY_RATE_CONTROL) += rc.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ath9k-$(CONFIG_ATH9K_PCI) += pci.o
 ath9k-$(CONFIG_ATH9K_AHB) += ahb.o
 ath9k-$(CONFIG_ATH9K_DEBUGFS) += debug.o

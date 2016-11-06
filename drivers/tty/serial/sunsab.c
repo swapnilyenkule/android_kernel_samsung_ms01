@@ -157,6 +157,18 @@ receive_chars(struct uart_sunsab_port *up,
 	    (up->port.line == up->port.cons->index))
 		saw_console_brk = 1;
 
+<<<<<<< HEAD
+=======
+	if (count == 0) {
+		if (unlikely(stat->sreg.isr1 & SAB82532_ISR1_BRK)) {
+			stat->sreg.isr0 &= ~(SAB82532_ISR0_PERR |
+					     SAB82532_ISR0_FERR);
+			up->port.icount.brk++;
+			uart_handle_break(&up->port);
+		}
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < count; i++) {
 		unsigned char ch = buf[i], flag;
 

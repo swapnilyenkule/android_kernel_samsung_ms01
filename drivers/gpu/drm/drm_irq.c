@@ -981,7 +981,11 @@ EXPORT_SYMBOL(drm_vblank_off);
  */
 void drm_vblank_pre_modeset(struct drm_device *dev, int crtc)
 {
+<<<<<<< HEAD
 	/* vblank is not initialized (IRQ not installed ?) */
+=======
+	/* vblank is not initialized (IRQ not installed ?), or has been freed */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!dev->num_crtcs)
 		return;
 	/*
@@ -1003,6 +1007,13 @@ void drm_vblank_post_modeset(struct drm_device *dev, int crtc)
 {
 	unsigned long irqflags;
 
+<<<<<<< HEAD
+=======
+	/* vblank is not initialized (IRQ not installed ?), or has been freed */
+	if (!dev->num_crtcs)
+		return;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (dev->vblank_inmodeset[crtc]) {
 		spin_lock_irqsave(&dev->vbl_lock, irqflags);
 		dev->vblank_disable_allowed = 1;

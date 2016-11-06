@@ -557,6 +557,10 @@ static int __btrfs_close_devices(struct btrfs_fs_devices *fs_devices)
 		new_device->writeable = 0;
 		new_device->in_fs_metadata = 0;
 		new_device->can_discard = 0;
+<<<<<<< HEAD
+=======
+		spin_lock_init(&new_device->io_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		list_replace_rcu(&device->dev_list, &new_device->dev_list);
 
 		call_rcu(&device->rcu, free_device);
@@ -590,6 +594,15 @@ int btrfs_close_devices(struct btrfs_fs_devices *fs_devices)
 		__btrfs_close_devices(fs_devices);
 		free_fs_devices(fs_devices);
 	}
+<<<<<<< HEAD
+=======
+	/*
+	 * Wait for rcu kworkers under __btrfs_close_devices
+	 * to finish all blkdev_puts so device is really
+	 * free when umount is done.
+	 */
+	rcu_barrier();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -1439,11 +1452,20 @@ int btrfs_rm_device(struct btrfs_root *root, char *device_path)
 		struct btrfs_fs_devices *fs_devices;
 		fs_devices = root->fs_info->fs_devices;
 		while (fs_devices) {
+<<<<<<< HEAD
 			if (fs_devices->seed == cur_devices)
 				break;
 			fs_devices = fs_devices->seed;
 		}
 		fs_devices->seed = cur_devices->seed;
+=======
+			if (fs_devices->seed == cur_devices) {
+				fs_devices->seed = cur_devices->seed;
+				break;
+			}
+			fs_devices = fs_devices->seed;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cur_devices->seed = NULL;
 		lock_chunks(root);
 		__btrfs_close_devices(cur_devices);

@@ -691,11 +691,20 @@ static int ethtool_reset(struct net_device *dev, char __user *useraddr)
 
 static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
 {
+<<<<<<< HEAD
 	struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
+=======
+	struct ethtool_wolinfo wol;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!dev->ethtool_ops->get_wol)
 		return -EOPNOTSUPP;
 
+<<<<<<< HEAD
+=======
+	memset(&wol, 0, sizeof(struct ethtool_wolinfo));
+	wol.cmd = ETHTOOL_GWOL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dev->ethtool_ops->get_wol(dev, &wol);
 
 	if (copy_to_user(useraddr, &wol, sizeof(wol)))
@@ -1286,7 +1295,11 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
 	void __user *useraddr = ifr->ifr_data;
 	u32 ethcmd;
 	int rc;
+<<<<<<< HEAD
 	u32 old_features;
+=======
+	netdev_features_t old_features;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!dev || !netif_device_present(dev))
 		return -ENODEV;

@@ -509,6 +509,11 @@ static void __init sclp_add_standby_memory(void)
 	add_memory_merged(0);
 }
 
+<<<<<<< HEAD
+=======
+#define MEM_SCT_SIZE (1UL << SECTION_SIZE_BITS)
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void __init insert_increment(u16 rn, int standby, int assigned)
 {
 	struct memory_increment *incr, *new_incr;
@@ -521,7 +526,11 @@ static void __init insert_increment(u16 rn, int standby, int assigned)
 	new_incr->rn = rn;
 	new_incr->standby = standby;
 	if (!standby)
+<<<<<<< HEAD
 		new_incr->usecount = 1;
+=======
+		new_incr->usecount = rzm > MEM_SCT_SIZE ? rzm/MEM_SCT_SIZE : 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	last_rn = 0;
 	prev = &sclp_mem_list;
 	list_for_each_entry(incr, &sclp_mem_list, list) {

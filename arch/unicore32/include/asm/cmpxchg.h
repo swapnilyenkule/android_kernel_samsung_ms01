@@ -35,7 +35,11 @@ static inline unsigned long __xchg(unsigned long x, volatile void *ptr,
 			: "memory", "cc");
 		break;
 	default:
+<<<<<<< HEAD
 		ret = __xchg_bad_pointer();
+=======
+		__xchg_bad_pointer();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	return ret;

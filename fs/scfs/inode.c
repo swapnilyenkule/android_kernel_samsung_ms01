@@ -2,7 +2,12 @@
  * fs/scfs/inode.c
  *
  * Copyright (C) 2014 Samsung Electronics Co., Ltd.
+<<<<<<< HEAD
  *   Authors: Jongmin Kim <jm45.kim@samsung.com>
+=======
+ *   Authors: Sunghwan Yun <sunghwan.yun@samsung.com>
+ *            Jongmin Kim <jm45.kim@samsung.com>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *            Sangwoo Lee <sangwoo2.lee@samsung.com>
  *            Inbae Lee   <inbae.lee@samsung.com>
  *
@@ -87,7 +92,11 @@ static int scfs_inode_set(struct inode *inode, void *opaque)
 	else
 		inode->i_fop = &scfs_file_fops;
 
+<<<<<<< HEAD
 	return SCFS_SUCCESS;
+=======
+	return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static struct inode *_scfs_get_inode(struct inode *lower_inode,
@@ -133,12 +142,49 @@ static int scfs_interpose(struct dentry *lower_dentry,
 
 	d_instantiate(dentry, inode);
 
+<<<<<<< HEAD
 	return SCFS_SUCCESS;
 }
 
 /* need to check parameters in calling vfs_write,
  * especially data buf 
  */
+=======
+	return 0;
+}
+
+int scfs_make_header(struct file *lower_file, struct inode *scfs_inode)
+{
+	struct scfs_sb_info *sbi = SCFS_S(scfs_inode->i_sb);
+	struct comp_footer cf;
+	loff_t pos = 0;
+	int ret;
+
+	if (!lower_file) {
+		SCFS_PRINT_ERROR("lower_file is null\n");
+		return -EIO;
+	}
+
+	cf.footer_size = CF_SIZE;
+	cf.cluster_size = sbi->options.cluster_size;
+	cf.original_file_size = 0;
+	cf.comp_type = sbi->options.comp_type;
+	cf.magic = SCFS_MAGIC;
+
+	ret = scfs_lower_write(lower_file, (char *)&cf, CF_SIZE, &pos);
+	mark_inode_dirty_sync(scfs_inode);
+
+	if (ret < 0) {
+		SCFS_PRINT_ERROR("error in writing header\n");
+		return ret;
+	}
+	ret = 0;
+
+	return ret;
+}
+
+#if 0
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int scfs_make_header(struct dentry *scfs_dentry, struct inode *scfs_inode)
 {
 	struct scfs_sb_info *sbi = SCFS_S(scfs_inode->i_sb);
@@ -147,6 +193,7 @@ int scfs_make_header(struct dentry *scfs_dentry, struct inode *scfs_inode)
 	loff_t pos = 0;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
 	if (!lower_file) {
@@ -155,14 +202,27 @@ int scfs_make_header(struct dentry *scfs_dentry, struct inode *scfs_inode)
 	}
 
 	cf.footer_size = sizeof(struct comp_footer);
+=======
+	if (!lower_file) {
+		SCFS_PRINT_ERROR("lower_file is null\n");
+		return -EIO;
+	}
+
+	cf.footer_size = CF_SIZE;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	cf.cluster_size = sbi->options.cluster_size;
 	cf.original_file_size = 0;
 	cf.comp_type = sbi->options.comp_type;
 	cf.magic = SCFS_MAGIC;
 
+<<<<<<< HEAD
 	ret = scfs_lower_write(lower_file, (char *)&cf,
 				sizeof(struct comp_footer), &pos);
 	mark_inode_dirty_sync(scfs_inode); // why?
+=======
+	ret = scfs_lower_write(lower_file, (char *)&cf, CF_SIZE, &pos);
+	mark_inode_dirty_sync(scfs_inode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (ret < 0) {
 		SCFS_PRINT_ERROR("error in writing header\n");
@@ -170,26 +230,74 @@ int scfs_make_header(struct dentry *scfs_dentry, struct inode *scfs_inode)
 	}
 	ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
 	return ret;
 }
+=======
+	return ret;
+}
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int scfs_initialize_file(struct dentry *scfs_dentry, struct inode *scfs_inode)
 {
 	struct scfs_inode_info *sii = SCFS_I(scfs_inode);
 	int ret = 0;
+<<<<<<< HEAD
 
 	SCFS_DEBUG_START;
+=======
+	struct file *lower_file;
 
 	copy_mount_flags_to_inode_flags(scfs_inode, scfs_inode->i_sb);
 	if (S_ISDIR(scfs_inode->i_mode)) {
 		SCFS_PRINT_ERROR("it's a directory\n");
+		sii->flags &= ~(SCFS_DATA_COMPRESSABLE);
+		goto out;
+	}
+
+	ret = scfs_initialize_lower_file(scfs_dentry, &lower_file, O_RDWR);
+	if (ret) {
+		SCFS_PRINT_ERROR("error in get_lower_file, ret : %d\n", ret);
+		goto out;
+	}
+
+	ret = scfs_make_header(lower_file, scfs_inode);
+	if (ret)
+		SCFS_PRINT_ERROR("error in make header\n");
+
+	fput(lower_file);
+
+out:
+	return ret;
+}
+
+#if 0
+int scfs_initialize_file(struct dentry *scfs_dentry, struct inode *scfs_inode)
+{
+	struct scfs_inode_info *sii = SCFS_I(scfs_inode);
+	int ret = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
+
+	copy_mount_flags_to_inode_flags(scfs_inode, scfs_inode->i_sb);
+	if (S_ISDIR(scfs_inode->i_mode)) {
+		SCFS_PRINT_ERROR("it's a directory\n");
+<<<<<<< HEAD
 		sii->flags &= ~(SCFS_DATA_COMPRESS);
 		goto out;
 	}
 
 	ret = scfs_get_lower_file(scfs_dentry, scfs_inode);
+=======
+		sii->flags &= ~(SCFS_DATA_COMPRESSABLE);
+		goto out;
+	}
+
+	/* last parameter may be O_RDWR */
+	ret = scfs_get_lower_file(scfs_dentry, scfs_inode, EMPTY_FLAG);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (ret) {
 		SCFS_PRINT_ERROR("error in get_lower_file, ret : %d\n", ret);
 		goto out;
@@ -202,6 +310,7 @@ int scfs_initialize_file(struct dentry *scfs_dentry, struct inode *scfs_inode)
 	scfs_put_lower_file(scfs_inode);
 
 out:
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
 	return ret;
@@ -210,14 +319,24 @@ out:
 static struct inode *
 scfs_do_create(struct inode *parent_inode,
 		struct dentry *scfs_dentry, umode_t mode)
+=======
+	return ret;
+}
+#endif
+static struct inode * scfs_do_create(struct inode *parent_inode,
+	struct dentry *scfs_dentry, umode_t mode)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dentry *lower_file_dentry;
 	struct dentry *lower_parent_dentry;
 	struct inode *inode;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_file_dentry = scfs_lower_dentry(scfs_dentry);
 	lower_parent_dentry = lock_parent(lower_file_dentry);
 
@@ -227,11 +346,17 @@ scfs_do_create(struct inode *parent_inode,
 		goto out;
 	}
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+<<<<<<< HEAD
 	ret = vfs_create(lower_parent_dentry->d_inode, lower_file_dentry,
 			mode, true);
 #else
 	ret = vfs_create(lower_parent_dentry->d_inode, lower_file_dentry,
 			mode, NULL);
+=======
+	ret = vfs_create(lower_parent_dentry->d_inode, lower_file_dentry, mode, true);
+#else
+	ret = vfs_create(lower_parent_dentry->d_inode, lower_file_dentry, mode, NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 	if (ret) {
 		SCFS_PRINT_ERROR("error in vfs_create, lower create, ret : %d\n", ret);
@@ -250,6 +375,7 @@ scfs_do_create(struct inode *parent_inode,
 unlock:
 	unlock_dir(lower_parent_dentry);
 out:
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
 	return inode;
@@ -257,6 +383,12 @@ out:
 
 static int
 scfs_do_unlink(struct inode *dir, struct dentry *dentry, struct inode *inode)
+=======
+	return inode;
+}
+
+static int scfs_do_unlink(struct inode *dir, struct dentry *dentry, struct inode *inode)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dentry *lower_dentry = scfs_lower_dentry(dentry);
 	struct inode *lower_dir_inode = scfs_lower_inode(dir);
@@ -304,8 +436,11 @@ static int scfs_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
 	struct dentry *lower_parent_dentry;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dir_dentry = scfs_lower_dentry(dentry);
 	lower_parent_dentry = lock_parent(lower_dir_dentry);
 	ret = vfs_mkdir(lower_parent_dentry->d_inode, lower_dir_dentry, mode);
@@ -336,8 +471,11 @@ out:
 	if (!dentry->d_inode)
 		d_drop(dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -366,8 +504,11 @@ static int scfs_create(struct inode *parent_inode, struct dentry *scfs_dentry,
 	struct inode *scfs_inode;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	scfs_inode = scfs_do_create(parent_inode, scfs_dentry, mode);
 	
 	if (IS_ERR(scfs_inode)) {
@@ -387,6 +528,7 @@ static int scfs_create(struct inode *parent_inode, struct dentry *scfs_dentry,
 		unlock_new_inode(scfs_inode);
 	}
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
 	return ret;
@@ -417,10 +559,34 @@ int scfs_footer_read(struct dentry *dentry, struct inode *inode)
 	lower_file_size = i_size_read(lower_file->f_mapping->host);
 	offset = lower_file_size - CF_SIZE;
 	ASSERT(offset >= 0);
+=======
+	return ret;
+}
+
+int scfs_footer_read(struct inode *inode, struct file *lower_file)
+{
+	struct comp_footer cf;
+	struct dentry *lower_dentry = lower_file->f_dentry;
+	struct scfs_inode_info *sii = SCFS_I(inode);
+	loff_t offset;
+	loff_t lower_file_size;
+	int ret = 0;
+
+	if (S_ISDIR(inode->i_mode))
+		return -EISDIR;
+
+	lower_file_size = i_size_read(lower_file->f_mapping->host);
+	offset = lower_file_size - CF_SIZE;
+	if (offset < 0) {
+		SCFS_PRINT("missing footer, %s\n", lower_dentry->d_name.name);
+		return SCFS_MISSING_META;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ret = scfs_lower_read(lower_file, (char *)&cf, CF_SIZE, &offset);
 	if (ret < 0) {
 		SCFS_PRINT_ERROR("f:%s read comp_footer error, %d \n",
+<<<<<<< HEAD
 					dentry->d_name.name, ret);
 		goto out;
 	}
@@ -438,11 +604,32 @@ int scfs_footer_read(struct dentry *dentry, struct inode *inode)
 		
 		ret = SCFS_ERR_IO;
 		goto out;
+=======
+					lower_dentry->d_name.name, ret);
+		return ret;
+	}
+	ret = 0;
+
+	if (cf.magic != SCFS_MAGIC || cf.footer_size < CF_SIZE ||
+			cf.footer_size > lower_file_size ||
+			cf.cluster_size < 0 ||
+			cf.cluster_size > SCFS_CLUSTER_SIZE_MAX) {
+		SCFS_PRINT("f:%s invalid meta, magic : %x,"
+		"cf.cluster_size %u, cf.comp_type %d, "
+		"cf.footer_size %d, cf.original_file_size %lld, "
+		"lower file size : %lld, cf_size %d, offset %lld\n",
+		lower_dentry->d_name.name, cf.magic, cf.cluster_size,
+		cf.comp_type, cf.footer_size, cf.original_file_size,
+		lower_file_size, CF_SIZE, offset);
+		
+		return SCFS_MISSING_META;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	sii->cinfo_array_size = cf.footer_size - CF_SIZE;
 	sii->cluster_size = cf.cluster_size;
 	i_size_write(inode, cf.original_file_size);
 	sii->comp_type = cf.comp_type;
+<<<<<<< HEAD
 	if (!sii->cinfo_array_size)
 		sii->flags &= ~SCFS_DATA_COMPRESS;
 	else
@@ -456,6 +643,18 @@ out:
 
 	SCFS_DEBUG_END;
 	
+=======
+
+	if (cf.original_file_size) {
+		if (!sii->cinfo_array_size) {
+			sii->flags &= ~SCFS_DATA_COMPRESSABLE;
+			sii->compressed = 0;
+		} else
+			sii->compressed = 1;
+	} else
+		sii->compressed = 0;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -465,10 +664,16 @@ static int scfs_lookup_interpose(struct dentry *dentry, struct dentry *lower_den
 	struct inode *inode, *lower_inode = lower_dentry->d_inode;
 	struct scfs_dentry_info *dentry_info;
 	struct vfsmount *lower_mnt;
+<<<<<<< HEAD
 	int ret = 0;
 #if SCFS_PROFILE_MEM
 	struct scfs_sb_info *sbi = SCFS_S(dentry->d_sb);
 #endif
+=======
+	struct scfs_inode_info *sii;
+	struct file *lower_file;
+	int ret = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	lower_mnt = mntget(scfs_dentry_to_lower_mnt(dentry->d_parent));
 	fsstack_copy_attr_atime(dir, lower_dentry->d_parent->d_inode);
@@ -482,11 +687,17 @@ static int scfs_lookup_interpose(struct dentry *dentry, struct dentry *lower_den
 			dput(lower_dentry);
 			mntput(lower_mnt);
 			d_drop(dentry);
+<<<<<<< HEAD
 			return SCFS_ERR_OUT_OF_MEMORY;
 		}
 #if SCFS_PROFILE_MEM
 		atomic_add(sizeof(struct scfs_dentry_info), &sbi->kmcache_size);
 #endif
+=======
+			return -ENOMEM;
+		}
+		profile_add_kmcached(sizeof(struct scfs_dentry_info), SCFS_S(dir->i_sb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	scfs_set_lower_dentry(dentry, lower_dentry);
@@ -494,13 +705,18 @@ static int scfs_lookup_interpose(struct dentry *dentry, struct dentry *lower_den
 
 	if (!lower_dentry->d_inode) {
 		d_add(dentry, NULL);
+<<<<<<< HEAD
 		return SCFS_SUCCESS;
+=======
+		return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	inode = _scfs_get_inode(lower_inode, dir->i_sb);
 	if (IS_ERR(inode)) {
 		SCFS_PRINT_ERROR("error in get_inode\n");
 		return PTR_ERR(inode);
 	}
+<<<<<<< HEAD
 	if (S_ISREG(inode->i_mode)) {
 		// We should get the i_size.
 		// it'll be done by scfs_footer_read func.
@@ -515,6 +731,36 @@ static int scfs_lookup_interpose(struct dentry *dentry, struct dentry *lower_den
 	}
 	else
 		i_size_write(inode, i_size_read(lower_inode));
+=======
+	i_size_write(inode, i_size_read(lower_inode));
+
+	if (S_ISREG(inode->i_mode)) {
+		ret = scfs_initialize_lower_file(dentry, &lower_file, O_RDONLY); 
+		if (ret) {
+			SCFS_PRINT_ERROR("err in get_lower_file %s\n",
+				dentry->d_name.name);
+			return ret;
+		}
+		/* retrieve i_size via footer read */
+		ret = scfs_footer_read(inode, lower_file);
+		fput(lower_file);
+		/* if there is no footer, treat as not-compressed file */
+		if (ret == SCFS_MISSING_META) {
+			SCFS_PRINT("missing footer\n", ret);
+			sii = SCFS_I(inode);
+			sii->cinfo_array_size = 0;
+			sii->flags &= ~SCFS_DATA_COMPRESSABLE;
+			sii->cluster_size = SCFS_S(dentry->d_sb)->options.cluster_size;
+			sii->comp_type = SCFS_S(dentry->d_sb)->options.comp_type;
+		} else if (ret) {
+			/* give a chance to handle the problem in loading meta */
+			SCFS_PRINT_ERROR("error in loading footer, %s ret : %d\n",
+				dentry->d_name.name, ret);
+			MAKE_META_INVALID(SCFS_I(inode));
+		}
+		ret = 0;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (inode->i_state & I_NEW)
 		unlock_new_inode(inode);
@@ -527,8 +773,11 @@ static int scfs_lookup_interpose(struct dentry *dentry, struct dentry *lower_den
 /*
  * scfs_lookup
  *  
+<<<<<<< HEAD
  * XXX : not confirmed, sequence of getting and putting a ref
  *
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 static struct dentry * scfs_lookup(struct inode *dir, struct dentry *dentry,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
@@ -540,8 +789,11 @@ static struct dentry * scfs_lookup(struct inode *dir, struct dentry *dentry,
 	struct dentry *lower_dir_dentry, *lower_dentry;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dir_dentry = scfs_lower_dentry(dentry->d_parent);
 	mutex_lock(&lower_dir_dentry->d_inode->i_mutex);
 	lower_dentry = lookup_one_len(dentry->d_name.name, lower_dir_dentry,
@@ -554,8 +806,11 @@ static struct dentry * scfs_lookup(struct inode *dir, struct dentry *dentry,
 
 	ret = scfs_lookup_interpose(dentry, lower_dentry, dir);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ERR_PTR(ret);
 }
 
@@ -570,8 +825,11 @@ static int scfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 	struct inode *target_inode;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_old_dentry = scfs_lower_dentry(old_dentry);
 	lower_new_dentry = scfs_lower_dentry(new_dentry);
 	dget(lower_old_dentry);
@@ -608,8 +866,11 @@ out_lock:
 	dput(lower_new_dentry);
 	dput(lower_old_dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -619,8 +880,11 @@ static int scfs_rmdir(struct inode *dir, struct dentry *dentry)
 	struct dentry *lower_dir_dentry;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	dget(dentry);
 	lower_dir_dentry = lock_parent(lower_dentry);
@@ -636,8 +900,11 @@ static int scfs_rmdir(struct inode *dir, struct dentry *dentry)
 		d_drop(dentry);
 	dput(dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -652,9 +919,14 @@ int scfs_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat
 	int ret;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
 	struct path path = {scfs_dentry_to_lower_mnt(dentry),
+<<<<<<< HEAD
 				scfs_lower_dentry(dentry)};
 #endif
 	SCFS_DEBUG_START;
+=======
+		scfs_lower_dentry(dentry)};
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ret = vfs_getattr(
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
@@ -666,13 +938,20 @@ int scfs_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat
 			&lower_stat);
 	if (!ret) {
 		fsstack_copy_attr_all(dentry->d_inode,
+<<<<<<< HEAD
 				      scfs_lower_inode(dentry->d_inode));
+=======
+			scfs_lower_inode(dentry->d_inode));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		generic_fillattr(dentry->d_inode, stat);
 		stat->blocks = lower_stat.blocks;
 	}
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -681,15 +960,22 @@ static int scfs_unlink(struct inode *dir, struct dentry *dentry)
 	return scfs_do_unlink(dir, dentry, dentry->d_inode);
 }
 
+<<<<<<< HEAD
 static int scfs_symlink(struct inode *dir, struct dentry *dentry,
 		const char *symname)
+=======
+static int scfs_symlink(struct inode *dir, struct dentry *dentry, const char *symname)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dentry *lower_dentry;
 	struct dentry *lower_dir_dentry;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	dget(lower_dentry);
 	lower_dir_dentry = lock_parent(lower_dentry);
@@ -699,6 +985,10 @@ static int scfs_symlink(struct inode *dir, struct dentry *dentry,
 	ret = scfs_interpose(lower_dentry, dentry, dir->i_sb);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fsstack_copy_attr_times(dir, lower_dir_dentry->d_inode);
 	fsstack_copy_inode_size(dir, lower_dir_dentry->d_inode);
 out:
@@ -707,6 +997,7 @@ out:
 	if (!dentry->d_inode)
 		d_drop(dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
 	return ret;
@@ -714,13 +1005,22 @@ out:
 
 static int scfs_mknod(struct inode *dir, struct dentry *dentry,
 		umode_t mode, dev_t dev)
+=======
+	return ret;
+}
+
+static int scfs_mknod(struct inode *dir, struct dentry *dentry, umode_t mode, dev_t dev)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dentry *lower_dentry;
 	struct dentry *lower_dir_dentry;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	lower_dir_dentry = lock_parent(lower_dentry);
 	ret = vfs_mknod(lower_dir_dentry->d_inode, lower_dentry, mode, dev);
@@ -729,6 +1029,10 @@ static int scfs_mknod(struct inode *dir, struct dentry *dentry,
 	ret = scfs_interpose(lower_dentry, dentry, dir->i_sb);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fsstack_copy_attr_times(dir, lower_dir_dentry->d_inode);
 	fsstack_copy_inode_size(dir, lower_dir_dentry->d_inode);
 out:
@@ -736,13 +1040,20 @@ out:
 	if (!dentry->d_inode)
 		d_drop(dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
 static int scfs_link(struct dentry *old_dentry, struct inode *dir,
+<<<<<<< HEAD
 			 struct dentry *new_dentry)
+=======
+	struct dentry *new_dentry)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dentry *lower_old_dentry;
 	struct dentry *lower_new_dentry;
@@ -750,8 +1061,11 @@ static int scfs_link(struct dentry *old_dentry, struct inode *dir,
 	u64 file_size_save;
 	int ret;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	file_size_save = i_size_read(old_dentry->d_inode);
 	lower_old_dentry = scfs_lower_dentry(old_dentry);
 	lower_new_dentry = scfs_lower_dentry(new_dentry);
@@ -765,6 +1079,10 @@ static int scfs_link(struct dentry *old_dentry, struct inode *dir,
 	ret = scfs_interpose(lower_new_dentry, new_dentry, dir->i_sb);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fsstack_copy_attr_times(dir, lower_dir_dentry->d_inode);
 	fsstack_copy_inode_size(dir, lower_dir_dentry->d_inode);
 	set_nlink(old_dentry->d_inode,
@@ -775,8 +1093,11 @@ out:
 	dput(lower_new_dentry);
 	dput(lower_old_dentry);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -788,8 +1109,11 @@ static int scfs_setattr(struct dentry *dentry, struct iattr *ia)
 	struct iattr lower_ia;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	inode = dentry->d_inode;
 	lower_inode = scfs_lower_inode(inode);
 	lower_dentry = scfs_lower_dentry(dentry);
@@ -807,7 +1131,10 @@ static int scfs_setattr(struct dentry *dentry, struct iattr *ia)
 			goto out;
 		lower_ia.ia_valid &= ~ATTR_SIZE;
 	}
+<<<<<<< HEAD
 	// for what?
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (lower_ia.ia_valid & (ATTR_KILL_SUID | ATTR_KILL_SGID))
 		lower_ia.ia_valid &= ~ATTR_MODE;
 
@@ -817,8 +1144,11 @@ static int scfs_setattr(struct dentry *dentry, struct iattr *ia)
 out:
 	fsstack_copy_attr_all(inode, lower_inode);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 
 }
@@ -830,19 +1160,28 @@ static int scfs_readlink(struct dentry *dentry, char __user *buf, int bufsiz)
 	size_t kbufsiz = PATH_MAX, copied;
 	mm_segment_t old_fs;
 	int ret;
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	struct scfs_sb_info *sbi = SCFS_S(dentry->d_sb);
 #endif
 
 	SCFS_DEBUG_START;
 	
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	kbuf = kmalloc(kbufsiz, GFP_KERNEL);
 	if (!kbuf) 
 		return -ENOMEM;
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	atomic_add(PATH_MAX, &sbi->kmalloc_size);
 #endif
+=======
+
+	profile_add_kmalloced(PATH_MAX, SCFS_S(dentry->d_sb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	old_fs = get_fs();
 	set_fs(get_ds());
@@ -859,6 +1198,7 @@ static int scfs_readlink(struct dentry *dentry, char __user *buf, int bufsiz)
 	ret = copy_to_user(buf, kbuf, copied) ? -EFAULT : copied;
 
 	fsstack_copy_attr_atime(dentry->d_inode,
+<<<<<<< HEAD
 				scfs_lower_dentry(dentry)->d_inode);
 out:
 	kfree(kbuf);
@@ -867,6 +1207,12 @@ out:
 #endif
 
 	SCFS_DEBUG_END;
+=======
+		scfs_lower_dentry(dentry)->d_inode);
+out:
+	kfree(kbuf);
+	profile_sub_kmalloced(PATH_MAX, SCFS_S(dentry->d_sb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return ret;
 }
@@ -876,43 +1222,60 @@ static void *scfs_follow_link(struct dentry *dentry, struct nameidata *nd)
 	char *buf;
 	int len = PAGE_SIZE, ret;
 	mm_segment_t old_fs;
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	struct scfs_sb_info *sbi = SCFS_S(dentry->d_sb);
 #endif
 
 	SCFS_DEBUG_START;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	buf = kmalloc(len, GFP_KERNEL);
 	if (!buf) {
 		buf = ERR_PTR(-ENOMEM);
 		goto out;
 	}
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	atomic_add(len, &sbi->kmalloc_size);
 #endif
+=======
+
+	profile_add_kmalloced(len, SCFS_S(dentry->d_sb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	old_fs = get_fs();
 	set_fs(get_ds());
 	ret = dentry->d_inode->i_op->readlink(dentry, (char __user *)buf, len);
 	set_fs(old_fs);
 	if (ret < 0) {
 		kfree(buf);
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 		atomic_sub(len, &sbi->kmalloc_size);
 #endif
+=======
+		profile_sub_kmalloced(len, SCFS_S(dentry->d_sb));
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		buf = ERR_PTR(ret);
 	} else
 		buf[ret] = '\0';
 out:
 	nd_set_link(nd, buf);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return NULL;
 }
 
 static void scfs_put_link(struct dentry *dentry, struct nameidata *nd, void *ptr)
 {
 	char *buf = nd_get_link(nd);
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	struct scfs_sb_info *sbi = SCFS_S(dentry->d_sb);
 #endif
@@ -927,6 +1290,13 @@ static void scfs_put_link(struct dentry *dentry, struct nameidata *nd, void *ptr
 	}
 
 	SCFS_DEBUG_END;
+=======
+
+	if (!IS_ERR(buf)) {
+		kfree(buf);
+		profile_sub_kmalloced(PAGE_SIZE, SCFS_S(dentry->d_sb));
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 int scfs_setxattr(struct dentry *dentry, const char *name, const void *value,
@@ -935,8 +1305,11 @@ int scfs_setxattr(struct dentry *dentry, const char *name, const void *value,
 	struct dentry *lower_dentry;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	if (!lower_dentry->d_inode->i_op->setxattr) {
 		ret = -EOPNOTSUPP;
@@ -948,8 +1321,11 @@ int scfs_setxattr(struct dentry *dentry, const char *name, const void *value,
 		fsstack_copy_attr_all(dentry->d_inode, lower_dentry->d_inode);
 out:
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -958,8 +1334,11 @@ ssize_t scfs_getxattr_lower(struct dentry *lower_dentry, const char *name,
 {
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!lower_dentry->d_inode->i_op->getxattr) {
 		ret = -EOPNOTSUPP;
 		goto out;
@@ -970,8 +1349,11 @@ ssize_t scfs_getxattr_lower(struct dentry *lower_dentry, const char *name,
 	mutex_unlock(&lower_dentry->d_inode->i_mutex);
 out:
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -979,7 +1361,11 @@ static ssize_t scfs_getxattr(struct dentry *dentry, const char *name, void *valu
 		  size_t size)
 {
 	return scfs_getxattr_lower(scfs_lower_dentry(dentry), name,
+<<<<<<< HEAD
 				       value, size);
+=======
+		value, size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t scfs_listxattr(struct dentry *dentry, char *list, size_t size)
@@ -987,8 +1373,11 @@ static ssize_t scfs_listxattr(struct dentry *dentry, char *list, size_t size)
 	struct dentry *lower_dentry;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	if (!lower_dentry->d_inode->i_op->listxattr) {
 		ret = -EOPNOTSUPP;
@@ -999,8 +1388,11 @@ static ssize_t scfs_listxattr(struct dentry *dentry, char *list, size_t size)
 	mutex_unlock(&lower_dentry->d_inode->i_mutex);
 out:
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -1009,8 +1401,11 @@ static int scfs_removexattr(struct dentry *dentry, const char *name)
 	struct dentry *lower_dentry;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_dentry = scfs_lower_dentry(dentry);
 	if (!lower_dentry->d_inode->i_op->removexattr) {
 		ret = -EOPNOTSUPP;
@@ -1020,9 +1415,12 @@ static int scfs_removexattr(struct dentry *dentry, const char *name)
 	ret = lower_dentry->d_inode->i_op->removexattr(lower_dentry, name);
 	mutex_unlock(&lower_dentry->d_inode->i_mutex);
 out:
+<<<<<<< HEAD
 
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 

@@ -179,7 +179,10 @@ config ARCH_MSM8960
 	select MSM_USE_USER_ACCESSIBLE_TIMERS
 	select MSM_CPU_PWRCTL
 	select MSM_LPM_TEST
+<<<<<<< HEAD
 	select HAS_MACH_MEMUTILS
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 config ARCH_MSM8930
 	bool "MSM8930"
@@ -536,7 +539,10 @@ config ARCH_MSM8226
 	select MSM_RPM_STATS_LOG
 	select ARCH_WANT_KMAP_ATOMIC_FLUSH
 	select ENABLE_VMALLOC_SAVINGS
+<<<<<<< HEAD
 	select HAS_MACH_MEMUTILS
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 config ARCH_MSM8226_3G_WIFI
 	bool "MSM8226_3G_WIFI"
@@ -4821,6 +4827,7 @@ config MUIC_RESET_PIN_ENABLE
         help 
                 This request is from H/W team
 		In case of mUIC voltage drop, mUIC will be reset
+<<<<<<< HEAD
 
 config HAS_MACH_MEMUTILS
 	default n
@@ -4828,4 +4835,6 @@ config HAS_MACH_MEMUTILS
 	help
 	Faster memcpy performance for Krait
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 endif

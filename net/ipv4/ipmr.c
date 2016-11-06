@@ -124,6 +124,11 @@ static DEFINE_SPINLOCK(mfc_unres_lock);
 static struct kmem_cache *mrt_cachep __read_mostly;
 
 static struct mr_table *ipmr_new_table(struct net *net, u32 id);
+<<<<<<< HEAD
+=======
+static void ipmr_free_table(struct mr_table *mrt);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int ip_mr_forward(struct net *net, struct mr_table *mrt,
 			 struct sk_buff *skb, struct mfc_cache *cache,
 			 int local);
@@ -131,6 +136,10 @@ static int ipmr_cache_report(struct mr_table *mrt,
 			     struct sk_buff *pkt, vifi_t vifi, int assert);
 static int __ipmr_fill_mroute(struct mr_table *mrt, struct sk_buff *skb,
 			      struct mfc_cache *c, struct rtmsg *rtm);
+<<<<<<< HEAD
+=======
+static void mroute_clean_tables(struct mr_table *mrt);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void ipmr_expire_process(unsigned long arg);
 
 #ifdef CONFIG_IP_MROUTE_MULTIPLE_TABLES
@@ -151,9 +160,18 @@ static struct mr_table *ipmr_get_table(struct net *net, u32 id)
 static int ipmr_fib_lookup(struct net *net, struct flowi4 *flp4,
 			   struct mr_table **mrt)
 {
+<<<<<<< HEAD
 	struct ipmr_result res;
 	struct fib_lookup_arg arg = { .result = &res, };
 	int err;
+=======
+	int err;
+	struct ipmr_result res;
+	struct fib_lookup_arg arg = {
+		.result = &res,
+		.flags = FIB_LOOKUP_NOREF,
+	};
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	err = fib_rules_lookup(net->ipv4.mr_rules_ops,
 			       flowi4_to_flowi(flp4), 0, &arg);
@@ -271,7 +289,11 @@ static void __net_exit ipmr_rules_exit(struct net *net)
 
 	list_for_each_entry_safe(mrt, next, &net->ipv4.mr_tables, list) {
 		list_del(&mrt->list);
+<<<<<<< HEAD
 		kfree(mrt);
+=======
+		ipmr_free_table(mrt);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	fib_rules_unregister(net->ipv4.mr_rules_ops);
 }
@@ -299,7 +321,11 @@ static int __net_init ipmr_rules_init(struct net *net)
 
 static void __net_exit ipmr_rules_exit(struct net *net)
 {
+<<<<<<< HEAD
 	kfree(net->ipv4.mrt);
+=======
+	ipmr_free_table(net->ipv4.mrt);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 #endif
 
@@ -336,6 +362,16 @@ static struct mr_table *ipmr_new_table(struct net *net, u32 id)
 	return mrt;
 }
 
+<<<<<<< HEAD
+=======
+static void ipmr_free_table(struct mr_table *mrt)
+{
+	del_timer_sync(&mrt->ipmr_expire_timer);
+	mroute_clean_tables(mrt);
+	kfree(mrt);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Service routines creating virtual interfaces: DVMRP tunnels and PIMREG */
 
 static void ipmr_del_tunnel(struct net_device *dev, struct vifctl *v)
@@ -438,7 +474,11 @@ static netdev_tx_t reg_vif_xmit(struct sk_buff *skb, struct net_device *dev)
 	struct mr_table *mrt;
 	struct flowi4 fl4 = {
 		.flowi4_oif	= dev->ifindex,
+<<<<<<< HEAD
 		.flowi4_iif	= skb->skb_iif ? : LOOPBACK_IFINDEX,
+=======
+		.flowi4_iif	= skb->skb_iif,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		.flowi4_mark	= skb->mark,
 	};
 	int err;
@@ -1563,7 +1603,11 @@ static void ip_encap(struct sk_buff *skb, __be32 saddr, __be32 daddr)
 	iph->protocol	=	IPPROTO_IPIP;
 	iph->ihl	=	5;
 	iph->tot_len	=	htons(skb->len);
+<<<<<<< HEAD
 	ip_select_ident(iph, skb_dst(skb), NULL);
+=======
+	ip_select_ident(skb, NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ip_send_check(iph);
 
 	memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));

@@ -465,7 +465,11 @@ static int osd_probe(struct device *dev)
 	oud->class_dev.class = &osd_uld_class;
 	oud->class_dev.parent = dev;
 	oud->class_dev.release = __remove;
+<<<<<<< HEAD
 	error = dev_set_name(&oud->class_dev, disk->disk_name);
+=======
+	error = dev_set_name(&oud->class_dev, "%s", disk->disk_name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (error) {
 		OSD_ERR("dev_set_name failed => %d\n", error);
 		goto err_put_cdev;

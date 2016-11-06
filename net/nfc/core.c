@@ -185,7 +185,15 @@ int nfc_dep_link_up(struct nfc_dev *dev, int target_index, u8 comm_mode)
 {
 	int rc = 0;
 	u8 *gb;
+<<<<<<< HEAD
 	size_t gb_len;
+=======
+#ifdef CONFIG_NFC_LLCP
+	size_t gb_len;
+#else
+	u8 gb_len;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	pr_debug("dev_name=%s comm %d\n", dev_name(&dev->dev), comm_mode);
 

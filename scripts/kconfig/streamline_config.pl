@@ -463,6 +463,11 @@ while(<CIN>) {
 	if (defined($configs{$1})) {
 	    if ($localyesconfig) {
 	        $setconfigs{$1} = 'y';
+<<<<<<< HEAD
+=======
+		print "$1=y\n";
+		next;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	    } else {
 	        $setconfigs{$1} = $2;
 	    }

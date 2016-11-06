@@ -726,6 +726,16 @@ const char * const vmstat_text[] = {
 #endif
 	"nr_anon_transparent_hugepages",
 	"nr_free_cma",
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+	"nr_cma_inactive_anon",
+	"nr_cma_active_anon",
+	"nr_cma_inactive_file",
+	"nr_cma_active_file",
+	"nr_cma_unevictable",
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	"nr_dirty_threshold",
 	"nr_dirty_background_threshold",
 
@@ -1156,7 +1166,12 @@ int sysctl_stat_interval __read_mostly = HZ;
 static void vmstat_update(struct work_struct *w)
 {
 	refresh_cpu_vm_stats(smp_processor_id());
+<<<<<<< HEAD
 	schedule_delayed_work(&__get_cpu_var(vmstat_work),
+=======
+	schedule_delayed_work_on(smp_processor_id(),
+		&__get_cpu_var(vmstat_work),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		round_jiffies_relative(sysctl_stat_interval));
 }
 

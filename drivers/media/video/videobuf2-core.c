@@ -543,7 +543,11 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
 	/*
 	 * Make sure the requested values and current defaults are sane.
 	 */
+<<<<<<< HEAD
 	num_buffers = min_t(unsigned int, req->count, VIDEO_MAX_FRAME);
+=======
+	num_buffers = min_t(unsigned int, req->count, VB2_MAX_FRAME);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	memset(q->plane_sizes, 0, sizeof(q->plane_sizes));
 	memset(q->alloc_ctx, 0, sizeof(q->alloc_ctx));
 	q->memory = req->memory;
@@ -651,7 +655,11 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	if (q->num_buffers == VIDEO_MAX_FRAME) {
+=======
+	if (q->num_buffers == VB2_MAX_FRAME) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dprintk(1, "%s(): maximum number of buffers already allocated\n",
 			__func__);
 		return -ENOBUFS;
@@ -665,7 +673,11 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
 		q->memory = create->memory;
 	}
 
+<<<<<<< HEAD
 	num_buffers = min(create->count, VIDEO_MAX_FRAME - q->num_buffers);
+=======
+	num_buffers = min(create->count, VB2_MAX_FRAME - q->num_buffers);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * Ask the driver, whether the requested number of buffers, planes per
@@ -1777,7 +1789,11 @@ struct vb2_fileio_buf {
 struct vb2_fileio_data {
 	struct v4l2_requestbuffers req;
 	struct v4l2_buffer b;
+<<<<<<< HEAD
 	struct vb2_fileio_buf bufs[VIDEO_MAX_FRAME];
+=======
+	struct vb2_fileio_buf bufs[VB2_MAX_FRAME];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned int index;
 	unsigned int q_count;
 	unsigned int dq_count;

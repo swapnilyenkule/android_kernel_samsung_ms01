@@ -390,6 +390,10 @@ static const struct sd_desc sd_desc = {
 /* -- module initialisation -- */
 static const struct usb_device_id device_table[] = {
 	{USB_DEVICE(0x045e, 0x02ae)},
+<<<<<<< HEAD
+=======
+	{USB_DEVICE(0x045e, 0x02bf)},
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	{}
 };
 

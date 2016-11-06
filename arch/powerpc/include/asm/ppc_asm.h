@@ -294,11 +294,23 @@ n:
  *      ld	rY,ADDROFF(name)(rX)
  */
 #ifdef __powerpc64__
+<<<<<<< HEAD
+=======
+#ifdef HAVE_AS_ATHIGH
+#define __AS_ATHIGH high
+#else
+#define __AS_ATHIGH h
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define LOAD_REG_IMMEDIATE(reg,expr)		\
 	lis     (reg),(expr)@highest;		\
 	ori     (reg),(reg),(expr)@higher;	\
 	rldicr  (reg),(reg),32,31;		\
+<<<<<<< HEAD
 	oris    (reg),(reg),(expr)@h;		\
+=======
+	oris    (reg),(reg),(expr)@__AS_ATHIGH;	\
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ori     (reg),(reg),(expr)@l;
 
 #define LOAD_REG_ADDR(reg,name)			\

@@ -601,8 +601,14 @@ static int mcs7830_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 {
 	u8 status;
 
+<<<<<<< HEAD
 	if (skb->len == 0) {
 		dev_err(&dev->udev->dev, "unexpected empty rx frame\n");
+=======
+	/* This check is no longer done by usbnet */
+	if (skb->len < dev->net->hard_header_len) {
+		dev_err(&dev->udev->dev, "unexpected tiny rx frame\n");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 	}
 

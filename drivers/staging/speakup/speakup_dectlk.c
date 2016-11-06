@@ -134,7 +134,11 @@ static struct spk_synth synth_dectlk = {
 	.vars = vars,
 	.default_pitch = ap_defaults,
 	.default_vol = g5_defaults,
+<<<<<<< HEAD
 	.probe = serial_synth_probe,
+=======
+	.probe = spk_serial_synth_probe,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.release = spk_serial_release,
 	.synth_immediate = spk_synth_immediate,
 	.catch_up = do_catch_up,
@@ -214,8 +218,13 @@ static void do_catch_up(struct spk_synth *synth)
 	int jiffy_delta_val;
 	int delay_time_val;
 
+<<<<<<< HEAD
 	jiffy_delta = get_var(JIFFY);
 	delay_time = get_var(DELAY);
+=======
+	jiffy_delta = spk_get_var(JIFFY);
+	delay_time = spk_get_var(DELAY);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spk_lock(flags);
 	jiffy_delta_val = jiffy_delta->u.n.value;
 	spk_unlock(flags);

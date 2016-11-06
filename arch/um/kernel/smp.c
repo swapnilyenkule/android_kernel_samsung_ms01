@@ -140,7 +140,11 @@ void smp_prepare_boot_cpu(void)
 	set_cpu_online(smp_processor_id(), true);
 }
 
+<<<<<<< HEAD
 int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpu_up(unsigned int cpu)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	cpu_set(cpu, smp_commenced_mask);
 	while (!cpu_online(cpu))

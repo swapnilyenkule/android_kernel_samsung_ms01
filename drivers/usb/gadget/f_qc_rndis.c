@@ -347,7 +347,11 @@ static struct usb_ss_ep_comp_descriptor rndis_qc_ss_bulk_comp_desc = {
 };
 
 static struct usb_descriptor_header *eth_qc_ss_function[] = {
+<<<<<<< HEAD
 	(struct usb_descriptor_header *) &rndis_iad_descriptor,
+=======
+	(struct usb_descriptor_header *) &rndis_qc_iad_descriptor,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* control interface matches ACM, not Ethernet */
 	(struct usb_descriptor_header *) &rndis_qc_control_intf,

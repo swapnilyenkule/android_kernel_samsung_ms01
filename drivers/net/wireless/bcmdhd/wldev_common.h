@@ -1,7 +1,11 @@
 /*
  * Common function shared by Linux WEXT, cfg80211 and p2p drivers
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: wldev_common.h,v 1.1.4.1.2.14 2011-02-09 01:40:07 $
+=======
+ * $Id: wldev_common.h 434085 2013-11-05 06:09:49Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 #ifndef __WLDEV_COMMON_H__
 #define __WLDEV_COMMON_H__
@@ -83,7 +91,17 @@ s32 wldev_iovar_getint_bsscfg(
 s32 wldev_iovar_setint_bsscfg(
 	struct net_device *dev, s8 *iovar, s32 val, s32 bssidx);
 
+<<<<<<< HEAD
 extern void get_customized_country_code(char *country_iso_code, wl_country_t *cspec);
+=======
+extern int dhd_net_set_fw_path(struct net_device *dev, char *fw);
+extern int dhd_net_bus_suspend(struct net_device *dev);
+extern int dhd_net_bus_resume(struct net_device *dev, uint8 stage);
+extern int dhd_net_wifi_platform_set_power(struct net_device *dev, bool on,
+	unsigned long delay_msec);
+extern void dhd_get_customized_country_code(struct net_device *dev, char *country_iso_code,
+	wl_country_t *cspec);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern void dhd_bus_country_set(struct net_device *dev, wl_country_t *cspec, bool notify);
 extern void dhd_bus_band_set(struct net_device *dev, uint band);
 extern int wldev_set_country(struct net_device *dev, char *country_code, bool notify,
@@ -109,5 +127,8 @@ int wldev_get_band(struct net_device *dev, uint *pband);
 
 int wldev_set_band(struct net_device *dev, uint band);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* __WLDEV_COMMON_H__ */

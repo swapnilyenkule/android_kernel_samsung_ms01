@@ -54,7 +54,14 @@ static int rawsock_release(struct socket *sock)
 {
 	struct sock *sk = sock->sk;
 
+<<<<<<< HEAD
 	pr_debug("sock=%p\n", sock);
+=======
+	pr_debug("sock=%p sk=%p\n", sock, sk);
+
+	if (!sk)
+		return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	sock_orphan(sk);
 	sock_put(sk);
@@ -232,8 +239,11 @@ static int rawsock_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (!skb)
 		return rc;
 
+<<<<<<< HEAD
 	msg->msg_namelen = 0;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	copied = skb->len;
 	if (len < copied) {
 		msg->msg_flags |= MSG_TRUNC;

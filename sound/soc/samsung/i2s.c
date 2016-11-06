@@ -392,7 +392,11 @@ static int i2s_set_sysclk(struct snd_soc_dai *dai,
 		if (dir == SND_SOC_CLOCK_IN)
 			rfs = 0;
 
+<<<<<<< HEAD
 		if ((rfs && other->rfs && (other->rfs != rfs)) ||
+=======
+		if ((rfs && other && other->rfs && (other->rfs != rfs)) ||
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				(any_active(i2s) &&
 				(((dir == SND_SOC_CLOCK_IN)
 					&& !(mod & MOD_CDCLKCON)) ||

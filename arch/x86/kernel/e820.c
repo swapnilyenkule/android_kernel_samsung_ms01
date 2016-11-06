@@ -1076,6 +1076,12 @@ void __init memblock_x86_fill(void)
 		memblock_add(ei->addr, ei->size);
 	}
 
+<<<<<<< HEAD
+=======
+	/* throw away partial pages */
+	memblock_trim_memory(PAGE_SIZE);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	memblock_dump_all();
 }
 

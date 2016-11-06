@@ -19,8 +19,13 @@
 
 		mov	\base, #AIC_BA
 
+<<<<<<< HEAD
 		ldr	\irqnr, [ \base, #AIC_IPER]
 		ldr	\irqnr, [ \base, #AIC_ISNR]
+=======
+		ldr	\irqnr, [\base, #AIC_IPER]
+		ldr	\irqnr, [\base, #AIC_ISNR]
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cmp	\irqnr, #0
 
 	.endm

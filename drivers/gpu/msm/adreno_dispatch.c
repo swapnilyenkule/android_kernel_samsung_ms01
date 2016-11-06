@@ -40,7 +40,11 @@ static unsigned int _dispatcher_inflight = 15;
 static unsigned int _cmdbatch_timeout = 2000;
 
 /* Interval for reading and comparing fault detection registers */
+<<<<<<< HEAD
 static unsigned int _fault_timer_interval = 50;
+=======
+static unsigned int _fault_timer_interval = 200;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* Local array for the current set of fault detect registers */
 static unsigned int fault_detect_regs[FT_DETECT_REGS_COUNT];
@@ -146,7 +150,10 @@ static inline struct kgsl_cmdbatch *adreno_dispatcher_get_cmdbatch(
 		struct adreno_context *drawctxt)
 {
 	struct kgsl_cmdbatch *cmdbatch = NULL;
+<<<<<<< HEAD
 	int pending;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	mutex_lock(&drawctxt->mutex);
 	if (drawctxt->cmdqueue_head != drawctxt->cmdqueue_tail) {
@@ -156,6 +163,7 @@ static inline struct kgsl_cmdbatch *adreno_dispatcher_get_cmdbatch(
 		 * Don't dequeue a cmdbatch that is still waiting for other
 		 * events
 		 */
+<<<<<<< HEAD
 
 		spin_lock(&cmdbatch->lock);
 		pending = list_empty(&cmdbatch->synclist) ? 0 : 1;
@@ -181,6 +189,9 @@ static inline struct kgsl_cmdbatch *adreno_dispatcher_get_cmdbatch(
 		spin_unlock(&cmdbatch->lock);
 
 		if (pending) {
+=======
+		if (kgsl_cmdbatch_sync_pending(cmdbatch)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			cmdbatch = ERR_PTR(-EAGAIN);
 			goto done;
 		}
@@ -964,6 +975,15 @@ static int dispatcher_do_fault(struct kgsl_device *device)
 	if (dispatcher->inflight == 0) {
 		KGSL_DRV_WARN(device,
 		"dispatcher_do_fault with 0 inflight commands\n");
+<<<<<<< HEAD
+=======
+		/*
+		 * For certain faults like h/w fault the interrupts are
+		 * turned off, re-enable here
+		 */
+		if (kgsl_pwrctrl_isenabled(device))
+			kgsl_pwrctrl_irq(device, KGSL_PWRFLAGS_ON);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 	}
 
@@ -986,9 +1006,12 @@ static int dispatcher_do_fault(struct kgsl_device *device)
 		adreno_readreg(adreno_dev, ADRENO_REG_CP_ME_CNTL, &reg);
 		reg |= (1 << 27) | (1 << 28);
 		adreno_writereg(adreno_dev, ADRENO_REG_CP_ME_CNTL, reg);
+<<<<<<< HEAD
 
 		/* Skip the PM dump for a timeout because it confuses people */
 		set_bit(KGSL_FT_SKIP_PMDUMP, &cmdbatch->fault_policy);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	adreno_readreg(adreno_dev, ADRENO_REG_CP_IB1_BASE, &base);
@@ -1550,6 +1573,7 @@ void adreno_dispatcher_irq_fault(struct kgsl_device *device)
  */
 void adreno_dispatcher_start(struct kgsl_device *device)
 {
+<<<<<<< HEAD
 	struct adreno_device *adreno_dev = ADRENO_DEVICE(device);
 
 	complete_all(&device->cmdbatch_gate);
@@ -1558,6 +1582,10 @@ void adreno_dispatcher_start(struct kgsl_device *device)
 	if (adreno_is_a305b(adreno_dev) || adreno_is_a305c(adreno_dev))
 		_fault_timer_interval = 200;
 
+=======
+	complete_all(&device->cmdbatch_gate);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Schedule the work loop to get things going */
 	adreno_dispatcher_schedule(device);
 }

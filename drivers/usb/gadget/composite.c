@@ -627,6 +627,10 @@ static void reset_config(struct usb_composite_dev *cdev)
 		bitmap_zero(f->endpoints, 32);
 	}
 	cdev->config = NULL;
+<<<<<<< HEAD
+=======
+	cdev->delayed_status = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int set_config(struct usb_composite_dev *cdev,

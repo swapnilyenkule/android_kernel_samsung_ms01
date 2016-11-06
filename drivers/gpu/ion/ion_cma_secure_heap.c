@@ -444,6 +444,10 @@ static struct ion_secure_cma_buffer_info *__ion_secure_cma_allocate(
 	ret = ion_secure_cma_alloc_from_pool(sheap, &info->phys, len);
 
 	if (ret) {
+<<<<<<< HEAD
+=======
+retry:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ret = ion_secure_cma_add_to_pool(sheap, len);
 		if (ret) {
 			mutex_unlock(&sheap->alloc_lock);
@@ -454,10 +458,16 @@ static struct ion_secure_cma_buffer_info *__ion_secure_cma_allocate(
 		ret = ion_secure_cma_alloc_from_pool(sheap, &info->phys, len);
 		if (ret) {
 			/*
+<<<<<<< HEAD
 			 * We just added memory to the pool, we shouldn't be
 			 * failing to get memory
 			 */
 			BUG();
+=======
+			 * Lost the race with the shrinker, try again
+			 */
+			goto retry;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 	mutex_unlock(&sheap->alloc_lock);

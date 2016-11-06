@@ -47,9 +47,15 @@ static int sis_driver_load(struct drm_device *dev, unsigned long chipset)
 	if (dev_priv == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	dev->dev_private = (void *)dev_priv;
 	dev_priv->chipset = chipset;
 	idr_init(&dev->object_name_idr);
+=======
+	idr_init(&dev_priv->object_idr);
+	dev->dev_private = (void *)dev_priv;
+	dev_priv->chipset = chipset;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }

@@ -17,6 +17,10 @@
 #include <linux/idr.h>
 #include <linux/fs.h>
 
+<<<<<<< HEAD
+=======
+#include <net/ipv6.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <net/net_namespace.h>
 #include <net/rtnetlink.h>
 #include <net/sock.h>
@@ -506,10 +510,18 @@ static int zerocopy_sg_from_iovec(struct sk_buff *skb, const struct iovec *from,
 		if (copy > size) {
 			++from;
 			--count;
+<<<<<<< HEAD
 		}
 		copy -= size;
 		offset1 += size;
 		offset = 0;
+=======
+			offset = 0;
+		} else
+			offset += size;
+		copy -= size;
+		offset1 += size;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (len == offset1)
@@ -519,6 +531,7 @@ static int zerocopy_sg_from_iovec(struct sk_buff *skb, const struct iovec *from,
 		struct page *page[MAX_SKB_FRAGS];
 		int num_pages;
 		unsigned long base;
+<<<<<<< HEAD
 
 		len = from->iov_len - offset1;
 		if (!len) {
@@ -537,6 +550,32 @@ static int zerocopy_sg_from_iovec(struct sk_buff *skb, const struct iovec *from,
 		skb->len += len;
 		skb->truesize += len;
 		atomic_add(len, &skb->sk->sk_wmem_alloc);
+=======
+		unsigned long truesize;
+
+		len = from->iov_len - offset;
+		if (!len) {
+			offset = 0;
+			++from;
+			continue;
+		}
+		base = (unsigned long)from->iov_base + offset;
+		size = ((base & ~PAGE_MASK) + len + ~PAGE_MASK) >> PAGE_SHIFT;
+		if (i + size > MAX_SKB_FRAGS)
+			return -EMSGSIZE;
+		num_pages = get_user_pages_fast(base, size, 0, &page[i]);
+		if (num_pages != size) {
+			int j;
+
+			for (j = 0; j < num_pages; j++)
+				put_page(page[i + j]);
+		}
+		truesize = size * PAGE_SIZE;
+		skb->data_len += len;
+		skb->len += len;
+		skb->truesize += truesize;
+		atomic_add(truesize, &skb->sk->sk_wmem_alloc);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		while (len) {
 			int off = base & ~PAGE_MASK;
 			int size = min_t(int, len, PAGE_SIZE - off);
@@ -547,7 +586,11 @@ static int zerocopy_sg_from_iovec(struct sk_buff *skb, const struct iovec *from,
 			len -= size;
 			i++;
 		}
+<<<<<<< HEAD
 		offset1 = 0;
+=======
+		offset = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		++from;
 	}
 	return 0;
@@ -571,6 +614,11 @@ static int macvtap_skb_from_vnet_hdr(struct sk_buff *skb,
 			break;
 		case VIRTIO_NET_HDR_GSO_UDP:
 			gso_type = SKB_GSO_UDP;
+<<<<<<< HEAD
+=======
+			if (skb->protocol == htons(ETH_P_IPV6))
+				ipv6_proxy_select_ident(skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		default:
 			return -EINVAL;
@@ -627,6 +675,11 @@ static int macvtap_skb_to_vnet_hdr(const struct sk_buff *skb,
 	if (skb->ip_summed == CHECKSUM_PARTIAL) {
 		vnet_hdr->flags = VIRTIO_NET_HDR_F_NEEDS_CSUM;
 		vnet_hdr->csum_start = skb_checksum_start_offset(skb);
+<<<<<<< HEAD
+=======
+		if (vlan_tx_tag_present(skb))
+			vnet_hdr->csum_start += VLAN_HLEN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		vnet_hdr->csum_offset = skb->csum_offset;
 	} else if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
 		vnet_hdr->flags = VIRTIO_NET_HDR_F_DATA_VALID;
@@ -635,6 +688,31 @@ static int macvtap_skb_to_vnet_hdr(const struct sk_buff *skb,
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static unsigned long iov_pages(const struct iovec *iv, int offset,
+			       unsigned long nr_segs)
+{
+	unsigned long seg, base;
+	int pages = 0, len, size;
+
+	while (nr_segs && (offset >= iv->iov_len)) {
+		offset -= iv->iov_len;
+		++iv;
+		--nr_segs;
+	}
+
+	for (seg = 0; seg < nr_segs; seg++) {
+		base = (unsigned long)iv[seg].iov_base + offset;
+		len = iv[seg].iov_len - offset;
+		size = ((base & ~PAGE_MASK) + len + ~PAGE_MASK) >> PAGE_SHIFT;
+		pages += size;
+		offset = 0;
+	}
+
+	return pages;
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* Get packet from user space buffer */
 static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
@@ -647,8 +725,14 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 	int err;
 	struct virtio_net_hdr vnet_hdr = { 0 };
 	int vnet_hdr_len = 0;
+<<<<<<< HEAD
 	int copylen;
 	bool zerocopy = false;
+=======
+	int copylen = 0;
+	bool zerocopy = false;
+	size_t linear;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (q->flags & IFF_VNET_HDR) {
 		vnet_hdr_len = q->vnet_hdr_sz;
@@ -676,6 +760,7 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 	if (unlikely(len < ETH_HLEN))
 		goto err;
 
+<<<<<<< HEAD
 	if (m && m->msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY))
 		zerocopy = true;
 
@@ -701,6 +786,41 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 	} else
 		err = skb_copy_datagram_from_iovec(skb, 0, iv, vnet_hdr_len,
 						   len);
+=======
+	err = -EMSGSIZE;
+	if (unlikely(count > UIO_MAXIOV))
+		goto err;
+
+	if (m && m->msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
+		copylen = vnet_hdr.hdr_len ? vnet_hdr.hdr_len : GOODCOPY_LEN;
+		linear = copylen;
+		if (iov_pages(iv, vnet_hdr_len + copylen, count)
+		    <= MAX_SKB_FRAGS)
+			zerocopy = true;
+	}
+
+	if (!zerocopy) {
+		copylen = len;
+		linear = vnet_hdr.hdr_len;
+	}
+
+	skb = macvtap_alloc_skb(&q->sk, NET_IP_ALIGN, copylen,
+				linear, noblock, &err);
+	if (!skb)
+		goto err;
+
+	if (zerocopy)
+		err = zerocopy_sg_from_iovec(skb, iv, vnet_hdr_len, count);
+	else {
+		err = skb_copy_datagram_from_iovec(skb, 0, iv, vnet_hdr_len,
+						   len);
+		if (!err && m && m->msg_control) {
+			struct ubuf_info *uarg = m->msg_control;
+			uarg->callback(uarg);
+		}
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err)
 		goto err_kfree;
 
@@ -717,8 +837,15 @@ static ssize_t macvtap_get_user(struct macvtap_queue *q, struct msghdr *m,
 	rcu_read_lock_bh();
 	vlan = rcu_dereference_bh(q->vlan);
 	/* copy skb_ubuf_info for callback when skb has no error */
+<<<<<<< HEAD
 	if (zerocopy)
 		skb_shinfo(skb)->destructor_arg = m->msg_control;
+=======
+	if (zerocopy) {
+		skb_shinfo(skb)->destructor_arg = m->msg_control;
+		skb_shinfo(skb)->tx_flags |= SKBTX_DEV_ZEROCOPY;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (vlan)
 		macvlan_start_xmit(skb, vlan->dev);
 	else
@@ -757,11 +884,18 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 				const struct sk_buff *skb,
 				const struct iovec *iv, int len)
 {
+<<<<<<< HEAD
 	struct macvlan_dev *vlan;
 	int ret;
 	int vnet_hdr_len = 0;
 	int vlan_offset = 0;
 	int copied;
+=======
+	int ret;
+	int vnet_hdr_len = 0;
+	int vlan_offset = 0;
+	int copied, total;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (q->flags & IFF_VNET_HDR) {
 		struct virtio_net_hdr vnet_hdr;
@@ -776,7 +910,12 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 		if (memcpy_toiovecend(iv, (void *)&vnet_hdr, 0, sizeof(vnet_hdr)))
 			return -EFAULT;
 	}
+<<<<<<< HEAD
 	copied = vnet_hdr_len;
+=======
+	total = copied = vnet_hdr_len;
+	total += skb->len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!vlan_tx_tag_present(skb))
 		len = min_t(int, skb->len, len);
@@ -791,6 +930,10 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 
 		vlan_offset = offsetof(struct vlan_ethhdr, h_vlan_proto);
 		len = min_t(int, skb->len + VLAN_HLEN, len);
+<<<<<<< HEAD
+=======
+		total += VLAN_HLEN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		copy = min_t(int, vlan_offset, len);
 		ret = skb_copy_datagram_const_iovec(skb, 0, iv, copied, copy);
@@ -808,6 +951,7 @@ static ssize_t macvtap_put_user(struct macvtap_queue *q,
 	}
 
 	ret = skb_copy_datagram_const_iovec(skb, vlan_offset, iv, copied, len);
+<<<<<<< HEAD
 	copied += len;
 
 done:
@@ -818,6 +962,11 @@ done:
 	rcu_read_unlock_bh();
 
 	return ret ? ret : copied;
+=======
+
+done:
+	return ret ? ret : total;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t macvtap_do_read(struct macvtap_queue *q, struct kiocb *iocb,
@@ -871,7 +1020,13 @@ static ssize_t macvtap_aio_read(struct kiocb *iocb, const struct iovec *iv,
 	}
 
 	ret = macvtap_do_read(q, iocb, iv, len, file->f_flags & O_NONBLOCK);
+<<<<<<< HEAD
 	ret = min_t(ssize_t, ret, len); /* XXX copied from tun.c. Why? */
+=======
+	ret = min_t(ssize_t, ret, len);
+	if (ret > 0)
+		iocb->ki_pos = ret;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out:
 	return ret;
 }

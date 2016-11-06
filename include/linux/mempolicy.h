@@ -137,6 +137,7 @@ static inline void mpol_cond_put(struct mempolicy *pol)
 		__mpol_put(pol);
 }
 
+<<<<<<< HEAD
 extern struct mempolicy *__mpol_cond_copy(struct mempolicy *tompol,
 					  struct mempolicy *frompol);
 static inline struct mempolicy *mpol_cond_copy(struct mempolicy *tompol,
@@ -147,6 +148,8 @@ static inline struct mempolicy *mpol_cond_copy(struct mempolicy *tompol,
 	return __mpol_cond_copy(tompol, frompol);
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern struct mempolicy *__mpol_dup(struct mempolicy *pol);
 static inline struct mempolicy *mpol_dup(struct mempolicy *pol)
 {
@@ -188,7 +191,11 @@ struct sp_node {
 
 struct shared_policy {
 	struct rb_root root;
+<<<<<<< HEAD
 	spinlock_t lock;
+=======
+	struct mutex mutex;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 void mpol_shared_policy_init(struct shared_policy *sp, struct mempolicy *mpol);
@@ -215,7 +222,11 @@ extern struct zonelist *huge_zonelist(struct vm_area_struct *vma,
 extern bool init_nodemask_of_mempolicy(nodemask_t *mask);
 extern bool mempolicy_nodemask_intersects(struct task_struct *tsk,
 				const nodemask_t *mask);
+<<<<<<< HEAD
 extern unsigned slab_node(struct mempolicy *policy);
+=======
+extern unsigned slab_node(void);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 extern enum zone_type policy_zone;
 
@@ -270,12 +281,15 @@ static inline void mpol_cond_put(struct mempolicy *pol)
 {
 }
 
+<<<<<<< HEAD
 static inline struct mempolicy *mpol_cond_copy(struct mempolicy *to,
 						struct mempolicy *from)
 {
 	return from;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline void mpol_get(struct mempolicy *pol)
 {
 }

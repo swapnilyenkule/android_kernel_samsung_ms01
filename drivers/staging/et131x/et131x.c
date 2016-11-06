@@ -1478,22 +1478,33 @@ static int et131x_mii_read(struct et131x_adapter *adapter, u8 reg, u16 *value)
  *
  * Return 0 on success, errno on failure (as defined in errno.h)
  */
+<<<<<<< HEAD
 static int et131x_mii_write(struct et131x_adapter *adapter, u8 reg, u16 value)
 {
 	struct mac_regs __iomem *mac = &adapter->regs->mac;
 	struct phy_device *phydev = adapter->phydev;
 	int status = 0;
 	u8 addr;
+=======
+static int et131x_mii_write(struct et131x_adapter *adapter, u8 addr, u8 reg,
+			    u16 value)
+{
+	struct mac_regs __iomem *mac = &adapter->regs->mac;
+	int status = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u32 delay = 0;
 	u32 mii_addr;
 	u32 mii_cmd;
 	u32 mii_indicator;
 
+<<<<<<< HEAD
 	if (!phydev)
 		return -EIO;
 
 	addr = phydev->addr;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Save a local copy of the registers we are dealing with so we can
 	 * set them back
 	 */
@@ -1550,6 +1561,10 @@ static void et1310_phy_access_mii_bit(struct et131x_adapter *adapter,
 {
 	u16 reg;
 	u16 mask = 0x0001 << bitnum;
+<<<<<<< HEAD
+=======
+	struct  phy_device *phydev = adapter->phydev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Read the requested register */
 	et131x_mii_read(adapter, regnum, &reg);
@@ -1560,11 +1575,19 @@ static void et1310_phy_access_mii_bit(struct et131x_adapter *adapter,
 		break;
 
 	case TRUEPHY_BIT_SET:
+<<<<<<< HEAD
 		et131x_mii_write(adapter, regnum, reg | mask);
 		break;
 
 	case TRUEPHY_BIT_CLEAR:
 		et131x_mii_write(adapter, regnum, reg & ~mask);
+=======
+		et131x_mii_write(adapter, phydev->addr, regnum, reg | mask);
+		break;
+
+	case TRUEPHY_BIT_CLEAR:
+		et131x_mii_write(adapter, phydev->addr, regnum, reg & ~mask);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 
 	default:
@@ -1715,6 +1738,7 @@ static int et131x_mdio_write(struct mii_bus *bus, int phy_addr, int reg, u16 val
 	struct net_device *netdev = bus->priv;
 	struct et131x_adapter *adapter = netdev_priv(netdev);
 
+<<<<<<< HEAD
 	return et131x_mii_write(adapter, reg, value);
 }
 
@@ -1726,6 +1750,9 @@ static int et131x_mdio_reset(struct mii_bus *bus)
 	et131x_mii_write(adapter, MII_BMCR, BMCR_RESET);
 
 	return 0;
+=======
+	return et131x_mii_write(adapter, phy_addr, reg, value);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -1741,12 +1768,20 @@ static int et131x_mdio_reset(struct mii_bus *bus)
 static void et1310_phy_power_down(struct et131x_adapter *adapter, bool down)
 {
 	u16 data;
+<<<<<<< HEAD
+=======
+	struct  phy_device *phydev = adapter->phydev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	et131x_mii_read(adapter, MII_BMCR, &data);
 	data &= ~BMCR_PDOWN;
 	if (down)
 		data |= BMCR_PDOWN;
+<<<<<<< HEAD
 	et131x_mii_write(adapter, MII_BMCR, data);
+=======
+	et131x_mii_write(adapter, phydev->addr, MII_BMCR, data);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -1759,6 +1794,10 @@ static void et131x_xcvr_init(struct et131x_adapter *adapter)
 	u16 imr;
 	u16 isr;
 	u16 lcr2;
+<<<<<<< HEAD
+=======
+	struct  phy_device *phydev = adapter->phydev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	et131x_mii_read(adapter, PHY_INTERRUPT_STATUS, &isr);
 	et131x_mii_read(adapter, PHY_INTERRUPT_MASK, &imr);
@@ -1770,7 +1809,11 @@ static void et131x_xcvr_init(struct et131x_adapter *adapter)
 		ET_PHY_INT_MASK_LINKSTAT &
 		ET_PHY_INT_MASK_ENABLE);
 
+<<<<<<< HEAD
 	et131x_mii_write(adapter, PHY_INTERRUPT_MASK, imr);
+=======
+	et131x_mii_write(adapter, phydev->addr, PHY_INTERRUPT_MASK, imr);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Set the LED behavior such that LED 1 indicates speed (off =
 	 * 10Mbits, blink = 100Mbits, on = 1000Mbits) and LED 2 indicates
@@ -1791,7 +1834,11 @@ static void et131x_xcvr_init(struct et131x_adapter *adapter)
 		else
 			lcr2 |= (LED_VAL_LINKON << LED_TXRX_SHIFT);
 
+<<<<<<< HEAD
 		et131x_mii_write(adapter, PHY_LED_2, lcr2);
+=======
+		et131x_mii_write(adapter, phydev->addr, PHY_LED_2, lcr2);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 
@@ -4202,6 +4249,7 @@ static void et131x_adjust_link(struct net_device *netdev)
 
 			et131x_mii_read(adapter, PHY_MPHY_CONTROL_REG,
 					 &register18);
+<<<<<<< HEAD
 			et131x_mii_write(adapter, PHY_MPHY_CONTROL_REG,
 					 register18 | 0x4);
 			et131x_mii_write(adapter, PHY_INDEX_REG,
@@ -4210,6 +4258,16 @@ static void et131x_adjust_link(struct net_device *netdev)
 					 register18 | 511);
 			et131x_mii_write(adapter, PHY_MPHY_CONTROL_REG,
 					 register18);
+=======
+			et131x_mii_write(adapter, phydev->addr,
+					 PHY_MPHY_CONTROL_REG, register18 | 0x4);
+			et131x_mii_write(adapter, phydev->addr, PHY_INDEX_REG,
+					 register18 | 0x8402);
+			et131x_mii_write(adapter, phydev->addr, PHY_DATA_REG,
+					 register18 | 511);
+			et131x_mii_write(adapter, phydev->addr,
+					 PHY_MPHY_CONTROL_REG, register18);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		et1310_config_flow_control(adapter);
@@ -4221,7 +4279,12 @@ static void et131x_adjust_link(struct net_device *netdev)
 			et131x_mii_read(adapter, PHY_CONFIG, &reg);
 			reg &= ~ET_PHY_CONFIG_TX_FIFO_DEPTH;
 			reg |= ET_PHY_CONFIG_FIFO_DEPTH_32;
+<<<<<<< HEAD
 			et131x_mii_write(adapter, PHY_CONFIG, reg);
+=======
+			et131x_mii_write(adapter, phydev->addr, PHY_CONFIG,
+					 reg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		et131x_set_rx_dma_timer(adapter);
@@ -4254,6 +4317,7 @@ static void et131x_adjust_link(struct net_device *netdev)
 
 				et131x_mii_read(adapter, PHY_MPHY_CONTROL_REG,
 						 &register18);
+<<<<<<< HEAD
 				et131x_mii_write(adapter, PHY_MPHY_CONTROL_REG,
 						 register18 | 0x4);
 				et131x_mii_write(adapter, PHY_INDEX_REG,
@@ -4262,6 +4326,19 @@ static void et131x_adjust_link(struct net_device *netdev)
 						 register18 | 511);
 				et131x_mii_write(adapter, PHY_MPHY_CONTROL_REG,
 						 register18);
+=======
+				et131x_mii_write(adapter, phydev->addr,
+						PHY_MPHY_CONTROL_REG,
+						register18 | 0x4);
+				et131x_mii_write(adapter, phydev->addr,
+						PHY_INDEX_REG,
+						register18 | 0x8402);
+				et131x_mii_write(adapter, phydev->addr,
+						PHY_DATA_REG, register18 | 511);
+				et131x_mii_write(adapter, phydev->addr,
+						PHY_MPHY_CONTROL_REG,
+						register18);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 
 			/* Free the packets being actively sent & stopped */
@@ -5343,10 +5420,13 @@ static int __devinit et131x_pci_setup(struct pci_dev *pdev,
 	/* Copy address into the net_device struct */
 	memcpy(netdev->dev_addr, adapter->addr, ETH_ALEN);
 
+<<<<<<< HEAD
 	/* Init variable for counting how long we do not have link status */
 	adapter->boot_coma = 0;
 	et1310_disable_phy_coma(adapter);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rc = -ENOMEM;
 
 	/* Setup the mii_bus struct */
@@ -5362,7 +5442,10 @@ static int __devinit et131x_pci_setup(struct pci_dev *pdev,
 	adapter->mii_bus->priv = netdev;
 	adapter->mii_bus->read = et131x_mdio_read;
 	adapter->mii_bus->write = et131x_mdio_write;
+<<<<<<< HEAD
 	adapter->mii_bus->reset = et131x_mdio_reset;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	adapter->mii_bus->irq = kmalloc(sizeof(int)*PHY_MAX_ADDR, GFP_KERNEL);
 	if (!adapter->mii_bus->irq) {
 		dev_err(&pdev->dev, "mii_bus irq allocation failed\n");
@@ -5387,6 +5470,13 @@ static int __devinit et131x_pci_setup(struct pci_dev *pdev,
 	/* Setup et1310 as per the documentation */
 	et131x_adapter_setup(adapter);
 
+<<<<<<< HEAD
+=======
+	/* Init variable for counting how long we do not have link status */
+	adapter->boot_coma = 0;
+	et1310_disable_phy_coma(adapter);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* We can enable interrupts now
 	 *
 	 *  NOTE - Because registration of interrupt handler is done in the

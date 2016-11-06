@@ -763,6 +763,7 @@ static void complete_scsi_command(CommandList_struct *c, int timeout,
 		{
 			case CMD_TARGET_STATUS:
 				/* Pass it up to the upper layers... */
+<<<<<<< HEAD
 				if( ei->ScsiStatus)
                 		{
 #if 0
@@ -773,6 +774,9 @@ static void complete_scsi_command(CommandList_struct *c, int timeout,
 					cmd->result |= (ei->ScsiStatus << 1);
                 		}
 				else {  /* scsi status is zero??? How??? */
+=======
+				if (!ei->ScsiStatus) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					
 	/* Ordinarily, this case should never happen, but there is a bug
 	   in some released firmware revisions that allows it to happen
@@ -804,6 +808,10 @@ static void complete_scsi_command(CommandList_struct *c, int timeout,
 				}
 			break;
 			case CMD_PROTOCOL_ERR:
+<<<<<<< HEAD
+=======
+				cmd->result = DID_ERROR << 16;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				dev_warn(&h->pdev->dev,
 					"%p has protocol error\n", c);
                         break;

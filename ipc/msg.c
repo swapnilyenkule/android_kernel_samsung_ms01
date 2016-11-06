@@ -296,7 +296,13 @@ static void freeque(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp)
 	}
 	atomic_sub(msq->q_cbytes, &ns->msg_bytes);
 	security_msg_queue_free(msq);
+<<<<<<< HEAD
 	ipc_rcu_putref(msq);
+=======
+	ipc_lock_by_ptr(&msq->q_perm);
+	ipc_rcu_putref(msq);
+	ipc_unlock(&msq->q_perm);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*

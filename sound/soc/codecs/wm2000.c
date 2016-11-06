@@ -190,9 +190,15 @@ static int wm2000_power_up(struct i2c_client *i2c, int analogue)
 
 	ret = wm2000_read(i2c, WM2000_REG_SPEECH_CLARITY);
 	if (wm2000->speech_clarity)
+<<<<<<< HEAD
 		ret &= ~WM2000_SPEECH_CLARITY;
 	else
 		ret |= WM2000_SPEECH_CLARITY;
+=======
+		ret |= WM2000_SPEECH_CLARITY;
+	else
+		ret &= ~WM2000_SPEECH_CLARITY;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	wm2000_write(i2c, WM2000_REG_SPEECH_CLARITY, ret);
 
 	wm2000_write(i2c, WM2000_REG_SYS_START0, 0x33);
@@ -581,7 +587,11 @@ static int wm2000_anc_mode_get(struct snd_kcontrol *kcontrol,
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm2000_priv *wm2000 = dev_get_drvdata(codec->dev);
 
+<<<<<<< HEAD
 	ucontrol->value.enumerated.item[0] = wm2000->anc_active;
+=======
+	ucontrol->value.integer.value[0] = wm2000->anc_active;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }
@@ -591,7 +601,11 @@ static int wm2000_anc_mode_put(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm2000_priv *wm2000 = dev_get_drvdata(codec->dev);
+<<<<<<< HEAD
 	int anc_active = ucontrol->value.enumerated.item[0];
+=======
+	int anc_active = ucontrol->value.integer.value[0];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (anc_active > 1)
 		return -EINVAL;
@@ -607,7 +621,11 @@ static int wm2000_speaker_get(struct snd_kcontrol *kcontrol,
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm2000_priv *wm2000 = dev_get_drvdata(codec->dev);
 
+<<<<<<< HEAD
 	ucontrol->value.enumerated.item[0] = wm2000->spk_ena;
+=======
+	ucontrol->value.integer.value[0] = wm2000->spk_ena;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }
@@ -617,7 +635,11 @@ static int wm2000_speaker_put(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm2000_priv *wm2000 = dev_get_drvdata(codec->dev);
+<<<<<<< HEAD
 	int val = ucontrol->value.enumerated.item[0];
+=======
+	int val = ucontrol->value.integer.value[0];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (val > 1)
 		return -EINVAL;
@@ -692,7 +714,11 @@ static int wm2000_resume(struct snd_soc_codec *codec)
 #endif
 
 static const struct regmap_config wm2000_regmap = {
+<<<<<<< HEAD
 	.reg_bits = 8,
+=======
+	.reg_bits = 16,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.val_bits = 8,
 };
 

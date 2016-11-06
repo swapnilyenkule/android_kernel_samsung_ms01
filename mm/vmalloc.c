@@ -44,8 +44,12 @@ static void vunmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end)
 	pte = pte_offset_kernel(pmd, addr);
 	
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
+<<<<<<< HEAD
 	if (tima_is_pg_protected((unsigned long)pte) == 1)
 		do_lazy_mmu = 1;
+=======
+	do_lazy_mmu = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (do_lazy_mmu) {
 		spin_lock(&init_mm.page_table_lock);
 		tima_send_cmd2((unsigned int)pmd, TIMA_LAZY_MMU_START, TIMA_LAZY_MMU_CMDID);
@@ -132,8 +136,12 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr,
 		return -ENOMEM;
 
 #ifdef CONFIG_TIMA_RKP_LAZY_MMU
+<<<<<<< HEAD
 	if (tima_is_pg_protected((unsigned long)pte) == 1)
 		do_lazy_mmu = 1;
+=======
+	do_lazy_mmu = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (do_lazy_mmu) {
 		spin_lock(&init_mm.page_table_lock);
 		tima_send_cmd2((unsigned int)pmd, TIMA_LAZY_MMU_START, TIMA_LAZY_MMU_CMDID);
@@ -442,6 +450,15 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
 	if (unlikely(!va))
 		return ERR_PTR(-ENOMEM);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Only scan the relevant parts containing pointers to other objects
+	 * to avoid false negatives.
+	 */
+	kmemleak_scan_area(&va->rb_node, SIZE_MAX, gfp_mask & GFP_RECLAIM_MASK);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 retry:
 	spin_lock(&vmap_area_lock);
 	/*
@@ -471,12 +488,20 @@ nocache:
 		addr = ALIGN(first->va_end, align);
 		if (addr < vstart)
 			goto nocache;
+<<<<<<< HEAD
 		if (addr + size - 1 < addr)
+=======
+		if (addr + size < addr)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto overflow;
 
 	} else {
 		addr = ALIGN(vstart, align);
+<<<<<<< HEAD
 		if (addr + size - 1 < addr)
+=======
+		if (addr + size < addr)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto overflow;
 
 		n = vmap_area_root.rb_node;
@@ -503,7 +528,11 @@ nocache:
 		if (addr + cached_hole_size < first->va_start)
 			cached_hole_size = first->va_start - addr;
 		addr = ALIGN(first->va_end, align);
+<<<<<<< HEAD
 		if (addr + size - 1 < addr)
+=======
+		if (addr + size < addr)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto overflow;
 
 		n = rb_next(&first->rb_node);
@@ -1810,11 +1839,19 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
 	insert_vmalloc_vmlist(area);
 
 	/*
+<<<<<<< HEAD
 	 * A ref_count = 3 is needed because the vm_struct and vmap_area
 	 * structures allocated in the __get_vm_area_node() function contain
 	 * references to the virtual address of the vmalloc'ed block.
 	 */
 	kmemleak_alloc(addr, real_size, 3, gfp_mask);
+=======
+	 * A ref_count = 2 is needed because vm_struct allocated in
+	 * __get_vm_area_node() contains a reference to the virtual address of
+	 * the vmalloc'ed block.
+	 */
+	kmemleak_alloc(addr, real_size, 2, gfp_mask);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return addr;
 

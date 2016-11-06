@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -41,6 +46,16 @@
 
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limUtils.cc contains the utility functions
  * LIM uses.
  * Author:        Chandra Modumudi
@@ -812,6 +827,10 @@ void limPostSmeSetKeysCnf( tpAniSirGlobal pMac,
 
 
   /// Free up buffer allocated for mlmSetKeysReq
+<<<<<<< HEAD
+=======
+  vos_mem_zero(pMlmSetKeysReq, sizeof(tLimMlmSetKeysReq));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   vos_mem_free( pMlmSetKeysReq );
   pMac->lim.gpLimMlmSetKeysReq = NULL;
 
@@ -1075,9 +1094,24 @@ tANI_U32 val = 0;
       }else {
           /*This case the keys are coming from upper layer so need to fill the 
           * key at the default wep key index and send to the HAL */
+<<<<<<< HEAD
           vos_mem_copy((tANI_U8 *) &pSetStaKeyParams->key[defWEPIdx],
                              (tANI_U8 *) &pMlmSetKeysReq->key[0], sizeof( pMlmSetKeysReq->key[0] ));
           pMlmSetKeysReq->numKeys = SIR_MAC_MAX_NUM_OF_DEFAULT_KEYS;
+=======
+          if (defWEPIdx >= SIR_MAC_MAX_NUM_OF_DEFAULT_KEYS)
+          {
+             limLog( pMac, LOGE, FL("WEPIdx length %d more than "
+                                    "the Max limit, reset to Max"),defWEPIdx);
+             vos_mem_free (pSetStaKeyParams);
+             return;
+          }
+          vos_mem_copy((tANI_U8 *) &pSetStaKeyParams->key[defWEPIdx],
+                                (tANI_U8 *) &pMlmSetKeysReq->key[0],
+                                  sizeof( pMlmSetKeysReq->key[0] ));
+          pMlmSetKeysReq->numKeys = SIR_MAC_MAX_NUM_OF_DEFAULT_KEYS;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       }
       break;
   case eSIR_ED_TKIP:

@@ -12,6 +12,10 @@
  *  published by the Free Software Foundation.
  */
 #include <linux/gpio.h>
+<<<<<<< HEAD
+=======
+#include <linux/gpio/machine.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
@@ -120,6 +124,7 @@ void lubbock_set_misc_wr(unsigned int mask, unsigned int set)
 }
 EXPORT_SYMBOL(lubbock_set_misc_wr);
 
+<<<<<<< HEAD
 static unsigned long lubbock_irq_enabled;
 
 static void lubbock_mask_irq(struct irq_data *d)
@@ -198,6 +203,8 @@ device_initcall(lubbock_irq_device_init);
 
 #endif
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int lubbock_udc_is_connected(void)
 {
 	return (LUB_MISC_RD & (1 << 9)) == 0;
@@ -380,11 +387,44 @@ static struct platform_device lubbock_flash_device[2] = {
 	},
 };
 
+<<<<<<< HEAD
+=======
+static struct resource lubbock_cplds_resources[] = {
+	[0] = {
+		.start	= LUBBOCK_FPGA_PHYS + 0xc0,
+		.end	= LUBBOCK_FPGA_PHYS + 0xe0 - 1,
+		.flags	= IORESOURCE_MEM,
+	},
+	[1] = {
+		.start	= PXA_GPIO_TO_IRQ(0),
+		.end	= PXA_GPIO_TO_IRQ(0),
+		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
+	},
+	[2] = {
+		.start	= LUBBOCK_IRQ(0),
+		.end	= LUBBOCK_IRQ(6),
+		.flags	= IORESOURCE_IRQ,
+	},
+};
+
+static struct platform_device lubbock_cplds_device = {
+	.name		= "pxa_cplds_irqs",
+	.id		= -1,
+	.resource	= &lubbock_cplds_resources[0],
+	.num_resources	= 3,
+};
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static struct platform_device *devices[] __initdata = {
 	&sa1111_device,
 	&smc91x_device,
 	&lubbock_flash_device[0],
 	&lubbock_flash_device[1],
+<<<<<<< HEAD
+=======
+	&lubbock_cplds_device,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static struct pxafb_mode_info sharp_lm8v31_mode = {
@@ -553,7 +593,11 @@ MACHINE_START(LUBBOCK, "Intel DBPXA250 Development Platform (aka Lubbock)")
 	/* Maintainer: MontaVista Software Inc. */
 	.map_io		= lubbock_map_io,
 	.nr_irqs	= LUBBOCK_NR_IRQS,
+<<<<<<< HEAD
 	.init_irq	= lubbock_init_irq,
+=======
+	.init_irq	= pxa25x_init_irq,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.handle_irq	= pxa25x_handle_irq,
 	.timer		= &pxa_timer,
 	.init_machine	= lubbock_init,

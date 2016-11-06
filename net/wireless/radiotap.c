@@ -95,6 +95,13 @@ int ieee80211_radiotap_iterator_init(
 	struct ieee80211_radiotap_header *radiotap_header,
 	int max_length, const struct ieee80211_radiotap_vendor_namespaces *vns)
 {
+<<<<<<< HEAD
+=======
+	/* check the radiotap header can actually be present */
+	if (max_length < sizeof(struct ieee80211_radiotap_header))
+		return -EINVAL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Linux only supports version 0 radiotap format */
 	if (radiotap_header->it_version)
 		return -EINVAL;
@@ -118,6 +125,13 @@ int ieee80211_radiotap_iterator_init(
 	/* find payload start allowing for extended bitmap(s) */
 
 	if (iterator->_bitmap_shifter & (1<<IEEE80211_RADIOTAP_EXT)) {
+<<<<<<< HEAD
+=======
+		if ((unsigned long)iterator->_arg -
+		    (unsigned long)iterator->_rtheader + sizeof(uint32_t) >
+		    (unsigned long)iterator->_max_length)
+			return -EINVAL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		while (get_unaligned_le32(iterator->_arg) &
 					(1 << IEEE80211_RADIOTAP_EXT)) {
 			iterator->_arg += sizeof(uint32_t);
@@ -129,7 +143,12 @@ int ieee80211_radiotap_iterator_init(
 			 */
 
 			if ((unsigned long)iterator->_arg -
+<<<<<<< HEAD
 			    (unsigned long)iterator->_rtheader >
+=======
+			    (unsigned long)iterator->_rtheader +
+			    sizeof(uint32_t) >
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			    (unsigned long)iterator->_max_length)
 				return -EINVAL;
 		}

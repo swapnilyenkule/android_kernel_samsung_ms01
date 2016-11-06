@@ -397,6 +397,27 @@ void path_put(struct path *path)
 }
 EXPORT_SYMBOL(path_put);
 
+<<<<<<< HEAD
+=======
+/**
+ * path_connected - Verify that a path->dentry is below path->mnt.mnt_root
+ * @path: nameidate to verify
+ *
+ * Rename can sometimes move a file or directory outside of a bind
+ * mount, path_connected allows those cases to be detected.
+ */
+static bool path_connected(const struct path *path)
+{
+	struct vfsmount *mnt = path->mnt;
+
+	/* Only bind mounts can have disconnected paths */
+	if (mnt->mnt_root == mnt->mnt_sb->s_root)
+		return true;
+
+	return is_subdir(path->dentry, mnt->mnt_root);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Path walking has 2 modes, rcu-walk and ref-walk (see
  * Documentation/filesystems/path-lookup.txt).  In situations when we can't
@@ -462,7 +483,11 @@ static int unlazy_walk(struct nameidata *nd, struct dentry *dentry)
 	mntget(nd->path.mnt);
 
 	rcu_read_unlock();
+<<<<<<< HEAD
 	br_read_unlock(&vfsmount_lock);
+=======
+	br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	nd->flags &= ~LOOKUP_RCU;
 	return 0;
 
@@ -520,14 +545,22 @@ static int complete_walk(struct nameidata *nd)
 		if (unlikely(!__d_rcu_to_refcount(dentry, nd->seq))) {
 			spin_unlock(&dentry->d_lock);
 			rcu_read_unlock();
+<<<<<<< HEAD
 			br_read_unlock(&vfsmount_lock);
+=======
+			br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return -ECHILD;
 		}
 		BUG_ON(nd->inode != dentry->d_inode);
 		spin_unlock(&dentry->d_lock);
 		mntget(nd->path.mnt);
 		rcu_read_unlock();
+<<<<<<< HEAD
 		br_read_unlock(&vfsmount_lock);
+=======
+		br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (likely(!(nd->flags & LOOKUP_JUMPED)))
@@ -553,12 +586,17 @@ static int complete_walk(struct nameidata *nd)
 
 static __always_inline void set_root(struct nameidata *nd)
 {
+<<<<<<< HEAD
 	if (!nd->root.mnt)
 		get_fs_root(current->fs, &nd->root);
+=======
+	get_fs_root(current->fs, &nd->root);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int link_path_walk(const char *, struct nameidata *);
 
+<<<<<<< HEAD
 static __always_inline void set_root_rcu(struct nameidata *nd)
 {
 	if (!nd->root.mnt) {
@@ -571,6 +609,19 @@ static __always_inline void set_root_rcu(struct nameidata *nd)
 			nd->seq = __read_seqcount_begin(&nd->root.dentry->d_seq);
 		} while (read_seqcount_retry(&fs->seq, seq));
 	}
+=======
+static __always_inline unsigned set_root_rcu(struct nameidata *nd)
+{
+	struct fs_struct *fs = current->fs;
+	unsigned seq, res;
+
+	do {
+		seq = read_seqcount_begin(&fs->seq);
+		nd->root = fs->root;
+		res = __read_seqcount_begin(&nd->root.dentry->d_seq);
+	} while (read_seqcount_retry(&fs->seq, seq));
+	return res;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static __always_inline int __vfs_follow_link(struct nameidata *nd, const char *link)
@@ -581,7 +632,12 @@ static __always_inline int __vfs_follow_link(struct nameidata *nd, const char *l
 		goto fail;
 
 	if (*link == '/') {
+<<<<<<< HEAD
 		set_root(nd);
+=======
+		if (!nd->root.mnt)
+			set_root(nd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		path_put(&nd->path);
 		nd->path = nd->root;
 		path_get(&nd->root);
@@ -688,6 +744,7 @@ static int follow_up_rcu(struct path *path)
 	return 1;
 }
 
+<<<<<<< HEAD
 /*
  * follow_up - Find the mountpoint of path's vfsmount
  *
@@ -698,21 +755,34 @@ static int follow_up_rcu(struct path *path)
  * Return 1 if we went up a level and 0 if we were already at the
  * root.
  */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int follow_up(struct path *path)
 {
 	struct mount *mnt = real_mount(path->mnt);
 	struct mount *parent;
 	struct dentry *mountpoint;
 
+<<<<<<< HEAD
 	br_read_lock(&vfsmount_lock);
 	parent = mnt->mnt_parent;
 	if (&parent->mnt == path->mnt) {
 		br_read_unlock(&vfsmount_lock);
+=======
+	br_read_lock(vfsmount_lock);
+	parent = mnt->mnt_parent;
+	if (&parent->mnt == path->mnt) {
+		br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 	}
 	mntget(&parent->mnt);
 	mountpoint = dget(mnt->mnt_mountpoint);
+<<<<<<< HEAD
 	br_read_unlock(&vfsmount_lock);
+=======
+	br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dput(path->dentry);
 	path->dentry = mountpoint;
 	mntput(path->mnt);
@@ -938,7 +1008,12 @@ static void follow_mount_rcu(struct nameidata *nd)
 
 static int follow_dotdot_rcu(struct nameidata *nd)
 {
+<<<<<<< HEAD
 	set_root_rcu(nd);
+=======
+	if (!nd->root.mnt)
+		set_root_rcu(nd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	while (1) {
 		if (nd->path.dentry == nd->root.dentry &&
@@ -955,6 +1030,11 @@ static int follow_dotdot_rcu(struct nameidata *nd)
 				goto failed;
 			nd->path.dentry = parent;
 			nd->seq = seq;
+<<<<<<< HEAD
+=======
+			if (unlikely(!path_connected(&nd->path)))
+				goto failed;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		}
 		if (!follow_up_rcu(&nd->path))
@@ -970,7 +1050,11 @@ failed:
 	if (!(nd->flags & LOOKUP_ROOT))
 		nd->root.mnt = NULL;
 	rcu_read_unlock();
+<<<<<<< HEAD
 	br_read_unlock(&vfsmount_lock);
+=======
+	br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return -ECHILD;
 }
 
@@ -1039,9 +1123,16 @@ static void follow_mount(struct path *path)
 	}
 }
 
+<<<<<<< HEAD
 static void follow_dotdot(struct nameidata *nd)
 {
 	set_root(nd);
+=======
+static int follow_dotdot(struct nameidata *nd)
+{
+	if (!nd->root.mnt)
+		set_root(nd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	while(1) {
 		struct dentry *old = nd->path.dentry;
@@ -1054,6 +1145,13 @@ static void follow_dotdot(struct nameidata *nd)
 			/* rare case of legitimate dget_parent()... */
 			nd->path.dentry = dget_parent(nd->path.dentry);
 			dput(old);
+<<<<<<< HEAD
+=======
+			if (unlikely(!path_connected(&nd->path))) {
+				path_put(&nd->path);
+				return -ENOENT;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		}
 		if (!follow_up(&nd->path))
@@ -1061,6 +1159,10 @@ static void follow_dotdot(struct nameidata *nd)
 	}
 	follow_mount(&nd->path);
 	nd->inode = nd->path.dentry->d_inode;
+<<<<<<< HEAD
+=======
+	return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*
@@ -1261,7 +1363,11 @@ static inline int handle_dots(struct nameidata *nd, int type)
 			if (follow_dotdot_rcu(nd))
 				return -ECHILD;
 		} else
+<<<<<<< HEAD
 			follow_dotdot(nd);
+=======
+			return follow_dotdot(nd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	return 0;
 }
@@ -1275,7 +1381,11 @@ static void terminate_walk(struct nameidata *nd)
 		if (!(nd->flags & LOOKUP_ROOT))
 			nd->root.mnt = NULL;
 		rcu_read_unlock();
+<<<<<<< HEAD
 		br_read_unlock(&vfsmount_lock);
+=======
+		br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 
@@ -1323,7 +1433,12 @@ static inline int walk_component(struct nameidata *nd, struct path *path,
 	}
 	if (should_follow_link(inode, follow)) {
 		if (nd->flags & LOOKUP_RCU) {
+<<<<<<< HEAD
 			if (unlikely(unlazy_walk(nd, path->dentry))) {
+=======
+			if (unlikely(nd->path.mnt != path->mnt ||
+				     unlazy_walk(nd, path->dentry))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				terminate_walk(nd);
 				return -ECHILD;
 			}
@@ -1628,7 +1743,11 @@ static int path_init(int dfd, const char *name, unsigned int flags,
 		nd->path = nd->root;
 		nd->inode = inode;
 		if (flags & LOOKUP_RCU) {
+<<<<<<< HEAD
 			br_read_lock(&vfsmount_lock);
+=======
+			br_read_lock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			rcu_read_lock();
 			nd->seq = __read_seqcount_begin(&nd->path.dentry->d_seq);
 		} else {
@@ -1641,9 +1760,15 @@ static int path_init(int dfd, const char *name, unsigned int flags,
 
 	if (*name=='/') {
 		if (flags & LOOKUP_RCU) {
+<<<<<<< HEAD
 			br_read_lock(&vfsmount_lock);
 			rcu_read_lock();
 			set_root_rcu(nd);
+=======
+			br_read_lock(vfsmount_lock);
+			rcu_read_lock();
+			nd->seq = set_root_rcu(nd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		} else {
 			set_root(nd);
 			path_get(&nd->root);
@@ -1654,7 +1779,11 @@ static int path_init(int dfd, const char *name, unsigned int flags,
 			struct fs_struct *fs = current->fs;
 			unsigned seq;
 
+<<<<<<< HEAD
 			br_read_lock(&vfsmount_lock);
+=======
+			br_read_lock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			rcu_read_lock();
 
 			do {
@@ -1690,7 +1819,11 @@ static int path_init(int dfd, const char *name, unsigned int flags,
 			if (fput_needed)
 				*fp = file;
 			nd->seq = __read_seqcount_begin(&nd->path.dentry->d_seq);
+<<<<<<< HEAD
 			br_read_lock(&vfsmount_lock);
+=======
+			br_read_lock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			rcu_read_lock();
 		} else {
 			path_get(&file->f_path);
@@ -2082,6 +2215,16 @@ int vfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 	if (error)
 		return error;
 	error = dir->i_op->create(dir, dentry, mode, nd);
+<<<<<<< HEAD
+=======
+	if (error)
+		return error;
+
+	error = security_inode_post_create(dir, dentry, mode);
+	if (error)
+		return error;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!error)
 		fsnotify_create(dir, dentry);
 	return error;
@@ -2557,6 +2700,16 @@ int vfs_mknod(struct inode *dir, struct dentry *dentry, umode_t mode, dev_t dev)
 		return error;
 
 	error = dir->i_op->mknod(dir, dentry, mode, dev);
+<<<<<<< HEAD
+=======
+	if (error)
+		return error;
+
+	error = security_inode_post_create(dir, dentry, mode);
+	if (error)
+		return error;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!error)
 		fsnotify_create(dir, dentry);
 	return error;

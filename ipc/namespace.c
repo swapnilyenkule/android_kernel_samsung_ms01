@@ -26,6 +26,7 @@ static struct ipc_namespace *create_ipc_ns(struct task_struct *tsk,
 	if (ns == NULL)
 		return ERR_PTR(-ENOMEM);
 
+<<<<<<< HEAD
 	err = proc_alloc_inum(&ns->proc_inum);
 	if (err) {
 		kfree(ns);
@@ -36,6 +37,11 @@ static struct ipc_namespace *create_ipc_ns(struct task_struct *tsk,
 	err = mq_init_ns(ns);
 	if (err) {
 		proc_free_inum(ns->proc_inum);
+=======
+	atomic_set(&ns->count, 1);
+	err = mq_init_ns(ns);
+	if (err) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		kfree(ns);
 		return ERR_PTR(err);
 	}
@@ -120,7 +126,10 @@ static void free_ipc_ns(struct ipc_namespace *ns)
 	 */
 	ipcns_notify(IPCNS_REMOVED);
 	put_user_ns(ns->user_ns);
+<<<<<<< HEAD
 	proc_free_inum(ns->proc_inum);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(ns);
 }
 
@@ -178,6 +187,7 @@ static int ipcns_install(struct nsproxy *nsproxy, void *ns)
 	return 0;
 }
 
+<<<<<<< HEAD
 static unsigned int ipcns_inum(void *vp)
 {
 	struct ipc_namespace *ns = vp;
@@ -185,11 +195,16 @@ static unsigned int ipcns_inum(void *vp)
 	return ns->proc_inum;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 const struct proc_ns_operations ipcns_operations = {
 	.name		= "ipc",
 	.type		= CLONE_NEWIPC,
 	.get		= ipcns_get,
 	.put		= ipcns_put,
 	.install	= ipcns_install,
+<<<<<<< HEAD
 	.inum		= ipcns_inum,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };

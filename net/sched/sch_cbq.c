@@ -250,10 +250,18 @@ cbq_classify(struct sk_buff *skb, struct Qdisc *sch, int *qerr)
 			else if ((cl = defmap[res.classid & TC_PRIO_MAX]) == NULL)
 				cl = defmap[TC_PRIO_BESTEFFORT];
 
+<<<<<<< HEAD
 			if (cl == NULL || cl->level >= head->level)
 				goto fallback;
 		}
 
+=======
+			if (cl == NULL)
+				goto fallback;
+		}
+		if (cl->level >= head->level)
+			goto fallback;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_NET_CLS_ACT
 		switch (result) {
 		case TC_ACT_QUEUED:
@@ -962,8 +970,16 @@ cbq_dequeue(struct Qdisc *sch)
 		cbq_update(q);
 		if ((incr -= incr2) < 0)
 			incr = 0;
+<<<<<<< HEAD
 	}
 	q->now += incr;
+=======
+		q->now += incr;
+	} else {
+		if (now > q->now)
+			q->now = now;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	q->now_rt = now;
 
 	for (;;) {
@@ -1463,6 +1479,10 @@ static int cbq_dump_wrr(struct sk_buff *skb, struct cbq_class *cl)
 	unsigned char *b = skb_tail_pointer(skb);
 	struct tc_cbq_wrropt opt;
 
+<<<<<<< HEAD
+=======
+	memset(&opt, 0, sizeof(opt));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	opt.flags = 0;
 	opt.allot = cl->allot;
 	opt.priority = cl->priority + 1;

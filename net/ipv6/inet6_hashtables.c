@@ -110,7 +110,11 @@ begintw:
 				goto out;
 			}
 			if (!INET6_TW_MATCH(sk, net, hash, saddr, daddr, ports, dif)) {
+<<<<<<< HEAD
 				sock_put(sk);
+=======
+				inet_twsk_put(inet_twsk(sk));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				goto begintw;
 			}
 			goto out;

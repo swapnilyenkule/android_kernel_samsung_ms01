@@ -422,7 +422,11 @@ _STATIC(__after_prom_start)
 	tovirt(r6,r6)			/* on booke, we already run at PAGE_OFFSET */
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_CRASH_DUMP
+=======
+#ifdef CONFIG_RELOCATABLE
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Check if the kernel has to be running as relocatable kernel based on the
  * variable __run_at_load, if it is set the kernel is treated as relocatable
@@ -447,6 +451,10 @@ _STATIC(__after_prom_start)
 	mtctr	r8
 	bctr
 
+<<<<<<< HEAD
+=======
+.balign 8
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 p_end:	.llong	_end - _stext
 
 4:	/* Now copy the rest of the kernel up to _end */
@@ -489,6 +497,10 @@ _GLOBAL(copy_and_flush)
 	sync
 	addi	r5,r5,8
 	addi	r6,r6,8
+<<<<<<< HEAD
+=======
+	isync
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	blr
 
 .align 8

@@ -90,6 +90,10 @@ static long media_device_enum_entities(struct media_device *mdev,
 	struct media_entity *ent;
 	struct media_entity_desc u_ent;
 
+<<<<<<< HEAD
+=======
+	memset(&u_ent, 0, sizeof(u_ent));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (copy_from_user(&u_ent.id, &uent->id, sizeof(u_ent.id)))
 		return -EFAULT;
 

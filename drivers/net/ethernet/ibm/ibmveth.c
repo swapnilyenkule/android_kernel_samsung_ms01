@@ -293,6 +293,21 @@ failure:
 	atomic_add(buffers_added, &(pool->available));
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * The final 8 bytes of the buffer list is a counter of frames dropped
+ * because there was not a buffer in the buffer list capable of holding
+ * the frame.
+ */
+static void ibmveth_update_rx_no_buffer(struct ibmveth_adapter *adapter)
+{
+	__be64 *p = adapter->buffer_list_addr + 4096 - 8;
+
+	adapter->rx_no_buffer = be64_to_cpup(p);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* replenish routine */
 static void ibmveth_replenish_task(struct ibmveth_adapter *adapter)
 {
@@ -308,8 +323,12 @@ static void ibmveth_replenish_task(struct ibmveth_adapter *adapter)
 			ibmveth_replenish_buffer_pool(adapter, pool);
 	}
 
+<<<<<<< HEAD
 	adapter->rx_no_buffer = *(u64 *)(((char*)adapter->buffer_list_addr) +
 						4096 - 8);
+=======
+	ibmveth_update_rx_no_buffer(adapter);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* empty and free ana buffer pool - also used to do cleanup in error paths */
@@ -472,6 +491,7 @@ static void ibmveth_cleanup(struct ibmveth_adapter *adapter)
 	}
 
 	if (adapter->rx_queue.queue_addr != NULL) {
+<<<<<<< HEAD
 		if (!dma_mapping_error(dev, adapter->rx_queue.queue_dma)) {
 			dma_unmap_single(dev,
 					adapter->rx_queue.queue_dma,
@@ -480,6 +500,11 @@ static void ibmveth_cleanup(struct ibmveth_adapter *adapter)
 			adapter->rx_queue.queue_dma = DMA_ERROR_CODE;
 		}
 		kfree(adapter->rx_queue.queue_addr);
+=======
+		dma_free_coherent(dev, adapter->rx_queue.queue_len,
+				  adapter->rx_queue.queue_addr,
+				  adapter->rx_queue.queue_dma);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		adapter->rx_queue.queue_addr = NULL;
 	}
 
@@ -556,10 +581,20 @@ static int ibmveth_open(struct net_device *netdev)
 		goto err_out;
 	}
 
+<<<<<<< HEAD
 	adapter->rx_queue.queue_len = sizeof(struct ibmveth_rx_q_entry) *
 						rxq_entries;
 	adapter->rx_queue.queue_addr = kmalloc(adapter->rx_queue.queue_len,
 						GFP_KERNEL);
+=======
+	dev = &adapter->vdev->dev;
+
+	adapter->rx_queue.queue_len = sizeof(struct ibmveth_rx_q_entry) *
+						rxq_entries;
+	adapter->rx_queue.queue_addr =
+	    dma_alloc_coherent(dev, adapter->rx_queue.queue_len,
+			       &adapter->rx_queue.queue_dma, GFP_KERNEL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!adapter->rx_queue.queue_addr) {
 		netdev_err(netdev, "unable to allocate rx queue pages\n");
@@ -567,12 +602,16 @@ static int ibmveth_open(struct net_device *netdev)
 		goto err_out;
 	}
 
+<<<<<<< HEAD
 	dev = &adapter->vdev->dev;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	adapter->buffer_list_dma = dma_map_single(dev,
 			adapter->buffer_list_addr, 4096, DMA_BIDIRECTIONAL);
 	adapter->filter_list_dma = dma_map_single(dev,
 			adapter->filter_list_addr, 4096, DMA_BIDIRECTIONAL);
+<<<<<<< HEAD
 	adapter->rx_queue.queue_dma = dma_map_single(dev,
 			adapter->rx_queue.queue_addr,
 			adapter->rx_queue.queue_len, DMA_BIDIRECTIONAL);
@@ -580,6 +619,11 @@ static int ibmveth_open(struct net_device *netdev)
 	if ((dma_mapping_error(dev, adapter->buffer_list_dma)) ||
 	    (dma_mapping_error(dev, adapter->filter_list_dma)) ||
 	    (dma_mapping_error(dev, adapter->rx_queue.queue_dma))) {
+=======
+
+	if ((dma_mapping_error(dev, adapter->buffer_list_dma)) ||
+	    (dma_mapping_error(dev, adapter->filter_list_dma))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		netdev_err(netdev, "unable to map filter or buffer list "
 			   "pages\n");
 		rc = -ENOMEM;
@@ -700,8 +744,12 @@ static int ibmveth_close(struct net_device *netdev)
 
 	free_irq(netdev->irq, netdev);
 
+<<<<<<< HEAD
 	adapter->rx_no_buffer = *(u64 *)(((char *)adapter->buffer_list_addr) +
 						4096 - 8);
+=======
+	ibmveth_update_rx_no_buffer(adapter);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ibmveth_cleanup(adapter);
 
@@ -1335,7 +1383,11 @@ static const struct net_device_ops ibmveth_netdev_ops = {
 static int __devinit ibmveth_probe(struct vio_dev *dev,
 				   const struct vio_device_id *id)
 {
+<<<<<<< HEAD
 	int rc, i;
+=======
+	int rc, i, mac_len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct net_device *netdev;
 	struct ibmveth_adapter *adapter;
 	unsigned char *mac_addr_p;
@@ -1345,11 +1397,26 @@ static int __devinit ibmveth_probe(struct vio_dev *dev,
 		dev->unit_address);
 
 	mac_addr_p = (unsigned char *)vio_get_attribute(dev, VETH_MAC_ADDR,
+<<<<<<< HEAD
 							NULL);
+=======
+							&mac_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!mac_addr_p) {
 		dev_err(&dev->dev, "Can't find VETH_MAC_ADDR attribute\n");
 		return -EINVAL;
 	}
+<<<<<<< HEAD
+=======
+	/* Workaround for old/broken pHyp */
+	if (mac_len == 8)
+		mac_addr_p += 2;
+	else if (mac_len != 6) {
+		dev_err(&dev->dev, "VETH_MAC_ADDR attribute wrong len %d\n",
+			mac_len);
+		return -EINVAL;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	mcastFilterSize_p = (unsigned int *)vio_get_attribute(dev,
 						VETH_MCAST_FILTER_SIZE, NULL);
@@ -1374,6 +1441,7 @@ static int __devinit ibmveth_probe(struct vio_dev *dev,
 
 	netif_napi_add(netdev, &adapter->napi, ibmveth_poll, 16);
 
+<<<<<<< HEAD
 	/*
 	 * Some older boxes running PHYP non-natively have an OF that returns
 	 * a 8-byte local-mac-address field (and the first 2 bytes have to be
@@ -1385,6 +1453,8 @@ static int __devinit ibmveth_probe(struct vio_dev *dev,
 	if ((*mac_addr_p & 0x3) != 0x02)
 		mac_addr_p += 2;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	adapter->mac_addr = 0;
 	memcpy(&adapter->mac_addr, mac_addr_p, 6);
 

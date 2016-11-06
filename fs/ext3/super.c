@@ -364,7 +364,11 @@ static struct block_device *ext3_blkdev_get(dev_t dev, struct super_block *sb)
 	return bdev;
 
 fail:
+<<<<<<< HEAD
 	ext3_msg(sb, "error: failed to open journal device %s: %ld",
+=======
+	ext3_msg(sb, KERN_ERR, "error: failed to open journal device %s: %ld",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		__bdevname(dev, b), PTR_ERR(bdev));
 
 	return NULL;
@@ -891,7 +895,11 @@ static ext3_fsblk_t get_sb_block(void **data, struct super_block *sb)
 	/*todo: use simple_strtoll with >32bit ext3 */
 	sb_block = simple_strtoul(options, &options, 0);
 	if (*options && *options != ',') {
+<<<<<<< HEAD
 		ext3_msg(sb, "error: invalid sb specification: %s",
+=======
+		ext3_msg(sb, KERN_ERR, "error: invalid sb specification: %s",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		       (char *) *data);
 		return 1;
 	}
@@ -1292,6 +1300,7 @@ set_qf_format:
 					"not specified.");
 			return 0;
 		}
+<<<<<<< HEAD
 	} else {
 		if (sbi->s_jquota_fmt) {
 			ext3_msg(sb, KERN_ERR, "error: journaled quota format "
@@ -1299,6 +1308,8 @@ set_qf_format:
 					"enabled.");
 			return 0;
 		}
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 #endif
 	return 1;

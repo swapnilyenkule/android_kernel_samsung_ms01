@@ -177,7 +177,11 @@ static int rd_build_device_space(struct rd_dev *rd_dev)
 						- 1;
 
 		for (j = 0; j < sg_per_table; j++) {
+<<<<<<< HEAD
 			pg = alloc_pages(GFP_KERNEL, 0);
+=======
+			pg = alloc_pages(GFP_KERNEL | __GFP_ZERO, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (!pg) {
 				pr_err("Unable to allocate scatterlist"
 					" pages for struct rd_dev_sg_table\n");

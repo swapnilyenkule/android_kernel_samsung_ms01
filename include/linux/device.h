@@ -849,6 +849,14 @@ extern __printf(5, 6)
 struct device *device_create(struct class *cls, struct device *parent,
 			     dev_t devt, void *drvdata,
 			     const char *fmt, ...);
+<<<<<<< HEAD
+=======
+extern __printf(6, 7)
+struct device *device_create_with_groups(struct class *cls,
+			     struct device *parent, dev_t devt, void *drvdata,
+			     const struct attribute_group **groups,
+			     const char *fmt, ...);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern void device_destroy(struct class *cls, dev_t devt);
 
 /*

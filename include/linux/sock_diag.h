@@ -4,7 +4,10 @@
 #include <linux/types.h>
 
 #define SOCK_DIAG_BY_FAMILY 20
+<<<<<<< HEAD
 #define SOCK_DESTROY_BACKPORT 21
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 struct sock_diag_req {
 	__u8	sdiag_family;
@@ -31,7 +34,10 @@ struct sock;
 struct sock_diag_handler {
 	__u8 family;
 	int (*dump)(struct sk_buff *skb, struct nlmsghdr *nlh);
+<<<<<<< HEAD
 	int (*destroy)(struct sk_buff *skb, struct nlmsghdr *nlh);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 int sock_diag_register(struct sock_diag_handler *h);
@@ -45,8 +51,11 @@ void sock_diag_save_cookie(void *sk, __u32 *cookie);
 
 int sock_diag_put_meminfo(struct sock *sk, struct sk_buff *skb, int attr);
 
+<<<<<<< HEAD
 int sock_diag_destroy(struct sock *sk, int err);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern struct sock *sock_diag_nlsk;
 #endif /* KERNEL */
 #endif

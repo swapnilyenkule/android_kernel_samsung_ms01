@@ -30,6 +30,13 @@ ip_set_timeout_uget(struct nlattr *tb)
 {
 	unsigned int timeout = ip_set_get_h32(tb);
 
+<<<<<<< HEAD
+=======
+	/* Normalize to fit into jiffies */
+	if (timeout > UINT_MAX/MSEC_PER_SEC)
+		timeout = UINT_MAX/MSEC_PER_SEC;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Userspace supplied TIMEOUT parameter: adjust crazy size */
 	return timeout == IPSET_NO_TIMEOUT ? IPSET_NO_TIMEOUT - 1 : timeout;
 }

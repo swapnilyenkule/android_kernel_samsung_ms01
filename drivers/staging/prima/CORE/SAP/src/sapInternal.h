@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef WLAN_QCT_WLANSAP_INTERNAL_H
@@ -95,7 +107,11 @@ when           who        what, where, why
 #include "sapApi.h"
 #include "sapFsm_ext.h"
 #include "sapChSelect.h"
+<<<<<<< HEAD
 
+=======
+#include "wlan_hdd_dp_utils.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*----------------------------------------------------------------------------
  * Preprocessor Definitions and Constants
  * -------------------------------------------------------------------------*/
@@ -155,6 +171,51 @@ typedef struct sSapQosCfg {
     v_U8_t              WmmIsEnabled;
 } tSapQosCfg;
 
+<<<<<<< HEAD
+=======
+typedef struct sSapAcsChannelInfo {
+    v_U32_t             channelNum;
+    v_U32_t             weight;
+}tSapAcsChannelInfo;
+
+typedef struct {
+    /** The station entry is used or not  */
+    v_BOOL_t isUsed;
+
+    /** Station ID reported back from HAL (through SAP). Broadcast
+     *  uses station ID zero by default in both libra and volans. */
+    v_U8_t ucSTAId;
+
+    /** MAC address of the station */
+    v_MACADDR_t macAddrSTA;
+
+    /** Current Station state so HDD knows how to deal with packet
+     *  queue. Most recent states used to change TL STA state. */
+    WLANTL_STAStateType tlSTAState;
+
+   /** Transmit queues for each AC (VO,VI,BE etc). */
+   //hdd_list_t wmm_tx_queue[NUM_TX_QUEUES];
+   hdd_list_t wmm_tx_queue[4];
+
+   /** Might need to differentiate queue depth in contention case */
+   //v_U16_t aTxQueueDepth[NUM_TX_QUEUES];
+   v_U16_t aTxQueueDepth[4];
+
+   /**Track whether OS TX queue has been disabled.*/
+   //v_BOOL_t txSuspended[NUM_TX_QUEUES];
+   v_BOOL_t txSuspended[4];
+
+   /**Track whether 3/4th of resources are used */
+   v_BOOL_t vosLowResource;
+
+   /** Track QoS status of station */
+   v_BOOL_t isQosEnabled;
+
+   /** The station entry for which Deauth is in progress  */
+   v_BOOL_t isDeauthInProgress;
+} hdd_station_info_t;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 typedef struct sSapContext {
 
     vos_lock_t          SapGlobalLock;
@@ -222,7 +283,20 @@ typedef struct sSapContext {
     v_U32_t           nStaAddIeLength;
     v_U8_t            pStaAddIE[MAX_ASSOC_IND_IE_LEN]; 
     v_U8_t            *channelList;
+<<<<<<< HEAD
     tSapChannelListInfo SapChnlList;
+=======
+    v_U8_t            numofChannel;
+    tSapChannelListInfo SapChnlList;
+
+    tANI_BOOLEAN       allBandScanned;
+    eCsrBand           currentPreferredBand;
+    eCsrBand           scanBandPreference;
+    v_U16_t            acsBandSwitchThreshold;
+    tSapAcsChannelInfo acsBestChannelInfo;
+    spinlock_t staInfo_lock; //To protect access to station Info
+    hdd_station_info_t aStaInfo[WLAN_MAX_STA_COUNT];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } *ptSapContext;
 
 

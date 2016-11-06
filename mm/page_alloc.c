@@ -174,17 +174,23 @@ int sysctl_lowmem_reserve_ratio[MAX_NR_ZONES-1] = {
 #ifdef CONFIG_ZONE_DMA32
 	 256,
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MSM8974PRO
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_HIGHMEM
 	 96,
 #endif
 	 96,
+<<<<<<< HEAD
 #else
 #ifdef CONFIG_HIGHMEM
 	 32,
 #endif
 	 32,
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 EXPORT_SYMBOL(totalram_pages);
@@ -608,7 +614,11 @@ static inline void __free_one_page(struct page *page,
 		combined_idx = buddy_idx & page_idx;
 		higher_page = page + (combined_idx - page_idx);
 		buddy_idx = __find_buddy_index(combined_idx, order + 1);
+<<<<<<< HEAD
 		higher_buddy = page + (buddy_idx - combined_idx);
+=======
+		higher_buddy = higher_page + (buddy_idx - combined_idx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (page_is_buddy(higher_page, higher_buddy, order + 1)) {
 			list_add_tail(&page->lru,
 				&zone->free_area[order].free_list[migratetype]);
@@ -801,6 +811,12 @@ void __init init_cma_reserved_pageblock(struct page *page)
 	do {
 		__ClearPageReserved(p);
 		set_page_count(p, 0);
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+		SetPageCMA(p);
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} while (++p, --i);
 
 	set_page_refcounted(page);
@@ -1383,6 +1399,7 @@ void free_hot_cold_page(struct page *page, int cold)
 	int wasMlocked = __TestClearPageMlocked(page);
 
 #ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
+<<<<<<< HEAD
 #if 1
 	{
 		extern u64 scfs_lowerpage_reclaim_count;
@@ -1390,6 +1407,16 @@ void free_hot_cold_page(struct page *page, int cold)
 			scfs_lowerpage_reclaim_count++;
 	}
 #endif
+=======
+	/*
+	   struct scfs_sb_info *sbi;
+
+	   if (PageScfslower(page) || PageNocache(page)) {
+	   sbi = SCFS_S(page->mapping->host->i_sb);
+	   sbi->scfs_lowerpage_reclaim_count++;
+	   }
+	 */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 	if (!free_pages_prepare(page, 0))
@@ -2047,6 +2074,16 @@ void warn_alloc_failed(gfp_t gfp_mask, int order, const char *fmt, ...)
 		return;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Walking all memory to count page types is very expensive and should
+	 * be inhibited in non-blockable contexts.
+	 */
+	if (!(gfp_mask & __GFP_WAIT))
+		filter |= SHOW_MEM_FILTER_PAGE_COUNT;
+
+	/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * This documents exceptions given to allocations in certain
 	 * contexts that are allowed to allocate outside current's set
 	 * of allowed nodes.
@@ -2137,6 +2174,17 @@ __alloc_pages_may_oom(gfp_t gfp_mask, unsigned int order,
 	}
 
 	/*
+<<<<<<< HEAD
+=======
+	 * PM-freezer should be notified that there might be an OOM killer on
+	 * its way to kill and wake somebody up. This is too early and we might
+	 * end up not killing anything but false positives are acceptable.
+	 * See freeze_processes.
+	 */
+	note_oom_kill();
+
+	/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * Go through the zonelist yet one more time, keep very high watermark
 	 * here, this is only to catch a parallel oom killing, we must fail if
 	 * we're still under heavy pressure.
@@ -2356,7 +2404,11 @@ static inline int
 gfp_to_alloc_flags(gfp_t gfp_mask)
 {
 	int alloc_flags = ALLOC_WMARK_MIN | ALLOC_CPUSET;
+<<<<<<< HEAD
 	const gfp_t wait = gfp_mask & __GFP_WAIT;
+=======
+	const bool atomic = !(gfp_mask & (__GFP_WAIT | __GFP_NO_KSWAPD));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* __GFP_HIGH is assumed to be the same as ALLOC_HIGH to save a branch. */
 	BUILD_BUG_ON(__GFP_HIGH != (__force gfp_t) ALLOC_HIGH);
@@ -2365,6 +2417,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
 	 * The caller may dip into page reserves a bit more if the caller
 	 * cannot run direct reclaim, or if the caller has realtime scheduling
 	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
+<<<<<<< HEAD
 	 * set both ALLOC_HARDER (!wait) and ALLOC_HIGH (__GFP_HIGH).
 	 */
 	alloc_flags |= (__force int) (gfp_mask & __GFP_HIGH);
@@ -2379,6 +2432,22 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
 		/*
 		 * Ignore cpuset if GFP_ATOMIC (!wait) rather than fail alloc.
 		 * See also cpuset_zone_allowed() comment in kernel/cpuset.c.
+=======
+	 * set both ALLOC_HARDER (atomic == true) and ALLOC_HIGH (__GFP_HIGH).
+	 */
+	alloc_flags |= (__force int) (gfp_mask & __GFP_HIGH);
+
+	if (atomic) {
+		/*
+		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+		 * if it can't schedule.
+		 */
+		if (!(gfp_mask & __GFP_NOMEMALLOC))
+			alloc_flags |= ALLOC_HARDER;
+		/*
+		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
+		 * comment for __cpuset_node_allowed_softwall().
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		 */
 		alloc_flags &= ~ALLOC_CPUSET;
 	} else if (unlikely(rt_task(current)) && !in_interrupt())
@@ -2397,6 +2466,64 @@ gfp_to_alloc_flags(gfp_t gfp_mask)
 	return alloc_flags;
 }
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_SEC_SLOWPATH)
+unsigned int oomk_state; /* 0 none, bit_0 time's up, bit_1 OOMK */
+
+struct slowpath_pressure {
+	unsigned int total_jiffies;
+	struct mutex slow_lock;
+} slowpath;
+
+/* slowtime - milliseconds time spend int __alloc_pages_slowpath() */
+static void slowpath_pressure(unsigned int slowtime)
+{
+	mutex_lock(&slowpath.slow_lock);
+	if (unlikely(slowpath.total_jiffies + slowtime >= UINT_MAX))
+		slowpath.total_jiffies = UINT_MAX;
+	else
+		slowpath.total_jiffies += slowtime;
+	mutex_unlock(&slowpath.slow_lock);
+}
+
+unsigned int get_and_reset_timeup(void)
+{
+	bool val = 0;
+
+	val = oomk_state;
+	oomk_state = 0;
+	pr_debug("%s: timeup %u\n", __func__, val);
+
+	return val;
+}
+
+unsigned int get_and_reset_slowtime(void)
+{
+	static bool first_read = false;
+	unsigned int slowtime = 0;
+
+	slowtime = slowpath.total_jiffies;
+	if (unlikely(first_read == false)) {
+		first_read = true;
+		slowtime = 0;
+	}
+	slowpath.total_jiffies = 0;
+	pr_debug("%s: slowtime %u\n", __func__, slowtime);
+
+	return slowtime;
+}
+
+static int __init slowpath_init(void)
+{
+	mutex_init(&slowpath.slow_lock);
+	return 0;
+}
+
+module_init(slowpath_init)
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline struct page *
 __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
 	struct zonelist *zonelist, enum zone_type high_zoneidx,
@@ -2412,7 +2539,14 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
 	bool deferred_compaction = false;
 	bool contended_compaction = false;
 #ifdef CONFIG_SEC_OOM_KILLER
+<<<<<<< HEAD
 	unsigned long oom_invoke_timeout = jiffies + HZ/4;
+=======
+	unsigned long oom_invoke_timeout = jiffies + HZ/32;
+#endif
+#ifdef CONFIG_SEC_SLOWPATH
+	unsigned long slowpath_time = jiffies;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 	/*
@@ -2539,10 +2673,20 @@ rebalance:
 			    !(gfp_mask & __GFP_NOFAIL))
 				goto nopage;
 #ifdef CONFIG_SEC_OOM_KILLER
+<<<<<<< HEAD
 			if (did_some_progress)
 				pr_info("time's up : calling "
 					"__alloc_pages_may_oom(o:%d, gfp:0x%x)\n", order, gfp_mask);
 
+=======
+			if (did_some_progress) {
+				pr_info("time's up : calling "
+					"__alloc_pages_may_oom(o:%d, gfp:0x%x)\n", order, gfp_mask);
+#if defined(CONFIG_SEC_SLOWPATH)
+				oomk_state |= 0x01;
+#endif
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 			page = __alloc_pages_may_oom(gfp_mask, order,
@@ -2571,7 +2715,11 @@ rebalance:
 			}
 
 #ifdef CONFIG_SEC_OOM_KILLER
+<<<<<<< HEAD
 			oom_invoke_timeout = jiffies + HZ/4;
+=======
+			oom_invoke_timeout = jiffies + HZ/32;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 			goto restart;
 		}
@@ -2604,10 +2752,26 @@ rebalance:
 
 nopage:
 	warn_alloc_failed(gfp_mask, order, NULL);
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_SEC_SLOWPATH)
+	slowpath_time = jiffies - slowpath_time;
+	if (wait && slowpath_time)
+		slowpath_pressure(slowpath_time);
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return page;
 got_pg:
 	if (kmemcheck_enabled)
 		kmemcheck_pagealloc_alloc(page, order, gfp_mask);
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_SEC_SLOWPATH)
+	slowpath_time = jiffies - slowpath_time;
+	if (wait && slowpath_time)
+		slowpath_pressure(slowpath_time);
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return page;
 
 }
@@ -2678,6 +2842,10 @@ out:
 	if (unlikely(!put_mems_allowed(cpuset_mems_cookie) && !page))
 		goto retry_cpuset;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return page;
 }
 EXPORT_SYMBOL(__alloc_pages_nodemask);
@@ -2711,6 +2879,7 @@ EXPORT_SYMBOL(get_zeroed_page);
 void __free_pages(struct page *page, unsigned int order)
 {
 	if (put_page_testzero(page)) {
+<<<<<<< HEAD
 #ifdef CONFIG_TIMA_RKP_DEBUG
 	//TODO: Do the check for all pages if order > 0
 	if (((unsigned long)__va(page_to_phys(page))) < ((unsigned long) high_memory)){
@@ -2724,6 +2893,8 @@ void __free_pages(struct page *page, unsigned int order)
 		}
 	}
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (order == 0)
 			free_hot_cold_page(page, 0);
 		else
@@ -2979,7 +3150,16 @@ void show_free_areas(unsigned int filter)
 		" dirty:%lu writeback:%lu unstable:%lu\n"
 		" free:%lu slab_reclaimable:%lu slab_unreclaimable:%lu\n"
 		" mapped:%lu shmem:%lu pagetables:%lu bounce:%lu\n"
+<<<<<<< HEAD
 		" free_cma:%lu\n",
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+		" free_cma:%lu cma_active_anon:%lu cma_inactive_anon:%lu\n"
+		" cma_active_file:%lu cma_inactive_file:%lu\n",
+#else
+		" free cma:%lu\n",
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		global_page_state(NR_ACTIVE_ANON),
 		global_page_state(NR_INACTIVE_ANON),
 		global_page_state(NR_ISOLATED_ANON),
@@ -2997,7 +3177,19 @@ void show_free_areas(unsigned int filter)
 		global_page_state(NR_SHMEM),
 		global_page_state(NR_PAGETABLE),
 		global_page_state(NR_BOUNCE),
+<<<<<<< HEAD
 		global_page_state(NR_FREE_CMA_PAGES));
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+		global_page_state(NR_FREE_CMA_PAGES),
+		global_page_state(NR_CMA_ACTIVE_ANON),
+		global_page_state(NR_CMA_INACTIVE_ANON),
+		global_page_state(NR_CMA_ACTIVE_FILE),
+		global_page_state(NR_CMA_INACTIVE_FILE));
+#else
+		global_page_state(NR_FREE_CMA_PAGES));
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	for_each_populated_zone(zone) {
 		int i;
@@ -4477,10 +4669,18 @@ static void __meminit calculate_node_totalpages(struct pglist_data *pgdat,
  * round what is now in bits to nearest long in bits, then return it in
  * bytes.
  */
+<<<<<<< HEAD
 static unsigned long __init usemap_size(unsigned long zonesize)
 {
 	unsigned long usemapsize;
 
+=======
+static unsigned long __init usemap_size(unsigned long zone_start_pfn, unsigned long zonesize)
+{
+	unsigned long usemapsize;
+
+	zonesize += zone_start_pfn & (pageblock_nr_pages-1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	usemapsize = roundup(zonesize, pageblock_nr_pages);
 	usemapsize = usemapsize >> pageblock_order;
 	usemapsize *= NR_PAGEBLOCK_BITS;
@@ -4490,21 +4690,35 @@ static unsigned long __init usemap_size(unsigned long zonesize)
 }
 
 static void __init setup_usemap(struct pglist_data *pgdat,
+<<<<<<< HEAD
 				struct zone *zone, unsigned long zonesize)
 {
 	unsigned long usemapsize = usemap_size(zonesize);
+=======
+				struct zone *zone,
+				unsigned long zone_start_pfn,
+				unsigned long zonesize)
+{
+	unsigned long usemapsize = usemap_size(zone_start_pfn, zonesize);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	zone->pageblock_flags = NULL;
 	if (usemapsize)
 		zone->pageblock_flags = alloc_bootmem_node_nopanic(pgdat,
 								   usemapsize);
 }
 #else
+<<<<<<< HEAD
 static inline void setup_usemap(struct pglist_data *pgdat,
 				struct zone *zone, unsigned long zonesize) {}
+=======
+static inline void setup_usemap(struct pglist_data *pgdat, struct zone *zone,
+				unsigned long zone_start_pfn, unsigned long zonesize) {}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* CONFIG_SPARSEMEM */
 
 #ifdef CONFIG_HUGETLB_PAGE_SIZE_VARIABLE
 
+<<<<<<< HEAD
 /* Return a sensible default order for the pageblock size. */
 static inline int pageblock_default_order(void)
 {
@@ -4517,13 +4731,32 @@ static inline int pageblock_default_order(void)
 /* Initialise the number of pages represented by NR_PAGEBLOCK_BITS */
 static inline void __init set_pageblock_order(unsigned int order)
 {
+=======
+/* Initialise the number of pages represented by NR_PAGEBLOCK_BITS */
+static inline void __init set_pageblock_order(void)
+{
+	unsigned int order;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Check that pageblock_nr_pages has not already been setup */
 	if (pageblock_order)
 		return;
 
+<<<<<<< HEAD
 	/*
 	 * Assume the largest contiguous order of interest is a huge page.
 	 * This value may be variable depending on boot parameters on IA64
+=======
+	if (HPAGE_SHIFT > PAGE_SHIFT)
+		order = HUGETLB_PAGE_ORDER;
+	else
+		order = MAX_ORDER - 1;
+
+	/*
+	 * Assume the largest contiguous order of interest is a huge page.
+	 * This value may be variable depending on boot parameters on IA64 and
+	 * powerpc.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 */
 	pageblock_order = order;
 }
@@ -4531,6 +4764,7 @@ static inline void __init set_pageblock_order(unsigned int order)
 
 /*
  * When CONFIG_HUGETLB_PAGE_SIZE_VARIABLE is not set, set_pageblock_order()
+<<<<<<< HEAD
  * and pageblock_default_order() are unused as pageblock_order is set
  * at compile-time. See include/linux/pageblock-flags.h for the values of
  * pageblock_order based on the kernel config
@@ -4540,6 +4774,15 @@ static inline int pageblock_default_order(unsigned int order)
 	return MAX_ORDER-1;
 }
 #define set_pageblock_order(x)	do {} while (0)
+=======
+ * is unused as pageblock_order is set at compile-time. See
+ * include/linux/pageblock-flags.h for the values of pageblock_order based on
+ * the kernel config
+ */
+static inline void set_pageblock_order(void)
+{
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif /* CONFIG_HUGETLB_PAGE_SIZE_VARIABLE */
 
@@ -4627,8 +4870,13 @@ static void __paginginit free_area_init_core(struct pglist_data *pgdat,
 		if (!size)
 			continue;
 
+<<<<<<< HEAD
 		set_pageblock_order(pageblock_default_order());
 		setup_usemap(pgdat, zone, size);
+=======
+		set_pageblock_order();
+		setup_usemap(pgdat, zone, zone_start_pfn, size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ret = init_currently_empty_zone(zone, zone_start_pfn,
 						size, MEMMAP_EARLY);
 		BUG_ON(ret);
@@ -6167,7 +6415,15 @@ static struct trace_print_flags pageflag_names[] = {
 	{1UL << PG_hwpoison,		"hwpoison"	},
 #endif
 	{1UL << PG_readahead,           "PG_readahead"  },
+<<<<<<< HEAD
 	{-1UL,				NULL		},
+=======
+
+#ifdef CONFIG_SCFS_LOWER_PAGECACHE_INVALIDATION
+	{1UL << PG_scfslower, "scfslower"},
+	{1UL << PG_nocache,"nocache"},
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static void dump_page_flags(unsigned long flags)

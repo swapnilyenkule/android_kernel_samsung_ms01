@@ -250,6 +250,10 @@ config MSND_FIFOSIZE
 menuconfig SOUND_OSS
 	tristate "OSS sound modules"
 	depends on ISA_DMA_API && VIRT_TO_BUS
+<<<<<<< HEAD
+=======
+	depends on !GENERIC_ISA_DMA_SUPPORT_BROKEN
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	help
 	  OSS is the Open Sound System suite of sound card drivers.  They make
 	  sound programming easier since they provide a common API.  Say Y or

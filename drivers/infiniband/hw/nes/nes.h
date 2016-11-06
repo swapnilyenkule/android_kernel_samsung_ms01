@@ -524,6 +524,10 @@ void nes_iwarp_ce_handler(struct nes_device *, struct nes_hw_cq *);
 int nes_destroy_cqp(struct nes_device *);
 int nes_nic_cm_xmit(struct sk_buff *, struct net_device *);
 void nes_recheck_link_status(struct work_struct *work);
+<<<<<<< HEAD
+=======
+void nes_terminate_timeout(unsigned long context);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* nes_nic.c */
 struct net_device *nes_netdev_init(struct nes_device *, void __iomem *);

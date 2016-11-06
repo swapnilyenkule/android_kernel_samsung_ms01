@@ -508,13 +508,21 @@ obj-$(CONFIG_BT_BCM4335) += board-bluetooth-bcm4335.o
 obj-$(CONFIG_BT_BCM4339) += board-bluetooth-bcm4339.o
 obj-$(CONFIG_BT_BCM4354) += board-bluetooth-bcm4354.o
 
+<<<<<<< HEAD
 obj-$(CONFIG_HAS_MACH_MEMUTILS) += memutils/
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 obj-$(CONFIG_ARCH_RANDOM) += early_random.o
 obj-$(CONFIG_PERFMAP) += perfmap.o
 
 obj-$(CONFIG_SEC_VIENNA_PROJECT) += board-vienna-motor.o
 obj-$(CONFIG_SEC_V2_PROJECT) += board-vienna-motor.o
 
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SEC_BSP) += sec_bsp.o
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ifdef CONFIG_ARCH_MSM8226
 obj-$(CONFIG_SEC_THERMISTOR) += sec_thermistor_8226.o msm8226-thermistor.o
 else ifdef CONFIG_ARCH_MSM8610

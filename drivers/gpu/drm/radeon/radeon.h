@@ -138,6 +138,7 @@ struct radeon_device;
 /*
  * BIOS.
  */
+<<<<<<< HEAD
 #define ATRM_BIOS_PAGE 4096
 
 #if defined(CONFIG_VGA_SWITCHEROO)
@@ -153,6 +154,8 @@ static inline int radeon_atrm_get_bios_chunk(uint8_t *bios, int offset, int len)
 	return -EINVAL;
 }
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 bool radeon_get_bios(struct radeon_device *rdev);
 
 

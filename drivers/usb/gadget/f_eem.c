@@ -319,10 +319,16 @@ fail:
 	if (f->hs_descriptors)
 		usb_free_descriptors(f->hs_descriptors);
 
+<<<<<<< HEAD
 	/* we might as well release our claims on endpoints */
 	if (eem->port.out_ep->desc)
 		eem->port.out_ep->driver_data = NULL;
 	if (eem->port.in_ep->desc)
+=======
+	if (eem->port.out_ep)
+		eem->port.out_ep->driver_data = NULL;
+	if (eem->port.in_ep)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		eem->port.in_ep->driver_data = NULL;
 
 	ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);

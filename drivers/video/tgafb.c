@@ -192,6 +192,11 @@ tgafb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
 
 	if (var->xres_virtual != var->xres || var->yres_virtual != var->yres)
 		return -EINVAL;
+<<<<<<< HEAD
+=======
+	if (var->xres * var->yres * (var->bits_per_pixel >> 3) > info->fix.smem_len)
+		return -EINVAL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (var->nonstd)
 		return -EINVAL;
 	if (1000000000 / var->pixclock > TGA_PLL_MAX_FREQ)
@@ -272,6 +277,10 @@ tgafb_set_par(struct fb_info *info)
 	par->yres = info->var.yres;
 	par->pll_freq = pll_freq = 1000000000 / info->var.pixclock;
 	par->bits_per_pixel = info->var.bits_per_pixel;
+<<<<<<< HEAD
+=======
+	info->fix.line_length = par->xres * (par->bits_per_pixel >> 3);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	tga_type = par->tga_type;
 
@@ -1146,6 +1155,7 @@ copyarea_line_32bpp(struct fb_info *info, u32 dy, u32 sy,
 	__raw_writel(TGA_MODE_SBM_24BPP|TGA_MODE_SIMPLE, tga_regs+TGA_MODE_REG);
 }
 
+<<<<<<< HEAD
 /* The general case of forward copy in 8bpp mode.  */
 static inline void
 copyarea_foreward_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
@@ -1321,12 +1331,35 @@ copyarea_backward_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
 	void __iomem *tga_regs;
 	void __iomem *tga_fb;
 
+=======
+/* The (almost) general case of backward copy in 8bpp mode.  */
+static inline void
+copyarea_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
+	      u32 height, u32 width, u32 line_length,
+	      const struct fb_copyarea *area)
+{
+	struct tga_par *par = (struct tga_par *) info->par;
+	unsigned i, yincr;
+	int depos, sepos, backward, last_step, step;
+	u32 mask_last;
+	unsigned n32;
+	void __iomem *tga_regs;
+	void __iomem *tga_fb;
+
+	/* Do acceleration only if we are aligned on 8 pixels */
+	if ((dx | sx | width) & 7) {
+		cfb_copyarea(info, area);
+		return;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	yincr = line_length;
 	if (dy > sy) {
 		dy += height - 1;
 		sy += height - 1;
 		yincr = -yincr;
 	}
+<<<<<<< HEAD
 
 	/* Compute the offsets and alignments in the frame buffer.
 	   More than anything else, these control how we do copies.  */
@@ -1362,6 +1395,33 @@ copyarea_backward_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
 
 	/* Finally copy the unaligned head of the span.  */
 	mask_last = -1 << (32 - left);
+=======
+	backward = dy == sy && dx > sx && dx < sx + width;
+
+	/* Compute the offsets and alignments in the frame buffer.
+	   More than anything else, these control how we do copies.  */
+	depos = dy * line_length + dx;
+	sepos = sy * line_length + sx;
+	if (backward)
+		depos += width, sepos += width;
+
+	/* Next copy full words at a time.  */
+	n32 = width / 32;
+	last_step = width % 32;
+
+	/* Finally copy the unaligned head of the span.  */
+	mask_last = (1ul << last_step) - 1;
+
+	if (!backward) {
+		step = 32;
+		last_step = 32;
+	} else {
+		step = -32;
+		last_step = -last_step;
+		sepos -= 32;
+		depos -= 32;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	tga_regs = par->tga_regs_base;
 	tga_fb = par->tga_fb_base;
@@ -1378,6 +1438,7 @@ copyarea_backward_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
 
 		sfb = tga_fb + sepos;
 		dfb = tga_fb + depos;
+<<<<<<< HEAD
 		if (mask_first) {
 			__raw_writel(mask_first, sfb);
 			wmb();
@@ -1388,15 +1449,43 @@ copyarea_backward_8bpp(struct fb_info *info, u32 dx, u32 dy, u32 sx, u32 sy,
 		for (j = 0; j < n32; ++j) {
 			sfb -= 32;
 			dfb -= 32;
+=======
+
+		for (j = 0; j < n32; j++) {
+			if (j < 2 && j + 1 < n32 && !backward &&
+			    !(((unsigned long)sfb | (unsigned long)dfb) & 63)) {
+				do {
+					__raw_writel(sfb - tga_fb, tga_regs+TGA_COPY64_SRC);
+					wmb();
+					__raw_writel(dfb - tga_fb, tga_regs+TGA_COPY64_DST);
+					wmb();
+					sfb += 64;
+					dfb += 64;
+					j += 2;
+				} while (j + 1 < n32);
+				j--;
+				continue;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			__raw_writel(0xffffffff, sfb);
 			wmb();
 			__raw_writel(0xffffffff, dfb);
 			wmb();
+<<<<<<< HEAD
 		}
 
 		if (mask_last) {
 			sfb -= 32;
 			dfb -= 32;
+=======
+			sfb += step;
+			dfb += step;
+		}
+
+		if (mask_last) {
+			sfb += last_step - step;
+			dfb += last_step - step;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			__raw_writel(mask_last, sfb);
 			wmb();
 			__raw_writel(mask_last, dfb);
@@ -1457,6 +1546,7 @@ tgafb_copyarea(struct fb_info *info, const struct fb_copyarea *area)
 	else if (bpp == 32)
 		cfb_copyarea(info, area);
 
+<<<<<<< HEAD
 	/* Detect overlapping source and destination that requires
 	   a backward copy.  */
 	else if (dy == sy && dx > sx && dx < sx + width)
@@ -1465,6 +1555,11 @@ tgafb_copyarea(struct fb_info *info, const struct fb_copyarea *area)
 	else
 		copyarea_foreward_8bpp(info, dx, dy, sx, sy, height,
 				       width, line_length);
+=======
+	else
+		copyarea_8bpp(info, dx, dy, sx, sy, height,
+			      width, line_length, area);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -1480,6 +1575,10 @@ tgafb_init_fix(struct fb_info *info)
 	int tga_bus_tc = TGA_BUS_TC(par->dev);
 	u8 tga_type = par->tga_type;
 	const char *tga_type_name = NULL;
+<<<<<<< HEAD
+=======
+	unsigned memory_size;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	switch (tga_type) {
 	case TGA_TYPE_8PLANE:
@@ -1487,21 +1586,37 @@ tgafb_init_fix(struct fb_info *info)
 			tga_type_name = "Digital ZLXp-E1";
 		if (tga_bus_tc)
 			tga_type_name = "Digital ZLX-E1";
+<<<<<<< HEAD
+=======
+		memory_size = 2097152;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	case TGA_TYPE_24PLANE:
 		if (tga_bus_pci)
 			tga_type_name = "Digital ZLXp-E2";
 		if (tga_bus_tc)
 			tga_type_name = "Digital ZLX-E2";
+<<<<<<< HEAD
+=======
+		memory_size = 8388608;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	case TGA_TYPE_24PLUSZ:
 		if (tga_bus_pci)
 			tga_type_name = "Digital ZLXp-E3";
 		if (tga_bus_tc)
 			tga_type_name = "Digital ZLX-E3";
+<<<<<<< HEAD
 		break;
 	default:
 		tga_type_name = "Unknown";
+=======
+		memory_size = 16777216;
+		break;
+	default:
+		tga_type_name = "Unknown";
+		memory_size = 16777216;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	}
 
@@ -1513,9 +1628,14 @@ tgafb_init_fix(struct fb_info *info)
 			    ? FB_VISUAL_PSEUDOCOLOR
 			    : FB_VISUAL_DIRECTCOLOR);
 
+<<<<<<< HEAD
 	info->fix.line_length = par->xres * (par->bits_per_pixel >> 3);
 	info->fix.smem_start = (size_t) par->tga_fb_base;
 	info->fix.smem_len = info->fix.line_length * par->yres;
+=======
+	info->fix.smem_start = (size_t) par->tga_fb_base;
+	info->fix.smem_len = memory_size;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	info->fix.mmio_start = (size_t) par->tga_regs_base;
 	info->fix.mmio_len = 512;
 
@@ -1640,6 +1760,12 @@ tgafb_register(struct device *dev)
 		modedb_tga = &modedb_tc;
 		modedbsize_tga = 1;
 	}
+<<<<<<< HEAD
+=======
+
+	tgafb_init_fix(info);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = fb_find_mode(&info->var, info,
 			   mode_option ? mode_option : mode_option_tga,
 			   modedb_tga, modedbsize_tga, NULL,
@@ -1657,7 +1783,10 @@ tgafb_register(struct device *dev)
 	}
 
 	tgafb_set_par(info);
+<<<<<<< HEAD
 	tgafb_init_fix(info);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (register_framebuffer(info) < 0) {
 		printk(KERN_ERR "tgafb: Could not register framebuffer\n");

@@ -463,7 +463,11 @@ extern void audit_putname(const char *name);
 extern void __audit_inode(const char *name, const struct dentry *dentry);
 extern void __audit_inode_child(const struct dentry *dentry,
 				const struct inode *parent);
+<<<<<<< HEAD
 extern void __audit_seccomp(unsigned long syscall, long signr, int code);
+=======
+extern void __audit_seccomp(unsigned long syscall);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern void __audit_ptrace(struct task_struct *t);
 
 static inline int audit_dummy_context(void)
@@ -480,14 +484,22 @@ static inline void audit_syscall_entry(int arch, int major, unsigned long a0,
 				       unsigned long a1, unsigned long a2,
 				       unsigned long a3)
 {
+<<<<<<< HEAD
 	if (unlikely(!audit_dummy_context()))
+=======
+	if (unlikely(current->audit_context))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		__audit_syscall_entry(arch, major, a0, a1, a2, a3);
 }
 static inline void audit_syscall_exit(void *pt_regs)
 {
 	if (unlikely(current->audit_context)) {
 		int success = is_syscall_success(pt_regs);
+<<<<<<< HEAD
 		int return_code = regs_return_value(pt_regs);
+=======
+		long return_code = regs_return_value(pt_regs);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		__audit_syscall_exit(success, return_code);
 	}
@@ -508,10 +520,17 @@ static inline void audit_inode_child(const struct dentry *dentry,
 }
 void audit_core_dumps(long signr);
 
+<<<<<<< HEAD
 static inline void audit_seccomp(unsigned long syscall, long signr, int code)
 {
 	if (unlikely(!audit_dummy_context()))
 		__audit_seccomp(syscall, signr, code);
+=======
+static inline void audit_seccomp(unsigned long syscall)
+{
+	if (unlikely(!audit_dummy_context()))
+		__audit_seccomp(syscall);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline void audit_ptrace(struct task_struct *t)
@@ -634,7 +653,11 @@ extern int audit_signals;
 #define audit_inode(n,d) do { (void)(d); } while (0)
 #define audit_inode_child(i,p) do { ; } while (0)
 #define audit_core_dumps(i) do { ; } while (0)
+<<<<<<< HEAD
 #define audit_seccomp(i,s,c) do { ; } while (0)
+=======
+#define audit_seccomp(i) do { ; } while (0)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define auditsc_get_stamp(c,t,s) (0)
 #define audit_get_loginuid(t) (-1)
 #define audit_get_sessionid(t) (-1)

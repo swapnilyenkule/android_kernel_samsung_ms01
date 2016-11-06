@@ -77,6 +77,17 @@
 
 #define	CONFIG_MEMSIZE					0x5428
 
+<<<<<<< HEAD
+=======
+#define	BIF_FB_EN						0x5490
+#define		FB_READ_EN					(1 << 0)
+#define		FB_WRITE_EN					(1 << 1)
+
+#define	CP_STRMOUT_CNTL					0x84FC
+
+#define	CP_COHER_CNTL					0x85F0
+#define	CP_COHER_SIZE					0x85F4
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	CP_COHER_BASE					0x85F8
 #define CP_ME_CNTL					0x86D8
 #define		CP_ME_HALT					(1 << 28)
@@ -196,6 +207,12 @@
 #define		NOOFCHAN_MASK					0x00003000
 #define MC_SHARED_CHREMAP					0x2008
 
+<<<<<<< HEAD
+=======
+#define MC_SHARED_BLACKOUT_CNTL           		0x20ac
+#define		BLACKOUT_MODE_MASK			0x00000007
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	MC_ARB_RAMCFG					0x2760
 #define		NOOFBANK_SHIFT					0
 #define		NOOFBANK_MASK					0x00000003
@@ -232,6 +249,10 @@
 #define	MC_VM_MD_L1_TLB0_CNTL				0x2654
 #define	MC_VM_MD_L1_TLB1_CNTL				0x2658
 #define	MC_VM_MD_L1_TLB2_CNTL				0x265C
+<<<<<<< HEAD
+=======
+#define	MC_VM_MD_L1_TLB3_CNTL				0x2698
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define	FUS_MC_VM_MD_L1_TLB0_CNTL			0x265C
 #define	FUS_MC_VM_MD_L1_TLB1_CNTL			0x2660
@@ -272,6 +293,10 @@
 #define	SCRATCH_UMSK					0x8540
 #define	SCRATCH_ADDR					0x8544
 
+<<<<<<< HEAD
+=======
+#define	SMX_SAR_CTL0					0xA008
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	SMX_DC_CTL0					0xA020
 #define		USE_HASH_FUNCTION				(1 << 0)
 #define		NUMBER_OF_SETS(x)				((x) << 1)
@@ -459,6 +484,13 @@
 #       define LATENCY_LOW_WATERMARK(x)                   ((x) << 0)
 #       define LATENCY_HIGH_WATERMARK(x)                  ((x) << 16)
 
+<<<<<<< HEAD
+=======
+#define	PIPE0_DMIF_BUFFER_CONTROL			  0x0ca0
+#       define DMIF_BUFFERS_ALLOCATED(x)                  ((x) << 0)
+#       define DMIF_BUFFERS_ALLOCATED_COMPLETED           (1 << 4)
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define IH_RB_CNTL                                        0x3e00
 #       define IH_RB_ENABLE                               (1 << 0)
 #       define IH_IB_SIZE(x)                              ((x) << 1) /* log2 */

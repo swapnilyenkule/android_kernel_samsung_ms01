@@ -72,8 +72,19 @@
    the statisic is greater then _max, set _max
 */
 
+<<<<<<< HEAD
 #define KGSL_STATS_ADD(_size, _stat, _max) \
 	do { _stat += (_size); if (_stat > _max) _max = _stat; } while (0)
+=======
+static inline void KGSL_STATS_ADD(uint32_t size, atomic_t *stat,
+		atomic_t *max)
+{
+	uint32_t ret = atomic_add_return(size, stat);
+
+	if (ret > atomic_read(max))
+		atomic_set(max, ret);
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define KGSL_MAX_NUMIBS 100000
 
@@ -106,6 +117,7 @@ struct kgsl_driver {
 	void *ptpool;
 
 	struct {
+<<<<<<< HEAD
 		unsigned int vmalloc;
 		unsigned int vmalloc_max;
 		unsigned int page_alloc;
@@ -115,6 +127,16 @@ struct kgsl_driver {
 		unsigned int mapped;
 		unsigned int mapped_max;
 		unsigned int histogram[16];
+=======
+		atomic_t vmalloc;
+		atomic_t vmalloc_max;
+		atomic_t page_alloc;
+		atomic_t page_alloc_max;
+		atomic_t coherent;
+		atomic_t coherent_max;
+		atomic_t mapped;
+		atomic_t mapped_max;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} stats;
 	unsigned int full_cache_threshold;
 };

@@ -234,7 +234,10 @@ enum
 	LINUX_MIB_TCPREQQFULLDROP,		/* TCPReqQFullDrop */
 	LINUX_MIB_TCPRETRANSFAIL,		/* TCPRetransFail */
 	LINUX_MIB_TCPRCVCOALESCE,			/* TCPRcvCoalesce */
+<<<<<<< HEAD
 	LINUX_MIB_TCPCHALLENGEACK,		/* TCPChallengeACK */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	__LINUX_MIB_MAX
 };
 

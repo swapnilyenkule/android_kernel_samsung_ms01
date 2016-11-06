@@ -52,6 +52,10 @@
 
 #include <asm/processor.h>
 #include <asm/io.h>
+<<<<<<< HEAD
+=======
+#include <asm/ioctl.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <asm/uaccess.h>
 #include <asm/pgtable.h>
 
@@ -693,8 +697,12 @@ int __kvm_set_memory_region(struct kvm *kvm,
 	int r;
 	gfn_t base_gfn;
 	unsigned long npages;
+<<<<<<< HEAD
 	unsigned long i;
 	struct kvm_memory_slot *memslot;
+=======
+	struct kvm_memory_slot *memslot, *slot;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct kvm_memory_slot old, new;
 	struct kvm_memslots *slots, *old_memslots;
 
@@ -741,6 +749,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
 
 	/* Check for overlaps */
 	r = -EEXIST;
+<<<<<<< HEAD
 	for (i = 0; i < KVM_MEMORY_SLOTS; ++i) {
 		struct kvm_memory_slot *s = &kvm->memslots->memslots[i];
 
@@ -748,6 +757,13 @@ int __kvm_set_memory_region(struct kvm *kvm,
 			continue;
 		if (!((base_gfn + npages <= s->base_gfn) ||
 		      (base_gfn >= s->base_gfn + s->npages)))
+=======
+	kvm_for_each_memslot(slot, kvm->memslots) {
+		if (slot->id >= KVM_MEMORY_SLOTS || slot == memslot)
+			continue;
+		if (!((base_gfn + npages <= slot->base_gfn) ||
+		      (base_gfn >= slot->base_gfn + slot->npages)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto out_free;
 	}
 
@@ -777,7 +793,11 @@ int __kvm_set_memory_region(struct kvm *kvm,
 		/* destroy any largepage mappings for dirty tracking */
 	}
 
+<<<<<<< HEAD
 	if (!npages) {
+=======
+	if (!npages || base_gfn != old.base_gfn) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		struct kvm_memory_slot *slot;
 
 		r = -ENOMEM;
@@ -793,8 +813,15 @@ int __kvm_set_memory_region(struct kvm *kvm,
 		old_memslots = kvm->memslots;
 		rcu_assign_pointer(kvm->memslots, slots);
 		synchronize_srcu_expedited(&kvm->srcu);
+<<<<<<< HEAD
 		/* From this point no new shadow pages pointing to a deleted
 		 * memslot will be created.
+=======
+		/* slot was deleted or moved, clear iommu mapping */
+		kvm_iommu_unmap_pages(kvm, &old);
+		/* From this point no new shadow pages pointing to a deleted,
+		 * or moved, memslot will be created.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		 *
 		 * validation of sp->gfn happens in:
 		 * 	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
@@ -808,6 +835,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
 	if (r)
 		goto out_free;
 
+<<<<<<< HEAD
 	/* map/unmap the pages in iommu page table */
 	if (npages) {
 		r = kvm_iommu_map_pages(kvm, &new);
@@ -816,12 +844,24 @@ int __kvm_set_memory_region(struct kvm *kvm,
 	} else
 		kvm_iommu_unmap_pages(kvm, &old);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	r = -ENOMEM;
 	slots = kmemdup(kvm->memslots, sizeof(struct kvm_memslots),
 			GFP_KERNEL);
 	if (!slots)
 		goto out_free;
 
+<<<<<<< HEAD
+=======
+	/* map new memory slot into the iommu */
+	if (npages) {
+		r = kvm_iommu_map_pages(kvm, &new);
+		if (r)
+			goto out_slots;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* actual memory is freed via old in kvm_free_physmem_slot below */
 	if (!npages) {
 		new.rmap = NULL;
@@ -848,6 +888,11 @@ int __kvm_set_memory_region(struct kvm *kvm,
 
 	return 0;
 
+<<<<<<< HEAD
+=======
+out_slots:
+	kfree(slots);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out_free:
 	kvm_free_physmem_slot(&new, &old);
 out:
@@ -1385,6 +1430,7 @@ int kvm_write_guest(struct kvm *kvm, gpa_t gpa, const void *data,
 }
 
 int kvm_gfn_to_hva_cache_init(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
+<<<<<<< HEAD
 			      gpa_t gpa)
 {
 	struct kvm_memslots *slots = kvm_memslots(kvm);
@@ -1400,6 +1446,40 @@ int kvm_gfn_to_hva_cache_init(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
 	else
 		return -EFAULT;
 
+=======
+			      gpa_t gpa, unsigned long len)
+{
+	struct kvm_memslots *slots = kvm_memslots(kvm);
+	int offset = offset_in_page(gpa);
+	gfn_t start_gfn = gpa >> PAGE_SHIFT;
+	gfn_t end_gfn = (gpa + len - 1) >> PAGE_SHIFT;
+	gfn_t nr_pages_needed = end_gfn - start_gfn + 1;
+	gfn_t nr_pages_avail;
+
+	ghc->gpa = gpa;
+	ghc->generation = slots->generation;
+	ghc->len = len;
+	ghc->memslot = gfn_to_memslot(kvm, start_gfn);
+	ghc->hva = gfn_to_hva_many(ghc->memslot, start_gfn, &nr_pages_avail);
+	if (!kvm_is_error_hva(ghc->hva) && nr_pages_avail >= nr_pages_needed) {
+		ghc->hva += offset;
+	} else {
+		/*
+		 * If the requested region crosses two memslots, we still
+		 * verify that the entire region is valid here.
+		 */
+		while (start_gfn <= end_gfn) {
+			ghc->memslot = gfn_to_memslot(kvm, start_gfn);
+			ghc->hva = gfn_to_hva_many(ghc->memslot, start_gfn,
+						   &nr_pages_avail);
+			if (kvm_is_error_hva(ghc->hva))
+				return -EFAULT;
+			start_gfn += nr_pages_avail;
+		}
+		/* Use the slow path for cross page reads and writes. */
+		ghc->memslot = NULL;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 EXPORT_SYMBOL_GPL(kvm_gfn_to_hva_cache_init);
@@ -1410,8 +1490,18 @@ int kvm_write_guest_cached(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
 	struct kvm_memslots *slots = kvm_memslots(kvm);
 	int r;
 
+<<<<<<< HEAD
 	if (slots->generation != ghc->generation)
 		kvm_gfn_to_hva_cache_init(kvm, ghc, ghc->gpa);
+=======
+	BUG_ON(len > ghc->len);
+
+	if (slots->generation != ghc->generation)
+		kvm_gfn_to_hva_cache_init(kvm, ghc, ghc->gpa, ghc->len);
+
+	if (unlikely(!ghc->memslot))
+		return kvm_write_guest(kvm, ghc->gpa, data, len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (kvm_is_error_hva(ghc->hva))
 		return -EFAULT;
@@ -1431,8 +1521,18 @@ int kvm_read_guest_cached(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
 	struct kvm_memslots *slots = kvm_memslots(kvm);
 	int r;
 
+<<<<<<< HEAD
 	if (slots->generation != ghc->generation)
 		kvm_gfn_to_hva_cache_init(kvm, ghc, ghc->gpa);
+=======
+	BUG_ON(len > ghc->len);
+
+	if (slots->generation != ghc->generation)
+		kvm_gfn_to_hva_cache_init(kvm, ghc, ghc->gpa, ghc->len);
+
+	if (unlikely(!ghc->memslot))
+		return kvm_read_guest(kvm, ghc->gpa, data, len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (kvm_is_error_hva(ghc->hva))
 		return -EFAULT;
@@ -1641,6 +1741,12 @@ static int kvm_vm_ioctl_create_vcpu(struct kvm *kvm, u32 id)
 	int r;
 	struct kvm_vcpu *vcpu, *v;
 
+<<<<<<< HEAD
+=======
+	if (id >= KVM_MAX_VCPUS)
+		return -EINVAL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	vcpu = kvm_arch_vcpu_create(kvm, id);
 	if (IS_ERR(vcpu))
 		return PTR_ERR(vcpu);
@@ -1714,6 +1820,12 @@ static long kvm_vcpu_ioctl(struct file *filp,
 	if (vcpu->kvm->mm != current->mm)
 		return -EIO;
 
+<<<<<<< HEAD
+=======
+	if (unlikely(_IOC_TYPE(ioctl) != KVMIO))
+		return -EINVAL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #if defined(CONFIG_S390) || defined(CONFIG_PPC)
 	/*
 	 * Special cases: vcpu ioctls that are asynchronous to vcpu execution,

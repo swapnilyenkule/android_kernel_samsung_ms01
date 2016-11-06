@@ -24,7 +24,11 @@ config SPARC
 	select HAVE_IRQ_WORK
 	select HAVE_DMA_ATTRS
 	select HAVE_DMA_API_DEBUG
+<<<<<<< HEAD
 	select HAVE_ARCH_JUMP_LABEL
+=======
+	select HAVE_ARCH_JUMP_LABEL if SPARC64
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	select HAVE_GENERIC_HARDIRQS
 	select GENERIC_IRQ_SHOW
 	select USE_GENERIC_SMP_HELPERS if SMP
@@ -584,6 +588,12 @@ config SYSVIPC_COMPAT
 	depends on COMPAT && SYSVIPC
 	default y
 
+<<<<<<< HEAD
+=======
+config KEYS_COMPAT
+	def_bool y if COMPAT && KEYS
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 endmenu
 
 source "net/Kconfig"

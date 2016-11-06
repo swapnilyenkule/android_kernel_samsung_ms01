@@ -131,7 +131,11 @@ void __init init_msc_irqs(unsigned long icubase, unsigned int irqbase, msc_irqma
 
 	board_bind_eic_interrupt = &msc_bind_eic_interrupt;
 
+<<<<<<< HEAD
 	for (; nirq >= 0; nirq--, imp++) {
+=======
+	for (; nirq > 0; nirq--, imp++) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		int n = imp->im_irq;
 
 		switch (imp->im_type) {

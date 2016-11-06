@@ -3497,6 +3497,7 @@ int venus_hfi_get_stride_scanline(int color_fmt,
 
 int venus_hfi_get_core_capabilities(void)
 {
+<<<<<<< HEAD
 	int i = 0, rc = 0, j = 0, venus_version_length = 0;
 	u32 smem_block_size = 0;
 	u8 *smem_table_ptr;
@@ -3536,6 +3537,13 @@ int venus_hfi_get_core_capabilities(void)
 			HAL_VIDEO_ENCODER_SCALING_CAPABILITY |
 			HAL_VIDEO_ENCODER_DEINTERLACE_CAPABILITY |
 			HAL_VIDEO_DECODER_MULTI_STREAM_CAPABILITY;
+=======
+	int rc = 0;
+	rc = HAL_VIDEO_ENCODER_ROTATION_CAPABILITY |
+		HAL_VIDEO_ENCODER_SCALING_CAPABILITY |
+		HAL_VIDEO_ENCODER_DEINTERLACE_CAPABILITY |
+		HAL_VIDEO_DECODER_MULTI_STREAM_CAPABILITY;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return rc;
 }
 

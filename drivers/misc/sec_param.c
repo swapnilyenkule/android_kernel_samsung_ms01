@@ -247,7 +247,11 @@ static ssize_t movinand_checksum_done_show
 		pr_err("checksum is not in valuable range.\n");
 		ret = 1;
 	}
+<<<<<<< HEAD
 	return sprintf(buf, "%u\n", ret);
+=======
+	return snprintf(buf, sizeof(buf), "%u\n", ret);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 static DEVICE_ATTR(movinand_checksum_done,
 				0664, movinand_checksum_done_show, NULL);
@@ -262,7 +266,11 @@ static ssize_t movinand_checksum_pass_show
 		pr_err("checksum is not in valuable range.\n");
 		ret = 1;
 	}
+<<<<<<< HEAD
 	return sprintf(buf, "%u\n", ret);
+=======
+	return snprintf(buf, sizeof(buf), "%u\n", ret);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 static DEVICE_ATTR(movinand_checksum_pass,
 				0664, movinand_checksum_pass_show, NULL);

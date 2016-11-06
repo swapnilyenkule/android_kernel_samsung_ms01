@@ -21,6 +21,10 @@
 #include <linux/signal.h>
 #include <linux/perf_event.h>
 #include <linux/hw_breakpoint.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <asm/uaccess.h>
 #include <asm/pgtable.h>
@@ -165,6 +169,38 @@ static inline bool invalid_selector(u16 value)
 
 #define FLAG_MASK		FLAG_MASK_32
 
+<<<<<<< HEAD
+=======
+/*
+ * X86_32 CPUs don't save ss and esp if the CPU is already in kernel mode
+ * when it traps.  The previous stack will be directly underneath the saved
+ * registers, and 'sp/ss' won't even have been saved. Thus the '&regs->sp'.
+ *
+ * Now, if the stack is empty, '&regs->sp' is out of range. In this
+ * case we try to take the previous stack. To always return a non-null
+ * stack pointer we fall back to regs as stack if no previous stack
+ * exists.
+ *
+ * This is valid only for kernel mode traps.
+ */
+unsigned long kernel_stack_pointer(struct pt_regs *regs)
+{
+	unsigned long context = (unsigned long)regs & ~(THREAD_SIZE - 1);
+	unsigned long sp = (unsigned long)&regs->sp;
+	struct thread_info *tinfo;
+
+	if (context == (sp & ~(THREAD_SIZE - 1)))
+		return sp;
+
+	tinfo = (struct thread_info *)context;
+	if (tinfo->previous_esp)
+		return tinfo->previous_esp;
+
+	return (unsigned long)regs;
+}
+EXPORT_SYMBOL_GPL(kernel_stack_pointer);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static unsigned long *pt_regs_access(struct pt_regs *regs, unsigned long regno)
 {
 	BUILD_BUG_ON(offsetof(struct pt_regs, bx) != 0);
@@ -1211,12 +1247,15 @@ static long x32_arch_ptrace(struct task_struct *child,
 					     0, sizeof(struct user_i387_struct),
 					     datap);
 
+<<<<<<< HEAD
 		/* normal 64bit interface to access TLS data.
 		   Works just like arch_prctl, except that the arguments
 		   are reversed. */
 	case PTRACE_ARCH_PRCTL:
 		return do_arch_prctl(child, data, addr);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		return compat_ptrace_request(child, request, addr, data);
 	}
@@ -1480,11 +1519,15 @@ long syscall_trace_enter(struct pt_regs *regs)
 		regs->flags |= X86_EFLAGS_TF;
 
 	/* do the secure computing check first */
+<<<<<<< HEAD
 	if (secure_computing(regs->orig_ax)) {
 		/* seccomp failures shouldn't expose any additional code. */
 		ret = -1L;
 		goto out;
 	}
+=======
+	secure_computing(regs->orig_ax);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (unlikely(test_thread_flag(TIF_SYSCALL_EMU)))
 		ret = -1L;
@@ -1509,7 +1552,10 @@ long syscall_trace_enter(struct pt_regs *regs)
 				    regs->dx, regs->r10);
 #endif
 
+<<<<<<< HEAD
 out:
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret ?: regs->orig_ax;
 }
 

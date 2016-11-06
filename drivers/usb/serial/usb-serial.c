@@ -168,6 +168,10 @@ static void destroy_serial(struct kref *kref)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	usb_put_intf(serial->interface);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	usb_put_dev(serial->dev);
 	kfree(serial);
 }
@@ -625,7 +629,11 @@ static struct usb_serial *create_serial(struct usb_device *dev,
 	}
 	serial->dev = usb_get_dev(dev);
 	serial->type = driver;
+<<<<<<< HEAD
 	serial->interface = interface;
+=======
+	serial->interface = usb_get_intf(interface);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kref_init(&serial->kref);
 	mutex_init(&serial->disc_mutex);
 	serial->minor = SERIAL_TTY_NO_MINOR;
@@ -670,12 +678,23 @@ exit:
 static struct usb_serial_driver *search_serial_device(
 					struct usb_interface *iface)
 {
+<<<<<<< HEAD
 	const struct usb_device_id *id;
 	struct usb_serial_driver *drv;
 
 	/* Check if the usb id matches a known device */
 	list_for_each_entry(drv, &usb_serial_driver_list, driver_list) {
 		id = get_iface_id(drv, iface);
+=======
+	const struct usb_device_id *id = NULL;
+	struct usb_serial_driver *drv;
+	struct usb_driver *driver = to_usb_driver(iface->dev.driver);
+
+	/* Check if the usb id matches a known device */
+	list_for_each_entry(drv, &usb_serial_driver_list, driver_list) {
+		if (drv->usb_driver == driver)
+			id = get_iface_id(drv, iface);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (id)
 			return drv;
 	}
@@ -697,10 +716,27 @@ static int serial_carrier_raised(struct tty_port *port)
 static void serial_dtr_rts(struct tty_port *port, int on)
 {
 	struct usb_serial_port *p = container_of(port, struct usb_serial_port, port);
+<<<<<<< HEAD
 	struct usb_serial_driver *drv = p->serial->type;
 
 	if (drv->dtr_rts)
 		drv->dtr_rts(p, on);
+=======
+	struct usb_serial *serial = p->serial;
+	struct usb_serial_driver *drv = serial->type;
+
+	if (!drv->dtr_rts)
+		return;
+	/*
+	 * Work-around bug in the tty-layer which can result in dtr_rts
+	 * being called after a disconnect (and tty_unregister_device
+	 * has returned). Remove once bug has been squashed.
+	 */
+	mutex_lock(&serial->disc_mutex);
+	if (!serial->disconnected)
+		drv->dtr_rts(p, on);
+	mutex_unlock(&serial->disc_mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static const struct tty_port_operations serial_port_ops = {
@@ -766,7 +802,11 @@ int usb_serial_probe(struct usb_interface *interface,
 
 		if (retval) {
 			dbg("sub driver rejected device");
+<<<<<<< HEAD
 			kfree(serial);
+=======
+			usb_serial_put(serial);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			module_put(type->driver.owner);
 			return retval;
 		}
@@ -781,29 +821,57 @@ int usb_serial_probe(struct usb_interface *interface,
 		if (usb_endpoint_is_bulk_in(endpoint)) {
 			/* we found a bulk in endpoint */
 			dbg("found bulk in on endpoint %d", i);
+<<<<<<< HEAD
 			bulk_in_endpoint[num_bulk_in] = endpoint;
 			++num_bulk_in;
+=======
+			if (num_bulk_in < MAX_NUM_PORTS) {
+				bulk_in_endpoint[num_bulk_in] = endpoint;
+				++num_bulk_in;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		if (usb_endpoint_is_bulk_out(endpoint)) {
 			/* we found a bulk out endpoint */
 			dbg("found bulk out on endpoint %d", i);
+<<<<<<< HEAD
 			bulk_out_endpoint[num_bulk_out] = endpoint;
 			++num_bulk_out;
+=======
+			if (num_bulk_out < MAX_NUM_PORTS) {
+				bulk_out_endpoint[num_bulk_out] = endpoint;
+				++num_bulk_out;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		if (usb_endpoint_is_int_in(endpoint)) {
 			/* we found a interrupt in endpoint */
 			dbg("found interrupt in on endpoint %d", i);
+<<<<<<< HEAD
 			interrupt_in_endpoint[num_interrupt_in] = endpoint;
 			++num_interrupt_in;
+=======
+			if (num_interrupt_in < MAX_NUM_PORTS) {
+				interrupt_in_endpoint[num_interrupt_in] = endpoint;
+				++num_interrupt_in;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		if (usb_endpoint_is_int_out(endpoint)) {
 			/* we found an interrupt out endpoint */
 			dbg("found interrupt out on endpoint %d", i);
+<<<<<<< HEAD
 			interrupt_out_endpoint[num_interrupt_out] = endpoint;
 			++num_interrupt_out;
+=======
+			if (num_interrupt_out < MAX_NUM_PORTS) {
+				interrupt_out_endpoint[num_interrupt_out] = endpoint;
+				++num_interrupt_out;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 
@@ -826,8 +894,15 @@ int usb_serial_probe(struct usb_interface *interface,
 				if (usb_endpoint_is_int_in(endpoint)) {
 					/* we found a interrupt in endpoint */
 					dbg("found interrupt in for Prolific device on separate interface");
+<<<<<<< HEAD
 					interrupt_in_endpoint[num_interrupt_in] = endpoint;
 					++num_interrupt_in;
+=======
+					if (num_interrupt_in < MAX_NUM_PORTS) {
+						interrupt_in_endpoint[num_interrupt_in] = endpoint;
+						++num_interrupt_in;
+					}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				}
 			}
 		}
@@ -838,7 +913,11 @@ int usb_serial_probe(struct usb_interface *interface,
 		 */
 		if (num_bulk_in == 0 || num_bulk_out == 0) {
 			dev_info(&interface->dev, "PL-2303 hack: descriptors matched but endpoints did not\n");
+<<<<<<< HEAD
 			kfree(serial);
+=======
+			usb_serial_put(serial);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			module_put(type->driver.owner);
 			return -ENODEV;
 		}
@@ -852,7 +931,11 @@ int usb_serial_probe(struct usb_interface *interface,
 		if (num_ports == 0) {
 			dev_err(&interface->dev,
 			    "Generic device with no bulk out, not allowed.\n");
+<<<<<<< HEAD
 			kfree(serial);
+=======
+			usb_serial_put(serial);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			module_put(type->driver.owner);
 			return -EIO;
 		}
@@ -866,6 +949,14 @@ int usb_serial_probe(struct usb_interface *interface,
 			num_ports = type->num_ports;
 	}
 
+<<<<<<< HEAD
+=======
+	if (num_ports > MAX_NUM_PORTS) {
+		dev_warn(&interface->dev, "too many ports requested: %d\n", num_ports);
+		num_ports = MAX_NUM_PORTS;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	serial->num_ports = num_ports;
 	serial->num_bulk_in = num_bulk_in;
 	serial->num_bulk_out = num_bulk_out;
@@ -895,6 +986,10 @@ int usb_serial_probe(struct usb_interface *interface,
 		port->port.ops = &serial_port_ops;
 		port->serial = serial;
 		spin_lock_init(&port->lock);
+<<<<<<< HEAD
+=======
+		init_waitqueue_head(&port->delta_msr_wait);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* Keep this for private driver use for the moment but
 		   should probably go away */
 		INIT_WORK(&port->work, usb_serial_port_work);
@@ -1338,7 +1433,10 @@ static int usb_serial_register(struct usb_serial_driver *driver)
 				driver->description);
 		return -EINVAL;
 	}
+<<<<<<< HEAD
 	driver->usb_driver->supports_autosuspend = 1;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Add this device to our list of devices */
 	mutex_lock(&table_lock);
@@ -1373,7 +1471,11 @@ static void usb_serial_deregister(struct usb_serial_driver *device)
  * @serial_drivers: NULL-terminated array of pointers to drivers to be registered
  *
  * Registers @udriver and all the drivers in the @serial_drivers array.
+<<<<<<< HEAD
  * Automatically fills in the .no_dynamic_id field in @udriver and
+=======
+ * Automatically fills in the .no_dynamic_id and PM fields in @udriver and
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * the .usb_driver field in each serial driver.
  */
 int usb_serial_register_drivers(struct usb_driver *udriver,
@@ -1392,11 +1494,23 @@ int usb_serial_register_drivers(struct usb_driver *udriver,
 	 * the serial drivers are registered, because the probe would
 	 * simply fail for lack of a matching serial driver.
 	 * Therefore save off udriver's id_table until we are all set.
+<<<<<<< HEAD
+=======
+	 *
+	 * Suspend/resume support is implemented in the usb-serial core,
+	 * so fill in the PM-related fields in udriver.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 */
 	saved_id_table = udriver->id_table;
 	udriver->id_table = NULL;
 
 	udriver->no_dynamic_id = 1;
+<<<<<<< HEAD
+=======
+	udriver->supports_autosuspend = 1;
+	udriver->suspend = usb_serial_suspend;
+	udriver->resume = usb_serial_resume;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rc = usb_register(udriver);
 	if (rc)
 		return rc;

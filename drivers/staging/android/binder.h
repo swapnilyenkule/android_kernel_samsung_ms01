@@ -91,6 +91,13 @@ struct binder_version {
 #define	BINDER_SET_CONTEXT_MGR		_IOW('b', 7, int)
 #define	BINDER_THREAD_EXIT		_IOW('b', 8, int)
 #define BINDER_VERSION			_IOWR('b', 9, struct binder_version)
+<<<<<<< HEAD
+=======
+/* { System SW, SA_SAMP */
+// SAMP : Service Process Management
+#define BINDER_GET_PROC_BINDERSTATS	_IOWR('b', 10, int)
+/* System SW, SA_SAMP } */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * NOTE: Two special error codes you should check for when calling

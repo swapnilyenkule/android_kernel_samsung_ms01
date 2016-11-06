@@ -85,7 +85,11 @@ endif
 ifdef CONFIG_X86_X32
 	x32_ld_ok := $(call try-run,\
 			/bin/echo -e '1: .quad 1b' | \
+<<<<<<< HEAD
 			$(CC) $(KBUILD_AFLAGS) -c -xassembler -o "$$TMP" - && \
+=======
+			$(CC) $(KBUILD_AFLAGS) -c -x assembler -o "$$TMP" - && \
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			$(OBJCOPY) -O elf32-x86-64 "$$TMP" "$$TMPO" && \
 			$(LD) -m elf32_x86_64 "$$TMPO" -o "$$TMP",y,n)
         ifeq ($(x32_ld_ok),y)
@@ -206,6 +210,10 @@ archclean:
 	$(Q)rm -rf $(objtree)/arch/i386
 	$(Q)rm -rf $(objtree)/arch/x86_64
 	$(Q)$(MAKE) $(clean)=$(boot)
+<<<<<<< HEAD
+=======
+	$(Q)$(MAKE) $(clean)=arch/x86/tools
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 define archhelp
   echo  '* bzImage      - Compressed kernel image (arch/x86/boot/bzImage)'

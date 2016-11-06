@@ -45,6 +45,13 @@ extern int test_set_oom_score_adj(int new_val);
 
 extern unsigned int oom_badness(struct task_struct *p, struct mem_cgroup *memcg,
 			const nodemask_t *nodemask, unsigned long totalpages);
+<<<<<<< HEAD
+=======
+
+extern int oom_kills_count(void);
+extern void note_oom_kill(void);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int try_set_zonelist_oom(struct zonelist *zonelist, gfp_t gfp_flags);
 extern void clear_zonelist_oom(struct zonelist *zonelist, gfp_t gfp_flags);
 

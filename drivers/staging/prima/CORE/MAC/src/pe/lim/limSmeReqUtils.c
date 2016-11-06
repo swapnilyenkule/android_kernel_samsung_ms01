@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2011-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,11 +42,21 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*
  *
+<<<<<<< HEAD
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limSmeReqUtils.cc contains the utility functions
  * for processing SME request messages.
  * Author:        Chandra Modumudi
@@ -516,7 +531,13 @@ limIsSmeStartBssReqValid(tpAniSirGlobal pMac,
     tANI_U8 valid = true;
 
     PELOG1(limLog(pMac, LOG1,
+<<<<<<< HEAD
            FL("Parsed START_BSS_REQ fields are bssType=%d, channelId=%d, SSID len=%d, rsnIE len=%d, nwType=%d, rateset len=%d"),
+=======
+           FL("Parsed START_BSS_REQ fields are bssType=%s (%d), channelId=%d,"
+              " SSID len=%d, rsnIE len=%d, nwType=%d, rateset len=%d"),
+           lim_BssTypetoString(pStartBssReq->bssType),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
            pStartBssReq->bssType,
            pStartBssReq->channelId,
            pStartBssReq->ssId.length,
@@ -872,10 +893,16 @@ limIsSmeScanReqValid(tpAniSirGlobal pMac, tpSirSmeScanReq pScanReq)
     {
         if (pScanReq->ssId[i].length > SIR_MAC_MAX_SSID_LENGTH)
         {
+<<<<<<< HEAD
+=======
+            limLog(pMac, LOGE,
+                   FL("Requested SSID length > SIR_MAC_MAX_SSID_LENGTH"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             valid = false;
             goto end;    
         }
     }
+<<<<<<< HEAD
     if ((pScanReq->bssType > eSIR_AUTO_MODE) ||
         (limIsGroupAddr(pScanReq->bssId) && !limIsAddrBC(pScanReq->bssId)) ||
         (!(pScanReq->scanType == eSIR_PASSIVE_SCAN || pScanReq->scanType == eSIR_ACTIVE_SCAN)) || 
@@ -883,18 +910,50 @@ limIsSmeScanReqValid(tpAniSirGlobal pMac, tpSirSmeScanReq pScanReq)
     {
         valid = false;
         goto end;
+=======
+    if (pScanReq->bssType > eSIR_AUTO_MODE)
+    {
+        limLog(pMac, LOGE, FL("Invalid BSS Type"));
+        valid = false;
+    }
+    if (limIsGroupAddr(pScanReq->bssId) && !limIsAddrBC(pScanReq->bssId))
+    {
+        valid = false;
+        limLog(pMac, LOGE, FL("BSSID is group addr and is not Broadcast Addr"));
+    }
+    if (!(pScanReq->scanType == eSIR_PASSIVE_SCAN || pScanReq->scanType == eSIR_ACTIVE_SCAN))
+    {
+        valid = false;
+        limLog(pMac, LOGE, FL("Invalid Scan Type"));
+    }
+    if (pScanReq->channelList.numChannels > SIR_MAX_NUM_CHANNELS)
+    {
+        valid = false;
+        limLog(pMac, LOGE, FL("Number of Channels > SIR_MAX_NUM_CHANNELS"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
     /*
     ** check min/max channelTime range
     **/
 
+<<<<<<< HEAD
     if ((pScanReq->scanType == eSIR_ACTIVE_SCAN) && 
         (pScanReq->maxChannelTime < pScanReq->minChannelTime))
     {
         PELOGW(limLog(pMac, LOGW, FL("Max Channel Time < Min Channel Time"));)
         valid = false;
         goto end;
+=======
+    if (valid)
+    {
+        if ((pScanReq->scanType == eSIR_ACTIVE_SCAN) &&
+            (pScanReq->maxChannelTime < pScanReq->minChannelTime))
+        {
+            limLog(pMac, LOGE, FL("Max Channel Time < Min Channel Time"));
+            valid = false;
+        }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
 end:

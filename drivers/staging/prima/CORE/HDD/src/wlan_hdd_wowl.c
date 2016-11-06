@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*============================================================================
@@ -98,7 +110,11 @@ static inline int find_ptrn_len(const char* ptrn)
 static void hdd_wowl_callback( void *pContext, eHalStatus halStatus )
 {
   VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
+<<<<<<< HEAD
       "%s: Return code = (%ld)\n", __func__, halStatus );
+=======
+      "%s: Return code = (%d)", __func__, halStatus );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 #ifdef WLAN_WAKEUP_EVENTS
@@ -107,7 +123,11 @@ static void hdd_wowl_wakeIndication_callback( void *pContext,
 {
   VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: Wake Reason %d",
       __func__, pWakeReasonInd->ulReason );
+<<<<<<< HEAD
   hdd_exit_wowl((hdd_adapter_t *)pContext);
+=======
+  hdd_exit_wowl( (hdd_adapter_t *)pContext, eWOWL_EXIT_WAKEIND );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 #endif
 
@@ -124,7 +144,11 @@ static void dump_hdd_wowl_ptrn(tSirWowlAddBcastPtrn *ptrn)
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: ucPatternMaskSize = 0x%x", __func__, 
       ptrn->ucPatternMaskSize);
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: Pattern: ", __func__);
+<<<<<<< HEAD
   for(i = 0; i<ptrn->ucPatternSize; i++)
+=======
+  for(i = 0; i < ptrn->ucPatternSize; i++)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
      VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO," %02X", ptrn->ucPattern[i]);
   VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO, "%s: PatternMask: ", __func__);
   for(i = 0; i<ptrn->ucPatternMaskSize; i++)
@@ -195,7 +219,11 @@ v_BOOL_t hdd_add_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
        ptrn[5] != WOWL_INTRA_PTRN_TOKENIZER)
     {
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+<<<<<<< HEAD
           "%s: Malformed pattern string. Skip!\n", __func__);
+=======
+          "%s: Malformed pattern string. Skip!", __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       ptrn += len; 
       goto next_ptrn;
     }
@@ -208,11 +236,19 @@ v_BOOL_t hdd_add_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
     localPattern.ucPatternMaskSize = 
       ( hdd_parse_hex( ptrn[3] ) * 0x10 ) + hdd_parse_hex( ptrn[4] );
 
+<<<<<<< HEAD
     if(localPattern.ucPatternSize > WOWL_PTRN_MAX_SIZE ||
        localPattern.ucPatternMaskSize > WOWL_PTRN_MASK_MAX_SIZE)
     {
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
           "%s: Invalid length specified. Skip!\n", __func__);
+=======
+    if(localPattern.ucPatternSize > SIR_WOWL_BCAST_PATTERN_MAX_SIZE ||
+       localPattern.ucPatternMaskSize > WOWL_PTRN_MASK_MAX_SIZE)
+    {
+      VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+          "%s: Invalid length specified. Skip!", __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       ptrn += len; 
       goto next_ptrn;
     }
@@ -222,7 +258,11 @@ v_BOOL_t hdd_add_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
     if(offset >= len || ptrn[offset] != WOWL_INTRA_PTRN_TOKENIZER) 
     {
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+<<<<<<< HEAD
           "%s: Malformed pattern string..skip!\n", __func__);
+=======
+          "%s: Malformed pattern string..skip!", __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       ptrn += len; 
       goto next_ptrn;
     }
@@ -232,7 +272,11 @@ v_BOOL_t hdd_add_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
     if(offset+1 != len) //offset begins with 0
     {
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+<<<<<<< HEAD
           "%s: Malformed pattern string...skip!\n", __func__);
+=======
+          "%s: Malformed pattern string...skip!", __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       ptrn += len; 
       goto next_ptrn;
     }
@@ -280,7 +324,11 @@ v_BOOL_t hdd_add_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
     {
       // Add failed, so invalidate the local storage
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+<<<<<<< HEAD
           "sme_WowlAddBcastPattern failed with error code (%ld)", halStatus );
+=======
+          "sme_WowlAddBcastPattern failed with error code (%d)", halStatus );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       kfree(g_hdd_wowl_ptrns[first_empty_slot]);
       g_hdd_wowl_ptrns[first_empty_slot] = NULL;
     }
@@ -349,24 +397,41 @@ v_BOOL_t hdd_del_wowl_ptrn (hdd_adapter_t *pAdapter, const char * ptrn)
 
 /**============================================================================
   @brief hdd_add_wowl_ptrn_debugfs() - Function which will add a WoW pattern
+<<<<<<< HEAD
   to be used when PBM filtering is enabled and MP filtering is disabled
+=======
+  sent from debugfs interface
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   @param pAdapter       : [in] pointer to the adapter
          pattern_idx    : [in] index of the pattern to be added
          pattern_offset : [in] offset of the pattern in the frame payload
          pattern_buf    : [in] pointer to the pattern hex string to be added
+<<<<<<< HEAD
+=======
+         pattern_mask   : [in] pointer to the pattern mask hex string
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   @return               : FALSE if any errors encountered
                         : TRUE otherwise
   ===========================================================================*/
 v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
+<<<<<<< HEAD
                                    v_U8_t pattern_offset, char *pattern_buf)
+=======
+                                   v_U8_t pattern_offset, char *pattern_buf,
+                                   char *pattern_mask)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
   tSirWowlAddBcastPtrn localPattern;
   eHalStatus halStatus;
   tHalHandle hHal = WLAN_HDD_GET_HAL_CTX(pAdapter);
   v_U8_t sessionId = pAdapter->sessionId;
+<<<<<<< HEAD
   v_U16_t pattern_len, i;
+=======
+  v_U16_t pattern_len, mask_len, i;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   if (pattern_idx > (WOWL_MAX_PTRNS_ALLOWED - 1))
   {
@@ -402,7 +467,17 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
   localPattern.ucPatternId = pattern_idx;
   localPattern.ucPatternByteOffset = pattern_offset;
   localPattern.ucPatternSize = pattern_len;
+<<<<<<< HEAD
 
+=======
+  if (localPattern.ucPatternSize > SIR_WOWL_BCAST_PATTERN_MAX_SIZE) {
+    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+               "%s: WoW pattern size (%d) greater than max (%d)",
+               __func__, localPattern.ucPatternSize,
+               SIR_WOWL_BCAST_PATTERN_MAX_SIZE);
+    return VOS_FALSE;
+  }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   /* Extract the pattern */
   for (i = 0; i < localPattern.ucPatternSize; i++)
   {
@@ -413,6 +488,7 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
     pattern_buf += 2;
   }
 
+<<<<<<< HEAD
   /* Generate bytemask by pattern length */
   for (i = 0; i < (pattern_len >> 3); i++)
     localPattern.ucPatternMask[i] = 0xFF;
@@ -423,6 +499,35 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
   {
     localPattern.ucPatternMask[i] = (1 << (pattern_len % 8)) - 1;
     localPattern.ucPatternMaskSize += 1;
+=======
+  /* Get pattern mask size by pattern length */
+  localPattern.ucPatternMaskSize = pattern_len >> 3;
+  if (pattern_len % 8)
+    localPattern.ucPatternMaskSize += 1;
+
+  mask_len = strlen(pattern_mask);
+  if ((mask_len % 2) || (localPattern.ucPatternMaskSize != (mask_len >> 1)))
+  {
+    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+               "%s: Malformed WoW pattern mask!", __func__);
+
+    return VOS_FALSE;
+  }
+  if (localPattern.ucPatternMaskSize > WOWL_PTRN_MASK_MAX_SIZE) {
+    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+               "%s: WoW pattern mask size (%d) greater than max (%d)",
+               __func__, localPattern.ucPatternMaskSize, WOWL_PTRN_MASK_MAX_SIZE);
+    return VOS_FALSE;
+  }
+  /* Extract the pattern mask */
+  for (i = 0; i < localPattern.ucPatternMaskSize; i++)
+  {
+    localPattern.ucPatternMask[i] =
+      (hdd_parse_hex(pattern_mask[0]) << 4) + hdd_parse_hex(pattern_mask[1]);
+
+    /* Skip to next byte */
+    pattern_mask += 2;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   }
 
   /* Register the pattern downstream */
@@ -431,12 +536,17 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
   if (!HAL_STATUS_SUCCESS(halStatus))
   {
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                "%s: sme_WowlAddBcastPattern failed with error code (%ld).",
+=======
+               "%s: sme_WowlAddBcastPattern failed with error code (%d).",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                __func__, halStatus);
 
     return VOS_FALSE;
   }
 
+<<<<<<< HEAD
   /* Enable WoW immediately after add a pattern. By default,
    * disable magic packet mode and enable pattern byte matching mode. */
   if (!hdd_enter_wowl(pAdapter, 0, 1))
@@ -447,6 +557,8 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
     return VOS_FALSE;
   }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   /* All is good. */
   if (!g_hdd_wowl_ptrns_debugfs[pattern_idx])
   {
@@ -461,6 +573,10 @@ v_BOOL_t hdd_add_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx,
 
 /**============================================================================
   @brief hdd_del_wowl_ptrn_debugfs() - Function which will remove a WoW pattern
+<<<<<<< HEAD
+=======
+  sent from debugfs interface
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   @param pAdapter    : [in] pointer to the adapter
          pattern_idx : [in] index of the pattern to be removed
@@ -499,7 +615,11 @@ v_BOOL_t hdd_del_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx)
   if (!HAL_STATUS_SUCCESS(halStatus))
   {
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                "%s: sme_WowlDelBcastPattern failed with error code (%ld).",
+=======
+               "%s: sme_WowlDelBcastPattern failed with error code (%d).",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                __func__, halStatus);
 
     return VOS_FALSE;
@@ -508,6 +628,7 @@ v_BOOL_t hdd_del_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx)
   g_hdd_wowl_ptrns_debugfs[pattern_idx] = 0;
   g_hdd_wowl_ptrns_count--;
 
+<<<<<<< HEAD
   if (g_hdd_wowl_ptrns_count == 0)
   {
     if (!hdd_exit_wowl(pAdapter))
@@ -519,6 +640,8 @@ v_BOOL_t hdd_del_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx)
     }
   }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   return VOS_TRUE;
 }
 
@@ -532,12 +655,21 @@ v_BOOL_t hdd_del_wowl_ptrn_debugfs(hdd_adapter_t *pAdapter, v_U8_t pattern_idx)
   @return           : FALSE if any errors encountered
                     : TRUE otherwise
   ===========================================================================*/
+<<<<<<< HEAD
 v_BOOL_t hdd_enter_wowl (hdd_adapter_t *pAdapter, v_BOOL_t enable_mp, v_BOOL_t enable_pbm) 
+=======
+v_BOOL_t hdd_enter_wowl (hdd_adapter_t *pAdapter, v_BOOL_t enable_mp, v_BOOL_t enable_pbm)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
   tSirSmeWowlEnterParams wowParams;
   eHalStatus halStatus;
   tHalHandle hHal = WLAN_HDD_GET_HAL_CTX(pAdapter);
 
+<<<<<<< HEAD
+=======
+  vos_mem_zero( &wowParams, sizeof( tSirSmeWowlEnterParams ) );
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   wowParams.ucPatternFilteringEnable = enable_pbm;
   wowParams.ucMagicPktEnable = enable_mp;
   if(enable_mp)
@@ -546,6 +678,17 @@ v_BOOL_t hdd_enter_wowl (hdd_adapter_t *pAdapter, v_BOOL_t enable_mp, v_BOOL_t e
                     &(pAdapter->macAddressCurrent) );
   }
 
+<<<<<<< HEAD
+=======
+#ifdef WLAN_WAKEUP_EVENTS
+  wowParams.ucWoWEAPIDRequestEnable = VOS_TRUE;
+  wowParams.ucWoWEAPOL4WayEnable = VOS_TRUE;
+  wowParams.ucWowNetScanOffloadMatch = VOS_TRUE;
+  wowParams.ucWowGTKRekeyError = VOS_TRUE;
+  wowParams.ucWoWBSSConnLoss = VOS_TRUE;
+#endif // WLAN_WAKEUP_EVENTS
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   // Request to put Libra into WoWL
   halStatus = sme_EnterWowl( hHal, hdd_wowl_callback, 
                              pAdapter,
@@ -561,7 +704,11 @@ v_BOOL_t hdd_enter_wowl (hdd_adapter_t *pAdapter, v_BOOL_t enable_mp, v_BOOL_t e
     {
       // We failed to enter WoWL
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR, 
+<<<<<<< HEAD
           "sme_EnterWowl failed with error code (%ld)", halStatus );
+=======
+          "sme_EnterWowl failed with error code (%d)", halStatus );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       return VOS_FALSE;
     }
   }
@@ -571,19 +718,36 @@ v_BOOL_t hdd_enter_wowl (hdd_adapter_t *pAdapter, v_BOOL_t enable_mp, v_BOOL_t e
 /**============================================================================
   @brief hdd_exit_wowl() - Function which will disable WoWL
 
+<<<<<<< HEAD
   @return           : FALSE if any errors encountered
                     : TRUE otherwise
   ===========================================================================*/
 v_BOOL_t hdd_exit_wowl (hdd_adapter_t*pAdapter) 
+=======
+  @param wowlExitSrc: To know is wowl exiting because of wakeup pkt or user
+                      explicitly disabling WoWL
+  @return           : FALSE if any errors encountered
+                    : TRUE otherwise
+  ===========================================================================*/
+v_BOOL_t hdd_exit_wowl (hdd_adapter_t*pAdapter, tWowlExitSource wowlExitSrc)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
   tHalHandle hHal = WLAN_HDD_GET_HAL_CTX(pAdapter);
   eHalStatus halStatus;
 
+<<<<<<< HEAD
   halStatus = sme_ExitWowl( hHal );
   if ( !HAL_STATUS_SUCCESS( halStatus ) )
   {
     VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
       "sme_ExitWowl failed with error code (%ld)", halStatus );
+=======
+  halStatus = sme_ExitWowl( hHal, wowlExitSrc );
+  if ( !HAL_STATUS_SUCCESS( halStatus ) )
+  {
+    VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
+      "sme_ExitWowl failed with error code (%d)", halStatus );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     return VOS_FALSE;
   }
 

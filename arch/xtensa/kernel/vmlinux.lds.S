@@ -83,7 +83,10 @@ SECTIONS
 
   _text = .;
   _stext = .;
+<<<<<<< HEAD
   _ftext = .;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   .text :
   {
@@ -112,7 +115,11 @@ SECTIONS
   EXCEPTION_TABLE(16)
   /* Data section */
 
+<<<<<<< HEAD
   _fdata = .;
+=======
+  _sdata = .;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   RW_DATA_SECTION(XCHAL_ICACHE_LINESIZE, PAGE_SIZE, THREAD_SIZE)
   _edata = .;
 

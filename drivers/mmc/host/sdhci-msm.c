@@ -2,7 +2,11 @@
  * drivers/mmc/host/sdhci-msm.c - Qualcomm MSM SDHCI Platform
  * driver source file
  *
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -916,6 +920,17 @@ retry:
 		memset(data_buf, 0, size);
 		mmc_wait_for_req(mmc, &mrq);
 
+<<<<<<< HEAD
+=======
+		/*
+		 * wait for 146 MCLK cycles for the card to send out the data
+		 * and thus move to TRANS state. As the MCLK would be minimum
+		 * 200MHz when tuning is performed, we need maximum 0.73us
+		 * delay. To be on safer side 1ms delay is given.
+		 */
+		if (cmd.error)
+			usleep_range(1000, 1200);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (!cmd.error && !data.error &&
 			!memcmp(data_buf, tuning_block_pattern, size)) {
 			/* tuning is successful at this tuning point */
@@ -1094,10 +1109,18 @@ static int sdhci_msm_dt_parse_vreg_info(struct device *dev,
 	struct device_node *np = dev->of_node;
 
 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", vreg_name);
+<<<<<<< HEAD
+=======
+#if !defined(CONFIG_SEC_PATEK_PROJECT)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!of_parse_phandle(np, prop_name, 0)) {
 		dev_info(dev, "No vreg data found for %s\n", vreg_name);
 		return ret;
 	}
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	vreg = devm_kzalloc(dev, sizeof(*vreg), GFP_KERNEL);
 	if (!vreg) {
@@ -1105,6 +1128,31 @@ static int sdhci_msm_dt_parse_vreg_info(struct device *dev,
 		ret = -ENOMEM;
 		return ret;
 	}
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_SEC_PATEK_PROJECT)
+	if (!strcmp(dev_name(dev), "msm_sdcc.3")) {
+		if (!strcmp(vreg_name, "vdd")) {
+			vreg->reg = regulator_get(dev, "max77826_ldo10");
+			dev_info(dev, "max77826_ldo10 is for %s\n", vreg_name);
+		}
+		else if (!strcmp(vreg_name, "vdd-io")) {
+			vreg->reg = regulator_get(dev, "max77826_ldo4");
+			dev_info(dev, "max77826_ldo4 is for %s\n", vreg_name);
+		}
+
+		if (IS_ERR(vreg->reg))
+			vreg->reg = NULL;
+
+		if (!vreg->reg)
+			dev_err(dev, "Settng Regulator for %s is failed\n", vreg_name);
+		else if (!strcmp(vreg_name, "vdd-io")) {
+			vreg->set_voltage_sup = true;
+			regulator_set_voltage(vreg->reg, 2950000, 2950000);
+		}
+	}
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	vreg->name = vreg_name;
 
@@ -1825,6 +1873,14 @@ static int sdhci_msm_vreg_enable(struct sdhci_msm_reg_data *vreg)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	if (!vreg->reg) {
+		pr_err("%s: %s Cannot find Regulator\n", __func__, vreg->name);
+		return ret;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #if defined(CONFIG_ARCH_MSM8974)\
 	|| defined(CONFIG_MACH_FRESCOLTESKT)||defined(CONFIG_MACH_FRESCOLTEKTT)||defined(CONFIG_MACH_FRESCOLTELGT)
 	if (vreg->rpm_reg) {
@@ -1865,6 +1921,14 @@ static int sdhci_msm_vreg_disable(struct sdhci_msm_reg_data *vreg)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	if (!vreg->reg) {
+		pr_err("%s: %s Cannot find Regulator\n", __func__, vreg->name);
+		return ret;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Never disable regulator marked as always_on */
 	if (vreg->is_enabled && !vreg->is_always_on) {
 		ret = regulator_disable(vreg->reg);
@@ -2330,7 +2394,11 @@ static void sdhci_msm_check_power_status(struct sdhci_host *host, u32 req_type)
 	 * Handle I/O voltage switch here if this request is for SDC3. 
 	 * SDC3 Don't use PWR_IRQ.
 	 */
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_K_PROJECT
+=======
+#if defined(CONFIG_SEC_K_PROJECT)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (strcmp(host->hw_name, "msm_sdcc.3") == 0 && !done && system_rev >= 6) { 
 		if (req_type == REQ_IO_HIGH) {
 			/* Switch voltage High */
@@ -2350,6 +2418,29 @@ static void sdhci_msm_check_power_status(struct sdhci_host *host, u32 req_type)
 			done = true;
 		}
 	} 
+<<<<<<< HEAD
+=======
+#elif defined(CONFIG_SEC_PATEK_PROJECT)
+	if (strcmp(host->hw_name, "msm_sdcc.3") == 0 && !done) { 
+		if (req_type == REQ_IO_HIGH) {
+			/* Switch voltage High */
+			if (sdhci_msm_set_vdd_io_vol(msm_host->pdata, VDD_IO_HIGH, 0)) {
+				pr_err("%s: %s: Voltage Switch to High is Fail\n", mmc_hostname(host->mmc), __func__);
+				return;
+			}
+			msm_host->curr_io_level = REQ_IO_HIGH;
+			done = true;
+		} else if (req_type == REQ_IO_LOW) { 
+			/* Switch voltage Low */
+			if (sdhci_msm_set_vdd_io_vol(msm_host->pdata, VDD_IO_LOW, 0)) {
+				pr_err("%s: %s: Voltage Switch to Low is Fail\n", mmc_hostname(host->mmc), __func__);
+				return;
+			}
+			msm_host->curr_io_level = REQ_IO_LOW;
+			done = true;
+		}
+	} 
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 	/*
 	 * This is needed here to hanlde a case where IRQ gets
@@ -2566,6 +2657,15 @@ static void sdhci_msm_set_clock(struct sdhci_host *host, unsigned int clock)
 	bool curr_pwrsave;
 
 	if (!clock) {
+<<<<<<< HEAD
+=======
+		/*
+		 * disable pwrsave to ensure clock is not auto-gated until
+		 * the rate is >400KHz (initialization complete).
+		 */
+		writel_relaxed(readl_relaxed(host->ioaddr + CORE_VENDOR_SPEC) &
+			~CORE_CLK_PWRSAVE, host->ioaddr + CORE_VENDOR_SPEC);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		sdhci_msm_prepare_clocks(host, false);
 		host->clock = clock;
 		return;
@@ -3129,7 +3229,11 @@ static int __devinit sdhci_msm_probe(struct platform_device *pdev)
 	 * max. 1ms for reset completion.
 	 */
 	ret = readl_poll_timeout(msm_host->core_mem + CORE_POWER,
+<<<<<<< HEAD
 			pwr, !(pwr & CORE_SW_RST), 100, 10);
+=======
+			pwr, !(pwr & CORE_SW_RST), 10, 1000);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (ret) {
 		dev_err(&pdev->dev, "reset failed (%d)\n", ret);
@@ -3172,7 +3276,10 @@ static int __devinit sdhci_msm_probe(struct platform_device *pdev)
 	host->quirks |= SDHCI_QUIRK_SINGLE_POWER_WRITE;
 	host->quirks |= SDHCI_QUIRK_CAP_CLOCK_BASE_BROKEN;
 	host->quirks2 |= SDHCI_QUIRK2_ALWAYS_USE_BASE_CLOCK;
+<<<<<<< HEAD
 	host->quirks2 |= SDHCI_QUIRK2_IGNORE_CMDCRC_FOR_TUNING;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	host->quirks2 |= SDHCI_QUIRK2_USE_MAX_DISCARD_SIZE;
 	host->quirks2 |= SDHCI_QUIRK2_IGNORE_DATATOUT_FOR_R1BCMD;
 	host->quirks2 |= SDHCI_QUIRK2_BROKEN_PRESET_VALUE;
@@ -3245,6 +3352,7 @@ static int __devinit sdhci_msm_probe(struct platform_device *pdev)
 	msm_host->mmc->caps2 |= msm_host->pdata->caps2;
 	msm_host->mmc->caps2 |= (MMC_CAP2_BOOTPART_NOACC |
 				MMC_CAP2_DETECT_ON_ERR);
+<<<<<<< HEAD
 	//msm_host->mmc->caps2 |= MMC_CAP2_SANITIZE;
 	msm_host->mmc->caps2 |= MMC_CAP2_CACHE_CTRL;
 	msm_host->mmc->caps2 |= MMC_CAP2_POWEROFF_NOTIFY;
@@ -3254,6 +3362,13 @@ static int __devinit sdhci_msm_probe(struct platform_device *pdev)
 	msm_host->mmc->caps2 |= MMC_CAP2_CLK_SCALE;
 #endif
 	//msm_host->mmc->caps2 |= MMC_CAP2_CORE_RUNTIME_PM;
+=======
+	/* msm_host->mmc->caps2 |= MMC_CAP2_SANITIZE; */
+	msm_host->mmc->caps2 |= MMC_CAP2_CACHE_CTRL;
+	msm_host->mmc->caps2 |= MMC_CAP2_POWEROFF_NOTIFY;
+	/* msm_host->mmc->caps2 &= ~MMC_CAP2_CLK_SCALE; */ /* Disable CLK_SCALE at L UPG */
+	/* msm_host->mmc->caps2 |= MMC_CAP2_CORE_RUNTIME_PM; */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	msm_host->mmc->caps2 |= MMC_CAP2_ASYNC_SDIO_IRQ_4BIT_MODE;
 	msm_host->mmc->caps2 |= MMC_CAP2_CORE_PM;
@@ -3304,7 +3419,11 @@ static int __devinit sdhci_msm_probe(struct platform_device *pdev)
 	/* SYSFS about SD Card Detection by soonil.lim */
 #if defined(CONFIG_MACH_SERRANO)
 	if (t_flash_detect_dev == NULL && !strcmp(host->hw_name, "msm_sdcc.3")) {
+<<<<<<< HEAD
 #elif defined(CONFIG_SEC_ATLANTIC_PROJECT)
+=======
+#elif defined(CONFIG_SEC_ATLANTIC_PROJECT) || defined(CONFIG_MACH_JSGLTE_CHN_CMCC)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (t_flash_detect_dev == NULL && !strcmp(host->hw_name, "msm_sdcc.2")) {
 #else
 	if (t_flash_detect_dev == NULL && gpio_is_valid(msm_host->pdata->status_gpio)) {

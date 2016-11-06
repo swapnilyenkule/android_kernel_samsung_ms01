@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #if !defined( __I_VOS_PACKET_H )
@@ -110,6 +122,12 @@
 // dereferenced is really referencing a struct vos_pkt_t
 #define VPKT_MAGIC_NUMBER 0x56504B54  /* VPKT in ASCII */
 
+<<<<<<< HEAD
+=======
+// while allocating the skb->data is cache aligned, so the memory allocated
+// is more than VPKT_SIZE_BUFFER
+#define VPKT_SIZE_BUFFER_ALIGNED SKB_DATA_ALIGN(VPKT_SIZE_BUFFER)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*--------------------------------------------------------------------------
   Type declarations
   ------------------------------------------------------------------------*/
@@ -194,6 +212,13 @@ typedef struct vos_pkt_context_s
    // We keep a separate count of the number of RX_RAW packets
    // waiting to be replenished
    v_SIZE_t rxReplenishListCount;
+<<<<<<< HEAD
+=======
+
+   // Count for the number of packets that could not be replenished
+   // because the memory allocation API failed
+   v_SIZE_t rxReplenishFailCount;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    //Existing list_size opearation traverse the list. Too slow for data path.
    //Add the field for a faster rx path
    v_SIZE_t rxRawFreeListCount;

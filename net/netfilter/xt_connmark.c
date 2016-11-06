@@ -5,6 +5,10 @@
  *	by Henrik Nordstrom <hno@marasystems.com>
  *	Copyright © CC Computer Consultants GmbH, 2007 - 2008
  *	Jan Engelhardt <jengelh@medozas.de>
+<<<<<<< HEAD
+=======
+ *      Copyright (c) 2015 Samsung Electronics Co., Ltd.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +24,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+<<<<<<< HEAD
+=======
+/*
+ *  Changes:
+ *  KwnagHyun Kim <kh0304.kim@samsung.com> 2015/07/08
+ *  Baesung Park  <baesung.park@samsung.com> 2015/07/08
+ *  Vignesh Saravanaperumal <vignesh1.s@samsung.com> 2015/07/08
+ *    Add codes to share UID/PID information
+ *
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <linux/module.h>
 #include <linux/skbuff.h>
@@ -28,6 +43,16 @@
 #include <linux/netfilter/x_tables.h>
 #include <linux/netfilter/xt_connmark.h>
 
+<<<<<<< HEAD
+=======
+// ------------- START of KNOX_VPN ------------------//
+#include <linux/types.h>
+#include <linux/tcp.h>
+#include <linux/ip.h>
+#include <net/ip.h>
+// ------------- END of KNOX_VPN -------------------//
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 MODULE_AUTHOR("Henrik Nordstrom <hno@marasystems.com>");
 MODULE_DESCRIPTION("Xtables: connection mark operations");
 MODULE_LICENSE("GPL");
@@ -36,6 +61,69 @@ MODULE_ALIAS("ip6t_CONNMARK");
 MODULE_ALIAS("ipt_connmark");
 MODULE_ALIAS("ip6t_connmark");
 
+<<<<<<< HEAD
+=======
+// ------------- START of KNOX_VPN ------------------//
+
+/* KNOX framework uses mark value 100 to 500
+ * when the special meta data is added
+ * This will indicate to the kernel code that
+ * it needs to append meta data to the packets
+ */
+
+#define META_MARK_BASE_LOWER 100
+#define META_MARK_BASE_UPPER 500
+
+/* Structure to hold metadata values
+ * intended for VPN clients to make
+ * more intelligent decisions
+ * when the KNOX meta mark
+ * feature is enabled
+ */
+
+struct knox_meta_param {
+	uid_t uid;
+	pid_t pid;
+};
+
+static unsigned int knoxvpn_uidpid(struct sk_buff *skb, u_int32_t newmark)
+{
+	int szMetaData;
+	struct skb_shared_info *knox_shinfo = NULL;
+
+	szMetaData = sizeof(struct knox_meta_param);
+	if (skb != NULL) {
+		knox_shinfo = skb_shinfo(skb);
+	} else {
+		pr_err("KNOX: NULL SKB - no KNOX processing");
+		return -1;
+	}
+
+	if( skb->sk == NULL) {
+		pr_err("KNOX: skb->sk value is null");
+		return -1;
+	}
+
+	if( knox_shinfo == NULL) {
+		pr_err("KNOX: knox_shinfo is null");
+		return -1;
+	}
+
+	if (newmark < META_MARK_BASE_LOWER || newmark > META_MARK_BASE_UPPER) {
+		pr_err("KNOX: The mark is out of range");
+		return -1;
+	} else {
+		knox_shinfo->uid = skb->sk->knox_uid;
+		knox_shinfo->pid = skb->sk->knox_pid;
+		knox_shinfo->knox_mark = newmark;
+	}
+
+	return 0;
+}
+
+// ------------- END of KNOX_VPN -------------------//
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static unsigned int
 connmark_tg(struct sk_buff *skb, const struct xt_action_param *par)
 {
@@ -68,9 +156,17 @@ connmark_tg(struct sk_buff *skb, const struct xt_action_param *par)
 		newmark = (skb->mark & ~info->nfmask) ^
 		          (ct->mark & info->ctmask);
 		skb->mark = newmark;
+<<<<<<< HEAD
 		break;
 	}
 
+=======
+// ------------- START of KNOX_VPN -----------------//
+		knoxvpn_uidpid(skb, newmark);
+// ------------- END of KNOX_VPN -------------------//
+		break;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return XT_CONTINUE;
 }
 

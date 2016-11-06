@@ -12,7 +12,10 @@
 #include <linux/utsname.h>
 #include <generated/utsrelease.h>
 #include <linux/version.h>
+<<<<<<< HEAD
 #include <linux/proc_fs.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #ifndef CONFIG_KALLSYMS
 #define version(a) Version_ ## a
@@ -35,7 +38,10 @@ struct uts_namespace init_uts_ns = {
 		.domainname	= UTS_DOMAINNAME,
 	},
 	.user_ns = &init_user_ns,
+<<<<<<< HEAD
 	.proc_inum = PROC_UTS_INIT_INO,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 EXPORT_SYMBOL_GPL(init_uts_ns);
 

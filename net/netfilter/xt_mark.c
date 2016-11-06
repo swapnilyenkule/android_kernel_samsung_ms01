@@ -16,6 +16,10 @@
 #include <linux/netfilter/xt_mark.h>
 #include <linux/netfilter/x_tables.h>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Marc Boucher <marc@mbsi.ca>");
 MODULE_DESCRIPTION("Xtables: packet mark operations");
@@ -28,8 +32,13 @@ static unsigned int
 mark_tg(struct sk_buff *skb, const struct xt_action_param *par)
 {
 	const struct xt_mark_tginfo2 *info = par->targinfo;
+<<<<<<< HEAD
 
 	skb->mark = (skb->mark & ~info->mask) ^ info->mark;
+=======
+	skb->mark = (skb->mark & ~info->mask) ^ info->mark;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return XT_CONTINUE;
 }
 

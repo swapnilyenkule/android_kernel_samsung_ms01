@@ -247,7 +247,11 @@ rproc_load_segments(struct rproc *rproc, const u8 *elf_data, size_t len)
 		}
 
 		if (offset + filesz > len) {
+<<<<<<< HEAD
 			dev_err(dev, "truncated fw: need 0x%x avail 0x%x\n",
+=======
+			dev_err(dev, "truncated fw: need 0x%x avail 0x%zx\n",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					offset + filesz, len);
 			ret = -EINVAL;
 			break;
@@ -643,6 +647,7 @@ static int rproc_handle_carveout(struct rproc *rproc,
 	dev_dbg(dev, "carveout rsc: da %x, pa %x, len %x, flags %x\n",
 			rsc->da, rsc->pa, rsc->len, rsc->flags);
 
+<<<<<<< HEAD
 	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
 	if (!mapping) {
 		dev_err(dev, "kzalloc mapping failed\n");
@@ -654,6 +659,12 @@ static int rproc_handle_carveout(struct rproc *rproc,
 		dev_err(dev, "kzalloc carveout failed\n");
 		ret = -ENOMEM;
 		goto free_mapping;
+=======
+	carveout = kzalloc(sizeof(*carveout), GFP_KERNEL);
+	if (!carveout) {
+		dev_err(dev, "kzalloc carveout failed\n");
+		return -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	va = dma_alloc_coherent(dev, rsc->len, &dma, GFP_KERNEL);
@@ -683,11 +694,25 @@ static int rproc_handle_carveout(struct rproc *rproc,
 	 * physical address in this case.
 	 */
 	if (rproc->domain) {
+<<<<<<< HEAD
+=======
+		mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
+		if (!mapping) {
+			dev_err(dev, "kzalloc mapping failed\n");
+			ret = -ENOMEM;
+			goto dma_free;
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ret = iommu_map(rproc->domain, rsc->da, dma, rsc->len,
 								rsc->flags);
 		if (ret) {
 			dev_err(dev, "iommu_map failed: %d\n", ret);
+<<<<<<< HEAD
 			goto dma_free;
+=======
+			goto free_mapping;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		/*
@@ -728,12 +753,20 @@ static int rproc_handle_carveout(struct rproc *rproc,
 
 	return 0;
 
+<<<<<<< HEAD
+=======
+free_mapping:
+	kfree(mapping);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 dma_free:
 	dma_free_coherent(dev, rsc->len, va, dma);
 free_carv:
 	kfree(carveout);
+<<<<<<< HEAD
 free_mapping:
 	kfree(mapping);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -934,7 +967,11 @@ static void rproc_resource_cleanup(struct rproc *rproc)
 		unmapped = iommu_unmap(rproc->domain, entry->da, entry->len);
 		if (unmapped != entry->len) {
 			/* nothing much to do besides complaining */
+<<<<<<< HEAD
 			dev_err(dev, "failed to unmap %u/%u\n", entry->len,
+=======
+			dev_err(dev, "failed to unmap %u/%zu\n", entry->len,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 								unmapped);
 		}
 
@@ -1020,7 +1057,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
 
 	ehdr = (struct elf32_hdr *)fw->data;
 
+<<<<<<< HEAD
 	dev_info(dev, "Booting fw image %s, size %d\n", name, fw->size);
+=======
+	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * if enabling an IOMMU isn't relevant for this rproc, this is
@@ -1041,8 +1082,15 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
 
 	/* look for the resource table */
 	table = rproc_find_rsc_table(rproc, fw->data, fw->size, &tablesz);
+<<<<<<< HEAD
 	if (!table)
 		goto clean_up;
+=======
+	if (!table) {
+		ret = -EINVAL;
+		goto clean_up;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* handle fw resources which are required to boot rproc */
 	ret = rproc_handle_boot_rsc(rproc, table, tablesz);

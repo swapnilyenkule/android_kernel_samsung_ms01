@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef WLAN_QCT_TL_HOSUPPORT_H
@@ -82,6 +94,30 @@ when        who    what, where, why
 ===========================================================================*/
 #include "wlan_qct_tl.h" 
 
+<<<<<<< HEAD
+=======
+#ifdef WLAN_FEATURE_LINK_LAYER_STATS
+/*==========================================================================
+
+   FUNCTION
+
+   DESCRIPTION
+
+   PARAMETERS
+
+   RETURN VALUE
+
+============================================================================*/
+VOS_STATUS WLANTL_HSGetDataRSSI
+(
+   v_PVOID_t        pAdapter,
+   v_PVOID_t        pBDHeader,
+   v_U8_t           STAid,
+   v_S7_t          *currentAvgRSSI
+);
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #if defined WLAN_FEATURE_NEIGHBOR_ROAMING
 /*----------------------------------------------------------------------------
  * Include Files
@@ -318,6 +354,10 @@ VOS_STATUS WLANTL_StatHandleTXFrame
    WLANTL_MetaInfoType *txMetaInfo
 );
 
+<<<<<<< HEAD
 #endif //FEATURE_WLAN_GEN6_ROAMING
+=======
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif /* WLAN_QCT_TL_HOSUPPORT_H */

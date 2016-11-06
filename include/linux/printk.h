@@ -101,9 +101,15 @@ asmlinkage __printf(1, 2) __cold
 int printk(const char *fmt, ...);
 
 /*
+<<<<<<< HEAD
  * Special printk facility for scheduler use only, _DO_NOT_USE_ !
  */
 __printf(1, 2) __cold int printk_sched(const char *fmt, ...);
+=======
+ * Special printk facility for scheduler/timekeeping use only, _DO_NOT_USE_ !
+ */
+__printf(1, 2) __cold int printk_deferred(const char *fmt, ...);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * Please don't use printk_ratelimit(), because it shares ratelimiting state
@@ -133,7 +139,11 @@ int printk(const char *s, ...)
 	return 0;
 }
 static inline __printf(1, 2) __cold
+<<<<<<< HEAD
 int printk_sched(const char *s, ...)
+=======
+int printk_deferred(const char *s, ...)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	return 0;
 }

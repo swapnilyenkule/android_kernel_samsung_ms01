@@ -98,6 +98,17 @@ void panic(const char *fmt, ...)
 	local_irq_disable();
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Disable local interrupts. This will prevent panic_smp_self_stop
+	 * from deadlocking the first cpu that invokes the panic, since
+	 * there is nothing to prevent an interrupt handler (that runs
+	 * after the panic_lock is acquired) from invoking panic again.
+	 */
+	local_irq_disable();
+
+	/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * It's possible to come here directly from a panic-assertion and
 	 * not have preempt disabled. Some functions called from here want
 	 * preempt to be disabled. No point enabling it later though...
@@ -138,8 +149,11 @@ void panic(const char *fmt, ...)
 	 */
 	crash_kexec(NULL);
 
+<<<<<<< HEAD
 	kmsg_dump(KMSG_DUMP_PANIC);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * Note smp_send_stop is the usual smp shutdown function, which
 	 * unfortunately means it may not be hardened to work in a panic
@@ -147,6 +161,11 @@ void panic(const char *fmt, ...)
 	 */
 	smp_send_stop();
 
+<<<<<<< HEAD
+=======
+	kmsg_dump(KMSG_DUMP_PANIC);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
 
 	bust_spinlocks(0);

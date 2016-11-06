@@ -390,7 +390,11 @@ static struct msg_group_t all_groups[] = {
 
 static const  int num_groups = sizeof(all_groups) / sizeof(struct msg_group_t);
 
+<<<<<<< HEAD
 char *msg_get(enum msg_index_t index)
+=======
+char *spk_msg_get(enum msg_index_t index)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	char *ch;
 
@@ -540,7 +544,11 @@ static int fmt_validate(char *template, char *user)
  * -EINVAL -  Invalid format specifiers in formatted message or illegal index.
  * -ENOMEM -  Unable to allocate memory.
 */
+<<<<<<< HEAD
 ssize_t msg_set(enum msg_index_t index, char *text, size_t length)
+=======
+ssize_t spk_msg_set(enum msg_index_t index, char *text, size_t length)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int rc = 0;
 	char *newstr = NULL;
@@ -575,7 +583,11 @@ ssize_t msg_set(enum msg_index_t index, char *text, size_t length)
  * Find a message group, given its name.  Return a pointer to the structure
  * if found, or NULL otherwise.
 */
+<<<<<<< HEAD
 struct msg_group_t *find_msg_group(const char *group_name)
+=======
+struct msg_group_t *spk_find_msg_group(const char *group_name)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct msg_group_t *group = NULL;
 	int i;
@@ -589,7 +601,11 @@ struct msg_group_t *find_msg_group(const char *group_name)
 	return group;
 }
 
+<<<<<<< HEAD
 void reset_msg_group(struct msg_group_t *group)
+=======
+void spk_reset_msg_group(struct msg_group_t *group)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	unsigned long flags;
 	enum msg_index_t i;
@@ -605,14 +621,22 @@ void reset_msg_group(struct msg_group_t *group)
 }
 
 /* Called at initialization time, to establish default messages. */
+<<<<<<< HEAD
 void initialize_msgs(void)
+=======
+void spk_initialize_msgs(void)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	memcpy(speakup_msgs, speakup_default_msgs,
 		sizeof(speakup_default_msgs));
 }
 
 /* Free user-supplied strings when module is unloaded: */
+<<<<<<< HEAD
 void free_user_msgs(void)
+=======
+void spk_free_user_msgs(void)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	enum msg_index_t index;
 	unsigned long flags;

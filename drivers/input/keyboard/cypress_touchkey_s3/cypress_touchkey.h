@@ -128,7 +128,10 @@ struct cypress_touchkey_info {
 #if defined(CONFIG_GLOVE_TOUCH)
 	int glove_value;
 #endif
+<<<<<<< HEAD
 	atomic_t keypad_enable;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 };
 

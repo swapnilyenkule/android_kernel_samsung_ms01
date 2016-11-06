@@ -39,7 +39,11 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
 	if (!csize)
 		return 0;
 
+<<<<<<< HEAD
 	vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
+=======
+	vaddr = ioremap(__pfn_to_phys(pfn), PAGE_SIZE);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!vaddr)
 		return -ENOMEM;
 

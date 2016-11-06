@@ -187,8 +187,13 @@ fill_with_dentries(void *buf, const char *name, int namelen, loff_t offset,
 	if (dbuf->count == ARRAY_SIZE(dbuf->dentries))
 		return -ENOSPC;
 
+<<<<<<< HEAD
 	if (name[0] == '.' && (name[1] == '\0' ||
 			       (name[1] == '.' && name[2] == '\0')))
+=======
+	if (name[0] == '.' && (namelen < 2 ||
+			       (namelen == 2 && name[1] == '.')))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 
 	dentry = lookup_one_len(name, dbuf->xadir, namelen);

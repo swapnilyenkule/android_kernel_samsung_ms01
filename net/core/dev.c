@@ -1056,6 +1056,11 @@ rollback:
  */
 int dev_set_alias(struct net_device *dev, const char *alias, size_t len)
 {
+<<<<<<< HEAD
+=======
+	char *new_ifalias;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ASSERT_RTNL();
 
 	if (len >= IFALIASZ)
@@ -1069,9 +1074,16 @@ int dev_set_alias(struct net_device *dev, const char *alias, size_t len)
 		return 0;
 	}
 
+<<<<<<< HEAD
 	dev->ifalias = krealloc(dev->ifalias, len + 1, GFP_KERNEL);
 	if (!dev->ifalias)
 		return -ENOMEM;
+=======
+	new_ifalias = krealloc(dev->ifalias, len + 1, GFP_KERNEL);
+	if (!new_ifalias)
+		return -ENOMEM;
+	dev->ifalias = new_ifalias;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	strlcpy(dev->ifalias, alias, len+1);
 	return len;
@@ -1173,6 +1185,10 @@ static int __dev_open(struct net_device *dev)
 		net_dmaengine_get();
 		dev_set_rx_mode(dev);
 		dev_activate(dev);
+<<<<<<< HEAD
+=======
+		add_device_randomness(dev->dev_addr, dev->addr_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	return ret;
@@ -1478,7 +1494,10 @@ void net_enable_timestamp(void)
 		return;
 	}
 #endif
+<<<<<<< HEAD
 	WARN_ON(in_interrupt());
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	static_key_slow_inc(&netstamp_needed);
 }
 EXPORT_SYMBOL(net_enable_timestamp);
@@ -1625,6 +1644,10 @@ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
 	skb->mark = 0;
 	secpath_reset(skb);
 	nf_reset(skb);
+<<<<<<< HEAD
+=======
+	nf_reset_trace(skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return netif_rx(skb);
 }
 EXPORT_SYMBOL_GPL(dev_forward_skb);
@@ -1637,6 +1660,22 @@ static inline int deliver_skb(struct sk_buff *skb,
 	return pt_prev->func(skb, skb->dev, pt_prev, orig_dev);
 }
 
+<<<<<<< HEAD
+=======
+static inline bool skb_loop_sk(struct packet_type *ptype, struct sk_buff *skb)
+{
+	if (!ptype->af_packet_priv || !skb->sk)
+		return false;
+
+	if (ptype->id_match)
+		return ptype->id_match(ptype, skb->sk);
+	else if ((struct sock *)ptype->af_packet_priv == skb->sk)
+		return true;
+
+	return false;
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  *	Support routine. Sends outgoing frames to any network
  *	taps currently in use.
@@ -1654,8 +1693,12 @@ static void dev_queue_xmit_nit(struct sk_buff *skb, struct net_device *dev)
 		 * they originated from - MvS (miquels@drinkel.ow.org)
 		 */
 		if ((ptype->dev == dev || !ptype->dev) &&
+<<<<<<< HEAD
 		    (ptype->af_packet_priv == NULL ||
 		     (struct sock *)ptype->af_packet_priv != skb->sk)) {
+=======
+		    (!skb_loop_sk(ptype, skb))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (pt_prev) {
 				deliver_skb(skb2, pt_prev, skb->dev);
 				pt_prev = ptype;
@@ -1879,6 +1922,12 @@ static void skb_warn_bad_offload(const struct sk_buff *skb)
 	struct net_device *dev = skb->dev;
 	const char *driver = "";
 
+<<<<<<< HEAD
+=======
+	if (!net_ratelimit())
+		return;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (dev && dev->dev.parent)
 		driver = dev_driver_string(dev->dev.parent);
 
@@ -2091,6 +2140,7 @@ static int dev_gso_segment(struct sk_buff *skb, netdev_features_t features)
 	return 0;
 }
 
+<<<<<<< HEAD
 /*
  * Try to orphan skb early, right before transmission by the device.
  * We cannot orphan skb if tx timestamp is requested or the sk-reference
@@ -2110,6 +2160,8 @@ static inline void skb_orphan_try(struct sk_buff *skb)
 	}
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static bool can_checksum_protocol(netdev_features_t features, __be16 protocol)
 {
 	return ((features & NETIF_F_GEN_CSUM) ||
@@ -2124,7 +2176,12 @@ static bool can_checksum_protocol(netdev_features_t features, __be16 protocol)
 static netdev_features_t harmonize_features(struct sk_buff *skb,
 	__be16 protocol, netdev_features_t features)
 {
+<<<<<<< HEAD
 	if (!can_checksum_protocol(features, protocol)) {
+=======
+	if (skb->ip_summed != CHECKSUM_NONE &&
+	    !can_checksum_protocol(features, protocol)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		features &= ~NETIF_F_ALL_CSUM;
 		features &= ~NETIF_F_SG;
 	} else if (illegal_highdma(skb->dev, skb)) {
@@ -2139,12 +2196,26 @@ netdev_features_t netif_skb_features(struct sk_buff *skb)
 	__be16 protocol = skb->protocol;
 	netdev_features_t features = skb->dev->features;
 
+<<<<<<< HEAD
 	if (protocol == htons(ETH_P_8021Q)) {
 		struct vlan_ethhdr *veh = (struct vlan_ethhdr *)skb->data;
 		protocol = veh->h_vlan_encapsulated_proto;
 	} else if (!vlan_tx_tag_present(skb)) {
 		return harmonize_features(skb, protocol, features);
 	}
+=======
+	if (skb_shinfo(skb)->gso_segs > skb->dev->gso_max_segs)
+		features &= ~NETIF_F_GSO_MASK;
+
+	if (!vlan_tx_tag_present(skb)) {
+		if (unlikely(protocol == htons(ETH_P_8021Q))) {
+			struct vlan_ethhdr *veh = (struct vlan_ethhdr *)skb->data;
+			protocol = veh->h_vlan_encapsulated_proto;
+		} else {
+			return harmonize_features(skb, protocol, features);
+		}
+        }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	features &= (skb->dev->vlan_features | NETIF_F_HW_VLAN_TX);
 
@@ -2166,7 +2237,11 @@ EXPORT_SYMBOL(netif_skb_features);
  *	   support DMA from it.
  */
 static inline int skb_needs_linearize(struct sk_buff *skb,
+<<<<<<< HEAD
 				      int features)
+=======
+				      netdev_features_t features)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	return skb_is_nonlinear(skb) &&
 			((skb_has_frag_list(skb) &&
@@ -2195,8 +2270,11 @@ int dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
 		if (!list_empty(&ptype_all))
 			dev_queue_xmit_nit(skb, dev);
 
+<<<<<<< HEAD
 		skb_orphan_try(skb);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		features = netif_skb_features(skb);
 
 		if (vlan_tx_tag_present(skb) &&
@@ -2306,7 +2384,11 @@ u16 __skb_tx_hash(const struct net_device *dev, const struct sk_buff *skb,
 	if (skb->sk && skb->sk->sk_hash)
 		hash = skb->sk->sk_hash;
 	else
+<<<<<<< HEAD
 		hash = (__force u16) skb->protocol ^ skb->rxhash;
+=======
+		hash = (__force u16) skb->protocol;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	hash = jhash_1word(hash, hashrnd);
 
 	return (u16) (((u64) hash * qcount) >> 32) + qoffset;
@@ -2619,6 +2701,7 @@ void __skb_get_rxhash(struct sk_buff *skb)
 	if (!skb_flow_dissect(skb, &keys))
 		return;
 
+<<<<<<< HEAD
 	if (keys.ports) {
 		if ((__force u16)keys.port16[1] < (__force u16)keys.port16[0])
 			swap(keys.port16[0], keys.port16[1]);
@@ -2628,6 +2711,18 @@ void __skb_get_rxhash(struct sk_buff *skb)
 	/* get a consistent hash (same value on both flow directions) */
 	if ((__force u32)keys.dst < (__force u32)keys.src)
 		swap(keys.dst, keys.src);
+=======
+	if (keys.ports)
+		skb->l4_rxhash = 1;
+
+	/* get a consistent hash (same value on both flow directions) */
+	if (((__force u32)keys.dst < (__force u32)keys.src) ||
+	    (((__force u32)keys.dst == (__force u32)keys.src) &&
+	     ((__force u16)keys.port16[1] < (__force u16)keys.port16[0]))) {
+		swap(keys.dst, keys.src);
+		swap(keys.port16[0], keys.port16[1]);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	hash = jhash_3words((__force u32)keys.dst,
 			    (__force u32)keys.src,
@@ -2763,8 +2858,15 @@ static int get_rps_cpu(struct net_device *dev, struct sk_buff *skb,
 		if (unlikely(tcpu != next_cpu) &&
 		    (tcpu == RPS_NO_CPU || !cpu_online(tcpu) ||
 		     ((int)(per_cpu(softnet_data, tcpu).input_queue_head -
+<<<<<<< HEAD
 		      rflow->last_qtail)) >= 0))
 			rflow = set_rps_cpu(dev, skb, rflow, next_cpu);
+=======
+		      rflow->last_qtail)) >= 0)) {
+			tcpu = next_cpu;
+			rflow = set_rps_cpu(dev, skb, rflow, next_cpu);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		if (tcpu != RPS_NO_CPU && cpu_online(tcpu)) {
 			*rflowp = rflow;
@@ -3123,6 +3225,10 @@ int netdev_rx_handler_register(struct net_device *dev,
 	if (dev->rx_handler)
 		return -EBUSY;
 
+<<<<<<< HEAD
+=======
+	/* Note: rx_handler_data must be set before rx_handler */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rcu_assign_pointer(dev->rx_handler_data, rx_handler_data);
 	rcu_assign_pointer(dev->rx_handler, rx_handler);
 
@@ -3143,6 +3249,14 @@ void netdev_rx_handler_unregister(struct net_device *dev)
 
 	ASSERT_RTNL();
 	RCU_INIT_POINTER(dev->rx_handler, NULL);
+<<<<<<< HEAD
+=======
+	/* a reader seeing a non NULL rx_handler in a rcu_read_lock()
+	 * section has a guarantee to see a non NULL rx_handler_data
+	 * as well.
+	 */
+	synchronize_net();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	RCU_INIT_POINTER(dev->rx_handler_data, NULL);
 }
 EXPORT_SYMBOL_GPL(netdev_rx_handler_unregister);
@@ -3209,18 +3323,29 @@ another_round:
 ncls:
 #endif
 
+<<<<<<< HEAD
 	rx_handler = rcu_dereference(skb->dev->rx_handler);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (vlan_tx_tag_present(skb)) {
 		if (pt_prev) {
 			ret = deliver_skb(skb, pt_prev, orig_dev);
 			pt_prev = NULL;
 		}
+<<<<<<< HEAD
 		if (vlan_do_receive(&skb, !rx_handler))
+=======
+		if (vlan_do_receive(&skb))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto another_round;
 		else if (unlikely(!skb))
 			goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	rx_handler = rcu_dereference(skb->dev->rx_handler);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (rx_handler) {
 		if (pt_prev) {
 			ret = deliver_skb(skb, pt_prev, orig_dev);
@@ -3228,6 +3353,10 @@ ncls:
 		}
 		switch (rx_handler(&skb)) {
 		case RX_HANDLER_CONSUMED:
+<<<<<<< HEAD
+=======
+			ret = NET_RX_SUCCESS;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto out;
 		case RX_HANDLER_ANOTHER:
 			goto another_round;
@@ -3240,6 +3369,12 @@ ncls:
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	if (vlan_tx_nonzero_tag_present(skb))
+		skb->pkt_type = PACKET_OTHERHOST;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* deliver only exact match when indicated */
 	null_or_dev = deliver_exact ? skb->dev : NULL;
 
@@ -3559,6 +3694,10 @@ static void napi_reuse_skb(struct napi_struct *napi, struct sk_buff *skb)
 	skb->vlan_tci = 0;
 	skb->dev = napi->dev;
 	skb->skb_iif = 0;
+<<<<<<< HEAD
+=======
+	skb->truesize = SKB_TRUESIZE(skb_end_offset(skb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	napi->skb = skb;
 }
@@ -4467,7 +4606,11 @@ static void dev_change_rx_flags(struct net_device *dev, int flags)
 {
 	const struct net_device_ops *ops = dev->netdev_ops;
 
+<<<<<<< HEAD
 	if ((dev->flags & IFF_UP) && ops->ndo_change_rx_flags)
+=======
+	if (ops->ndo_change_rx_flags)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ops->ndo_change_rx_flags(dev, flags);
 }
 
@@ -4825,6 +4968,10 @@ int dev_set_mac_address(struct net_device *dev, struct sockaddr *sa)
 	err = ops->ndo_set_mac_address(dev, sa);
 	if (!err)
 		call_netdevice_notifiers(NETDEV_CHANGEADDR, dev);
+<<<<<<< HEAD
+=======
+	add_device_randomness(dev->dev_addr, dev->addr_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return err;
 }
 EXPORT_SYMBOL(dev_set_mac_address);
@@ -5568,6 +5715,7 @@ int register_netdevice(struct net_device *dev)
 	dev->features |= NETIF_F_SOFT_FEATURES;
 	dev->wanted_features = dev->features & dev->hw_features;
 
+<<<<<<< HEAD
 	/* Turn on no cache copy if HW is doing checksum */
 	if (!(dev->flags & IFF_LOOPBACK)) {
 		dev->hw_features |= NETIF_F_NOCACHE_COPY;
@@ -5575,6 +5723,10 @@ int register_netdevice(struct net_device *dev)
 			dev->wanted_features |= NETIF_F_NOCACHE_COPY;
 			dev->features |= NETIF_F_NOCACHE_COPY;
 		}
+=======
+	if (!(dev->flags & IFF_LOOPBACK)) {
+		dev->hw_features |= NETIF_F_NOCACHE_COPY;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* Make NETIF_F_HIGHDMA inheritable to VLAN devices.
@@ -5603,6 +5755,10 @@ int register_netdevice(struct net_device *dev)
 	dev_init_scheduler(dev);
 	dev_hold(dev);
 	list_netdevice(dev);
+<<<<<<< HEAD
+=======
+	add_device_randomness(dev->dev_addr, dev->addr_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Notify protocols, that a new device appeared. */
 	ret = call_netdevice_notifiers(NETDEV_REGISTER, dev);
@@ -5966,6 +6122,10 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
 	dev_net_set(dev, &init_net);
 
 	dev->gso_max_size = GSO_MAX_SIZE;
+<<<<<<< HEAD
+=======
+	dev->gso_max_segs = GSO_MAX_SEGS;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	INIT_LIST_HEAD(&dev->napi_list);
 	INIT_LIST_HEAD(&dev->unreg_list);
@@ -6274,10 +6434,27 @@ static int dev_cpu_callback(struct notifier_block *nfb,
 		oldsd->output_queue = NULL;
 		oldsd->output_queue_tailp = &oldsd->output_queue;
 	}
+<<<<<<< HEAD
 	/* Append NAPI poll list from offline CPU. */
 	if (!list_empty(&oldsd->poll_list)) {
 		list_splice_init(&oldsd->poll_list, &sd->poll_list);
 		raise_softirq_irqoff(NET_RX_SOFTIRQ);
+=======
+	/* Append NAPI poll list from offline CPU, with one exception :
+	 * process_backlog() must be called by cpu owning percpu backlog.
+	 * We properly handle process_queue & input_pkt_queue later.
+	 */
+	while (!list_empty(&oldsd->poll_list)) {
+		struct napi_struct *napi = list_first_entry(&oldsd->poll_list,
+							struct napi_struct,
+							poll_list);
+
+		list_del_init(&napi->poll_list);
+		if (napi->poll == process_backlog)
+			napi->state = 0;
+		else
+			____napi_schedule(sd, napi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	raise_softirq_irqoff(NET_TX_SOFTIRQ);
@@ -6288,7 +6465,11 @@ static int dev_cpu_callback(struct notifier_block *nfb,
 		netif_rx(skb);
 		input_queue_head_incr(oldsd);
 	}
+<<<<<<< HEAD
 	while ((skb = __skb_dequeue(&oldsd->input_pkt_queue))) {
+=======
+	while ((skb = skb_dequeue(&oldsd->input_pkt_queue))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		netif_rx(skb);
 		input_queue_head_incr(oldsd);
 	}
@@ -6341,7 +6522,12 @@ static struct hlist_head *netdev_create_hash(void)
 /* Initialize per network namespace state */
 static int __net_init netdev_init(struct net *net)
 {
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&net->dev_base_head);
+=======
+	if (net != &init_net)
+		INIT_LIST_HEAD(&net->dev_base_head);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	net->dev_name_head = netdev_create_hash();
 	if (net->dev_name_head == NULL)

@@ -66,6 +66,10 @@
  *	port.
  * @flags: usb serial port flags
  * @write_wait: a wait_queue_head_t used by the port.
+<<<<<<< HEAD
+=======
+ * @delta_msr_wait: modem-status-change wait queue
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * @work: work queue entry for the line discipline waking up.
  * @throttled: nonzero if the read urb is inactive to throttle the device
  * @throttle_req: nonzero if the tty wants to throttle us
@@ -112,6 +116,10 @@ struct usb_serial_port {
 
 	unsigned long		flags;
 	wait_queue_head_t	write_wait;
+<<<<<<< HEAD
+=======
+	wait_queue_head_t	delta_msr_wait;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct work_struct	work;
 	char			throttled;
 	char			throttle_req;

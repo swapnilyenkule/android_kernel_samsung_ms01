@@ -117,13 +117,21 @@ static struct page *brd_insert_page(struct brd_device *brd, sector_t sector)
 
 	spin_lock(&brd->brd_lock);
 	idx = sector >> PAGE_SECTORS_SHIFT;
+<<<<<<< HEAD
+=======
+	page->index = idx;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (radix_tree_insert(&brd->brd_pages, idx, page)) {
 		__free_page(page);
 		page = radix_tree_lookup(&brd->brd_pages, idx);
 		BUG_ON(!page);
 		BUG_ON(page->index != idx);
+<<<<<<< HEAD
 	} else
 		page->index = idx;
+=======
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_unlock(&brd->brd_lock);
 
 	radix_tree_preload_end();
@@ -546,7 +554,11 @@ static struct kobject *brd_probe(dev_t dev, int *part, void *data)
 
 	mutex_lock(&brd_devices_mutex);
 	brd = brd_init_one(MINOR(dev) >> part_shift);
+<<<<<<< HEAD
 	kobj = brd ? get_disk(brd->brd_disk) : ERR_PTR(-ENOMEM);
+=======
+	kobj = brd ? get_disk(brd->brd_disk) : NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_unlock(&brd_devices_mutex);
 
 	*part = 0;

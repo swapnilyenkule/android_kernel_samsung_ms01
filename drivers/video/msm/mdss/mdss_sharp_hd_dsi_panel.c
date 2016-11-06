@@ -1297,7 +1297,11 @@ static ssize_t mdss_sharp_auto_brightness_show(struct device *dev,
 {
 	int rc;
 
+<<<<<<< HEAD
 	rc = sprintf(buf, "%d\n",
+=======
+	rc = snprintf(buf, sizeof(buf), "%d\n",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					msd.dstat.auto_brightness);
 	pr_info("%s : auto_brightness : %d\n", __func__, msd.dstat.auto_brightness);
 

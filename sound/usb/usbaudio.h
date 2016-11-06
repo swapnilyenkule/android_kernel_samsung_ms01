@@ -36,7 +36,11 @@ struct snd_usb_audio {
 	struct snd_card *card;
 	struct usb_interface *pm_intf;
 	u32 usb_id;
+<<<<<<< HEAD
 	struct mutex shutdown_mutex;
+=======
+	struct rw_semaphore shutdown_rwsem;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned int shutdown:1;
 	unsigned int probing:1;
 	unsigned int autosuspended:1;	

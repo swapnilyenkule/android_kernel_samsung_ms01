@@ -79,6 +79,7 @@ static inline void buffer_size_add(struct persistent_ram_zone *prz, size_t a)
 	} while (atomic_cmpxchg(&prz->buffer->size, old, new) != old);
 }
 
+<<<<<<< HEAD
 /* increase the size counter, retuning an error if it hits the max size */
 static inline ssize_t buffer_size_add_clamp(struct persistent_ram_zone *prz,
 	size_t a)
@@ -96,6 +97,8 @@ static inline ssize_t buffer_size_add_clamp(struct persistent_ram_zone *prz,
 	return 0;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void notrace persistent_ram_encode_rs8(struct persistent_ram_zone *prz,
 	uint8_t *data, size_t len, uint8_t *ecc)
 {
@@ -301,7 +304,11 @@ int notrace persistent_ram_write(struct persistent_ram_zone *prz,
 		c = prz->buffer_size;
 	}
 
+<<<<<<< HEAD
 	buffer_size_add_clamp(prz, c);
+=======
+	buffer_size_add(prz, c);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	start = buffer_start_add(prz, c);
 

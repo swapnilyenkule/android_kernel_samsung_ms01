@@ -907,9 +907,15 @@ fail:
 	/* we might as well release our claims on endpoints */
 	if (rndis->notify)
 		rndis->notify->driver_data = NULL;
+<<<<<<< HEAD
 	if (rndis->port.out_ep->desc)
 		rndis->port.out_ep->driver_data = NULL;
 	if (rndis->port.in_ep->desc)
+=======
+	if (rndis->port.out_ep)
+		rndis->port.out_ep->driver_data = NULL;
+	if (rndis->port.in_ep)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		rndis->port.in_ep->driver_data = NULL;
 
 	ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);

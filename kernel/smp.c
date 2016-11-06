@@ -13,8 +13,11 @@
 #include <linux/smp.h>
 #include <linux/cpu.h>
 
+<<<<<<< HEAD
 #include "smpboot.h"
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_USE_GENERIC_SMP_HELPERS
 static struct {
 	struct list_head	queue;
@@ -33,6 +36,10 @@ struct call_function_data {
 	struct call_single_data	csd;
 	atomic_t		refs;
 	cpumask_var_t		cpumask;
+<<<<<<< HEAD
+=======
+	cpumask_var_t		cpumask_ipi;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static DEFINE_PER_CPU_SHARED_ALIGNED(struct call_function_data, cfd_data);
@@ -56,6 +63,12 @@ hotplug_cfd(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		if (!zalloc_cpumask_var_node(&cfd->cpumask, GFP_KERNEL,
 				cpu_to_node(cpu)))
 			return notifier_from_errno(-ENOMEM);
+<<<<<<< HEAD
+=======
+		if (!zalloc_cpumask_var_node(&cfd->cpumask_ipi, GFP_KERNEL,
+				cpu_to_node(cpu)))
+			return notifier_from_errno(-ENOMEM);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 
 #ifdef CONFIG_HOTPLUG_CPU
@@ -65,6 +78,10 @@ hotplug_cfd(struct notifier_block *nfb, unsigned long action, void *hcpu)
 	case CPU_DEAD:
 	case CPU_DEAD_FROZEN:
 		free_cpumask_var(cfd->cpumask);
+<<<<<<< HEAD
+=======
+		free_cpumask_var(cfd->cpumask_ipi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 #endif
 	};
@@ -527,6 +544,15 @@ void smp_call_function_many(const struct cpumask *mask,
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * After we put an entry into the list, data->cpumask
+	 * may be cleared again when another CPU sends another IPI for
+	 * a SMP function call, so data->cpumask will be zero.
+	 */
+	cpumask_copy(data->cpumask_ipi, data->cpumask);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	raw_spin_lock_irqsave(&call_function.lock, flags);
 	/*
 	 * Place entry at the _HEAD_ of the list, so that any cpu still
@@ -550,7 +576,11 @@ void smp_call_function_many(const struct cpumask *mask,
 	smp_mb();
 
 	/* Send a message to all CPUs in the map */
+<<<<<<< HEAD
 	arch_send_call_function_ipi_mask(data->cpumask);
+=======
+	arch_send_call_function_ipi_mask(data->cpumask_ipi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Optionally wait for the CPUs to complete */
 	if (wait)
@@ -672,8 +702,11 @@ void __init smp_init(void)
 {
 	unsigned int cpu;
 
+<<<<<<< HEAD
 	idle_threads_init();
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* FIXME: This should be done in userspace --RR */
 	for_each_present_cpu(cpu) {
 		if (num_online_cpus() >= setup_max_cpus)

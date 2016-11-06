@@ -87,10 +87,16 @@ struct exception_table_entry;
 void sort_ex_table(struct exception_table_entry *start,
 		   struct exception_table_entry *finish);
 
+<<<<<<< HEAD
 #ifdef CONFIG_MODVERSIONS
 #define ARCH_RELOCATES_KCRCTAB
 
 extern const unsigned long reloc_start[];
+=======
+#if defined(CONFIG_MODVERSIONS) && defined(CONFIG_PPC64)
+#define ARCH_RELOCATES_KCRCTAB
+#define reloc_start PHYSICAL_START
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 #endif /* __KERNEL__ */
 #endif	/* _ASM_POWERPC_MODULE_H */

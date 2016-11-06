@@ -959,14 +959,25 @@ void __init tsc_init(void)
 
 	x86_init.timers.tsc_pre_init();
 
+<<<<<<< HEAD
 	if (!cpu_has_tsc)
 		return;
+=======
+	if (!cpu_has_tsc) {
+		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
+		return;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	tsc_khz = x86_platform.calibrate_tsc();
 	cpu_khz = tsc_khz;
 
 	if (!tsc_khz) {
 		mark_tsc_unstable("could not calculate TSC khz");
+<<<<<<< HEAD
+=======
+		setup_clear_cpu_cap(X86_FEATURE_TSC_DEADLINE_TIMER);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	}
 

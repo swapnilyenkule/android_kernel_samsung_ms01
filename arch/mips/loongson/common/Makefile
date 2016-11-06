@@ -10,7 +10,12 @@ obj-$(CONFIG_GENERIC_GPIO) += gpio.o
 # Serial port support
 #
 obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
+<<<<<<< HEAD
 obj-$(CONFIG_SERIAL_8250) += serial.o
+=======
+loongson-serial-$(CONFIG_SERIAL_8250) := serial.o
+obj-y += $(loongson-serial-m) $(loongson-serial-y)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 obj-$(CONFIG_LOONGSON_UART_BASE) += uart_base.o
 obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
 

@@ -2441,6 +2441,13 @@ static int snd_pcm_oss_open(struct inode *inode, struct file *file)
 		mutex_unlock(&pcm->open_mutex);
 		schedule();
 		mutex_lock(&pcm->open_mutex);
+<<<<<<< HEAD
+=======
+		if (pcm->card->shutdown) {
+			err = -ENODEV;
+			break;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (signal_pending(current)) {
 			err = -ERESTARTSYS;
 			break;

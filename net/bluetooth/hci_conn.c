@@ -321,6 +321,7 @@ void hci_setup_sync(struct hci_conn *conn, __u16 handle)
 
 	conn->attempt++;
 
+<<<<<<< HEAD
 	BT_DBG("conn->pkt_type = %x", conn->pkt_type);
 	cp.handle   = cpu_to_le16(handle);
 
@@ -356,6 +357,10 @@ void hci_setup_sync(struct hci_conn *conn, __u16 handle)
 
 	BT_DBG("pkt_type modified value = %x", conn->pkt_type);
 
+=======
+	cp.handle   = cpu_to_le16(handle);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	cp.tx_bandwidth   = cpu_to_le32(0x00001f40);
 	cp.rx_bandwidth   = cpu_to_le32(0x00001f40);
 	if (conn->hdev->is_wbs) {
@@ -503,11 +508,15 @@ static void hci_conn_idle(unsigned long arg)
 	struct hci_conn *conn = (void *) arg;
 
 	BT_DBG("conn %p mode %d", conn, conn->mode);
+<<<<<<< HEAD
 	if (conn->hdev &&
 		hci_conn_hash_lookup_ba(conn->hdev, SCO_LINK, &conn->dst)) {
 		BT_ERR("SCO Active : Do not allow SNIFF");
 		return;
 	}
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	hci_conn_enter_sniff_mode(conn);
 }
 
@@ -545,7 +554,10 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type,
 					__u16 pkt_type, bdaddr_t *dst)
 {
 	struct hci_conn *conn;
+<<<<<<< HEAD
 	struct hci_conn *tmp_conn;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	BT_DBG("%s dst %s", hdev->name, batostr(dst));
 
@@ -562,6 +574,7 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type,
 	conn->io_capability = hdev->io_capability;
 	conn->remote_auth = 0xff;
 
+<<<<<<< HEAD
 	tmp_conn = hci_conn_hash_lookup_ba(hdev, ACL_LINK, dst);
 	if (tmp_conn) {
 		memcpy(conn->features, tmp_conn->features, 8);
@@ -575,6 +588,8 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type,
 	BT_DBG("conn->pkt_type = %x", conn->pkt_type);
 	BT_DBG("hdev->esco_type = %x", hdev->esco_type);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	conn->power_save = 1;
 	conn->disc_timeout = HCI_DISCONN_TIMEOUT;
 	conn->conn_valid = true;
@@ -605,7 +620,10 @@ struct hci_conn *hci_conn_add(struct hci_dev *hdev, int type,
 		break;
 	}
 
+<<<<<<< HEAD
 	BT_DBG("after change conn->pkt_type = %x", conn->pkt_type);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	skb_queue_head_init(&conn->data_q);
 
 	setup_timer(&conn->disc_timer, hci_conn_timeout, (unsigned long)conn);

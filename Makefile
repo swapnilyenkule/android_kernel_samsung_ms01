@@ -1,6 +1,10 @@
 VERSION = 3
 PATCHLEVEL = 4
+<<<<<<< HEAD
 SUBLEVEL = 0
+=======
+SUBLEVEL = 110
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 EXTRAVERSION =
 NAME = Saber-toothed Squirrel
 
@@ -193,7 +197,11 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?=arm
+<<<<<<< HEAD
 CROSS_COMPILE	?=/opt/toolchains/arm-eabi-4.9/bin/arm-eabi-
+=======
+CROSS_COMPILE	?=/opt/toolchains/arm-eabi-4.6/bin/arm-eabi-
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -378,7 +386,11 @@ KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 KBUILD_AFLAGS_MODULE  := -DMODULE
+<<<<<<< HEAD
 KBUILD_CFLAGS_MODULE  := -DMODULE -fno-pic
+=======
+KBUILD_CFLAGS_MODULE  := -DMODULE
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -597,6 +609,11 @@ KBUILD_CFLAGS	+= -fomit-frame-pointer
 endif
 endif
 
+<<<<<<< HEAD
+=======
+KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ifdef CONFIG_DEBUG_INFO
 KBUILD_CFLAGS	+= -g
 KBUILD_AFLAGS	+= -gdwarf-2

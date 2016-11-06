@@ -34,8 +34,20 @@ static int atmel_trng_read(struct hwrng *rng, void *buf, size_t max,
 	u32 *data = buf;
 
 	/* data ready? */
+<<<<<<< HEAD
 	if (readl(trng->base + TRNG_ODATA) & 1) {
 		*data = readl(trng->base + TRNG_ODATA);
+=======
+	if (readl(trng->base + TRNG_ISR) & 1) {
+		*data = readl(trng->base + TRNG_ODATA);
+		/*
+		  ensure data ready is only set again AFTER the next data
+		  word is ready in case it got set between checking ISR
+		  and reading ODATA, so we don't risk re-reading the
+		  same word
+		*/
+		readl(trng->base + TRNG_ISR);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 4;
 	} else
 		return 0;

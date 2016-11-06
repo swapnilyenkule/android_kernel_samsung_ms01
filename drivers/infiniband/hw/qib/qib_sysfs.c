@@ -550,6 +550,7 @@ bail:
 	return ret < 0 ? ret : count;
 }
 
+<<<<<<< HEAD
 static ssize_t show_logged_errs(struct device *device,
 				struct device_attribute *attr, char *buf)
 {
@@ -572,6 +573,8 @@ static ssize_t show_logged_errs(struct device *device,
 	return count;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Dump tempsense regs. in decimal, to ease shell-scripts.
  */
@@ -618,7 +621,10 @@ static DEVICE_ATTR(nctxts, S_IRUGO, show_nctxts, NULL);
 static DEVICE_ATTR(nfreectxts, S_IRUGO, show_nfreectxts, NULL);
 static DEVICE_ATTR(serial, S_IRUGO, show_serial, NULL);
 static DEVICE_ATTR(boardversion, S_IRUGO, show_boardversion, NULL);
+<<<<<<< HEAD
 static DEVICE_ATTR(logged_errors, S_IRUGO, show_logged_errs, NULL);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static DEVICE_ATTR(tempsense, S_IRUGO, show_tempsense, NULL);
 static DEVICE_ATTR(localbus_info, S_IRUGO, show_localbus_info, NULL);
 static DEVICE_ATTR(chip_reset, S_IWUSR, NULL, store_chip_reset);
@@ -632,7 +638,10 @@ static struct device_attribute *qib_attributes[] = {
 	&dev_attr_nfreectxts,
 	&dev_attr_serial,
 	&dev_attr_boardversion,
+<<<<<<< HEAD
 	&dev_attr_logged_errors,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	&dev_attr_tempsense,
 	&dev_attr_localbus_info,
 	&dev_attr_chip_reset,

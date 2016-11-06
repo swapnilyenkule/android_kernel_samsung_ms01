@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,11 +42,21 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*
  *
+<<<<<<< HEAD
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limTimerUtils.h contains the utility definitions
  * LIM uses for timer handling.
  * Author:        Chandra Modumudi
@@ -85,7 +100,11 @@ enum
 #endif
     eLIM_REMAIN_CHN_TIMER,
     eLIM_PERIODIC_PROBE_REQ_TIMER,
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
+=======
+#ifdef FEATURE_WLAN_ESE
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     eLIM_TSM_TIMER,
 #endif
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
@@ -115,7 +134,10 @@ void limDeactivateAndChangeTimer(tpAniSirGlobal, tANI_U32);
 void limHeartBeatDeactivateAndChangeTimer(tpAniSirGlobal, tpPESession);
 void limReactivateHeartBeatTimer(tpAniSirGlobal, tpPESession);
 void limDummyPktExpTimerHandler(void *, tANI_U32);
+<<<<<<< HEAD
 void limSendDisassocFrameThresholdHandler(void *, tANI_U32);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void limCnfWaitTmerHandler(void *, tANI_U32);
 void limKeepaliveTmerHandler(void *, tANI_U32);
 void limDeactivateAndChangePerStaIdTimer(tpAniSirGlobal, tANI_U32, tANI_U16);

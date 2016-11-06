@@ -57,6 +57,10 @@
 MODULE_AUTHOR("Ville Nuorvala");
 MODULE_DESCRIPTION("IPv6 tunneling device");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS_RTNL_LINK("ip6tnl");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 MODULE_ALIAS_NETDEV("ip6tnl0");
 
 #ifdef IP6_TNL_DEBUG

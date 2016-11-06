@@ -59,6 +59,7 @@ struct attribute_group *sm_create_sysfs_attributes(struct sm_ftl *ftl)
 	struct attribute_group *attr_group;
 	struct attribute **attributes;
 	struct sm_sysfs_attribute *vendor_attribute;
+<<<<<<< HEAD
 
 	int vendor_len = strnlen(ftl->cis_buffer + SM_CIS_VENDOR_OFFSET,
 					SM_SMALL_PAGE - SM_CIS_VENDOR_OFFSET);
@@ -68,6 +69,14 @@ struct attribute_group *sm_create_sysfs_attributes(struct sm_ftl *ftl)
 		goto error1;
 	memcpy(vendor, ftl->cis_buffer + SM_CIS_VENDOR_OFFSET, vendor_len);
 	vendor[vendor_len] = 0;
+=======
+	char *vendor;
+
+	vendor = kstrndup(ftl->cis_buffer + SM_CIS_VENDOR_OFFSET,
+			  SM_SMALL_PAGE - SM_CIS_VENDOR_OFFSET, GFP_KERNEL);
+	if (!vendor)
+		goto error1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Initialize sysfs attributes */
 	vendor_attribute =
@@ -78,7 +87,11 @@ struct attribute_group *sm_create_sysfs_attributes(struct sm_ftl *ftl)
 	sysfs_attr_init(&vendor_attribute->dev_attr.attr);
 
 	vendor_attribute->data = vendor;
+<<<<<<< HEAD
 	vendor_attribute->len = vendor_len;
+=======
+	vendor_attribute->len = strlen(vendor);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	vendor_attribute->dev_attr.attr.name = "vendor";
 	vendor_attribute->dev_attr.attr.mode = S_IRUGO;
 	vendor_attribute->dev_attr.show = sm_attr_show;

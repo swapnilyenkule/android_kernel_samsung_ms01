@@ -344,6 +344,13 @@ static void md_make_request(struct request_queue *q, struct bio *bio)
 		bio_io_error(bio);
 		return;
 	}
+<<<<<<< HEAD
+=======
+	if (mddev->ro == 1 && unlikely(rw == WRITE)) {
+		bio_endio(bio, bio_sectors(bio) == 0 ? 0 : -EROFS);
+		return;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	smp_rmb(); /* Ensure implications of  'active' are visible */
 	rcu_read_lock();
 	if (mddev->suspended) {
@@ -452,7 +459,11 @@ static void submit_flushes(struct work_struct *ws)
 			atomic_inc(&rdev->nr_pending);
 			atomic_inc(&rdev->nr_pending);
 			rcu_read_unlock();
+<<<<<<< HEAD
 			bi = bio_alloc_mddev(GFP_KERNEL, 0, mddev);
+=======
+			bi = bio_alloc_mddev(GFP_NOIO, 0, mddev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			bi->bi_end_io = md_end_flush;
 			bi->bi_private = rdev;
 			bi->bi_bdev = rdev->bdev;
@@ -1143,8 +1154,16 @@ static int super_90_load(struct md_rdev *rdev, struct md_rdev *refdev, int minor
 			ret = 0;
 	}
 	rdev->sectors = rdev->sb_start;
+<<<<<<< HEAD
 	/* Limit to 4TB as metadata cannot record more than that */
 	if (rdev->sectors >= (2ULL << 32))
+=======
+	/* Limit to 4TB as metadata cannot record more than that.
+	 * (not needed for Linear and RAID0 as metadata doesn't
+	 * record this size)
+	 */
+	if (rdev->sectors >= (2ULL << 32) && sb->level >= 1)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		rdev->sectors = (2ULL << 32) - 2;
 
 	if (rdev->sectors < ((sector_t)sb->size) * 2 && sb->level >= 1)
@@ -1426,7 +1445,11 @@ super_90_rdev_size_change(struct md_rdev *rdev, sector_t num_sectors)
 	/* Limit to 4TB as metadata cannot record more than that.
 	 * 4TB == 2^32 KB, or 2*2^32 sectors.
 	 */
+<<<<<<< HEAD
 	if (num_sectors >= (2ULL << 32))
+=======
+	if (num_sectors >= (2ULL << 32) && rdev->mddev->level >= 1)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		num_sectors = (2ULL << 32) - 2;
 	md_super_write(rdev->mddev, rdev, rdev->sb_start, rdev->sb_size,
 		       rdev->sb_page);
@@ -1580,8 +1603,13 @@ static int super_1_load(struct md_rdev *rdev, struct md_rdev *refdev, int minor_
 					     sector, count, 1) == 0)
 				return -EINVAL;
 		}
+<<<<<<< HEAD
 	} else if (sb->bblog_offset == 0)
 		rdev->badblocks.shift = -1;
+=======
+	} else if (sb->bblog_offset != 0)
+		rdev->badblocks.shift = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!refdev) {
 		ret = 1;
@@ -1802,10 +1830,17 @@ retry:
 			memset(bbp, 0xff, PAGE_SIZE);
 
 			for (i = 0 ; i < bb->count ; i++) {
+<<<<<<< HEAD
 				u64 internal_bb = *p++;
 				u64 store_bb = ((BB_OFFSET(internal_bb) << 10)
 						| BB_LEN(internal_bb));
 				*bbp++ = cpu_to_le64(store_bb);
+=======
+				u64 internal_bb = p[i];
+				u64 store_bb = ((BB_OFFSET(internal_bb) << 10)
+						| BB_LEN(internal_bb));
+				bbp[i] = cpu_to_le64(store_bb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			bb->changed = 0;
 			if (read_seqretry(&bb->lock, seq))
@@ -2879,6 +2914,12 @@ rdev_size_store(struct md_rdev *rdev, const char *buf, size_t len)
 		} else if (!sectors)
 			sectors = (i_size_read(rdev->bdev->bd_inode) >> 9) -
 				rdev->data_offset;
+<<<<<<< HEAD
+=======
+		if (!my_mddev->pers->resize)
+			/* Cannot change size for RAID0 or Linear etc */
+			return -EINVAL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	if (sectors < my_mddev->dev_sectors)
 		return -EINVAL; /* component must fit device */
@@ -3097,7 +3138,11 @@ int md_rdev_init(struct md_rdev *rdev)
 	 * be used - I wonder if that matters
 	 */
 	rdev->badblocks.count = 0;
+<<<<<<< HEAD
 	rdev->badblocks.shift = 0;
+=======
+	rdev->badblocks.shift = -1; /* disabled until explicitly enabled */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rdev->badblocks.page = kmalloc(PAGE_SIZE, GFP_KERNEL);
 	seqlock_init(&rdev->badblocks.lock);
 	if (rdev->badblocks.page == NULL)
@@ -3169,9 +3214,12 @@ static struct md_rdev *md_import_device(dev_t newdev, int super_format, int supe
 			goto abort_free;
 		}
 	}
+<<<<<<< HEAD
 	if (super_format == -1)
 		/* hot-add for 0.90, or non-persistent: so no badblocks */
 		rdev->badblocks.shift = -1;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return rdev;
 
@@ -3500,6 +3548,10 @@ level_store(struct mddev *mddev, const char *buf, size_t len)
 		mddev->in_sync = 1;
 		del_timer_sync(&mddev->safemode_timer);
 	}
+<<<<<<< HEAD
+=======
+	blk_set_stacking_limits(&mddev->queue->limits);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	pers->run(mddev);
 	mddev_resume(mddev);
 	set_bit(MD_CHANGE_DEVS, &mddev->flags);
@@ -7053,8 +7105,15 @@ void md_do_sync(struct mddev *mddev)
 	/* just incase thread restarts... */
 	if (test_bit(MD_RECOVERY_DONE, &mddev->recovery))
 		return;
+<<<<<<< HEAD
 	if (mddev->ro) /* never try to sync a read-only array */
 		return;
+=======
+	if (mddev->ro) {/* never try to sync a read-only array */
+		set_bit(MD_RECOVERY_INTR, &mddev->recovery);
+		return;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
 		if (test_bit(MD_RECOVERY_CHECK, &mddev->recovery))
@@ -7160,6 +7219,22 @@ void md_do_sync(struct mddev *mddev)
 			    rdev->recovery_offset < j)
 				j = rdev->recovery_offset;
 		rcu_read_unlock();
+<<<<<<< HEAD
+=======
+
+		/* If there is a bitmap, we need to make sure all
+		 * writes that started before we added a spare
+		 * complete before we start doing a recovery.
+		 * Otherwise the write might complete and (via
+		 * bitmap_endwrite) set a bit in the bitmap after the
+		 * recovery has checked that bit and skipped that
+		 * region.
+		 */
+		if (mddev->bitmap) {
+			mddev->pers->quiesce(mddev, 1);
+			mddev->pers->quiesce(mddev, 0);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	printk(KERN_INFO "md: %s of RAID array %s\n", desc, mdname(mddev));
@@ -7407,6 +7482,11 @@ static int remove_and_add_spares(struct mddev *mddev)
 			}
 		}
 	}
+<<<<<<< HEAD
+=======
+	if (removed)
+		set_bit(MD_CHANGE_DEVS, &mddev->flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return spares;
 }
 
@@ -7420,9 +7500,17 @@ static void reap_sync_thread(struct mddev *mddev)
 	    !test_bit(MD_RECOVERY_REQUESTED, &mddev->recovery)) {
 		/* success...*/
 		/* activate any spares */
+<<<<<<< HEAD
 		if (mddev->pers->spare_active(mddev))
 			sysfs_notify(&mddev->kobj, NULL,
 				     "degraded");
+=======
+		if (mddev->pers->spare_active(mddev)) {
+			sysfs_notify(&mddev->kobj, NULL,
+				     "degraded");
+			set_bit(MD_CHANGE_DEVS, &mddev->flags);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	if (test_bit(MD_RECOVERY_RESHAPE, &mddev->recovery) &&
 	    mddev->pers->finish_reshape)
@@ -7677,9 +7765,15 @@ int md_is_badblock(struct badblocks *bb, sector_t s, int sectors,
 		   sector_t *first_bad, int *bad_sectors)
 {
 	int hi;
+<<<<<<< HEAD
 	int lo = 0;
 	u64 *p = bb->page;
 	int rv = 0;
+=======
+	int lo;
+	u64 *p = bb->page;
+	int rv;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sector_t target = s + sectors;
 	unsigned seq;
 
@@ -7694,7 +7788,12 @@ int md_is_badblock(struct badblocks *bb, sector_t s, int sectors,
 
 retry:
 	seq = read_seqbegin(&bb->lock);
+<<<<<<< HEAD
 
+=======
+	lo = 0;
+	rv = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	hi = bb->count;
 
 	/* Binary search between lo and hi for 'target'
@@ -8144,7 +8243,12 @@ static int md_notify_reboot(struct notifier_block *this,
 		if (mddev_trylock(mddev)) {
 			if (mddev->pers)
 				__md_stop_writes(mddev);
+<<<<<<< HEAD
 			mddev->safemode = 2;
+=======
+			if (mddev->persistent)
+				mddev->safemode = 2;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			mddev_unlock(mddev);
 		}
 		need_delay = 1;

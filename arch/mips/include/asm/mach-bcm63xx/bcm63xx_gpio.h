@@ -2,6 +2,10 @@
 #define BCM63XX_GPIO_H
 
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <bcm63xx_cpu.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int __init bcm63xx_gpio_init(void);
 

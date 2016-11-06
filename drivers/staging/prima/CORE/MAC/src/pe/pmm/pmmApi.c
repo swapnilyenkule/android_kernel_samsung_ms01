@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -40,6 +45,16 @@
  */
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file pmmApi.cc contains functions related to the API exposed
  * by power management module
  *
@@ -82,6 +97,14 @@
 
 #include "wlan_qct_wda.h"
 
+<<<<<<< HEAD
+=======
+#define LIM_ADMIT_MASK_FLAG_ACBE 1
+#define LIM_ADMIT_MASK_FLAG_ACBK 2
+#define LIM_ADMIT_MASK_FLAG_ACVI 4
+#define LIM_ADMIT_MASK_FLAG_ACVO 8
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 // --------------------------------------------------------------------
 /**
  * pmmInitialize
@@ -525,6 +548,12 @@ failure:
     // Change the state back to original state
     pMac->pmm.gPmmState =origState;
     limSendSmeRsp(pMac, eWNI_PMC_ENTER_BMPS_RSP, respStatus, 0, 0);
+<<<<<<< HEAD
+=======
+
+    // update the BMPS pwr save Error Stats
+    pmmBmpsUpdateSleepReqFailureCnt(pMac);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     return;
 }
 
@@ -845,7 +874,11 @@ void pmmExitBmpsResponseHandler(tpAniSirGlobal pMac,  tpSirMsgQ limMsg)
     tANI_U8 PowersavesessionId;
     tpPESession psessionEntry;
     tSirResultCodes retStatus = eSIR_SME_SUCCESS;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     /* Copy the power save sessionId to the local variable */
     PowersavesessionId = pMac->pmm.sessionId;
 
@@ -861,10 +894,13 @@ void pmmExitBmpsResponseHandler(tpAniSirGlobal pMac,  tpSirMsgQ limMsg)
         return;
     }
 
+<<<<<<< HEAD
     
 
     /* Update wakeup statistics */
     pmmUpdateWakeupStats(pMac);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     if (NULL == limMsg->bodyptr)
     {
@@ -895,6 +931,11 @@ void pmmExitBmpsResponseHandler(tpAniSirGlobal pMac,  tpSirMsgQ limMsg)
     {
         case eHAL_STATUS_SUCCESS:
             retStatus = eSIR_SME_SUCCESS;
+<<<<<<< HEAD
+=======
+            /* Update wakeup statistics */
+            pmmUpdateWakeupStats(pMac);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
 
         default:
@@ -904,13 +945,20 @@ void pmmExitBmpsResponseHandler(tpAniSirGlobal pMac,  tpSirMsgQ limMsg)
                  * But, PMC will be informed about the error.
                  */
                 retStatus = eSIR_SME_BMPS_REQ_FAILED;
+<<<<<<< HEAD
+=======
+                pmmBmpsUpdateWakeupReqFailureCnt(pMac);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             }
             break;
 
     }
 
     pMac->pmm.gPmmState = ePMM_STATE_BMPS_WAKEUP;
+<<<<<<< HEAD
     pmmUpdateWakeupStats(pMac);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     // turn on background scan
     pMac->sys.gSysEnableScanMode = true;
@@ -918,7 +966,11 @@ void pmmExitBmpsResponseHandler(tpAniSirGlobal pMac,  tpSirMsgQ limMsg)
     // send response to PMC
    if(IS_FEATURE_SUPPORTED_BY_FW(SLM_SESSIONIZATION) )
    {
+<<<<<<< HEAD
        limSendSmeRsp(pMac, eWNI_PMC_EXIT_BMPS_RSP, retStatus, 
+=======
+       limSendSmeRsp(pMac, eWNI_PMC_EXIT_BMPS_RSP, retStatus,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                   psessionEntry->smeSessionId, psessionEntry->transactionId);
    }
    else
@@ -1384,9 +1436,15 @@ void pmmUpdatePwrSaveStats(tpAniSirGlobal pMac)
 
     pMac->pmm.BmpsavgTimeAwake = ( ( (pMac->pmm.BmpsavgTimeAwake * pMac->pmm.BmpscntSleep) + TimeAwake ) / (pMac->pmm.BmpscntSleep + 1) );
 
+<<<<<<< HEAD
     pMac->pmm.BmpscntSleep++;
     return;
 */
+=======
+*/
+    pMac->pmm.BmpscntSleep++;
+    return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -1428,9 +1486,15 @@ void pmmUpdateWakeupStats(tpAniSirGlobal pMac)
 
         pMac->pmm.BmpsavgSleepTime = ( ( (pMac->pmm.BmpsavgSleepTime * pMac->pmm.BmpscntAwake) + SleepTime ) / (pMac->pmm.BmpscntAwake + 1) );
 
+<<<<<<< HEAD
         pMac->pmm.BmpscntAwake++;
         return;
 */
+=======
+*/
+        pMac->pmm.BmpscntAwake++;
+        return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 // --------------------------------------------------------------------
@@ -1465,7 +1529,21 @@ void pmmEnterImpsRequestHandler (tpAniSirGlobal pMac)
     /*Returns True even single active session present */
     if(peIsAnySessionActive(pMac))
     {
+<<<<<<< HEAD
         resultCode = eSIR_SME_INVALID_STATE;
+=======
+        /* Print active pesession and tracedump once in every 16
+         * continous error.
+         */
+        if (!(pMac->pmc.ImpsReqFailCnt & 0xF))
+        {
+            pePrintActiveSession(pMac);
+            vosTraceDumpAll(pMac,0,0,100,0);
+        }
+        resultCode = eSIR_SME_INVALID_STATE;
+        pmmLog(pMac, LOGE, FL("Session is active go to failure resultCode = "
+               "eSIR_SME_INVALID_STATE (%d)"),resultCode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         goto failure;
     }
 
@@ -1585,6 +1663,11 @@ failure:
            rspStatus,
            pMac->pmm.gPmmState);)
 
+<<<<<<< HEAD
+=======
+    pmmImpsUpdateSleepErrStats(pMac, rspStatus);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     pMac->pmm.gPmmState = nextState;
 
     limSendSmeRsp(pMac,
@@ -1638,7 +1721,11 @@ void pmmExitImpsRequestHandler (tpAniSirGlobal pMac)
     {
         // PE in invalid state 
         PELOGE(pmmLog(pMac, LOGE, 
+<<<<<<< HEAD
                       FL("pmmImps: Wakeup Req received in invalid state: %x"),
+=======
+                      FL("pmmImps: Wakeup Req received in invalid state: %d"),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                       pMac->pmm.gPmmState);)
 
         resultCode = eSIR_SME_INVALID_PMM_STATE;
@@ -1706,25 +1793,48 @@ void pmmExitImpsResponseHandler(tpAniSirGlobal pMac, eHalStatus rspStatus)
     case eHAL_STATUS_SUCCESS:
         {
             resultCode = eSIR_SME_SUCCESS;
+<<<<<<< HEAD
             PELOG2(pmmLog(pMac, LOG2, 
                           FL("pmmImps: Received WDA_EXIT_IMPS_RSP with Successful response from HAL"));)
+=======
+            pMac->pmm.gPmmState = ePMM_STATE_IMPS_WAKEUP;
+            PELOG2(pmmLog(pMac, LOG2,
+                          FL("pmmImps: Received WDA_EXIT_IMPS_RSP with Successful response from HAL"));)
+            //update power save statistics
+            pmmImpsUpdateWakeupStats(pMac);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         }
         break;
 
         default:
             {
                 resultCode = eSIR_SME_IMPS_REQ_FAILED;
+<<<<<<< HEAD
                 PELOGW(pmmLog(pMac, LOGW, 
                               FL("pmmImps: Received WDA_EXIT_IMPS_RSP with Failure Status from HAL"));)
+=======
+                /* Set the status back to IMPS SLEEP as we failed
+                 * to come out of sleep
+                 */
+                pMac->pmm.gPmmState = ePMM_STATE_IMPS_SLEEP;
+                PELOGW(pmmLog(pMac, LOGW, 
+                              FL("pmmImps: Received WDA_EXIT_IMPS_RSP with Failure Status from HAL"));)
+                // update th power save error stats
+                pmmImpsUpdateWakeupErrStats(pMac, rspStatus);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             }
             break;
 
     }
 
+<<<<<<< HEAD
     pMac->pmm.gPmmState = ePMM_STATE_IMPS_WAKEUP;
 
     //update power save statistics
     pmmImpsUpdateWakeupStats(pMac);
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     limSendSmeRsp(pMac,
                   eWNI_PMC_EXIT_IMPS_RSP,
@@ -1914,7 +2024,11 @@ void pmmExitUapsdRequestHandler(tpAniSirGlobal pMac)
     else
     {
         PELOGE(pmmLog(pMac, LOGE,
+<<<<<<< HEAD
             FL("pmmUapsd: Rcv EXIT_UAPSD from PMC in invalid state: %x"),
+=======
+            FL("pmmUapsd: Rcv EXIT_UAPSD from PMC in invalid state: %d"),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             pMac->pmm.gPmmState);)
 
         resultCode = eSIR_SME_INVALID_PMM_STATE;
@@ -2545,8 +2659,11 @@ tSirRetStatus pmmUapsdSendChangePwrSaveMsg (tpAniSirGlobal pMac, tANI_U8 mode)
 {
     tSirRetStatus retStatus = eSIR_SUCCESS;
     tpUapsdParams pUapsdParams = NULL;
+<<<<<<< HEAD
     tANI_U8  uapsdDeliveryMask = 0;
     tANI_U8  uapsdTriggerMask = 0;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     tSirMsgQ msgQ;
     tpPESession pSessionEntry;
     tpExitUapsdParams pExitUapsdParams = NULL;
@@ -2572,6 +2689,7 @@ tSirRetStatus pmmUapsdSendChangePwrSaveMsg (tpAniSirGlobal pMac, tANI_U8 mode)
         msgQ.type = WDA_ENTER_UAPSD_REQ;
         msgQ.bodyptr = pUapsdParams;
 
+<<<<<<< HEAD
         uapsdDeliveryMask = (pMac->lim.gUapsdPerAcBitmask | pMac->lim.gUapsdPerAcDeliveryEnableMask);
         uapsdTriggerMask = (pMac->lim.gUapsdPerAcBitmask | pMac->lim.gUapsdPerAcTriggerEnableMask);
 
@@ -2583,6 +2701,86 @@ tSirRetStatus pmmUapsdSendChangePwrSaveMsg (tpAniSirGlobal pMac, tANI_U8 mode)
         pUapsdParams->beTriggerEnabled = LIM_UAPSD_GET(ACBE, uapsdTriggerMask);
         pUapsdParams->viTriggerEnabled = LIM_UAPSD_GET(ACVI, uapsdTriggerMask);
         pUapsdParams->voTriggerEnabled = LIM_UAPSD_GET(ACVO, uapsdTriggerMask);
+=======
+        /*
+        * An AC is delivery enabled AC if the bit for that AC is set into the
+        * gAcAdmitMask[SIR_MAC_DIRECTION_DLINK],it is not set then we will take Static values.
+        */
+
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_DNLINK] & LIM_ADMIT_MASK_FLAG_ACBE)
+        {
+            pUapsdParams->beDeliveryEnabled = LIM_UAPSD_GET(ACBE, pMac->lim.gUapsdPerAcDeliveryEnableMask);
+        }
+        else
+        {
+            pUapsdParams->beDeliveryEnabled = LIM_UAPSD_GET(ACBE, pMac->lim.gUapsdPerAcBitmask);
+        }
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_DNLINK] & LIM_ADMIT_MASK_FLAG_ACBK)
+        {
+            pUapsdParams->bkDeliveryEnabled = LIM_UAPSD_GET(ACBK, pMac->lim.gUapsdPerAcDeliveryEnableMask);
+        }
+        else
+        {
+            pUapsdParams->bkDeliveryEnabled = LIM_UAPSD_GET(ACBK, pMac->lim.gUapsdPerAcBitmask);
+        }
+        if  ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_DNLINK] & LIM_ADMIT_MASK_FLAG_ACVI)
+        {
+            pUapsdParams->viDeliveryEnabled = LIM_UAPSD_GET(ACVI, pMac->lim.gUapsdPerAcDeliveryEnableMask);
+        }
+        else
+        {
+            pUapsdParams->viDeliveryEnabled = LIM_UAPSD_GET(ACVI, pMac->lim.gUapsdPerAcBitmask);
+        }
+
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_DNLINK] & LIM_ADMIT_MASK_FLAG_ACVO)
+        {
+            pUapsdParams->voDeliveryEnabled = LIM_UAPSD_GET(ACVO, pMac->lim.gUapsdPerAcDeliveryEnableMask);
+        }
+        else
+        {
+            pUapsdParams->voDeliveryEnabled = LIM_UAPSD_GET(ACVO, pMac->lim.gUapsdPerAcBitmask);
+        }
+
+        /*
+        * An AC is trigger enabled AC if the bit for that AC is set into the
+        * gAcAdmitMask[SIR_MAC_DIRECTION_UPLINK],it is not set then we will take Static values.
+        */
+
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_UPLINK] & LIM_ADMIT_MASK_FLAG_ACBE)
+        {
+             pUapsdParams->beTriggerEnabled = LIM_UAPSD_GET(ACBE, pMac->lim.gUapsdPerAcTriggerEnableMask);
+        }
+        else
+        {
+             pUapsdParams->beTriggerEnabled = LIM_UAPSD_GET(ACBE, pMac->lim.gUapsdPerAcBitmask);
+        }
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_UPLINK] & LIM_ADMIT_MASK_FLAG_ACBK)
+        {
+             pUapsdParams->bkTriggerEnabled = LIM_UAPSD_GET(ACBK, pMac->lim.gUapsdPerAcTriggerEnableMask);
+        }
+        else
+        {
+             pUapsdParams->bkTriggerEnabled = LIM_UAPSD_GET(ACBK, pMac->lim.gUapsdPerAcBitmask);
+        }
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_UPLINK] & LIM_ADMIT_MASK_FLAG_ACVI)
+        {
+             pUapsdParams->viTriggerEnabled = LIM_UAPSD_GET(ACVI, pMac->lim.gUapsdPerAcTriggerEnableMask);
+        }
+        else
+        {
+             pUapsdParams->viTriggerEnabled = LIM_UAPSD_GET(ACVI, pMac->lim.gUapsdPerAcBitmask);
+        }
+
+        if ( pMac->lim.gAcAdmitMask[SIR_MAC_DIRECTION_UPLINK] & LIM_ADMIT_MASK_FLAG_ACVO)
+        {
+             pUapsdParams->voTriggerEnabled = LIM_UAPSD_GET(ACVO, pMac->lim.gUapsdPerAcTriggerEnableMask);
+        }
+        else
+        {
+             pUapsdParams->voTriggerEnabled = LIM_UAPSD_GET(ACVO, pMac->lim.gUapsdPerAcBitmask);
+        }
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         pUapsdParams->bssIdx = pSessionEntry->bssIdx;
 
         PELOGW(pmmLog(pMac, LOGW,
@@ -2693,10 +2891,17 @@ void pmmImpsUpdatePwrSaveStats(tpAniSirGlobal pMac)
 
     pMac->pmm.ImpsAvgTimeAwake = ((pMac->pmm.ImpsAvgTimeAwake * pMac->pmm.ImpsCntSleep) + TimeAwake) / (pMac->pmm.ImpsCntSleep + 1);
 
+<<<<<<< HEAD
     (pMac->pmm.ImpsCntSleep)++;
 
     return;
 */
+=======
+*/
+    (pMac->pmm.ImpsCntSleep)++;
+
+    return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -2740,10 +2945,17 @@ void pmmImpsUpdateWakeupStats (tpAniSirGlobal pMac)
 
     pMac->pmm.ImpsAvgSleepTime = ( ( (pMac->pmm.ImpsAvgSleepTime * pMac->pmm.ImpsCntAwake) + SleepTime) / (pMac->pmm.ImpsCntAwake + 1));
 
+<<<<<<< HEAD
     (pMac->pmm.ImpsCntAwake)++;
 
     return;
 */
+=======
+*/
+    (pMac->pmm.ImpsCntAwake)++;
+
+    return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 // Collects number of times error occurred while going to sleep mode

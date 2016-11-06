@@ -74,6 +74,10 @@ struct snd_usb_substream {
 	unsigned int fill_max: 1;	/* fill max packet size always */
 	unsigned int txfr_quirk:1;	/* allow sub-frame alignment */
 	unsigned int fmt_type;		/* USB audio format type (1-3) */
+<<<<<<< HEAD
+=======
+	unsigned int pkt_offset_adj;	/* Bytes to drop from beginning of packets (for non-compliant devices) */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	unsigned int running: 1;	/* running status */
 
@@ -87,6 +91,10 @@ struct snd_usb_substream {
 	struct snd_urb_ctx syncurb[SYNC_URBS];	/* sync urb table */
 	char *syncbuf;				/* sync buffer for all sync URBs */
 	dma_addr_t sync_dma;			/* DMA address of syncbuf */
+<<<<<<< HEAD
+=======
+	unsigned int speed;		/* USB_SPEED_XXX */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	u64 formats;			/* format bitmasks (all or'ed) */
 	unsigned int num_formats;		/* number of supported audio formats (list) */

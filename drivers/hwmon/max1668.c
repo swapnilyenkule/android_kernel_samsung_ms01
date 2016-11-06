@@ -243,7 +243,11 @@ static ssize_t set_temp_min(struct device *dev,
 	data->temp_min[index] = SENSORS_LIMIT(temp/1000, -128, 127);
 	if (i2c_smbus_write_byte_data(client,
 					MAX1668_REG_LIML_WR(index),
+<<<<<<< HEAD
 					data->temp_max[index]))
+=======
+					data->temp_min[index]))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		count = -EIO;
 	mutex_unlock(&data->update_lock);
 

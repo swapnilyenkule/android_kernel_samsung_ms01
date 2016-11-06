@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2008-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2008-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -191,8 +195,11 @@ struct adreno_device {
 	unsigned int fast_hang_detect;
 	unsigned int ft_policy;
 	unsigned int long_ib_detect;
+<<<<<<< HEAD
 	unsigned int long_ib;
 	unsigned int long_ib_ts;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned int ft_pf_policy;
 	unsigned int gpulist_index;
 	struct ocmem_buf *ocmem_hdl;
@@ -218,6 +225,10 @@ enum adreno_device_flags {
 	ADRENO_DEVICE_PWRON_FIXUP = 1,
 	ADRENO_DEVICE_INITIALIZED = 2,
 	ADRENO_DEVICE_STARTED = 3,
+<<<<<<< HEAD
+=======
+	ADRENO_DEVICE_HANG_INTR = 4,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 #define PERFCOUNTER_FLAG_NONE 0x0
@@ -240,6 +251,10 @@ struct adreno_perfcount_register {
 	unsigned int kernelcount;
 	unsigned int usercount;
 	unsigned int offset;
+<<<<<<< HEAD
+=======
+	unsigned int offset_hi;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int load_bit;
 	unsigned int select;
 	uint64_t value;
@@ -310,6 +325,10 @@ enum adreno_regs {
 	ADRENO_REG_CP_IB2_BASE,
 	ADRENO_REG_CP_IB2_BUFSZ,
 	ADRENO_REG_CP_TIMESTAMP,
+<<<<<<< HEAD
+=======
+	ADRENO_REG_CP_HW_FAULT,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ADRENO_REG_SCRATCH_ADDR,
 	ADRENO_REG_SCRATCH_UMSK,
 	ADRENO_REG_SCRATCH_REG2,
@@ -522,7 +541,11 @@ const char *adreno_perfcounter_get_name(struct adreno_device
 
 int adreno_perfcounter_get(struct adreno_device *adreno_dev,
 	unsigned int groupid, unsigned int countable, unsigned int *offset,
+<<<<<<< HEAD
 	unsigned int flags);
+=======
+	unsigned int *offset_hi, unsigned int flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int adreno_perfcounter_put(struct adreno_device *adreno_dev,
 	unsigned int groupid, unsigned int countable, unsigned int flags);

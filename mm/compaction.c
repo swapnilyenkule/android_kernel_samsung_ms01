@@ -243,7 +243,10 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
 {
 	int nr_scanned = 0, total_isolated = 0;
 	struct page *cursor, *valid_page = NULL;
+<<<<<<< HEAD
 	unsigned long nr_strict_required = end_pfn - blockpfn;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned long flags;
 	bool locked = false;
 
@@ -256,11 +259,19 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
 
 		nr_scanned++;
 		if (!pfn_valid_within(blockpfn))
+<<<<<<< HEAD
 			continue;
 		if (!valid_page)
 			valid_page = page;
 		if (!PageBuddy(page))
 			continue;
+=======
+			goto isolate_fail;
+		if (!valid_page)
+			valid_page = page;
+		if (!PageBuddy(page))
+			goto isolate_fail;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		/*
 		 * The zone lock must be held to isolate freepages.
@@ -281,12 +292,19 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
 
 		/* Recheck this is a buddy page under lock */
 		if (!PageBuddy(page))
+<<<<<<< HEAD
 			continue;
 
 		/* Found a free page, break it into order-0 pages */
 		isolated = split_free_page(page);
 		if (!isolated && strict)
 			break;
+=======
+			goto isolate_fail;
+
+		/* Found a free page, break it into order-0 pages */
+		isolated = split_free_page(page);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		total_isolated += isolated;
 		for (i = 0; i < isolated; i++) {
 			list_add(&page->lru, freelist);
@@ -297,7 +315,15 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
 		if (isolated) {
 			blockpfn += isolated - 1;
 			cursor += isolated - 1;
+<<<<<<< HEAD
 		}
+=======
+			continue;
+		}
+isolate_fail:
+		if(strict)
+			break;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	trace_mm_compaction_isolate_freepages(nr_scanned, total_isolated);
@@ -307,7 +333,11 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
 	 * pages requested were isolated. If there were any failures, 0 is
 	 * returned and CMA will fail.
 	 */
+<<<<<<< HEAD
 	if (strict && nr_strict_required > total_isolated)
+=======
+	if(strict && blockpfn < end_pfn)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		total_isolated = 0;
 
 	if (locked)
@@ -578,6 +608,15 @@ isolate_migratepages_range(struct zone *zone, struct compact_control *cc,
 		/* Successfully isolated */
 		cc->finished_update_migrate = true;
 		del_page_from_lru_list(zone, page, page_lru(page));
+<<<<<<< HEAD
+=======
+
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+		if (unevictable)
+			__mod_zone_page_state(zone, NR_FREE_CMA_PAGES + 1 + page_lru(page), -1);
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		list_add(&page->lru, migratelist);
 		cc->nr_migratepages++;
 		nr_isolated++;
@@ -1082,6 +1121,17 @@ static int __compact_pgdat(pg_data_t *pgdat, struct compact_control *cc)
 		INIT_LIST_HEAD(&cc->freepages);
 		INIT_LIST_HEAD(&cc->migratepages);
 
+<<<<<<< HEAD
+=======
+		/*
+		 * When called via /proc/sys/vm/compact_memory
+		 * this makes sure we compact the whole zone regardless of
+		 * cached scanner positions.
+		 */
+		if (cc->order == -1)
+			__reset_isolation_suitable(zone);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (cc->order == -1 || !compaction_deferred(zone, cc->order))
 			compact_zone(zone, cc);
 
@@ -1141,8 +1191,19 @@ int sysctl_compact_memory;
 int sysctl_compaction_handler(struct ctl_table *table, int write,
 			void __user *buffer, size_t *length, loff_t *ppos)
 {
+<<<<<<< HEAD
 	if (write)
 		compact_nodes();
+=======
+	if (write) {
+		sysctl_compact_memory++;
+		compact_nodes();
+		pr_info("compact_memory done.(%d times so far)\n",
+			sysctl_compact_memory);
+	}
+	else
+		proc_dointvec(table, write, buffer, length, ppos);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }

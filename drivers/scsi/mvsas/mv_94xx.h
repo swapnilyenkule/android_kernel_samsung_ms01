@@ -258,6 +258,7 @@ enum sas_sata_phy_regs {
 #define SPI_ADDR_VLD_94XX         	(1U << 1)
 #define SPI_CTRL_SpiStart_94XX     	(1U << 0)
 
+<<<<<<< HEAD
 #define mv_ffc(x)   ffz(x)
 
 static inline int
@@ -273,6 +274,13 @@ mv_ffc64(u64 v)
 		return 32 + i;
 
 	return -1;
+=======
+static inline int
+mv_ffc64(u64 v)
+{
+	u64 x = ~v;
+	return x ? __ffs64(x) : -1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 #define r_reg_set_enable(i) \

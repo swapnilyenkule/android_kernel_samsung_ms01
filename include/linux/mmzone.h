@@ -708,7 +708,11 @@ typedef struct pglist_data {
 					     range, including holes */
 	int node_id;
 	wait_queue_head_t kswapd_wait;
+<<<<<<< HEAD
 	struct task_struct *kswapd;
+=======
+	struct task_struct *kswapd;	/* Protected by lock_memory_hotplug() */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int kswapd_max_order;
 	enum zone_type classzone_idx;
 } pg_data_t;

@@ -606,6 +606,10 @@ static int atm_tc_dump_class(struct Qdisc *sch, unsigned long cl,
 		struct sockaddr_atmpvc pvc;
 		int state;
 
+<<<<<<< HEAD
+=======
+		memset(&pvc, 0, sizeof(pvc));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pvc.sap_family = AF_ATMPVC;
 		pvc.sap_addr.itf = flow->vcc->dev ? flow->vcc->dev->number : -1;
 		pvc.sap_addr.vpi = flow->vcc->vpi;

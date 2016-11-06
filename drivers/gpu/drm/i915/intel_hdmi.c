@@ -138,14 +138,26 @@ static void i9xx_write_infoframe(struct drm_encoder *encoder,
 
 	I915_WRITE(VIDEO_DIP_CTL, VIDEO_DIP_ENABLE | val | port | flags);
 
+<<<<<<< HEAD
+=======
+	mmiowb();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < len; i += 4) {
 		I915_WRITE(VIDEO_DIP_DATA, *data);
 		data++;
 	}
+<<<<<<< HEAD
+=======
+	mmiowb();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	flags |= intel_infoframe_flags(frame);
 
 	I915_WRITE(VIDEO_DIP_CTL, VIDEO_DIP_ENABLE | val | port | flags);
+<<<<<<< HEAD
+=======
+	POSTING_READ(VIDEO_DIP_CTL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void ironlake_write_infoframe(struct drm_encoder *encoder,
@@ -168,14 +180,26 @@ static void ironlake_write_infoframe(struct drm_encoder *encoder,
 
 	I915_WRITE(reg, VIDEO_DIP_ENABLE | val | flags);
 
+<<<<<<< HEAD
+=======
+	mmiowb();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < len; i += 4) {
 		I915_WRITE(TVIDEO_DIP_DATA(intel_crtc->pipe), *data);
 		data++;
 	}
+<<<<<<< HEAD
+=======
+	mmiowb();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	flags |= intel_infoframe_flags(frame);
 
 	I915_WRITE(reg, VIDEO_DIP_ENABLE | val | flags);
+<<<<<<< HEAD
+=======
+	POSTING_READ(reg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 static void intel_set_infoframe(struct drm_encoder *encoder,
 				struct dip_infoframe *frame)
@@ -271,7 +295,11 @@ static void intel_hdmi_dpms(struct drm_encoder *encoder, int mode)
 	u32 temp;
 	u32 enable_bits = SDVO_ENABLE;
 
+<<<<<<< HEAD
 	if (intel_hdmi->has_audio)
+=======
+	if (intel_hdmi->has_audio || mode != DRM_MODE_DPMS_ON)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		enable_bits |= SDVO_AUDIO_ENABLE;
 
 	temp = I915_READ(intel_hdmi->sdvox_reg);
@@ -549,10 +577,20 @@ void intel_hdmi_init(struct drm_device *dev, int sdvox_reg)
 	if (!HAS_PCH_SPLIT(dev)) {
 		intel_hdmi->write_infoframe = i9xx_write_infoframe;
 		I915_WRITE(VIDEO_DIP_CTL, 0);
+<<<<<<< HEAD
 	} else {
 		intel_hdmi->write_infoframe = ironlake_write_infoframe;
 		for_each_pipe(i)
 			I915_WRITE(TVIDEO_DIP_CTL(i), 0);
+=======
+		POSTING_READ(VIDEO_DIP_CTL);
+	} else {
+		intel_hdmi->write_infoframe = ironlake_write_infoframe;
+		for_each_pipe(i) {
+			I915_WRITE(TVIDEO_DIP_CTL(i), 0);
+			POSTING_READ(TVIDEO_DIP_CTL(i));
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	drm_encoder_helper_add(&intel_encoder->base, &intel_hdmi_helper_funcs);

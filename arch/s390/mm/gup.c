@@ -183,7 +183,11 @@ int get_user_pages_fast(unsigned long start, int nr_pages, int write,
 	addr = start;
 	len = (unsigned long) nr_pages << PAGE_SHIFT;
 	end = start + len;
+<<<<<<< HEAD
 	if (end < start)
+=======
+	if ((end < start) || (end > TASK_SIZE))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto slow_irqon;
 
 	/*

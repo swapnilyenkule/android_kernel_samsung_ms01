@@ -186,8 +186,13 @@ static void do_usb_entry(struct usb_device_id *id,
 				range_lo < 0x9 ? "[%X-9" : "[%X",
 				range_lo);
 			sprintf(alias + strlen(alias),
+<<<<<<< HEAD
 				range_hi > 0xA ? "a-%X]" : "%X]",
 				range_lo);
+=======
+				range_hi > 0xA ? "A-%X]" : "%X]",
+				range_hi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 	if (bcdDevice_initial_digits < (sizeof(id->bcdDevice_lo) * 2 - 1))

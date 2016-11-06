@@ -1,6 +1,10 @@
 /**
    @copyright
+<<<<<<< HEAD
    Copyright (c) 2013, INSIDE Secure Oy. All rights reserved.
+=======
+   Copyright (c) 2013 - 2014, INSIDE Secure Oy. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 */
 
 #include <linux/kernel.h>
@@ -8,16 +12,30 @@
 #include <linux/uaccess.h>
 #include <linux/vmalloc.h>
 #include <linux/module.h>
+<<<<<<< HEAD
+=======
+#include <linux/user_namespace.h>
+#include <linux/version.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include "kernelspd_internal.h"
 
 #define KERNELSPD_PROCFS_COMMAND_BYTECOUNT_MAX 0x7fffffff
+<<<<<<< HEAD
+=======
+#define KERNELSPD_IPSEC_BOUNDARY_LENGTH_MAX (10*1024)
+
+char *ipsec_boundary;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static struct proc_dir_entry *spd_control_file;
 static int initialised = 0;
 static int active = 0;
 static int open = 0;
+<<<<<<< HEAD
 static char interfaces[1024] = "";
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static int
 spd_proc_open(
@@ -42,12 +60,94 @@ spd_proc_open(
   return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int
+update_ipsec_boundary(
+        const char __user *user_boundary,
+        size_t user_boundary_bytecount)
+{
+  char *new_ipsec_boundary = NULL;
+  unsigned new_ipsec_boundary_bytecount = user_boundary_bytecount;
+  int status;
+
+  if (new_ipsec_boundary_bytecount == 0)
+    {
+      DEBUG_FAIL(def, "IPsec boundary needed.");
+      return -EFAULT;
+    }
+
+  if (new_ipsec_boundary_bytecount > KERNELSPD_IPSEC_BOUNDARY_LENGTH_MAX)
+    {
+      DEBUG_FAIL(
+              def,
+              "IPsec boundary too long %u.",
+              new_ipsec_boundary_bytecount);
+
+      return -EFAULT;
+    }
+
+  new_ipsec_boundary = vmalloc(new_ipsec_boundary_bytecount + 1);
+  if (new_ipsec_boundary == NULL)
+    {
+      DEBUG_FAIL(def, "vmalloc() failed.");
+      return -EFAULT;
+    }
+
+  status =
+      copy_from_user(
+              new_ipsec_boundary,
+              user_boundary,
+              new_ipsec_boundary_bytecount);
+  if (status != 0)
+    {
+      DEBUG_FAIL(def, "Copy from user failed.");
+      vfree(new_ipsec_boundary);
+      return -EFAULT;
+    }
+
+  new_ipsec_boundary[new_ipsec_boundary_bytecount] = '\0';
+  if (ipsec_boundary_is_valid_spec(new_ipsec_boundary) == false)
+    {
+      DEBUG_FAIL(
+              def,
+              "IPsec boundary '%s' invalid.",
+              new_ipsec_boundary);
+      vfree(new_ipsec_boundary);
+      return -EFAULT;
+    }
+
+    {
+      char *old_boundary;
+
+      write_lock_bh(&spd_lock);
+
+      old_boundary = ipsec_boundary;
+      ipsec_boundary = new_ipsec_boundary;
+
+      write_unlock_bh(&spd_lock);
+
+      if (old_boundary != NULL)
+        {
+          vfree(old_boundary);
+        }
+    }
+
+  return 0;
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int
 process_command(
         struct KernelSpdCommand *cmd,
+<<<<<<< HEAD
         const char __user *data,
         size_t data_len)
+=======
+        const char __user *cmd_data,
+        size_t cmd_data_bytecount)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 {
   int status = 0;
@@ -58,6 +158,7 @@ process_command(
     {
     case KERNEL_SPD_ACTIVATE:
       {
+<<<<<<< HEAD
         int ifnames_len = cmd->bytecount - sizeof cmd;
 
         if (ifnames_len >= sizeof interfaces - 1)
@@ -75,10 +176,18 @@ process_command(
         if (active != 0)
           {
             DEBUG_FAIL(def, "Kernel SPD Already active.\n");
+=======
+        int ipsec_boundary_bytecount = cmd_data_bytecount;
+
+        if (active != 0)
+          {
+            DEBUG_FAIL(def, "Kernel SPD already active.");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             status = -EFAULT;
           }
         else
           {
+<<<<<<< HEAD
             status = copy_from_user(interfaces, data, ifnames_len);
             if (status != 0)
               {
@@ -93,6 +202,17 @@ process_command(
             if (spd_hooks_init() != 0)
               {
                 DEBUG_FAIL(proc, "Kernel SPD Failed activating NF Hooks.\n");
+=======
+            status = update_ipsec_boundary(cmd_data, ipsec_boundary_bytecount);
+            if (status != 0)
+              {
+                break;
+              }
+
+            if (spd_hooks_init() != 0)
+              {
+                DEBUG_FAIL(proc, "Kernel SPD Failed activating NF Hooks.");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 status = -EFAULT;
               }
 
@@ -100,8 +220,13 @@ process_command(
 
             DEBUG_HIGH(
                     kernel,
+<<<<<<< HEAD
                     "Kernel SPD activated. Unprotected interfaces: %s.\n",
                     interfaces);
+=======
+                    "Kernel SPD activated. IPsec boundary: '%s'.",
+                    ipsec_boundary);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
           }
       }
       break;
@@ -119,20 +244,31 @@ process_command(
           }
 
         active = 0;
+<<<<<<< HEAD
         status = cmd->bytecount;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       }
       break;
 
     case KERNEL_SPD_INSERT_ENTRY:
       {
         struct IPSelectorDbEntry *entry;
+<<<<<<< HEAD
         const int payload_bytecount = cmd->bytecount - sizeof *cmd;
+=======
+        const int payload_bytecount = cmd_data_bytecount;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
         if (!KERNEL_SPD_ID_VALID(cmd->spd_id))
         {
           DEBUG_FAIL(
                   proc,
+<<<<<<< HEAD
                   "Invalid SPD id %d.\n",
+=======
+                  "Invalid SPD id %d.",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                   cmd->spd_id);
 
           status = -EFAULT;
@@ -151,7 +287,11 @@ process_command(
             break;
           }
 
+<<<<<<< HEAD
         status = copy_from_user(entry + 1, data, payload_bytecount);
+=======
+        status = copy_from_user(entry + 1, cmd_data, payload_bytecount);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         if (status != 0)
           {
             DEBUG_FAIL(proc, "Copy from user failed.");
@@ -182,7 +322,12 @@ process_command(
                 debug_dump_ip_selector_group,
                 entry + 1,
                 payload_bytecount,
+<<<<<<< HEAD
                 "Insert entry %d to spd id %d action %d priority %d precedence %d:",
+=======
+                "Insert entry %d to spd "
+                "id %d action %d priority %d precedence %d:",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 entry->id,
                 cmd->spd_id,
                 entry->action,
@@ -192,8 +337,11 @@ process_command(
         write_lock_bh(&spd_lock);
         ip_selector_db_entry_add(&spd, cmd->spd_id, entry, cmd->precedence);
         write_unlock_bh(&spd_lock);
+<<<<<<< HEAD
 
         status = cmd->bytecount;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       }
       break;
 
@@ -248,7 +396,77 @@ process_command(
             }
         }
 
+<<<<<<< HEAD
       status = cmd->bytecount;
+=======
+      break;
+
+    case KERNEL_SPD_UPDATE_IPSEC_BOUNDARY:
+      {
+        int new_ipsec_boundary_bytecount = cmd_data_bytecount;
+
+        if (active == 0)
+          {
+            DEBUG_FAIL(def, "Kernel SPD is not active.");
+            return -EFAULT;
+          }
+
+        status = update_ipsec_boundary(cmd_data, new_ipsec_boundary_bytecount);
+        if (status != 0)
+          {
+            break;
+          }
+
+        DEBUG_HIGH(
+                kernel,
+                "IPsec boundary updated: '%s'.",
+                ipsec_boundary);
+      }
+      break;
+
+    case KERNEL_SPD_VERSION_SYNC:
+      {
+        int version_bytecount = cmd_data_bytecount;
+        uint32_t version;
+
+        if (version_bytecount != sizeof version)
+          {
+            DEBUG_FAIL(
+                    def,
+                    "Invalid version size %d; should be %d.",
+                    version_bytecount,
+                    (int) sizeof version);
+            return -EFAULT;
+          }
+
+        status =
+            copy_from_user(
+                    &version,
+                    cmd_data,
+                    sizeof version);
+        if (status != 0)
+          {
+            DEBUG_FAIL(def, "Copy from user failed.");
+            return -EFAULT;
+          }
+
+        if (version != KERNEL_SPD_VERSION)
+          {
+            DEBUG_FAIL(
+                    def,
+                    "Invalid version %d; should be %d.",
+                    version,
+                    KERNEL_SPD_VERSION);
+
+            return -EINVAL;
+          }
+
+        DEBUG_HIGH(
+                kernel,
+                "Versions in sync: %d.",
+                version);
+      }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       break;
 
     default:
@@ -321,6 +539,7 @@ spd_proc_write(
           break;
         }
 
+<<<<<<< HEAD
       bytes_read += sizeof command;
 
       status = process_command(&command, data + bytes_read, data_len - bytes_read);
@@ -331,6 +550,35 @@ spd_proc_write(
         }
 
       bytes_read += status;
+=======
+      if (command.bytecount > data_len - bytes_read)
+        {
+          DEBUG_FAIL(
+                  proc,
+                  "Command bytecount %d bigger than data_len %d.",
+                  (int) command.bytecount,
+                  (int) data_len);
+
+          bytes_read = -EINVAL;
+          break;
+        }
+
+      bytes_read += sizeof command;
+
+      status =
+          process_command(
+                  &command,
+                  data + bytes_read,
+                  command.bytecount - sizeof command);
+
+      if (status < 0)
+        {
+          bytes_read = status;
+          break;
+        }
+
+      bytes_read += command.bytecount;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
   return bytes_read;
@@ -390,6 +638,31 @@ static const struct file_operations spd_proc_fops =
   .release = spd_proc_release
 };
 
+<<<<<<< HEAD
+=======
+void spd_proc_set_ids(struct proc_dir_entry *proc_entry)
+{
+  uid_t uid = 0;
+  gid_t gid = 0;
+
+#ifdef CONFIG_VPNCLIENT_PROC_UID
+  uid = CONFIG_VPNCLIENT_PROC_UID;
+#endif
+
+#ifdef CONFIG_VPNCLIENT_PROC_GID
+  gid = CONFIG_VPNCLIENT_PROC_GID;
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+  proc_entry->uid = uid;
+  proc_entry->gid = gid;
+#else
+  proc_set_user(proc_entry,
+                make_kuid(current_user_ns(), uid),
+                make_kgid(current_user_ns(), gid));
+#endif
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int
 spd_proc_init(
@@ -398,7 +671,11 @@ spd_proc_init(
   spd_control_file =
       proc_create(
               LINUX_SPD_PROC_FILENAME,
+<<<<<<< HEAD
               S_IFREG | S_IRUSR | S_IWUSR,
+=======
+              S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
               NULL, &spd_proc_fops);
 
   if (spd_control_file == NULL)
@@ -411,7 +688,12 @@ spd_proc_init(
       return -1;
     }
 
+<<<<<<< HEAD
   unprotected_ifaces = interfaces;
+=======
+  spd_proc_set_ids(spd_control_file);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   initialised = 1;
 
   DEBUG_MEDIUM(
@@ -441,6 +723,16 @@ spd_proc_uninit(
       spd_proc_cleanup_selectors();
 
       remove_proc_entry(LINUX_SPD_PROC_FILENAME, NULL);
+<<<<<<< HEAD
+=======
+
+      if (ipsec_boundary != NULL)
+        {
+          vfree(ipsec_boundary);
+          ipsec_boundary = NULL;
+        }
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       initialised = 0;
     }
   else

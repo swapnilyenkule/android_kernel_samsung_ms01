@@ -39,11 +39,19 @@
 #undef __SYSCALL_I386
 #define __SYSCALL_I386(nr, sym, compat) [ nr ] = sym,
 
+<<<<<<< HEAD
 typedef void (*sys_call_ptr_t)(void);
 
 extern void sys_ni_syscall(void);
 
 const sys_call_ptr_t sys_call_table[] __cacheline_aligned = {
+=======
+typedef asmlinkage void (*sys_call_ptr_t)(void);
+
+extern asmlinkage void sys_ni_syscall(void);
+
+const sys_call_ptr_t sys_call_table[] ____cacheline_aligned = {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * Smells like a compiler bug -- it doesn't work
 	 * when the & below is removed.

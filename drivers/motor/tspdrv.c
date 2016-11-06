@@ -121,6 +121,7 @@ static int vibrator_work;
 
 struct vibrator_platform_data vibrator_drvdata;
 
+<<<<<<< HEAD
 /*
  * msm8974_sec tspdrv vibration strength control
  * (/sys/class/timed_output/vibrator/pwm_value)
@@ -135,6 +136,8 @@ struct vibrator_platform_data vibrator_drvdata;
 #define BASE_STRENGTH 126
 static unsigned int pwm_val = 100;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int set_vibetonz(int timeout)
 {
 	int8_t strength;
@@ -148,7 +151,11 @@ static int set_vibetonz(int timeout)
 	} else {
 		DbgOut((KERN_INFO "tspdrv: ENABLE\n"));
 		if (vibrator_drvdata.vib_model == HAPTIC_PWM) {
+<<<<<<< HEAD
 			strength = (int8_t) (BASE_STRENGTH * pwm_val / 100);
+=======
+			strength = 126;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			/* 90% duty cycle */
 			ImmVibeSPI_ForceOut_SetSamples(0, 8, 1, &strength);
 		} else { /* HAPTIC_MOTOR */
@@ -161,6 +168,7 @@ static int set_vibetonz(int timeout)
 	return 0;
 }
 
+<<<<<<< HEAD
 static ssize_t pwm_value_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", pwm_val);
@@ -189,6 +197,8 @@ ssize_t pwm_value_store(struct device *dev, struct device_attribute *attr, const
 static DEVICE_ATTR(pwm_value, S_IRUGO | S_IWUSR,
 		pwm_value_show, pwm_value_store);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void _set_vibetonz_work(struct work_struct *unused)
 {
 	set_vibetonz(vibrator_work);
@@ -261,6 +271,7 @@ static void vibetonz_start(void)
 
 	ret = timed_output_dev_register(&timed_output_vt);
 
+<<<<<<< HEAD
 	if (ret) {
 		DbgOut((KERN_ERR
 		"tspdrv: timed_output_dev_register is fail\n"));
@@ -272,6 +283,11 @@ static void vibetonz_start(void)
 	if (ret)
 		DbgOut((KERN_ERR
 		"tspdrv: create sysfs fail: pwm_value\n"));
+=======
+	if (ret)
+		DbgOut((KERN_ERR
+		"tspdrv: timed_output_dev_register is fail\n"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* File IO */

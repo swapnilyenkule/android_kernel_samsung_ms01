@@ -233,6 +233,10 @@ static int sdcardfs_open(struct inode *inode, struct file *file)
 	/* save current_cred and override it */
 	OVERRIDE_CRED(sbi, saved_cred);
 
+<<<<<<< HEAD
+=======
+	file->f_mode |= FMODE_NONMAPPABLE;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	file->private_data =
 		kzalloc(sizeof(struct sdcardfs_file_info), GFP_KERNEL);
 	if (!SDCARDFS_F(file)) {
@@ -258,8 +262,15 @@ static int sdcardfs_open(struct inode *inode, struct file *file)
 	if (err)
 		kfree(SDCARDFS_F(file));
 	else {
+<<<<<<< HEAD
 		fsstack_copy_attr_all(inode, sdcardfs_lower_inode(inode));
 		fix_derived_permission(inode); 
+=======
+		mutex_lock(&inode->i_mutex);
+		sdcardfs_copy_inode_attr(inode, sdcardfs_lower_inode(inode));
+		fix_derived_permission(inode);
+		mutex_unlock(&inode->i_mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 out_revert_cred:
@@ -324,6 +335,14 @@ static int sdcardfs_fasync(int fd, struct file *file, int flag)
 	return err;
 }
 
+<<<<<<< HEAD
+=======
+static struct file *sdcardfs_get_lower_file(struct file *f)
+{
+	return sdcardfs_lower_file(f);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 const struct file_operations sdcardfs_main_fops = {
 	.llseek		= generic_file_llseek,
 	.read		= sdcardfs_read,
@@ -338,6 +357,10 @@ const struct file_operations sdcardfs_main_fops = {
 	.release	= sdcardfs_file_release,
 	.fsync		= sdcardfs_fsync,
 	.fasync		= sdcardfs_fasync,
+<<<<<<< HEAD
+=======
+	.get_lower_file = sdcardfs_get_lower_file,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /* trimmed directory options */
@@ -354,4 +377,8 @@ const struct file_operations sdcardfs_dir_fops = {
 	.flush		= sdcardfs_flush,
 	.fsync		= sdcardfs_fsync,
 	.fasync		= sdcardfs_fasync,
+<<<<<<< HEAD
+=======
+	.get_lower_file = sdcardfs_get_lower_file,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };

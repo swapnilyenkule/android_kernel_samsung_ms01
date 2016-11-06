@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2011-2015 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,11 +42,21 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*
  *
+<<<<<<< HEAD
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limProcessBeaconFrame.cc contains the code
  * for processing Received Beacon Frame.
  * Author:        Chandra Modumudi
@@ -94,7 +109,10 @@ limProcessBeaconFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession ps
     /* here is it required to increment session specific heartBeat beacon counter */  
 
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     pHdr = WDA_GET_RX_MAC_HEADER(pRxPacketInfo);
 
 
@@ -136,6 +154,7 @@ limProcessBeaconFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession ps
             // Received wrongly formatted/invalid Beacon.
             // Ignore it and move on.
             limLog(pMac, LOGW,
+<<<<<<< HEAD
                    FL("Received invalid Beacon in state %X"),
                    psessionEntry->limMlmState);
             limPrintMlmState(pMac, LOGW,  psessionEntry->limMlmState);
@@ -143,6 +162,18 @@ limProcessBeaconFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession ps
             return;
         }
 
+=======
+                   FL("Received invalid Beacon in state %d"),
+                   psessionEntry->limMlmState);
+            limPrintMlmState(pMac, LOGW,  psessionEntry->limMlmState);
+            if ((!psessionEntry->currentBssBeaconCnt) &&
+               (sirCompareMacAddr( psessionEntry->bssId, pHdr->sa)))
+                limParseBeaconForTim(pMac, (tANI_U8 *) pRxPacketInfo, psessionEntry);
+
+            vos_mem_free(pBeacon);
+            return;
+        }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         /*during scanning, when any session is active, and beacon/Pr belongs to
           one of the session, fill up the following, TBD - HB couter */
         if ((!psessionEntry->lastBeaconDtimPeriod) &&
@@ -287,7 +318,11 @@ limProcessBeaconFrameNoSession(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo)
         if (sirConvertBeaconFrame2Struct(pMac, (tANI_U8 *) pRxPacketInfo, pBeacon) != eSIR_SUCCESS)
         {
             // Received wrongly formatted/invalid Beacon. Ignore and move on. 
+<<<<<<< HEAD
             limLog(pMac, LOGW, FL("Received invalid Beacon in global MLM state %X"), pMac->lim.gLimMlmState);
+=======
+            limLog(pMac, LOGW, FL("Received invalid Beacon in global MLM state %d"), pMac->lim.gLimMlmState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             limPrintMlmState(pMac, LOGW,  pMac->lim.gLimMlmState);
             vos_mem_free(pBeacon);
             return;
@@ -310,7 +345,12 @@ limProcessBeaconFrameNoSession(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo)
     } // end of (eLIM_MLM_WT_PROBE_RESP_STATE) || (eLIM_MLM_PASSIVE_SCAN_STATE)
     else
     {
+<<<<<<< HEAD
         limLog(pMac, LOG1, FL("Rcvd Beacon in unexpected MLM state %d"), pMac->lim.gLimMlmState);
+=======
+        limLog(pMac, LOG1, FL("Rcvd Beacon in unexpected MLM state %s (%d)"),
+               limMlmStateStr(pMac->lim.gLimMlmState), pMac->lim.gLimMlmState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         limPrintMlmState(pMac, LOG1, pMac->lim.gLimMlmState);
 #ifdef WLAN_DEBUG                    
         pMac->lim.gLimUnexpBcnCnt++;

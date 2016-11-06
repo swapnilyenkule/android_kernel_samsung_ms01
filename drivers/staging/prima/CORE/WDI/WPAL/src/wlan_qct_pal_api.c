@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012,2014-2015 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /**=========================================================================
@@ -61,6 +73,7 @@
 #ifndef MEMORY_DEBUG
 #include "vos_memory.h"
 #endif /* MEMORY_DEBUG */
+<<<<<<< HEAD
 #include "vos_api.h"
 
 #include "dma-mapping.h"
@@ -72,6 +85,20 @@ typedef struct sPalStruct
    /*?must check the data type*/
    void* devHandle;
 } tPalContext;
+=======
+#include "vos_sched.h"
+#include "vos_api.h"
+
+#include "dma-mapping.h"
+#include <linux/version.h>
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0))
+#include <soc/qcom/subsystem_restart.h>
+#else
+#include <mach/subsystem_restart.h>
+#endif
+#include <linux/wcnss_wlan.h>
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define WPAL_GET_NDIS_HANDLE(p)  ( ((tPalContext *)(p))->devHandle )
 
@@ -99,6 +126,7 @@ typedef struct
  *                     is opaque to caller.
  *                    Caller save the returned pointer for future use when
  *                    calling PAL APIs.
+<<<<<<< HEAD
  * @param pOSContext Pointer to a context that is OS specific. This is NULL is a 
                      particular PAL doesn't use it for that OS.
  * 
@@ -111,6 +139,19 @@ wpt_status wpalOpen(void **ppPalContext, void *pOSContext)
    gContext.devHandle = pOSContext;
 
    status = wpalDeviceInit(pOSContext);
+=======
+ * @param devHandle pointer to the OS specific device handle.
+ * 
+ * @return wpt_status eWLAN_PAL_STATUS_SUCCESS - success. Otherwise fail.
+ */
+wpt_status wpalOpen(void **ppPalContext, void *devHandle)
+{
+   wpt_status status;
+
+   gContext.devHandle = devHandle;
+
+   status = wpalDeviceInit(devHandle);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    if (!WLAN_PAL_IS_STATUS_SUCCESS(status))
    {
       WPAL_TRACE(eWLAN_MODULE_PAL, eWLAN_PAL_TRACE_LEVEL_FATAL,
@@ -226,10 +267,15 @@ void wpalMemoryFill(void *buf, wpt_uint32 size, wpt_byte bFill)
  */
 void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr)
 {
+<<<<<<< HEAD
+=======
+   struct device *wcnss_device = (struct device *) gContext.devHandle;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    void *pv = NULL;
    dma_addr_t PhyAddr;
    wpt_uint32 uAllocLen = size + sizeof(tPalDmaMemInfo);
    
+<<<<<<< HEAD
    pv = dma_alloc_coherent(NULL, uAllocLen, &PhyAddr, GFP_KERNEL);
    if ( NULL == pv ) 
    {
@@ -237,6 +283,16 @@ void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr)
                  "%s Unable to allocate DMA buffer\n", __func__);
      return NULL;
    }
+=======
+   pv = dma_alloc_coherent(wcnss_device, uAllocLen, &PhyAddr, GFP_KERNEL);
+   if ( NULL == pv ) 
+   {
+     WPAL_TRACE(eWLAN_MODULE_PAL, eWLAN_PAL_TRACE_LEVEL_ERROR, 
+                 "%s Unable to allocate DMA buffer", __func__);
+     return NULL;
+   }
+   wpalMemoryZero(pv, uAllocLen);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    
    ((tPalDmaMemInfo *)pv)->length  = uAllocLen;
@@ -256,12 +312,21 @@ void *wpalDmaMemoryAllocate(wpt_uint32 size, void **ppPhysicalAddr)
  */
 void wpalDmaMemoryFree(void *pv)
 {
+<<<<<<< HEAD
+=======
+   struct device *wcnss_device = (struct device *) gContext.devHandle;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    tPalDmaMemInfo *pMemInfo = (tPalDmaMemInfo *)(((wpt_byte *)pv) -
                                       sizeof(tPalDmaMemInfo));
     if(pv)
     { 
         pv = (wpt_byte *)pv - pMemInfo->offset;
+<<<<<<< HEAD
         dma_free_coherent(NULL, pMemInfo->length, pv, pMemInfo->phyAddr);
+=======
+        dma_free_coherent(wcnss_device, pMemInfo->length, pv, pMemInfo->phyAddr);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
 }/*wpalDmaMemoryFree*/
@@ -430,7 +495,11 @@ void wpalWcnssResetIntr(void)
 
 /*---------------------------------------------------------------------------
     wpalFwDumpReq -  Trigger the dump commands to Firmware
+<<<<<<< HEAD
 
+=======
+     
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     Param:
        cmd - Command No. to execute
        arg1 - argument 1 to cmd
@@ -459,7 +528,38 @@ void wpalFwDumpReq(wpt_uint32 cmd, wpt_uint32 arg1, wpt_uint32 arg2,
 ---------------------------------------------------------------------------*/
 void wpalDevicePanic(void)
 {
+<<<<<<< HEAD
    BUG_ON(0);
    return;
 }
+=======
+   BUG_ON(1);
+   return;
+}
+/*---------------------------------------------------------------------------
+    wpalIslogPInProgress -  calls vos API vos_is_logp_in_progress()
+
+    Param:
+       NONE
+    Return:
+       STATUS
+ ---------------------------------------------------------------------------*/
+int  wpalIslogPInProgress(void)
+{
+   return vos_is_logp_in_progress(VOS_MODULE_ID_WDI, NULL);
+}
+
+/*---------------------------------------------------------------------------
+    wpalIsSsrPanicOnFailure -  calls vos API isSsrPanicOnFailure()
+
+    Param:
+       NONE
+    Return:
+       STATUS
+ ---------------------------------------------------------------------------*/
+int  wpalIsSsrPanicOnFailure(void)
+{
+   return isSsrPanicOnFailure();
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 

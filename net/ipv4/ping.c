@@ -214,8 +214,11 @@ static struct sock *ping_lookup(struct net *net, struct sk_buff *skb, u16 ident)
 					     &ipv6_hdr(skb)->daddr))
 				continue;
 #endif
+<<<<<<< HEAD
 		} else {
 			continue;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif)
@@ -255,9 +258,12 @@ int ping_init_sock(struct sock *sk)
 	int i, j, count;
 	int ret = 0;
 
+<<<<<<< HEAD
 	if (sk->sk_family == AF_INET6)
 		inet6_sk(sk)->ipv6only = 1;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	inet_get_ping_group_range_net(net, range, range+1);
 	if (range[0] <= group && group <= range[1])
 		return 0;
@@ -275,6 +281,10 @@ int ping_init_sock(struct sock *sk)
 
 		count -= cp_count;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = -EACCES;
 
 out_release_group:
@@ -304,11 +314,14 @@ int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
 		if (addr_len < sizeof(*addr))
 			return -EINVAL;
 
+<<<<<<< HEAD
 		if (addr->sin_family != AF_INET &&
 		    !(addr->sin_family == AF_UNSPEC &&
 		      addr->sin_addr.s_addr == htonl(INADDR_ANY)))
 			return -EAFNOSUPPORT;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pr_debug("ping_check_bind_addr(sk=%p,addr=%pI4,port=%d)\n",
 			 sk, &addr->sin_addr.s_addr, ntohs(addr->sin_port));
 
@@ -333,9 +346,12 @@ int ping_check_bind_addr(struct sock *sk, struct inet_sock *isk,
 		if (addr_len < sizeof(*addr))
 			return -EINVAL;
 
+<<<<<<< HEAD
 		if (addr->sin6_family != AF_INET6)
 			return -EAFNOSUPPORT;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pr_debug("ping_check_bind_addr(sk=%p,addr=%pI6c,port=%d)\n",
 			 sk, addr->sin6_addr.s6_addr, ntohs(addr->sin6_port));
 
@@ -722,7 +738,11 @@ int ping_v4_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		if (msg->msg_namelen < sizeof(*usin))
 			return -EINVAL;
 		if (usin->sin_family != AF_INET)
+<<<<<<< HEAD
 			return -EAFNOSUPPORT;
+=======
+			return -EINVAL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		daddr = usin->sin_addr.s_addr;
 		/* no remote port */
 	} else {
@@ -794,7 +814,11 @@ int ping_v4_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		err = PTR_ERR(rt);
 		rt = NULL;
 		if (err == -ENETUNREACH)
+<<<<<<< HEAD
 			IP_INC_STATS_BH(net, IPSTATS_MIB_OUTNOROUTES);
+=======
+			IP_INC_STATS(net, IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto out;
 	}
 
@@ -1094,7 +1118,11 @@ static void ping_seq_stop(struct seq_file *seq, void *v)
 }
 
 static void ping_format_sock(struct sock *sp, struct seq_file *f,
+<<<<<<< HEAD
 		int bucket, int *len)
+=======
+		int bucket)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct inet_sock *inet = inet_sk(sp);
 	__be32 dest = inet->inet_daddr;
@@ -1103,29 +1131,50 @@ static void ping_format_sock(struct sock *sp, struct seq_file *f,
 	__u16 srcp = ntohs(inet->inet_sport);
 
 	seq_printf(f, "%5d: %08X:%04X %08X:%04X"
+<<<<<<< HEAD
 		" %02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %d%n",
+=======
+		" %02X %08X:%08X %02X:%08lX %08X %5d %8d %lu %d %pK %d",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		bucket, src, srcp, dest, destp, sp->sk_state,
 		sk_wmem_alloc_get(sp),
 		sk_rmem_alloc_get(sp),
 		0, 0L, 0, sock_i_uid(sp), 0, sock_i_ino(sp),
 		atomic_read(&sp->sk_refcnt), sp,
+<<<<<<< HEAD
 		atomic_read(&sp->sk_drops), len);
+=======
+		atomic_read(&sp->sk_drops));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int ping_seq_show(struct seq_file *seq, void *v)
 {
+<<<<<<< HEAD
 	if (v == SEQ_START_TOKEN)
 		seq_printf(seq, "%-127s\n",
 			   "  sl  local_address rem_address   st tx_queue "
+=======
+	seq_setwidth(seq, 127);
+	if (v == SEQ_START_TOKEN)
+		seq_puts(seq, "  sl  local_address rem_address   st tx_queue "
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			   "rx_queue tr tm->when retrnsmt   uid  timeout "
 			   "inode ref pointer drops");
 	else {
 		struct ping_iter_state *state = seq->private;
+<<<<<<< HEAD
 		int len;
 
 		ping_format_sock(v, seq, state->bucket, &len);
 		seq_printf(seq, "%*s\n", 127 - len, "");
 	}
+=======
+
+		ping_format_sock(v, seq, state->bucket);
+	}
+	seq_pad(seq, '\n');
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 

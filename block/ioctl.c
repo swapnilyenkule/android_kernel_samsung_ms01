@@ -8,7 +8,16 @@
 #include <linux/fs.h>
 #include <linux/blktrace_api.h>
 #include <asm/uaccess.h>
+<<<<<<< HEAD
 #include <linux/stlog.h>
+=======
+
+#ifdef CONFIG_BLOCK_SUPPORT_STLOG
+#include <linux/stlog.h>
+#else
+#define ST_LOG(fmt,...)
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static int blkpg_ioctl(struct block_device *bdev, struct blkpg_ioctl_arg __user *arg)
 {

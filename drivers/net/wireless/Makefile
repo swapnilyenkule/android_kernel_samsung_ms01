@@ -65,7 +65,11 @@ obj-$(CONFIG_BCM4334)	+= bcmdhd/
 obj-$(CONFIG_BCM43241)	+= bcmdhd/
 obj-$(CONFIG_BCM4335)	+= bcmdhd/
 obj-$(CONFIG_BCM4339)	+= bcmdhd/
+<<<<<<< HEAD
 obj-$(CONFIG_BCM4354)	+= bcmdhd4354/
+=======
+obj-$(CONFIG_BCM4354)	+= bcmdhd/
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 obj-$(CONFIG_BRCMFMAC)	+= brcm80211/
 obj-$(CONFIG_BRCMSMAC)	+= brcm80211/

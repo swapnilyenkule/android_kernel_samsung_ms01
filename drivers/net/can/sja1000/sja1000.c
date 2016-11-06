@@ -91,7 +91,11 @@ static void sja1000_write_cmdreg(struct sja1000_priv *priv, u8 val)
 	 */
 	spin_lock_irqsave(&priv->cmdreg_lock, flags);
 	priv->write_reg(priv, REG_CMR, val);
+<<<<<<< HEAD
 	priv->read_reg(priv, REG_SR);
+=======
+	priv->read_reg(priv, SJA1000_REG_SR);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_unlock_irqrestore(&priv->cmdreg_lock, flags);
 }
 
@@ -487,6 +491,7 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 	uint8_t isrc, status;
 	int n = 0;
 
+<<<<<<< HEAD
 	/* Shared interrupts and IRQ off? */
 	if (priv->read_reg(priv, REG_IER) == IRQ_OFF)
 		return IRQ_NONE;
@@ -500,6 +505,21 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 		/* check for absent controller due to hw unplug */
 		if (status == 0xFF && sja1000_is_absent(priv))
 			return IRQ_NONE;
+=======
+	if (priv->pre_irq)
+		priv->pre_irq(priv);
+
+	/* Shared interrupts and IRQ off? */
+	if (priv->read_reg(priv, REG_IER) == IRQ_OFF)
+		goto out;
+
+	while ((isrc = priv->read_reg(priv, REG_IR)) && (n < SJA1000_MAX_IRQ)) {
+
+		status = priv->read_reg(priv, SJA1000_REG_SR);
+		/* check for absent controller due to hw unplug */
+		if (status == 0xFF && sja1000_is_absent(priv))
+			goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		if (isrc & IRQ_WUI)
 			netdev_warn(dev, "wakeup interrupt\n");
@@ -515,10 +535,17 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 			/* receive interrupt */
 			while (status & SR_RBS) {
 				sja1000_rx(dev);
+<<<<<<< HEAD
 				status = priv->read_reg(priv, REG_SR);
 				/* check for absent controller */
 				if (status == 0xFF && sja1000_is_absent(priv))
 					return IRQ_NONE;
+=======
+				status = priv->read_reg(priv, SJA1000_REG_SR);
+				/* check for absent controller */
+				if (status == 0xFF && sja1000_is_absent(priv))
+					goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 		}
 		if (isrc & (IRQ_DOI | IRQ_EI | IRQ_BEI | IRQ_EPI | IRQ_ALI)) {
@@ -526,8 +553,14 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
 			if (sja1000_err(dev, isrc, status))
 				break;
 		}
+<<<<<<< HEAD
 	}
 
+=======
+		n++;
+	}
+out:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (priv->post_irq)
 		priv->post_irq(priv);
 

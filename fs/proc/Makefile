@@ -21,7 +21,11 @@ proc-y	+= uptime.o
 proc-y	+= version.o
 proc-y	+= softirqs.o
 proc-y	+= namespaces.o
+<<<<<<< HEAD
 proc-y	+= stlog.o
+=======
+proc-$(CONFIG_PROC_STLOG)	+= stlog.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 proc-$(CONFIG_PROC_SYSCTL)	+= proc_sysctl.o
 proc-$(CONFIG_NET)		+= proc_net.o
 proc-$(CONFIG_PROC_KCORE)	+= kcore.o

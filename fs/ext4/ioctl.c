@@ -38,7 +38,11 @@ long ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		handle_t *handle = NULL;
 		int err, migrate = 0;
 		struct ext4_iloc iloc;
+<<<<<<< HEAD
 		unsigned int oldflags;
+=======
+		unsigned int oldflags, mask, i;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		unsigned int jflag;
 
 		if (!inode_owner_or_capable(inode))
@@ -115,9 +119,20 @@ long ext4_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		if (err)
 			goto flags_err;
 
+<<<<<<< HEAD
 		flags = flags & EXT4_FL_USER_MODIFIABLE;
 		flags |= oldflags & ~EXT4_FL_USER_MODIFIABLE;
 		ei->i_flags = flags;
+=======
+		for (i = 0, mask = 1; i < 32; i++, mask <<= 1) {
+			if (!(mask & EXT4_FL_USER_MODIFIABLE))
+				continue;
+			if (mask & flags)
+				ext4_set_inode_flag(inode, i);
+			else
+				ext4_clear_inode_flag(inode, i);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		ext4_set_inode_flags(inode);
 		inode->i_ctime = ext4_current_time(inode);
@@ -256,7 +271,10 @@ group_extend_out:
 		err = ext4_move_extents(filp, donor_filp, me.orig_start,
 					me.donor_start, me.len, &me.moved_len);
 		mnt_drop_write_file(filp);
+<<<<<<< HEAD
 		mnt_drop_write(filp->f_path.mnt);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		if (copy_to_user((struct move_extent __user *)arg,
 				 &me, sizeof(me)))
@@ -396,13 +414,19 @@ resizefs_out:
 		return err;
 	}
 
+<<<<<<< HEAD
 	case FIDTRIM:
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	case FITRIM:
 	{
 		struct request_queue *q = bdev_get_queue(sb->s_bdev);
 		struct fstrim_range range;
 		int ret = 0;
+<<<<<<< HEAD
 		int flags  = cmd == FIDTRIM ? BLKDEV_DISCARD_SECURE : 0;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		if (!capable(CAP_SYS_ADMIN))
 			return -EPERM;
@@ -417,15 +441,22 @@ resizefs_out:
 			return -EOPNOTSUPP;
 		}
 
+<<<<<<< HEAD
 		if ((flags & BLKDEV_DISCARD_SECURE) && !blk_queue_secdiscard(q))
 			return -EOPNOTSUPP;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (copy_from_user(&range, (struct fstrim_range __user *)arg,
 		    sizeof(range)))
 			return -EFAULT;
 
 		range.minlen = max((unsigned int)range.minlen,
 				   q->limits.discard_granularity);
+<<<<<<< HEAD
 		ret = ext4_trim_fs(sb, &range, flags);
+=======
+		ret = ext4_trim_fs(sb, &range);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret < 0)
 			return ret;
 
@@ -436,6 +467,14 @@ resizefs_out:
 		return 0;
 	}
 
+<<<<<<< HEAD
+=======
+	case FS_IOC_INVAL_MAPPING:
+	{
+		return invalidate_mapping_pages(inode->i_mapping, 0, -1);
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		return -ENOTTY;
 	}

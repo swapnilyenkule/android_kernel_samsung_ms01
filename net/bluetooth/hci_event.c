@@ -45,8 +45,11 @@
 #include <net/bluetooth/bluetooth.h>
 #include <net/bluetooth/hci_core.h>
 
+<<<<<<< HEAD
 struct hci_conn *temp_conn;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Handle HCI Event packets */
 
 static void hci_cc_inquiry_cancel(struct hci_dev *hdev, struct sk_buff *skb)
@@ -246,6 +249,7 @@ static void hci_cc_read_local_name(struct hci_dev *hdev, struct sk_buff *skb)
 	memcpy(hdev->dev_name, rp->name, HCI_MAX_NAME_LENGTH);
 }
 
+<<<<<<< HEAD
 static void hci_cc_read_sync_conn(struct hci_dev *hdev, __u8 status)
 {
 	hci_dev_lock(hdev);
@@ -256,6 +260,8 @@ static void hci_cc_read_sync_conn(struct hci_dev *hdev, __u8 status)
 	hci_dev_unlock(hdev);
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void hci_cc_write_auth_enable(struct hci_dev *hdev, struct sk_buff *skb)
 {
 	__u8 status = *((__u8 *) skb->data);
@@ -1782,6 +1788,7 @@ static inline void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *sk
 			struct hci_cp_accept_sync_conn_req cp;
 
 			bacpy(&cp.bdaddr, &ev->bdaddr);
+<<<<<<< HEAD
 			BT_DBG("incoming connec 1 conn->pkt_type %x",
 							conn->pkt_type);
 
@@ -1805,11 +1812,19 @@ static inline void hci_conn_request_evt(struct hci_dev *hdev, struct sk_buff *sk
 				cp.max_latency    = cpu_to_le16(0xffff);
 				cp.retrans_effort = 0xff;
 			}
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			cp.pkt_type = cpu_to_le16(conn->pkt_type);
 
 			cp.tx_bandwidth   = cpu_to_le32(0x00001f40);
 			cp.rx_bandwidth   = cpu_to_le32(0x00001f40);
+<<<<<<< HEAD
 			cp.content_format = cpu_to_le16(hdev->voice_setting);
+=======
+			cp.max_latency    = cpu_to_le16(0x000A);
+			cp.content_format = cpu_to_le16(hdev->voice_setting);
+			cp.retrans_effort = 0x01;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 			hci_send_cmd(hdev, HCI_OP_ACCEPT_SYNC_CONN_REQ,
 							sizeof(cp), &cp);
@@ -2346,7 +2361,11 @@ static inline void hci_cmd_complete_evt(struct hci_dev *hdev, struct sk_buff *sk
 	if (ev->opcode != HCI_OP_NOP)
 		del_timer(&hdev->cmd_timer);
 
+<<<<<<< HEAD
 	if (ev->ncmd) {
+=======
+	if (ev->ncmd && !test_bit(HCI_RESET, &hdev->flags)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		atomic_set(&hdev->cmd_cnt, 1);
 		if (!skb_queue_empty(&hdev->cmd_q))
 			tasklet_schedule(&hdev->cmd_task);
@@ -2444,10 +2463,13 @@ static inline void hci_cmd_status_evt(struct hci_dev *hdev, struct sk_buff *skb)
 		hci_cs_le_start_enc(hdev, ev->status);
 		break;
 
+<<<<<<< HEAD
 	case HCI_OP_ACCEPT_SYNC_CONN_REQ:
 		hci_cc_read_sync_conn(hdev, ev->status);
 		break;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		BT_DBG("%s opcode 0x%x", hdev->name, opcode);
 		break;
@@ -2945,7 +2967,10 @@ static inline void hci_sync_conn_complete_evt(struct hci_dev *hdev, struct sk_bu
 {
 	struct hci_ev_sync_conn_complete *ev = (void *) skb->data;
 	struct hci_conn *conn;
+<<<<<<< HEAD
 	struct hci_cp_setup_sync_conn cp;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	BT_DBG("%s status %d", hdev->name, ev->status);
 
@@ -2977,11 +3002,15 @@ static inline void hci_sync_conn_complete_evt(struct hci_dev *hdev, struct sk_bu
 	case 0x1a:	/* Unsupported Remote Feature */
 	case 0x1f:	/* Unspecified error */
 		if (conn->out && conn->attempt < 2) {
+<<<<<<< HEAD
 			BT_DBG("Negotiation ... ");
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (!conn->hdev->is_wbs)
 				conn->pkt_type =
 					(hdev->esco_type & SCO_ESCO_MASK) |
 					(hdev->esco_type & EDR_ESCO_MASK);
+<<<<<<< HEAD
 
 			conn->state = BT_CONNECT;
 			conn->out = 1;
@@ -3001,6 +3030,8 @@ static inline void hci_sync_conn_complete_evt(struct hci_dev *hdev, struct sk_bu
 			hci_send_cmd(conn->hdev,
 				HCI_OP_SETUP_SYNC_CONN, sizeof(cp), &cp);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			hci_setup_sync(conn, conn->link->handle);
 			goto unlock;
 		}

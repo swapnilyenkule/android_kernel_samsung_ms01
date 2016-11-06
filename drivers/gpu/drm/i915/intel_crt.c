@@ -266,6 +266,39 @@ static bool intel_crt_detect_hotplug(struct drm_connector *connector)
 	return ret;
 }
 
+<<<<<<< HEAD
+=======
+static struct edid *intel_crt_get_edid(struct drm_connector *connector,
+				struct i2c_adapter *i2c)
+{
+	struct edid *edid;
+
+	edid = drm_get_edid(connector, i2c);
+
+	if (!edid && !intel_gmbus_is_forced_bit(i2c)) {
+		DRM_DEBUG_KMS("CRT GMBUS EDID read failed, retry using GPIO bit-banging\n");
+		intel_gmbus_force_bit(i2c, true);
+		edid = drm_get_edid(connector, i2c);
+		intel_gmbus_force_bit(i2c, false);
+	}
+
+	return edid;
+}
+
+/* local version of intel_ddc_get_modes() to use intel_crt_get_edid() */
+static int intel_crt_ddc_get_modes(struct drm_connector *connector,
+				struct i2c_adapter *adapter)
+{
+	struct edid *edid;
+
+	edid = intel_crt_get_edid(connector, adapter);
+	if (!edid)
+		return 0;
+
+	return intel_connector_update_modes(connector, edid);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static bool intel_crt_detect_ddc(struct drm_connector *connector)
 {
 	struct intel_crt *crt = intel_attached_crt(connector);
@@ -279,7 +312,11 @@ static bool intel_crt_detect_ddc(struct drm_connector *connector)
 		struct edid *edid;
 		bool is_digital = false;
 
+<<<<<<< HEAD
 		edid = drm_get_edid(connector,
+=======
+		edid = intel_crt_get_edid(connector,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			&dev_priv->gmbus[dev_priv->crt_ddc_pin].adapter);
 		/*
 		 * This may be a DVI-I connector with a shared DDC
@@ -477,13 +514,21 @@ static int intel_crt_get_modes(struct drm_connector *connector)
 	struct drm_i915_private *dev_priv = dev->dev_private;
 	int ret;
 
+<<<<<<< HEAD
 	ret = intel_ddc_get_modes(connector,
+=======
+	ret = intel_crt_ddc_get_modes(connector,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				 &dev_priv->gmbus[dev_priv->crt_ddc_pin].adapter);
 	if (ret || !IS_G4X(dev))
 		return ret;
 
 	/* Try to probe digital port for output in DVI-I -> VGA mode. */
+<<<<<<< HEAD
 	return intel_ddc_get_modes(connector,
+=======
+	return intel_crt_ddc_get_modes(connector,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				   &dev_priv->gmbus[GMBUS_PORT_DPB].adapter);
 }
 
@@ -534,7 +579,11 @@ static const struct drm_encoder_funcs intel_crt_enc_funcs = {
 	.destroy = intel_encoder_destroy,
 };
 
+<<<<<<< HEAD
 static int __init intel_no_crt_dmi_callback(const struct dmi_system_id *id)
+=======
+static int intel_no_crt_dmi_callback(const struct dmi_system_id *id)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	DRM_DEBUG_KMS("Skipping CRT initialization for %s\n", id->ident);
 	return 1;
@@ -549,6 +598,17 @@ static const struct dmi_system_id intel_no_crt[] = {
 			DMI_MATCH(DMI_PRODUCT_NAME, "ZGB"),
 		},
 	},
+<<<<<<< HEAD
+=======
+	{
+		.callback = intel_no_crt_dmi_callback,
+		.ident = "DELL XPS 8700",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 8700"),
+		},
+	},
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	{ }
 };
 

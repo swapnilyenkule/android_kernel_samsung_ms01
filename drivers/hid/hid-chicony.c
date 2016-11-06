@@ -60,6 +60,10 @@ static int ch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 static const struct hid_device_id ch_devices[] = {
 	{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_TACTICAL_PAD) },
 	{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_WIRELESS2) },
+<<<<<<< HEAD
+=======
+	{ HID_USB_DEVICE(USB_VENDOR_ID_CHICONY, USB_DEVICE_ID_CHICONY_AK1D) },
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	{ }
 };
 MODULE_DEVICE_TABLE(hid, ch_devices);

@@ -173,7 +173,11 @@ static ssize_t modalias_show(struct device *dev, struct device_attribute *attr, 
 {
 	struct pci_dev *pci_dev = to_pci_dev(dev);
 
+<<<<<<< HEAD
 	return sprintf(buf, "pci:v%08Xd%08Xsv%08Xsd%08Xbc%02Xsc%02Xi%02x\n",
+=======
+	return sprintf(buf, "pci:v%08Xd%08Xsv%08Xsd%08Xbc%02Xsc%02Xi%02X\n",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		       pci_dev->vendor, pci_dev->device,
 		       pci_dev->subsystem_vendor, pci_dev->subsystem_device,
 		       (u8)(pci_dev->class >> 16), (u8)(pci_dev->class >> 8),

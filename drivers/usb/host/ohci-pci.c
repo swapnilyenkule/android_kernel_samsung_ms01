@@ -414,7 +414,11 @@ static struct pci_driver ohci_pci_driver = {
 	.remove =	usb_hcd_pci_remove,
 	.shutdown =	usb_hcd_pci_shutdown,
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM_SLEEP
+=======
+#ifdef CONFIG_PM
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.driver =	{
 		.pm =	&usb_hcd_pci_pm_ops
 	},

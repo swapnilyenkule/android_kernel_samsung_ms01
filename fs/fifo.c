@@ -14,7 +14,11 @@
 #include <linux/sched.h>
 #include <linux/pipe_fs_i.h>
 
+<<<<<<< HEAD
 static void wait_for_partner(struct inode* inode, unsigned int *cnt)
+=======
+static int wait_for_partner(struct inode* inode, unsigned int *cnt)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int cur = *cnt;	
 
@@ -23,6 +27,10 @@ static void wait_for_partner(struct inode* inode, unsigned int *cnt)
 		if (signal_pending(current))
 			break;
 	}
+<<<<<<< HEAD
+=======
+	return cur == *cnt ? -ERESTARTSYS : 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void wake_up_partner(struct inode* inode)
@@ -67,8 +75,12 @@ static int fifo_open(struct inode *inode, struct file *filp)
 				 * seen a writer */
 				filp->f_version = pipe->w_counter;
 			} else {
+<<<<<<< HEAD
 				wait_for_partner(inode, &pipe->w_counter);
 				if(signal_pending(current))
+=======
+				if (wait_for_partner(inode, &pipe->w_counter))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					goto err_rd;
 			}
 		}
@@ -90,8 +102,12 @@ static int fifo_open(struct inode *inode, struct file *filp)
 			wake_up_partner(inode);
 
 		if (!pipe->readers) {
+<<<<<<< HEAD
 			wait_for_partner(inode, &pipe->r_counter);
 			if (signal_pending(current))
+=======
+			if (wait_for_partner(inode, &pipe->r_counter))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				goto err_wr;
 		}
 		break;

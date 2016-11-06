@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -40,6 +45,15 @@
  */
 
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /******************************************************************************
 *
 * Name:  pmc.c
@@ -47,8 +61,11 @@
 * Description:
       Power Management Control (PMC) processing routines.
 *
+<<<<<<< HEAD
 * Copyright 2008 (c) Qualcomm Technologies, Inc. All Rights Reserved.
 *     Qualcomm Technologies Confidential and Proprietary.
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 *
 *
 ******************************************************************************/
@@ -63,7 +80,10 @@
 #include "pmc.h"
 #include "wlan_qct_wda.h"
 #include "wlan_ps_wow_diag.h"
+<<<<<<< HEAD
 #include <vos_power.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include "csrInsideApi.h"
 
 static void pmcProcessDeferredMsg( tpAniSirGlobal pMac );
@@ -222,12 +242,16 @@ eHalStatus pmcEnterFullPowerState (tHalHandle hHal)
         return eHAL_STATUS_FAILURE;
     }
 
+<<<<<<< HEAD
     pmcLog(pMac, LOG1, "PMC: Enter full power done: Cancel XO Core ON vote");
     if (vos_chipVoteXOCore(NULL, NULL, NULL, VOS_FALSE) != VOS_STATUS_SUCCESS)
     {
         pmcLog(pMac, LOGE, "Could not cancel XO Core ON vote. Not returning failure. "
                                 "Power consumed will be high");
     }
+=======
+    pmcLog(pMac, LOG1, "PMC: Enter full power done");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     return eHAL_STATUS_SUCCESS;
 }
@@ -252,8 +276,11 @@ eHalStatus pmcEnterFullPowerState (tHalHandle hHal)
 eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReason fullPowerReason)
 {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
+<<<<<<< HEAD
     vos_call_status_type callType;
     VOS_STATUS status;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     pmcLog(pMac, LOG2, FL("Entering pmcEnterRequestFullPowerState"));
 
@@ -281,7 +308,13 @@ eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReas
     case REQUEST_ENTER_WOWL:
     case REQUEST_EXIT_WOWL:
         pmcLog(pMac, LOGW, FL("Request for full power is being buffered. "
+<<<<<<< HEAD
             "Current state is %d"), pMac->pmc.pmcState);
+=======
+                              "Current state is %s (%d)"),
+                              sme_PmcStatetoString(pMac->pmc.pmcState),
+                                                   pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         //Ignore the new reason if request for full power is already pending
         if( !pMac->pmc.requestFullPowerPending )
         {
@@ -294,12 +327,15 @@ eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReas
     case IMPS:
         if ( pMac->pmc.rfSuppliesVotedOff )
         {
+<<<<<<< HEAD
             status = vos_chipVoteOnRFSupply(&callType, NULL, NULL);
             VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ) );
 
             status = vos_chipVoteOnXOBuffer(&callType, NULL, NULL);
             VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ) );
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             pMac->pmc.rfSuppliesVotedOff = FALSE;
         }
 
@@ -330,6 +366,7 @@ eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReas
     case STANDBY:
         if ( pMac->pmc.rfSuppliesVotedOff )
         {
+<<<<<<< HEAD
             status = vos_chipVoteOnXOBuffer(&callType, NULL, NULL);
             if(VOS_STATUS_SUCCESS != status)
             {
@@ -341,6 +378,8 @@ eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReas
                 return eHAL_STATUS_FAILURE;
             }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             pMac->pmc.rfSuppliesVotedOff = FALSE;
         }
 
@@ -380,7 +419,13 @@ eHalStatus pmcEnterRequestFullPowerState (tHalHandle hHal, tRequestFullPowerReas
     /* Cannot go directly to Request Full Power State from these states. */
     default:
         pmcLog(pMac, LOGE,
+<<<<<<< HEAD
                FL("Trying to enter Request Full Power State from state %d"), pMac->pmc.pmcState);
+=======
+               FL("Trying to enter Request Full Power State from state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState),
+                                    pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         PMC_ABORT;
         return eHAL_STATUS_FAILURE;
     }
@@ -411,7 +456,12 @@ eHalStatus pmcEnterRequestImpsState (tHalHandle hHal)
     /* Can enter Request IMPS State only from Full Power State. */
     if (pMac->pmc.pmcState != FULL_POWER)
     {
+<<<<<<< HEAD
         pmcLog(pMac, LOGE, FL("Trying to enter Request IMPS State from state %d"), pMac->pmc.pmcState);
+=======
+        pmcLog(pMac, LOGE, FL("Trying to enter Request IMPS State from state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState), pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         return eHAL_STATUS_FAILURE;
     }
 
@@ -452,14 +502,22 @@ eHalStatus pmcEnterRequestImpsState (tHalHandle hHal)
 eHalStatus pmcEnterImpsState (tHalHandle hHal)
 {
     tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
+<<<<<<< HEAD
     vos_call_status_type callType;
     VOS_STATUS status;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     pmcLog(pMac, LOG2, FL("Entering pmcEnterImpsState"));
 
     /* Can enter IMPS State only from Request IMPS State. */
     if (pMac->pmc.pmcState != REQUEST_IMPS)
     {
+<<<<<<< HEAD
         pmcLog(pMac, LOGE, FL("Trying to enter IMPS State from state %d"), pMac->pmc.pmcState);
+=======
+        pmcLog(pMac, LOGE, FL("Trying to enter IMPS State from state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState), pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         return eHAL_STATUS_FAILURE;
     }
 
@@ -499,6 +557,7 @@ eHalStatus pmcEnterImpsState (tHalHandle hHal)
         pMac->pmc.ImpsReqTimerfailCnt = 0;
     }
 
+<<<<<<< HEAD
     //Vote off RF supplies. Note RF supllies are not voted off if there is a
     //pending request for full power already
     status = vos_chipVoteOffRFSupply(&callType, NULL, NULL);
@@ -507,6 +566,8 @@ eHalStatus pmcEnterImpsState (tHalHandle hHal)
     status = vos_chipVoteOffXOBuffer(&callType, NULL, NULL);
     VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ) );
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     pMac->pmc.rfSuppliesVotedOff= TRUE;
 
     return eHAL_STATUS_SUCCESS;
@@ -534,11 +595,25 @@ eHalStatus pmcEnterRequestBmpsState (tHalHandle hHal)
 
     pmcLog(pMac, LOG2, FL("Entering pmcEnterRequestBmpsState"));
 
+<<<<<<< HEAD
+=======
+    if (pMac->isCoexScoIndSet)
+    {
+        pmcLog(pMac, LOGE, FL("block entering into BMPS mode in SCO case %d\n"),
+                               pMac->isCoexScoIndSet);
+        return eHAL_STATUS_FAILURE;
+    }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     /* Can enter Request BMPS State only from Full Power State. */
     if (pMac->pmc.pmcState != FULL_POWER)
     {
         pmcLog(pMac, LOGE,
+<<<<<<< HEAD
                FL("Trying to enter Request BMPS State from state %d"), pMac->pmc.pmcState);
+=======
+               FL("Trying to enter Request BMPS State from state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState), pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         return eHAL_STATUS_FAILURE;
     }
 
@@ -736,7 +811,11 @@ eHalStatus pmcSendPowerSaveConfigMessage (tHalHandle hHal)
 
     pmcLog(pMac, LOG2, FL("Entering pmcSendPowerSaveConfigMessage"));
 
+<<<<<<< HEAD
     palZeroMemory(pMac->hHdd, &(powerSaveConfig), sizeof(tSirPowerSaveCfg));
+=======
+    vos_mem_set(&(powerSaveConfig), sizeof(tSirPowerSaveCfg), 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     switch (pMac->pmc.bmpsConfig.forwardBeacons)
     {
@@ -828,7 +907,12 @@ eHalStatus pmcSendMessage (tpAniSirGlobal pMac, tANI_U16 messageType, void *pMes
     pmcLog(pMac, LOG2, FL("Entering pmcSendMessage, message type %d"), messageType);
 
     /* Allocate and fill in message. */
+<<<<<<< HEAD
     if (palAllocateMemory(pMac->hHdd, (void **)&pMsg, WNI_CFG_MB_HDR_LEN + messageSize) != eHAL_STATUS_SUCCESS)
+=======
+    pMsg = vos_mem_malloc(WNI_CFG_MB_HDR_LEN + messageSize);
+    if ( NULL == pMsg )
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         pmcLog(pMac, LOGE, FL("Cannot allocate memory for message"));
         PMC_ABORT;
@@ -838,12 +922,16 @@ eHalStatus pmcSendMessage (tpAniSirGlobal pMac, tANI_U16 messageType, void *pMes
     pMsg->msgLen = (tANI_U16) (WNI_CFG_MB_HDR_LEN + messageSize);
     if (messageSize > 0)
     {
+<<<<<<< HEAD
         if (palCopyMemory(pMac->hHdd, pMsg->data, pMessageData, messageSize) != eHAL_STATUS_SUCCESS)
         {
             pmcLog(pMac, LOGE, FL("Cannot copy message data"));
             PMC_ABORT;
             return eHAL_STATUS_FAILURE;
         }
+=======
+        vos_mem_copy(pMsg->data, pMessageData, messageSize);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
     /* Send message. */
@@ -895,11 +983,15 @@ void pmcDoCallbacks (tHalHandle hHal, eHalStatus callbackStatus)
         pRequestFullPowerEntry = GET_BASE_ADDR(pEntry, tRequestFullPowerEntry, link);
         if (pRequestFullPowerEntry->callbackRoutine)
            pRequestFullPowerEntry->callbackRoutine(pRequestFullPowerEntry->callbackContext, callbackStatus);
+<<<<<<< HEAD
         if (palFreeMemory(pMac->hHdd, pRequestFullPowerEntry) != eHAL_STATUS_SUCCESS)
         {
             pmcLog(pMac, LOGE, FL("Cannot free request full power routine list entry"));
             PMC_ABORT;
         }
+=======
+        vos_mem_free(pRequestFullPowerEntry);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 
 }
@@ -991,7 +1083,12 @@ void pmcImpsTimerExpired (tHalHandle hHal)
     /* If timer expires and we are in a state other than IMPS State then something is wrong. */
     if (pMac->pmc.pmcState != IMPS)
     {
+<<<<<<< HEAD
         pmcLog(pMac, LOGE, FL("Got IMPS timer expiration in state %d"), pMac->pmc.pmcState);
+=======
+        pmcLog(pMac, LOGE, FL("Got IMPS timer expiration in state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState), pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         PMC_ABORT;
         return;
     }
@@ -1026,7 +1123,12 @@ void pmcTrafficTimerExpired (tHalHandle hHal)
     /* If timer expires and we are in a state other than Full Power State then something is wrong. */
     if (pMac->pmc.pmcState != FULL_POWER)
     {
+<<<<<<< HEAD
         pmcLog(pMac, LOGE, FL("Got traffic timer expiration in state %d"), pMac->pmc.pmcState);
+=======
+        pmcLog(pMac, LOGE, FL("Got traffic timer expiration in state %s (%d)"),
+               sme_PmcStatetoString(pMac->pmc.pmcState), pMac->pmc.pmcState);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         return;
     }
 
@@ -1150,7 +1252,11 @@ void pmcDoBmpsCallbacks (tHalHandle hHal, eHalStatus callbackStatus)
       if (pRequestBmpsEntry->callbackRoutine)
          pRequestBmpsEntry->callbackRoutine(pRequestBmpsEntry->callbackContext,
          callbackStatus);
+<<<<<<< HEAD
       palFreeMemory(pMac->hHdd, pRequestBmpsEntry);
+=======
+      vos_mem_free(pRequestBmpsEntry);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       pEntry = csrLLRemoveHead(&pMac->pmc.requestBmpsList, FALSE);
    }
    csrLLUnlock(&pMac->pmc.requestBmpsList);
@@ -1190,7 +1296,11 @@ void pmcDoStartUapsdCallbacks (tHalHandle hHal, eHalStatus callbackStatus)
       pStartUapsdEntry = GET_BASE_ADDR(pEntry, tStartUapsdEntry, link);
       pStartUapsdEntry->callbackRoutine(pStartUapsdEntry->callbackContext,
          callbackStatus);
+<<<<<<< HEAD
       palFreeMemory(pMac->hHdd, pStartUapsdEntry);
+=======
+      vos_mem_free(pStartUapsdEntry);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
       pEntry = csrLLRemoveHead(&pMac->pmc.requestStartUapsdList, FALSE);
    }
    csrLLUnlock(&pMac->pmc.requestStartUapsdList);
@@ -1491,8 +1601,11 @@ eHalStatus pmcEnterRequestStandbyState (tHalHandle hHal)
 eHalStatus pmcEnterStandbyState (tHalHandle hHal)
 {
    tpAniSirGlobal pMac = PMAC_STRUCT(hHal);
+<<<<<<< HEAD
    vos_call_status_type callType;
    VOS_STATUS status;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    pmcLog(pMac, LOG2, "PMC: entering pmcEnterStandbyState");
 
@@ -1515,6 +1628,7 @@ eHalStatus pmcEnterStandbyState (tHalHandle hHal)
       return pmcEnterRequestFullPowerState(hHal, pMac->pmc.requestFullPowerReason);
    }
 
+<<<<<<< HEAD
    //Note that RF supplies are not voted off if there is already a pending request
    //for full power
    status = vos_chipVoteOffRFSupply(&callType, NULL, NULL);
@@ -1523,6 +1637,8 @@ eHalStatus pmcEnterStandbyState (tHalHandle hHal)
    status = vos_chipVoteOffXOBuffer(&callType, NULL, NULL);
    VOS_ASSERT( VOS_IS_STATUS_SUCCESS( status ) );
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    pMac->pmc.rfSuppliesVotedOff= TRUE;
 
    return eHAL_STATUS_SUCCESS;
@@ -1824,9 +1940,12 @@ void pmcDoEnterWowlCallbacks (tHalHandle hHal, eHalStatus callbackStatus)
    /* Call Wowl callback routine. */
    if (pMac->pmc.enterWowlCallbackRoutine != NULL)
       pMac->pmc.enterWowlCallbackRoutine(pMac->pmc.enterWowlCallbackContext, callbackStatus);
+<<<<<<< HEAD
 
    pMac->pmc.enterWowlCallbackRoutine = NULL;
    pMac->pmc.enterWowlCallbackContext = NULL;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -1875,7 +1994,11 @@ static void pmcProcessDeferredMsg( tpAniSirGlobal pMac )
             break;
         }
         //Need to free the memory here
+<<<<<<< HEAD
         palFreeMemory( pMac->hHdd, pDeferredMsg );
+=======
+        vos_mem_free(pDeferredMsg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     } //while
 }
 
@@ -1885,16 +2008,26 @@ eHalStatus pmcDeferMsg( tpAniSirGlobal pMac, tANI_U16 messageType, void *pData, 
     tPmcDeferredMsg *pDeferredMsg;
     eHalStatus status;
 
+<<<<<<< HEAD
     if( !HAL_STATUS_SUCCESS( palAllocateMemory( pMac->hHdd, (void **)&pDeferredMsg, sizeof(tPmcDeferredMsg) ) ) )
+=======
+    pDeferredMsg = vos_mem_malloc(sizeof(tPmcDeferredMsg));
+    if ( NULL == pDeferredMsg )
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         pmcLog(pMac, LOGE, FL("Cannot allocate memory for callback context"));
         return eHAL_STATUS_RESOURCES;
     }
+<<<<<<< HEAD
     palZeroMemory( pMac->hHdd, pDeferredMsg, sizeof(tPmcDeferredMsg) );
+=======
+    vos_mem_set(pDeferredMsg, sizeof(tPmcDeferredMsg), 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     pDeferredMsg->messageType = messageType;
     pDeferredMsg->size = (tANI_U16)size;
     if( pData )
     {
+<<<<<<< HEAD
         if( !HAL_STATUS_SUCCESS( palCopyMemory( pMac->hHdd, &pDeferredMsg->u.data,
                                     pData, size ) ) )
         {
@@ -1902,6 +2035,9 @@ eHalStatus pmcDeferMsg( tpAniSirGlobal pMac, tANI_U16 messageType, void *pData, 
             palFreeMemory( pMac->hHdd, pDeferredMsg );
             return eHAL_STATUS_FAILURE;
         }
+=======
+        vos_mem_copy(&pDeferredMsg->u.data, pData, size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
     csrLLInsertTail( &pMac->pmc.deferredMsgList, &pDeferredMsg->link, eANI_BOOLEAN_TRUE );
     //No callback is needed. The messages are put into deferred queue and be processed first
@@ -1912,7 +2048,11 @@ eHalStatus pmcDeferMsg( tpAniSirGlobal pMac, tANI_U16 messageType, void *pData, 
         //either fail or already in full power
         if( csrLLRemoveEntry( &pMac->pmc.deferredMsgList, &pDeferredMsg->link, eANI_BOOLEAN_TRUE ) )
         {
+<<<<<<< HEAD
             palFreeMemory( pMac->hHdd, pDeferredMsg );
+=======
+            vos_mem_free(pDeferredMsg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         }
         if( !HAL_STATUS_SUCCESS( status ) )
         {
@@ -1934,7 +2074,11 @@ void pmcReleaseCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
     else
     {
         //this is a specially allocated comamnd due to out of command buffer. free it.
+<<<<<<< HEAD
         palFreeMemory(pMac->hHdd, pCommand);
+=======
+        vos_mem_free(pCommand);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 }
 
@@ -2035,12 +2179,18 @@ eHalStatus pmcPrepareCommand( tpAniSirGlobal pMac, eSmeCommandType cmdType, void
         else
         {
             pmcLog( pMac, LOGE,
+<<<<<<< HEAD
                     FL(" fail to get command buffer for command 0x%X curState = %d"), cmdType, pMac->pmc.pmcState );
+=======
+                    FL(" fail to get command buffer for command 0x%X curState = %d"),
+                    cmdType, pMac->pmc.pmcState );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             //For certain PMC command, we cannot fail
             if( PMC_IS_COMMAND_CANNOT_FAIL(cmdType) )
             {
                 pmcLog( pMac, LOGE,
                         FL(" command 0x%X  cannot fail try allocating memory for it"), cmdType );
+<<<<<<< HEAD
                 status = palAllocateMemory(pMac->hHdd, (void **)&pCommand, sizeof(tSmeCmd));
                 if(!HAL_STATUS_SUCCESS(status))
                 {
@@ -2050,6 +2200,18 @@ eHalStatus pmcPrepareCommand( tpAniSirGlobal pMac, eSmeCommandType cmdType, void
                     break;
                 }
                 palZeroMemory(pMac->hHdd, pCommand, sizeof(tSmeCmd));
+=======
+                pCommand = vos_mem_malloc(sizeof(tSmeCmd));
+                if ( NULL == pCommand )
+                {
+                    VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_FATAL,
+                                "%s fail to allocate memory for command (0x%X)",
+                                __func__, cmdType);
+                    pCommand = NULL;
+                    return eHAL_STATUS_FAILURE;
+                }
+                vos_mem_set(pCommand, sizeof(tSmeCmd), 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 //Make sure it will be free when it is done
                 pCommand->u.pmcCmd.fReleaseWhenDone = TRUE;
             }
@@ -2148,7 +2310,10 @@ eHalStatus pmcIssueCommand( tpAniSirGlobal pMac, eSmeCommandType cmdType, void *
 tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
 {
     eHalStatus status = eHAL_STATUS_SUCCESS;
+<<<<<<< HEAD
     VOS_STATUS vstatus;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     tANI_BOOLEAN fRemoveCmd = eANI_BOOLEAN_TRUE;
 
     do
@@ -2222,6 +2387,7 @@ tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
                 {
                     /* Change PMC state */
                     pMac->pmc.pmcState = REQUEST_BMPS;
+<<<<<<< HEAD
                     pmcLog(pMac, LOG2, "PMC: Enter BMPS req done: Force XO Core ON");
                     vstatus = vos_chipVoteXOCore(NULL, NULL, NULL, VOS_TRUE);
                     if ( !VOS_IS_STATUS_SUCCESS(vstatus) )
@@ -2230,6 +2396,10 @@ tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
                     }
                     else /* XO Core turn ON was successful */
                     {
+=======
+                    pmcLog(pMac, LOG2, "PMC: Enter BMPS req done");
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                     /* Tell MAC to have device enter BMPS mode. */
                     status = pmcSendMessage(pMac, eWNI_PMC_ENTER_BMPS_REQ, NULL, 0);
                     if ( HAL_STATUS_SUCCESS( status ) )
@@ -2239,6 +2409,7 @@ tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
                     else
                     {
                         pmcLog(pMac, LOGE, "Fail to send enter BMPS msg to PE");
+<<<<<<< HEAD
                             /* Cancel the vote for XO Core */
                             pmcLog(pMac, LOGW, "In module init: Cancel the vote for XO CORE ON "
                                                              "since send enter bmps failed");
@@ -2250,6 +2421,8 @@ tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand )
                             }
 
                         }
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                     }
                 }
                 if( !HAL_STATUS_SUCCESS( status ) )
@@ -2583,7 +2756,11 @@ tANI_BOOLEAN pmcShouldBmpsTimerRun( tpAniSirGlobal pMac )
         return eANI_BOOLEAN_FALSE;
     }
 
+<<<<<<< HEAD
     if ((vos_concurrent_sessions_running()) &&
+=======
+    if ((vos_concurrent_open_sessions_running()) &&
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         ((csrIsConcurrentInfraConnected( pMac ) ||
         (vos_get_concurrency_mode()& VOS_SAP) ||
         (vos_get_concurrency_mode()& VOS_P2P_GO))))
@@ -2649,3 +2826,29 @@ void pmcStopDiagEvtTimer (tHalHandle hHal)
     (void)vos_timer_stop(&pMac->pmc.hDiagEvtTimer);
 }
 #endif
+<<<<<<< HEAD
+=======
+const char * sme_PmcStatetoString(const v_U8_t pmcState)
+{   switch (pmcState)
+    {
+        CASE_RETURN_STRING( STOPPED );
+        CASE_RETURN_STRING( FULL_POWER );
+        CASE_RETURN_STRING( LOW_POWER);
+        CASE_RETURN_STRING( REQUEST_IMPS );
+        CASE_RETURN_STRING( IMPS );
+        CASE_RETURN_STRING( REQUEST_BMPS );
+        CASE_RETURN_STRING( BMPS );
+        CASE_RETURN_STRING( REQUEST_FULL_POWER );
+        CASE_RETURN_STRING( REQUEST_START_UAPSD );
+        CASE_RETURN_STRING( REQUEST_STOP_UAPSD );
+        CASE_RETURN_STRING( UAPSD );
+        CASE_RETURN_STRING( REQUEST_STANDBY );
+        CASE_RETURN_STRING( STANDBY );
+        CASE_RETURN_STRING( REQUEST_ENTER_WOWL );
+        CASE_RETURN_STRING( REQUEST_EXIT_WOWL );
+        CASE_RETURN_STRING( WOWL );
+        default:
+            return "Invalid pmcState";
+    }
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

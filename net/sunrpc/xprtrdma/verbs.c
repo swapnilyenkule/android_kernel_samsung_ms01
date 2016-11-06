@@ -485,7 +485,11 @@ rpcrdma_ia_open(struct rpcrdma_xprt *xprt, struct sockaddr *addr, int memreg)
 	if (rc) {
 		dprintk("RPC:       %s: ib_query_device failed %d\n",
 			__func__, rc);
+<<<<<<< HEAD
 		goto out2;
+=======
+		goto out3;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (devattr.device_cap_flags & IB_DEVICE_LOCAL_DMA_LKEY) {
@@ -587,7 +591,11 @@ rpcrdma_ia_open(struct rpcrdma_xprt *xprt, struct sockaddr *addr, int memreg)
 		printk(KERN_ERR "%s: invalid memory registration mode %d\n",
 				__func__, memreg);
 		rc = -EINVAL;
+<<<<<<< HEAD
 		goto out2;
+=======
+		goto out3;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	dprintk("RPC:       %s: memory registration strategy is %d\n",
 		__func__, memreg);
@@ -596,6 +604,13 @@ rpcrdma_ia_open(struct rpcrdma_xprt *xprt, struct sockaddr *addr, int memreg)
 	ia->ri_memreg_strategy = memreg;
 
 	return 0;
+<<<<<<< HEAD
+=======
+
+out3:
+	ib_dealloc_pd(ia->ri_pd);
+	ia->ri_pd = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out2:
 	rdma_destroy_id(ia->ri_id);
 	ia->ri_id = NULL;

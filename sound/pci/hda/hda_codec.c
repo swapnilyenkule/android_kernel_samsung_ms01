@@ -165,7 +165,11 @@ const char *snd_hda_get_jack_type(u32 cfg)
 		"Line Out", "Speaker", "HP Out", "CD",
 		"SPDIF Out", "Digital Out", "Modem Line", "Modem Hand",
 		"Line In", "Aux", "Mic", "Telephony",
+<<<<<<< HEAD
 		"SPDIF In", "Digitial In", "Reserved", "Other"
+=======
+		"SPDIF In", "Digital In", "Reserved", "Other"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	};
 
 	return jack_types[(cfg & AC_DEFCFG_DEVICE)
@@ -617,6 +621,12 @@ int snd_hda_queue_unsol_event(struct hda_bus *bus, u32 res, u32 res_ex)
 	struct hda_bus_unsolicited *unsol;
 	unsigned int wp;
 
+<<<<<<< HEAD
+=======
+	if (!bus || !bus->workq)
+		return 0;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	trace_hda_unsol_event(bus, res, res_ex);
 	unsol = bus->unsol;
 	if (!unsol)
@@ -1192,6 +1202,10 @@ static void snd_hda_codec_free(struct hda_codec *codec)
 {
 	if (!codec)
 		return;
+<<<<<<< HEAD
+=======
+	snd_hda_jack_tbl_clear(codec);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	restore_init_pincfgs(codec);
 #ifdef CONFIG_SND_HDA_POWER_SAVE
 	cancel_delayed_work(&codec->power_work);
@@ -1200,6 +1214,10 @@ static void snd_hda_codec_free(struct hda_codec *codec)
 	list_del(&codec->list);
 	snd_array_free(&codec->mixers);
 	snd_array_free(&codec->nids);
+<<<<<<< HEAD
+=======
+	snd_array_free(&codec->cvt_setups);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	snd_array_free(&codec->conn_lists);
 	snd_array_free(&codec->spdif_out);
 	codec->bus->caddr_tbl[codec->addr] = NULL;
@@ -2088,6 +2106,19 @@ _snd_hda_find_mixer_ctl(struct hda_codec *codec,
 	return snd_ctl_find_id(codec->bus->card, &id);
 }
 
+<<<<<<< HEAD
+=======
+/* meta hook to call each driver's vmaster hook */
+static void vmaster_hook(void *private_data, int enabled)
+{
+	struct hda_vmaster_mute_hook *hook = private_data;
+
+	if (hook->mute_mode != HDA_VMUTE_FOLLOW_MASTER)
+		enabled = hook->mute_mode;
+	hook->hook(hook->codec, enabled);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**
  * snd_hda_find_mixer_ctl - Find a mixer control element with the given name
  * @codec: HD-audio codec
@@ -2277,6 +2308,10 @@ int snd_hda_codec_reset(struct hda_codec *codec)
 	}
 	if (codec->patch_ops.free)
 		codec->patch_ops.free(codec);
+<<<<<<< HEAD
+=======
+	memset(&codec->patch_ops, 0, sizeof(codec->patch_ops));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	snd_hda_jack_tbl_clear(codec);
 	codec->proc_widget_hook = NULL;
 	codec->spec = NULL;
@@ -2290,7 +2325,10 @@ int snd_hda_codec_reset(struct hda_codec *codec)
 	codec->num_pcms = 0;
 	codec->pcm_info = NULL;
 	codec->preset = NULL;
+<<<<<<< HEAD
 	memset(&codec->patch_ops, 0, sizeof(codec->patch_ops));
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	codec->slave_dig_outs = NULL;
 	codec->spdif_status_reset = 0;
 	module_put(codec->owner);
@@ -2515,9 +2553,15 @@ int snd_hda_add_vmaster_hook(struct hda_codec *codec,
 
 	if (!hook->hook || !hook->sw_kctl)
 		return 0;
+<<<<<<< HEAD
 	snd_ctl_add_vmaster_hook(hook->sw_kctl, hook->hook, codec);
 	hook->codec = codec;
 	hook->mute_mode = HDA_VMUTE_FOLLOW_MASTER;
+=======
+	hook->codec = codec;
+	hook->mute_mode = HDA_VMUTE_FOLLOW_MASTER;
+	snd_ctl_add_vmaster_hook(hook->sw_kctl, vmaster_hook, hook);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!expose_enum_ctl)
 		return 0;
 	kctl = snd_ctl_new1(&vmaster_mute_mode, hook);
@@ -2535,6 +2579,7 @@ void snd_hda_sync_vmaster_hook(struct hda_vmaster_mute_hook *hook)
 {
 	if (!hook->hook || !hook->codec)
 		return;
+<<<<<<< HEAD
 	switch (hook->mute_mode) {
 	case HDA_VMUTE_FOLLOW_MASTER:
 		snd_ctl_sync_vmaster_hook(hook->sw_kctl);
@@ -2543,6 +2588,9 @@ void snd_hda_sync_vmaster_hook(struct hda_vmaster_mute_hook *hook)
 		hook->hook(hook->codec, hook->mute_mode);
 		break;
 	}
+=======
+	snd_ctl_sync_vmaster_hook(hook->sw_kctl);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 EXPORT_SYMBOL_HDA(snd_hda_sync_vmaster_hook);
 
@@ -2908,7 +2956,11 @@ static unsigned int convert_to_spdif_status(unsigned short val)
 	if (val & AC_DIG1_PROFESSIONAL)
 		sbits |= IEC958_AES0_PROFESSIONAL;
 	if (sbits & IEC958_AES0_PROFESSIONAL) {
+<<<<<<< HEAD
 		if (sbits & AC_DIG1_EMPHASIS)
+=======
+		if (val & AC_DIG1_EMPHASIS)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			sbits |= IEC958_AES0_PRO_EMPHASIS_5015;
 	} else {
 		if (val & AC_DIG1_EMPHASIS)

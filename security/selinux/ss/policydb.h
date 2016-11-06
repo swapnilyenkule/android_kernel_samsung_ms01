@@ -60,6 +60,7 @@ struct class_datum {
 	struct symtab permissions;	/* class-specific permission symbol table */
 	struct constraint_node *constraints;	/* constraints on class permissions */
 	struct constraint_node *validatetrans;	/* special transition rules */
+<<<<<<< HEAD
 /* Options how a new object user, role, and type should be decided */
 #define DEFAULT_SOURCE         1
 #define DEFAULT_TARGET         2
@@ -74,6 +75,8 @@ struct class_datum {
 #define DEFAULT_TARGET_HIGH    5
 #define DEFAULT_TARGET_LOW_HIGH        6
 	char default_range;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /* Role attributes */
@@ -154,6 +157,7 @@ struct cond_bool_datum {
 struct cond_node;
 
 /*
+<<<<<<< HEAD
  * type set preserves data needed to determine constraint info from
  * policy source. This is not used by the kernel policy but allows
  * utilities such as audit2allow to determine constraint denials.
@@ -165,6 +169,8 @@ struct type_set {
 };
 
 /*
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * The configuration data includes security contexts for
  * initial SIDs, unlabeled file systems, TCP and UDP port numbers,
  * network interfaces, and nodes.  This structure stores the

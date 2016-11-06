@@ -465,6 +465,7 @@ struct input_keymap_entry {
 #define KEY_VIDEO_NEXT		241	/* drive next video source */
 #define KEY_VIDEO_PREV		242	/* drive previous video source */
 #define KEY_BRIGHTNESS_CYCLE	243	/* brightness up, after max is min */
+<<<<<<< HEAD
 #define KEY_BRIGHTNESS_AUTO	244	/* Set Auto Brightness: manual
 					  brightness control is off,
 					  rely on ambient */
@@ -473,6 +474,12 @@ struct input_keymap_entry {
 
 #define KEY_WWAN		246	/* Wireless WAN (LTE, UMTS, GSM, etc.) */
 #define KEY_WIMAX		KEY_WWAN
+=======
+#define KEY_BRIGHTNESS_ZERO	244	/* brightness off, use ambient */
+#define KEY_DISPLAY_OFF		245	/* display device to off state */
+
+#define KEY_WIMAX		246
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define KEY_RFKILL		247	/* Key that controls all radios */
 
 #define KEY_MICMUTE		248	/* Mute / unmute the microphone */
@@ -524,6 +531,7 @@ struct input_keymap_entry {
 #define BTN_DEAD		0x12f
 
 #define BTN_GAMEPAD		0x130
+<<<<<<< HEAD
 #define BTN_SOUTH		0x130
 #define BTN_A			BTN_SOUTH
 #define BTN_EAST		0x131
@@ -533,6 +541,13 @@ struct input_keymap_entry {
 #define BTN_X			BTN_NORTH
 #define BTN_WEST		0x134
 #define BTN_Y			BTN_WEST
+=======
+#define BTN_A			0x130
+#define BTN_B			0x131
+#define BTN_C			0x132
+#define BTN_X			0x133
+#define BTN_Y			0x134
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define BTN_Z			0x135
 #define BTN_TL			0x136
 #define BTN_TR			0x137
@@ -646,7 +661,10 @@ struct input_keymap_entry {
 #define KEY_ADDRESSBOOK		0x1ad	/* AL Contacts/Address Book */
 #define KEY_MESSENGER		0x1ae	/* AL Instant Messaging */
 #define KEY_DISPLAYTOGGLE	0x1af	/* Turn display (LCD) on and off */
+<<<<<<< HEAD
 #define KEY_BRIGHTNESS_TOGGLE	KEY_DISPLAYTOGGLE
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define KEY_SPELLCHECK		0x1b0   /* AL Spell Check */
 #define KEY_LOGOFF		0x1b1   /* AL Logoff */
 
@@ -737,6 +755,7 @@ struct input_keymap_entry {
 #define KEY_PEN_PDCT		0x230 /* E-PEN PDCT flag*/
 #define KEY_FAKE_PWR		0x240 /* Fake Power off flag*/
 
+<<<<<<< HEAD
 #define BTN_DPAD_UP		0x220
 #define BTN_DPAD_DOWN		0x221
 #define BTN_DPAD_LEFT		0x222
@@ -755,6 +774,8 @@ struct input_keymap_entry {
 #define KEY_BRIGHTNESS_MIN		0x250	/* Set Brightness to Minimum */
 #define KEY_BRIGHTNESS_MAX		0x251	/* Set Brightness to Maximum */
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define BTN_TRIGGER_HAPPY		0x2c0
 #define BTN_TRIGGER_HAPPY1		0x2c0
 #define BTN_TRIGGER_HAPPY2		0x2c1
@@ -926,9 +947,14 @@ struct input_keymap_entry {
 #define SW_RIGHT_HAND	0x18	/* set = right hand*/
 #define SW_BOTH_HAND	0x19	/* set = both hand*/
 #define SW_W1			0x1A  /* set = w1_slave */
+<<<<<<< HEAD
 #define SW_MUTE_DEVICE		0x0e  /* set = device disabled */
 #define SW_MAX			0x20
 
+=======
+
+#define SW_MAX			0x20
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define SW_CNT			(SW_MAX+1)
 
 /*

@@ -1013,15 +1013,22 @@ static void trusted_rcu_free(struct rcu_head *rcu)
  */
 static int trusted_update(struct key *key, const void *data, size_t datalen)
 {
+<<<<<<< HEAD
 	struct trusted_key_payload *p;
+=======
+	struct trusted_key_payload *p = key->payload.data;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct trusted_key_payload *new_p;
 	struct trusted_key_options *new_o;
 	char *datablob;
 	int ret = 0;
 
+<<<<<<< HEAD
 	if (test_bit(KEY_FLAG_NEGATIVE, &key->flags))
 		return -ENOKEY;
 	p = key->payload.data;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!p->migratable)
 		return -EPERM;
 	if (datalen <= 0 || datalen > 32767 || !data)

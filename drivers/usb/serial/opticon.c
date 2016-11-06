@@ -160,7 +160,15 @@ static int send_control_msg(struct usb_serial_port *port, u8 requesttype,
 {
 	struct usb_serial *serial = port->serial;
 	int retval;
+<<<<<<< HEAD
 	u8 buffer[2];
+=======
+	u8 *buffer;
+
+	buffer = kzalloc(1, GFP_KERNEL);
+	if (!buffer)
+		return -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	buffer[0] = val;
 	/* Send the message to the vendor control endpoint
@@ -169,6 +177,10 @@ static int send_control_msg(struct usb_serial_port *port, u8 requesttype,
 				requesttype,
 				USB_DIR_OUT|USB_TYPE_VENDOR|USB_RECIP_INTERFACE,
 				0, 0, buffer, 1, 0);
+<<<<<<< HEAD
+=======
+	kfree(buffer);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return retval;
 }
@@ -288,11 +300,19 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
 
 	/* The conncected devices do not have a bulk write endpoint,
 	 * to transmit data to de barcode device the control endpoint is used */
+<<<<<<< HEAD
 	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_NOIO);
 	if (!dr) {
 		dev_err(&port->dev, "out of memory\n");
 		count = -ENOMEM;
 		goto error;
+=======
+	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_ATOMIC);
+	if (!dr) {
+		dev_err(&port->dev, "out of memory\n");
+		count = -ENOMEM;
+		goto error_no_dr;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	dr->bRequestType = USB_TYPE_VENDOR | USB_RECIP_INTERFACE | USB_DIR_OUT;
@@ -322,6 +342,11 @@ static int opticon_write(struct tty_struct *tty, struct usb_serial_port *port,
 
 	return count;
 error:
+<<<<<<< HEAD
+=======
+	kfree(dr);
+error_no_dr:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	usb_free_urb(urb);
 error_no_urb:
 	kfree(buffer);

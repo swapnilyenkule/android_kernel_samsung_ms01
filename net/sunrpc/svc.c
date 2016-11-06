@@ -407,6 +407,17 @@ static int svc_uses_rpcbind(struct svc_serv *serv)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+int svc_bind(struct svc_serv *serv, struct net *net)
+{
+	if (!svc_uses_rpcbind(serv))
+		return 0;
+	return svc_rpcb_setup(serv, net);
+}
+EXPORT_SYMBOL_GPL(svc_bind);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Create an RPC service
  */
@@ -471,6 +482,7 @@ __svc_create(struct svc_program *prog, unsigned int bufsize, int npools,
 		spin_lock_init(&pool->sp_lock);
 	}
 
+<<<<<<< HEAD
 	if (svc_uses_rpcbind(serv)) {
 		if (svc_rpcb_setup(serv, current->nsproxy->net_ns) < 0) {
 			kfree(serv->sv_pools);
@@ -480,6 +492,10 @@ __svc_create(struct svc_program *prog, unsigned int bufsize, int npools,
 		if (!serv->sv_shutdown)
 			serv->sv_shutdown = svc_rpcb_cleanup;
 	}
+=======
+	if (svc_uses_rpcbind(serv) && (!serv->sv_shutdown))
+		serv->sv_shutdown = svc_rpcb_cleanup;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return serv;
 }
@@ -536,8 +552,11 @@ EXPORT_SYMBOL_GPL(svc_shutdown_net);
 void
 svc_destroy(struct svc_serv *serv)
 {
+<<<<<<< HEAD
 	struct net *net = current->nsproxy->net_ns;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dprintk("svc: svc_destroy(%s, %d)\n",
 				serv->sv_program->pg_name,
 				serv->sv_nrthreads);
@@ -552,8 +571,11 @@ svc_destroy(struct svc_serv *serv)
 
 	del_timer_sync(&serv->sv_temptimer);
 
+<<<<<<< HEAD
 	svc_shutdown_net(serv, net);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * The last user is gone and thus all sockets have to be destroyed to
 	 * the point. Check this.
@@ -1379,7 +1401,12 @@ bc_svc_process(struct svc_serv *serv, struct rpc_rqst *req,
 						sizeof(req->rq_snd_buf));
 		return bc_send(req);
 	} else {
+<<<<<<< HEAD
 		/* Nothing to do to drop request */
+=======
+		/* drop request */
+		xprt_free_bc_request(req);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 	}
 }

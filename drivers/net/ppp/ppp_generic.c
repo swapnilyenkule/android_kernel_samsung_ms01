@@ -588,7 +588,11 @@ static long ppp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			if (file == ppp->owner)
 				ppp_shutdown_interface(ppp);
 		}
+<<<<<<< HEAD
 		if (atomic_long_read(&file->f_count) <= 2) {
+=======
+		if (atomic_long_read(&file->f_count) < 2) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			ppp_release(NULL, file);
 			err = 0;
 		} else

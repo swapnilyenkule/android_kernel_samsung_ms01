@@ -31,7 +31,10 @@ static void proc_evict_inode(struct inode *inode)
 	struct proc_dir_entry *de;
 	struct ctl_table_header *head;
 	const struct proc_ns_operations *ns_ops;
+<<<<<<< HEAD
 	void *ns;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	truncate_inode_pages(&inode->i_data, 0);
 	end_writeback(inode);
@@ -50,9 +53,14 @@ static void proc_evict_inode(struct inode *inode)
 	}
 	/* Release any associated namespace */
 	ns_ops = PROC_I(inode)->ns_ops;
+<<<<<<< HEAD
 	ns = PROC_I(inode)->ns;
 	if (ns_ops && ns)
 		ns_ops->put(ns);
+=======
+	if (ns_ops && ns_ops->put)
+		ns_ops->put(PROC_I(inode)->ns);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static struct kmem_cache * proc_inode_cachep;
@@ -445,12 +453,19 @@ static const struct file_operations proc_reg_file_ops_no_compat = {
 
 struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
 {
+<<<<<<< HEAD
 	struct inode * inode;
 
 	inode = iget_locked(sb, de->low_ino);
 	if (!inode)
 		return NULL;
 	if (inode->i_state & I_NEW) {
+=======
+	struct inode *inode = new_inode_pseudo(sb);
+
+	if (inode) {
+		inode->i_ino = de->low_ino;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		inode->i_mtime = inode->i_atime = inode->i_ctime = CURRENT_TIME;
 		PROC_I(inode)->fd = 0;
 		PROC_I(inode)->pde = de;
@@ -479,9 +494,13 @@ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
 				inode->i_fop = de->proc_fops;
 			}
 		}
+<<<<<<< HEAD
 		unlock_new_inode(inode);
 	} else
 	       pde_put(de);
+=======
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return inode;
 }			
 

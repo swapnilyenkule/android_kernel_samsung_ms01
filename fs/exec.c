@@ -627,7 +627,11 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
 		 * when the old and new regions overlap clear from new_end.
 		 */
 		free_pgd_range(&tlb, new_end, old_end, new_end,
+<<<<<<< HEAD
 			vma->vm_next ? vma->vm_next->vm_start : 0);
+=======
+			vma->vm_next ? vma->vm_next->vm_start : USER_PGTABLES_CEILING);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		/*
 		 * otherwise, clean from old_start; this is done to not touch
@@ -636,7 +640,11 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
 		 * for the others its just a little faster.
 		 */
 		free_pgd_range(&tlb, old_start, old_end, new_end,
+<<<<<<< HEAD
 			vma->vm_next ? vma->vm_next->vm_start : 0);
+=======
+			vma->vm_next ? vma->vm_next->vm_start : USER_PGTABLES_CEILING);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	tlb_finish_mmu(&tlb, new_end, old_end);
 
@@ -826,10 +834,17 @@ static int exec_mmap(struct mm_struct *mm)
 	/* Notify parent that we're no longer interested in the old VM */
 	tsk = current;
 	old_mm = current->mm;
+<<<<<<< HEAD
 	sync_mm_rss(old_mm);
 	mm_release(tsk, old_mm);
 
 	if (old_mm) {
+=======
+	mm_release(tsk, old_mm);
+
+	if (old_mm) {
+		sync_mm_rss(old_mm);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/*
 		 * Make sure that if there is a core dump in progress
 		 * for the old mm, we get out and die instead of going
@@ -912,11 +927,19 @@ static int de_thread(struct task_struct *tsk)
 
 		sig->notify_count = -1;	/* for exit_notify() */
 		for (;;) {
+<<<<<<< HEAD
+=======
+			threadgroup_change_begin(tsk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			write_lock_irq(&tasklist_lock);
 			if (likely(leader->exit_state))
 				break;
 			__set_current_state(TASK_UNINTERRUPTIBLE);
 			write_unlock_irq(&tasklist_lock);
+<<<<<<< HEAD
+=======
+			threadgroup_change_end(tsk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			schedule();
 		}
 
@@ -972,6 +995,10 @@ static int de_thread(struct task_struct *tsk)
 		if (unlikely(leader->ptrace))
 			__wake_up_parent(leader, leader->parent);
 		write_unlock_irq(&tasklist_lock);
+<<<<<<< HEAD
+=======
+		threadgroup_change_end(tsk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		release_task(leader);
 	}
@@ -1027,7 +1054,11 @@ static void flush_old_files(struct files_struct * files)
 		unsigned long set, i;
 
 		j++;
+<<<<<<< HEAD
 		i = j * __NFDBITS;
+=======
+		i = j * BITS_PER_LONG;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		fdt = files_fdtable(files);
 		if (i >= fdt->max_fds)
 			break;
@@ -1117,7 +1148,12 @@ int flush_old_exec(struct linux_binprm * bprm)
 	bprm->mm = NULL;		/* We're using it now */
 
 	set_fs(USER_DS);
+<<<<<<< HEAD
 	current->flags &= ~(PF_RANDOMIZE | PF_FORKNOEXEC | PF_KTHREAD);
+=======
+	current->flags &=
+		~(PF_RANDOMIZE | PF_FORKNOEXEC | PF_KTHREAD | PF_NOFREEZE);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	flush_thread();
 	current->personality &= ~bprm->per_clear;
 
@@ -1165,6 +1201,7 @@ void setup_new_exec(struct linux_binprm * bprm)
 			set_dumpable(current->mm, suid_dumpable);
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Flush performance counters when crossing a
 	 * security domain:
@@ -1172,6 +1209,8 @@ void setup_new_exec(struct linux_binprm * bprm)
 	if (!get_dumpable(current->mm))
 		perf_event_exit_task(current);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* An exec changes our domain. We are no longer part of the thread
 	   group */
 
@@ -1208,9 +1247,30 @@ void free_bprm(struct linux_binprm *bprm)
 		mutex_unlock(&current->signal->cred_guard_mutex);
 		abort_creds(bprm->cred);
 	}
+<<<<<<< HEAD
 	kfree(bprm);
 }
 
+=======
+	/* If a binfmt changed the interp, free it. */
+	if (bprm->interp != bprm->filename)
+		kfree(bprm->interp);
+	kfree(bprm);
+}
+
+int bprm_change_interp(char *interp, struct linux_binprm *bprm)
+{
+	/* If a binfmt changed the interp, free it first. */
+	if (bprm->interp != bprm->filename)
+		kfree(bprm->interp);
+	bprm->interp = kstrdup(interp, GFP_KERNEL);
+	if (!bprm->interp)
+		return -ENOMEM;
+	return 0;
+}
+EXPORT_SYMBOL(bprm_change_interp);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * install the new credentials for this executable
  */
@@ -1220,6 +1280,18 @@ void install_exec_creds(struct linux_binprm *bprm)
 
 	commit_creds(bprm->cred);
 	bprm->cred = NULL;
+<<<<<<< HEAD
+=======
+
+	/*
+	 * Disable monitoring for regular users
+	 * when executing setuid binaries. Must
+	 * wait until new credentials are committed
+	 * by commit_creds() above
+	 */
+	if (get_dumpable(current->mm) != SUID_DUMP_USER)
+		perf_event_exit_task(current);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * cred_guard_mutex must be held at least to this point to prevent
 	 * ptrace_attach() from altering our determination of the task's
@@ -1230,10 +1302,56 @@ void install_exec_creds(struct linux_binprm *bprm)
 }
 EXPORT_SYMBOL(install_exec_creds);
 
+<<<<<<< HEAD
 /*
  * determine how safe it is to execute the proposed program
  * - the caller must hold ->cred_guard_mutex to protect against
  *   PTRACE_ATTACH or seccomp thread-sync
+=======
+static void bprm_fill_uid(struct linux_binprm *bprm)
+{
+	struct inode *inode;
+	unsigned int mode;
+	uid_t uid;
+	gid_t gid;
+
+	/* clear any previous set[ug]id data from a previous binary */
+	bprm->cred->euid = current_euid();
+	bprm->cred->egid = current_egid();
+
+	if (bprm->file->f_path.mnt->mnt_flags & MNT_NOSUID)
+		return;
+
+	inode = bprm->file->f_path.dentry->d_inode;
+	mode = ACCESS_ONCE(inode->i_mode);
+	if (!(mode & (S_ISUID|S_ISGID)))
+		return;
+
+	/* Be careful if suid/sgid is set */
+	mutex_lock(&inode->i_mutex);
+
+	/* reload atomically mode/uid/gid now that lock held */
+	mode = inode->i_mode;
+	uid = inode->i_uid;
+	gid = inode->i_gid;
+	mutex_unlock(&inode->i_mutex);
+
+	if (mode & S_ISUID) {
+		bprm->per_clear |= PER_CLEAR_ON_SETID;
+		bprm->cred->euid = uid;
+	}
+
+	if ((mode & (S_ISGID | S_IXGRP)) == (S_ISGID | S_IXGRP)) {
+		bprm->per_clear |= PER_CLEAR_ON_SETID;
+		bprm->cred->egid = gid;
+	}
+}
+
+/*
+ * determine how safe it is to execute the proposed program
+ * - the caller must hold ->cred_guard_mutex to protect against
+ *   PTRACE_ATTACH
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 static int check_unsafe_exec(struct linux_binprm *bprm)
 {
@@ -1248,6 +1366,7 @@ static int check_unsafe_exec(struct linux_binprm *bprm)
 			bprm->unsafe |= LSM_UNSAFE_PTRACE;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * This isn't strictly necessary, but it makes it harder for LSMs to
 	 * mess up.
@@ -1255,6 +1374,8 @@ static int check_unsafe_exec(struct linux_binprm *bprm)
 	if (task_no_new_privs(current))
 		bprm->unsafe |= LSM_UNSAFE_NO_NEW_PRIVS;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	n_fs = 1;
 	spin_lock(&p->fs->lock);
 	rcu_read_lock();
@@ -1286,6 +1407,7 @@ static int check_unsafe_exec(struct linux_binprm *bprm)
  */
 int prepare_binprm(struct linux_binprm *bprm)
 {
+<<<<<<< HEAD
 	umode_t mode;
 	struct inode * inode = bprm->file->f_path.dentry->d_inode;
 	int retval;
@@ -1317,6 +1439,14 @@ int prepare_binprm(struct linux_binprm *bprm)
 			bprm->cred->egid = inode->i_gid;
 		}
 	}
+=======
+	int retval;
+
+	if (bprm->file->f_op == NULL)
+		return -EACCES;
+
+	bprm_fill_uid(bprm);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* fill in binprm security blob */
 	retval = security_bprm_set_creds(bprm);
@@ -1384,6 +1514,13 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 	struct linux_binfmt *fmt;
 	pid_t old_pid, old_vpid;
 
+<<<<<<< HEAD
+=======
+	/* This allows 4 levels of binfmt rewrites before failing hard. */
+	if (depth > 5)
+		return -ELOOP;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	retval = security_bprm_check(bprm);
 	if (retval)
 		return retval;
@@ -1408,12 +1545,17 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 			if (!try_module_get(fmt->module))
 				continue;
 			read_unlock(&binfmt_lock);
+<<<<<<< HEAD
 			retval = fn(bprm, regs);
 			/*
 			 * Restore the depth counter to its starting value
 			 * in this call, so we don't have to rely on every
 			 * load_binary function to restore it on return.
 			 */
+=======
+			bprm->recursion_depth = depth + 1;
+			retval = fn(bprm, regs);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			bprm->recursion_depth = depth;
 			if (retval >= 0) {
 				if (depth == 0) {
@@ -2017,6 +2159,15 @@ static int __get_dumpable(unsigned long mm_flags)
 	return (ret >= 2) ? 2 : ret;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * This returns the actual value of the suid_dumpable flag. For things
+ * that are using this for checking for privilege transitions, it must
+ * test against SUID_DUMP_USER rather than treating it as a boolean
+ * value.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int get_dumpable(struct mm_struct *mm)
 {
 	return __get_dumpable(mm->flags);

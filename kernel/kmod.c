@@ -541,6 +541,14 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
 	int retval = 0;
 
 	helper_lock();
+<<<<<<< HEAD
+=======
+	if (!sub_info->path) {
+		retval = -EINVAL;
+		goto out;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (sub_info->path[0] == '\0')
 		goto out;
 

@@ -747,6 +747,15 @@ sctp_disposition_t sctp_sf_do_5_1D_ce(const struct sctp_endpoint *ep,
 		struct sctp_chunk auth;
 		sctp_ierror_t ret;
 
+<<<<<<< HEAD
+=======
+		/* Make sure that we and the peer are AUTH capable */
+		if (!sctp_auth_enable || !new_asoc->peer.auth_capable) {
+			sctp_association_free(new_asoc);
+			return sctp_sf_pdiscard(ep, asoc, type, arg, commands);
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* set-up our fake chunk so that we can process it */
 		auth.skb = chunk->auth_chunk;
 		auth.asoc = chunk->asoc;
@@ -757,10 +766,13 @@ sctp_disposition_t sctp_sf_do_5_1D_ce(const struct sctp_endpoint *ep,
 		auth.transport = chunk->transport;
 
 		ret = sctp_sf_authenticate(ep, new_asoc, type, &auth);
+<<<<<<< HEAD
 
 		/* We can now safely free the auth_chunk clone */
 		kfree_skb(chunk->auth_chunk);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret != SCTP_IERROR_NO_ERROR) {
 			sctp_association_free(new_asoc);
 			return sctp_sf_pdiscard(ep, asoc, type, arg, commands);
@@ -2044,7 +2056,11 @@ sctp_disposition_t sctp_sf_do_5_2_4_dupcook(const struct sctp_endpoint *ep,
 	}
 
 	/* Delete the tempory new association. */
+<<<<<<< HEAD
 	sctp_add_cmd_sf(commands, SCTP_CMD_NEW_ASOC, SCTP_ASOC(new_asoc));
+=======
+	sctp_add_cmd_sf(commands, SCTP_CMD_SET_ASOC, SCTP_ASOC(new_asoc));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sctp_add_cmd_sf(commands, SCTP_CMD_DELETE_TCB, SCTP_NULL());
 
 	/* Restore association pointer to provide SCTP command interpeter
@@ -3514,9 +3530,13 @@ sctp_disposition_t sctp_sf_do_asconf(const struct sctp_endpoint *ep,
 	struct sctp_chunk	*asconf_ack = NULL;
 	struct sctp_paramhdr	*err_param = NULL;
 	sctp_addiphdr_t		*hdr;
+<<<<<<< HEAD
 	union sctp_addr_param	*addr_param;
 	__u32			serial;
 	int			length;
+=======
+	__u32			serial;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!sctp_vtag_verify(chunk, asoc)) {
 		sctp_add_cmd_sf(commands, SCTP_CMD_REPORT_BAD_TAG,
@@ -3541,6 +3561,7 @@ sctp_disposition_t sctp_sf_do_asconf(const struct sctp_endpoint *ep,
 	hdr = (sctp_addiphdr_t *)chunk->skb->data;
 	serial = ntohl(hdr->serial);
 
+<<<<<<< HEAD
 	addr_param = (union sctp_addr_param *)hdr->params;
 	length = ntohs(addr_param->p.length);
 	if (length < sizeof(sctp_paramhdr_t))
@@ -3552,6 +3573,10 @@ sctp_disposition_t sctp_sf_do_asconf(const struct sctp_endpoint *ep,
 			    (sctp_paramhdr_t *)((void *)addr_param + length),
 			    (void *)chunk->chunk_end,
 			    &err_param))
+=======
+	/* Verify the ASCONF chunk before processing it. */
+	if (!sctp_verify_asconf(asoc, chunk, true, &err_param))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return sctp_sf_violation_paramlen(ep, asoc, type, arg,
 						  (void *)err_param, commands);
 
@@ -3668,10 +3693,14 @@ sctp_disposition_t sctp_sf_do_asconf_ack(const struct sctp_endpoint *ep,
 	rcvd_serial = ntohl(addip_hdr->serial);
 
 	/* Verify the ASCONF-ACK chunk before processing it. */
+<<<<<<< HEAD
 	if (!sctp_verify_asconf(asoc,
 	    (sctp_paramhdr_t *)addip_hdr->params,
 	    (void *)asconf_ack->chunk_end,
 	    &err_param))
+=======
+	if (!sctp_verify_asconf(asoc, asconf_ack, false, &err_param))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return sctp_sf_violation_paramlen(ep, asoc, type, arg,
 			   (void *)err_param, commands);
 

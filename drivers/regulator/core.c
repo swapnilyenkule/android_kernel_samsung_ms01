@@ -779,7 +779,11 @@ static int suspend_prepare(struct regulator_dev *rdev, suspend_state_t state)
 static void print_constraints(struct regulator_dev *rdev)
 {
 	struct regulation_constraints *constraints = rdev->constraints;
+<<<<<<< HEAD
 	char buf[80] = "";
+=======
+	char buf[160] = "";
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int count = 0;
 	int ret;
 
@@ -1427,12 +1431,20 @@ void regulator_put(struct regulator *regulator)
 		device_remove_file(regulator->dev, &regulator->dev_attr);
 		kfree(regulator->dev_attr.attr.name);
 	}
+<<<<<<< HEAD
+=======
+	mutex_lock(&rdev->mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(regulator->supply_name);
 	list_del(&regulator->list);
 	kfree(regulator);
 
 	rdev->open_count--;
 	rdev->exclusive = 0;
+<<<<<<< HEAD
+=======
+	mutex_unlock(&rdev->mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	module_put(rdev->owner);
 	mutex_unlock(&regulator_list_mutex);
@@ -3462,6 +3474,11 @@ unset_supplies:
 	unset_regulator_supplies(rdev);
 
 scrub:
+<<<<<<< HEAD
+=======
+	if (rdev->supply)
+		regulator_put(rdev->supply);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(rdev->constraints);
 	device_unregister(&rdev->dev);
 	/* device core frees rdev */

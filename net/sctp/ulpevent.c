@@ -373,9 +373,16 @@ fail:
  * specification [SCTP] and any extensions for a list of possible
  * error formats.
  */
+<<<<<<< HEAD
 struct sctp_ulpevent *sctp_ulpevent_make_remote_error(
 	const struct sctp_association *asoc, struct sctp_chunk *chunk,
 	__u16 flags, gfp_t gfp)
+=======
+struct sctp_ulpevent *
+sctp_ulpevent_make_remote_error(const struct sctp_association *asoc,
+				struct sctp_chunk *chunk, __u16 flags,
+				gfp_t gfp)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct sctp_ulpevent *event;
 	struct sctp_remote_error *sre;
@@ -394,8 +401,12 @@ struct sctp_ulpevent *sctp_ulpevent_make_remote_error(
 	/* Copy the skb to a new skb with room for us to prepend
 	 * notification with.
 	 */
+<<<<<<< HEAD
 	skb = skb_copy_expand(chunk->skb, sizeof(struct sctp_remote_error),
 			      0, gfp);
+=======
+	skb = skb_copy_expand(chunk->skb, sizeof(*sre), 0, gfp);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Pull off the rest of the cause TLV from the chunk.  */
 	skb_pull(chunk->skb, elen);
@@ -406,6 +417,7 @@ struct sctp_ulpevent *sctp_ulpevent_make_remote_error(
 	event = sctp_skb2event(skb);
 	sctp_ulpevent_init(event, MSG_NOTIFICATION, skb->truesize);
 
+<<<<<<< HEAD
 	sre = (struct sctp_remote_error *)
 		skb_push(skb, sizeof(struct sctp_remote_error));
 
@@ -457,11 +469,27 @@ struct sctp_ulpevent *sctp_ulpevent_make_remote_error(
 	 * All notifications for a given association have the same association
 	 * identifier.  For TCP style socket, this field is ignored.
 	 */
+=======
+	sre = (struct sctp_remote_error *) skb_push(skb, sizeof(*sre));
+
+	/* Trim the buffer to the right length.  */
+	skb_trim(skb, sizeof(*sre) + elen);
+
+	/* RFC6458, Section 6.1.3. SCTP_REMOTE_ERROR */
+	memset(sre, 0, sizeof(*sre));
+	sre->sre_type = SCTP_REMOTE_ERROR;
+	sre->sre_flags = 0;
+	sre->sre_length = skb->len;
+	sre->sre_error = cause;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sctp_ulpevent_set_owner(event, asoc);
 	sre->sre_assoc_id = sctp_assoc2id(asoc);
 
 	return event;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 fail:
 	return NULL;
 }
@@ -904,7 +932,13 @@ __u16 sctp_ulpevent_get_notification_type(const struct sctp_ulpevent *event)
 	return notification->sn_header.sn_type;
 }
 
+<<<<<<< HEAD
 /* Copy out the sndrcvinfo into a msghdr.  */
+=======
+/* RFC6458, Section 5.3.2. SCTP Header Information Structure
+ * (SCTP_SNDRCV, DEPRECATED)
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void sctp_ulpevent_read_sndrcvinfo(const struct sctp_ulpevent *event,
 				   struct msghdr *msghdr)
 {
@@ -913,6 +947,7 @@ void sctp_ulpevent_read_sndrcvinfo(const struct sctp_ulpevent *event,
 	if (sctp_ulpevent_is_notification(event))
 		return;
 
+<<<<<<< HEAD
 	/* Sockets API Extensions for SCTP
 	 * Section 5.2.2 SCTP Header Information Structure (SCTP_SNDRCV)
 	 *
@@ -976,11 +1011,27 @@ void sctp_ulpevent_read_sndrcvinfo(const struct sctp_ulpevent *event,
 	/* context value that is set via SCTP_CONTEXT socket option. */
 	sinfo.sinfo_context = event->asoc->default_rcv_context;
 
+=======
+	memset(&sinfo, 0, sizeof(sinfo));
+	sinfo.sinfo_stream = event->stream;
+	sinfo.sinfo_ssn = event->ssn;
+	sinfo.sinfo_ppid = event->ppid;
+	sinfo.sinfo_flags = event->flags;
+	sinfo.sinfo_tsn = event->tsn;
+	sinfo.sinfo_cumtsn = event->cumtsn;
+	sinfo.sinfo_assoc_id = sctp_assoc2id(event->asoc);
+	/* Context value that is set via SCTP_CONTEXT socket option. */
+	sinfo.sinfo_context = event->asoc->default_rcv_context;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* These fields are not used while receiving. */
 	sinfo.sinfo_timetolive = 0;
 
 	put_cmsg(msghdr, IPPROTO_SCTP, SCTP_SNDRCV,
+<<<<<<< HEAD
 		 sizeof(struct sctp_sndrcvinfo), (void *)&sinfo);
+=======
+		 sizeof(sinfo), &sinfo);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* Do accounting for bytes received and hold a reference to the association

@@ -39,8 +39,11 @@
 bool shpchp_debug;
 bool shpchp_poll_mode;
 int shpchp_poll_time;
+<<<<<<< HEAD
 struct workqueue_struct *shpchp_wq;
 struct workqueue_struct *shpchp_ordered_wq;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define DRIVER_VERSION	"0.4"
 #define DRIVER_AUTHOR	"Dan Zink <dan.zink@compaq.com>, Greg Kroah-Hartman <greg@kroah.com>, Dely Sy <dely.l.sy@intel.com>"
@@ -123,6 +126,17 @@ static int init_slots(struct controller *ctrl)
 		slot->device = ctrl->slot_device_offset + i;
 		slot->hpc_ops = ctrl->hpc_ops;
 		slot->number = ctrl->first_slot + (ctrl->slot_num_inc * i);
+<<<<<<< HEAD
+=======
+
+		snprintf(name, sizeof(name), "shpchp-%d", slot->number);
+		slot->wq = alloc_workqueue(name, 0, 0);
+		if (!slot->wq) {
+			retval = -ENOMEM;
+			goto error_info;
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		mutex_init(&slot->lock);
 		INIT_DELAYED_WORK(&slot->work, shpchp_queue_pushbutton_work);
 
@@ -142,7 +156,11 @@ static int init_slots(struct controller *ctrl)
 		if (retval) {
 			ctrl_err(ctrl, "pci_hp_register failed with error %d\n",
 				 retval);
+<<<<<<< HEAD
 			goto error_info;
+=======
+			goto error_slotwq;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		get_power_status(hotplug_slot, &info->power_status);
@@ -154,6 +172,11 @@ static int init_slots(struct controller *ctrl)
 	}
 
 	return 0;
+<<<<<<< HEAD
+=======
+error_slotwq:
+	destroy_workqueue(slot->wq);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 error_info:
 	kfree(info);
 error_hpslot:
@@ -174,8 +197,12 @@ void cleanup_slots(struct controller *ctrl)
 		slot = list_entry(tmp, struct slot, slot_list);
 		list_del(&slot->slot_list);
 		cancel_delayed_work(&slot->work);
+<<<<<<< HEAD
 		flush_workqueue(shpchp_wq);
 		flush_workqueue(shpchp_ordered_wq);
+=======
+		destroy_workqueue(slot->wq);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pci_hp_deregister(slot->hotplug_slot);
 	}
 }
@@ -358,6 +385,7 @@ static struct pci_driver shpc_driver = {
 
 static int __init shpcd_init(void)
 {
+<<<<<<< HEAD
 	int retval = 0;
 
 	shpchp_wq = alloc_ordered_workqueue("shpchp", 0);
@@ -369,14 +397,21 @@ static int __init shpcd_init(void)
 		destroy_workqueue(shpchp_wq);
 		return -ENOMEM;
 	}
+=======
+	int retval;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	retval = pci_register_driver(&shpc_driver);
 	dbg("%s: pci_register_driver = %d\n", __func__, retval);
 	info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+<<<<<<< HEAD
 	if (retval) {
 		destroy_workqueue(shpchp_ordered_wq);
 		destroy_workqueue(shpchp_wq);
 	}
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return retval;
 }
 
@@ -384,8 +419,11 @@ static void __exit shpcd_cleanup(void)
 {
 	dbg("unload_shpchpd()\n");
 	pci_unregister_driver(&shpc_driver);
+<<<<<<< HEAD
 	destroy_workqueue(shpchp_ordered_wq);
 	destroy_workqueue(shpchp_wq);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	info(DRIVER_DESC " version: " DRIVER_VERSION " unloaded\n");
 }
 

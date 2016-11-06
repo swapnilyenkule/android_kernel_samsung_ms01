@@ -75,7 +75,11 @@ int spu_handle_mm_fault(struct mm_struct *mm, unsigned long ea,
 		if (*flt & VM_FAULT_OOM) {
 			ret = -ENOMEM;
 			goto out_unlock;
+<<<<<<< HEAD
 		} else if (*flt & VM_FAULT_SIGBUS) {
+=======
+		} else if (*flt & (VM_FAULT_SIGBUS | VM_FAULT_SIGSEGV)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			ret = -EFAULT;
 			goto out_unlock;
 		}

@@ -573,7 +573,12 @@ MODULE_DEVICE_TABLE(of, ulite_of_match);
 
 static int __devinit ulite_probe(struct platform_device *pdev)
 {
+<<<<<<< HEAD
 	struct resource *res, *res2;
+=======
+	struct resource *res;
+	int irq;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int id = pdev->id;
 #ifdef CONFIG_OF
 	const __be32 *prop;
@@ -587,11 +592,19 @@ static int __devinit ulite_probe(struct platform_device *pdev)
 	if (!res)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	res2 = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 	if (!res2)
 		return -ENODEV;
 
 	return ulite_assign(&pdev->dev, id, res->start, res2->start);
+=======
+	irq = platform_get_irq(pdev, 0);
+	if (irq <= 0)
+		return -ENXIO;
+
+	return ulite_assign(&pdev->dev, id, res->start, irq);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int __devexit ulite_remove(struct platform_device *pdev)

@@ -202,9 +202,15 @@ extern void __kernel_vsyscall;
 	if (vdso_enabled)					\
 		NEW_AUX_ENT(AT_SYSINFO_EHDR, VDSO_BASE);	\
 	else							\
+<<<<<<< HEAD
 		NEW_AUX_ENT(AT_IGNORE, 0);
 #else
 #define VSYSCALL_AUX_ENT
+=======
+		NEW_AUX_ENT(AT_IGNORE, 0)
+#else
+#define VSYSCALL_AUX_ENT	NEW_AUX_ENT(AT_IGNORE, 0)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* CONFIG_VSYSCALL */
 
 #ifdef CONFIG_SH_FPU

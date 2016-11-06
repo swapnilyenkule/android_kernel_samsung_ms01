@@ -776,7 +776,11 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_201)
 	lwz	r3,VCORE_NAPPING_THREADS(r5)
 	lwz	r4,VCPU_PTID(r9)
 	li	r0,1
+<<<<<<< HEAD
 	sldi	r0,r0,r4
+=======
+	sld	r0,r0,r4
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	andc.	r3,r3,r0		/* no sense IPI'ing ourselves */
 	beq	43f
 	mulli	r4,r4,PACA_SIZE		/* get paca for thread 0 */
@@ -935,7 +939,11 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_206)
 BEGIN_FTR_SECTION
 	mfspr	r8, SPRN_DSCR
 	ld	r7, HSTATE_DSCR(r13)
+<<<<<<< HEAD
 	std	r8, VCPU_DSCR(r7)
+=======
+	std	r8, VCPU_DSCR(r9)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mtspr	SPRN_DSCR, r7
 END_FTR_SECTION_IFSET(CPU_FTR_ARCH_206)
 

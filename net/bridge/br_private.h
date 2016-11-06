@@ -501,6 +501,10 @@ extern struct net_bridge_port *br_get_port(struct net_bridge *br,
 extern void br_init_port(struct net_bridge_port *p);
 extern void br_become_designated_port(struct net_bridge_port *p);
 
+<<<<<<< HEAD
+=======
+extern void __br_set_forward_delay(struct net_bridge *br, unsigned long t);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int br_set_forward_delay(struct net_bridge *br, unsigned long x);
 extern int br_set_hello_time(struct net_bridge *br, unsigned long x);
 extern int br_set_max_age(struct net_bridge *br, unsigned long x);
@@ -538,6 +542,10 @@ extern int (*br_fdb_test_addr_hook)(struct net_device *dev, unsigned char *addr)
 #endif
 
 /* br_netlink.c */
+<<<<<<< HEAD
+=======
+extern struct rtnl_link_ops br_link_ops;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int br_netlink_init(void);
 extern void br_netlink_fini(void);
 extern void br_ifinfo_notify(int event, struct net_bridge_port *port);

@@ -2096,9 +2096,13 @@ static ssize_t ntfs_file_aio_write_nolock(struct kiocb *iocb,
 	err = file_remove_suid(file);
 	if (err)
 		goto out;
+<<<<<<< HEAD
 	err = file_update_time(file);
 	if (err)
 		goto out;
+=======
+	file_update_time(file);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	written = ntfs_file_buffered_write(iocb, iov, nr_segs, pos, ppos,
 			count);
 out:

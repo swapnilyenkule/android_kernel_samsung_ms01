@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2010-2014, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2010-2013, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -28,11 +32,15 @@ static DEFINE_SPINLOCK(tz_lock);
  * FLOOR is 5msec to capture up to 3 re-draws
  * per frame for 60fps content.
  */
+<<<<<<< HEAD
 #define FLOOR		        5000
 /*
  * MIN_BUSY is 1 msec for the sample to be sent
  */
 #define MIN_BUSY		1000
+=======
+#define FLOOR			5000
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define LONG_FLOOR		50000
 #define HIST			5
 #define TARGET			80
@@ -120,6 +128,7 @@ static int tz_get_target_freq(struct devfreq *devfreq, unsigned long *freq,
 	/*
 	 * Do not waste CPU cycles running this algorithm if
 	 * the GPU just started, or if less than FLOOR time
+<<<<<<< HEAD
 	 * has passed since the last run or the gpu hasn't been
 	 * busier than MIN_BUSY.
 	 */
@@ -127,6 +136,13 @@ static int tz_get_target_freq(struct devfreq *devfreq, unsigned long *freq,
 		(priv->bin.total_time < FLOOR) ||
 		(unsigned int) priv->bin.busy_time < MIN_BUSY) {
 		return 0;
+=======
+	 * has passed since the last run.
+	 */
+	if ((stats.total_time == 0) ||
+		(priv->bin.total_time < FLOOR)) {
+		return 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	level = devfreq_get_freq_level(devfreq, stats.current_frequency);

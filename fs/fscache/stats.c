@@ -276,5 +276,9 @@ const struct file_operations fscache_stats_fops = {
 	.open		= fscache_stats_open,
 	.read		= seq_read,
 	.llseek		= seq_lseek,
+<<<<<<< HEAD
 	.release	= seq_release,
+=======
+	.release        = single_release,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };

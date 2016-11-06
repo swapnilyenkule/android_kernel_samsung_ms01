@@ -37,10 +37,17 @@ struct outer_cache_fns {
 	void (*resume)(void);
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_OUTER_CACHE
 
 extern struct outer_cache_fns outer_cache;
 
+=======
+extern struct outer_cache_fns outer_cache;
+
+#ifdef CONFIG_OUTER_CACHE
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline void outer_inv_range(phys_addr_t start, phys_addr_t end)
 {
 	if (outer_cache.inv_range)

@@ -302,10 +302,13 @@ static irqreturn_t cypress_touchkey_interrupt(int irq, void *dev_id)
 	int press;
 	int ret;
 
+<<<<<<< HEAD
 	if (!atomic_read(&info->keypad_enable)) {
 		goto out;
 	}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = gpio_get_value(info->pdata->gpio_int);
 	if (ret) {
 		dev_err(&info->client->dev, "not real interrupt (%d).\n", ret);
@@ -944,6 +947,7 @@ static ssize_t autocalibration_status(struct device *dev,
 		return sprintf(buf, "Disabled\n");
 }
 
+<<<<<<< HEAD
 static ssize_t sec_keypad_enable_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -976,6 +980,8 @@ static ssize_t sec_keypad_enable_store(struct device *dev,
 
 static DEVICE_ATTR(keypad_enable, S_IRUGO|S_IWUSR, sec_keypad_enable_show,
 	      sec_keypad_enable_store);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static DEVICE_ATTR(touchkey_firm_update_status,
 		S_IRUGO | S_IWUSR | S_IWGRP, touchkey_firm_status_show, NULL);
 static DEVICE_ATTR(touchkey_firm_version_panel, S_IRUGO,
@@ -1191,8 +1197,11 @@ printk("[TKEY] %s _ %d\n",__func__,__LINE__);
 	set_bit(EV_LED, input_dev->evbit);
 	set_bit(LED_MISC, input_dev->ledbit);
 
+<<<<<<< HEAD
 	atomic_set(&info->keypad_enable, 1);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < pdata->keycodes_size; i++) {
 		info->keycode[i] = pdata->touchkey_keycode[i];
 		set_bit(info->keycode[i], input_dev->keybit);
@@ -1318,6 +1327,7 @@ printk("[TKEY] %s _ %d\n",__func__,__LINE__);
 
 
 	if (device_create_file(sec_touchkey,
+<<<<<<< HEAD
 			&dev_attr_keypad_enable) < 0) {
 		pr_err("Failed to create device file(%s)!\n",
 			dev_attr_keypad_enable.attr.name);
@@ -1325,6 +1335,8 @@ printk("[TKEY] %s _ %d\n",__func__,__LINE__);
 	}
 
 	if (device_create_file(sec_touchkey,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			&dev_attr_touchkey_firm_update_status) < 0) {
 		pr_err("Failed to create device file(%s)!\n",
 			dev_attr_touchkey_firm_update.attr.name);

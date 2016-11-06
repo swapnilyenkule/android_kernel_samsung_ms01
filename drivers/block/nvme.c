@@ -1153,7 +1153,11 @@ static int nvme_user_admin_cmd(struct nvme_ns *ns,
 	struct nvme_admin_cmd cmd;
 	struct nvme_command c;
 	int status, length;
+<<<<<<< HEAD
 	struct nvme_iod *iod;
+=======
+	struct nvme_iod *uninitialized_var(iod);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!capable(CAP_SYS_ADMIN))
 		return -EACCES;

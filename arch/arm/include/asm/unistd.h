@@ -404,7 +404,10 @@
 #define __NR_setns			(__NR_SYSCALL_BASE+375)
 #define __NR_process_vm_readv		(__NR_SYSCALL_BASE+376)
 #define __NR_process_vm_writev		(__NR_SYSCALL_BASE+377)
+<<<<<<< HEAD
 #define __NR_seccomp			(__NR_SYSCALL_BASE+383)
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * The following SWIs are ARM private.

@@ -966,7 +966,11 @@ int nfc_llcp_register_device(struct nfc_dev *ndev)
 	local->remote_lto = LLCP_DEFAULT_LTO;
 	local->remote_rw = LLCP_DEFAULT_RW;
 
+<<<<<<< HEAD
 	list_add(&llcp_devices, &local->list);
+=======
+	list_add(&local->list, &llcp_devices);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 

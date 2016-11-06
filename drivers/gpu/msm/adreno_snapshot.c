@@ -599,8 +599,16 @@ static int ib_add_gpu_object(struct kgsl_device *device, phys_addr_t ptbase,
 				unsigned int gpuaddr = src[i + 1];
 				unsigned int size = src[i + 2];
 
+<<<<<<< HEAD
 				parse_ib(device, ptbase, gpuaddr, size);
 
+=======
+				ret = parse_ib(device, ptbase, gpuaddr, size);
+
+				/* If adding the IB failed then stop parsing */
+				if (ret < 0)
+					goto done;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			} else {
 				ret = ib_parse_type3(device, &src[i], ptbase);
 				/*
@@ -926,6 +934,7 @@ static int snapshot_ib(struct kgsl_device *device, void *snapshot,
 			if ((obj->dwords - i) < type3_pkt_size(*src) + 1)
 				continue;
 
+<<<<<<< HEAD
 			if (adreno_cmd_is_ib(*src)) {
 				parse_ib(device, obj->ptbase, src[1],
 					src[2]);
@@ -936,6 +945,17 @@ static int snapshot_ib(struct kgsl_device *device, void *snapshot,
 				if (ret < 0)
 					break;
 			}
+=======
+			if (adreno_cmd_is_ib(*src))
+				ret = parse_ib(device, obj->ptbase, src[1],
+					src[2]);
+			else
+				ret = ib_parse_type3(device, src, obj->ptbase);
+
+			/* Stop parsing if the type3 decode fails */
+			if (ret < 0)
+				break;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 

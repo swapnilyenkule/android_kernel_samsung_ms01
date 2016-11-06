@@ -23,7 +23,10 @@
 #include <linux/ioport.h>
 #include <linux/kernel_stat.h>
 #include <linux/ptrace.h>
+<<<<<<< HEAD
 #include <linux/random.h>	/* for rand_initialize_irq() */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/signal.h>
 #include <linux/smp.h>
 #include <linux/threads.h>

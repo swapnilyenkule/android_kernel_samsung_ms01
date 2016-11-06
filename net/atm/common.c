@@ -812,6 +812,10 @@ int vcc_getsockopt(struct socket *sock, int level, int optname,
 
 		if (!vcc->dev || !test_bit(ATM_VF_ADDR, &vcc->flags))
 			return -ENOTCONN;
+<<<<<<< HEAD
+=======
+		memset(&pvc, 0, sizeof(pvc));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pvc.sap_family = AF_ATMPVC;
 		pvc.sap_addr.itf = vcc->dev->number;
 		pvc.sap_addr.vpi = vcc->vpi;

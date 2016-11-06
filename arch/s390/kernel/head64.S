@@ -61,7 +61,11 @@ ENTRY(startup_continue)
 	.quad	0			# cr12: tracing off
 	.quad	0			# cr13: home space segment table
 	.quad	0xc0000000		# cr14: machine check handling off
+<<<<<<< HEAD
 	.quad	0			# cr15: linkage stack operations
+=======
+	.quad	.Llinkage_stack		# cr15: linkage stack operations
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 .Lpcmsk:.quad	0x0000000180000000
 .L4malign:.quad 0xffffffffffc00000
 .Lscan2g:.quad	0x80000000 + 0x20000 - 8	# 2GB + 128K - 8
@@ -69,12 +73,23 @@ ENTRY(startup_continue)
 .Lparmaddr:
 	.quad	PARMAREA
 	.align	64
+<<<<<<< HEAD
 .Lduct: .long	0,0,0,0,.Lduald,0,0,0
 	.long	0,0,0,0,0,0,0,0
+=======
+.Lduct: .long	0,.Laste,.Laste,0,.Lduald,0,0,0
+	.long	0,0,0,0,0,0,0,0
+.Laste:	.quad	0,0xffffffffffffffff,0,0,0,0,0,0
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.align	128
 .Lduald:.rept	8
 	.long	0x80000000,0,0,0	# invalid access-list entries
 	.endr
+<<<<<<< HEAD
+=======
+.Llinkage_stack:
+	.long	0,0,0x89000000,0,0,0,0x8a000000,0
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 ENTRY(_ehead)
 

@@ -198,8 +198,13 @@ int ext3fs_dirhash(const char *name, int len, struct dx_hash_info *hinfo)
 		return -1;
 	}
 	hash = hash & ~1;
+<<<<<<< HEAD
 	if (hash == (EXT3_HTREE_EOF << 1))
 		hash = (EXT3_HTREE_EOF-1) << 1;
+=======
+	if (hash == (EXT3_HTREE_EOF_32BIT << 1))
+		hash = (EXT3_HTREE_EOF_32BIT - 1) << 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	hinfo->hash = hash;
 	hinfo->minor_hash = minor_hash;
 	return 0;

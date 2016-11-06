@@ -775,7 +775,11 @@ static unsigned armv7_a7_perf_cache_map[PERF_COUNT_HW_CACHE_MAX]
 /*
  * PMXEVTYPER: Event selection reg
  */
+<<<<<<< HEAD
 #define	ARMV7_EVTYPE_MASK	0xc00000ff	/* Mask for writable bits */
+=======
+#define	ARMV7_EVTYPE_MASK	0xc80000ff	/* Mask for writable bits */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	ARMV7_EVTYPE_EVENT	0xff		/* Mask for EVENT bits */
 
 /*

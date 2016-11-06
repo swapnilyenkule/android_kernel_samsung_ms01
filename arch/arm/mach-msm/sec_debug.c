@@ -1993,9 +1993,13 @@ int sec_debug_subsys_init(void)
 
 	sec_debug_subsys_set_kloginfo(&secdbg_krait->log.idx_paddr,
 		&secdbg_krait->log.log_paddr, &secdbg_krait->log.size);
+<<<<<<< HEAD
 #ifdef CONFIG_ANDROID_LOGGER
 	sec_debug_subsys_set_logger_info(&secdbg_krait->logger_log);
 #endif
+=======
+	sec_debug_subsys_set_logger_info(&secdbg_krait->logger_log);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	secdbg_krait->tz_core_dump =
 		(struct tzbsp_dump_buf_s **)get_wdog_regsave_paddr();

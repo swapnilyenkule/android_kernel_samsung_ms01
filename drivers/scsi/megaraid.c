@@ -1967,7 +1967,11 @@ megaraid_abort_and_reset(adapter_t *adapter, Scsi_Cmnd *cmd, int aor)
 	     cmd->device->id, cmd->device->lun);
 
 	if(list_empty(&adapter->pending_list))
+<<<<<<< HEAD
 		return FALSE;
+=======
+		return FAILED;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	list_for_each_safe(pos, next, &adapter->pending_list) {
 
@@ -1990,7 +1994,11 @@ megaraid_abort_and_reset(adapter_t *adapter, Scsi_Cmnd *cmd, int aor)
 					(aor==SCB_ABORT) ? "ABORTING":"RESET",
 					scb->idx);
 
+<<<<<<< HEAD
 				return FALSE;
+=======
+				return FAILED;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			else {
 
@@ -2015,12 +2023,20 @@ megaraid_abort_and_reset(adapter_t *adapter, Scsi_Cmnd *cmd, int aor)
 				list_add_tail(SCSI_LIST(cmd),
 						&adapter->completed_list);
 
+<<<<<<< HEAD
 				return TRUE;
+=======
+				return SUCCESS;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 		}
 	}
 
+<<<<<<< HEAD
 	return FALSE;
+=======
+	return FAILED;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline int

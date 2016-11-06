@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /******************************************************************************
@@ -76,8 +88,11 @@
 #define PMC_IS_CHIP_ACCESSIBLE(pmcState) ( (IMPS != (pmcState)) && (REQUEST_IMPS != (pmcState)) && \
        (STANDBY != (pmcState)) && (REQUEST_STANDBY != (pmcState)) )
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Power events that are signaled to PMC. */
 
 typedef enum ePmcPowerEvent
@@ -197,7 +212,10 @@ typedef enum ePmcState
 
 } tPmcState;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Which beacons should be forwarded to the host. */
 
 typedef enum ePmcBeaconsToForward
@@ -231,8 +249,16 @@ typedef enum ePmcSmpsMode
 
 } tPmcSmpsMode;
 
+<<<<<<< HEAD
 
 
+=======
+typedef enum
+{
+    eWOWL_EXIT_USER,
+    eWOWL_EXIT_WAKEIND
+}tWowlExitSource;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* Configuration parameters for Idle Mode Power Save (IMPS). */
 
@@ -313,7 +339,10 @@ typedef struct sPmcSmpsConfigParams
 
 
 /* Routine definitions. */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern eHalStatus pmcOpen (tHalHandle hHal);
 
 extern eHalStatus pmcStart (tHalHandle hHal);
@@ -436,7 +465,11 @@ extern eHalStatus pmcEnterWowl (
 #endif // WLAN_WAKEUP_EVENTS
     tpSirSmeWowlEnterParams wowlEnterParams, tANI_U8 sessionId);
 
+<<<<<<< HEAD
 extern eHalStatus pmcExitWowl (tHalHandle hHal);
+=======
+extern eHalStatus pmcExitWowl (tHalHandle hHal, tWowlExitSource wowlExitSrc);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 
 extern eHalStatus pmcSetHostOffload (tHalHandle hHal, tpSirHostOffloadReq pRequest,

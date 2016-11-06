@@ -47,37 +47,65 @@ static struct ot200_led leds[] = {
 	{
 		.name = "led_1",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(7),
+=======
+		.mask = BIT(6),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_2",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(6),
+=======
+		.mask = BIT(5),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_3",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(5),
+=======
+		.mask = BIT(4),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_4",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(4),
+=======
+		.mask = BIT(3),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_5",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(3),
+=======
+		.mask = BIT(2),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_6",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(2),
+=======
+		.mask = BIT(1),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.name = "led_7",
 		.port = 0x49,
+<<<<<<< HEAD
 		.mask = BIT(1),
+=======
+		.mask = BIT(0),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 };
 

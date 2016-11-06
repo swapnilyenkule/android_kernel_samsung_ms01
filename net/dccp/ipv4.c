@@ -435,8 +435,13 @@ exit:
 	NET_INC_STATS_BH(sock_net(sk), LINUX_MIB_LISTENDROPS);
 	return NULL;
 put_and_exit:
+<<<<<<< HEAD
 	bh_unlock_sock(newsk);
 	sock_put(newsk);
+=======
+	inet_csk_prepare_forced_close(newsk);
+	dccp_done(newsk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	goto exit;
 }
 

@@ -199,7 +199,12 @@ void __init mv78xx0_ge00_init(struct mv643xx_eth_platform_data *eth_data)
 {
 	orion_ge00_init(eth_data,
 			GE00_PHYS_BASE, IRQ_MV78XX0_GE00_SUM,
+<<<<<<< HEAD
 			IRQ_MV78XX0_GE_ERR, get_tclk());
+=======
+			IRQ_MV78XX0_GE_ERR, get_tclk(),
+			MV643XX_TX_CSUM_DEFAULT_LIMIT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -210,7 +215,12 @@ void __init mv78xx0_ge01_init(struct mv643xx_eth_platform_data *eth_data)
 {
 	orion_ge01_init(eth_data,
 			GE01_PHYS_BASE, IRQ_MV78XX0_GE01_SUM,
+<<<<<<< HEAD
 			NO_IRQ, get_tclk());
+=======
+			NO_IRQ, get_tclk(),
+			MV643XX_TX_CSUM_DEFAULT_LIMIT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 

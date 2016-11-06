@@ -30,4 +30,8 @@
 
 h1940_pm_return:
 	mov	r0, #S3C2410_PA_GPIO
+<<<<<<< HEAD
 	ldr	pc, [ r0, #S3C2410_GSTATUS3 - S3C24XX_VA_GPIO ]
+=======
+	ldr	pc, [r0, #S3C2410_GSTATUS3 - S3C24XX_VA_GPIO]
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

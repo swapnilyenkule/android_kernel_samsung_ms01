@@ -28,6 +28,10 @@
 #include <linux/tty.h>
 #include <linux/console.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/rcupdate.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <asm/reg.h>
 #include <asm/uaccess.h>
@@ -54,8 +58,16 @@ cpu_idle(void)
 		/* FIXME -- EV6 and LCA45 know how to power down
 		   the CPU.  */
 
+<<<<<<< HEAD
 		while (!need_resched())
 			cpu_relax();
+=======
+		rcu_idle_enter();
+		while (!need_resched())
+			cpu_relax();
+
+		rcu_idle_exit();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		schedule();
 	}
 }

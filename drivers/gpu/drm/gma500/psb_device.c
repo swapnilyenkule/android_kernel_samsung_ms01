@@ -197,7 +197,12 @@ static int psb_save_display_registers(struct drm_device *dev)
 	}
 
 	list_for_each_entry(connector, &dev->mode_config.connector_list, head)
+<<<<<<< HEAD
 		connector->funcs->save(connector);
+=======
+		if (connector->funcs->save)
+			connector->funcs->save(connector);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	mutex_unlock(&dev->mode_config.mutex);
 	return 0;
@@ -235,7 +240,12 @@ static int psb_restore_display_registers(struct drm_device *dev)
 			crtc->funcs->restore(crtc);
 
 	list_for_each_entry(connector, &dev->mode_config.connector_list, head)
+<<<<<<< HEAD
 		connector->funcs->restore(connector);
+=======
+		if (connector->funcs->restore)
+			connector->funcs->restore(connector);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	mutex_unlock(&dev->mode_config.mutex);
 	return 0;

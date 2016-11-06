@@ -20,9 +20,13 @@
 #include <linux/namei.h>
 #include <linux/debugfs.h>
 #include <linux/io.h>
+<<<<<<< HEAD
 #ifdef CONFIG_ZSWAP
 #include <linux/atomic.h>
 #endif
+=======
+#include <linux/atomic.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static ssize_t default_read_file(struct file *file, char __user *buf,
 				 size_t count, loff_t *ppos)
@@ -405,7 +409,10 @@ struct dentry *debugfs_create_size_t(const char *name, umode_t mode,
 }
 EXPORT_SYMBOL_GPL(debugfs_create_size_t);
 
+<<<<<<< HEAD
 #ifdef CONFIG_ZSWAP
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int debugfs_atomic_t_set(void *data, u64 val)
 {
 	atomic_set((atomic_t *)data, val);
@@ -447,7 +454,10 @@ struct dentry *debugfs_create_atomic_t(const char *name, umode_t mode,
 	return debugfs_create_file(name, mode, parent, value, &fops_atomic_t);
 }
 EXPORT_SYMBOL_GPL(debugfs_create_atomic_t);
+<<<<<<< HEAD
 #endif /* CONFIG_ZSWAP */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static ssize_t read_file_bool(struct file *file, char __user *user_buf,
 			      size_t count, loff_t *ppos)

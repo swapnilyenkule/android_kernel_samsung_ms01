@@ -522,7 +522,11 @@ asmlinkage long long do_syscall_trace_enter(struct pt_regs *regs)
 {
 	long long ret = 0;
 
+<<<<<<< HEAD
 	secure_computing_strict(regs->regs[9]);
+=======
+	secure_computing(regs->regs[9]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (test_thread_flag(TIF_SYSCALL_TRACE) &&
 	    tracehook_report_syscall_entry(regs))

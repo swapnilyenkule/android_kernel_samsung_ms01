@@ -267,7 +267,10 @@ static void atl1c_check_link_status(struct atl1c_adapter *adapter)
 				dev_warn(&pdev->dev, "stop mac failed\n");
 		atl1c_set_aspm(hw, false);
 		netif_carrier_off(netdev);
+<<<<<<< HEAD
 		netif_stop_queue(netdev);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		atl1c_phy_reset(hw);
 		atl1c_phy_init(&adapter->hw);
 	} else {

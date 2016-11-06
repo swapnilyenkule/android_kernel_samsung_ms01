@@ -205,9 +205,15 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
 		rc = __vfs_setxattr_noperm(dentry, XATTR_NAME_EVM,
 					   &xattr_data,
 					   sizeof(xattr_data), 0);
+<<<<<<< HEAD
 	}
 	else if (rc == -ENODATA)
 		rc = inode->i_op->removexattr(dentry, XATTR_NAME_EVM);
+=======
+	} else if (rc == -ENODATA && inode->i_op->removexattr) {
+		rc = inode->i_op->removexattr(dentry, XATTR_NAME_EVM);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return rc;
 }
 

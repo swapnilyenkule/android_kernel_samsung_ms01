@@ -552,7 +552,11 @@ int iscsi_copy_param_list(
 	param_list = kzalloc(sizeof(struct iscsi_param_list), GFP_KERNEL);
 	if (!param_list) {
 		pr_err("Unable to allocate memory for struct iscsi_param_list.\n");
+<<<<<<< HEAD
 		goto err_out;
+=======
+		return -1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	INIT_LIST_HEAD(&param_list->param_list);
 	INIT_LIST_HEAD(&param_list->extra_response_list);
@@ -713,9 +717,15 @@ static int iscsi_add_notunderstood_response(
 	}
 	INIT_LIST_HEAD(&extra_response->er_list);
 
+<<<<<<< HEAD
 	strncpy(extra_response->key, key, strlen(key) + 1);
 	strncpy(extra_response->value, NOTUNDERSTOOD,
 			strlen(NOTUNDERSTOOD) + 1);
+=======
+	strlcpy(extra_response->key, key, sizeof(extra_response->key));
+	strlcpy(extra_response->value, NOTUNDERSTOOD,
+		sizeof(extra_response->value));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	list_add_tail(&extra_response->er_list,
 			&param_list->extra_response_list);
@@ -1571,8 +1581,11 @@ int iscsi_decode_text_input(
 
 		if (phase & PHASE_SECURITY) {
 			if (iscsi_check_for_auth_key(key) > 0) {
+<<<<<<< HEAD
 				char *tmpptr = key + strlen(key);
 				*tmpptr = '=';
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				kfree(tmpbuf);
 				return 1;
 			}

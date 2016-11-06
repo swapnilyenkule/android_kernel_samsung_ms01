@@ -409,15 +409,30 @@ int second_overflow(unsigned long secs)
 			time_state = TIME_DEL;
 		break;
 	case TIME_INS:
+<<<<<<< HEAD
 		if (secs % 86400 == 0) {
 			leap = -1;
 			time_state = TIME_OOP;
+=======
+		if (!(time_status & STA_INS))
+			time_state = TIME_OK;
+		else if (secs % 86400 == 0) {
+			leap = -1;
+			time_state = TIME_OOP;
+			time_tai++;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			printk(KERN_NOTICE
 				"Clock: inserting leap second 23:59:60 UTC\n");
 		}
 		break;
 	case TIME_DEL:
+<<<<<<< HEAD
 		if ((secs + 1) % 86400 == 0) {
+=======
+		if (!(time_status & STA_DEL))
+			time_state = TIME_OK;
+		else if ((secs + 1) % 86400 == 0) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			leap = 1;
 			time_tai--;
 			time_state = TIME_WAIT;
@@ -426,7 +441,10 @@ int second_overflow(unsigned long secs)
 		}
 		break;
 	case TIME_OOP:
+<<<<<<< HEAD
 		time_tai++;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		time_state = TIME_WAIT;
 		break;
 
@@ -656,6 +674,20 @@ int do_adjtimex(struct timex *txc)
 			return result;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Check for potential multiplication overflows that can
+	 * only happen on 64-bit systems:
+	 */
+	if ((txc->modes & ADJ_FREQUENCY) && (BITS_PER_LONG == 64)) {
+		if (LLONG_MIN / PPM_SCALE > txc->freq)
+			return -EINVAL;
+		if (LLONG_MAX / PPM_SCALE < txc->freq)
+			return -EINVAL;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	getnstimeofday(&ts);
 
 	spin_lock_irq(&ntp_lock);

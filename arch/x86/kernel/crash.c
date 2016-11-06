@@ -95,10 +95,17 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
 	cpu_emergency_vmxoff();
 	cpu_emergency_svm_disable();
 
+<<<<<<< HEAD
 	lapic_shutdown();
 #if defined(CONFIG_X86_IO_APIC)
 	disable_IO_APIC();
 #endif
+=======
+#if defined(CONFIG_X86_IO_APIC)
+	disable_IO_APIC();
+#endif
+	lapic_shutdown();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_HPET_TIMER
 	hpet_disable();
 #endif

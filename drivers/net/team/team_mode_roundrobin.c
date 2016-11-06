@@ -52,6 +52,11 @@ static bool rr_transmit(struct team *team, struct sk_buff *skb)
 
 	port_index = rr_priv(team)->sent_packets++ % team->port_count;
 	port = team_get_port_by_index_rcu(team, port_index);
+<<<<<<< HEAD
+=======
+	if (unlikely(!port))
+		goto drop;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	port = __get_first_port_up(team, port);
 	if (unlikely(!port))
 		goto drop;

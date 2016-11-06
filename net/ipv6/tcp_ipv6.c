@@ -899,8 +899,12 @@ static void tcp_v6_send_response(struct sk_buff *skb, u32 seq, u32 ack, u32 win,
 	__tcp_v6_send_check(buff, &fl6.saddr, &fl6.daddr);
 
 	fl6.flowi6_proto = IPPROTO_TCP;
+<<<<<<< HEAD
 	if (ipv6_addr_type(&fl6.daddr) & IPV6_ADDR_LINKLOCAL)
 		fl6.flowi6_oif = inet6_iif(skb);
+=======
+	fl6.flowi6_oif = inet6_iif(skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fl6.flowi6_mark = IP6_REPLY_MARK(net, skb->mark);
 	fl6.fl6_dport = t1->dest;
 	fl6.fl6_sport = t1->source;
@@ -1416,7 +1420,12 @@ static struct sock * tcp_v6_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 #endif
 
 	if (__inet_inherit_port(sk, newsk) < 0) {
+<<<<<<< HEAD
 		sock_put(newsk);
+=======
+		inet_csk_prepare_forced_close(newsk);
+		tcp_done(newsk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto out;
 	}
 	__inet6_hash(newsk, NULL);
@@ -1575,7 +1584,11 @@ ipv6_pktoptions:
 		if (np->rxopt.bits.rxhlim || np->rxopt.bits.rxohlim)
 			np->mcast_hops = ipv6_hdr(opt_skb)->hop_limit;
 		if (np->rxopt.bits.rxtclass)
+<<<<<<< HEAD
 			np->rcv_tclass = ipv6_tclass(ipv6_hdr(skb));
+=======
+			np->rcv_tclass = ipv6_tclass(ipv6_hdr(opt_skb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ipv6_opt_accepted(sk, opt_skb)) {
 			skb_set_owner_r(opt_skb, sk);
 			opt_skb = xchg(&np->pktoptions, opt_skb);
@@ -2136,7 +2149,10 @@ struct proto tcpv6_prot = {
 	.proto_cgroup		= tcp_proto_cgroup,
 #endif
 	.clear_sk		= tcp_v6_clear_sk,
+<<<<<<< HEAD
 	.diag_destroy		= tcp_abort,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static const struct inet6_protocol tcpv6_protocol = {

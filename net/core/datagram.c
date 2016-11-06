@@ -187,7 +187,11 @@ struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 		skb_queue_walk(queue, skb) {
 			*peeked = skb->peeked;
 			if (flags & MSG_PEEK) {
+<<<<<<< HEAD
 				if (*off >= skb->len) {
+=======
+				if (*off >= skb->len && skb->len) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					*off -= skb->len;
 					continue;
 				}
@@ -677,7 +681,10 @@ EXPORT_SYMBOL(__skb_checksum_complete);
  *	@skb: skbuff
  *	@hlen: hardware length
  *	@iov: io vector
+<<<<<<< HEAD
  *	@len: amount of data to copy from skb to iov
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  *	Caller _must_ check that skb will fit to this iovec.
  *
@@ -687,14 +694,21 @@ EXPORT_SYMBOL(__skb_checksum_complete);
  *			   can be modified!
  */
 int skb_copy_and_csum_datagram_iovec(struct sk_buff *skb,
+<<<<<<< HEAD
 				     int hlen, struct iovec *iov, int len)
+=======
+				     int hlen, struct iovec *iov)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	__wsum csum;
 	int chunk = skb->len - hlen;
 
+<<<<<<< HEAD
 	if (chunk > len)
 		chunk = len;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!chunk)
 		return 0;
 

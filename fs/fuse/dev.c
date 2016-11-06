@@ -721,8 +721,13 @@ static int fuse_try_move_page(struct fuse_copy_state *cs, struct page **pagep)
 
 	newpage = buf->page;
 
+<<<<<<< HEAD
 	if (WARN_ON(!PageUptodate(newpage)))
 		return -EIO;
+=======
+	if (!PageUptodate(newpage))
+		SetPageUptodate(newpage);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ClearPageMappedToDisk(newpage);
 
@@ -1580,6 +1585,10 @@ static int fuse_retrieve(struct fuse_conn *fc, struct inode *inode,
 		req->pages[req->num_pages] = page;
 		req->num_pages++;
 
+<<<<<<< HEAD
+=======
+		offset = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		num -= this_num;
 		total_len += this_num;
 		index++;
@@ -1637,6 +1646,12 @@ copy_finish:
 static int fuse_notify(struct fuse_conn *fc, enum fuse_notify_code code,
 		       unsigned int size, struct fuse_copy_state *cs)
 {
+<<<<<<< HEAD
+=======
+	/* Don't try to move pages (yet) */
+	cs->move_pages = 0;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	switch (code) {
 	case FUSE_NOTIFY_POLL:
 		return fuse_notify_poll(fc, size, cs);

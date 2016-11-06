@@ -26,6 +26,10 @@
 #include <linux/ptrace.h>
 #include <linux/unistd.h>
 #include <linux/hardirq.h>
+<<<<<<< HEAD
+=======
+#include <linux/rcupdate.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <asm/io.h>
 #include <asm/uaccess.h>
@@ -82,6 +86,10 @@ void cpu_idle (void)
 {
 	/* endless idle loop with no priority at all */
 	while (1) {
+<<<<<<< HEAD
+=======
+		rcu_idle_enter();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		while (!need_resched()) {
 			void (*idle)(void) = pm_idle;
 
@@ -90,6 +98,10 @@ void cpu_idle (void)
 
 			idle();
 		}
+<<<<<<< HEAD
+=======
+		rcu_idle_exit();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		schedule_preempt_disabled();
 	}
 }

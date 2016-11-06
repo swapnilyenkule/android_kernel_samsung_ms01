@@ -194,7 +194,11 @@ static void sharpsl_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 	sharpsl_pcmcia_init_reset(skt);
 }
 
+<<<<<<< HEAD
 static struct pcmcia_low_level sharpsl_pcmcia_ops __initdata = {
+=======
+static struct pcmcia_low_level sharpsl_pcmcia_ops = {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.owner                  = THIS_MODULE,
 	.hw_init                = sharpsl_pcmcia_hw_init,
 	.socket_state           = sharpsl_pcmcia_socket_state,

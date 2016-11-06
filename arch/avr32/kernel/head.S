@@ -10,12 +10,16 @@
 #include <linux/linkage.h>
 
 #include <asm/page.h>
+<<<<<<< HEAD
 #include <asm/thread_info.h>
 #include <asm/sysreg.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	.section .init.text,"ax"
 	.global kernel_entry
 kernel_entry:
+<<<<<<< HEAD
 	/* Initialize status register */
 	lddpc   r0, init_sr
 	mtsr	SYSREG_SR, r0
@@ -30,13 +34,18 @@ kernel_entry:
 	mov	r7, 0
 #endif
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Start the show */
 	lddpc   pc, kernel_start_addr
 
 	.align  2
+<<<<<<< HEAD
 init_sr:
 	.long   0x007f0000	/* Supervisor mode, everything masked */
 stack_addr:
 	.long   init_thread_union
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 kernel_start_addr:
 	.long   start_kernel

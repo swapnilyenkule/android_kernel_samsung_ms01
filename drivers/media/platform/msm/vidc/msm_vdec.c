@@ -21,6 +21,7 @@
 
 #define MSM_VDEC_DVC_NAME "msm_vdec_8974"
 #define MIN_NUM_OUTPUT_BUFFERS 4
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_KLTE_DCM)
 //Kishore MSM Patch https://www.codeaurora.org/cgit/quic/la//kernel/msm/commit/?id=0b07789494d4d3a96bba5d60e6783ae6ea69ecf5
 #define MAX_NUM_OUTPUT_BUFFERS VIDEO_MAX_FRAME
@@ -28,6 +29,10 @@
 #define MAX_NUM_OUTPUT_BUFFERS 6
 #endif /* defined(CONFIG_MACH_KLTE_DCM) */
 #define DEFAULT_VIDEO_CONCEAL_COLOR_BLACK 0x8080
+=======
+#define MAX_NUM_OUTPUT_BUFFERS VB2_MAX_FRAME
+#define DEFAULT_VIDEO_CONCEAL_COLOR_BLACK 0x8010
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define MB_SIZE_IN_PIXEL (16 * 16)
 
 #define TZ_INFO_GET_FEATURE_VERSION_ID 0x3
@@ -112,7 +117,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		),
 		.qmenu = mpeg_video_stream_format,
 		.step = 0,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_OUTPUT_ORDER,
@@ -127,7 +135,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 			),
 		.qmenu = mpeg_video_output_order,
 		.step = 0,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_ENABLE_PICTURE_TYPE,
@@ -139,7 +150,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_KEEP_ASPECT_RATIO,
@@ -151,7 +165,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_POST_LOOP_DEBLOCKER_MODE,
@@ -163,7 +180,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_DIVX_FORMAT,
@@ -179,7 +199,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 			),
 		.qmenu = mpeg_video_vidc_divx_format,
 		.step = 0,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_MB_ERROR_MAP_REPORTING,
@@ -191,7 +214,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_CONTINUE_DATA_TRANSFER,
@@ -203,7 +229,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_SYNC_FRAME_DECODE,
@@ -223,7 +252,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 0,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_EXTRADATA,
@@ -284,7 +316,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 			),
 		.qmenu = mpeg_vidc_video_alloc_mode_type,
 		.step = 0,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_ALLOC_MODE_OUTPUT,
@@ -300,7 +335,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 			),
 		.qmenu = mpeg_vidc_video_alloc_mode_type,
 		.step = 0,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_FRAME_ASSEMBLY,
@@ -312,7 +350,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_STREAM_OUTPUT_MODE,
@@ -328,7 +369,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.menu_skip_mask = 0,
 		.step = 1,
 		.qmenu = NULL,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_CONCEAL_COLOR,
@@ -338,7 +382,10 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.maximum = 0xffffff,
 		.default_value = DEFAULT_VIDEO_CONCEAL_COLOR_BLACK,
 		.step = 1,
+<<<<<<< HEAD
 		.cluster = 0,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_BUFFER_SIZE_LIMIT,
@@ -351,6 +398,7 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.menu_skip_mask = 0,
 		.qmenu = NULL,
 	},
+<<<<<<< HEAD
 	{
 		.id = V4L2_CID_MPEG_VIDC_VIDEO_PRIORITY,
 		.name = "Session Priority",
@@ -371,6 +419,8 @@ static struct msm_vidc_ctrl msm_vdec_ctrls[] = {
 		.step = 1,
 		.qmenu = NULL,
 	},
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 #define NUM_CTRLS ARRAY_SIZE(msm_vdec_ctrls)
@@ -1489,7 +1539,11 @@ int msm_vdec_cmd(struct msm_vidc_inst *inst, struct v4l2_decoder_cmd *dec)
 	case V4L2_DEC_QCOM_CMD_FLUSH:
 		if (core->state != VIDC_CORE_INVALID &&
 			inst->state ==  MSM_VIDC_CORE_INVALID) {
+<<<<<<< HEAD
 			rc = msm_comm_recover_from_session_error(inst);
+=======
+			rc = msm_comm_kill_session(inst);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (rc)
 				dprintk(VIDC_ERR,
 					"Failed to recover from session_error: %d\n",
@@ -1504,7 +1558,11 @@ int msm_vdec_cmd(struct msm_vidc_inst *inst, struct v4l2_decoder_cmd *dec)
 	case V4L2_DEC_CMD_STOP:
 		if (core->state != VIDC_CORE_INVALID &&
 			inst->state ==  MSM_VIDC_CORE_INVALID) {
+<<<<<<< HEAD
 			rc = msm_comm_recover_from_session_error(inst);
+=======
+			rc = msm_comm_kill_session(inst);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (rc)
 				dprintk(VIDC_ERR,
 					"Failed to recover from session_error: %d\n",
@@ -1833,6 +1891,7 @@ static int try_set_ctrl(struct msm_vidc_inst *inst, struct v4l2_ctrl *ctrl)
 			"Limiting input buffer size to :%u\n", ctrl->val);
 		break;
 	}
+<<<<<<< HEAD
 	case V4L2_CID_MPEG_VIDC_VIDEO_PRIORITY:
 		property_id = HAL_CONFIG_REALTIME;
 		hal_property.enable = ctrl->val;
@@ -1841,6 +1900,8 @@ static int try_set_ctrl(struct msm_vidc_inst *inst, struct v4l2_ctrl *ctrl)
 	case V4L2_CID_MPEG_VIDC_VIDEO_OPERATING_RATE:
 		property_id = 0;
 		break;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		break;
 	}
@@ -1914,12 +1975,18 @@ int msm_vdec_g_ctrl(struct msm_vidc_inst *inst, struct v4l2_control *ctrl)
 	return v4l2_g_ctrl(&inst->ctrl_handler, ctrl);
 }
 
+<<<<<<< HEAD
 static struct v4l2_ctrl **get_cluster(int type, int *size)
+=======
+static struct v4l2_ctrl **get_super_cluster(struct msm_vidc_inst *inst,
+				int *size)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int c = 0, sz = 0;
 	struct v4l2_ctrl **cluster = kmalloc(sizeof(struct v4l2_ctrl *) *
 			NUM_CTRLS, GFP_KERNEL);
 
+<<<<<<< HEAD
 	if (type <= 0 || !size || !cluster)
 		return NULL;
 
@@ -1929,6 +1996,13 @@ static struct v4l2_ctrl **get_cluster(int type, int *size)
 			++sz;
 		}
 	}
+=======
+	if (!size || !cluster || !inst)
+		return NULL;
+
+	for (c = 0; c < NUM_CTRLS; c++)
+		cluster[sz++] = inst->ctrls[c];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	*size = sz;
 	return cluster;
@@ -1939,6 +2013,22 @@ int msm_vdec_ctrl_init(struct msm_vidc_inst *inst)
 	int idx = 0;
 	struct v4l2_ctrl_config ctrl_cfg = {0};
 	int ret_val = 0;
+<<<<<<< HEAD
+=======
+	int cluster_size = 0;
+
+	if (!inst) {
+		dprintk(VIDC_ERR, "%s - invalid input\n", __func__);
+		return -EINVAL;
+	}
+
+	inst->ctrls = kzalloc(sizeof(struct v4l2_ctrl *) * NUM_CTRLS,
+				GFP_KERNEL);
+	if (!inst->ctrls) {
+		dprintk(VIDC_ERR, "%s - failed to allocate ctrl\n", __func__);
+		return -ENOMEM;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ret_val = v4l2_ctrl_handler_init(&inst->ctrl_handler, NUM_CTRLS);
 
@@ -1992,7 +2082,11 @@ int msm_vdec_ctrl_init(struct msm_vidc_inst *inst)
 		}
 
 
+<<<<<<< HEAD
 		msm_vdec_ctrls[idx].priv = ctrl;
+=======
+		inst->ctrls[idx] = ctrl;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	ret_val = inst->ctrl_handler.error;
 	if (ret_val)
@@ -2000,6 +2094,7 @@ int msm_vdec_ctrl_init(struct msm_vidc_inst *inst)
 			"Error adding ctrls to ctrl handle, %d\n",
 			inst->ctrl_handler.error);
 
+<<<<<<< HEAD
 	/* Construct clusters */
 	for (idx = 1; idx < MSM_VDEC_CTRL_CLUSTER_MAX; ++idx) {
 		struct msm_vidc_ctrl_cluster *temp = NULL;
@@ -2025,16 +2120,40 @@ int msm_vdec_ctrl_init(struct msm_vidc_inst *inst)
 		INIT_LIST_HEAD(&temp->list);
 		list_add_tail(&temp->list, &inst->ctrl_clusters);
 	}
+=======
+	/* Construct a super cluster of all controls */
+	inst->cluster = get_super_cluster(inst, &cluster_size);
+	if (!inst->cluster || !cluster_size) {
+		dprintk(VIDC_WARN,
+				"Failed to setup super cluster\n");
+		return -EINVAL;
+	}
+
+	v4l2_ctrl_cluster(cluster_size, inst->cluster);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret_val;
 }
 
 int msm_vdec_ctrl_deinit(struct msm_vidc_inst *inst)
 {
+<<<<<<< HEAD
 	struct msm_vidc_ctrl_cluster *curr, *next;
 	list_for_each_entry_safe(curr, next, &inst->ctrl_clusters, list) {
 		kfree(curr->cluster);
 		kfree(curr);
 	}
 	v4l2_ctrl_handler_free(&inst->ctrl_handler);
+=======
+	if (!inst) {
+		dprintk(VIDC_ERR, "%s invalid parameters\n", __func__);
+		return -EINVAL;
+	}
+
+	kfree(inst->ctrls);
+	kfree(inst->cluster);
+	v4l2_ctrl_handler_free(&inst->ctrl_handler);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }

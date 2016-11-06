@@ -237,9 +237,14 @@ int propagate_mnt(struct mount *dest_mnt, struct dentry *dest_dentry,
 
 		source =  get_source(m, prev_dest_mnt, prev_src_mnt, &type);
 
+<<<<<<< HEAD
 		child = copy_tree(source, source->mnt.mnt_root, type);
 		if (IS_ERR(child)) {
 			ret = PTR_ERR(child);
+=======
+		if (!(child = copy_tree(source, source->mnt.mnt_root, type))) {
+			ret = -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			list_splice(tree_list, tmp_list.prev);
 			goto out;
 		}
@@ -258,12 +263,20 @@ int propagate_mnt(struct mount *dest_mnt, struct dentry *dest_dentry,
 		prev_src_mnt  = child;
 	}
 out:
+<<<<<<< HEAD
 	br_write_lock(&vfsmount_lock);
+=======
+	br_write_lock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	while (!list_empty(&tmp_list)) {
 		child = list_first_entry(&tmp_list, struct mount, mnt_hash);
 		umount_tree(child, 0, &umount_list);
 	}
+<<<<<<< HEAD
 	br_write_unlock(&vfsmount_lock);
+=======
+	br_write_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	release_mounts(&umount_list);
 	return ret;
 }
@@ -334,8 +347,15 @@ static void __propagate_umount(struct mount *mnt)
 		 * umount the child only if the child has no
 		 * other children
 		 */
+<<<<<<< HEAD
 		if (child && list_empty(&child->mnt_mounts))
 			list_move_tail(&child->mnt_hash, &mnt->mnt_hash);
+=======
+		if (child && list_empty(&child->mnt_mounts)) {
+			list_del_init(&child->mnt_child);
+			list_move_tail(&child->mnt_hash, &mnt->mnt_hash);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 

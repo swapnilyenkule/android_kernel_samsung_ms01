@@ -576,7 +576,11 @@ static int pppoe_release(struct socket *sock)
 
 	po = pppox_sk(sk);
 
+<<<<<<< HEAD
 	if (sk->sk_state & (PPPOX_CONNECTED | PPPOX_BOUND)) {
+=======
+	if (sk->sk_state & (PPPOX_CONNECTED | PPPOX_BOUND | PPPOX_ZOMBIE)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dev_put(po->pppoe_dev);
 		po->pppoe_dev = NULL;
 	}
@@ -681,7 +685,11 @@ static int pppoe_connect(struct socket *sock, struct sockaddr *uservaddr,
 		po->chan.hdrlen = (sizeof(struct pppoe_hdr) +
 				   dev->hard_header_len);
 
+<<<<<<< HEAD
 		po->chan.mtu = dev->mtu - sizeof(struct pppoe_hdr);
+=======
+		po->chan.mtu = dev->mtu - sizeof(struct pppoe_hdr) - 2;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		po->chan.private = sk;
 		po->chan.ops = &pppoe_chan_ops;
 
@@ -985,8 +993,11 @@ static int pppoe_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (error < 0)
 		goto end;
 
+<<<<<<< HEAD
 	m->msg_namelen = 0;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (skb) {
 		total_len = min_t(size_t, total_len, skb->len);
 		error = skb_copy_datagram_iovec(skb, 0, m->msg_iov, total_len);

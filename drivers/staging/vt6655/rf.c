@@ -1029,6 +1029,10 @@ unsigned char byPwrdBm = 0;
 		break;
     case RATE_6M:
     case RATE_9M:
+<<<<<<< HEAD
+=======
+    case RATE_12M:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     case RATE_18M:
         byPwr = pDevice->abyOFDMPwrTbl[uCH];
         if (pDevice->byRFType == RF_UW2452) {

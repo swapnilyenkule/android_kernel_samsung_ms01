@@ -110,6 +110,10 @@ int ramfs_nommu_expand_for_mapping(struct inode *inode, size_t newsize)
 
 		/* prevent the page from being discarded on memory pressure */
 		SetPageDirty(page);
+<<<<<<< HEAD
+=======
+		SetPageUptodate(page);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		unlock_page(page);
 		put_page(page);

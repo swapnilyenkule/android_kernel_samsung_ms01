@@ -315,10 +315,21 @@ int adreno_drawctxt_wait_global(struct adreno_device *adreno_dev,
 	kgsl_mutex_unlock(&device->mutex, &device->mutex_owner);
 
 	if (timeout) {
+<<<<<<< HEAD
 		if (0 == (int) wait_event_timeout(drawctxt->waiting,
 			_check_global_timestamp(device, drawctxt, timestamp),
 			msecs_to_jiffies(timeout)))
 			ret = -ETIMEDOUT;
+=======
+		ret = (int) wait_event_timeout(drawctxt->waiting,
+		_check_global_timestamp(device, drawctxt, timestamp),
+			msecs_to_jiffies(timeout));
+
+		if (ret == 0)
+			ret = -ETIMEDOUT;
+		else if (ret > 0)
+			ret = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		wait_event(drawctxt->waiting,
 		_check_global_timestamp(device, drawctxt, timestamp));
@@ -542,6 +553,7 @@ int adreno_drawctxt_detach(struct kgsl_context *context)
 	 */
 	BUG_ON(!mutex_is_locked(&device->mutex));
 
+<<<<<<< HEAD
 	/* Wait for the last global timestamp to pass before continuing.
 	 * The maxumum wait time is 30s, some large IB's can take longer
 	 * than 10s and if hang happens then the time for the context's
@@ -550,6 +562,11 @@ int adreno_drawctxt_detach(struct kgsl_context *context)
 	 */
 	ret = adreno_drawctxt_wait_global(adreno_dev, context,
 		drawctxt->internal_timestamp, 30 * 1000);
+=======
+	/* Wait for the last global timestamp to pass before continuing */
+	ret = adreno_drawctxt_wait_global(adreno_dev, context,
+		drawctxt->internal_timestamp, 10 * 1000);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * If the wait for global fails then nothing after this point is likely
 	 * to work very well - BUG_ON() so we can take advantage of the debug

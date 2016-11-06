@@ -1882,7 +1882,11 @@ static void msm_bus_bimc_config_master(
 {
 	int mode, i, ports;
 	struct msm_bus_bimc_info *binfo;
+<<<<<<< HEAD
 	uint64_t bw = 0;
+=======
+	uint64_t bw;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	binfo = (struct msm_bus_bimc_info *)fab_pdata->hw_data;
 	ports = info->node_info->num_mports;

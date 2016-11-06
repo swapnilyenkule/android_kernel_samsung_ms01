@@ -46,15 +46,22 @@
 
 #define LMK_COUNT_READ
 
+<<<<<<< HEAD
 #ifdef CONFIG_SEC_DEBUG_LMK_COUNT_INFO
 #define OOM_COUNT_READ
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef LMK_COUNT_READ
 static uint32_t lmk_count = 0;
 #endif
 
 #ifdef CONFIG_SEC_OOM_KILLER
 #define MULTIPLE_OOM_KILLER
+<<<<<<< HEAD
+=======
+#define OOM_COUNT_READ
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 #ifdef OOM_COUNT_READ
@@ -62,7 +69,11 @@ static uint32_t oom_count = 0;
 #endif
 
 #ifdef MULTIPLE_OOM_KILLER
+<<<<<<< HEAD
 #define OOM_DEPTH 7
+=======
+#define OOM_DEPTH 5
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 static uint32_t lowmem_debug_level = 1;
@@ -140,6 +151,19 @@ static int test_task_flag(struct task_struct *p, int flag)
 
 static DEFINE_MUTEX(scan_mutex);
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+#define SSWAP_LMK_THRESHOLD	(30720 * 2)
+#define CMA_PAGE_RATIO		70
+#endif
+
+#if defined(CONFIG_ZSWAP)
+extern atomic_t zswap_pool_pages;
+extern atomic_t zswap_stored_pages;
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 {
 	struct task_struct *tsk;
@@ -157,6 +181,18 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #ifdef CONFIG_SEC_DEBUG_LMK_MEMINFO
 	static DEFINE_RATELIMIT_STATE(lmk_rs, DEFAULT_RATELIMIT_INTERVAL, 1);
 #endif
+<<<<<<< HEAD
+=======
+	unsigned long nr_cma_free;
+	struct reclaim_state *reclaim_state = current->reclaim_state;
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+	unsigned long nr_cma_inactive_file;
+	unsigned long nr_cma_active_file;
+	unsigned long cma_page_ratio;
+	bool is_active_high;
+	bool flag = 0;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (nr_to_scan > 0) {
 		if (mutex_lock_interruptible(&scan_mutex) < 0)
@@ -165,6 +201,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 
 	other_free = global_page_state(NR_FREE_PAGES);
 
+<<<<<<< HEAD
 #ifdef CONFIG_ZSWAP
 	if (!current_is_kswapd())
 #endif
@@ -175,6 +212,33 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 		other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM) -
 						total_swapcache_pages;
+=======
+	nr_cma_free = global_page_state(NR_FREE_CMA_PAGES);
+#ifdef CONFIG_ZSWAP
+	if (!current_is_kswapd() || sc->priority <= 6)
+#endif
+		other_free -= nr_cma_free;
+
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+	nr_cma_inactive_file = global_page_state(NR_CMA_INACTIVE_FILE);
+	nr_cma_active_file = global_page_state(NR_CMA_ACTIVE_FILE);
+	cma_page_ratio = 100 * global_page_state(NR_CMA_INACTIVE_FILE) /
+				global_page_state(NR_INACTIVE_FILE);
+	is_active_high = (global_page_state(NR_ACTIVE_FILE) >
+				global_page_state(NR_INACTIVE_FILE)) ? 1 : 0;
+#endif
+	other_file = global_page_state(NR_FILE_PAGES);
+
+#if defined(CONFIG_CMA_PAGE_COUNTING) && defined(CONFIG_EXCLUDE_LRU_LIVING_IN_CMA)
+	if (get_nr_swap_pages() < SSWAP_LMK_THRESHOLD && cma_page_ratio >= CMA_PAGE_RATIO
+			&& !is_active_high) {
+		other_file = other_file - (nr_cma_inactive_file + nr_cma_active_file);
+		flag = 1;
+	}
+#endif
+	if (global_page_state(NR_SHMEM) + total_swapcache_pages < other_file)
+		other_file -= global_page_state(NR_SHMEM) + total_swapcache_pages;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	else
 		other_file = 0;
 
@@ -240,6 +304,18 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_ZSWAP)
+		if (atomic_read(&zswap_stored_pages)) {
+			lowmem_print(3, "shown tasksize : %d\n", tasksize);
+			tasksize += atomic_read(&zswap_pool_pages) * get_mm_counter(p->mm, MM_SWAPENTS)
+				/ atomic_read(&zswap_stored_pages);
+			lowmem_print(3, "real tasksize : %d\n", tasksize);
+		}
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		task_unlock(p);
 		if (tasksize <= 0)
 			continue;
@@ -257,11 +333,34 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			     p->pid, p->comm, oom_score_adj, tasksize);
 	}
 	if (selected) {
+<<<<<<< HEAD
 		lowmem_print(1, "send sigkill to %d (%s), adj %d, size %d, \
 				free memory = %d, reclaimable memory = %d\n",
 			    selected->pid, selected->comm,
 			    selected_oom_score_adj, selected_tasksize,
 				other_free, other_file);
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+		lowmem_print(1, "send sigkill to %d (%s), adj %d, size %d, "
+			"ofree %d, ofile %d(%c), is_kswapd %d - "
+			"cma_free %lu priority %d cma_i_file %lu cma_a_file %lu\n",
+			selected->pid, selected->comm,
+			selected_oom_score_adj, selected_tasksize,
+			other_free, other_file, flag ? '-' : '+',
+			!!current_is_kswapd(),
+			nr_cma_free, sc->priority,
+			nr_cma_inactive_file, nr_cma_active_file);
+#else
+		lowmem_print(1, "send sigkill to %d (%s), adj %d, size %d, "
+				"free memory = %d, reclaimable memory = %d "
+				"is_kswapd %d cma_free %lu priority %d\n",
+				selected->pid, selected->comm,
+				selected_oom_score_adj, selected_tasksize,
+				other_free, other_file,
+				!!current_is_kswapd(),
+				nr_cma_free, sc->priority);
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		lowmem_deathpending_timeout = jiffies + HZ;
 		send_sig(SIGKILL, selected, 0);
 		set_tsk_thread_flag(selected, TIF_MEMDIE);
@@ -282,6 +381,11 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 #endif
 		/* give the system time to free up the memory */
 		msleep_interruptible(20);
+<<<<<<< HEAD
+=======
+		if(reclaim_state)
+			reclaim_state->reclaimed_slab = selected_tasksize;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else
 		rcu_read_unlock();
 
@@ -329,6 +433,27 @@ static int android_oom_handler(struct notifier_block *nb,
 #endif
 
 	unsigned long *freed = data;
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+	unsigned long nr_cma_free;
+	unsigned long nr_cma_inactive_file;
+	unsigned long nr_cma_active_file;
+	int other_free;
+	int other_file;
+
+	nr_cma_free = global_page_state(NR_FREE_CMA_PAGES);
+	other_free = global_page_state(NR_FREE_PAGES) - nr_cma_free;
+
+	nr_cma_inactive_file = global_page_state(NR_CMA_INACTIVE_FILE);
+	nr_cma_active_file = global_page_state(NR_CMA_ACTIVE_FILE);
+	other_file = global_page_state(NR_FILE_PAGES) -
+					global_page_state(NR_SHMEM) -
+					total_swapcache_pages -
+					nr_cma_inactive_file -
+					nr_cma_active_file;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* show status */
 	pr_warning("%s invoked Android-oom-killer: "
@@ -433,11 +558,28 @@ static int android_oom_handler(struct notifier_block *nb,
 #ifdef MULTIPLE_OOM_KILLER
 	for (i = 0; i < OOM_DEPTH; i++) {
 		if (selected[i]) {
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_CMA_PAGE_COUNTING)
+			lowmem_print(1, "oom: send sigkill to %d (%s), adj %d, "
+				"size %d ofree %d ofile %d "
+				"cma_free %lu cma_i_file %lu cma_a_file %lu\n",
+				selected[i]->pid, selected[i]->comm,
+				selected_oom_score_adj[i],
+				selected_tasksize[i],
+				other_free, other_file,
+				nr_cma_free, nr_cma_inactive_file, nr_cma_active_file);
+#else
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			lowmem_print(1, "oom: send sigkill to %d (%s), adj %d,\
 				     size %d\n",
 				     selected[i]->pid, selected[i]->comm,
 				     selected_oom_score_adj[i],
 				     selected_tasksize[i]);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			send_sig(SIGKILL, selected[i], 0);
 			rem -= selected_tasksize[i];
 			*freed += (unsigned long)selected_tasksize[i];

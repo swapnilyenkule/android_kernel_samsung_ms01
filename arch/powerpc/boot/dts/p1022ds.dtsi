@@ -33,6 +33,7 @@
  */
 
 &board_lbc {
+<<<<<<< HEAD
 	/*
 	 * This node is used to access the pixis via "indirect" mode,
 	 * which is done by writing the pixis register index to chip
@@ -49,6 +50,8 @@
 		interrupts = <8 0 0 0>;
 	};
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	nor@0,0 {
 		#address-cells = <1>;
 		#size-cells = <1>;

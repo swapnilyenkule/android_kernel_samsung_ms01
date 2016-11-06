@@ -50,7 +50,11 @@ static void resume_irqs(bool want_early)
 		bool is_early = desc->action &&
 			desc->action->flags & IRQF_EARLY_RESUME;
 
+<<<<<<< HEAD
 		if (is_early != want_early)
+=======
+		if (!is_early && want_early)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 
 		raw_spin_lock_irqsave(&desc->lock, flags);

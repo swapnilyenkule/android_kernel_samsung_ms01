@@ -78,10 +78,13 @@ struct ath_config {
 		       sizeof(struct ath_buf_state));		\
 	} while (0)
 
+<<<<<<< HEAD
 #define ATH_RXBUF_RESET(_bf) do {		\
 		(_bf)->bf_stale = false;	\
 	} while (0)
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**
  * enum buffer_type - Buffer type flags
  *
@@ -213,6 +216,10 @@ struct ath_frame_info {
 	enum ath9k_key_type keytype;
 	u8 keyix;
 	u8 retries;
+<<<<<<< HEAD
+=======
+	u8 rtscts_rate;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 struct ath_buf_state {
@@ -313,6 +320,10 @@ struct ath_rx {
 	struct ath_buf *rx_bufptr;
 	struct ath_rx_edma rx_edma[ATH9K_RX_QUEUE_MAX];
 
+<<<<<<< HEAD
+=======
+	struct ath_buf *buf_hold;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct sk_buff *frag;
 };
 

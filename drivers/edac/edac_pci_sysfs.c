@@ -257,7 +257,11 @@ static ssize_t edac_pci_dev_store(struct kobject *kobj,
 	struct edac_pci_dev_attribute *edac_pci_dev;
 	edac_pci_dev = (struct edac_pci_dev_attribute *)attr;
 
+<<<<<<< HEAD
 	if (edac_pci_dev->show)
+=======
+	if (edac_pci_dev->store)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return edac_pci_dev->store(edac_pci_dev->value, buffer, count);
 	return -EIO;
 }

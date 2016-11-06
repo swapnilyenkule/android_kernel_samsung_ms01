@@ -1136,8 +1136,13 @@ int queue_delayed_work_on(int cpu, struct workqueue_struct *wq,
 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
 		unsigned int lcpu;
 
+<<<<<<< HEAD
 		BUG_ON(timer_pending(timer));
 		BUG_ON(!list_empty(&work->entry));
+=======
+		WARN_ON_ONCE(timer_pending(timer));
+		WARN_ON_ONCE(!list_empty(&work->entry));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		timer_stats_timer_set_start_info(&dwork->timer);
 
@@ -1450,12 +1455,25 @@ static void destroy_worker(struct worker *worker)
 	if (worker->flags & WORKER_IDLE)
 		pool->nr_idle--;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Once WORKER_DIE is set, the kworker may destroy itself at any
+	 * point.  Pin to ensure the task stays until we're done with it.
+	 */
+	get_task_struct(worker->task);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	list_del_init(&worker->entry);
 	worker->flags |= WORKER_DIE;
 
 	spin_unlock_irq(&gcwq->lock);
 
 	kthread_stop(worker->task);
+<<<<<<< HEAD
+=======
+	put_task_struct(worker->task);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(worker);
 
 	spin_lock_irq(&gcwq->lock);
@@ -1862,7 +1880,13 @@ __acquires(&gcwq->lock)
 
 	spin_unlock_irq(&gcwq->lock);
 
+<<<<<<< HEAD
 	work_clear_pending(work);
+=======
+	smp_wmb();	/* paired with test_and_set_bit(PENDING) */
+	work_clear_pending(work);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lock_map_acquire_read(&cwq->wq->lockdep_map);
 	lock_map_acquire(&lockdep_map);
 	trace_workqueue_execute_start(work);
@@ -1889,6 +1913,18 @@ __acquires(&gcwq->lock)
 		dump_stack();
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * The following prevents a kworker from hogging CPU on !PREEMPT
+	 * kernels, where a requeueing work item waiting for something to
+	 * happen could deadlock with stop_machine as such work item could
+	 * indefinitely requeue itself while all other CPUs are trapped in
+	 * stop_machine.
+	 */
+	cond_resched();
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_lock_irq(&gcwq->lock);
 
 	/* clear cpu intensive status */
@@ -2041,8 +2077,15 @@ static int rescuer_thread(void *__wq)
 repeat:
 	set_current_state(TASK_INTERRUPTIBLE);
 
+<<<<<<< HEAD
 	if (kthread_should_stop())
 		return 0;
+=======
+	if (kthread_should_stop()) {
+		__set_current_state(TASK_RUNNING);
+		return 0;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * See whether any cpu is asking for help.  Unbounded
@@ -3473,14 +3516,27 @@ static int __cpuinit trustee_thread(void *__gcwq)
 
 	for_each_busy_worker(worker, i, pos, gcwq) {
 		struct work_struct *rebind_work = &worker->rebind_work;
+<<<<<<< HEAD
+=======
+		unsigned long worker_flags = worker->flags;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		/*
 		 * Rebind_work may race with future cpu hotplug
 		 * operations.  Use a separate flag to mark that
+<<<<<<< HEAD
 		 * rebinding is scheduled.
 		 */
 		worker->flags |= WORKER_REBIND;
 		worker->flags &= ~WORKER_ROGUE;
+=======
+		 * rebinding is scheduled.  The morphing should
+		 * be atomic.
+		 */
+		worker_flags |= WORKER_REBIND;
+		worker_flags &= ~WORKER_ROGUE;
+		ACCESS_ONCE(worker->flags) = worker_flags;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		/* queue rebind_work, wq doesn't matter, use the default one */
 		if (test_and_set_bit(WORK_STRUCT_PENDING_BIT,
@@ -3644,21 +3700,71 @@ err_destroy:
 	return NOTIFY_BAD;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
 
 struct work_for_cpu {
 	struct completion completion;
+=======
+/*
+ * Workqueues should be brought up before normal priority CPU notifiers.
+ * This will be registered high priority CPU notifier.
+ */
+static int __devinit workqueue_cpu_up_callback(struct notifier_block *nfb,
+					       unsigned long action,
+					       void *hcpu)
+{
+	switch (action & ~CPU_TASKS_FROZEN) {
+	case CPU_UP_PREPARE:
+	case CPU_UP_CANCELED:
+	case CPU_DOWN_FAILED:
+	case CPU_ONLINE:
+		return workqueue_cpu_callback(nfb, action, hcpu);
+	}
+	return NOTIFY_OK;
+}
+
+/*
+ * Workqueues should be brought down after normal priority CPU notifiers.
+ * This will be registered as low priority CPU notifier.
+ */
+static int __devinit workqueue_cpu_down_callback(struct notifier_block *nfb,
+						 unsigned long action,
+						 void *hcpu)
+{
+	switch (action & ~CPU_TASKS_FROZEN) {
+	case CPU_DOWN_PREPARE:
+	case CPU_DYING:
+	case CPU_POST_DEAD:
+		return workqueue_cpu_callback(nfb, action, hcpu);
+	}
+	return NOTIFY_OK;
+}
+
+#ifdef CONFIG_SMP
+
+struct work_for_cpu {
+	struct work_struct work;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	long (*fn)(void *);
 	void *arg;
 	long ret;
 };
 
+<<<<<<< HEAD
 static int do_work_for_cpu(void *_wfc)
 {
 	struct work_for_cpu *wfc = _wfc;
 	wfc->ret = wfc->fn(wfc->arg);
 	complete(&wfc->completion);
 	return 0;
+=======
+static void work_for_cpu_fn(struct work_struct *work)
+{
+	struct work_for_cpu *wfc = container_of(work, struct work_for_cpu, work);
+
+	wfc->ret = wfc->fn(wfc->arg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -3673,6 +3779,7 @@ static int do_work_for_cpu(void *_wfc)
  */
 long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 {
+<<<<<<< HEAD
 	struct task_struct *sub_thread;
 	struct work_for_cpu wfc = {
 		.completion = COMPLETION_INITIALIZER_ONSTACK(wfc.completion),
@@ -3686,6 +3793,13 @@ long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 	kthread_bind(sub_thread, cpu);
 	wake_up_process(sub_thread);
 	wait_for_completion(&wfc.completion);
+=======
+	struct work_for_cpu wfc = { .fn = fn, .arg = arg };
+
+	INIT_WORK_ONSTACK(&wfc.work, work_for_cpu_fn);
+	schedule_work_on(cpu, &wfc.work);
+	flush_work(&wfc.work);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return wfc.ret;
 }
 EXPORT_SYMBOL_GPL(work_on_cpu);
@@ -3839,7 +3953,12 @@ static int __init init_workqueues(void)
 	unsigned int cpu;
 	int i;
 
+<<<<<<< HEAD
 	cpu_notifier(workqueue_cpu_callback, CPU_PRI_WORKQUEUE);
+=======
+	cpu_notifier(workqueue_cpu_up_callback, CPU_PRI_WORKQUEUE_UP);
+	cpu_notifier(workqueue_cpu_down_callback, CPU_PRI_WORKQUEUE_DOWN);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* initialize gcwqs */
 	for_each_gcwq_cpu(cpu) {

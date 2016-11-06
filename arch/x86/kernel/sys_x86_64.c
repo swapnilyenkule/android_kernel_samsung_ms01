@@ -115,7 +115,11 @@ static void find_start_end(unsigned long flags, unsigned long *begin,
 				*begin = new_begin;
 		}
 	} else {
+<<<<<<< HEAD
 		*begin = TASK_UNMAPPED_BASE;
+=======
+		*begin = current->mm->mmap_legacy_base;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		*end = TASK_SIZE;
 	}
 }

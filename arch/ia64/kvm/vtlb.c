@@ -256,7 +256,11 @@ u64 guest_vhpt_lookup(u64 iha, u64 *pte)
 			"srlz.d;;"
 			"ssm psr.i;;"
 			"srlz.d;;"
+<<<<<<< HEAD
 			: "=r"(ret) : "r"(iha), "r"(pte):"memory");
+=======
+			: "=&r"(ret) : "r"(iha), "r"(pte) : "memory");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return ret;
 }

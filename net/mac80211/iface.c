@@ -395,10 +395,19 @@ static void ieee80211_do_stop(struct ieee80211_sub_if_data *sdata,
 	u32 hw_reconf_flags = 0;
 	int i;
 	enum nl80211_channel_type orig_ct;
+<<<<<<< HEAD
 
 	clear_bit(SDATA_STATE_RUNNING, &sdata->state);
 
 	if (local->scan_sdata == sdata)
+=======
+	bool cancel_scan;
+
+	clear_bit(SDATA_STATE_RUNNING, &sdata->state);
+
+	cancel_scan = local->scan_sdata == sdata;
+	if (cancel_scan)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ieee80211_scan_cancel(local);
 
 	/*
@@ -514,6 +523,21 @@ static void ieee80211_do_stop(struct ieee80211_sub_if_data *sdata,
 		ieee80211_configure_filter(local);
 		break;
 	default:
+<<<<<<< HEAD
+=======
+		mutex_lock(&local->mtx);
+		if (local->hw_roc_dev == sdata->dev &&
+		    local->hw_roc_channel) {
+			/* ignore return value since this is racy */
+			drv_cancel_remain_on_channel(local);
+			ieee80211_queue_work(&local->hw, &local->hw_roc_done);
+		}
+		mutex_unlock(&local->mtx);
+
+		flush_work(&local->hw_roc_start);
+		flush_work(&local->hw_roc_done);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		flush_work(&sdata->work);
 		/*
 		 * When we get here, the interface is marked down.
@@ -550,6 +574,12 @@ static void ieee80211_do_stop(struct ieee80211_sub_if_data *sdata,
 
 	ieee80211_recalc_ps(local, -1);
 
+<<<<<<< HEAD
+=======
+	if (cancel_scan)
+		flush_delayed_work(&local->scan_work);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (local->open_count == 0) {
 		if (local->ops->napi_poll)
 			napi_disable(&local->napi);
@@ -1245,6 +1275,18 @@ void ieee80211_remove_interfaces(struct ieee80211_local *local)
 
 	ASSERT_RTNL();
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Close all AP_VLAN interfaces first, as otherwise they
+	 * might be closed while the AP interface they belong to
+	 * is closed, causing unregister_netdevice_many() to crash.
+	 */
+	list_for_each_entry(sdata, &local->interfaces, list)
+		if (sdata->vif.type == NL80211_IFTYPE_AP_VLAN)
+			dev_close(sdata->dev);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_lock(&local->iflist_mtx);
 	list_for_each_entry_safe(sdata, tmp, &local->interfaces, list) {
 		list_del(&sdata->list);

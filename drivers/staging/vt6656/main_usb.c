@@ -718,8 +718,11 @@ static int vt6656_suspend(struct usb_interface *intf, pm_message_t message)
 	if (device->flags & DEVICE_FLAGS_OPENED)
 		device_close(device->dev);
 
+<<<<<<< HEAD
 	usb_put_dev(interface_to_usbdev(intf));
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 
@@ -730,8 +733,11 @@ static int vt6656_resume(struct usb_interface *intf)
 	if (!device || !device->dev)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	usb_get_dev(interface_to_usbdev(intf));
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!(device->flags & DEVICE_FLAGS_OPENED))
 		device_open(device->dev);
 
@@ -1224,6 +1230,11 @@ device_release_WPADEV(pDevice);
     memset(pMgmt->abyCurrBSSID, 0, 6);
     pMgmt->eCurrState = WMAC_STATE_IDLE;
 
+<<<<<<< HEAD
+=======
+	pDevice->flags &= ~DEVICE_FLAGS_OPENED;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     device_free_tx_bufs(pDevice);
     device_free_rx_bufs(pDevice);
     device_free_int_bufs(pDevice);
@@ -1235,7 +1246,10 @@ device_release_WPADEV(pDevice);
     usb_free_urb(pDevice->pInterruptURB);
 
     BSSvClearNodeDBTable(pDevice, 0);
+<<<<<<< HEAD
     pDevice->flags &=(~DEVICE_FLAGS_OPENED);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "device_close2 \n");
 

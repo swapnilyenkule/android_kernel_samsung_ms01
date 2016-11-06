@@ -420,9 +420,22 @@ long drm_ioctl(struct file *filp,
 			asize = drv_size;
 	}
 	else if ((nr >= DRM_COMMAND_END) || (nr < DRM_COMMAND_BASE)) {
+<<<<<<< HEAD
 		ioctl = &drm_ioctls[nr];
 		cmd = ioctl->cmd;
 		usize = asize = _IOC_SIZE(cmd);
+=======
+		u32 drv_size;
+
+		ioctl = &drm_ioctls[nr];
+
+		drv_size = _IOC_SIZE(ioctl->cmd);
+		usize = asize = _IOC_SIZE(cmd);
+		if (drv_size > asize)
+			asize = drv_size;
+
+		cmd = ioctl->cmd;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else
 		goto err_i1;
 

@@ -322,7 +322,11 @@ struct thread_struct {
 	regs->loadrs = 0;									\
 	regs->r8 = get_dumpable(current->mm);	/* set "don't zap registers" flag */		\
 	regs->r12 = new_sp - 16;	/* allocate 16 byte scratch area */			\
+<<<<<<< HEAD
 	if (unlikely(!get_dumpable(current->mm))) {							\
+=======
+	if (unlikely(get_dumpable(current->mm) != SUID_DUMP_USER)) {	\
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/*										\
 		 * Zap scratch regs to avoid leaking bits between processes with different	\
 		 * uid/privileges.								\

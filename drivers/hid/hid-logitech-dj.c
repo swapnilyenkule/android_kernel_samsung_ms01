@@ -26,6 +26,10 @@
 #include <linux/hid.h>
 #include <linux/module.h>
 #include <linux/usb.h>
+<<<<<<< HEAD
+=======
+#include <asm/unaligned.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include "usbhid/usbhid.h"
 #include "hid-ids.h"
 #include "hid-logitech-dj.h"
@@ -184,6 +188,10 @@ static struct hid_ll_driver logi_dj_ll_driver;
 static int logi_dj_output_hidraw_report(struct hid_device *hid, u8 * buf,
 					size_t count,
 					unsigned char report_type);
+<<<<<<< HEAD
+=======
+static int logi_dj_recv_query_paired_devices(struct dj_receiver_dev *djrcv_dev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static void logi_dj_recv_destroy_djhid_device(struct dj_receiver_dev *djrcv_dev,
 						struct dj_report *dj_report)
@@ -224,6 +232,7 @@ static void logi_dj_recv_add_djhid_device(struct dj_receiver_dev *djrcv_dev,
 	if (dj_report->report_params[DEVICE_PAIRED_PARAM_SPFUNCTION] &
 	    SPFUNCTION_DEVICE_LIST_EMPTY) {
 		dbg_hid("%s: device list is empty\n", __func__);
+<<<<<<< HEAD
 		return;
 	}
 
@@ -231,6 +240,15 @@ static void logi_dj_recv_add_djhid_device(struct dj_receiver_dev *djrcv_dev,
 	    (dj_report->device_index > DJ_DEVICE_INDEX_MAX)) {
 		dev_err(&djrcv_hdev->dev, "%s: invalid device index:%d\n",
 			__func__, dj_report->device_index);
+=======
+		djrcv_dev->querying_devices = false;
+		return;
+	}
+
+	if (djrcv_dev->paired_dj_devices[dj_report->device_index]) {
+		/* The device is already known. No need to reallocate it. */
+		dbg_hid("%s: device is already known\n", __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	}
 
@@ -265,8 +283,13 @@ static void logi_dj_recv_add_djhid_device(struct dj_receiver_dev *djrcv_dev,
 		goto dj_device_allocate_fail;
 	}
 
+<<<<<<< HEAD
 	dj_dev->reports_supported = le32_to_cpu(
 		dj_report->report_params[DEVICE_PAIRED_RF_REPORT_TYPE]);
+=======
+	dj_dev->reports_supported = get_unaligned_le32(
+		dj_report->report_params + DEVICE_PAIRED_RF_REPORT_TYPE);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dj_dev->hdev = dj_hiddev;
 	dj_dev->dj_receiver_dev = djrcv_dev;
 	dj_dev->device_index = dj_report->device_index;
@@ -297,6 +320,10 @@ static void delayedwork_callback(struct work_struct *work)
 	struct dj_report dj_report;
 	unsigned long flags;
 	int count;
+<<<<<<< HEAD
+=======
+	int retval;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	dbg_hid("%s\n", __func__);
 
@@ -329,6 +356,28 @@ static void delayedwork_callback(struct work_struct *work)
 		logi_dj_recv_destroy_djhid_device(djrcv_dev, &dj_report);
 		break;
 	default:
+<<<<<<< HEAD
+=======
+	/* A normal report (i. e. not belonging to a pair/unpair notification)
+	 * arriving here, means that the report arrived but we did not have a
+	 * paired dj_device associated to the report's device_index, this
+	 * means that the original "device paired" notification corresponding
+	 * to this dj_device never arrived to this driver. The reason is that
+	 * hid-core discards all packets coming from a device while probe() is
+	 * executing. */
+	if (!djrcv_dev->paired_dj_devices[dj_report.device_index]) {
+		/* ok, we don't know the device, just re-ask the
+		 * receiver for the list of connected devices. */
+		retval = logi_dj_recv_query_paired_devices(djrcv_dev);
+		if (!retval) {
+			/* everything went fine, so just leave */
+			break;
+		}
+		dev_err(&djrcv_dev->hdev->dev,
+			"%s:logi_dj_recv_query_paired_devices "
+			"error:%d\n", __func__, retval);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dbg_hid("%s: unexpected report type\n", __func__);
 	}
 }
@@ -359,6 +408,15 @@ static void logi_dj_recv_forward_null_report(struct dj_receiver_dev *djrcv_dev,
 	if (!djdev) {
 		dbg_hid("djrcv_dev->paired_dj_devices[dj_report->device_index]"
 			" is NULL, index %d\n", dj_report->device_index);
+<<<<<<< HEAD
+=======
+		kfifo_in(&djrcv_dev->notif_fifo, dj_report, sizeof(struct dj_report));
+
+		if (schedule_work(&djrcv_dev->work) == 0) {
+			dbg_hid("%s: did not schedule the work item, was already "
+			"queued\n", __func__);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	}
 
@@ -389,6 +447,15 @@ static void logi_dj_recv_forward_report(struct dj_receiver_dev *djrcv_dev,
 	if (dj_device == NULL) {
 		dbg_hid("djrcv_dev->paired_dj_devices[dj_report->device_index]"
 			" is NULL, index %d\n", dj_report->device_index);
+<<<<<<< HEAD
+=======
+		kfifo_in(&djrcv_dev->notif_fifo, dj_report, sizeof(struct dj_report));
+
+		if (schedule_work(&djrcv_dev->work) == 0) {
+			dbg_hid("%s: did not schedule the work item, was already "
+			"queued\n", __func__);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	}
 
@@ -410,6 +477,7 @@ static int logi_dj_recv_send_report(struct dj_receiver_dev *djrcv_dev,
 				    struct dj_report *dj_report)
 {
 	struct hid_device *hdev = djrcv_dev->hdev;
+<<<<<<< HEAD
 	int sent_bytes;
 
 	if (!hdev->hid_output_raw_report) {
@@ -423,10 +491,32 @@ static int logi_dj_recv_send_report(struct dj_receiver_dev *djrcv_dev,
 						 HID_OUTPUT_REPORT);
 
 	return (sent_bytes < 0) ? sent_bytes : 0;
+=======
+	struct hid_report *report;
+	struct hid_report_enum *output_report_enum;
+	u8 *data = (u8 *)(&dj_report->device_index);
+	unsigned int i;
+
+	output_report_enum = &hdev->report_enum[HID_OUTPUT_REPORT];
+	report = output_report_enum->report_id_hash[REPORT_ID_DJ_SHORT];
+
+	if (!report) {
+		dev_err(&hdev->dev, "%s: unable to find dj report\n", __func__);
+		return -ENODEV;
+	}
+
+	for (i = 0; i < DJREPORT_SHORT_LENGTH - 1; i++)
+		report->field[0]->value[i] = data[i];
+
+	usbhid_submit_report(hdev, report, USB_DIR_OUT);
+
+	return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int logi_dj_recv_query_paired_devices(struct dj_receiver_dev *djrcv_dev)
 {
+<<<<<<< HEAD
 	struct dj_report dj_report;
 
 	memset(&dj_report, 0, sizeof(dj_report));
@@ -448,6 +538,40 @@ static int logi_dj_recv_switch_to_dj_mode(struct dj_receiver_dev *djrcv_dev,
 	dj_report.report_params[CMD_SWITCH_PARAM_DEVBITFIELD] = 0x3F;
 	dj_report.report_params[CMD_SWITCH_PARAM_TIMEOUT_SECONDS] = (u8)timeout;
 	return logi_dj_recv_send_report(djrcv_dev, &dj_report);
+=======
+	struct dj_report *dj_report;
+	int retval;
+
+	dj_report = kzalloc(sizeof(struct dj_report), GFP_KERNEL);
+	if (!dj_report)
+		return -ENOMEM;
+	dj_report->report_id = REPORT_ID_DJ_SHORT;
+	dj_report->device_index = 0xFF;
+	dj_report->report_type = REPORT_TYPE_CMD_GET_PAIRED_DEVICES;
+	retval = logi_dj_recv_send_report(djrcv_dev, dj_report);
+	kfree(dj_report);
+	return retval;
+}
+
+
+static int logi_dj_recv_switch_to_dj_mode(struct dj_receiver_dev *djrcv_dev,
+					  unsigned timeout)
+{
+	struct dj_report *dj_report;
+	int retval;
+
+	dj_report = kzalloc(sizeof(struct dj_report), GFP_KERNEL);
+	if (!dj_report)
+		return -ENOMEM;
+	dj_report->report_id = REPORT_ID_DJ_SHORT;
+	dj_report->device_index = 0xFF;
+	dj_report->report_type = REPORT_TYPE_CMD_SWITCH;
+	dj_report->report_params[CMD_SWITCH_PARAM_DEVBITFIELD] = 0x3F;
+	dj_report->report_params[CMD_SWITCH_PARAM_TIMEOUT_SECONDS] = (u8)timeout;
+	retval = logi_dj_recv_send_report(djrcv_dev, dj_report);
+	kfree(dj_report);
+	return retval;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -630,7 +754,10 @@ static int logi_dj_raw_event(struct hid_device *hdev,
 	struct dj_receiver_dev *djrcv_dev = hid_get_drvdata(hdev);
 	struct dj_report *dj_report = (struct dj_report *) data;
 	unsigned long flags;
+<<<<<<< HEAD
 	bool report_processed = false;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	dbg_hid("%s, size:%d\n", __func__, size);
 
@@ -658,6 +785,7 @@ static int logi_dj_raw_event(struct hid_device *hdev,
 	 * anything else with it.
 	 */
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&djrcv_dev->lock, flags);
 	if (dj_report->report_id == REPORT_ID_DJ_SHORT) {
 		switch (dj_report->report_type) {
@@ -679,6 +807,43 @@ static int logi_dj_raw_event(struct hid_device *hdev,
 	spin_unlock_irqrestore(&djrcv_dev->lock, flags);
 
 	return report_processed;
+=======
+	/* case 1) */
+	if (data[0] != REPORT_ID_DJ_SHORT)
+		return false;
+
+	if ((dj_report->device_index < DJ_DEVICE_INDEX_MIN) ||
+	    (dj_report->device_index > DJ_DEVICE_INDEX_MAX)) {
+		/*
+		 * Device index is wrong, bail out.
+		 * This driver can ignore safely the receiver notifications,
+		 * so ignore those reports too.
+		 */
+		if (dj_report->device_index != DJ_RECEIVER_INDEX)
+			dev_err(&hdev->dev, "%s: invalid device index:%d\n",
+				__func__, dj_report->device_index);
+		return false;
+	}
+
+	spin_lock_irqsave(&djrcv_dev->lock, flags);
+	switch (dj_report->report_type) {
+	case REPORT_TYPE_NOTIF_DEVICE_PAIRED:
+	case REPORT_TYPE_NOTIF_DEVICE_UNPAIRED:
+		logi_dj_recv_queue_notification(djrcv_dev, dj_report);
+		break;
+	case REPORT_TYPE_NOTIF_CONNECTION_STATUS:
+		if (dj_report->report_params[CONNECTION_STATUS_PARAM_STATUS] ==
+		    STATUS_LINKLOSS) {
+			logi_dj_recv_forward_null_report(djrcv_dev, dj_report);
+		}
+		break;
+	default:
+		logi_dj_recv_forward_report(djrcv_dev, dj_report);
+	}
+	spin_unlock_irqrestore(&djrcv_dev->lock, flags);
+
+	return true;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int logi_dj_probe(struct hid_device *hdev,
@@ -735,6 +900,15 @@ static int logi_dj_probe(struct hid_device *hdev,
 		goto hid_parse_fail;
 	}
 
+<<<<<<< HEAD
+=======
+	if (!hid_validate_values(hdev, HID_OUTPUT_REPORT, REPORT_ID_DJ_SHORT,
+				 0, DJREPORT_SHORT_LENGTH - 1)) {
+		retval = -ENODEV;
+		goto hid_parse_fail;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Starts the usb device and connects to upper interfaces hiddev and
 	 * hidraw */
 	retval = hid_hw_start(hdev, HID_CONNECT_DEFAULT);

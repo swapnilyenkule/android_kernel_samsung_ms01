@@ -2,7 +2,11 @@
  * Misc utility routines for accessing PMU corerev specific features
  * of the SiliconBackplane-based Broadcom chips.
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,16 +26,28 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: hndpmu.c 414368 2013-07-24 15:00:23Z $
  */
 
+=======
+ * $Id: hndpmu.c 531050 2015-02-02 07:21:19Z $
+ */
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Note: this file contains PLL/FLL related functions. A chip can contain multiple PLLs/FLLs.
  * However, in the context of this file the baseband ('BB') PLL/FLL is referred to.
  *
  * Throughout this code, the prefixes 'pmu0_', 'pmu1_' and 'pmu2_' are used.
  * They refer to different revisions of the PMU (which is at revision 18 @ Apr 25, 2012)
+<<<<<<< HEAD
  * pmu2_ marks the transition from PLL to ADFLL (Digital Frequency Locked Loop)
+=======
+ * pmu1_ marks the transition from PLL to ADFLL (Digital Frequency Locked Loop). It supports
+ * fractional frequency generation. pmu2_ does not support fractional frequency generation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #include <bcm_cfg.h>
@@ -54,6 +70,19 @@
  */
 #define	PMU_NONE(args)
 
+<<<<<<< HEAD
+=======
+/** contains resource bit positions for a specific chip */
+struct rsc_per_chip_s {
+	uint8 ht_avail;
+	uint8 macphy_clkavail;
+	uint8 ht_start;
+	uint8 otp_pu;
+};
+
+typedef struct rsc_per_chip_s rsc_per_chip_t;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* SDIO Pad drive strength to select value mappings.
  * The last strength value in each table must be 0 (the tri-state value).
@@ -118,7 +147,11 @@ static const sdiod_drive_str_t sdiod_drive_strength_tab5_1v8[] = {
 
 /* SDIO Drive Strength to sel value table for PMU Rev 13 (3.3v) */
 
+<<<<<<< HEAD
 /* SDIO Drive Strength to sel value table for PMU Rev 17 (1.8v) */
+=======
+/** SDIO Drive Strength to sel value table for PMU Rev 17 (1.8v) */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static const sdiod_drive_str_t sdiod_drive_strength_tab6_1v8[] = {
 	{3, 0x3},
 	{2, 0x2},
@@ -126,7 +159,11 @@ static const sdiod_drive_str_t sdiod_drive_strength_tab6_1v8[] = {
 	{0, 0x0} };
 
 
+<<<<<<< HEAD
 /*
+=======
+/**
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * SDIO Drive Strength to sel value table for 43143 PMU Rev 17, see Confluence 43143 Toplevel
  * architecture page, section 'PMU Chip Control 1 Register definition', click link to picture
  * BCM43143_sel_sdio_signals.jpg. Valid after PMU Chip Control 0 Register, bit31 (override) has

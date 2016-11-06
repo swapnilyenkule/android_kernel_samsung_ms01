@@ -30,3 +30,10 @@ subdir-$(CONFIG_INTEGRITY)		+= integrity
 obj-$(CONFIG_INTEGRITY)			+= integrity/built-in.o
 # TIMA uevent 
 obj-$(CONFIG_TIMA_UEVENT)     += tima_uevent/
+<<<<<<< HEAD
+=======
+
+# Knox SDP
+obj-$(CONFIG_SDP) += sdp/
+obj-$(CONFIG_SDP) += sdp/built-in.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

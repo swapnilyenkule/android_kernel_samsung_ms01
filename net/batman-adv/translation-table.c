@@ -1803,10 +1803,17 @@ bool is_ap_isolated(struct bat_priv *bat_priv, uint8_t *src, uint8_t *dst)
 {
 	struct tt_local_entry *tt_local_entry = NULL;
 	struct tt_global_entry *tt_global_entry = NULL;
+<<<<<<< HEAD
 	bool ret = true;
 
 	if (!atomic_read(&bat_priv->ap_isolation))
 		return false;
+=======
+	bool ret = false;
+
+	if (!atomic_read(&bat_priv->ap_isolation))
+		goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	tt_local_entry = tt_local_hash_find(bat_priv, dst);
 	if (!tt_local_entry)
@@ -1816,10 +1823,17 @@ bool is_ap_isolated(struct bat_priv *bat_priv, uint8_t *src, uint8_t *dst)
 	if (!tt_global_entry)
 		goto out;
 
+<<<<<<< HEAD
 	if (_is_ap_isolated(tt_local_entry, tt_global_entry))
 		goto out;
 
 	ret = false;
+=======
+	if (!_is_ap_isolated(tt_local_entry, tt_global_entry))
+		goto out;
+
+	ret = true;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 out:
 	if (tt_global_entry)

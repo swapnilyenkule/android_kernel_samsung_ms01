@@ -20,7 +20,10 @@
 #include <linux/workqueue.h>
 #include <linux/cpumask.h>
 #include <asm/div64.h>
+<<<<<<< HEAD
 #include <asm/cputime.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define CPUFREQ_NAME_LEN 16
 
@@ -492,10 +495,13 @@ void cpufreq_frequency_table_get_attr(struct cpufreq_frequency_table *table,
 void cpufreq_frequency_table_put_attr(unsigned int cpu);
 
 
+<<<<<<< HEAD
 /*********************************************************************
  *                         CPUFREQ STATS                             *
  *********************************************************************/
 
 void acct_update_power(struct task_struct *p, cputime_t cputime);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* _LINUX_CPUFREQ_H */

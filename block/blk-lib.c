@@ -42,7 +42,11 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
 {
 	DECLARE_COMPLETION_ONSTACK(wait);
 	struct request_queue *q = bdev_get_queue(bdev);
+<<<<<<< HEAD
 	int type = REQ_WRITE | REQ_DISCARD;
+=======
+	int type = REQ_WRITE | REQ_DISCARD | REQ_PRIO;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned int max_discard_sectors;
 	struct bio_batch bb;
 	struct bio *bio;
@@ -101,6 +105,17 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
 
 		atomic_inc(&bb.done);
 		submit_bio(type, bio);
+<<<<<<< HEAD
+=======
+
+		/*
+		 * We can loop for a long time in here, if someone does
+		 * full device discards (like mkfs). Be nice and allow
+		 * us to schedule out to avoid softlocking if preempt
+		 * is disabled.
+		 */
+		cond_resched();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* Wait for bios in-flight */

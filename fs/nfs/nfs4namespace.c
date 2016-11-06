@@ -81,7 +81,12 @@ static char *nfs_path_component(const char *nfspath, const char *end)
 static char *nfs4_path(struct dentry *dentry, char *buffer, ssize_t buflen)
 {
 	char *limit;
+<<<<<<< HEAD
 	char *path = nfs_path(&limit, dentry, buffer, buflen);
+=======
+	char *path = nfs_path(&limit, dentry, buffer, buflen,
+			      NFS_PATH_CANONICAL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!IS_ERR(path)) {
 		char *path_component = nfs_path_component(path, limit);
 		if (path_component)

@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,6 +23,15 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+<<<<<<< HEAD
+=======
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifndef __SYS_GLOBAL_H__
 #define __SYS_GLOBAL_H__
 
@@ -28,6 +41,10 @@ typedef struct sAniSirSys
 
     tANI_U32 gSysFrameCount[4][16];
     tANI_U32 gSysBbtReceived;
+<<<<<<< HEAD
+=======
+    tANI_U32 gSysBbtPendingMgmtCount;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     tANI_U32 gSysBbtPostedToLim;
     tANI_U32 gSysBbtPostedToSch;
     tANI_U32 gSysBbtPostedToPmm;
@@ -43,6 +60,10 @@ typedef struct sAniSirSys
     tANI_U32 gSysEnableLearnMode;
     tANI_U32 gSysEnableScanMode;
     tANI_U32 gSysEnableLinkMonitorMode;
+<<<<<<< HEAD
+=======
+    vos_spin_lock_t lock;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } tAniSirSys, *tpAniSirSys;
 
 #endif

@@ -51,6 +51,10 @@ struct threshold_block {
 	unsigned int		cpu;
 	u32			address;
 	u16			interrupt_enable;
+<<<<<<< HEAD
+=======
+	bool			interrupt_capable;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u16			threshold_limit;
 	struct kobject		kobj;
 	struct list_head	miscj;
@@ -83,6 +87,24 @@ struct thresh_restart {
 	u16			old_limit;
 };
 
+<<<<<<< HEAD
+=======
+static bool lvt_interrupt_supported(unsigned int bank, u32 msr_high_bits)
+{
+	/*
+	 * bank 4 supports APIC LVT interrupts implicitly since forever.
+	 */
+	if (bank == 4)
+		return true;
+
+	/*
+	 * IntP: interrupt present; if this bit is set, the thresholding
+	 * bank can generate APIC LVT interrupts
+	 */
+	return msr_high_bits & BIT(28);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
 {
 	int msr = (hi & MASK_LVTOFF_HI) >> 20;
@@ -104,8 +126,15 @@ static int lvt_off_valid(struct threshold_block *b, int apic, u32 lo, u32 hi)
 	return 1;
 };
 
+<<<<<<< HEAD
 /* must be called with correct cpu affinity */
 /* Called via smp_call_function_single() */
+=======
+/*
+ * Called via smp_call_function_single(), must be called with correct
+ * cpu affinity.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void threshold_restart_bank(void *_tr)
 {
 	struct thresh_restart *tr = _tr;
@@ -128,6 +157,15 @@ static void threshold_restart_bank(void *_tr)
 		    (new_count & THRESHOLD_MAX);
 	}
 
+<<<<<<< HEAD
+=======
+	/* clear IntType */
+	hi &= ~MASK_INT_TYPE_HI;
+
+	if (!tr->b->interrupt_capable)
+		goto done;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (tr->set_lvt_off) {
 		if (lvt_off_valid(tr->b, tr->lvt_off, lo, hi)) {
 			/* set new lvt offset */
@@ -136,9 +174,16 @@ static void threshold_restart_bank(void *_tr)
 		}
 	}
 
+<<<<<<< HEAD
 	tr->b->interrupt_enable ?
 	    (hi = (hi & ~MASK_INT_TYPE_HI) | INT_TYPE_APIC) :
 	    (hi &= ~MASK_INT_TYPE_HI);
+=======
+	if (tr->b->interrupt_enable)
+		hi |= INT_TYPE_APIC;
+
+ done:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	hi |= MASK_COUNT_EN_HI;
 	wrmsr(tr->b->address, lo, hi);
@@ -202,6 +247,7 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
 			if (shared_bank[bank] && c->cpu_core_id)
 				break;
 
+<<<<<<< HEAD
 			offset = setup_APIC_mce(offset,
 						(high & MASK_LVTOFF_HI) >> 20);
 
@@ -210,6 +256,19 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
 			b.bank		= bank;
 			b.block		= block;
 			b.address	= address;
+=======
+			memset(&b, 0, sizeof(b));
+			b.cpu			= cpu;
+			b.bank			= bank;
+			b.block			= block;
+			b.address		= address;
+			b.interrupt_capable	= lvt_interrupt_supported(bank, high);
+
+			if (b.interrupt_capable) {
+				int new = (high & MASK_LVTOFF_HI) >> 20;
+				offset  = setup_APIC_mce(offset, new);
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 			mce_threshold_block_init(&b, offset);
 			mce_threshold_vector = amd_threshold_interrupt;
@@ -309,6 +368,12 @@ store_interrupt_enable(struct threshold_block *b, const char *buf, size_t size)
 	struct thresh_restart tr;
 	unsigned long new;
 
+<<<<<<< HEAD
+=======
+	if (!b->interrupt_capable)
+		return -EINVAL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (strict_strtoul(buf, 0, &new) < 0)
 		return -EINVAL;
 
@@ -467,6 +532,10 @@ static __cpuinit int allocate_threshold_blocks(unsigned int cpu,
 	b->cpu			= cpu;
 	b->address		= address;
 	b->interrupt_enable	= 0;
+<<<<<<< HEAD
+=======
+	b->interrupt_capable	= lvt_interrupt_supported(bank, high);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	b->threshold_limit	= THRESHOLD_MAX;
 
 	INIT_LIST_HEAD(&b->miscj);

@@ -5,7 +5,11 @@
 #include <linux/export.h>
 #include "vlan.h"
 
+<<<<<<< HEAD
 bool vlan_do_receive(struct sk_buff **skbp, bool last_handler)
+=======
+bool vlan_do_receive(struct sk_buff **skbp)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct sk_buff *skb = *skbp;
 	u16 vlan_id = skb->vlan_tci & VLAN_VID_MASK;
@@ -13,6 +17,7 @@ bool vlan_do_receive(struct sk_buff **skbp, bool last_handler)
 	struct vlan_pcpu_stats *rx_stats;
 
 	vlan_dev = vlan_find_dev(skb->dev, vlan_id);
+<<<<<<< HEAD
 	if (!vlan_dev) {
 		/* Only the last call to vlan_do_receive() should change
 		 * pkt_type to PACKET_OTHERHOST
@@ -21,6 +26,10 @@ bool vlan_do_receive(struct sk_buff **skbp, bool last_handler)
 			skb->pkt_type = PACKET_OTHERHOST;
 		return false;
 	}
+=======
+	if (!vlan_dev)
+		return false;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	skb = *skbp = skb_share_check(skb, GFP_ATOMIC);
 	if (unlikely(!skb))
@@ -102,11 +111,21 @@ EXPORT_SYMBOL(vlan_dev_vlan_id);
 
 static struct sk_buff *vlan_reorder_header(struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	if (skb_cow(skb, skb_headroom(skb)) < 0)
 		return NULL;
 	memmove(skb->data - ETH_HLEN, skb->data - VLAN_ETH_HLEN, 2 * ETH_ALEN);
 	skb->mac_header += VLAN_HLEN;
 	skb_reset_mac_len(skb);
+=======
+	if (skb_cow(skb, skb_headroom(skb)) < 0) {
+		kfree_skb(skb);
+		return NULL;
+	}
+
+	memmove(skb->data - ETH_HLEN, skb->data - VLAN_ETH_HLEN, 2 * ETH_ALEN);
+	skb->mac_header += VLAN_HLEN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return skb;
 }
 
@@ -140,6 +159,11 @@ struct sk_buff *vlan_untag(struct sk_buff *skb)
 
 	skb_reset_network_header(skb);
 	skb_reset_transport_header(skb);
+<<<<<<< HEAD
+=======
+	skb_reset_mac_len(skb);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return skb;
 
 err_free:

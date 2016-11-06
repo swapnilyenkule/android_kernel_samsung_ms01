@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -43,6 +48,17 @@
     ------------------------------------------------------------------------- *  
  
     Copyright (C) 2006 Airgo Networks, Incorporated
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/** ------------------------------------------------------------------------- * 
+    -------------------------------------------------------------------------
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    ---------------------------------------------------------------------------*
 */
@@ -53,7 +69,11 @@
 #include "csrInsideApi.h"
 #include "smeInside.h"
 #include "smsDebug.h"
+<<<<<<< HEAD
 
+=======
+#include "macTrace.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 
 
@@ -62,10 +82,19 @@ eHalStatus csrMsgProcessor( tpAniSirGlobal pMac,  void *pMsgBuf )
     eHalStatus status = eHAL_STATUS_SUCCESS;
     tSirSmeRsp *pSmeRsp = (tSirSmeRsp *)pMsgBuf;
 
+<<<<<<< HEAD
     smsLog( pMac, LOG2, "  Message %d[0x%04X] received in curState %d and substate %d",
                 pSmeRsp->messageType, pSmeRsp->messageType, 
                 pMac->roam.curState[pSmeRsp->sessionId],
                 pMac->roam.curSubState[pSmeRsp->sessionId] );
+=======
+    smsLog(pMac, LOG2, FL("Message %d[0x%04X] received in curState %s"
+           "and substate %s"),
+           pSmeRsp->messageType, pSmeRsp->messageType,
+           macTraceGetcsrRoamState(pMac->roam.curState[pSmeRsp->sessionId]),
+           macTraceGetcsrRoamSubState(
+           pMac->roam.curSubState[pSmeRsp->sessionId]));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     // Process the message based on the state of the roaming states...
     

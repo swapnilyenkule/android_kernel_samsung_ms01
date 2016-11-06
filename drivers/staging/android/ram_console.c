@@ -55,7 +55,10 @@ static int __devinit ram_console_probe(struct platform_device *pdev)
 	struct ram_console_platform_data *pdata = pdev->dev.platform_data;
 	struct persistent_ram_zone *prz;
 
+<<<<<<< HEAD
 	pdev->dev.init_name = "ram_console";
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	prz = persistent_ram_init_ringbuffer(&pdev->dev, true);
 	if (IS_ERR(prz))
 		return PTR_ERR(prz);
@@ -75,6 +78,7 @@ static int __devinit ram_console_probe(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct of_device_id msm_match_table[] = {
 	{.compatible = "ram_console"},
 	{},
@@ -84,6 +88,11 @@ static struct platform_driver ram_console_driver = {
 	.driver		= {
 		.name	= "ram_console",
 		.of_match_table = msm_match_table,
+=======
+static struct platform_driver ram_console_driver = {
+	.driver		= {
+		.name	= "ram_console",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	},
 	.probe = ram_console_probe,
 };

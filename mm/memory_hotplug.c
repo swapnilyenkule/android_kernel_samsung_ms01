@@ -128,9 +128,12 @@ static void register_page_bootmem_info_section(unsigned long start_pfn)
 	struct page *page, *memmap, *page_page;
 	int memmap_page_valid;
 
+<<<<<<< HEAD
 	if (!pfn_valid(start_pfn))
 		return;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	section_nr = pfn_to_section_nr(start_pfn);
 	ms = __nr_to_section(section_nr);
 
@@ -201,9 +204,22 @@ void register_page_bootmem_info_node(struct pglist_data *pgdat)
 	end_pfn = pfn + pgdat->node_spanned_pages;
 
 	/* register_section info */
+<<<<<<< HEAD
 	for (; pfn < end_pfn; pfn += PAGES_PER_SECTION)
 		register_page_bootmem_info_section(pfn);
 
+=======
+	for (; pfn < end_pfn; pfn += PAGES_PER_SECTION) {
+		/*
+		 * Some platforms can assign the same pfn to multiple nodes - on
+		 * node0 as well as nodeN.  To avoid registering a pfn against
+		 * multiple nodes we check that this pfn does not already
+		 * reside in some other node.
+		 */
+		if (pfn_valid(pfn) && (pfn_to_nid(pfn) == node))
+			register_page_bootmem_info_section(pfn);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 #endif /* !CONFIG_SPARSEMEM_VMEMMAP */
 

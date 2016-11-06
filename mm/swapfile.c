@@ -392,7 +392,11 @@ scan:
 		}
 	}
 	offset = si->lowest_bit;
+<<<<<<< HEAD
 	while (++offset < scan_base) {
+=======
+	while (offset < scan_base) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (!si->swap_map[offset]) {
 			spin_lock(&si->lock);
 			goto checks;
@@ -405,6 +409,10 @@ scan:
 			cond_resched();
 			latency_ration = LATENCY_LIMIT;
 		}
+<<<<<<< HEAD
+=======
+		offset++;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	spin_lock(&si->lock);
 
@@ -670,6 +678,7 @@ int page_swapcount(struct page *page)
 }
 
 /*
+<<<<<<< HEAD
  * How many references to @entry are currently swapped out?
  * This considers COUNT_CONTINUED so it returns exact answer.
  */
@@ -712,6 +721,8 @@ out:
 }
 
 /*
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * We can write to an anon page without COW if there are no other references
  * to it.  And as a side-effect, free up its swap: because the old content
  * on disk will never be read, and seeking back there to write new content
@@ -2048,17 +2059,25 @@ static unsigned long read_swap_header(struct swap_info_struct *p,
 
 	/*
 	 * Find out how many pages are allowed for a single swap
+<<<<<<< HEAD
 	 * device. There are three limiting factors: 1) the number
 	 * of bits for the swap offset in the swp_entry_t type, and
 	 * 2) the number of bits in the swap pte as defined by the
 	 * the different architectures, and 3) the number of free bits
 	 * in an exceptional radix_tree entry. In order to find the
+=======
+	 * device. There are two limiting factors: 1) the number
+	 * of bits for the swap offset in the swp_entry_t type, and
+	 * 2) the number of bits in the swap pte as defined by the
+	 * different architectures. In order to find the
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * largest possible bit mask, a swap entry with swap type 0
 	 * and swap offset ~0UL is created, encoded to a swap pte,
 	 * decoded to a swp_entry_t again, and finally the swap
 	 * offset is extracted. This will mask all the bits from
 	 * the initial ~0UL mask that can't be encoded in either
 	 * the swp_entry_t or the architecture definition of a
+<<<<<<< HEAD
 	 * swap pte.  Then the same is done for a radix_tree entry.
 	 */
 	maxpages = swp_offset(pte_to_swp_entry(
@@ -2066,6 +2085,12 @@ static unsigned long read_swap_header(struct swap_info_struct *p,
 	maxpages = swp_offset(radix_to_swp_entry(
 			swp_to_radix_entry(swp_entry(0, maxpages)))) + 1;
 
+=======
+	 * swap pte.
+	 */
+	maxpages = swp_offset(pte_to_swp_entry(
+			swp_entry_to_pte(swp_entry(0, ~0UL)))) + 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (maxpages > swap_header->info.last_page) {
 		maxpages = swap_header->info.last_page + 1;
 		/* p->max is an unsigned int: don't overflow it */

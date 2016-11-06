@@ -164,7 +164,11 @@ static int mpc512x_psc_spi_transfer_rxtx(struct spi_device *spi,
 
 		for (i = count; i > 0; i--) {
 			data = tx_buf ? *tx_buf++ : 0;
+<<<<<<< HEAD
 			if (len == EOFBYTE)
+=======
+			if (len == EOFBYTE && t->cs_change)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				setbits32(&fifo->txcmd, MPC512x_PSC_FIFO_EOF);
 			out_8(&fifo->txdata_8, data);
 			len--;

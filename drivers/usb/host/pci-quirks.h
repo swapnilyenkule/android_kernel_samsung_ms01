@@ -14,6 +14,10 @@ void usb_enable_xhci_ports(struct pci_dev *xhci_pdev);
 static inline void usb_amd_quirk_pll_disable(void) {}
 static inline void usb_amd_quirk_pll_enable(void) {}
 static inline void usb_amd_dev_put(void) {}
+<<<<<<< HEAD
+=======
+static inline void usb_disable_xhci_ports(struct pci_dev *xhci_pdev) {}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif  /* CONFIG_PCI */
 
 #endif  /*  __LINUX_USB_PCI_QUIRKS_H  */

@@ -1610,12 +1610,16 @@ u32 vid_enc_set_buffer(struct video_client_ctx *client_ctx,
 	enum vcd_buffer_type vcd_buffer_t = VCD_BUFFER_INPUT;
 	enum buffer_dir dir_buffer = BUFFER_TYPE_INPUT;
 	u32 vcd_status = VCD_ERR_FAIL;
+<<<<<<< HEAD
 	unsigned long kernel_vaddr, length, user_vaddr, phy_addr = 0;
 	int pmem_fd = 0;
 	struct ion_handle *buff_handle = NULL;
 	u32 ion_flag = 0;
 	struct file *file = NULL;
 	s32 buffer_index = 0;
+=======
+	unsigned long kernel_vaddr, length = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!client_ctx || !buffer_info)
 		return false;
@@ -1637,6 +1641,7 @@ u32 vid_enc_set_buffer(struct video_client_ctx *client_ctx,
 		return false;
 	}
 
+<<<<<<< HEAD
 	/*
 	* Flush output buffers explcitly once, during registration. This ensures
 	* any pending CPU writes (if cleared after allocation) are
@@ -1669,6 +1674,8 @@ u32 vid_enc_set_buffer(struct video_client_ctx *client_ctx,
 	}
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	vcd_status = vcd_set_buffer(client_ctx->vcd_handle,
 				    vcd_buffer_t, (u8 *) kernel_vaddr,
 				    buffer_info->sz);

@@ -933,7 +933,11 @@ err:
 
 static void fsl_spi_cs_control(struct spi_device *spi, bool on)
 {
+<<<<<<< HEAD
 	struct device *dev = spi->dev.parent;
+=======
+	struct device *dev = spi->dev.parent->parent;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct mpc8xxx_spi_probe_info *pinfo = to_of_pinfo(dev->platform_data);
 	u16 cs = spi->chip_select;
 	int gpio = pinfo->gpios[cs];

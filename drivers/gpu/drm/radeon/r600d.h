@@ -483,6 +483,10 @@
 #define		TC_L2_SIZE(x)					((x)<<5)
 #define		L2_DISABLE_LATE_HIT				(1<<9)
 
+<<<<<<< HEAD
+=======
+#define	VC_ENHANCE					0x9714
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define	VGT_CACHE_INVALIDATION				0x88C4
 #define		CACHE_INVALIDATION(x)				((x)<<0)
@@ -872,6 +876,10 @@
 #define	PACKET3_INDIRECT_BUFFER				0x32
 #define	PACKET3_SURFACE_SYNC				0x43
 #              define PACKET3_CB0_DEST_BASE_ENA    (1 << 6)
+<<<<<<< HEAD
+=======
+#              define PACKET3_FULL_CACHE_ENA       (1 << 20) /* r7xx+ only */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #              define PACKET3_TC_ACTION_ENA        (1 << 23)
 #              define PACKET3_VC_ACTION_ENA        (1 << 24)
 #              define PACKET3_CB_ACTION_ENA        (1 << 25)

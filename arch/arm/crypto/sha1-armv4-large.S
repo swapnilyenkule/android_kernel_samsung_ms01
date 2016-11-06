@@ -495,4 +495,7 @@ ENTRY(sha1_block_data_order)
 ENDPROC(sha1_block_data_order)
 .asciz	"SHA1 block transform for ARMv4, CRYPTOGAMS by <appro@openssl.org>"
 .align	2
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

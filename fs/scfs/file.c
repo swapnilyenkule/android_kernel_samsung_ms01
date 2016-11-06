@@ -2,7 +2,12 @@
  * fs/scfs/file.c
  *
  * Copyright (C) 2014 Samsung Electronics Co., Ltd.
+<<<<<<< HEAD
  *   Authors: Jongmin Kim <jm45.kim@samsung.com>
+=======
+ *   Authors: Sunghwan Yun <sunghwan.yun@samsung.com>
+ *            Jongmin Kim <jm45.kim@samsung.com>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *            Sangwoo Lee <sangwoo2.lee@samsung.com>
  *            Inbae Lee   <inbae.lee@samsung.com>
  *
@@ -32,6 +37,7 @@
 #include "scfs.h"
 
 /*
+<<<<<<< HEAD
  * scfs_open
  */
 static int scfs_open(struct inode *inode, struct file *file)
@@ -67,6 +73,53 @@ static int scfs_open(struct inode *inode, struct file *file)
 		return ret;
 	}
 
+=======
+ * Check validity of cinfo data(array).
+ * It is called in scfs_open, failed, the file is treated non-compressed,
+ * such as the one have no 'footer'.
+ */
+int scfs_check_cinfo(struct scfs_inode_info *sii, void *buf)
+{
+	struct scfs_cinfo *cinfo = buf;
+	int prev_last_offset = 0;
+	int cinfo_size = sii->cinfo_array_size;
+
+	for (cinfo = buf; (unsigned long)cinfo < (unsigned long)buf + cinfo_size; cinfo++) {
+		if (cinfo->offset < prev_last_offset || !cinfo->size ||
+			cinfo->size > sii->cluster_size) {
+			SCFS_PRINT("invalid cinfo, prev_last_offset : %d, "
+				"offset : %d, size : %d\n", prev_last_offset,
+				cinfo->offset, cinfo->size);
+			return -1;
+		}
+		prev_last_offset = cinfo->offset + cinfo->size;
+	}
+	return 0;
+}
+
+static int scfs_open(struct inode *inode, struct file *file)
+{
+	struct scfs_sb_info *sbi = SCFS_S(inode->i_sb);
+	struct scfs_inode_info *sii = SCFS_I(inode);
+	struct scfs_file_info *fi;
+	int ret = 0;
+	struct file *lower_file;
+
+	if (IS_WROPENED(sii)) {
+		SCFS_PRINT("This file is already opened with 'WRITE' flag\n");
+		return -EPERM;
+	}
+
+	fi = kmem_cache_zalloc(scfs_file_info_cache, GFP_KERNEL);
+	if (!fi)
+		return -ENOMEM;
+
+	profile_add_kmcached(sizeof(struct scfs_file_info), sbi);
+
+	file->private_data = fi;
+
+	mutex_lock(&sii->cinfo_mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (IS_INVALID_META(sii)) {
 		SCFS_PRINT("meta is invalid, so we should re-load it\n");
 		ret = scfs_reload_meta(file);
@@ -74,6 +127,7 @@ static int scfs_open(struct inode *inode, struct file *file)
 			SCFS_PRINT_ERROR("error in re-reading footer, err : %d\n", ret);
 			goto out;
 		}
+<<<<<<< HEAD
 	}
 
 	/* should I check whether lower file is RO when upper is not and vice versa? */
@@ -115,6 +169,51 @@ out:
 
 	SCFS_PRINT("lower, dentry name : %s, count : %d\n",
 	lower_dentry->d_name.name, lower_dentry->d_count);
+=======
+	} else if (sii->compressed && !sii->cinfo_array) {
+		/* 1st lower-open is for getting cinfo */
+		ret = scfs_initialize_lower_file(file->f_dentry, &lower_file, O_RDONLY); 
+		if (ret) {
+			SCFS_PRINT_ERROR("err in get_lower_file %s\n",
+				file->f_dentry->d_name.name);
+			goto out;
+		}
+		scfs_set_lower_file(file, lower_file);
+
+		SCFS_PRINT("info size = %d \n", sii->cinfo_array_size);
+		ret = scfs_load_cinfo(sii, lower_file);
+		if (ret) {
+			SCFS_PRINT_ERROR("err in loading cinfo, ret : %d\n",
+				file->f_dentry->d_name.name);
+			fput(lower_file);
+			goto out;
+		}
+		fput(lower_file);
+	}
+
+	ret = scfs_initialize_lower_file(file->f_dentry, &lower_file, file->f_flags); 
+	if (ret) {
+		SCFS_PRINT_ERROR("err in get_lower_file %s\n",
+			file->f_dentry->d_name.name);
+
+		goto out;
+	}
+	scfs_set_lower_file(file, lower_file);
+out:
+	if (!ret) {
+		fsstack_copy_attr_all(inode, scfs_lower_inode(inode));
+		if (file->f_flags & (O_RDWR | O_WRONLY))
+			MAKE_WROPENED(sii);
+	} else {
+		scfs_set_lower_file(file, NULL);
+		kmem_cache_free(scfs_file_info_cache, file->private_data);
+		profile_sub_kmcached(sizeof(struct scfs_file_info), sbi);
+		sii->cinfo_array = NULL;
+	}
+	mutex_unlock(&sii->cinfo_mutex);
+	SCFS_PRINT("lower, dentry name : %s, count : %d, ret : %d\n",
+		file->f_dentry->d_name.name, file->f_dentry->d_count, ret);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	
 	return ret;
 }
@@ -124,6 +223,7 @@ out:
  */
 static int scfs_file_release(struct inode *inode, struct file *file)
 {
+<<<<<<< HEAD
 #if SCFS_PROFILE_MEM
 	struct scfs_sb_info *sbi = SCFS_S(inode->i_sb);
 #endif
@@ -134,6 +234,23 @@ static int scfs_file_release(struct inode *inode, struct file *file)
 #if SCFS_PROFILE_MEM
 	atomic_sub(sizeof(struct scfs_file_info), &sbi->kmcache_size);
 #endif
+=======
+	int ret;
+
+	SCFS_PRINT("f:%s calling fput with lower_file\n",
+			file->f_path.dentry->d_name.name);
+
+	if (file->f_flags & (O_RDWR | O_WRONLY)) {
+		CLEAR_WROPENED(SCFS_I(inode));
+		ret = scfs_write_meta(file);
+		if (ret)
+			return ret;
+	}
+
+	fput(SCFS_F(file)->lower_file);
+	kmem_cache_free(scfs_file_info_cache, SCFS_F(file));
+	profile_sub_kmcached(sizeof(struct scfs_file_info), SCFS_S(inode->i_sb));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }
@@ -147,8 +264,11 @@ static int scfs_readdir(struct file *file, void *dirent, filldir_t filldir)
 	struct dentry *dentry = file->f_path.dentry;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_file = scfs_lower_file(file);
 	lower_file->f_pos = file->f_pos;
 	ret = vfs_readdir(lower_file, filldir, dirent);
@@ -156,8 +276,11 @@ static int scfs_readdir(struct file *file, void *dirent, filldir_t filldir)
 	if (ret >= 0)
 		fsstack_copy_attr_atime(dentry->d_inode, lower_file->f_path.dentry->d_inode);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -167,9 +290,13 @@ static int scfs_readdir(struct file *file, void *dirent, filldir_t filldir)
 static long scfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct file *lower_file;
+<<<<<<< HEAD
 	long ret = SCFS_ERR_NO_FILE;
 
 	SCFS_DEBUG_START;
+=======
+	long ret = -ENOENT;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	lower_file = scfs_lower_file(file);
 
@@ -179,8 +306,11 @@ static long scfs_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned lo
 		ret = lower_file->f_op->unlocked_ioctl(lower_file, cmd, arg);
 
 out:
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -191,10 +321,15 @@ out:
 static long scfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct file *lower_file;
+<<<<<<< HEAD
 	long ret = SCFS_ERR_NO_FILE;
 
 	SCFS_DEBUG_START;
 	
+=======
+	long ret = -ENOIOCTLCMD;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_file = scfs_lower_file(file);
 
 	if (!lower_file || !lower_file->f_op)
@@ -203,7 +338,10 @@ static long scfs_compat_ioctl(struct file *file, unsigned int cmd, unsigned long
 		ret = lower_file->f_op->compat_ioctl(lower_file, cmd, arg);
 
 out:
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 #endif
@@ -213,14 +351,20 @@ static int scfs_flush(struct file *file, fl_owner_t id)
 	struct file *lower_file = NULL;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_file = scfs_lower_file(file);
 	if (lower_file && lower_file->f_op && lower_file->f_op->flush)
 		ret = lower_file->f_op->flush(lower_file, id);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -228,12 +372,24 @@ static int scfs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
 	ret = vfs_fsync(scfs_lower_file(file), datasync);
 
 	SCFS_DEBUG_END;
 
+=======
+	ret = scfs_write_meta(file);
+	if(ret)
+		return ret;
+#ifdef SCFS_MULTI_THREAD_COMPRESSION
+//	scfs_write_compress_all_cluster(SCFS_I(file->f_path.dentry->d_inode));
+#endif
+
+	ret = vfs_fsync(scfs_lower_file(file), datasync);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
@@ -242,27 +398,46 @@ static int scfs_fasync(int fd, struct file *file, int flag)
 	struct file *lower_file = NULL;
 	int ret = 0;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lower_file = scfs_lower_file(file);
 	if (lower_file->f_op && lower_file->f_op->fasync)
 		ret = lower_file->f_op->fasync(fd, lower_file, flag);
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 
 static const struct vm_operations_struct scfs_file_vm_ops = {
 	.fault		= filemap_fault,
+<<<<<<< HEAD
 	//TODO we may not need this, but for testing we just printk here 
 	//.page_mkwrite   = scfs_page_mkwrite,
 };
 
+=======
+};
+
+/*
+ * SCFS doesn't have a writepage, so write with mmap has no effect.
+ * First implementation was returning error when having VM_WRITE,
+ * but some process in boot sequence uses mmap with VM_WRITE
+ * - without write, just with flag - so, now using VM_WRITE is 
+ * available.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int scfs_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	struct address_space *mapping = file->f_mapping;
 
+<<<<<<< HEAD
 	SCFS_DEBUG_START;
 
 	if (!mapping->a_ops->readpage)
@@ -271,15 +446,33 @@ static int scfs_mmap(struct file *file, struct vm_area_struct *vma)
 	SCFS_PRINT("file %s\n", file->f_path.dentry->d_name.name);	
 
 	if (file->f_mode & FMODE_WRITE) {
+=======
+	if (!mapping->a_ops->readpage)
+		return -ENOEXEC;
+
+	SCFS_PRINT("file %s\n", file->f_path.dentry->d_name.name);	
+
+	//if (file->f_mode & FMODE_WRITE) {
+		/*
+	if (vma->vm_flags & VM_WRITE) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		SCFS_PRINT_ERROR("f_mode WRITE was set! error. "
 			"f_mode %x (FMODE_READ: %x FMODE_WRITE %x)\n", 
 			file->f_mode,
 			file->f_mode & FMODE_READ,
 			file->f_mode & FMODE_WRITE);
+<<<<<<< HEAD
 		return SCFS_ERR_PERMISSION;
 	}
 
 	//TODO should we touch the file before FMODE_WRITE check?
+=======
+	SCFS_PRINT_ERROR("filename : %s\n", file->f_path.dentry->d_name.name);	
+		return -EPERM;
+	}
+	*/
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	file_accessed(file);
 	vma->vm_ops = &scfs_file_vm_ops;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
@@ -305,11 +498,18 @@ static int scfs_mmap(struct file *file, struct vm_area_struct *vma)
 			vma->vm_flags & VM_MAYWRITE);
 	}
 
+<<<<<<< HEAD
 	SCFS_DEBUG_END;
 	
 	return SCFS_SUCCESS;
 }
 
+=======
+	return 0;
+}
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*****************************/
 /* file_operations structres */
 /*****************************/
@@ -337,7 +537,11 @@ const struct file_operations scfs_file_fops = {
 	.aio_write 	= generic_file_aio_write,
 	.unlocked_ioctl	= scfs_unlocked_ioctl,
 #ifdef CONFIG_COMPAT
+<<<<<<< HEAD
 	.compat_ioctl	= ioctl,
+=======
+	.compat_ioctl	= scfs_compat_ioctl,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 	.mmap		= scfs_mmap,
 	.open 		= scfs_open,

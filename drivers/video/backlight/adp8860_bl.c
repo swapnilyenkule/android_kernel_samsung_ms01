@@ -791,7 +791,11 @@ static int adp8860_i2c_suspend(struct i2c_client *client, pm_message_t message)
 
 static int adp8860_i2c_resume(struct i2c_client *client)
 {
+<<<<<<< HEAD
 	adp8860_set_bits(client, ADP8860_MDCR, NSTBY);
+=======
+	adp8860_set_bits(client, ADP8860_MDCR, NSTBY | BLEN);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }

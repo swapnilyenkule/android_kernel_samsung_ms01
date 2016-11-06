@@ -125,6 +125,11 @@ typedef unsigned long sigset_t;
 extern void do_notify_resume(struct pt_regs *, void *, __u32);
 # endif /* __KERNEL__ */
 
+<<<<<<< HEAD
+=======
+#define __ARCH_HAS_SA_RESTORER
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef __i386__
 # ifdef __KERNEL__
 struct old_sigaction {

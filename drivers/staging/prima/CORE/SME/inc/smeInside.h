@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #if !defined( __SMEINSIDE_H )
@@ -129,6 +141,10 @@ typedef struct TdlsSendMgmtInfo
   tANI_U8 dialog;
   tANI_U16 statusCode;
   tANI_U8 responder;
+<<<<<<< HEAD
+=======
+  tANI_U32 peerCapability;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   tANI_U8 *buf;
   tANI_U8 len;
 } tTdlsSendMgmtCmdInfo;
@@ -139,7 +155,16 @@ typedef struct TdlsLinkEstablishInfo
   tANI_U8 uapsdQueues;
   tANI_U8 maxSp;
   tANI_U8 isBufSta;
+<<<<<<< HEAD
   tANI_U8 isResponder;
+=======
+  tANI_U8 isOffChannelSupported;
+  tANI_U8 isResponder;
+  tANI_U8 supportedChannelsLen;
+  tANI_U8 supportedChannels[SIR_MAC_MAX_SUPP_CHANNELS];
+  tANI_U8 supportedOperClassesLen;
+  tANI_U8 supportedOperClasses[SIR_MAC_MAX_SUPP_OPER_CLASSES];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } tTdlsLinkEstablishCmdInfo;
 
 typedef struct TdlsAddStaInfo
@@ -162,6 +187,19 @@ typedef struct TdlsDelStaInfo
 {
   tSirMacAddr peerMac;
 } tTdlsDelStaCmdInfo;
+<<<<<<< HEAD
+=======
+
+// tdlsoffchan
+typedef struct TdlsChanSwitchInfo
+{
+  tSirMacAddr peerMac;
+  tANI_U8 tdlsOffCh;
+  tANI_U8 tdlsOffChBwOffset;
+  tANI_U8 tdlsSwMode;
+} tTdlsChanSwitchCmdInfo;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
 typedef struct TdlsDisReqCmdinfo
 {
@@ -198,6 +236,10 @@ typedef struct s_tdls_cmd
     tTdlsSendMgmtCmdInfo tdlsSendMgmtCmdInfo;
     tTdlsAddStaCmdInfo   tdlsAddStaCmdInfo;
     tTdlsDelStaCmdInfo   tdlsDelStaCmdInfo;
+<<<<<<< HEAD
+=======
+    tTdlsChanSwitchCmdInfo tdlsChanSwitchCmdInfo; //tdlsoffchan
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   }u;
 } tTdlsCmd;
 #endif  /* FEATURE_WLAN_TDLS */
@@ -226,6 +268,10 @@ typedef struct tagSmeCmd
 #ifdef FEATURE_WLAN_TDLS
         tTdlsCmd  tdlsCmd;
 #endif
+<<<<<<< HEAD
+=======
+        tSirPNOScanReq pnoInfo;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }u;
 }tSmeCmd;
 
@@ -241,7 +287,12 @@ tSmeCmd *smeGetCommandBuffer( tpAniSirGlobal pMac );
 void smePushCommand( tpAniSirGlobal pMac, tSmeCmd *pCmd, tANI_BOOLEAN fHighPriority );
 void smeProcessPendingQueue( tpAniSirGlobal pMac );
 void smeReleaseCommand(tpAniSirGlobal pMac, tSmeCmd *pCmd);
+<<<<<<< HEAD
 void purgeSmeSessionCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId);
+=======
+void purgeSmeSessionCmdList(tpAniSirGlobal pMac, tANI_U32 sessionId,
+        tDblLinkList *pList);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 tANI_BOOLEAN smeCommandPending(tpAniSirGlobal pMac);
 tANI_BOOLEAN pmcProcessCommand( tpAniSirGlobal pMac, tSmeCmd *pCommand );
 //this function is used to abort a command where the normal processing of the command
@@ -313,8 +364,19 @@ eHalStatus csrTdlsChangePeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr 
 eHalStatus csrTdlsDelPeerSta(tHalHandle hHal, tANI_U8 sessionId, tSirMacAddr peerMac);
 eHalStatus csrTdlsProcessCmd(tpAniSirGlobal pMac,tSmeCmd *pCommand );
 eHalStatus csrTdlsProcessLinkEstablish( tpAniSirGlobal pMac, tSmeCmd *cmd );
+<<<<<<< HEAD
 eHalStatus tdlsMsgProcessor(tpAniSirGlobal pMac,v_U16_t msg_type,
                                                            void *pMsgBuf);
+=======
+eHalStatus csrTdlsProcessChanSwitchReq(tpAniSirGlobal pMac, tSmeCmd *cmd ); //tdlsoffchan
+eHalStatus tdlsMsgProcessor(tpAniSirGlobal pMac,v_U16_t msg_type, void *pMsgBuf);
+VOS_STATUS csrTdlsSendChanSwitchReq(tHalHandle hHal,
+                                    tANI_U8 sessionId,
+                                    tSirMacAddr peerMac,
+                                    tANI_S32 tdlsOffCh,
+                                    tANI_S32 tdlsOffChBwOffset,
+                                    tANI_U8 tdlsSwMode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
 eHalStatus csrTdlsDiscoveryReq(tHalHandle hHal, tANI_U8 sessionId,
                                           tCsrTdlsDisRequest *tdlsDisReq);
@@ -325,7 +387,11 @@ eHalStatus csrTdlsTeardownReq(tHalHandle hHal, tANI_U8 sessionId,
 #endif
 #endif /* FEATURE_WLAN_TDLS */
 
+<<<<<<< HEAD
 #if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_CCX) || defined(FEATURE_WLAN_LFR)
+=======
+#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 eHalStatus csrFlushCfgBgScanRoamChannelList(tpAniSirGlobal pMac);
 eHalStatus csrCreateBgScanRoamChannelList(tpAniSirGlobal pMac,
                                             const tANI_U8 *pChannelList,
@@ -333,11 +399,19 @@ eHalStatus csrCreateBgScanRoamChannelList(tpAniSirGlobal pMac,
 eHalStatus csrUpdateBgScanConfigIniChannelList(tpAniSirGlobal pMac, eCsrBand eBand);
 #endif
 
+<<<<<<< HEAD
 #if defined(FEATURE_WLAN_CCX) && defined(FEATURE_WLAN_CCX_UPLOAD)
+=======
+#if defined(FEATURE_WLAN_ESE) && defined(FEATURE_WLAN_ESE_UPLOAD)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 eHalStatus csrCreateRoamScanChannelList(tpAniSirGlobal pMac,
                                                 tANI_U8 *pChannelList,
                                                 tANI_U8 numChannels,
                                                 const eCsrBand eBand);
 #endif
+<<<<<<< HEAD
+=======
+void activeListCmdTimeoutHandle(void *userData);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif //#if !defined( __SMEINSIDE_H )

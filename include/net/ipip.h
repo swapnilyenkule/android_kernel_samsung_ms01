@@ -50,7 +50,11 @@ struct ip_tunnel_prl_entry {
 	int pkt_len = skb->len - skb_transport_offset(skb);		\
 									\
 	skb->ip_summed = CHECKSUM_NONE;					\
+<<<<<<< HEAD
 	ip_select_ident(iph, &rt->dst, NULL);				\
+=======
+	ip_select_ident(skb, NULL);				\
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 									\
 	err = ip_local_out(skb);					\
 	if (likely(net_xmit_eval(err) == 0)) {				\

@@ -621,7 +621,11 @@ static void __kfree_section_memmap(struct page *memmap, unsigned long nr_pages)
 {
 	return; /* XXX: Not implemented yet */
 }
+<<<<<<< HEAD
 static void free_map_bootmem(struct page *page, unsigned long nr_pages)
+=======
+static void free_map_bootmem(struct page *memmap, unsigned long nr_pages)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 }
 #else
@@ -662,10 +666,18 @@ static void __kfree_section_memmap(struct page *memmap, unsigned long nr_pages)
 			   get_order(sizeof(struct page) * nr_pages));
 }
 
+<<<<<<< HEAD
 static void free_map_bootmem(struct page *page, unsigned long nr_pages)
 {
 	unsigned long maps_section_nr, removing_section_nr, i;
 	unsigned long magic;
+=======
+static void free_map_bootmem(struct page *memmap, unsigned long nr_pages)
+{
+	unsigned long maps_section_nr, removing_section_nr, i;
+	unsigned long magic;
+	struct page *page = virt_to_page(memmap);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	for (i = 0; i < nr_pages; i++, page++) {
 		magic = (unsigned long) page->lru.next;
@@ -714,6 +726,7 @@ static void free_section_usemap(struct page *memmap, unsigned long *usemap)
 	 */
 
 	if (memmap) {
+<<<<<<< HEAD
 		struct page *memmap_page;
 		memmap_page = virt_to_page(memmap);
 
@@ -721,6 +734,12 @@ static void free_section_usemap(struct page *memmap, unsigned long *usemap)
 			>> PAGE_SHIFT;
 
 		free_map_bootmem(memmap_page, nr_pages);
+=======
+		nr_pages = PAGE_ALIGN(PAGES_PER_SECTION * sizeof(struct page))
+			>> PAGE_SHIFT;
+
+		free_map_bootmem(memmap, nr_pages);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 

@@ -190,7 +190,11 @@ static int bind_get(int number, dev_t *dev)
 	struct raw_device_data *rawdev;
 	struct block_device *bdev;
 
+<<<<<<< HEAD
 	if (number <= 0 || number >= MAX_RAW_MINORS)
+=======
+	if (number <= 0 || number >= max_raw_minors)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return -EINVAL;
 
 	rawdev = &raw_devices[number];

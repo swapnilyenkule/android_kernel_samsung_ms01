@@ -71,7 +71,11 @@ static void companion_common(struct pci_dev *pdev, struct usb_hcd *hcd,
 			continue;
 
 		companion_hcd = pci_get_drvdata(companion);
+<<<<<<< HEAD
 		if (!companion_hcd)
+=======
+		if (!companion_hcd || !companion_hcd->self.root_hub)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 
 		/* For SET_HS_COMPANION, store a pointer to the EHCI bus in
@@ -173,6 +177,10 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	struct hc_driver	*driver;
 	struct usb_hcd		*hcd;
 	int			retval;
+<<<<<<< HEAD
+=======
+	int			hcd_irq = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (usb_disabled())
 		return -ENODEV;
@@ -187,6 +195,7 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 		return -ENODEV;
 	dev->current_state = PCI_D0;
 
+<<<<<<< HEAD
 	/* The xHCI driver supports MSI and MSI-X,
 	 * so don't fail if the BIOS doesn't provide a legacy IRQ.
 	 */
@@ -196,6 +205,21 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 			pci_name(dev));
 		retval = -ENODEV;
 		goto disable_pci;
+=======
+	/*
+	 * The xHCI driver has its own irq management
+	 * make sure irq setup is not touched for xhci in generic hcd code
+	 */
+	if ((driver->flags & HCD_MASK) != HCD_USB3) {
+		if (!dev->irq) {
+			dev_err(&dev->dev,
+			"Found HC with no IRQ. Check BIOS/PCI %s setup!\n",
+				pci_name(dev));
+			retval = -ENODEV;
+			goto disable_pci;
+		}
+		hcd_irq = dev->irq;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	hcd = usb_create_hcd(driver, &dev->dev, pci_name(dev));
@@ -245,7 +269,11 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
 	pci_set_master(dev);
 
+<<<<<<< HEAD
 	retval = usb_add_hcd(hcd, dev->irq, IRQF_SHARED);
+=======
+	retval = usb_add_hcd(hcd, hcd_irq, IRQF_SHARED);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (retval != 0)
 		goto unmap_registers;
 	set_hs_companion(dev, hcd);
@@ -493,6 +521,7 @@ static int hcd_pci_suspend_noirq(struct device *dev)
 
 	pci_save_state(pci_dev);
 
+<<<<<<< HEAD
 	/*
 	 * Some systems crash if an EHCI controller is in D3 during
 	 * a sleep transition.  We have to leave such controllers in D0.
@@ -502,6 +531,8 @@ static int hcd_pci_suspend_noirq(struct device *dev)
 		return retval;
 	}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* If the root hub is dead rather than suspended, disallow remote
 	 * wakeup.  usb_hc_died() should ensure that both hosts are marked as
 	 * dying, so we only need to check the primary roothub.

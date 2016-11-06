@@ -120,6 +120,7 @@ static int efx_test_nvram(struct efx_nic *efx, struct efx_self_tests *tests)
 	return rc;
 }
 
+<<<<<<< HEAD
 static int efx_test_chip(struct efx_nic *efx, struct efx_self_tests *tests)
 {
 	int rc = 0;
@@ -133,6 +134,8 @@ static int efx_test_chip(struct efx_nic *efx, struct efx_self_tests *tests)
 	return rc;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**************************************************************************
  *
  * Interrupt and event queue testing
@@ -699,8 +702,12 @@ int efx_selftest(struct efx_nic *efx, struct efx_self_tests *tests,
 {
 	enum efx_loopback_mode loopback_mode = efx->loopback_mode;
 	int phy_mode = efx->phy_mode;
+<<<<<<< HEAD
 	enum reset_type reset_method = RESET_TYPE_INVISIBLE;
 	int rc_test = 0, rc_reset = 0, rc;
+=======
+	int rc_test = 0, rc_reset, rc;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	efx_selftest_async_cancel(efx);
 
@@ -735,6 +742,7 @@ int efx_selftest(struct efx_nic *efx, struct efx_self_tests *tests,
 	/* Detach the device so the kernel doesn't transmit during the
 	 * loopback test and the watchdog timeout doesn't fire.
 	 */
+<<<<<<< HEAD
 	netif_device_detach(efx->net_dev);
 
 	mutex_lock(&efx->mac_lock);
@@ -775,6 +783,30 @@ int efx_selftest(struct efx_nic *efx, struct efx_self_tests *tests,
 		efx_schedule_reset(efx, RESET_TYPE_DISABLE);
 		return rc_reset;
 	}
+=======
+	efx_device_detach_sync(efx);
+
+	if (efx->type->test_chip) {
+		rc_reset = efx->type->test_chip(efx, tests);
+		if (rc_reset) {
+			netif_err(efx, hw, efx->net_dev,
+				  "Unable to recover from chip test\n");
+			efx_schedule_reset(efx, RESET_TYPE_DISABLE);
+			return rc_reset;
+		}
+
+		if ((tests->registers < 0) && !rc_test)
+			rc_test = -EIO;
+	}
+
+	/* Ensure that the phy is powered and out of loopback
+	 * for the bist and loopback tests */
+	mutex_lock(&efx->mac_lock);
+	efx->phy_mode &= ~PHY_MODE_LOW_POWER;
+	efx->loopback_mode = LOOPBACK_NONE;
+	__efx_reconfigure_port(efx);
+	mutex_unlock(&efx->mac_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	rc = efx_test_phy(efx, tests, flags);
 	if (rc && !rc_test)

@@ -247,12 +247,20 @@ struct dip_infoframe {
 			uint16_t bottom_bar_start;
 			uint16_t left_bar_end;
 			uint16_t right_bar_start;
+<<<<<<< HEAD
 		} avi;
+=======
+		} __attribute__ ((packed)) avi;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		struct {
 			uint8_t vn[8];
 			uint8_t pd[16];
 			uint8_t sdi;
+<<<<<<< HEAD
 		} spd;
+=======
+		} __attribute__ ((packed)) spd;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		uint8_t payload[27];
 	} __attribute__ ((packed)) body;
 } __attribute__((packed));
@@ -277,7 +285,14 @@ struct intel_unpin_work {
 	struct drm_i915_gem_object *old_fb_obj;
 	struct drm_i915_gem_object *pending_flip_obj;
 	struct drm_pending_vblank_event *event;
+<<<<<<< HEAD
 	int pending;
+=======
+	atomic_t pending;
+#define INTEL_FLIP_INACTIVE	0
+#define INTEL_FLIP_PENDING	1
+#define INTEL_FLIP_COMPLETE	2
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	bool enable_stall_check;
 };
 
@@ -288,6 +303,11 @@ struct intel_fbc_work {
 	int interval;
 };
 
+<<<<<<< HEAD
+=======
+int intel_connector_update_modes(struct drm_connector *connector,
+				struct edid *edid);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int intel_ddc_get_modes(struct drm_connector *c, struct i2c_adapter *adapter);
 extern bool intel_ddc_probe(struct intel_encoder *intel_encoder, int ddc_bus);
 

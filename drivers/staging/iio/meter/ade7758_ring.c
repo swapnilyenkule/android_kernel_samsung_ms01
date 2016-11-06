@@ -96,7 +96,11 @@ static int ade7758_ring_preenable(struct iio_dev *indio_dev)
 	size_t d_size;
 	unsigned channel;
 
+<<<<<<< HEAD
 	if (!bitmap_empty(indio_dev->active_scan_mask, indio_dev->masklength))
+=======
+	if (bitmap_empty(indio_dev->active_scan_mask, indio_dev->masklength))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return -EINVAL;
 
 	channel = find_first_bit(indio_dev->active_scan_mask,

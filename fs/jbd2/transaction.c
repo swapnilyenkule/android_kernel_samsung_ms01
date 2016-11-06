@@ -502,10 +502,17 @@ int jbd2__journal_restart(handle_t *handle, int nblocks, gfp_t gfp_mask)
 		   &transaction->t_outstanding_credits);
 	if (atomic_dec_and_test(&transaction->t_updates))
 		wake_up(&journal->j_wait_updates);
+<<<<<<< HEAD
 	spin_unlock(&transaction->t_handle_lock);
 
 	jbd_debug(2, "restarting handle %p\n", handle);
 	tid = transaction->t_tid;
+=======
+	tid = transaction->t_tid;
+	spin_unlock(&transaction->t_handle_lock);
+
+	jbd_debug(2, "restarting handle %p\n", handle);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	need_to_start = !tid_geq(journal->j_commit_request, tid);
 	read_unlock(&journal->j_state_lock);
 	if (need_to_start)
@@ -1043,9 +1050,18 @@ out:
 void jbd2_journal_set_triggers(struct buffer_head *bh,
 			       struct jbd2_buffer_trigger_type *type)
 {
+<<<<<<< HEAD
 	struct journal_head *jh = bh2jh(bh);
 
 	jh->b_triggers = type;
+=======
+	struct journal_head *jh = jbd2_journal_grab_journal_head(bh);
+
+	if (WARN_ON(!jh))
+		return;
+	jh->b_triggers = type;
+	jbd2_journal_put_journal_head(jh);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 void jbd2_buffer_frozen_trigger(struct journal_head *jh, void *mapped_data,
@@ -1097,6 +1113,7 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
 {
 	transaction_t *transaction = handle->h_transaction;
 	journal_t *journal = transaction->t_journal;
+<<<<<<< HEAD
 	struct journal_head *jh = bh2jh(bh);
 	int ret = 0;
 
@@ -1108,6 +1125,20 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
 		ret = -EUCLEAN;
 		goto out;
 	}
+=======
+	struct journal_head *jh;
+	int ret = 0;
+
+	if (is_handle_aborted(handle))
+		goto out;
+	jh = jbd2_journal_grab_journal_head(bh);
+	if (!jh) {
+		ret = -EUCLEAN;
+		goto out;
+	}
+	jbd_debug(5, "journal_head %p\n", jh);
+	JBUFFER_TRACE(jh, "entry");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	jbd_lock_bh_state(bh);
 
@@ -1118,7 +1149,14 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
 		 * once a transaction -bzzz
 		 */
 		jh->b_modified = 1;
+<<<<<<< HEAD
 		J_ASSERT_JH(jh, handle->h_buffer_credits > 0);
+=======
+		if (handle->h_buffer_credits <= 0) {
+			ret = -ENOSPC;
+			goto out_unlock_bh;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		handle->h_buffer_credits--;
 	}
 
@@ -1198,9 +1236,15 @@ int jbd2_journal_dirty_metadata(handle_t *handle, struct buffer_head *bh)
 	spin_unlock(&journal->j_list_lock);
 out_unlock_bh:
 	jbd_unlock_bh_state(bh);
+<<<<<<< HEAD
 out:
 	JBUFFER_TRACE(jh, "exit");
 	WARN_ON(ret);	/* All errors are bugs, so dump the stack */
+=======
+	jbd2_journal_put_journal_head(jh);
+out:
+	JBUFFER_TRACE(jh, "exit");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret;
 }
 

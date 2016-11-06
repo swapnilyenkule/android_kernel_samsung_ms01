@@ -11,11 +11,19 @@
 
 extern int setup_signal_stack_sc(unsigned long stack_top, int sig, 
 				 struct k_sigaction *ka,
+<<<<<<< HEAD
 				 struct pt_regs *regs,
 				 sigset_t *mask);
 extern int setup_signal_stack_si(unsigned long stack_top, int sig,
 				 struct k_sigaction *ka,
 				 struct pt_regs *regs, struct siginfo *info,
+=======
+				 struct pt_regs *regs, 
+				 sigset_t *mask);
+extern int setup_signal_stack_si(unsigned long stack_top, int sig, 
+				 struct k_sigaction *ka,
+				 struct pt_regs *regs, siginfo_t *info, 
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				 sigset_t *mask);
 
 #endif

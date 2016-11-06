@@ -1473,6 +1473,10 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
 	rdev = rc_allocate_device();
 	if (!rdev)
 		goto failure;
+<<<<<<< HEAD
+=======
+	itdev->rdev = rdev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ret = -ENODEV;
 
@@ -1604,7 +1608,10 @@ static int ite_probe(struct pnp_dev *pdev, const struct pnp_device_id
 	if (ret)
 		goto failure;
 
+<<<<<<< HEAD
 	itdev->rdev = rdev;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ite_pr(KERN_NOTICE, "driver has been successfully loaded\n");
 
 	return 0;

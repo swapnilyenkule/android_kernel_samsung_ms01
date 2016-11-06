@@ -436,6 +436,10 @@ acpi_get_table_with_size(char *signature,
 
 	return (AE_NOT_FOUND);
 }
+<<<<<<< HEAD
+=======
+ACPI_EXPORT_SYMBOL(acpi_get_table_with_size)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 acpi_status
 acpi_get_table(char *signature,

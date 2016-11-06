@@ -436,8 +436,13 @@ void rt2x00usb_kick_queue(struct data_queue *queue)
 	case QID_RX:
 		if (!rt2x00queue_full(queue))
 			rt2x00queue_for_each_entry(queue,
+<<<<<<< HEAD
 						   Q_INDEX_DONE,
 						   Q_INDEX,
+=======
+						   Q_INDEX,
+						   Q_INDEX_DONE,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 						   NULL,
 						   rt2x00usb_kick_rx_entry);
 		break;

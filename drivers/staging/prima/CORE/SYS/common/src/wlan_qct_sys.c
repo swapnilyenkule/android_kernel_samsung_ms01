@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*===========================================================================
@@ -114,7 +126,12 @@ typedef struct
 
 } sysContextData;
 
+<<<<<<< HEAD
 
+=======
+// sysStop 20 Seconds timeout
+#define SYS_STOP_TIMEOUT 20000
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static vos_event_t gStopEvt;
 
 VOS_STATUS sysBuildMessageHeader( SYS_MSG_ID sysMsgId, vos_msg_t *pMsg )
@@ -164,11 +181,19 @@ VOS_STATUS sysStop( v_CONTEXT_t pVosContext )
    /* post a message to SYS module in MC to stop SME and MAC */
    sysBuildMessageHeader( SYS_MSG_ID_MC_STOP, &sysMsg );
 
+<<<<<<< HEAD
    // Save the user callback and user data to callback in the body pointer
    // and body data portion of the message.
    // finished.
    sysMsg.bodyptr = (void *)sysStopCompleteCb;
    sysMsg.bodyval = (v_U32_t) &gStopEvt;
+=======
+   // Save the user callback and user data
+
+   // finished.
+   sysMsg.callback = sysStopCompleteCb;
+   sysMsg.bodyptr  = (void *) &gStopEvt;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    // post the message..
    vosStatus = vos_mq_post_message( VOS_MQ_ID_SYS, &sysMsg );
@@ -177,7 +202,11 @@ VOS_STATUS sysStop( v_CONTEXT_t pVosContext )
       vosStatus = VOS_STATUS_E_BADMSG;
    }
 
+<<<<<<< HEAD
    vosStatus = vos_wait_events( &gStopEvt, 1, 0, &evtIndex );
+=======
+   vosStatus = vos_wait_events( &gStopEvt, 1, SYS_STOP_TIMEOUT, &evtIndex );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    VOS_ASSERT( VOS_IS_STATUS_SUCCESS ( vosStatus ) );
 
    vosStatus = vos_event_destroy( &gStopEvt );
@@ -218,8 +247,13 @@ typedef struct sPolFileHeader
 {
   tPolFileVersion FileVersion;
   tPolFileVersion HWCapabilities;
+<<<<<<< HEAD
   unsigned long   FileLength;
   unsigned long   NumDirectoryEntries;
+=======
+  unsigned int   FileLength;
+  unsigned int   NumDirectoryEntries;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 } tPolFileHeader;
 
@@ -238,9 +272,15 @@ typedef enum ePolFileDirTypes
 
 typedef struct sPolFileDirEntry
 {
+<<<<<<< HEAD
   unsigned long DirEntryType;
   unsigned long DirEntryFileOffset;
   unsigned long DirEntryLength;
+=======
+  unsigned int DirEntryType;
+  unsigned int DirEntryFileOffset;
+  unsigned int DirEntryLength;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 } tPolFileDirEntry;
 
@@ -336,7 +376,17 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
    VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
    v_VOID_t *hHal;
 
+<<<<<<< HEAD
    VOS_ASSERT( pMsg );
+=======
+   if (NULL == pMsg)
+   {
+      VOS_ASSERT(0);
+      VOS_TRACE(VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+            "%s: NULL pointer to vos_msg_t", __func__);
+      return VOS_STATUS_E_INVAL;
+   }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    // All 'new' SYS messages are identified by a cookie in the reserved
    // field of the message as well as the message type.  This prevents
@@ -353,7 +403,11 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
             /* Handling for this message is not needed now so adding 
              *debug print and VOS_ASSERT*/
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        " Received SYS_MSG_ID_MC_START message msgType= %d [0x%08lx]",
+=======
+                       " Received SYS_MSG_ID_MC_START message msgType= %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type );
             VOS_ASSERT(0);
             break;
@@ -379,7 +433,11 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
                vosStatus = macStop( hHal, HAL_STOP_TYPE_SYS_DEEP_SLEEP );
                VOS_ASSERT( VOS_IS_STATUS_SUCCESS( vosStatus ) );
 
+<<<<<<< HEAD
                ((sysResponseCback)pMsg->bodyptr)((v_VOID_t *)pMsg->bodyval);
+=======
+               ((sysResponseCback)pMsg->callback)((v_VOID_t *)pMsg->bodyptr);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
                vosStatus = VOS_STATUS_SUCCESS;
             }
@@ -391,13 +449,18 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
          case SYS_MSG_ID_MC_THR_PROBE:
          {
             VOS_TRACE(VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        " Received SYS_MSG_ID_MC_THR_PROBE message msgType = %d [0x%08lx]",
+=======
+                       " Received SYS_MSG_ID_MC_THR_PROBE message msgType = %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type);
             break;
          }
 
          case SYS_MSG_ID_MC_TIMER:
          {
+<<<<<<< HEAD
             vos_timer_callback_t timerCB;
             // hummmm... note says...
             // invoke the timer callback and the user data stick
@@ -408,6 +471,14 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
             // make the callback to the timer routine...
             timerCB( (v_VOID_t *)pMsg->bodyval );
 
+=======
+            vos_timer_callback_t timerCB = pMsg->callback;
+
+            if (NULL != timerCB)
+            {
+               timerCB(pMsg->bodyptr);
+            }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
          }
          case SYS_MSG_ID_FTM_RSP:
@@ -419,7 +490,11 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
          default:
          {
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        "Unknown message type in sysMcProcessMsg() msgType= %d [0x%08lx]",
+=======
+                       "Unknown message type in sysMcProcessMsg() msgType= %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type );
             break;
         }
@@ -439,7 +514,11 @@ VOS_STATUS sysMcProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
                        "Received SYS message cookie with unidentified "
+<<<<<<< HEAD
                        "MC message type= %d [0x%08lX]", pMsg->type, pMsg->type );
+=======
+                       "MC message type= %d [0x%08X]", pMsg->type, pMsg->type );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
             vosStatus = VOS_STATUS_E_BADMSG;
             if (pMsg->bodyptr) 
@@ -459,7 +538,17 @@ VOS_STATUS sysTxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 {
    VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
 
+<<<<<<< HEAD
    VOS_ASSERT( pMsg );
+=======
+   if (NULL == pMsg)
+   {
+      VOS_ASSERT(0);
+      VOS_TRACE(VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+            "%s: NULL pointer to vos_msg_t", __func__);
+      return VOS_STATUS_E_INVAL;
+   }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    // All 'new' SYS messages are identified by a cookie in the reserved
    // field of the message as well as the message type.  This prevents
@@ -478,7 +567,11 @@ VOS_STATUS sysTxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
            /* Handling for this message is not needed now so adding 
             * debug print and VOS_ASSERT*/
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        " Received SYS_MSG_ID_TX_THR_PROBE message msgType= %d [0x%08lx]",
+=======
+                       " Received SYS_MSG_ID_TX_THR_PROBE message msgType= %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type );
             VOS_ASSERT(0);
 
@@ -487,6 +580,7 @@ VOS_STATUS sysTxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 
          case SYS_MSG_ID_TX_TIMER:
          {
+<<<<<<< HEAD
             vos_timer_callback_t timerCB;
 
             // hummmm... note says...
@@ -498,13 +592,25 @@ VOS_STATUS sysTxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
             // make the callback to the timer routine...
             timerCB( (v_VOID_t *)pMsg->bodyval );
 
+=======
+            vos_timer_callback_t timerCB = pMsg->callback;
+
+            if (NULL != timerCB)
+            {
+               timerCB(pMsg->bodyptr);
+            }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
          }
 
          default:
          {
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        "Unknown message type in sysTxProcessMsg() msgType= %d [0x%08lx]",
+=======
+                       "Unknown message type in sysTxProcessMsg() msgType= %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type );
             break;
         }
@@ -517,7 +623,11 @@ VOS_STATUS sysTxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 
       VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
                  "Received SYS message cookie with unidentified TX message "
+<<<<<<< HEAD
                  " type= %d [0x%08lX]", pMsg->type, pMsg->type );
+=======
+                 " type= %d [0x%08X]", pMsg->type, pMsg->type );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
       vosStatus = VOS_STATUS_E_BADMSG;
    }   // end else
@@ -530,7 +640,17 @@ VOS_STATUS sysRxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 {
    VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
 
+<<<<<<< HEAD
    VOS_ASSERT( pMsg );
+=======
+   if (NULL == pMsg)
+   {
+      VOS_ASSERT(0);
+      VOS_TRACE(VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+            "%s: NULL pointer to vos_msg_t", __func__);
+      return VOS_STATUS_E_INVAL;
+   }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    // All 'new' SYS messages are identified by a cookie in the reserved
    // field of the message as well as the message type.  This prevents
@@ -544,6 +664,7 @@ VOS_STATUS sysRxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
       {
          case SYS_MSG_ID_RX_TIMER:
          {
+<<<<<<< HEAD
             vos_timer_callback_t timerCB;
 
             // hummmm... note says...
@@ -555,13 +676,25 @@ VOS_STATUS sysRxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
             // make the callback to the timer routine...
             timerCB( (v_VOID_t *)pMsg->bodyval );
 
+=======
+            vos_timer_callback_t timerCB = pMsg->callback;
+
+            if (NULL != timerCB)
+            {
+               timerCB(pMsg->bodyptr);
+            }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
          }
 
          default:
          {
             VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
+<<<<<<< HEAD
                        "Unknown message type in sysRxProcessMsg() msgType= %d [0x%08lx]",
+=======
+                       "Unknown message type in sysRxProcessMsg() msgType= %d [0x%08x]",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                        pMsg->type, pMsg->type );
             break;
         }
@@ -574,7 +707,11 @@ VOS_STATUS sysRxProcessMsg( v_CONTEXT_t pVosContext, vos_msg_t *pMsg )
 
       VOS_TRACE( VOS_MODULE_ID_SYS, VOS_TRACE_LEVEL_ERROR,
                  "Received SYS message cookie with unidentified RX message "
+<<<<<<< HEAD
                  " type= %d [0x%08lX]", pMsg->type, pMsg->type );
+=======
+                 " type= %d [0x%08X]", pMsg->type, pMsg->type );
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
       vosStatus = VOS_STATUS_E_BADMSG;
    }   // end else

@@ -74,6 +74,7 @@ out:
 	return rc;
 }
 
+<<<<<<< HEAD
 /*
  * Sets both levels in the MLS range of 'dst' to the high level of 'src'.
  */
@@ -94,6 +95,8 @@ out:
 	return rc;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline int mls_context_cmp(struct context *c1, struct context *c2)
 {
 	return ((c1->range.level[0].sens == c2->range.level[0].sens) &&

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2011,2013-2014, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2011, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -18,6 +22,10 @@ struct rq_data {
 	unsigned long rq_poll_last_jiffy;
 	unsigned long rq_poll_total_jiffies;
 	unsigned long def_timer_last_jiffy;
+<<<<<<< HEAD
+=======
+	unsigned int def_interval;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned int hotplug_disabled;
 	int64_t def_start_time;
 	struct attribute_group *attr_group;

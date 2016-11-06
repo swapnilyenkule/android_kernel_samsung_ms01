@@ -674,6 +674,57 @@ static const struct tv_mode tv_modes[] = {
 		.filter_table = filter_table,
 	},
 	{
+<<<<<<< HEAD
+=======
+		.name       = "480p",
+		.clock		= 107520,
+		.refresh	= 59940,
+		.oversample     = TV_OVERSAMPLE_4X,
+		.component_only = 1,
+
+		.hsync_end      = 64,               .hblank_end         = 122,
+		.hblank_start   = 842,              .htotal             = 857,
+
+		.progressive    = true,		    .trilevel_sync = false,
+
+		.vsync_start_f1 = 12,               .vsync_start_f2     = 12,
+		.vsync_len      = 12,
+
+		.veq_ena        = false,
+
+		.vi_end_f1      = 44,               .vi_end_f2          = 44,
+		.nbr_end        = 479,
+
+		.burst_ena      = false,
+
+		.filter_table = filter_table,
+	},
+	{
+		.name       = "576p",
+		.clock		= 107520,
+		.refresh	= 50000,
+		.oversample     = TV_OVERSAMPLE_4X,
+		.component_only = 1,
+
+		.hsync_end      = 64,               .hblank_end         = 139,
+		.hblank_start   = 859,              .htotal             = 863,
+
+		.progressive    = true,		    .trilevel_sync = false,
+
+		.vsync_start_f1 = 10,               .vsync_start_f2     = 10,
+		.vsync_len      = 10,
+
+		.veq_ena        = false,
+
+		.vi_end_f1      = 48,               .vi_end_f2          = 48,
+		.nbr_end        = 575,
+
+		.burst_ena      = false,
+
+		.filter_table = filter_table,
+	},
+	{
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		.name       = "720p@60Hz",
 		.clock		= 148800,
 		.refresh	= 60000,
@@ -1185,6 +1236,14 @@ intel_tv_detect_type(struct intel_tv *intel_tv,
 
 	I915_WRITE(TV_DAC, save_tv_dac & ~TVDAC_STATE_CHG_EN);
 	I915_WRITE(TV_CTL, save_tv_ctl);
+<<<<<<< HEAD
+=======
+	POSTING_READ(TV_CTL);
+
+	/* For unknown reasons the hw barfs if we don't do this vblank wait. */
+	intel_wait_for_vblank(intel_tv->base.base.dev,
+			      to_intel_crtc(intel_tv->base.base.crtc)->pipe);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Restore interrupt config */
 	if (connector->polled & DRM_CONNECTOR_POLL_HPD) {

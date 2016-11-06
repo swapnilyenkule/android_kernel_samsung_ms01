@@ -73,3 +73,12 @@ config PROC_AVC
         default n
         help
           support logging audit avc message
+<<<<<<< HEAD
+=======
+
+config PROC_STLOG
+	bool "Enable Storage log"
+	depends on PROC_FS
+	default y
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

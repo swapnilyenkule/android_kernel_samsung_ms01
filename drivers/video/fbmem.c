@@ -1172,8 +1172,15 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		event.data = &con2fb;
 		if (!lock_fb_info(info))
 			return -ENODEV;
+<<<<<<< HEAD
 		event.info = info;
 		ret = fb_notifier_call_chain(FB_EVENT_SET_CONSOLE_MAP, &event);
+=======
+		console_lock();
+		event.info = info;
+		ret = fb_notifier_call_chain(FB_EVENT_SET_CONSOLE_MAP, &event);
+		console_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		unlock_fb_info(info);
 		break;
 	case FBIOBLANK:
@@ -1631,7 +1638,13 @@ static int do_register_framebuffer(struct fb_info *fb_info)
 	event.info = fb_info;
 	if (!lock_fb_info(fb_info))
 		return -ENODEV;
+<<<<<<< HEAD
 	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
+=======
+	console_lock();
+	fb_notifier_call_chain(FB_EVENT_FB_REGISTERED, &event);
+	console_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unlock_fb_info(fb_info);
 	return 0;
 }
@@ -1647,8 +1660,15 @@ static int do_unregister_framebuffer(struct fb_info *fb_info)
 
 	if (!lock_fb_info(fb_info))
 		return -ENODEV;
+<<<<<<< HEAD
 	event.info = fb_info;
 	ret = fb_notifier_call_chain(FB_EVENT_FB_UNBIND, &event);
+=======
+	console_lock();
+	event.info = fb_info;
+	ret = fb_notifier_call_chain(FB_EVENT_FB_UNBIND, &event);
+	console_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unlock_fb_info(fb_info);
 
 	if (ret)
@@ -1663,7 +1683,13 @@ static int do_unregister_framebuffer(struct fb_info *fb_info)
 	num_registered_fb--;
 	fb_cleanup_device(fb_info);
 	event.info = fb_info;
+<<<<<<< HEAD
 	fb_notifier_call_chain(FB_EVENT_FB_UNREGISTERED, &event);
+=======
+	console_lock();
+	fb_notifier_call_chain(FB_EVENT_FB_UNREGISTERED, &event);
+	console_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* this may free fb info */
 	put_fb_info(fb_info);
@@ -1834,11 +1860,16 @@ int fb_new_modelist(struct fb_info *info)
 	err = 1;
 
 	if (!list_empty(&info->modelist)) {
+<<<<<<< HEAD
 		if (!lock_fb_info(info))
 			return -ENODEV;
 		event.info = info;
 		err = fb_notifier_call_chain(FB_EVENT_NEW_MODELIST, &event);
 		unlock_fb_info(info);
+=======
+		event.info = info;
+		err = fb_notifier_call_chain(FB_EVENT_NEW_MODELIST, &event);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	return err;

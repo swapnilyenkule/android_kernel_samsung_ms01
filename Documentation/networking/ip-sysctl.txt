@@ -544,11 +544,14 @@ tcp_thin_dupack - BOOLEAN
 	Documentation/networking/tcp-thin.txt
 	Default: 0
 
+<<<<<<< HEAD
 tcp_challenge_ack_limit - INTEGER
 	Limits number of Challenge ACK sent per second, as recommended
 	in RFC 5961 (Improving TCP's Robustness to Blind In-Window Attacks)
 	Default: 100
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 UDP variables:
 
 udp_mem - vector of 3 INTEGERs: min, pressure, max
@@ -1209,6 +1212,7 @@ router_solicitations - INTEGER
 	routers are present.
 	Default: 3
 
+<<<<<<< HEAD
 use_oif_addrs_only - BOOLEAN
 	When enabled, the candidate source addresses for destinations
 	routed via this interface are restricted to the set of addresses
@@ -1216,6 +1220,8 @@ use_oif_addrs_only - BOOLEAN
 
 	Default: false
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 use_tempaddr - INTEGER
 	Preference for Privacy Extensions (RFC3041).
 	  <= 0 : disable Privacy Extensions
@@ -1291,6 +1297,7 @@ force_tllao - BOOLEAN
 	race condition where the sender deletes the cached link-layer address
 	prior to receiving a response to a previous solicitation."
 
+<<<<<<< HEAD
 optimistic_dad - BOOLEAN
 	Whether to perform Optimistic Duplicate Address Detection (RFC 4429).
 		0: disabled (default)
@@ -1304,6 +1311,8 @@ use_optimistic - BOOLEAN
 		0: disabled (default)
 		1: enabled
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 icmp/*:
 ratelimit - INTEGER
 	Limit the maximal rates for sending ICMPv6 packets.

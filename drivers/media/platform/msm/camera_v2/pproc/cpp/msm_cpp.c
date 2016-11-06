@@ -286,6 +286,11 @@ static unsigned long msm_cpp_queue_buffer_info(struct cpp_device *cpp_dev,
 	return buff->map_info.phy_addr;
 
 QUEUE_BUFF_ERROR2:
+<<<<<<< HEAD
+=======
+	ion_unmap_iommu(cpp_dev->client, buff->map_info.ion_handle,
+		cpp_dev->domain_num, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ion_free(cpp_dev->client, buff->map_info.ion_handle);
 QUEUE_BUFF_ERROR1:
 	buff->map_info.ion_handle = NULL;

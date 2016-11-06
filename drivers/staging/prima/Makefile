@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # We can build either as part of a standalone Kernel build or part
 # of an Android build.  Determine which mechanism is being used
 ifeq ($(MODNAME),)
@@ -648,3 +649,22 @@ KBUILD_CPPFLAGS += $(CDEFINES)
 obj-$(CONFIG_PRIMA_WLAN) += $(MODNAME).o
 obj-$(CONFIG_PRONTO_WLAN) += $(MODNAME).o
 $(MODNAME)-y := $(OBJS)
+=======
+default: all
+
+KBUILD_OPTIONS := WLAN_ROOT=$(PWD)
+KBUILD_OPTIONS += MODNAME=wlan
+
+all::
+	$(MAKE) -C $(KERNEL_SOURCE) $(KBUILD_OPTIONS) $(EXTRA_CFLAGS) ARCH=$(ARCH) \
+		SUBDIRS=$(CURDIR) CC=${CC} modules
+
+modules_install:
+	$(MAKE) INSTALL_MOD_STRIP=1 -C $(KERNEL_SRC) M=$(shell pwd) modules_install
+
+clean::
+	rm -f *.o *.ko *.mod.c *.mod.o *~ .*.cmd Module.symvers
+	rm -rf .tmp_versions
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

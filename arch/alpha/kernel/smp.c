@@ -487,7 +487,11 @@ smp_prepare_boot_cpu(void)
 }
 
 int __cpuinit
+<<<<<<< HEAD
 __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+__cpu_up(unsigned int cpu)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	smp_boot_one_cpu(cpu);
 

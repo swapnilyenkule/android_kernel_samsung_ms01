@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -66,6 +70,10 @@ char *mdss_dsi_buf_init(struct dsi_buf *dp)
 		off = 8 - off;
 	dp->data += off;
 	dp->len = 0;
+<<<<<<< HEAD
+=======
+	dp->read_cnt = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return dp->data;
 }
 
@@ -121,6 +129,10 @@ int mdss_dsi_buf_alloc(struct dsi_buf *dp, int size)
 
 	dp->data = dp->start;
 	dp->len = 0;
+<<<<<<< HEAD
+=======
+	dp->read_cnt = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return size;
 #endif
 }
@@ -610,6 +622,10 @@ int mdss_dsi_short_read1_resp(struct dsi_buf *rp)
 	/* strip out dcs type */
 	rp->data++;
 	rp->len = 1;
+<<<<<<< HEAD
+=======
+	rp->read_cnt -= 3;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return rp->len;
 }
 
@@ -621,6 +637,10 @@ int mdss_dsi_short_read2_resp(struct dsi_buf *rp)
 	/* strip out dcs type */
 	rp->data++;
 	rp->len = 2;
+<<<<<<< HEAD
+=======
+	rp->read_cnt -= 2;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return rp->len;
 }
 
@@ -629,6 +649,10 @@ int mdss_dsi_long_read_resp(struct dsi_buf *rp)
 	/* strip out dcs header */
 	rp->data += 4;
 	rp->len -= 4;
+<<<<<<< HEAD
+=======
+	rp->read_cnt -= 6;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return rp->len;
 }
 

@@ -769,6 +769,12 @@ BYTE    byPwr = pDevice->byCCKPwr;
         return TRUE;
     }
 
+<<<<<<< HEAD
+=======
+	if (uCH == 0)
+		return -EINVAL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     switch (uRATE) {
     case RATE_1M:
     case RATE_2M:

@@ -151,7 +151,10 @@ static int __devinit pcie_portdrv_probe(struct pci_dev *dev,
 static void pcie_portdrv_remove(struct pci_dev *dev)
 {
 	pcie_port_device_remove(dev);
+<<<<<<< HEAD
 	pci_disable_device(dev);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int error_detected_iter(struct device *device, void *data)

@@ -1,8 +1,15 @@
 #ifndef ISCSI_PARAMETERS_H
 #define ISCSI_PARAMETERS_H
 
+<<<<<<< HEAD
 struct iscsi_extra_response {
 	char key[64];
+=======
+#include <scsi/iscsi_proto.h>
+
+struct iscsi_extra_response {
+	char key[KEY_MAXLEN];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	char value[32];
 	struct list_head er_list;
 } ____cacheline_aligned;

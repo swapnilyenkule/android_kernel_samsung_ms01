@@ -1061,7 +1061,11 @@ struct nfstime4 {
 };
 
 #ifdef CONFIG_NFS_V4_1
+<<<<<<< HEAD
 #define NFS4_EXCHANGE_ID_LEN	(48)
+=======
+#define NFS4_EXCHANGE_ID_LEN	(127)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct nfs41_exchange_id_args {
 	struct nfs_client		*client;
 	nfs4_verifier			*verifier;

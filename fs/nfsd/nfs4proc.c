@@ -194,6 +194,10 @@ static __be32
 do_open_lookup(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_open *open)
 {
 	struct svc_fh *resfh;
+<<<<<<< HEAD
+=======
+	int accmode;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	__be32 status;
 
 	resfh = kmalloc(sizeof(struct svc_fh), GFP_KERNEL);
@@ -253,9 +257,16 @@ do_open_lookup(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_o
 	/* set reply cache */
 	fh_copy_shallow(&open->op_openowner->oo_owner.so_replay.rp_openfh,
 			&resfh->fh_handle);
+<<<<<<< HEAD
 	if (!open->op_created)
 		status = do_open_permission(rqstp, resfh, open,
 					    NFSD_MAY_NOP);
+=======
+	accmode = NFSD_MAY_NOP;
+	if (open->op_created)
+		accmode |= NFSD_MAY_OWNER_OVERRIDE;
+	status = do_open_permission(rqstp, resfh, open, accmode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	set_change_info(&open->op_cinfo, current_fh);
 	fh_dup2(current_fh, resfh);
 out:
@@ -268,6 +279,10 @@ static __be32
 do_open_fhandle(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_open *open)
 {
 	__be32 status;
+<<<<<<< HEAD
+=======
+	int accmode = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* We don't know the target directory, and therefore can not
 	* set the change info
@@ -281,9 +296,25 @@ do_open_fhandle(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_
 
 	open->op_truncate = (open->op_iattr.ia_valid & ATTR_SIZE) &&
 		(open->op_iattr.ia_size == 0);
+<<<<<<< HEAD
 
 	status = do_open_permission(rqstp, current_fh, open,
 				    NFSD_MAY_OWNER_OVERRIDE);
+=======
+	/*
+	 * In the delegation case, the client is telling us about an
+	 * open that it *already* performed locally, some time ago.  We
+	 * should let it succeed now if possible.
+	 *
+	 * In the case of a CLAIM_FH open, on the other hand, the client
+	 * may be counting on us to enforce permissions (the Linux 4.1
+	 * client uses this for normal opens, for example).
+	 */
+	if (open->op_claim_type == NFS4_OPEN_CLAIM_DELEG_CUR_FH)
+		accmode = NFSD_MAY_OWNER_OVERRIDE;
+
+	status = do_open_permission(rqstp, current_fh, open, accmode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return status;
 }
@@ -530,6 +561,7 @@ nfsd4_create(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 
 	switch (create->cr_type) {
 	case NF4LNK:
+<<<<<<< HEAD
 		/* ugh! we have to null-terminate the linktext, or
 		 * vfs_symlink() will choke.  it is always safe to
 		 * null-terminate by brute force, since at worst we
@@ -539,6 +571,8 @@ nfsd4_create(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 		 */
 		create->cr_linkname[create->cr_linklen] = 0;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		status = nfsd_symlink(rqstp, &cstate->current_fh,
 				      create->cr_name, create->cr_namelen,
 				      create->cr_linkname, create->cr_linklen,
@@ -891,6 +925,7 @@ nfsd4_write(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 
 	nfs4_lock_state();
 	status = nfs4_preprocess_stateid_op(cstate, stateid, WR_STATE, &filp);
+<<<<<<< HEAD
 	if (filp)
 		get_file(filp);
 	nfs4_unlock_state();
@@ -899,6 +934,16 @@ nfsd4_write(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 		dprintk("NFSD: nfsd4_write: couldn't process stateid!\n");
 		return status;
 	}
+=======
+	if (status) {
+		nfs4_unlock_state();
+		dprintk("NFSD: nfsd4_write: couldn't process stateid!\n");
+		return status;
+	}
+	if (filp)
+		get_file(filp);
+	nfs4_unlock_state();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	cnt = write->wr_buflen;
 	write->wr_how_written = write->wr_stable_how;
@@ -1128,7 +1173,12 @@ static bool need_wrongsec_check(struct svc_rqst *rqstp)
 	 */
 	if (argp->opcnt == resp->opcnt)
 		return false;
+<<<<<<< HEAD
 
+=======
+	if (next->opnum == OP_ILLEGAL)
+		return false;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	nextd = OPDESC(next);
 	/*
 	 * Rest of 2.6.3.1.1: certain operations will return WRONGSEC
@@ -1232,6 +1282,15 @@ nfsd4_proc_compound(struct svc_rqst *rqstp,
 		/* If op is non-idempotent */
 		if (opdesc->op_flags & OP_MODIFIES_SOMETHING) {
 			plen = opdesc->op_rsize_bop(rqstp, op);
+<<<<<<< HEAD
+=======
+			/*
+			 * If there's still another operation, make sure
+			 * we'll have space to at least encode an error:
+			 */
+			if (resp->opcnt < args->opcnt)
+				plen += COMPOUND_ERR_SLACK_SPACE;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			op->status = nfsd4_check_resp_size(resp, plen);
 		}
 
@@ -1399,7 +1458,12 @@ static inline u32 nfsd4_setattr_rsize(struct svc_rqst *rqstp, struct nfsd4_op *o
 
 static inline u32 nfsd4_setclientid_rsize(struct svc_rqst *rqstp, struct nfsd4_op *op)
 {
+<<<<<<< HEAD
 	return (op_encode_hdr_size + 2 + 1024) * sizeof(__be32);
+=======
+	return (op_encode_hdr_size + 2 + XDR_QUADLEN(NFS4_VERIFIER_SIZE)) *
+								sizeof(__be32);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline u32 nfsd4_write_rsize(struct svc_rqst *rqstp, struct nfsd4_op *op)

@@ -182,18 +182,30 @@ int nfsd_nrthreads(void)
 	return rv;
 }
 
+<<<<<<< HEAD
 static int nfsd_init_socks(int port)
+=======
+static int nfsd_init_socks(int port, struct net *net)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int error;
 	if (!list_empty(&nfsd_serv->sv_permsocks))
 		return 0;
 
+<<<<<<< HEAD
 	error = svc_create_xprt(nfsd_serv, "udp", &init_net, PF_INET, port,
+=======
+	error = svc_create_xprt(nfsd_serv, "udp", net, PF_INET, port,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					SVC_SOCK_DEFAULTS);
 	if (error < 0)
 		return error;
 
+<<<<<<< HEAD
 	error = svc_create_xprt(nfsd_serv, "tcp", &init_net, PF_INET, port,
+=======
+	error = svc_create_xprt(nfsd_serv, "tcp", net, PF_INET, port,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					SVC_SOCK_DEFAULTS);
 	if (error < 0)
 		return error;
@@ -203,7 +215,11 @@ static int nfsd_init_socks(int port)
 
 static bool nfsd_up = false;
 
+<<<<<<< HEAD
 static int nfsd_startup(unsigned short port, int nrservs)
+=======
+static int nfsd_startup(unsigned short port, int nrservs, struct net *net)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int ret;
 
@@ -217,10 +233,17 @@ static int nfsd_startup(unsigned short port, int nrservs)
 	ret = nfsd_racache_init(2*nrservs);
 	if (ret)
 		return ret;
+<<<<<<< HEAD
 	ret = nfsd_init_socks(port);
 	if (ret)
 		goto out_racache;
 	ret = lockd_up();
+=======
+	ret = nfsd_init_socks(port, net);
+	if (ret)
+		goto out_racache;
+	ret = lockd_up(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (ret)
 		goto out_racache;
 	ret = nfs4_state_start();
@@ -229,13 +252,21 @@ static int nfsd_startup(unsigned short port, int nrservs)
 	nfsd_up = true;
 	return 0;
 out_lockd:
+<<<<<<< HEAD
 	lockd_down();
+=======
+	lockd_down(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out_racache:
 	nfsd_racache_shutdown();
 	return ret;
 }
 
+<<<<<<< HEAD
 static void nfsd_shutdown(void)
+=======
+static void nfsd_shutdown(struct net *net)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	/*
 	 * write_ports can create the server without actually starting
@@ -246,16 +277,24 @@ static void nfsd_shutdown(void)
 	if (!nfsd_up)
 		return;
 	nfs4_state_shutdown();
+<<<<<<< HEAD
 	lockd_down();
+=======
+	lockd_down(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	nfsd_racache_shutdown();
 	nfsd_up = false;
 }
 
 static void nfsd_last_thread(struct svc_serv *serv, struct net *net)
 {
+<<<<<<< HEAD
 	/* When last nfsd thread exits we need to do some clean-up */
 	nfsd_serv = NULL;
 	nfsd_shutdown();
+=======
+	nfsd_shutdown(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	svc_rpcb_cleanup(serv, net);
 
@@ -328,8 +367,15 @@ static int nfsd_get_default_max_blksize(void)
 	return ret;
 }
 
+<<<<<<< HEAD
 int nfsd_create_serv(void)
 {
+=======
+int nfsd_create_serv(struct net *net)
+{
+	int error;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	WARN_ON(!mutex_is_locked(&nfsd_mutex));
 	if (nfsd_serv) {
 		svc_get(nfsd_serv);
@@ -343,6 +389,15 @@ int nfsd_create_serv(void)
 	if (nfsd_serv == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
+=======
+	error = svc_bind(nfsd_serv, net);
+	if (error < 0) {
+		svc_destroy(nfsd_serv);
+		return error;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	set_max_drc();
 	do_gettimeofday(&nfssvc_boot);		/* record boot time */
 	return 0;
@@ -368,7 +423,11 @@ int nfsd_get_nrthreads(int n, int *nthreads)
 	return 0;
 }
 
+<<<<<<< HEAD
 int nfsd_set_nrthreads(int n, int *nthreads)
+=======
+int nfsd_set_nrthreads(int n, int *nthreads, struct net *net)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int i = 0;
 	int tot = 0;
@@ -417,8 +476,12 @@ int nfsd_set_nrthreads(int n, int *nthreads)
 		if (err)
 			break;
 	}
+<<<<<<< HEAD
 	svc_destroy(nfsd_serv);
 
+=======
+	nfsd_destroy(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return err;
 }
 
@@ -428,7 +491,11 @@ int nfsd_set_nrthreads(int n, int *nthreads)
  * this is the first time nrservs is nonzero.
  */
 int
+<<<<<<< HEAD
 nfsd_svc(unsigned short port, int nrservs)
+=======
+nfsd_svc(unsigned short port, int nrservs, struct net *net)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int	error;
 	bool	nfsd_up_before;
@@ -443,13 +510,21 @@ nfsd_svc(unsigned short port, int nrservs)
 	if (nrservs == 0 && nfsd_serv == NULL)
 		goto out;
 
+<<<<<<< HEAD
 	error = nfsd_create_serv();
+=======
+	error = nfsd_create_serv(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (error)
 		goto out;
 
 	nfsd_up_before = nfsd_up;
 
+<<<<<<< HEAD
 	error = nfsd_startup(port, nrservs);
+=======
+	error = nfsd_startup(port, nrservs, net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (error)
 		goto out_destroy;
 	error = svc_set_num_threads(nfsd_serv, NULL, nrservs);
@@ -462,9 +537,15 @@ nfsd_svc(unsigned short port, int nrservs)
 	error = nfsd_serv->sv_nrthreads - 1;
 out_shutdown:
 	if (error < 0 && !nfsd_up_before)
+<<<<<<< HEAD
 		nfsd_shutdown();
 out_destroy:
 	svc_destroy(nfsd_serv);		/* Release server */
+=======
+		nfsd_shutdown(net);
+out_destroy:
+	nfsd_destroy(net);		/* Release server */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out:
 	mutex_unlock(&nfsd_mutex);
 	return error;
@@ -478,6 +559,11 @@ static int
 nfsd(void *vrqstp)
 {
 	struct svc_rqst *rqstp = (struct svc_rqst *) vrqstp;
+<<<<<<< HEAD
+=======
+	struct svc_xprt *perm_sock = list_entry(rqstp->rq_server->sv_permsocks.next, typeof(struct svc_xprt), xpt_list);
+	struct net *net = perm_sock->xpt_net;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int err, preverr = 0;
 
 	/* Lock module and set up kernel thread */
@@ -547,9 +633,19 @@ nfsd(void *vrqstp)
 	nfsdstats.th_cnt --;
 
 out:
+<<<<<<< HEAD
 	/* Release the thread */
 	svc_exit_thread(rqstp);
 
+=======
+	rqstp->rq_server = NULL;
+
+	/* Release the thread */
+	svc_exit_thread(rqstp);
+
+	nfsd_destroy(net);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Release module */
 	mutex_unlock(&nfsd_mutex);
 	module_put_and_exit(0);
@@ -637,7 +733,11 @@ nfsd_dispatch(struct svc_rqst *rqstp, __be32 *statp)
 	}
 
 	/* Store reply in cache. */
+<<<<<<< HEAD
 	nfsd_cache_update(rqstp, proc->pc_cachetype, statp + 1);
+=======
+	nfsd_cache_update(rqstp, rqstp->rq_cachetype, statp + 1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 1;
 }
 
@@ -659,9 +759,17 @@ int nfsd_pool_stats_open(struct inode *inode, struct file *file)
 int nfsd_pool_stats_release(struct inode *inode, struct file *file)
 {
 	int ret = seq_release(inode, file);
+<<<<<<< HEAD
 	mutex_lock(&nfsd_mutex);
 	/* this function really, really should have been called svc_put() */
 	svc_destroy(nfsd_serv);
+=======
+	struct net *net = inode->i_sb->s_fs_info;
+
+	mutex_lock(&nfsd_mutex);
+	/* this function really, really should have been called svc_put() */
+	nfsd_destroy(net);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_unlock(&nfsd_mutex);
 	return ret;
 }

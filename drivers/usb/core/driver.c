@@ -911,8 +911,12 @@ EXPORT_SYMBOL_GPL(usb_deregister);
  * it doesn't support pre_reset/post_reset/reset_resume or
  * because it doesn't support suspend/resume.
  *
+<<<<<<< HEAD
  * The caller must hold @intf's device's lock, but not its pm_mutex
  * and not @intf->dev.sem.
+=======
+ * The caller must hold @intf's device's lock, but not @intf's lock.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 void usb_forced_unbind_intf(struct usb_interface *intf)
 {
@@ -925,16 +929,49 @@ void usb_forced_unbind_intf(struct usb_interface *intf)
 	intf->needs_binding = 1;
 }
 
+<<<<<<< HEAD
 /* Delayed forced unbinding of a USB interface driver and scan
  * for rebinding.
  *
  * The caller must hold @intf's device's lock, but not its pm_mutex
  * and not @intf->dev.sem.
+=======
+/*
+ * Unbind drivers for @udev's marked interfaces.  These interfaces have
+ * the needs_binding flag set, for example by usb_resume_interface().
+ *
+ * The caller must hold @udev's device lock.
+ */
+static void unbind_marked_interfaces(struct usb_device *udev)
+{
+	struct usb_host_config	*config;
+	int			i;
+	struct usb_interface	*intf;
+
+	config = udev->actconfig;
+	if (config) {
+		for (i = 0; i < config->desc.bNumInterfaces; ++i) {
+			intf = config->interface[i];
+			if (intf->dev.driver && intf->needs_binding)
+				usb_forced_unbind_intf(intf);
+		}
+	}
+}
+
+/* Delayed forced unbinding of a USB interface driver and scan
+ * for rebinding.
+ *
+ * The caller must hold @intf's device's lock, but not @intf's lock.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Note: Rebinds will be skipped if a system sleep transition is in
  * progress and the PM "complete" callback hasn't occurred yet.
  */
+<<<<<<< HEAD
 void usb_rebind_intf(struct usb_interface *intf)
+=======
+static void usb_rebind_intf(struct usb_interface *intf)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int rc;
 
@@ -951,6 +988,7 @@ void usb_rebind_intf(struct usb_interface *intf)
 	}
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 
 /* Unbind drivers for @udev's interfaces that don't support suspend/resume
@@ -960,26 +998,44 @@ void usb_rebind_intf(struct usb_interface *intf)
  * The caller must hold @udev's device lock.
  */
 static void unbind_no_pm_drivers_interfaces(struct usb_device *udev)
+=======
+/*
+ * Rebind drivers to @udev's marked interfaces.  These interfaces have
+ * the needs_binding flag set.
+ *
+ * The caller must hold @udev's device lock.
+ */
+static void rebind_marked_interfaces(struct usb_device *udev)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct usb_host_config	*config;
 	int			i;
 	struct usb_interface	*intf;
+<<<<<<< HEAD
 	struct usb_driver	*drv;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	config = udev->actconfig;
 	if (config) {
 		for (i = 0; i < config->desc.bNumInterfaces; ++i) {
 			intf = config->interface[i];
+<<<<<<< HEAD
 
 			if (intf->dev.driver) {
 				drv = to_usb_driver(intf->dev.driver);
 				if (!drv->suspend || !drv->resume)
 					usb_forced_unbind_intf(intf);
 			}
+=======
+			if (intf->needs_binding)
+				usb_rebind_intf(intf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 }
 
+<<<<<<< HEAD
 /* Unbind drivers for @udev's interfaces that failed to support reset-resume.
  * These interfaces have the needs_binding flag set by usb_resume_interface().
  *
@@ -1002,17 +1058,54 @@ static void unbind_no_reset_resume_drivers_interfaces(struct usb_device *udev)
 }
 
 static void do_rebind_interfaces(struct usb_device *udev)
+=======
+/*
+ * Unbind all of @udev's marked interfaces and then rebind all of them.
+ * This ordering is necessary because some drivers claim several interfaces
+ * when they are first probed.
+ *
+ * The caller must hold @udev's device lock.
+ */
+void usb_unbind_and_rebind_marked_interfaces(struct usb_device *udev)
+{
+	unbind_marked_interfaces(udev);
+	rebind_marked_interfaces(udev);
+}
+
+#ifdef CONFIG_PM
+
+/* Unbind drivers for @udev's interfaces that don't support suspend/resume
+ * There is no check for reset_resume here because it can be determined
+ * only during resume whether reset_resume is needed.
+ *
+ * The caller must hold @udev's device lock.
+ */
+static void unbind_no_pm_drivers_interfaces(struct usb_device *udev)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct usb_host_config	*config;
 	int			i;
 	struct usb_interface	*intf;
+<<<<<<< HEAD
+=======
+	struct usb_driver	*drv;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	config = udev->actconfig;
 	if (config) {
 		for (i = 0; i < config->desc.bNumInterfaces; ++i) {
 			intf = config->interface[i];
+<<<<<<< HEAD
 			if (intf->needs_binding)
 				usb_rebind_intf(intf);
+=======
+
+			if (intf->dev.driver) {
+				drv = to_usb_driver(intf->dev.driver);
+				if (!drv->suspend || !drv->resume)
+					usb_forced_unbind_intf(intf);
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 }
@@ -1390,7 +1483,11 @@ int usb_resume_complete(struct device *dev)
 	 * whose needs_binding flag is set
 	 */
 	if (udev->state != USB_STATE_NOTATTACHED)
+<<<<<<< HEAD
 		do_rebind_interfaces(udev);
+=======
+		rebind_marked_interfaces(udev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 
@@ -1421,7 +1518,11 @@ int usb_resume(struct device *dev, pm_message_t msg)
 		pm_runtime_disable(dev);
 		pm_runtime_set_active(dev);
 		pm_runtime_enable(dev);
+<<<<<<< HEAD
 		unbind_no_reset_resume_drivers_interfaces(udev);
+=======
+		unbind_marked_interfaces(udev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* Avoid PM error messages for devices disconnected while suspended
@@ -1734,6 +1835,21 @@ static int autosuspend_check(struct usb_device *udev)
 		dev_dbg(&udev->dev, "remote wakeup needed for autosuspend\n");
 		return -EOPNOTSUPP;
 	}
+<<<<<<< HEAD
+=======
+
+	/*
+	 * If the device is a direct child of the root hub and the HCD
+	 * doesn't handle wakeup requests, don't allow autosuspend when
+	 * wakeup is needed.
+	 */
+	if (w && udev->parent == udev->bus->root_hub &&
+			bus_to_hcd(udev->bus)->cant_recv_wakeups) {
+		dev_dbg(&udev->dev, "HCD doesn't handle wakeup requests\n");
+		return -EOPNOTSUPP;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	udev->do_remote_wakeup = w;
 	return 0;
 }

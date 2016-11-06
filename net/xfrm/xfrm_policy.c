@@ -1761,7 +1761,11 @@ static struct dst_entry *make_blackhole(struct net *net, u16 family,
 
 	if (!afinfo) {
 		dst_release(dst_orig);
+<<<<<<< HEAD
 		ret = ERR_PTR(-EINVAL);
+=======
+		return ERR_PTR(-EINVAL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		ret = afinfo->blackhole_route(net, dst_orig);
 	}

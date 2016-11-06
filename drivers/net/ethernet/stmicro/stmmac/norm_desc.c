@@ -126,6 +126,10 @@ static void ndesc_init_rx_desc(struct dma_desc *p, unsigned int ring_size,
 {
 	int i;
 	for (i = 0; i < ring_size; i++) {
+<<<<<<< HEAD
+=======
+		p->des01.all_flags = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		p->des01.rx.own = 1;
 		p->des01.rx.buffer1_size = BUF_SIZE_2KiB - 1;
 
@@ -141,7 +145,11 @@ static void ndesc_init_tx_desc(struct dma_desc *p, unsigned int ring_size)
 {
 	int i;
 	for (i = 0; i < ring_size; i++) {
+<<<<<<< HEAD
 		p->des01.tx.own = 0;
+=======
+		p->des01.all_flags = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ndesc_tx_set_on_ring_chain(p, (i == (ring_size - 1)));
 		p++;
 	}
@@ -164,6 +172,10 @@ static void ndesc_set_tx_owner(struct dma_desc *p)
 
 static void ndesc_set_rx_owner(struct dma_desc *p)
 {
+<<<<<<< HEAD
+=======
+	p->des01.all_flags = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	p->des01.rx.own = 1;
 }
 

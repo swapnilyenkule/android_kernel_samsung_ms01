@@ -1,13 +1,26 @@
 # Android makefile for the WLAN Module
 
+<<<<<<< HEAD
 # Build/Package options for 8960 target
 ifeq ($(call is-board-platform,msm8960),true)
+=======
+# Assume no targets will be supported
+WLAN_CHIPSET :=
+
+# Build/Package options for 8960 target
+ifeq ($(TARGET_BOARD_PLATFORM),msm8960)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 WLAN_CHIPSET := prima
 WLAN_SELECT := CONFIG_PRIMA_WLAN=m
 endif
 
+<<<<<<< HEAD
 # Build/Package options for 8974, 8226, 8610 targets
 ifeq ($(call is-board-platform-in-list,msm8974 msm8226 msm8610),true)
+=======
+# Build/Package options for 8916, 8974, 8226, 8610, 8909 targets
+ifneq (,$(filter msm8916 msm8974 msm8226 msm8610 msm8909,$(TARGET_BOARD_PLATFORM)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 WLAN_CHIPSET := pronto
 WLAN_SELECT := CONFIG_PRONTO_WLAN=m
 endif
@@ -34,14 +47,30 @@ else
 endif
 
 # DLKM_DIR was moved for JELLY_BEAN (PLATFORM_SDK 16)
+<<<<<<< HEAD
 ifeq ($(call is-platform-sdk-version-at-least,16),true)
+=======
+ifeq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 16 ))" )))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
        DLKM_DIR := $(TOP)/device/qcom/common/dlkm
 else
        DLKM_DIR := build/dlkm
 endif
 
+<<<<<<< HEAD
 ifeq ($(WLAN_PROPRIETARY),1)
 # For the proprietary driver the firmware files are handled here
+=======
+# Copy WCNSS_cfg.dat file from firmware_bin/ folder to target out directory.
+ifeq ($(WLAN_PROPRIETARY),0)
+
+$(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima)
+$(shell rm -f $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_cfg.dat)
+$(shell cp $(LOCAL_PATH)/firmware_bin/WCNSS_cfg.dat $(TARGET_OUT_ETC)/firmware/wlan/prima)
+
+else
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 include $(CLEAR_VARS)
 LOCAL_MODULE       := WCNSS_qcom_wlan_nv.bin
 LOCAL_MODULE_TAGS  := optional
@@ -99,6 +128,7 @@ $(shell mkdir -p $(TARGET_OUT)/lib/modules; \
         ln -sf /system/lib/modules/$(WLAN_CHIPSET)/$(WLAN_CHIPSET)_wlan.ko \
                $(TARGET_OUT)/lib/modules/wlan.ko)
 
+<<<<<<< HEAD
 ifeq ($(WLAN_PROPRIETARY),1)
 $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
         ln -sf /persist/WCNSS_qcom_wlan_nv.bin \
@@ -107,6 +137,8 @@ $(shell mkdir -p $(TARGET_OUT_ETC)/firmware/wlan/prima; \
         $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 endif
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 endif # DLKM check
 
 endif # supported target check

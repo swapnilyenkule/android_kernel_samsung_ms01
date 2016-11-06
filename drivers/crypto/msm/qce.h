@@ -1,6 +1,10 @@
 /* Qualcomm Crypto Engine driver API
  *
+<<<<<<< HEAD
  * Copyright (c) 2010-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2010-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -116,6 +120,17 @@ struct ce_hw_support {
 	bool bam;
 	bool is_shared;
 	bool hw_key;
+<<<<<<< HEAD
+=======
+	bool use_sw_aes_cbc_ecb_ctr_algo;
+	bool use_sw_aead_algo;
+	bool use_sw_aes_xts_algo;
+	bool use_sw_ahash_algo;
+	bool use_sw_hmac_algo;
+	bool use_sw_aes_ccm_algo;
+	bool clk_mgmt_sus_res;
+	unsigned int ce_device;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /* Sha operation parameters */
@@ -158,6 +173,16 @@ struct qce_req {
 	unsigned int  flags;
 };
 
+<<<<<<< HEAD
+=======
+struct qce_pm_table {
+	int (*suspend)(void *handle);
+	int (*resume)(void *handle);
+};
+
+extern struct qce_pm_table qce_pm_table;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void *qce_open(struct platform_device *pdev, int *rc);
 int qce_close(void *handle);
 int qce_aead_req(void *handle, struct qce_req *req);

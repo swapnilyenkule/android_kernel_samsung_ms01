@@ -50,7 +50,11 @@ find_acceptable_alias(struct dentry *result,
 
 	inode = result->d_inode;
 	spin_lock(&inode->i_lock);
+<<<<<<< HEAD
 	list_for_each_entry(dentry, &inode->i_dentry, d_alias) {
+=======
+	list_for_each_entry(dentry, &inode->i_dentry, d_u.d_alias) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dget(dentry);
 		spin_unlock(&inode->i_lock);
 		if (toput)

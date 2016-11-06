@@ -19,7 +19,11 @@
 		interrupts = <0 72 0>;
 		vdd-supply = <&gdsc_mdss>;
 
+<<<<<<< HEAD
 		qcom,max-bandwidth-low-kbps = <1100000>;
+=======
+		qcom,max-bandwidth-low-kbps = <1660000>;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		qcom,max-bandwidth-high-kbps = <1660000>;
 		qcom,max-clk-rate = <200000000>;
 		qcom,mdss-pipe-vig-off = <0x00001200>;
@@ -38,8 +42,12 @@
 		qcom,mdss-wb-off = <0x00011100 0x00013100>;
 		qcom,mdss-intf-off = <0x00000000 0x00021300>;
 		qcom,mdss-rot-block-size = <64>;
+<<<<<<< HEAD
 		qcom,mdss-rotator-ot-limit = <2>;
 		qcom,mdss-smp-mb-per-pipe = <3>;
+=======
+		qcom,mdss-smp-mb-per-pipe = <4>;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		vdd-cx-supply = <&pm8226_s1_corner>;
 
 		qcom,vbif-settings = <0x004 0x00000001>,
@@ -47,6 +55,7 @@
 				     <0x124 0x00000003>,
 				     <0x0C0 0x02101010>;
 		qcom,mdp-settings = <0x02E0 0x000000A5>,
+<<<<<<< HEAD
 				    <0x02E4 0x00000055>,
 				    <0x03AC 0xC0000CCC>,
 				    <0x03B4 0xC0000000>,
@@ -54,12 +63,18 @@
 				    <0x04A8 0x0CCCC000>,
 				    <0x04B0 0xC0000000>,
 				    <0x04B8 0xC0000000>;
+=======
+				    <0x02E4 0x00000055>;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		mdss_fb0: qcom,mdss_fb_primary {
 			cell-index = <0>;
 			compatible = "qcom,mdss-fb";
+<<<<<<< HEAD
 			qcom,memory-reservation-type = "EBI1";
 			qcom,memory-reservation-size = <0x800000>;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			qcom,memblock-reserve = <0x03200000 0xFA0000>;
 		};
 

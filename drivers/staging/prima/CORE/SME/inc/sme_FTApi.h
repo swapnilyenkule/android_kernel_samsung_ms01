@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2013-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -41,6 +46,15 @@
 
 
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #if !defined( __SME_FTAPI_H )
 #define __SME_FTAPI_H
 
@@ -51,10 +65,13 @@
   
   \brief macros and prototype for SME APIs
   
+<<<<<<< HEAD
    Copyright 2008 (c) Qualcomm Technologies, Inc.  All Rights Reserved.
    
    Qualcomm Technologies Confidential and Proprietary.
   
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   ========================================================================*/
 typedef enum eFTIEState
 {
@@ -91,6 +108,10 @@ typedef struct sFTSMEContext
     vos_timer_t       preAuthReassocIntvlTimer;
     tCsrRoamSetKey    *pCsrFTKeyInfo;
 
+<<<<<<< HEAD
+=======
+    v_BOOL_t          addMDIE;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } tftSMEContext, *tpftSMEContext;
 
 /*--------------------------------------------------------------------------
@@ -108,6 +129,13 @@ void sme_SetFTPreAuthState(tHalHandle hHal, v_BOOL_t state);
 v_BOOL_t sme_GetFTPreAuthState(tHalHandle hHal);
 v_BOOL_t sme_GetFTPTKState(tHalHandle hHal);
 void sme_SetFTPTKState(tHalHandle hHal, v_BOOL_t state);
+<<<<<<< HEAD
+=======
+#if defined(WLAN_FEATURE_VOWIFI_11R)
+void sme_FTReset(tHalHandle hHal);
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 
 #endif //#if !defined( __SME_FTAPI_H )

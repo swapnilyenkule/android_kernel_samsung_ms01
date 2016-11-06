@@ -205,6 +205,11 @@ static inline int sctp_cacc_skip(struct sctp_transport *primary,
  */
 void sctp_outq_init(struct sctp_association *asoc, struct sctp_outq *q)
 {
+<<<<<<< HEAD
+=======
+	memset(q, 0, sizeof(struct sctp_outq));
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	q->asoc = asoc;
 	INIT_LIST_HEAD(&q->out_chunk_list);
 	INIT_LIST_HEAD(&q->control_chunk_list);
@@ -212,6 +217,7 @@ void sctp_outq_init(struct sctp_association *asoc, struct sctp_outq *q)
 	INIT_LIST_HEAD(&q->sacked);
 	INIT_LIST_HEAD(&q->abandoned);
 
+<<<<<<< HEAD
 	q->fast_rtx = 0;
 	q->outstanding_bytes = 0;
 	q->empty = 1;
@@ -219,11 +225,18 @@ void sctp_outq_init(struct sctp_association *asoc, struct sctp_outq *q)
 
 	q->malloced = 0;
 	q->out_qlen = 0;
+=======
+	q->empty = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* Free the outqueue structure and any related pending chunks.
  */
+<<<<<<< HEAD
 void sctp_outq_teardown(struct sctp_outq *q)
+=======
+static void __sctp_outq_teardown(struct sctp_outq *q)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct sctp_transport *transport;
 	struct list_head *lchunk, *temp;
@@ -276,8 +289,11 @@ void sctp_outq_teardown(struct sctp_outq *q)
 		sctp_chunk_free(chunk);
 	}
 
+<<<<<<< HEAD
 	q->error = 0;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Throw away any leftover control chunks. */
 	list_for_each_entry_safe(chunk, tmp, &q->control_chunk_list, list) {
 		list_del_init(&chunk->list);
@@ -285,11 +301,24 @@ void sctp_outq_teardown(struct sctp_outq *q)
 	}
 }
 
+<<<<<<< HEAD
+=======
+void sctp_outq_teardown(struct sctp_outq *q)
+{
+	__sctp_outq_teardown(q);
+	sctp_outq_init(q->asoc, q);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Free the outqueue structure and any related pending chunks.  */
 void sctp_outq_free(struct sctp_outq *q)
 {
 	/* Throw away leftover chunks. */
+<<<<<<< HEAD
 	sctp_outq_teardown(q);
+=======
+	__sctp_outq_teardown(q);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* If we were kmalloc()'d, free the memory.  */
 	if (q->malloced)

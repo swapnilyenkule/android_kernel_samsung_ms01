@@ -515,7 +515,12 @@ static void fuse_read_update_size(struct inode *inode, loff_t size,
 	struct fuse_inode *fi = get_fuse_inode(inode);
 
 	spin_lock(&fc->lock);
+<<<<<<< HEAD
 	if (attr_ver == fi->attr_version && size < inode->i_size) {
+=======
+	if (attr_ver == fi->attr_version && size < inode->i_size &&
+	    !test_bit(FUSE_I_SIZE_UNSTABLE, &fi->state)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		fi->attr_version = ++fc->attr_version;
 		i_size_write(inode, size);
 	}
@@ -692,6 +697,11 @@ static int fuse_readpages_fill(void *_data, struct page *page)
 		lock_page(newpage);
 		put_page(newpage);
 
+<<<<<<< HEAD
+=======
+		lru_cache_add_file(newpage);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* finally release the old page and swap pointers */
 		unlock_page(oldpage);
 		page_cache_release(oldpage);
@@ -913,12 +923,22 @@ static ssize_t fuse_perform_write(struct file *file,
 {
 	struct inode *inode = mapping->host;
 	struct fuse_conn *fc = get_fuse_conn(inode);
+<<<<<<< HEAD
+=======
+	struct fuse_inode *fi = get_fuse_inode(inode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int err = 0;
 	ssize_t res = 0;
 
 	if (is_bad_inode(inode))
 		return -EIO;
 
+<<<<<<< HEAD
+=======
+	if (inode->i_size < pos + iov_iter_count(ii))
+		set_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	do {
 		struct fuse_req *req;
 		ssize_t count;
@@ -953,6 +973,10 @@ static ssize_t fuse_perform_write(struct file *file,
 	if (res > 0)
 		fuse_write_update_size(inode, pos);
 
+<<<<<<< HEAD
+=======
+	clear_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fuse_invalidate_attr(inode);
 
 	return res > 0 ? res : err;
@@ -998,9 +1022,13 @@ static ssize_t fuse_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 	if (err)
 		goto out;
 
+<<<<<<< HEAD
 	err = file_update_time(file);
 	if (err)
 		goto out;
+=======
+	file_update_time(file);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (file->f_flags & O_DIRECT) {
 		written = generic_file_direct_write(iocb, iov, &nr_segs,
@@ -1332,7 +1360,10 @@ static int fuse_writepage_locked(struct page *page)
 
 	inc_bdi_stat(mapping->backing_dev_info, BDI_WRITEBACK);
 	inc_zone_page_state(tmp_page, NR_WRITEBACK_TEMP);
+<<<<<<< HEAD
 	end_page_writeback(page);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	spin_lock(&fc->lock);
 	list_add(&req->writepages_entry, &fi->writepages);
@@ -1340,6 +1371,11 @@ static int fuse_writepage_locked(struct page *page)
 	fuse_flush_writepages(inode);
 	spin_unlock(&fc->lock);
 
+<<<<<<< HEAD
+=======
+	end_page_writeback(page);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 
 err_free:
@@ -1736,7 +1772,11 @@ static int fuse_verify_ioctl_iov(struct iovec *iov, size_t count)
 	size_t n;
 	u32 max = FUSE_MAX_PAGES_PER_REQ << PAGE_SHIFT;
 
+<<<<<<< HEAD
 	for (n = 0; n < count; n++) {
+=======
+	for (n = 0; n < count; n++, iov++) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (iov->iov_len > (size_t) max)
 			return -ENOMEM;
 		max -= iov->iov_len;

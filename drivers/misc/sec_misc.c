@@ -63,7 +63,11 @@ static struct miscdevice sec_misc_device = {
 static ssize_t emmc_checksum_done_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	return sprintf(buf, "%d\n", emmc_checksum_done);
+=======
+	return snprintf(buf, sizeof(buf), "%d\n", emmc_checksum_done);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t emmc_checksum_done_store(struct device *dev,
@@ -84,7 +88,11 @@ static DEVICE_ATTR(emmc_checksum_done, S_IRUGO | S_IWUSR ,
 static ssize_t emmc_checksum_pass_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	return sprintf(buf, "%d\n", emmc_checksum_pass);
+=======
+	return snprintf(buf, sizeof(buf), "%d\n", emmc_checksum_pass);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t emmc_checksum_pass_store(struct device *dev,
@@ -112,7 +120,11 @@ static ssize_t rory_control_show(struct device *dev,
 
 	sec_get_param(param_rory_control, &rory_control);
 
+<<<<<<< HEAD
 	return sprintf(buf, "%d\n", rory_control);
+=======
+	return snprintf(buf, sizeof(buf), "%d\n", rory_control);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t rory_control_store(struct device *dev,
@@ -235,7 +247,11 @@ static ssize_t drop_caches_show
 	(struct device *dev, struct device_attribute *attr, char *buf)
 {
 	int ret = 0;
+<<<<<<< HEAD
 	return sprintf(buf, "%d\n", ret);
+=======
+	return snprintf(buf, sizeof(buf), "%d\n", ret);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t drop_caches_store
@@ -272,6 +288,7 @@ static DEVICE_ATTR(drop_caches, S_IRUGO | S_IWUSR | S_IWGRP,\
  * End Drop Caches
  */
 
+<<<<<<< HEAD
 /*
  * For external CP download
  */
@@ -302,6 +319,38 @@ static DEVICE_ATTR(update_cp_bin, S_IRUGO | S_IWUSR | S_IWGRP,\
 #endif
 
 
+=======
+/*
+ * For external CP download
+ */
+#ifdef CONFIG_GSM_MODEM_SPRD6500
+static ssize_t update_cp_bin_show
+	(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	int update = 0;
+
+	sec_get_param(param_update_cp_bin, (void *)&update);
+
+	return snprintf(buf, sizeof(buf), "%d\n", update);
+}
+
+static ssize_t update_cp_bin_store
+	(struct device *dev, struct device_attribute *attr,\
+		const char *buf, size_t size)
+{
+	int update = 0;
+
+	sscanf(buf, "%i", &update);
+	sec_set_param(param_update_cp_bin, &update);
+
+	return size;
+}
+static DEVICE_ATTR(update_cp_bin, S_IRUGO | S_IWUSR | S_IWGRP,\
+			update_cp_bin_show, update_cp_bin_store);
+#endif
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct device *sec_misc_dev;
 
 static struct device_attribute *sec_misc_attrs[] = {

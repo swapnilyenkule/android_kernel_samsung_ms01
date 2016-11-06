@@ -67,6 +67,10 @@
 #define IXGBE_DEV_ID_82599_LS            0x154F
 #define IXGBE_DEV_ID_X540T               0x1528
 #define IXGBE_DEV_ID_82599_SFP_SF_QP     0x154A
+<<<<<<< HEAD
+=======
+#define IXGBE_DEV_ID_X540T1              0x1560
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* VF Device IDs */
 #define IXGBE_DEV_ID_82599_VF           0x10ED

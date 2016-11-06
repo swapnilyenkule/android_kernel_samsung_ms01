@@ -342,7 +342,13 @@ int ttm_bo_move_memcpy(struct ttm_buffer_object *bo,
 	if (old_iomap == NULL && ttm == NULL)
 		goto out2;
 
+<<<<<<< HEAD
 	if (ttm->state == tt_unpopulated) {
+=======
+	/* TTM might be null for moves within the same region.
+	 */
+	if (ttm && ttm->state == tt_unpopulated) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ret = ttm->bdev->driver->ttm_tt_populate(ttm);
 		if (ret)
 			goto out1;

@@ -182,7 +182,11 @@ TRACE_EVENT(sched_switch,
 		  __print_flags(__entry->prev_state & (TASK_STATE_MAX-1), "|",
 				{ 1, "S"} , { 2, "D" }, { 4, "T" }, { 8, "t" },
 				{ 16, "Z" }, { 32, "X" }, { 64, "x" },
+<<<<<<< HEAD
 				{ 128, "K" }, { 256, "W" }, { 512, "P" }) : "R",
+=======
+				{ 128, "W" }) : "R",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		__entry->prev_state & TASK_STATE_MAX ? "+" : "",
 		__entry->next_comm, __entry->next_pid, __entry->next_prio)
 );

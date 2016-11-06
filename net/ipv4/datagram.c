@@ -57,7 +57,11 @@ int ip4_datagram_connect(struct sock *sk, struct sockaddr *uaddr, int addr_len)
 	if (IS_ERR(rt)) {
 		err = PTR_ERR(rt);
 		if (err == -ENETUNREACH)
+<<<<<<< HEAD
 			IP_INC_STATS_BH(sock_net(sk), IPSTATS_MIB_OUTNOROUTES);
+=======
+			IP_INC_STATS(sock_net(sk), IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto out;
 	}
 

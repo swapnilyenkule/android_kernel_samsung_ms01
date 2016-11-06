@@ -1264,6 +1264,12 @@ int bnx2i_send_fw_iscsi_init_msg(struct bnx2i_hba *hba)
 	int rc = 0;
 	u64 mask64;
 
+<<<<<<< HEAD
+=======
+	memset(&iscsi_init, 0x00, sizeof(struct iscsi_kwqe_init1));
+	memset(&iscsi_init2, 0x00, sizeof(struct iscsi_kwqe_init2));
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	bnx2i_adjust_qp_size(hba);
 
 	iscsi_init.flags =

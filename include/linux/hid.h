@@ -420,10 +420,19 @@ struct hid_report {
 	struct hid_device *device;			/* associated device */
 };
 
+<<<<<<< HEAD
 struct hid_report_enum {
 	unsigned numbered;
 	struct list_head report_list;
 	struct hid_report *report_id_hash[256];
+=======
+#define HID_MAX_IDS 256
+
+struct hid_report_enum {
+	unsigned numbered;
+	struct list_head report_list;
+	struct hid_report *report_id_hash[HID_MAX_IDS];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 #define HID_REPORT_TYPES 3
@@ -480,7 +489,10 @@ struct hid_device {							/* device report descriptor */
 	enum hid_type type;						/* device type (mouse, kbd, ...) */
 	unsigned country;						/* HID country */
 	struct hid_report_enum report_enum[HID_REPORT_TYPES];
+<<<<<<< HEAD
 	struct work_struct led_work;					/* delayed LED worker */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	struct semaphore driver_lock;					/* protects the current driver */
 	struct device dev;						/* device */
@@ -741,6 +753,13 @@ void hid_output_report(struct hid_report *report, __u8 *data);
 struct hid_device *hid_allocate_device(void);
 struct hid_report *hid_register_report(struct hid_device *device, unsigned type, unsigned id);
 int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);
+<<<<<<< HEAD
+=======
+struct hid_report *hid_validate_values(struct hid_device *hid,
+				       unsigned int type, unsigned int id,
+				       unsigned int field_index,
+				       unsigned int report_counts);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int hid_check_keys_pressed(struct hid_device *hid);
 int hid_connect(struct hid_device *hid, unsigned int connect_mask);
 void hid_disconnect(struct hid_device *hid);
@@ -902,7 +921,11 @@ static inline int hid_hw_power(struct hid_device *hdev, int level)
 	return hdev->ll_driver->power ? hdev->ll_driver->power(hdev, level) : 0;
 }
 
+<<<<<<< HEAD
 void hid_report_raw_event(struct hid_device *hid, int type, u8 *data, int size,
+=======
+int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, int size,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		int interrupt);
 
 extern int hid_generic_init(void);

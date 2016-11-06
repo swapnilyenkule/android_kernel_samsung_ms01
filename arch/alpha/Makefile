@@ -12,7 +12,11 @@ NM := $(NM) -B
 
 LDFLAGS_vmlinux	:= -static -N #-relax
 CHECKFLAGS	+= -D__alpha__ -m64
+<<<<<<< HEAD
 cflags-y	:= -pipe -mno-fp-regs -ffixed-8 -msmall-data
+=======
+cflags-y	:= -pipe -mno-fp-regs -ffixed-8
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 cflags-y	+= $(call cc-option, -fno-jump-tables)
 
 cpuflags-$(CONFIG_ALPHA_EV4)		:= -mcpu=ev4

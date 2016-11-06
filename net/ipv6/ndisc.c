@@ -441,7 +441,10 @@ struct sk_buff *ndisc_build_skb(struct net_device *dev,
 	int hlen = LL_RESERVED_SPACE(dev);
 	int tlen = dev->needed_tailroom;
 	int len;
+<<<<<<< HEAD
 	int err;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u8 *opt;
 
 	if (!dev->addr_len)
@@ -451,6 +454,7 @@ struct sk_buff *ndisc_build_skb(struct net_device *dev,
 	if (llinfo)
 		len += ndisc_opt_addr_space(dev);
 
+<<<<<<< HEAD
 	skb = sock_alloc_send_skb(sk,
 				  (MAX_HEADER + sizeof(struct ipv6hdr) +
 				   len + hlen + tlen),
@@ -459,6 +463,14 @@ struct sk_buff *ndisc_build_skb(struct net_device *dev,
 		ND_PRINTK0(KERN_ERR
 			   "ICMPv6 ND: %s() failed to allocate an skb, err=%d.\n",
 			   __func__, err);
+=======
+	skb = alloc_skb((MAX_HEADER + sizeof(struct ipv6hdr) +
+			 len + hlen + tlen), GFP_ATOMIC);
+	if (!skb) {
+		ND_PRINTK0(KERN_ERR
+			   "ICMPv6 ND: %s() failed to allocate an skb.\n",
+			   __func__);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return NULL;
 	}
 
@@ -486,6 +498,14 @@ struct sk_buff *ndisc_build_skb(struct net_device *dev,
 					   csum_partial(hdr,
 							len, 0));
 
+<<<<<<< HEAD
+=======
+	/* Manually assign socket ownership as we avoid calling
+	 * sock_alloc_send_pskb() to bypass wmem buffer limits
+	 */
+	skb_set_owner_w(skb, sk);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return skb;
 }
 
@@ -593,7 +613,11 @@ static void ndisc_send_unsol_na(struct net_device *dev)
 {
 	struct inet6_dev *idev;
 	struct inet6_ifaddr *ifa;
+<<<<<<< HEAD
 	struct in6_addr mcaddr;
+=======
+	struct in6_addr mcaddr = IN6ADDR_LINKLOCAL_ALLNODES_INIT;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	idev = in6_dev_get(dev);
 	if (!idev)
@@ -601,7 +625,10 @@ static void ndisc_send_unsol_na(struct net_device *dev)
 
 	read_lock_bh(&idev->lock);
 	list_for_each_entry(ifa, &idev->addr_list, if_list) {
+<<<<<<< HEAD
 		addrconf_addr_solict_mult(&ifa->addr, &mcaddr);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ndisc_send_na(dev, NULL, &mcaddr, &ifa->addr,
 			      /*router=*/ !!idev->cnf.forwarding,
 			      /*solicited=*/ false, /*override=*/ true,
@@ -1272,7 +1299,12 @@ static void ndisc_router_discovery(struct sk_buff *skb)
 		if (in6_dev->cnf.hop_limit < ra_msg->icmph.icmp6_hop_limit) {
 			in6_dev->cnf.hop_limit = ra_msg->icmph.icmp6_hop_limit;
 		} else {
+<<<<<<< HEAD
 			ND_PRINTK2(KERN_WARNING "RA: Got route advertisement with lower hop_limit than current\n");
+=======
+			ND_PRINTK2(KERN_WARNING
+				   "RA: Got route advertisement with lower hop_limit than current\n");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 		if (rt)
 			dst_metric_set(&rt->dst, RTAX_HOPLIMIT,

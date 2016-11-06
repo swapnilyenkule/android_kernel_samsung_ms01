@@ -392,7 +392,11 @@ static int regcache_rbtree_sync(struct regmap *map, unsigned int min,
 			base = 0;
 
 		if (max < rbnode->base_reg + rbnode->blklen)
+<<<<<<< HEAD
 			end = rbnode->base_reg + rbnode->blklen - max;
+=======
+			end = max - rbnode->base_reg + 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		else
 			end = rbnode->blklen;
 

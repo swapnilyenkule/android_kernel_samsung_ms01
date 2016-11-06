@@ -99,7 +99,11 @@ unsigned long __init find_ibft_region(unsigned long *sizep)
 	/* iBFT 1.03 section 1.4.3.1 mandates that UEFI machines will
 	 * only use ACPI for this */
 
+<<<<<<< HEAD
 	if (!efi_enabled)
+=======
+	if (!efi_enabled(EFI_BOOT))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		find_ibft_in_mem();
 
 	if (ibft_addr) {

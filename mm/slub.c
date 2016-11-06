@@ -1388,7 +1388,11 @@ static struct page *new_slab(struct kmem_cache *s, gfp_t flags, int node)
 	setup_object(s, page, last);
 	set_freepointer(s, last, NULL);
 #ifdef CONFIG_TIMA_RKP_30
+<<<<<<< HEAD
 	tima_send_cmd3(page_to_phys(page), compound_order(page), 1, 0x3f826221);
+=======
+	tima_send_cmd3(page_to_phys(page), compound_order(page), 1, 0x26);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 	page->freelist = start;
 	page->inuse = page->objects;
@@ -1443,7 +1447,11 @@ static void rcu_free_slab(struct rcu_head *h)
 static void free_slab(struct kmem_cache *s, struct page *page)
 {
 #ifdef CONFIG_TIMA_RKP_30
+<<<<<<< HEAD
 	tima_send_cmd3(page_to_phys(page), compound_order(page), 0, 0x3f826221);
+=======
+	tima_send_cmd3(page_to_phys(page), compound_order(page), 0, 0x26);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 	if (unlikely(s->flags & SLAB_DESTROY_BY_RCU)) {
 		struct rcu_head *head;
@@ -1522,15 +1530,28 @@ static inline void *acquire_slab(struct kmem_cache *s,
 		freelist = page->freelist;
 		counters = page->counters;
 		new.counters = counters;
+<<<<<<< HEAD
 		if (mode)
 			new.inuse = page->objects;
+=======
+		if (mode) {
+			new.inuse = page->objects;
+			new.freelist = NULL;
+		} else {
+			new.freelist = freelist;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		VM_BUG_ON(new.frozen);
 		new.frozen = 1;
 
 	} while (!__cmpxchg_double_slab(s, page,
 			freelist, counters,
+<<<<<<< HEAD
 			NULL, new.counters,
+=======
+			new.freelist, new.counters,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			"lock and freeze"));
 
 	remove_partial(n, page);
@@ -1572,7 +1593,10 @@ static void *get_partial_node(struct kmem_cache *s,
 			object = t;
 			available =  page->objects - page->inuse;
 		} else {
+<<<<<<< HEAD
 			page->freelist = t;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			available = put_cpu_partial(s, page, 0);
 			stat(s, CPU_PARTIAL_NODE);
 		}
@@ -1622,7 +1646,11 @@ static struct page *get_any_partial(struct kmem_cache *s, gfp_t flags,
 
 	do {
 		cpuset_mems_cookie = get_mems_allowed();
+<<<<<<< HEAD
 		zonelist = node_zonelist(slab_node(current->mempolicy), flags);
+=======
+		zonelist = node_zonelist(slab_node(), flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		for_each_zone_zonelist(zone, z, zonelist, high_zoneidx) {
 			struct kmem_cache_node *n;
 
@@ -1887,18 +1915,37 @@ redo:
 /* Unfreeze all the cpu partial slabs */
 static void unfreeze_partials(struct kmem_cache *s)
 {
+<<<<<<< HEAD
 	struct kmem_cache_node *n = NULL;
+=======
+	struct kmem_cache_node *n = NULL, *n2 = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct kmem_cache_cpu *c = this_cpu_ptr(s->cpu_slab);
 	struct page *page, *discard_page = NULL;
 
 	while ((page = c->partial)) {
+<<<<<<< HEAD
 		enum slab_modes { M_PARTIAL, M_FREE };
 		enum slab_modes l, m;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		struct page new;
 		struct page old;
 
 		c->partial = page->next;
+<<<<<<< HEAD
 		l = M_FREE;
+=======
+
+		n2 = get_node(s, page_to_nid(page));
+		if (n != n2) {
+			if (n)
+				spin_unlock(&n->list_lock);
+
+			n = n2;
+			spin_lock(&n->list_lock);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		do {
 
@@ -1911,6 +1958,7 @@ static void unfreeze_partials(struct kmem_cache *s)
 
 			new.frozen = 0;
 
+<<<<<<< HEAD
 			if (!new.inuse && (!n || n->nr_partial > s->min_partial))
 				m = M_FREE;
 			else {
@@ -1940,14 +1988,25 @@ static void unfreeze_partials(struct kmem_cache *s)
 				l = m;
 			}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		} while (!cmpxchg_double_slab(s, page,
 				old.freelist, old.counters,
 				new.freelist, new.counters,
 				"unfreezing slab"));
 
+<<<<<<< HEAD
 		if (m == M_FREE) {
 			page->next = discard_page;
 			discard_page = page;
+=======
+		if (unlikely(!new.inuse && n->nr_partial > s->min_partial)) {
+			page->next = discard_page;
+			discard_page = page;
+		} else {
+			add_partial(n, page, DEACTIVATE_TO_TAIL);
+			stat(s, FREE_ADD_PARTIAL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 
@@ -4544,7 +4603,17 @@ static ssize_t show_slab_objects(struct kmem_cache *s,
 			page = c->partial;
 
 			if (page) {
+<<<<<<< HEAD
 				x = page->pobjects;
+=======
+				node = page_to_nid(page);
+				if (flags & SO_TOTAL)
+					WARN_ON_ONCE(1);
+				else if (flags & SO_OBJECTS)
+					WARN_ON_ONCE(1);
+				else
+					x = page->pages;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				total += x;
 				nodes[node] += x;
 			}

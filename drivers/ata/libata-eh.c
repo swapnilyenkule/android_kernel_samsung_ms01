@@ -1287,14 +1287,23 @@ void ata_eh_qc_complete(struct ata_queued_cmd *qc)
  *	should be retried.  To be used from EH.
  *
  *	SCSI midlayer limits the number of retries to scmd->allowed.
+<<<<<<< HEAD
  *	scmd->retries is decremented for commands which get retried
+=======
+ *	scmd->allowed is incremented for commands which get retried
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *	due to unrelated failures (qc->err_mask is zero).
  */
 void ata_eh_qc_retry(struct ata_queued_cmd *qc)
 {
 	struct scsi_cmnd *scmd = qc->scsicmd;
+<<<<<<< HEAD
 	if (!qc->err_mask && scmd->retries)
 		scmd->retries--;
+=======
+	if (!qc->err_mask)
+		scmd->allowed++;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	__ata_eh_qc_complete(qc);
 }
 
@@ -2600,6 +2609,10 @@ int ata_eh_reset(struct ata_link *link, int classify,
 		 * bus as we may be talking too fast.
 		 */
 		dev->pio_mode = XFER_PIO_0;
+<<<<<<< HEAD
+=======
+		dev->dma_mode = 0xff;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		/* If the controller has a pio mode setup function
 		 * then use it to set the chipset to rights. Don't
@@ -3423,6 +3436,12 @@ static int ata_eh_set_lpm(struct ata_link *link, enum ata_lpm_policy policy,
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	link->last_lpm_change = jiffies;
+	link->flags |= ATA_LFLAG_CHANGED;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 
 fail:

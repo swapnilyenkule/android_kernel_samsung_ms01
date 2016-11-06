@@ -1,7 +1,11 @@
 /*
  * BT-AMP support routines
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: dhd_bta.c 379512 2013-01-17 22:49:08Z $
+=======
+ * $Id: dhd_bta.c 434656 2013-11-07 01:11:33Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 #ifndef WLBTAMP
 #error "WLBTAMP is not defined"
@@ -101,7 +109,10 @@ dhd_bta_flush_hcidata(dhd_pub_t *pub, uint16 llh)
 			void *pkt = pktq_pdeq(q, prec);
 			int ifidx;
 
+<<<<<<< HEAD
 			PKTPULL(pub->osh, pkt, dhd_bus_hdrlen(pub->bus));
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			dhd_prot_hdrpull(pub, &ifidx, pkt, NULL, NULL);
 
 			if (PKTLEN(pub->osh, pkt) >= RFC1042_HDR_LEN) {
@@ -129,7 +140,10 @@ dhd_bta_flush_hcidata(dhd_pub_t *pub, uint16 llh)
 			}
 
 			dhd_prot_hdrpush(pub, ifidx, pkt);
+<<<<<<< HEAD
 			PKTPUSH(pub->osh, pkt, dhd_bus_hdrlen(pub->bus));
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 			if (head_pkt == NULL)
 				head_pkt = pkt;

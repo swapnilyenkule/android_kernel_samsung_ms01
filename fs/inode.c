@@ -168,6 +168,12 @@ int inode_init_always(struct super_block *sb, struct inode *inode)
 	mapping->assoc_mapping = NULL;
 	mapping->backing_dev_info = &default_backing_dev_info;
 	mapping->writeback_index = 0;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SDP
+	mapping->userid = 0;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * If the block_device provides a backing_dev_info for client
@@ -705,7 +711,11 @@ void prune_icache_sb(struct super_block *sb, int nr_to_scan)
 		 * inode to the back of the list so we don't spin on it.
 		 */
 		if (!spin_trylock(&inode->i_lock)) {
+<<<<<<< HEAD
 			list_move_tail(&inode->i_lru, &sb->s_inode_lru);
+=======
+			list_move(&inode->i_lru, &sb->s_inode_lru);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 		}
 
@@ -1480,6 +1490,7 @@ static int relatime_need_update(struct vfsmount *mnt, struct inode *inode,
 	return 0;
 }
 
+<<<<<<< HEAD
 /*
  * This does the actual work of updating an inodes time or version.  Must have
  * had called mnt_want_write() before calling this.
@@ -1501,6 +1512,8 @@ static int update_time(struct inode *inode, struct timespec *time, int flags)
 	return 0;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**
  *	touch_atime	-	update the access time
  *	@mnt: mount the inode is accessed on
@@ -1539,6 +1552,7 @@ void touch_atime(struct path *path)
 	if (mnt_want_write(mnt))
 		return;
 
+<<<<<<< HEAD
 	/*
 	 * File systems can error out when updating inodes if they need to
 	 * allocate new space to modify an inode (such is the case for
@@ -1547,6 +1561,10 @@ void touch_atime(struct path *path)
 	 * so just ignore the return value.
 	 */
 	update_time(inode, &now, S_ATIME);
+=======
+	inode->i_atime = now;
+	mark_inode_dirty_sync(inode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mnt_drop_write(mnt);
 }
 EXPORT_SYMBOL(touch_atime);
@@ -1560,6 +1578,7 @@ EXPORT_SYMBOL(touch_atime);
  *	usage in the file write path of filesystems, and filesystems may
  *	choose to explicitly ignore update via this function with the
  *	S_NOCMTIME inode flag, e.g. for network filesystem where these
+<<<<<<< HEAD
  *	timestamps are handled by the server.  This can return an error for
  *	file systems who need to allocate space in order to update an inode.
  */
@@ -1574,6 +1593,20 @@ int file_update_time(struct file *file)
 	/* First try to exhaust all avenues to not sync */
 	if (IS_NOCMTIME(inode))
 		return 0;
+=======
+ *	timestamps are handled by the server.
+ */
+
+void file_update_time(struct file *file)
+{
+	struct inode *inode = file->f_path.dentry->d_inode;
+	struct timespec now;
+	enum { S_MTIME = 1, S_CTIME = 2, S_VERSION = 4 } sync_it = 0;
+
+	/* First try to exhaust all avenues to not sync */
+	if (IS_NOCMTIME(inode))
+		return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	now = current_fs_time(inode->i_sb);
 	if (!timespec_equal(&inode->i_mtime, &now))
@@ -1586,6 +1619,7 @@ int file_update_time(struct file *file)
 		sync_it |= S_VERSION;
 
 	if (!sync_it)
+<<<<<<< HEAD
 		return 0;
 
 	/* Finally allowed to write? Takes lock. */
@@ -1596,6 +1630,23 @@ int file_update_time(struct file *file)
 	mnt_drop_write_file(file);
 
 	return ret;
+=======
+		return;
+
+	/* Finally allowed to write? Takes lock. */
+	if (mnt_want_write_file(file))
+		return;
+
+	/* Only change inode inside the lock region */
+	if (sync_it & S_VERSION)
+		inode_inc_iversion(inode);
+	if (sync_it & S_CTIME)
+		inode->i_ctime = now;
+	if (sync_it & S_MTIME)
+		inode->i_mtime = now;
+	mark_inode_dirty_sync(inode);
+	mnt_drop_write_file(file);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 EXPORT_SYMBOL(file_update_time);
 

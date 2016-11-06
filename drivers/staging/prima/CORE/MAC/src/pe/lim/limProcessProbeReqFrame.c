@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -41,6 +46,16 @@
 
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limProcessProbeReqFrame.cc contains the code
  * for processing Probe Request Frame.
  * Author:        Chandra Modumudi
@@ -443,7 +458,12 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
                                   || (pMac->lim.gLimHalScanState != eLIM_HAL_IDLE_SCAN_STATE)))
         {
            limLog(pMac, LOG3,
+<<<<<<< HEAD
               FL("While GO is scanning, don't send probe response on diff channel"));
+=======
+              FL("While GO is scanning, don't send probe response"
+                 " on diff channel"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
            break;
         }
 
@@ -466,8 +486,14 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
             // Parse Probe Request frame
             if (sirConvertProbeReqFrame2Struct(pMac, pBody, frameLen, &probeReq)==eSIR_FAILURE)
             {
+<<<<<<< HEAD
                 PELOGW(limLog(pMac, LOGW, FL("Parse error ProbeRequest, length=%d, SA is:"), frameLen);)
                 limPrintMacAddr(pMac, pHdr->sa, LOGW);
+=======
+                PELOGW(limLog(pMac, LOGE, FL("Parse error ProbeRequest,"
+                " length=%d, SA is:" MAC_ADDRESS_STR),
+                 frameLen,MAC_ADDR_ARRAY(pHdr->sa));)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 pMac->sys.probeError++;
                 break;
             }
@@ -616,6 +642,13 @@ limProcessProbeReqFrame(tpAniSirGlobal pMac, tANI_U8 *pRxPacketInfo,tpPESession 
             else
             {
                 {
+<<<<<<< HEAD
+=======
+                    if ((VOS_P2P_GO_MODE == psessionEntry->pePersona) &&
+                                                        pMac->miracastVendorConfig)
+                        return;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                     // Broadcast SSID in the Probe Request.
                     // Reply with SSID we're configured with.
                     //Turn off the SSID length to 0 if hidden SSID feature is present
@@ -673,6 +706,7 @@ static void
 limIndicateProbeReqToHDD(tpAniSirGlobal pMac, tANI_U8 *pBd,
                          tpPESession psessionEntry)
 {
+<<<<<<< HEAD
     tpSirMacMgmtHdr     pHdr;
     tANI_U32            frameLen;
 
@@ -686,6 +720,13 @@ limIndicateProbeReqToHDD(tpAniSirGlobal pMac, tANI_U8 *pBd,
                (tANI_U8*)pHdr, (frameLen + sizeof(tSirMacMgmtHdr)), 
                psessionEntry->smeSessionId, WDA_GET_RX_CH(pBd),
                psessionEntry, 0);
+=======
+    limLog( pMac, LOG1, "Received a probe request frame");
+
+    //send the probe req to SME.
+    limSendSmeMgmtFrameInd( pMac, psessionEntry->smeSessionId, pBd,
+                            psessionEntry, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef WLAN_FEATURE_P2P_INTERNAL
     limSendP2PProbeResponse(pMac, pBd, psessionEntry);
 #endif

@@ -250,7 +250,11 @@ static void nuc900_nand_enable(struct nuc900_nand *nand)
 	val = __raw_readl(nand->reg + REG_FMICSR);
 
 	if (!(val & NAND_EN))
+<<<<<<< HEAD
 		__raw_writel(val | NAND_EN, REG_FMICSR);
+=======
+		__raw_writel(val | NAND_EN, nand->reg + REG_FMICSR);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	val = __raw_readl(nand->reg + REG_SMCSR);
 

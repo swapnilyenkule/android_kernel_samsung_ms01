@@ -1165,6 +1165,12 @@ static void x86_pmu_del(struct perf_event *event, int flags)
 	for (i = 0; i < cpuc->n_events; i++) {
 		if (event == cpuc->event_list[i]) {
 
+<<<<<<< HEAD
+=======
+			if (i >= cpuc->n_events - cpuc->n_added)
+				--cpuc->n_added;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (x86_pmu.put_event_constraints)
 				x86_pmu.put_event_constraints(cpuc, event);
 

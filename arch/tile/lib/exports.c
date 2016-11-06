@@ -90,4 +90,9 @@ uint64_t __ashrdi3(uint64_t, unsigned int);
 EXPORT_SYMBOL(__ashrdi3);
 uint64_t __ashldi3(uint64_t, unsigned int);
 EXPORT_SYMBOL(__ashldi3);
+<<<<<<< HEAD
+=======
+int __ffsdi2(uint64_t);
+EXPORT_SYMBOL(__ffsdi2);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif

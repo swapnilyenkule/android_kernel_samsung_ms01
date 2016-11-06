@@ -16,9 +16,19 @@
 	char *tmp;						\
 								\
 	tmp = kmalloc(sizeof(format) + max_alloc, GFP_ATOMIC);	\
+<<<<<<< HEAD
 	sprintf(tmp, format, param);				\
 	strcat(str, tmp);					\
 	kfree(tmp);						\
+=======
+	if (likely(tmp)) {					\
+		sprintf(tmp, format, param);			\
+		strcat(str, tmp);				\
+		kfree(tmp);					\
+	} else {						\
+		strcat(str, "kmalloc failure in SPRINTFCAT");	\
+	}							\
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void report_jump_idx(u32 status, char *outstr)

@@ -176,7 +176,11 @@
 #define X86_FEATURE_XSAVEOPT	(7*32+ 4) /* Optimized Xsave */
 #define X86_FEATURE_PLN		(7*32+ 5) /* Intel Power Limit Notification */
 #define X86_FEATURE_PTS		(7*32+ 6) /* Intel Package Thermal Status */
+<<<<<<< HEAD
 #define X86_FEATURE_DTS		(7*32+ 7) /* Digital Thermal Sensor */
+=======
+#define X86_FEATURE_DTHERM	(7*32+ 7) /* Digital Thermal Sensor */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define X86_FEATURE_HW_PSTATE	(7*32+ 8) /* AMD HW-PState */
 
 /* Virtualization flags: Linux defined, word 8 */
@@ -342,7 +346,11 @@ extern const char * const x86_power_flags[32];
 static __always_inline __pure bool __static_cpu_has(u16 bit)
 {
 #if __GNUC__ > 4 || __GNUC_MINOR__ >= 5
+<<<<<<< HEAD
 		asm goto("1: jmp %l[t_no]\n"
+=======
+		asm_volatile_goto("1: jmp %l[t_no]\n"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			 "2:\n"
 			 ".section .altinstructions,\"a\"\n"
 			 " .long 1b - .\n"

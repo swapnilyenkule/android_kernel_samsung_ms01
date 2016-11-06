@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -40,6 +45,15 @@
  */
 
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /** ------------------------------------------------------------------------- *
     ------------------------------------------------------------------------- *
 
@@ -51,8 +65,11 @@
 
     $Id$
 
+<<<<<<< HEAD
     Copyright (C) 2006 Airgo Networks, Incorporated
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    ========================================================================== */
 
@@ -234,7 +251,12 @@ typedef enum
     eHAL_STATUS_FT_PREAUTH_KEY_SUCCESS,
     eHAL_STATUS_FT_PREAUTH_KEY_FAILED,
 #endif
+<<<<<<< HEAD
 
+=======
+    //CMD not Queued in SME
+    eHAL_STATUS_CMD_NOT_QUEUED,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     // not a real status.  Just a way to mark the maximum in the enum.
     eHAL_STATUS_MAX
 

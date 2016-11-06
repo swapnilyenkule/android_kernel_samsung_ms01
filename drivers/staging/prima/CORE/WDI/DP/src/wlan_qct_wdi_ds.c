@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /**=========================================================================
@@ -142,8 +154,14 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
   wpt_uint8      ucSwFrameTXXlation;
   wpt_uint8      ucUP;
   wpt_uint8      ucTypeSubtype;
+<<<<<<< HEAD
   wpt_uint8      alignment;
   wpt_uint8      ucTxFlag;
+=======
+  wpt_uint8      isEapol;
+  wpt_uint8      alignment;
+  wpt_uint32     ucTxFlag;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   wpt_uint8      ucProtMgmtFrame;
   wpt_uint8*     pSTAMACAddress;
   wpt_uint8*     pAddr2MACAddress;
@@ -172,6 +190,10 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
   ucSwFrameTXXlation = pTxMetadata->fdisableFrmXlt;
   ucTypeSubtype = pTxMetadata->typeSubtype;
   ucUP = pTxMetadata->fUP;
+<<<<<<< HEAD
+=======
+  isEapol = pTxMetadata->isEapol;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   ucTxFlag = pTxMetadata->txFlags;
   ucProtMgmtFrame = pTxMetadata->fProtMgmtFrame;
   pSTAMACAddress = &(pTxMetadata->fSTAMACAddress[0]);
@@ -218,9 +240,19 @@ WDI_Status WDI_DS_TxPacket(void *pContext,
 
   alignment = 0;
   WDI_DS_PrepareBDHeader(pFrame, ucSwFrameTXXlation, alignment);
+<<<<<<< HEAD
 
   wdiStatus = WDI_FillTxBd(pContext, ucTypeSubtype, pSTAMACAddress, pAddr2MACAddress,
     &ucUP, 1, pvBDHeader, ucTxFlag /* No ACK */, ucProtMgmtFrame, 0, &staId);
+=======
+  if (pTxMetadata->isEapol)
+  {
+    WPAL_TRACE( eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_INFO,
+              "Packet Length is %d\n", pTxMetadata->fPktlen);
+  }
+  wdiStatus = WDI_FillTxBd(pContext, ucTypeSubtype, pSTAMACAddress, pAddr2MACAddress,
+    &ucUP, 1, pvBDHeader, ucTxFlag /* No ACK */, ucProtMgmtFrame, 0, isEapol, &staId);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   if(WDI_STATUS_SUCCESS != wdiStatus)
   {

@@ -9,6 +9,7 @@
  * get good packing density in that tree, so the index should be dense in
  * the low-order bits.
  *
+<<<<<<< HEAD
  * We arrange the `type' and `offset' fields so that `type' is at the five
  * high-order bits of the swp_entry_t and `offset' is right-aligned in the
  * remaining bits.
@@ -16,6 +17,17 @@
  * swp_entry_t's are *never* stored anywhere in their arch-dependent format.
  */
 #define SWP_TYPE_SHIFT(e)	(sizeof(e.val) * 8 - MAX_SWAPFILES_SHIFT)
+=======
+ * We arrange the `type' and `offset' fields so that `type' is at the seven
+ * high-order bits of the swp_entry_t and `offset' is right-aligned in the
+ * remaining bits.  Although `type' itself needs only five bits, we allow for
+ * shmem/tmpfs to shift it all up a further two bits: see swp_to_radix_entry().
+ *
+ * swp_entry_t's are *never* stored anywhere in their arch-dependent format.
+ */
+#define SWP_TYPE_SHIFT(e)	((sizeof(e.val) * 8) - \
+			(MAX_SWAPFILES_SHIFT + RADIX_TREE_EXCEPTIONAL_SHIFT))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define SWP_OFFSET_MASK(e)	((1UL << SWP_TYPE_SHIFT(e)) - 1)
 
 /*
@@ -135,6 +147,10 @@ static inline void make_migration_entry_read(swp_entry_t *entry)
 
 extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 					unsigned long address);
+<<<<<<< HEAD
+=======
+extern void migration_entry_wait_huge(struct mm_struct *mm, pte_t *pte);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #else
 
 #define make_migration_entry(page, write) swp_entry(0, 0)
@@ -146,6 +162,11 @@ static inline int is_migration_entry(swp_entry_t swp)
 static inline void make_migration_entry_read(swp_entry_t *entryp) { }
 static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 					 unsigned long address) { }
+<<<<<<< HEAD
+=======
+static inline void migration_entry_wait_huge(struct mm_struct *mm,
+					pte_t *pte) { }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline int is_write_migration_entry(swp_entry_t entry)
 {
 	return 0;

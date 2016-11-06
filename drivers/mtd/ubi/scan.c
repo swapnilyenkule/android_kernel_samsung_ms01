@@ -997,7 +997,11 @@ static int process_eb(struct ubi_device *ubi, struct ubi_scan_info *si,
 			return err;
 		goto adjust_mean_ec;
 	case UBI_IO_FF:
+<<<<<<< HEAD
 		if (ec_err)
+=======
+		if (ec_err || bitflips)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			err = add_to_list(si, pnum, ec, 1, &si->erase);
 		else
 			err = add_to_list(si, pnum, ec, 0, &si->free);

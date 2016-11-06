@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2011,2013-2015, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -371,7 +375,11 @@ void kgsl_gpummu_destroy_pagetable(struct kgsl_pagetable *pt)
 	kgsl_ptpool_free((struct kgsl_ptpool *)kgsl_driver.ptpool,
 				gpummu_pt->base.hostptr);
 
+<<<<<<< HEAD
 	kgsl_driver.stats.coherent -= KGSL_PAGETABLE_SIZE;
+=======
+	atomic_sub(KGSL_PAGETABLE_SIZE, &kgsl_driver.stats.coherent);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	kfree(gpummu_pt->tlbflushfilter.base);
 
@@ -469,8 +477,13 @@ static void *kgsl_gpummu_create_pagetable(void)
 	/* ptpool allocations are from coherent memory, so update the
 	   device statistics acordingly */
 
+<<<<<<< HEAD
 	KGSL_STATS_ADD(KGSL_PAGETABLE_SIZE, kgsl_driver.stats.coherent,
 		       kgsl_driver.stats.coherent_max);
+=======
+	KGSL_STATS_ADD(KGSL_PAGETABLE_SIZE, &kgsl_driver.stats.coherent,
+		       &kgsl_driver.stats.coherent_max);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return (void *)gpummu_pt;
 

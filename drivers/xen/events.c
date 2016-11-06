@@ -324,7 +324,11 @@ static void init_evtchn_cpu_bindings(void)
 
 	for_each_possible_cpu(i)
 		memset(per_cpu(cpu_evtchn_mask, i),
+<<<<<<< HEAD
 		       (i == 0) ? ~0 : 0, sizeof(*per_cpu(cpu_evtchn_mask, i)));
+=======
+		       (i == 0) ? ~0 : 0, NR_EVENT_CHANNELS/8);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline void clear_evtchn(int port)
@@ -563,8 +567,13 @@ static unsigned int __startup_pirq(unsigned int irq)
 	pirq_query_unmask(irq);
 
 	evtchn_to_irq[evtchn] = irq;
+<<<<<<< HEAD
 	bind_evtchn_to_cpu(evtchn, 0);
 	info->evtchn = evtchn;
+=======
+	info->evtchn = evtchn;
+	bind_evtchn_to_cpu(evtchn, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 out:
 	unmask_evtchn(evtchn);
@@ -611,7 +620,11 @@ static void disable_pirq(struct irq_data *data)
 	disable_dynirq(data);
 }
 
+<<<<<<< HEAD
 static int find_irq_by_gsi(unsigned gsi)
+=======
+int xen_irq_from_gsi(unsigned gsi)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct irq_info *info;
 
@@ -625,6 +638,10 @@ static int find_irq_by_gsi(unsigned gsi)
 
 	return -1;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(xen_irq_from_gsi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * Do not make any assumptions regarding the relationship between the
@@ -644,7 +661,11 @@ int xen_bind_pirq_gsi_to_irq(unsigned gsi,
 
 	mutex_lock(&irq_mapping_update_lock);
 
+<<<<<<< HEAD
 	irq = find_irq_by_gsi(gsi);
+=======
+	irq = xen_irq_from_gsi(gsi);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (irq != -1) {
 		printk(KERN_INFO "xen_map_pirq_gsi: returning irq %d for gsi %u\n",
 		       irq, gsi);
@@ -905,7 +926,11 @@ static int find_virq(unsigned int virq, unsigned int cpu)
 	return rc;
 }
 
+<<<<<<< HEAD
 int bind_virq_to_irq(unsigned int virq, unsigned int cpu)
+=======
+int bind_virq_to_irq(unsigned int virq, unsigned int cpu, bool percpu)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct evtchn_bind_virq bind_virq;
 	int evtchn, irq, ret;
@@ -919,8 +944,17 @@ int bind_virq_to_irq(unsigned int virq, unsigned int cpu)
 		if (irq == -1)
 			goto out;
 
+<<<<<<< HEAD
 		irq_set_chip_and_handler_name(irq, &xen_percpu_chip,
 					      handle_percpu_irq, "virq");
+=======
+		if (percpu)
+			irq_set_chip_and_handler_name(irq, &xen_percpu_chip,
+						      handle_percpu_irq, "virq");
+		else
+			irq_set_chip_and_handler_name(irq, &xen_dynamic_chip,
+						      handle_edge_irq, "virq");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		bind_virq.virq = virq;
 		bind_virq.vcpu = cpu;
@@ -1041,7 +1075,11 @@ int bind_virq_to_irqhandler(unsigned int virq, unsigned int cpu,
 {
 	int irq, retval;
 
+<<<<<<< HEAD
 	irq = bind_virq_to_irq(virq, cpu);
+=======
+	irq = bind_virq_to_irq(virq, cpu, irqflags & IRQF_PERCPU);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (irq < 0)
 		return irq;
 	retval = request_irq(irq, handler, irqflags, devname, dev_id);
@@ -1257,7 +1295,11 @@ static void __xen_evtchn_do_upcall(void)
 {
 	int start_word_idx, start_bit_idx;
 	int word_idx, bit_idx;
+<<<<<<< HEAD
 	int i;
+=======
+	int i, irq;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int cpu = get_cpu();
 	struct shared_info *s = HYPERVISOR_shared_info;
 	struct vcpu_info *vcpu_info = __this_cpu_read(xen_vcpu);
@@ -1265,6 +1307,11 @@ static void __xen_evtchn_do_upcall(void)
 
 	do {
 		unsigned long pending_words;
+<<<<<<< HEAD
+=======
+		unsigned long pending_bits;
+		struct irq_desc *desc;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		vcpu_info->evtchn_upcall_pending = 0;
 
@@ -1275,6 +1322,20 @@ static void __xen_evtchn_do_upcall(void)
 		/* Clear master flag /before/ clearing selector flag. */
 		wmb();
 #endif
+<<<<<<< HEAD
+=======
+		if ((irq = per_cpu(virq_to_irq, cpu)[VIRQ_TIMER]) != -1) {
+			int evtchn = evtchn_from_irq(irq);
+			word_idx = evtchn / BITS_PER_LONG;
+			pending_bits = evtchn % BITS_PER_LONG;
+			if (active_evtchns(cpu, s, word_idx) & (1ULL << pending_bits)) {
+				desc = irq_to_desc(irq);
+				if (desc)
+					generic_handle_irq_desc(irq, desc);
+			}
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pending_words = xchg(&vcpu_info->evtchn_pending_sel, 0);
 
 		start_word_idx = __this_cpu_read(current_word_idx);
@@ -1283,7 +1344,10 @@ static void __xen_evtchn_do_upcall(void)
 		word_idx = start_word_idx;
 
 		for (i = 0; pending_words != 0; i++) {
+<<<<<<< HEAD
 			unsigned long pending_bits;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			unsigned long words;
 
 			words = MASK_LSBS(pending_words, word_idx);
@@ -1312,8 +1376,12 @@ static void __xen_evtchn_do_upcall(void)
 
 			do {
 				unsigned long bits;
+<<<<<<< HEAD
 				int port, irq;
 				struct irq_desc *desc;
+=======
+				int port;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 				bits = MASK_LSBS(pending_bits, bit_idx);
 
@@ -1364,8 +1432,13 @@ void xen_evtchn_do_upcall(struct pt_regs *regs)
 {
 	struct pt_regs *old_regs = set_irq_regs(regs);
 
+<<<<<<< HEAD
 	exit_idle();
 	irq_enter();
+=======
+	irq_enter();
+	exit_idle();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	__xen_evtchn_do_upcall();
 
@@ -1410,8 +1483,15 @@ void rebind_evtchn_irq(int evtchn, int irq)
 /* Rebind an evtchn so that it gets delivered to a specific cpu */
 static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 {
+<<<<<<< HEAD
 	struct evtchn_bind_vcpu bind_vcpu;
 	int evtchn = evtchn_from_irq(irq);
+=======
+	struct shared_info *s = HYPERVISOR_shared_info;
+	struct evtchn_bind_vcpu bind_vcpu;
+	int evtchn = evtchn_from_irq(irq);
+	int masked;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!VALID_EVTCHN(evtchn))
 		return -1;
@@ -1428,6 +1508,15 @@ static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 	bind_vcpu.vcpu = tcpu;
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Mask the event while changing the VCPU binding to prevent
+	 * it being delivered on an unexpected VCPU.
+	 */
+	masked = sync_test_and_set_bit(evtchn, s->evtchn_mask);
+
+	/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * If this fails, it usually just indicates that we're dealing with a
 	 * virq or IPI channel, which don't actually need to be rebound. Ignore
 	 * it, but don't do the xenlinux-level rebind in that case.
@@ -1435,6 +1524,12 @@ static int rebind_irq_to_cpu(unsigned irq, unsigned tcpu)
 	if (HYPERVISOR_event_channel_op(EVTCHNOP_bind_vcpu, &bind_vcpu) >= 0)
 		bind_evtchn_to_cpu(evtchn, tcpu);
 
+<<<<<<< HEAD
+=======
+	if (!masked)
+		unmask_evtchn(evtchn);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 

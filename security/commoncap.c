@@ -523,17 +523,25 @@ skip:
 
 
 	/* Don't let someone trace a set[ug]id/setpcap binary with the revised
+<<<<<<< HEAD
 	 * credentials unless they have the appropriate permit.
 	 *
 	 * In addition, if NO_NEW_PRIVS, then ensure we get no new privs.
+=======
+	 * credentials unless they have the appropriate permit
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 */
 	if ((new->euid != old->uid ||
 	     new->egid != old->gid ||
 	     !cap_issubset(new->cap_permitted, old->cap_permitted)) &&
 	    bprm->unsafe & ~LSM_UNSAFE_PTRACE_CAP) {
 		/* downgrade; they get no more than they had, and maybe less */
+<<<<<<< HEAD
 		if (!capable(CAP_SETUID) ||
 		    (bprm->unsafe & LSM_UNSAFE_NO_NEW_PRIVS)) {
+=======
+		if (!capable(CAP_SETUID)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			new->euid = new->uid;
 			new->egid = new->gid;
 		}

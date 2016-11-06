@@ -1,5 +1,9 @@
 #include <asm/asm-offsets.h>
 #include <asm/page.h>
+<<<<<<< HEAD
+=======
+#include <asm/thread_info.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <asm-generic/vmlinux.lds.h>
 
 #undef mips
@@ -72,7 +76,11 @@ SECTIONS
 	.data : {	/* Data */
 		. = . + DATAOFFSET;		/* for CONFIG_MAPPED_KERNEL */
 
+<<<<<<< HEAD
 		INIT_TASK_DATA(PAGE_SIZE)
+=======
+		INIT_TASK_DATA(THREAD_SIZE)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		NOSAVE_DATA
 		CACHELINE_ALIGNED_DATA(1 << CONFIG_MIPS_L1_CACHE_SHIFT)
 		READ_MOSTLY_DATA(1 << CONFIG_MIPS_L1_CACHE_SHIFT)

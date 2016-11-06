@@ -34,6 +34,10 @@
 #include <linux/dma-mapping.h>
 
 #include <mach/cputype.h>
+<<<<<<< HEAD
+=======
+#include <mach/hardware.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <asm/mach-types.h>
 

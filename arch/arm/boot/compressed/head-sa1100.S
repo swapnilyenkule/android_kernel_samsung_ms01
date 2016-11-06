@@ -11,6 +11,10 @@
 #include <asm/mach-types.h>
 
 		.section        ".start", "ax"
+<<<<<<< HEAD
+=======
+		.arch	armv4
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 __SA1100_start:
 

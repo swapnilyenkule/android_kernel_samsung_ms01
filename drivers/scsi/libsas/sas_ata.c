@@ -139,12 +139,21 @@ static void sas_ata_task_done(struct sas_task *task)
 	if (stat->stat == SAS_PROTO_RESPONSE || stat->stat == SAM_STAT_GOOD ||
 	    ((stat->stat == SAM_STAT_CHECK_CONDITION &&
 	      dev->sata_dev.command_set == ATAPI_COMMAND_SET))) {
+<<<<<<< HEAD
 		ata_tf_from_fis(resp->ending_fis, &dev->sata_dev.tf);
 
 		if (!link->sactive) {
 			qc->err_mask |= ac_err_mask(dev->sata_dev.tf.command);
 		} else {
 			link->eh_info.err_mask |= ac_err_mask(dev->sata_dev.tf.command);
+=======
+		memcpy(dev->sata_dev.fis, resp->ending_fis, ATA_RESP_FIS_SIZE);
+
+		if (!link->sactive) {
+			qc->err_mask |= ac_err_mask(dev->sata_dev.fis[2]);
+		} else {
+			link->eh_info.err_mask |= ac_err_mask(dev->sata_dev.fis[2]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (unlikely(link->eh_info.err_mask))
 				qc->flags |= ATA_QCFLAG_FAILED;
 		}
@@ -161,8 +170,13 @@ static void sas_ata_task_done(struct sas_task *task)
 				qc->flags |= ATA_QCFLAG_FAILED;
 			}
 
+<<<<<<< HEAD
 			dev->sata_dev.tf.feature = 0x04; /* status err */
 			dev->sata_dev.tf.command = ATA_ERR;
+=======
+			dev->sata_dev.fis[3] = 0x04; /* status err */
+			dev->sata_dev.fis[2] = ATA_ERR;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 
@@ -211,7 +225,11 @@ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
 		qc->tf.nsect = 0;
 	}
 
+<<<<<<< HEAD
 	ata_tf_to_fis(&qc->tf, 1, 0, (u8*)&task->ata_task.fis);
+=======
+	ata_tf_to_fis(&qc->tf, qc->dev->link->pmp, 1, (u8 *)&task->ata_task.fis);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	task->uldd_task = qc;
 	if (ata_is_atapi(qc->tf.protocol)) {
 		memcpy(task->ata_task.atapi_packet, qc->cdb, qc->dev->cdb_len);
@@ -269,7 +287,11 @@ static bool sas_ata_qc_fill_rtf(struct ata_queued_cmd *qc)
 {
 	struct domain_device *dev = qc->ap->private_data;
 
+<<<<<<< HEAD
 	memcpy(&qc->result_tf, &dev->sata_dev.tf, sizeof(qc->result_tf));
+=======
+	ata_tf_from_fis(dev->sata_dev.fis, &qc->result_tf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return true;
 }
 

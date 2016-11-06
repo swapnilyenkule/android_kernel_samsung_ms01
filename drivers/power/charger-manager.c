@@ -330,7 +330,11 @@ static void uevent_notify(struct charger_manager *cm, const char *event)
 	strncpy(env_str, event, UEVENT_BUF_SIZE);
 	kobject_uevent(&cm->dev->kobj, KOBJ_CHANGE);
 
+<<<<<<< HEAD
 	dev_info(cm->dev, event);
+=======
+	dev_info(cm->dev, "%s", event);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -808,6 +812,14 @@ static int charger_manager_probe(struct platform_device *pdev)
 		goto err_no_charger_stat;
 	}
 
+<<<<<<< HEAD
+=======
+	if (!desc->psy_fuel_gauge) {
+		dev_err(&pdev->dev, "No fuel gauge power supply defined\n");
+		return -EINVAL;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Counting index only */
 	while (desc->psy_charger_stat[i])
 		i++;

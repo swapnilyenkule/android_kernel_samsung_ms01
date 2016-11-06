@@ -24,16 +24,20 @@ static const struct proc_ns_operations *ns_entries[] = {
 #ifdef CONFIG_IPC_NS
 	&ipcns_operations,
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_PID_NS
 	&pidns_operations,
 #endif
 	&mntns_operations,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static const struct file_operations ns_file_operations = {
 	.llseek		= no_llseek,
 };
 
+<<<<<<< HEAD
 static const struct inode_operations ns_inode_operations = {
 	.setattr	= proc_setattr,
 };
@@ -183,6 +187,8 @@ static const struct inode_operations proc_ns_link_inode_operations = {
 	.setattr	= proc_setattr,
 };
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static struct dentry *proc_ns_instantiate(struct inode *dir,
 	struct dentry *dentry, struct task_struct *task, const void *ptr)
 {
@@ -190,15 +196,31 @@ static struct dentry *proc_ns_instantiate(struct inode *dir,
 	struct inode *inode;
 	struct proc_inode *ei;
 	struct dentry *error = ERR_PTR(-ENOENT);
+<<<<<<< HEAD
+=======
+	void *ns;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	inode = proc_pid_make_inode(dir->i_sb, task);
 	if (!inode)
 		goto out;
 
+<<<<<<< HEAD
 	ei = PROC_I(inode);
 	inode->i_mode = S_IFLNK|S_IRWXUGO;
 	inode->i_op = &proc_ns_link_inode_operations;
 	ei->ns_ops = ns_ops;
+=======
+	ns = ns_ops->get(task);
+	if (!ns)
+		goto out_iput;
+
+	ei = PROC_I(inode);
+	inode->i_mode = S_IFREG|S_IRUSR;
+	inode->i_fop  = &ns_file_operations;
+	ei->ns_ops    = ns_ops;
+	ei->ns	      = ns;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	d_set_d_op(dentry, &pid_dentry_operations);
 	d_add(dentry, inode);
@@ -207,6 +229,12 @@ static struct dentry *proc_ns_instantiate(struct inode *dir,
 		error = NULL;
 out:
 	return error;
+<<<<<<< HEAD
+=======
+out_iput:
+	iput(inode);
+	goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int proc_ns_fill_cache(struct file *filp, void *dirent,
@@ -233,6 +261,13 @@ static int proc_ns_dir_readdir(struct file *filp, void *dirent,
 	if (!task)
 		goto out_no_task;
 
+<<<<<<< HEAD
+=======
+	ret = -EPERM;
+	if (!ptrace_may_access(task, PTRACE_MODE_READ))
+		goto out;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = 0;
 	i = filp->f_pos;
 	switch (i) {
@@ -292,6 +327,13 @@ static struct dentry *proc_ns_dir_lookup(struct inode *dir,
 	if (!task)
 		goto out_no_task;
 
+<<<<<<< HEAD
+=======
+	error = ERR_PTR(-EPERM);
+	if (!ptrace_may_access(task, PTRACE_MODE_READ))
+		goto out;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	last = &ns_entries[ARRAY_SIZE(ns_entries)];
 	for (entry = ns_entries; entry < last; entry++) {
 		if (strlen((*entry)->name) != len)
@@ -299,6 +341,10 @@ static struct dentry *proc_ns_dir_lookup(struct inode *dir,
 		if (!memcmp(dentry->d_name.name, (*entry)->name, len))
 			break;
 	}
+<<<<<<< HEAD
+=======
+	error = ERR_PTR(-ENOENT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (entry == last)
 		goto out;
 
@@ -333,7 +379,10 @@ out_invalid:
 	return ERR_PTR(-EINVAL);
 }
 
+<<<<<<< HEAD
 bool proc_ns_inode(struct inode *inode)
 {
 	return inode->i_fop == &ns_file_operations;
 }
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

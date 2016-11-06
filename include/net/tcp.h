@@ -123,7 +123,11 @@ extern void tcp_time_wait(struct sock *sk, int state, int timeo);
 #endif
 #define TCP_RTO_MAX	((unsigned)(120*HZ))
 #define TCP_RTO_MIN	((unsigned)(HZ/5))
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_KLTE_CMCC)
+=======
+#if defined(CONFIG_TARGET_LOCALE_CHN)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define TCP_TIMEOUT_INIT ((unsigned)(3*HZ))	/* RFC2988bis initial RTO value	*/
 #else
 #define TCP_TIMEOUT_INIT ((unsigned)(1*HZ))	/* RFC2988bis initial RTO value	*/
@@ -258,7 +262,10 @@ extern int sysctl_tcp_max_ssthresh;
 extern int sysctl_tcp_cookie_size;
 extern int sysctl_tcp_thin_linear_timeouts;
 extern int sysctl_tcp_thin_dupack;
+<<<<<<< HEAD
 extern int sysctl_tcp_challenge_ack_limit;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int sysctl_tcp_default_init_rwnd;
 
 /* sysctl variables for controlling various tcp parameters */
@@ -1003,8 +1010,11 @@ extern void tcp_set_state(struct sock *sk, int state);
 
 extern void tcp_done(struct sock *sk);
 
+<<<<<<< HEAD
 int tcp_abort(struct sock *sk, int err);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline void tcp_sack_reset(struct tcp_options_received *rx_opt)
 {
 	rx_opt->dsack = 0;

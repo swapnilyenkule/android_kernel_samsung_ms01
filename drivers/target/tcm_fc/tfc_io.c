@@ -330,7 +330,11 @@ void ft_invl_hw_context(struct ft_cmd *cmd)
 		ep = fc_seq_exch(seq);
 		if (ep) {
 			lport = ep->lp;
+<<<<<<< HEAD
 			if (lport && (ep->xid <= lport->lro_xid))
+=======
+			if (lport && (ep->xid <= lport->lro_xid)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				/*
 				 * "ddp_done" trigger invalidation of HW
 				 * specific DDP context
@@ -345,6 +349,10 @@ void ft_invl_hw_context(struct ft_cmd *cmd)
 				 * identified using ep->xid)
 				 */
 				cmd->was_ddp_setup = 0;
+<<<<<<< HEAD
+=======
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 }

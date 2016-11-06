@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -41,6 +46,19 @@
 
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file wniApi.h contains message definitions exported by
  * Sirius software modules.
  * NOTE: See projects/sirius/include/sirApi.h for structure
@@ -110,7 +128,11 @@
 
 
 /// Start of Sirius/Host message types
+<<<<<<< HEAD
 #define WNI_HOST_MSG_START             0x1400
+=======
+#define WNI_HOST_MSG_START             0x1500
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 enum eWniMsgTypes
 {
@@ -307,8 +329,13 @@ enum eWniMsgTypes
     eWNI_SME_FT_AGGR_QOS_RSP,
 #endif
 
+<<<<<<< HEAD
 #if defined FEATURE_WLAN_CCX
     eWNI_SME_CCX_ADJACENT_AP_REPORT,
+=======
+#if defined FEATURE_WLAN_ESE
+    eWNI_SME_ESE_ADJACENT_AP_REPORT,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
     eWNI_SME_REGISTER_MGMT_FRAME_REQ,
@@ -346,11 +373,19 @@ enum eWniMsgTypes
     eWNI_SME_TDLS_DEL_STA_IND,
     eWNI_SME_TDLS_DEL_ALL_PEER_IND,
     eWNI_SME_MGMT_FRM_TX_COMPLETION_IND,
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_TDLS_OXYGEN_DISAPPEAR_AP
     eWNI_SME_TDLS_AP_DISAPPEAR_IND,
 #endif
     eWNI_SME_TDLS_LINK_ESTABLISH_REQ,
     eWNI_SME_TDLS_LINK_ESTABLISH_RSP,
+=======
+    eWNI_SME_TDLS_LINK_ESTABLISH_REQ,
+    eWNI_SME_TDLS_LINK_ESTABLISH_RSP,
+// tdlsoffchan
+    eWNI_SME_TDLS_CHANNEL_SWITCH_REQ,
+    eWNI_SME_TDLS_CHANNEL_SWITCH_RSP,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
     //NOTE: If you are planning to add more mesages, please make sure that 
     //SIR_LIM_ITC_MSG_TYPES_BEGIN is moved appropriately. It is set as
@@ -383,17 +418,35 @@ enum eWniMsgTypes
     eWNI_SME_HANDOFF_REQ,/*upper layer requested handoff to driver in STA mode*/
     eWNI_SME_ROAM_SCAN_OFFLOAD_RSP,/*Fwd the LFR scan offload rsp from FW to SME*/
 #ifdef FEATURE_WLAN_LPHB
+<<<<<<< HEAD
     eWNI_SME_LPHB_WAIT_TIMEOUT_IND,
+=======
+    eWNI_SME_LPHB_IND,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* FEATURE_WLAN_LPHB */
 
     eWNI_SME_GET_TSM_STATS_REQ,
     eWNI_SME_GET_TSM_STATS_RSP,
     eWNI_SME_TSM_IE_IND,
 
+<<<<<<< HEAD
     eWNI_SME_MSG_TYPES_END
 };
 
 #define WNI_CFG_MSG_TYPES_BEGIN        0x1100
+=======
+#ifdef FEATURE_WLAN_CH_AVOID
+   eWNI_SME_CH_AVOID_IND,
+#endif /* FEATURE_WLAN_CH_AVOID */
+    eWNI_SME_HT40_OBSS_SCAN_IND, /* START and UPDATE OBSS SCAN Indication*/
+    eWNI_SME_HT40_STOP_OBSS_SCAN_IND, /* STOP OBSS SCAN indication */
+    eWNI_SME_MAC_SPOOF_ADDR_IND,
+    eWNI_SME_ENCRYPT_MSG_RSP,
+    eWNI_SME_MSG_TYPES_END
+};
+
+#define WNI_CFG_MSG_TYPES_BEGIN        0x1200
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*---------------------------------------------------------------------*/
 /* CFG Module Definitions                                              */
@@ -429,9 +482,15 @@ enum eWniMsgTypes
 
 /*---------------------------------------------------------------------*/
 /* CFG to HDD message paramter indices                                 */
+<<<<<<< HEAD
 /*                                                                     */
 /*   The followings are word indices starting from the message body    */
 /*                                                                     */
+=======
+
+/*   The followings are word indices starting from the message body    */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*   WNI_CFG_xxxx_xxxx_xxxx:         index of parameter                */
 /*                                                                     */
 /*   WNI_CFG_xxxx_xxxx_NUM:          number of parameters in message   */

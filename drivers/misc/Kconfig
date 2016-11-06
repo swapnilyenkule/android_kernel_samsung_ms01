@@ -1011,12 +1011,15 @@ config TI_DRV2667
 	  To compile this driver as a module, choose M here: the
 	  module will be called ti_drv2667.
 
+<<<<<<< HEAD
 config UID_CPUTIME
 	tristate "Per-UID cpu time statistics"
 	depends on PROFILING
 	help
 	  Per UID based cpu time statistics exported to /proc/uid_cputime
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 config RT8973_JIG_WAKEUP
         bool "enable JIG wakeup when send Jig command"
         default n
@@ -1041,4 +1044,8 @@ source "drivers/misc/lis3lv02d/Kconfig"
 source "drivers/misc/carma/Kconfig"
 source "drivers/misc/altera-stapl/Kconfig"
 source "drivers/misc/modem_if/Kconfig"
+<<<<<<< HEAD
+=======
+source "drivers/misc/dualwave/Kconfig"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 endmenu

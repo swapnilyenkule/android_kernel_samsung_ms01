@@ -715,7 +715,11 @@ static SENSOR_DEVICE_ATTR(temp1_max_alarm, S_IRUGO,
 	get_temp_alarm, NULL, IDX_TEMP1_MAX);
 static SENSOR_DEVICE_ATTR(temp1_crit_alarm, S_IRUGO,
 	get_temp_alarm, NULL, IDX_TEMP1_CRIT);
+<<<<<<< HEAD
 static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO | S_IWUSR,
+=======
+static SENSOR_DEVICE_ATTR(temp2_input, S_IRUGO,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	get_temp, NULL, IDX_TEMP2_INPUT);
 static SENSOR_DEVICE_ATTR(temp2_min, S_IRUGO | S_IWUSR, get_temp,
 	set_temp, IDX_TEMP2_MIN);

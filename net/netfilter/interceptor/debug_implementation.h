@@ -1,6 +1,10 @@
 /**
    @copyright
+<<<<<<< HEAD
    Copyright (c) 2011 - 2013, INSIDE Secure Oy. All rights reserved.
+=======
+   Copyright (c) 2011 - 2015, INSIDE Secure Oy. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 */
 
 
@@ -238,5 +242,31 @@ DebugDumper(
 
 DebugDumper debug_dump_hex_bytes;
 
+<<<<<<< HEAD
+=======
+void
+debug_disable(
+        void);
+
+void
+debug_enable(
+        void);
+
+void
+debug_set_filename(
+        const char *filename);
+
+void
+debug_set_filter_filename(
+        const char *filename);
+
+void
+debug_set_filter_string(
+        const char *debug_string);
+
+void
+debug_set_prefix(
+        const char *prefix);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif /* DEBUG_IMPLEMENTATION_H */

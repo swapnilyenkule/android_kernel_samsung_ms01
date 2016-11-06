@@ -2653,6 +2653,10 @@ static struct talitos_crypto_alg *talitos_alg_alloc(struct device *dev,
 		break;
 	default:
 		dev_err(dev, "unknown algorithm type %d\n", t_alg->algt.type);
+<<<<<<< HEAD
+=======
+		kfree(t_alg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return ERR_PTR(-EINVAL);
 	}
 

@@ -36,6 +36,12 @@ bool freezing_slow_path(struct task_struct *p)
 	if (p->flags & PF_NOFREEZE)
 		return false;
 
+<<<<<<< HEAD
+=======
+	if (test_thread_flag(TIF_MEMDIE))
+		return false;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (pm_nosig_freezing || cgroup_freezing(p))
 		return true;
 

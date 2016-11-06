@@ -137,7 +137,11 @@ static int xhci_plat_probe(struct platform_device *pdev)
 		goto put_hcd;
 	}
 
+<<<<<<< HEAD
 	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
+=======
+	hcd->regs = ioremap_nocache(hcd->rsrc_start, hcd->rsrc_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!hcd->regs) {
 		dev_dbg(&pdev->dev, "error mapping memory\n");
 		ret = -EFAULT;

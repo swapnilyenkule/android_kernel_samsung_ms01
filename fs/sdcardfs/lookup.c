@@ -146,8 +146,13 @@ static struct inode *sdcardfs_iget(struct super_block *sb,
 		init_special_inode(inode, lower_inode->i_mode,
 				   lower_inode->i_rdev);
 
+<<<<<<< HEAD
 	/* all well, copy inode attributes */
 	fsstack_copy_attr_all(inode, lower_inode);
+=======
+	/* all well, copy inode attributes, don't need to hold i_mutex here */
+	sdcardfs_copy_inode_attr(inode, lower_inode);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fsstack_copy_inode_size(inode, lower_inode);
 
 	fix_derived_permission(inode);

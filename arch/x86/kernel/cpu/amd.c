@@ -417,6 +417,19 @@ static void __cpuinit early_init_amd_mc(struct cpuinfo_x86 *c)
 
 	c->x86_coreid_bits = bits;
 #endif
+<<<<<<< HEAD
+=======
+
+	/* F16h erratum 793, CVE-2013-6885 */
+	if (c->x86 == 0x16 && c->x86_model <= 0xf) {
+		u64 val;
+
+		if (!rdmsrl_amd_safe(MSR_AMD64_LS_CFG, &val) &&
+		    !(val & BIT(15)))
+			wrmsrl_amd_safe(MSR_AMD64_LS_CFG, val | BIT(15));
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void __cpuinit bsp_init_amd(struct cpuinfo_x86 *c)
@@ -598,6 +611,37 @@ static void __cpuinit init_amd(struct cpuinfo_x86 *c)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * The way access filter has a performance penalty on some workloads.
+	 * Disable it on the affected CPUs.
+	 */
+	if ((c->x86 == 0x15) &&
+	    (c->x86_model >= 0x02) && (c->x86_model < 0x20)) {
+		u64 val;
+
+		if (!rdmsrl_safe(0xc0011021, &val) && !(val & 0x1E)) {
+			val |= 0x1E;
+			checking_wrmsrl(0xc0011021, val);
+		}
+	}
+
+	/*
+	 * The way access filter has a performance penalty on some workloads.
+	 * Disable it on the affected CPUs.
+	 */
+	if ((c->x86 == 0x15) &&
+	    (c->x86_model >= 0x02) && (c->x86_model < 0x20)) {
+		u64 val;
+
+		if (!rdmsrl_safe(0xc0011021, &val) && !(val & 0x1E)) {
+			val |= 0x1E;
+			checking_wrmsrl(0xc0011021, val);
+		}
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	cpu_detect_cache_sizes(c);
 
 	/* Multi core CPU? */

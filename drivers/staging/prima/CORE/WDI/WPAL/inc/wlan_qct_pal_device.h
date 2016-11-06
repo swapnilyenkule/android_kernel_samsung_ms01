@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef WLAN_QCT_PAL_DEVICE_H
@@ -80,6 +92,14 @@
 #define     WPAL_SMSM_WLAN_TX_ENABLE          0x00000400
 #define     WPAL_SMSM_WLAN_TX_RINGS_EMPTY     0x00000200
 
+<<<<<<< HEAD
+=======
+typedef enum
+{
+   WPAL_DEBUG_START_HEALTH_TIMER = 1<<0,
+   WPAL_DEBUG_TX_DESC_RESYNC     = 1<<1,
+} WPAL_DeviceDebugFlags;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* ====================================================================================================================
   @  Function Name 
       wpalIsrType
@@ -113,7 +133,11 @@ typedef void (* wpalIsrType)(void *usrCtxt);
  * ==================================================================================================================*/
 wpt_status wpalDeviceInit
 (
+<<<<<<< HEAD
    void                 *deviceCB
+=======
+   void                 *devHandle
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 );
 
 /* ====================================================================================================================

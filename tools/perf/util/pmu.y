@@ -1,5 +1,8 @@
 
+<<<<<<< HEAD
 %name-prefix "perf_pmu_"
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 %parse-param {struct list_head *format}
 %parse-param {char *name}
 

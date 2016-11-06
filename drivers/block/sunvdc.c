@@ -461,7 +461,11 @@ static int generic_request(struct vdc_port *port, u8 op, void *buf, int len)
 	int op_len, err;
 	void *req_buf;
 
+<<<<<<< HEAD
 	if (!(((u64)1 << ((u64)op - 1)) & port->operations))
+=======
+	if (!(((u64)1 << (u64)op) & port->operations))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return -EOPNOTSUPP;
 
 	switch (op) {

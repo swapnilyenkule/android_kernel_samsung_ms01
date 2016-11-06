@@ -78,7 +78,10 @@ struct pid_namespace init_pid_ns = {
 	.last_pid = 0,
 	.level = 0,
 	.child_reaper = &init_task,
+<<<<<<< HEAD
 	.proc_inum = PROC_PID_INIT_INO,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 EXPORT_SYMBOL_GPL(init_pid_ns);
 

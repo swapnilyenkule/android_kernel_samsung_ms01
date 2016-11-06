@@ -1339,7 +1339,11 @@ int ldc_connect(struct ldc_channel *lp)
 	if (!(lp->flags & LDC_FLAG_ALLOCED_QUEUES) ||
 	    !(lp->flags & LDC_FLAG_REGISTERED_QUEUES) ||
 	    lp->hs_state != LDC_HS_OPEN)
+<<<<<<< HEAD
 		err = -EINVAL;
+=======
+		err = ((lp->hs_state > LDC_HS_OPEN) ? 0 : -EINVAL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	else
 		err = start_handshake(lp);
 

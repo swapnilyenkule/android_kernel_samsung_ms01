@@ -331,7 +331,11 @@ static int build_snap_context(struct ceph_snap_realm *realm)
 
 	/* alloc new snap context */
 	err = -ENOMEM;
+<<<<<<< HEAD
 	if (num > (ULONG_MAX - sizeof(*snapc)) / sizeof(u64))
+=======
+	if (num > (SIZE_MAX - sizeof(*snapc)) / sizeof(u64))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto fail;
 	snapc = kzalloc(sizeof(*snapc) + num*sizeof(u64), GFP_NOFS);
 	if (!snapc)

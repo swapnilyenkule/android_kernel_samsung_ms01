@@ -53,10 +53,13 @@
 /* External tools reserve first few grant table entries. */
 #define NR_RESERVED_ENTRIES 8
 #define GNTTAB_LIST_END 0xffffffff
+<<<<<<< HEAD
 #define GREFS_PER_GRANT_FRAME \
 (grant_table_version == 1 ?                      \
 (PAGE_SIZE / sizeof(struct grant_entry_v1)) :   \
 (PAGE_SIZE / sizeof(union grant_entry_v2)))
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static grant_ref_t **gnttab_list;
 static unsigned int nr_grant_frames;
@@ -151,6 +154,10 @@ static struct gnttab_ops *gnttab_interface;
 static grant_status_t *grstatus;
 
 static int grant_table_version;
+<<<<<<< HEAD
+=======
+static int grefs_per_grant_frame;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static struct gnttab_free_callback *gnttab_free_callback_list;
 
@@ -644,9 +651,24 @@ void gnttab_request_free_callback(struct gnttab_free_callback *callback,
 				  void (*fn)(void *), void *arg, u16 count)
 {
 	unsigned long flags;
+<<<<<<< HEAD
 	spin_lock_irqsave(&gnttab_list_lock, flags);
 	if (callback->next)
 		goto out;
+=======
+	struct gnttab_free_callback *cb;
+
+	spin_lock_irqsave(&gnttab_list_lock, flags);
+
+	/* Check if the callback is already on the list */
+	cb = gnttab_free_callback_list;
+	while (cb) {
+		if (cb == callback)
+			goto out;
+		cb = cb->next;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	callback->fn = fn;
 	callback->arg = arg;
 	callback->count = count;
@@ -679,12 +701,23 @@ static int grow_gnttab_list(unsigned int more_frames)
 	unsigned int new_nr_grant_frames, extra_entries, i;
 	unsigned int nr_glist_frames, new_nr_glist_frames;
 
+<<<<<<< HEAD
 	new_nr_grant_frames = nr_grant_frames + more_frames;
 	extra_entries       = more_frames * GREFS_PER_GRANT_FRAME;
 
 	nr_glist_frames = (nr_grant_frames * GREFS_PER_GRANT_FRAME + RPP - 1) / RPP;
 	new_nr_glist_frames =
 		(new_nr_grant_frames * GREFS_PER_GRANT_FRAME + RPP - 1) / RPP;
+=======
+	BUG_ON(grefs_per_grant_frame == 0);
+
+	new_nr_grant_frames = nr_grant_frames + more_frames;
+	extra_entries       = more_frames * grefs_per_grant_frame;
+
+	nr_glist_frames = (nr_grant_frames * grefs_per_grant_frame + RPP - 1) / RPP;
+	new_nr_glist_frames =
+		(new_nr_grant_frames * grefs_per_grant_frame + RPP - 1) / RPP;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = nr_glist_frames; i < new_nr_glist_frames; i++) {
 		gnttab_list[i] = (grant_ref_t *)__get_free_page(GFP_ATOMIC);
 		if (!gnttab_list[i])
@@ -692,12 +725,21 @@ static int grow_gnttab_list(unsigned int more_frames)
 	}
 
 
+<<<<<<< HEAD
 	for (i = GREFS_PER_GRANT_FRAME * nr_grant_frames;
 	     i < GREFS_PER_GRANT_FRAME * new_nr_grant_frames - 1; i++)
 		gnttab_entry(i) = i + 1;
 
 	gnttab_entry(i) = gnttab_free_head;
 	gnttab_free_head = GREFS_PER_GRANT_FRAME * nr_grant_frames;
+=======
+	for (i = grefs_per_grant_frame * nr_grant_frames;
+	     i < grefs_per_grant_frame * new_nr_grant_frames - 1; i++)
+		gnttab_entry(i) = i + 1;
+
+	gnttab_entry(i) = gnttab_free_head;
+	gnttab_free_head = grefs_per_grant_frame * nr_grant_frames;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	gnttab_free_count += extra_entries;
 
 	nr_grant_frames = new_nr_grant_frames;
@@ -774,7 +816,12 @@ int gnttab_map_refs(struct gnttab_map_grant_ref *map_ops,
 EXPORT_SYMBOL_GPL(gnttab_map_refs);
 
 int gnttab_unmap_refs(struct gnttab_unmap_grant_ref *unmap_ops,
+<<<<<<< HEAD
 		      struct page **pages, unsigned int count, bool clear_pte)
+=======
+		      struct gnttab_map_grant_ref *kmap_ops,
+		      struct page **pages, unsigned int count)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int i, ret;
 
@@ -786,7 +833,12 @@ int gnttab_unmap_refs(struct gnttab_unmap_grant_ref *unmap_ops,
 		return ret;
 
 	for (i = 0; i < count; i++) {
+<<<<<<< HEAD
 		ret = m2p_remove_override(pages[i], clear_pte);
+=======
+		ret = m2p_remove_override(pages[i], kmap_ops ?
+				       &kmap_ops[i] : NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret)
 			return ret;
 	}
@@ -797,7 +849,12 @@ EXPORT_SYMBOL_GPL(gnttab_unmap_refs);
 
 static unsigned nr_status_frames(unsigned nr_grant_frames)
 {
+<<<<<<< HEAD
 	return (nr_grant_frames * GREFS_PER_GRANT_FRAME + SPP - 1) / SPP;
+=======
+	BUG_ON(grefs_per_grant_frame == 0);
+	return (nr_grant_frames * grefs_per_grant_frame + SPP - 1) / SPP;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int gnttab_map_frames_v1(unsigned long *frames, unsigned int nr_gframes)
@@ -955,6 +1012,10 @@ static void gnttab_request_version(void)
 	rc = HYPERVISOR_grant_table_op(GNTTABOP_set_version, &gsv, 1);
 	if (rc == 0 && gsv.version == 2) {
 		grant_table_version = 2;
+<<<<<<< HEAD
+=======
+		grefs_per_grant_frame = PAGE_SIZE / sizeof(union grant_entry_v2);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		gnttab_interface = &gnttab_v2_ops;
 	} else if (grant_table_version == 2) {
 		/*
@@ -967,17 +1028,28 @@ static void gnttab_request_version(void)
 		panic("we need grant tables version 2, but only version 1 is available");
 	} else {
 		grant_table_version = 1;
+<<<<<<< HEAD
+=======
+		grefs_per_grant_frame = PAGE_SIZE / sizeof(struct grant_entry_v1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		gnttab_interface = &gnttab_v1_ops;
 	}
 	printk(KERN_INFO "Grant tables using version %d layout.\n",
 		grant_table_version);
 }
 
+<<<<<<< HEAD
 int gnttab_resume(void)
 {
 	unsigned int max_nr_gframes;
 
 	gnttab_request_version();
+=======
+static int gnttab_setup(void)
+{
+	unsigned int max_nr_gframes;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	max_nr_gframes = gnttab_max_grant_frames();
 	if (max_nr_gframes < nr_grant_frames)
 		return -ENOSYS;
@@ -1000,6 +1072,15 @@ int gnttab_resume(void)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+int gnttab_resume(void)
+{
+	gnttab_request_version();
+	return gnttab_setup();
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int gnttab_suspend(void)
 {
 	gnttab_interface->unmap_frames();
@@ -1011,9 +1092,16 @@ static int gnttab_expand(unsigned int req_entries)
 	int rc;
 	unsigned int cur, extra;
 
+<<<<<<< HEAD
 	cur = nr_grant_frames;
 	extra = ((req_entries + (GREFS_PER_GRANT_FRAME-1)) /
 		 GREFS_PER_GRANT_FRAME);
+=======
+	BUG_ON(grefs_per_grant_frame == 0);
+	cur = nr_grant_frames;
+	extra = ((req_entries + (grefs_per_grant_frame-1)) /
+		 grefs_per_grant_frame);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (cur + extra > gnttab_max_grant_frames())
 		return -ENOSPC;
 
@@ -1031,21 +1119,35 @@ int gnttab_init(void)
 	unsigned int nr_init_grefs;
 	int ret;
 
+<<<<<<< HEAD
+=======
+	gnttab_request_version();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	nr_grant_frames = 1;
 	boot_max_nr_grant_frames = __max_nr_grant_frames();
 
 	/* Determine the maximum number of frames required for the
 	 * grant reference free list on the current hypervisor.
 	 */
+<<<<<<< HEAD
 	max_nr_glist_frames = (boot_max_nr_grant_frames *
 			       GREFS_PER_GRANT_FRAME / RPP);
+=======
+	BUG_ON(grefs_per_grant_frame == 0);
+	max_nr_glist_frames = (boot_max_nr_grant_frames *
+			       grefs_per_grant_frame / RPP);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	gnttab_list = kmalloc(max_nr_glist_frames * sizeof(grant_ref_t *),
 			      GFP_KERNEL);
 	if (gnttab_list == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	nr_glist_frames = (nr_grant_frames * GREFS_PER_GRANT_FRAME + RPP - 1) / RPP;
+=======
+	nr_glist_frames = (nr_grant_frames * grefs_per_grant_frame + RPP - 1) / RPP;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < nr_glist_frames; i++) {
 		gnttab_list[i] = (grant_ref_t *)__get_free_page(GFP_KERNEL);
 		if (gnttab_list[i] == NULL) {
@@ -1054,12 +1156,20 @@ int gnttab_init(void)
 		}
 	}
 
+<<<<<<< HEAD
 	if (gnttab_resume() < 0) {
+=======
+	if (gnttab_setup() < 0) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ret = -ENODEV;
 		goto ini_nomem;
 	}
 
+<<<<<<< HEAD
 	nr_init_grefs = nr_grant_frames * GREFS_PER_GRANT_FRAME;
+=======
+	nr_init_grefs = nr_grant_frames * grefs_per_grant_frame;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	for (i = NR_RESERVED_ENTRIES; i < nr_init_grefs - 1; i++)
 		gnttab_entry(i) = i + 1;

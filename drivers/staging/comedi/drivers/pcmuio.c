@@ -464,6 +464,7 @@ static int pcmuio_detach(struct comedi_device *dev)
 	if (dev->iobase)
 		release_region(dev->iobase, ASIC_IOSIZE * thisboard->num_asics);
 
+<<<<<<< HEAD
 	for (i = 0; i < MAX_ASICS; ++i) {
 		if (devpriv->asics[i].irq)
 			free_irq(devpriv->asics[i].irq, dev);
@@ -471,6 +472,15 @@ static int pcmuio_detach(struct comedi_device *dev)
 
 	if (devpriv && devpriv->sprivs)
 		kfree(devpriv->sprivs);
+=======
+	if (devpriv) {
+		for (i = 0; i < MAX_ASICS; ++i) {
+			if (devpriv->asics[i].irq)
+				free_irq(devpriv->asics[i].irq, dev);
+		}
+		kfree(devpriv->sprivs);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }

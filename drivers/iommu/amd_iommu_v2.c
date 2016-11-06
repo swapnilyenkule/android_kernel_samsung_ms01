@@ -681,6 +681,11 @@ int amd_iommu_bind_pasid(struct pci_dev *pdev, int pasid,
 
 	atomic_set(&pasid_state->count, 1);
 	init_waitqueue_head(&pasid_state->wq);
+<<<<<<< HEAD
+=======
+	spin_lock_init(&pasid_state->lock);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	pasid_state->task         = task;
 	pasid_state->mm           = get_task_mm(task);
 	pasid_state->device_state = dev_state;

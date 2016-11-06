@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -43,6 +48,17 @@
 * Copyright (c) 2013 Qualcomm Atheros, Inc.
 * All Rights Reserved.
 * Qualcomm Atheros Confidential and Proprietary.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   \file  macTrace.c
 
   \brief implementation for trace related APIs
@@ -72,11 +88,17 @@
 #include "csrInternal.h"
 #include "limGlobal.h"
 #include "wlan_qct_tl.h"
+<<<<<<< HEAD
 
 #ifdef TRACE_RECORD
 static tTraceRecord gTraceTbl[MAX_TRACE_RECORDS];
 static tTraceData gTraceData;
 static tpTraceCb traceCBTable[VOS_MODULE_ID_MAX];
+=======
+#include "vos_trace.h"
+
+#ifdef TRACE_RECORD
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* ---------------------------------------------------------------------------
     \fn macTraceGetHDDWlanConnState
@@ -516,8 +538,13 @@ tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
         CASE_RETURN_STRING(eWNI_SME_FT_AGGR_QOS_REQ);
         CASE_RETURN_STRING(eWNI_SME_FT_AGGR_QOS_RSP);
 #endif
+<<<<<<< HEAD
 #if defined FEATURE_WLAN_CCX
         CASE_RETURN_STRING(eWNI_SME_CCX_ADJACENT_AP_REPORT);
+=======
+#if defined FEATURE_WLAN_ESE
+        CASE_RETURN_STRING(eWNI_SME_ESE_ADJACENT_AP_REPORT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
         CASE_RETURN_STRING(eWNI_SME_REGISTER_MGMT_FRAME_REQ);
         CASE_RETURN_STRING(eWNI_SME_COEX_IND);
@@ -544,7 +571,12 @@ tANI_U8* macTraceGetSmeMsgString( tANI_U16 smeMsg )
         CASE_RETURN_STRING(eWNI_SME_GET_ROAM_RSSI_RSP);
         CASE_RETURN_STRING(eWNI_SME_GET_TSM_STATS_REQ);
         CASE_RETURN_STRING(eWNI_SME_GET_TSM_STATS_RSP);
+<<<<<<< HEAD
 
+=======
+        CASE_RETURN_STRING(eWNI_SME_HT40_OBSS_SCAN_IND);
+        CASE_RETURN_STRING(eWNI_SME_HT40_STOP_OBSS_SCAN_IND);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         default:
             return( (tANI_U8*)"UNKNOWN" );
             break;
@@ -692,7 +724,11 @@ tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
         CASE_RETURN_STRING(WDA_TIMER_CHIP_MONITOR_TIMEOUT);
         CASE_RETURN_STRING(WDA_TIMER_TRAFFIC_ACTIVITY_REQ);
         CASE_RETURN_STRING(WDA_TIMER_ADC_RSSI_STATS);
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
+=======
+#ifdef FEATURE_WLAN_ESE
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         CASE_RETURN_STRING(WDA_TSM_STATS_REQ);
         CASE_RETURN_STRING(WDA_TSM_STATS_RSP);
 #endif
@@ -803,8 +839,11 @@ tANI_U8* macTraceGetWdaMsgString( tANI_U16 wdaMsg )
     }
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
 {
     switch( limMsg )
@@ -835,7 +874,10 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
         CASE_RETURN_STRING(SIR_LIM_PROBE_HB_FAILURE_TIMEOUT);
         CASE_RETURN_STRING(SIR_LIM_ADDTS_RSP_TIMEOUT );
         CASE_RETURN_STRING(SIR_LIM_LINK_TEST_DURATION_TIMEOUT );
+<<<<<<< HEAD
         CASE_RETURN_STRING(SIR_LIM_HASH_MISS_THRES_TIMEOUT  );
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         CASE_RETURN_STRING(SIR_LIM_CNF_WAIT_TIMEOUT         );
         CASE_RETURN_STRING(SIR_LIM_KEEPALIVE_TIMEOUT        );
         CASE_RETURN_STRING(SIR_LIM_UPDATE_OLBC_CACHEL_TIMEOUT );
@@ -855,8 +897,13 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
 #endif
         CASE_RETURN_STRING(SIR_LIM_BEACON_GEN_IND );
         CASE_RETURN_STRING(SIR_LIM_PERIODIC_PROBE_REQ_TIMEOUT);
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
         CASE_RETURN_STRING(SIR_LIM_CCX_TSM_TIMEOUT);
+=======
+#ifdef FEATURE_WLAN_ESE
+        CASE_RETURN_STRING(SIR_LIM_ESE_TSM_TIMEOUT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
         CASE_RETURN_STRING(SIR_LIM_DISASSOC_ACK_TIMEOUT);
         CASE_RETURN_STRING(SIR_LIM_DEAUTH_ACK_TIMEOUT);
@@ -869,9 +916,12 @@ tANI_U8* macTraceGetLimMsgString( tANI_U16 limMsg )
     }
 }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 tANI_U8* macTraceGetCfgMsgString( tANI_U16 cfgMsg )
 {
     switch( cfgMsg )
@@ -909,6 +959,7 @@ tANI_U8* macTraceGetModuleString( tANI_U8 moduleId  )
     //return gVosTraceInfo[moduleId].moduleNameStr;
 }
 
+<<<<<<< HEAD
 
 
 
@@ -937,15 +988,21 @@ void macTraceInit(tpAniSirGlobal pMac)
 
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void macTraceReset(tpAniSirGlobal pMac)
 {
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void macTrace(tpAniSirGlobal pMac,  tANI_U8 code, tANI_U8 session, tANI_U32 data)
 {
     //Today macTrace is being invoked by PE only, need to remove this function once PE is migrated to using new trace API.
     macTraceNew(pMac, VOS_MODULE_ID_PE, code, session, data);
+<<<<<<< HEAD
 
 #if 0
     tpTraceRecord rec = NULL;
@@ -1056,6 +1113,15 @@ void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 sess
 
 
 
+=======
+}
+
+void macTraceNew(tpAniSirGlobal pMac, tANI_U8 module, tANI_U8 code, tANI_U8 session, tANI_U32 data)
+{
+    vos_trace(module, code, session, data);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
 {
     tANI_U16 msgId = (tANI_U16)MAC_TRACE_GET_MSG_ID(msgType);
@@ -1078,6 +1144,7 @@ tANI_U8* macTraceMsgString(tpAniSirGlobal pMac, tANI_U32 msgType)
     }
 }
 
+<<<<<<< HEAD
 
 
 
@@ -1162,4 +1229,6 @@ void macTraceRegister( tpAniSirGlobal pMac, VOS_MODULE_ID moduleId,    tpTraceCb
 }
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif

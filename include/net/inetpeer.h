@@ -40,16 +40,29 @@ struct inet_peer {
 	u32			pmtu_orig;
 	u32			pmtu_learned;
 	struct inetpeer_addr_base redirect_learned;
+<<<<<<< HEAD
 	struct list_head	gc_list;
 	/*
 	 * Once inet_peer is queued for deletion (refcnt == -1), following fields
 	 * are not available: rid, ip_id_count, tcp_ts, tcp_ts_stamp
+=======
+	union {
+		struct list_head	gc_list;
+		struct rcu_head     gc_rcu;
+	};
+	/*
+	 * Once inet_peer is queued for deletion (refcnt == -1), following fields
+	 * are not available: rid, tcp_ts, tcp_ts_stamp
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 * We can share memory with rcu_head to help keep inet_peer small.
 	 */
 	union {
 		struct {
 			atomic_t			rid;		/* Frag reception counter */
+<<<<<<< HEAD
 			atomic_t			ip_id_count;	/* IP ID for the next packet */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			__u32				tcp_ts;
 			__u32				tcp_ts_stamp;
 		};
@@ -99,7 +112,11 @@ extern bool inet_peer_xrlim_allow(struct inet_peer *peer, int timeout);
 extern void inetpeer_invalidate_tree(int family);
 
 /*
+<<<<<<< HEAD
  * temporary check to make sure we dont access rid, ip_id_count, tcp_ts,
+=======
+ * temporary check to make sure we dont access rid, tcp_ts,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * tcp_ts_stamp if no refcount is taken on inet_peer
  */
 static inline void inet_peer_refcheck(const struct inet_peer *p)
@@ -107,6 +124,7 @@ static inline void inet_peer_refcheck(const struct inet_peer *p)
 	WARN_ON_ONCE(atomic_read(&p->refcnt) <= 0);
 }
 
+<<<<<<< HEAD
 
 /* can be called with or without local BH being disabled */
 static inline int inet_getid(struct inet_peer *p, int more)
@@ -123,4 +141,6 @@ static inline int inet_getid(struct inet_peer *p, int more)
 	return new;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* _NET_INETPEER_H */

@@ -28,6 +28,10 @@ obj-$(CONFIG_MD_MULTIPATH)	+= multipath.o
 obj-$(CONFIG_MD_FAULTY)		+= faulty.o
 obj-$(CONFIG_BLK_DEV_MD)	+= md-mod.o
 obj-$(CONFIG_BLK_DEV_DM)	+= dm-mod.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_BLK_DEV_DM_BUILTIN) += dm-builtin.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 obj-$(CONFIG_DM_BUFIO)		+= dm-bufio.o
 obj-$(CONFIG_DM_CRYPT)		+= dm-crypt.o
 obj-$(CONFIG_DM_DELAY)		+= dm-delay.o

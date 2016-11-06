@@ -186,11 +186,25 @@ static int __init dummy_init_module(void)
 
 	rtnl_lock();
 	err = __rtnl_link_register(&dummy_link_ops);
+<<<<<<< HEAD
 
 	for (i = 0; i < numdummies && !err; i++)
 		err = dummy_init_one();
 	if (err < 0)
 		__rtnl_link_unregister(&dummy_link_ops);
+=======
+	if (err < 0)
+		goto out;
+
+	for (i = 0; i < numdummies && !err; i++) {
+		err = dummy_init_one();
+		cond_resched();
+	}
+	if (err < 0)
+		__rtnl_link_unregister(&dummy_link_ops);
+
+out:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rtnl_unlock();
 
 	return err;

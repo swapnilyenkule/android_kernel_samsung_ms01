@@ -45,6 +45,10 @@ struct pscsi_dev_virt {
 	int	pdv_lun_id;
 	struct block_device *pdv_bd;
 	struct scsi_device *pdv_sd;
+<<<<<<< HEAD
+=======
+	struct Scsi_Host *pdv_lld_host;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct se_hba *pdv_se_hba;
 } ____cacheline_aligned;
 

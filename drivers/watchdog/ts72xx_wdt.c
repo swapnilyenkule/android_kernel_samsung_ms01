@@ -310,7 +310,12 @@ static long ts72xx_wdt_ioctl(struct file *file, unsigned int cmd,
 
 	case WDIOC_GETSTATUS:
 	case WDIOC_GETBOOTSTATUS:
+<<<<<<< HEAD
 		return put_user(0, p);
+=======
+		error = put_user(0, p);
+		break;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	case WDIOC_KEEPALIVE:
 		ts72xx_wdt_kick(wdt);

@@ -562,9 +562,15 @@ static int __init caif_device_init(void)
 
 static void __exit caif_device_exit(void)
 {
+<<<<<<< HEAD
 	unregister_pernet_subsys(&caif_net_ops);
 	unregister_netdevice_notifier(&caif_device_notifier);
 	dev_remove_pack(&caif_packet_type);
+=======
+	unregister_netdevice_notifier(&caif_device_notifier);
+	dev_remove_pack(&caif_packet_type);
+	unregister_pernet_subsys(&caif_net_ops);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 module_init(caif_device_init);

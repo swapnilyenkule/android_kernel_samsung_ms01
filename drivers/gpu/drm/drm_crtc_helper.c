@@ -328,8 +328,13 @@ drm_crtc_prepare_encoders(struct drm_device *dev)
  * drm_crtc_set_mode - set a mode
  * @crtc: CRTC to program
  * @mode: mode to use
+<<<<<<< HEAD
  * @x: width of mode
  * @y: height of mode
+=======
+ * @x: horizontal offset into the surface
+ * @y: vertical offset into the surface
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * LOCKING:
  * Caller must hold mode config lock.

@@ -334,6 +334,28 @@ finish:
 	return retval;
 }
 
+<<<<<<< HEAD
+=======
+static void sctp_packet_release_owner(struct sk_buff *skb)
+{
+	sk_free(skb->sk);
+}
+
+static void sctp_packet_set_owner_w(struct sk_buff *skb, struct sock *sk)
+{
+	skb_orphan(skb);
+	skb->sk = sk;
+	skb->destructor = sctp_packet_release_owner;
+
+	/*
+	 * The data chunks have already been accounted for in sctp_sendmsg(),
+	 * therefore only reserve a single byte to keep socket around until
+	 * the packet has been transmitted.
+	 */
+	atomic_inc(&sk->sk_wmem_alloc);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* All packets are sent to the network through this function from
  * sctp_outq_tail().
  *
@@ -375,7 +397,11 @@ int sctp_packet_transmit(struct sctp_packet *packet)
 	/* Set the owning socket so that we know where to get the
 	 * destination IP address.
 	 */
+<<<<<<< HEAD
 	skb_set_owner_w(nskb, sk);
+=======
+	sctp_packet_set_owner_w(nskb, sk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!sctp_transport_dst_check(tp)) {
 		sctp_transport_route(tp, NULL, sctp_sk(sk));
@@ -499,7 +525,12 @@ int sctp_packet_transmit(struct sctp_packet *packet)
 	 * by CRC32-C as described in <draft-ietf-tsvwg-sctpcsum-02.txt>.
 	 */
 	if (!sctp_checksum_disable) {
+<<<<<<< HEAD
 		if (!(dst->dev->features & NETIF_F_SCTP_CSUM)) {
+=======
+		if (!(dst->dev->features & NETIF_F_SCTP_CSUM) ||
+		    (dst_xfrm(dst) != NULL) || packet->ipfragok) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			__u32 crc32 = sctp_start_cksum((__u8 *)sh, cksum_buf_len);
 
 			/* 3) Put the resultant value into the checksum field in the
@@ -567,7 +598,11 @@ out:
 	return err;
 no_route:
 	kfree_skb(nskb);
+<<<<<<< HEAD
 	IP_INC_STATS_BH(&init_net, IPSTATS_MIB_OUTNOROUTES);
+=======
+	IP_INC_STATS(&init_net, IPSTATS_MIB_OUTNOROUTES);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* FIXME: Returning the 'err' will effect all the associations
 	 * associated with a socket, although only one of the paths of the

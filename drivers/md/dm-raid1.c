@@ -603,6 +603,18 @@ static void write_callback(unsigned long error, void *context)
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If the bio is discard, return an error, but do not
+	 * degrade the array.
+	 */
+	if (bio->bi_rw & REQ_DISCARD) {
+		bio_endio(bio, -EOPNOTSUPP);
+		return;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < ms->nr_mirrors; i++)
 		if (test_bit(i, &error))
 			fail_mirror(ms->mirror + i, DM_RAID1_WRITE_ERROR);
@@ -1084,6 +1096,10 @@ static int mirror_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	ti->split_io = dm_rh_get_region_size(ms->rh);
 	ti->num_flush_requests = 1;
 	ti->num_discard_requests = 1;
+<<<<<<< HEAD
+=======
+	ti->discard_zeroes_data_unsupported = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ms->kmirrord_wq = alloc_workqueue("kmirrord",
 					  WQ_NON_REENTRANT | WQ_MEM_RECLAIM, 0);
@@ -1214,7 +1230,11 @@ static int mirror_end_io(struct dm_target *ti, struct bio *bio,
 	 * We need to dec pending if this was a write.
 	 */
 	if (rw == WRITE) {
+<<<<<<< HEAD
 		if (!(bio->bi_rw & REQ_FLUSH))
+=======
+		if (!(bio->bi_rw & (REQ_FLUSH | REQ_DISCARD)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			dm_rh_dec(ms->rh, map_context->ll);
 		return error;
 	}

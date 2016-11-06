@@ -50,7 +50,11 @@ void pci_update_resource(struct pci_dev *dev, int resno)
 	if (res->flags & IORESOURCE_PCI_FIXED)
 		return;
 
+<<<<<<< HEAD
 	pcibios_resource_to_bus(dev, &region, res);
+=======
+	pcibios_resource_to_bus(dev->bus, &region, res);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	new = region.start | (res->flags & PCI_REGION_FLAG_MASK);
 	if (res->flags & IORESOURCE_IO)
@@ -206,7 +210,12 @@ static int pci_revert_fw_address(struct resource *res, struct pci_dev *dev,
 	return ret;
 }
 
+<<<<<<< HEAD
 static int _pci_assign_resource(struct pci_dev *dev, int resno, int size, resource_size_t min_align)
+=======
+static int _pci_assign_resource(struct pci_dev *dev, int resno,
+				resource_size_t size, resource_size_t min_align)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct resource *res = dev->resource + resno;
 	struct pci_bus *bus;

@@ -197,7 +197,11 @@ config SERIAL_SAMSUNG_UARTS_4
 config SERIAL_SAMSUNG_UARTS
 	int
 	depends on ARM && PLAT_SAMSUNG
+<<<<<<< HEAD
 	default 6 if ARCH_S5P6450
+=======
+	default 6 if CPU_S5P6450
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default 4 if SERIAL_SAMSUNG_UARTS_4 || CPU_S3C2416
 	default 3
 	help

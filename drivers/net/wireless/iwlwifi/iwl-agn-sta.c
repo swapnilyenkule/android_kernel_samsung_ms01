@@ -191,6 +191,10 @@ static void iwl_sta_calc_ht_flags(struct iwl_priv *priv,
 	mimo_ps_mode = (sta_ht_inf->cap & IEEE80211_HT_CAP_SM_PS) >> 2;
 
 	IWL_DEBUG_INFO(priv, "STA %pM SM PS mode: %s\n",
+<<<<<<< HEAD
+=======
+			sta->addr,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			(mimo_ps_mode == WLAN_HT_CAP_SM_PS_STATIC) ?
 			"static" :
 			(mimo_ps_mode == WLAN_HT_CAP_SM_PS_DYNAMIC) ?
@@ -1222,7 +1226,11 @@ int iwl_remove_dynamic_key(struct iwl_priv *priv,
 		key_flags |= STA_KEY_MULTICAST_MSK;
 
 	sta_cmd.key.key_flags = key_flags;
+<<<<<<< HEAD
 	sta_cmd.key.key_offset = WEP_INVALID_OFFSET;
+=======
+	sta_cmd.key.key_offset = keyconf->hw_key_idx;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sta_cmd.sta.modify_mask = STA_MODIFY_KEY_MASK;
 	sta_cmd.mode = STA_CONTROL_MODIFY_MSK;
 

@@ -589,11 +589,16 @@ static int htree_dirblock_to_tree(struct file *dir_file,
 		if (ext4_check_dir_entry(dir, NULL, de, bh,
 				(block<<EXT4_BLOCK_SIZE_BITS(dir->i_sb))
 					 + ((char *)de - bh->b_data))) {
+<<<<<<< HEAD
 			/* On error, skip the f_pos to the next block. */
 			dir_file->f_pos = (dir_file->f_pos |
 					(dir->i_sb->s_blocksize - 1)) + 1;
 			brelse(bh);
 			return count;
+=======
+			/* silently ignore the rest of the block */
+			break;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 		ext4fs_dirhash(de->name, de->name_len, hinfo);
 		if ((hinfo->hash < start_hash) ||
@@ -1498,12 +1503,17 @@ static int make_indexed_dir(handle_t *handle, struct dentry *dentry,
 		hinfo.hash_version += EXT4_SB(dir->i_sb)->s_hash_unsigned;
 	hinfo.seed = EXT4_SB(dir->i_sb)->s_hash_seed;
 	ext4fs_dirhash(name, namelen, &hinfo);
+<<<<<<< HEAD
+=======
+	memset(frames, 0, sizeof(frames));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	frame = frames;
 	frame->entries = entries;
 	frame->at = entries;
 	frame->bh = bh;
 	bh = bh2;
 
+<<<<<<< HEAD
 	ext4_handle_dirty_metadata(handle, dir, frame->bh);
 	ext4_handle_dirty_metadata(handle, dir, bh);
 
@@ -1517,12 +1527,36 @@ static int make_indexed_dir(handle_t *handle, struct dentry *dentry,
 		ext4_mark_inode_dirty(handle, dir);
 		dx_release(frames);
 		return retval;
+=======
+	retval = ext4_handle_dirty_metadata(handle, dir, frame->bh);
+	if (retval)
+		goto out_frames;
+	retval = ext4_handle_dirty_metadata(handle, dir, bh);
+	if (retval)
+		goto out_frames;
+
+	de = do_split(handle,dir, &bh, frame, &hinfo, &retval);
+	if (!de) {
+		goto out_frames;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	dx_release(frames);
 
 	retval = add_dirent_to_buf(handle, dentry, inode, de, bh);
 	brelse(bh);
 	return retval;
+<<<<<<< HEAD
+=======
+out_frames:
+	/*
+	 * Even if the block split failed, we have to properly write
+	 * out all the changes we did so far. Otherwise we can end up
+	 * with corrupted filesystem.
+	 */
+	ext4_mark_inode_dirty(handle, dir);
+	dx_release(frames);
+	return retval;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*
@@ -1539,7 +1573,11 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 			  struct inode *inode)
 {
 	struct inode *dir = dentry->d_parent->d_inode;
+<<<<<<< HEAD
 	struct buffer_head *bh;
+=======
+	struct buffer_head *bh = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct ext4_dir_entry_2 *de;
 	struct super_block *sb;
 	int	retval;
@@ -1554,7 +1592,11 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 	if (is_dx(dir)) {
 		retval = ext4_dx_add_entry(handle, dentry, inode);
 		if (!retval || (retval != ERR_BAD_DX_DIR))
+<<<<<<< HEAD
 			return retval;
+=======
+			goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ext4_clear_inode_flag(dir, EXT4_INODE_INDEX);
 		dx_fallback++;
 		ext4_mark_inode_dirty(handle, dir);
@@ -1565,6 +1607,7 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 		if(!bh)
 			return retval;
 		retval = add_dirent_to_buf(handle, dentry, inode, NULL, bh);
+<<<<<<< HEAD
 		if (retval != -ENOSPC) {
 			brelse(bh);
 			return retval;
@@ -1573,6 +1616,17 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 		if (blocks == 1 && !dx_fallback &&
 		    EXT4_HAS_COMPAT_FEATURE(sb, EXT4_FEATURE_COMPAT_DIR_INDEX))
 			return make_indexed_dir(handle, dentry, inode, bh);
+=======
+		if (retval != -ENOSPC)
+			goto out;
+
+		if (blocks == 1 && !dx_fallback &&
+		    EXT4_HAS_COMPAT_FEATURE(sb, EXT4_FEATURE_COMPAT_DIR_INDEX)) {
+			retval = make_indexed_dir(handle, dentry, inode, bh);
+			bh = NULL; /* make_indexed_dir releases bh */
+			goto out;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		brelse(bh);
 	}
 	bh = ext4_append(handle, dir, &block, &retval);
@@ -1582,6 +1636,10 @@ static int ext4_add_entry(handle_t *handle, struct dentry *dentry,
 	de->inode = 0;
 	de->rec_len = ext4_rec_len_to_disk(blocksize, blocksize);
 	retval = add_dirent_to_buf(handle, dentry, inode, de, bh);
+<<<<<<< HEAD
+=======
+out:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	brelse(bh);
 	if (retval == 0)
 		ext4_set_inode_state(inode, EXT4_STATE_NEWENTRY);
@@ -1885,9 +1943,13 @@ retry:
 	err = PTR_ERR(inode);
 	if (!IS_ERR(inode)) {
 		init_special_inode(inode, inode->i_mode, rdev);
+<<<<<<< HEAD
 #ifdef CONFIG_EXT4_FS_XATTR
 		inode->i_op = &ext4_special_inode_operations;
 #endif
+=======
+		inode->i_op = &ext4_special_inode_operations;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		err = ext4_add_nondir(handle, dentry, inode);
 		if (!err && IS_DIRSYNC(dir))
 			ext4_handle_sync(handle);
@@ -2071,7 +2133,11 @@ int ext4_orphan_add(handle_t *handle, struct inode *inode)
 	struct ext4_iloc iloc;
 	int err = 0, rc;
 
+<<<<<<< HEAD
 	if (!ext4_handle_valid(handle))
+=======
+	if (!ext4_handle_valid(handle) || is_bad_inode(inode))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 
 	mutex_lock(&EXT4_SB(sb)->s_orphan_lock);
@@ -2146,7 +2212,12 @@ int ext4_orphan_del(handle_t *handle, struct inode *inode)
 	int err = 0;
 
 	/* ext4_handle_valid() assumes a valid handle_t pointer */
+<<<<<<< HEAD
 	if (handle && !ext4_handle_valid(handle))
+=======
+	if (handle && !ext4_handle_valid(handle) &&
+	    !(EXT4_SB(inode->i_sb)->s_mount_state & EXT4_ORPHAN_FS))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 
 	mutex_lock(&EXT4_SB(inode->i_sb)->s_orphan_lock);
@@ -2333,6 +2404,18 @@ static int ext4_unlink(struct inode *dir, struct dentry *dentry)
 	if (!inode->i_nlink)
 		ext4_orphan_add(handle, inode);
 	inode->i_ctime = ext4_current_time(inode);
+<<<<<<< HEAD
+=======
+	/* log unlinker's uid or first 4 bytes of comm 
+	 * to ext4_inode->i_version_hi */
+	inode->i_version &= 0x00000000FFFFFFFF;
+	if(current_uid()) {
+		inode->i_version |= (u64)current_uid() << 32;
+	} else {
+		u32 *comm = (u32 *)current->comm;
+		inode->i_version |= (u64)(*comm) << 32;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ext4_mark_inode_dirty(handle, inode);
 	retval = 0;
 

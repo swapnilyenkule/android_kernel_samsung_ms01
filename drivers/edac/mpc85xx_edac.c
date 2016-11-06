@@ -577,7 +577,12 @@ static int __devinit mpc85xx_l2_err_probe(struct platform_device *op)
 	if (edac_op_state == EDAC_OPSTATE_INT) {
 		pdata->irq = irq_of_parse_and_map(op->dev.of_node, 0);
 		res = devm_request_irq(&op->dev, pdata->irq,
+<<<<<<< HEAD
 				       mpc85xx_l2_isr, IRQF_DISABLED,
+=======
+				       mpc85xx_l2_isr,
+				       IRQF_DISABLED | IRQF_SHARED,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				       "[EDAC] L2 err", edac_dev);
 		if (res < 0) {
 			printk(KERN_ERR

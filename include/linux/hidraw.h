@@ -76,13 +76,21 @@ struct hidraw_list {
 #ifdef CONFIG_HIDRAW
 int hidraw_init(void);
 void hidraw_exit(void);
+<<<<<<< HEAD
 void hidraw_report_event(struct hid_device *, u8 *, int);
+=======
+int hidraw_report_event(struct hid_device *, u8 *, int);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int hidraw_connect(struct hid_device *);
 void hidraw_disconnect(struct hid_device *);
 #else
 static inline int hidraw_init(void) { return 0; }
 static inline void hidraw_exit(void) { }
+<<<<<<< HEAD
 static inline void hidraw_report_event(struct hid_device *hid, u8 *data, int len) { }
+=======
+static inline int hidraw_report_event(struct hid_device *hid, u8 *data, int len) { return 0; }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline int hidraw_connect(struct hid_device *hid) { return -1; }
 static inline void hidraw_disconnect(struct hid_device *hid) { }
 #endif

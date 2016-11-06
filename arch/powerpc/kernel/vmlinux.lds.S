@@ -38,9 +38,12 @@ jiffies = jiffies_64 + 4;
 #endif
 SECTIONS
 {
+<<<<<<< HEAD
 	. = 0;
 	reloc_start = .;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	. = KERNELBASE;
 
 /*
@@ -216,6 +219,10 @@ SECTIONS
 		*(.opd)
 	}
 
+<<<<<<< HEAD
+=======
+	. = ALIGN(256);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.got : AT(ADDR(.got) - LOAD_OFFSET) {
 		__toc_start = .;
 		*(.got)

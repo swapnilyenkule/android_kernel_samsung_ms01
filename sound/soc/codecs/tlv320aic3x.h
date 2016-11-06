@@ -166,6 +166,10 @@
 
 /* PLL registers bitfields */
 #define PLLP_SHIFT		0
+<<<<<<< HEAD
+=======
+#define PLLP_MASK		7
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define PLLQ_SHIFT		3
 #define PLLR_SHIFT		0
 #define PLLJ_SHIFT		2

@@ -37,12 +37,20 @@ struct inet_skb_parm {
 	struct ip_options	opt;		/* Compiled IP options		*/
 	unsigned char		flags;
 
+<<<<<<< HEAD
 #define IPSKB_FORWARDED		BIT(0)
 #define IPSKB_XFRM_TUNNEL_SIZE	BIT(1)
 #define IPSKB_XFRM_TRANSFORMED	BIT(2)
 #define IPSKB_FRAG_COMPLETE	BIT(3)
 #define IPSKB_REROUTED		BIT(4)
 #define IPSKB_DOREDIRECT	BIT(5)
+=======
+#define IPSKB_FORWARDED		1
+#define IPSKB_XFRM_TUNNEL_SIZE	2
+#define IPSKB_XFRM_TRANSFORMED	4
+#define IPSKB_FRAG_COMPLETE	8
+#define IPSKB_REROUTED		16
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static inline unsigned int ip_hdrlen(const struct sk_buff *skb)
@@ -269,16 +277,28 @@ int ip_dont_fragment(struct sock *sk, struct dst_entry *dst)
 		 !(dst_metric_locked(dst, RTAX_MTU)));
 }
 
+<<<<<<< HEAD
 extern void __ip_select_ident(struct iphdr *iph, struct dst_entry *dst, int more);
 
 static inline void ip_select_ident(struct iphdr *iph, struct dst_entry *dst, struct sock *sk)
 {
 	if (iph->frag_off & htons(IP_DF)) {
+=======
+u32 ip_idents_reserve(u32 hash, int segs);
+void __ip_select_ident(struct iphdr *iph, int segs);
+
+static inline void ip_select_ident_segs(struct sk_buff *skb, struct sock *sk, int segs)
+{
+	struct iphdr *iph = ip_hdr(skb);
+
+	if ((iph->frag_off & htons(IP_DF)) && !skb->local_df) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* This is only to work around buggy Windows95/2000
 		 * VJ compression implementations.  If the ID field
 		 * does not change, they drop every other packet in
 		 * a TCP stream using header compression.
 		 */
+<<<<<<< HEAD
 		iph->id = (sk && inet_sk(sk)->inet_daddr) ?
 					htons(inet_sk(sk)->inet_id++) : 0;
 	} else
@@ -295,6 +315,22 @@ static inline void ip_select_ident_more(struct iphdr *iph, struct dst_entry *dst
 			iph->id = 0;
 	} else
 		__ip_select_ident(iph, dst, more);
+=======
+		if (sk && inet_sk(sk)->inet_daddr) {
+			iph->id = htons(inet_sk(sk)->inet_id);
+			inet_sk(sk)->inet_id += segs;
+		} else {
+			iph->id = 0;
+		}
+	} else {
+		__ip_select_ident(iph, segs);
+	}
+}
+
+static inline void ip_select_ident(struct sk_buff *skb, struct sock *sk)
+{
+	ip_select_ident_segs(skb, sk, 1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*

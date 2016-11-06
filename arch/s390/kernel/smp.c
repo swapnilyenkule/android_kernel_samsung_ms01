@@ -738,7 +738,11 @@ static void __cpuinit smp_fork_idle(struct work_struct *work)
 }
 
 /* Upping and downing of CPUs */
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct create_idle c_idle;
 	struct pcpu *pcpu;
@@ -1034,14 +1038,20 @@ static int __cpuinit smp_cpu_notify(struct notifier_block *self,
 	unsigned int cpu = (unsigned int)(long)hcpu;
 	struct cpu *c = &pcpu_devices[cpu].cpu;
 	struct device *s = &c->dev;
+<<<<<<< HEAD
 	struct s390_idle_data *idle;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int err = 0;
 
 	switch (action) {
 	case CPU_ONLINE:
 	case CPU_ONLINE_FROZEN:
+<<<<<<< HEAD
 		idle = &per_cpu(s390_idle, cpu);
 		memset(idle, 0, sizeof(struct s390_idle_data));
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		err = sysfs_create_group(&s->kobj, &cpu_online_attr_group);
 		break;
 	case CPU_DEAD:

@@ -36,6 +36,14 @@ static void sdcardfs_put_super(struct super_block *sb)
 	if (!spd)
 		return;
 
+<<<<<<< HEAD
+=======
+	printk(KERN_ERR "sdcardfs: umounted dev_name %s\n", 
+				spd->devpath ? spd->devpath : "");
+	if(spd->devpath)
+		kfree(spd->devpath);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if(spd->obbpath_s) {
 		kfree(spd->obbpath_s);
 		path_put(&spd->obbpath);

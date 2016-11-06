@@ -1022,7 +1022,11 @@ int dpm_suspend_end(pm_message_t state)
 
 	error = dpm_suspend_noirq(state);
 	if (error) {
+<<<<<<< HEAD
 		dpm_resume_early(state);
+=======
+		dpm_resume_early(resume_event(state));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return error;
 	}
 

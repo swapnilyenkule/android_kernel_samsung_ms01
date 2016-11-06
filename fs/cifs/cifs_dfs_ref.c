@@ -18,6 +18,10 @@
 #include <linux/slab.h>
 #include <linux/vfs.h>
 #include <linux/fs.h>
+<<<<<<< HEAD
+=======
+#include <linux/inet.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include "cifsglob.h"
 #include "cifsproto.h"
 #include "cifsfs.h"
@@ -150,7 +154,12 @@ char *cifs_compose_mount_options(const char *sb_mountdata,
 	 * assuming that we have 'unc=' and 'ip=' in
 	 * the original sb_mountdata
 	 */
+<<<<<<< HEAD
 	md_len = strlen(sb_mountdata) + rc + strlen(ref->node_name) + 12;
+=======
+	md_len = strlen(sb_mountdata) + rc + strlen(ref->node_name) + 12 +
+			INET6_ADDRSTRLEN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mountdata = kzalloc(md_len+1, GFP_KERNEL);
 	if (mountdata == NULL) {
 		rc = -ENOMEM;
@@ -226,6 +235,11 @@ compose_mount_options_out:
 compose_mount_options_err:
 	kfree(mountdata);
 	mountdata = ERR_PTR(rc);
+<<<<<<< HEAD
+=======
+	kfree(*devname);
+	*devname = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	goto compose_mount_options_out;
 }
 

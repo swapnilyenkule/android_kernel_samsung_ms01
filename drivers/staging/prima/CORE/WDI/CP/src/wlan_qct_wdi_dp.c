@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -39,6 +44,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*===========================================================================
 
                        W L A N _ Q C T _ W D I _ D P. C
@@ -396,9 +413,16 @@ WDI_FillTxBd
     wpt_uint8*             pTid, 
     wpt_uint8              ucDisableFrmXtl, 
     void*                  pTxBd, 
+<<<<<<< HEAD
     wpt_uint8              ucTxFlag, 
     wpt_uint8              ucProtMgmtFrame,
     wpt_uint32             uTimeStamp,
+=======
+    wpt_uint32             ucTxFlag,
+    wpt_uint8              ucProtMgmtFrame,
+    wpt_uint32             uTimeStamp,
+    wpt_uint8              isEapol,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     wpt_uint8*             staIndex
 )
 {
@@ -424,7 +448,11 @@ WDI_FillTxBd
     ucSubType = (ucTypeSubtype & WDI_FRAME_SUBTYPE_MASK);
 
     WPAL_TRACE( eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_WARN, 
+<<<<<<< HEAD
                "Type: %d/%d, MAC S: %08x. MAC D: %08x., Tid=%d, frmXlat=%d, pTxBD=%08x ucTxFlag 0x%X\n", 
+=======
+               "Type: %d/%d, MAC S: %08x. MAC D: %08x., Tid=%d, frmXlat=%d, pTxBD=%p ucTxFlag 0x%X",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 ucType, ucSubType, 
                 *((wpt_uint32 *) pAddr2), 
                *((wpt_uint32 *) pDestMacAddr), 
@@ -469,6 +497,20 @@ WDI_FillTxBd
         pBd->dpuRF = BMUWQ_BTQM_TX_MGMT; 
     }
 
+<<<<<<< HEAD
+=======
+    if (ucTxFlag & WDI_USE_FW_IN_TX_PATH)
+    {
+        WPAL_TRACE( eWLAN_MODULE_DAL_CTRL, eWLAN_PAL_TRACE_LEVEL_INFO,
+          "iType: %d SubType %d, MAC S: %08x. MAC D: %08x., Tid=%d",
+                    ucType, ucSubType,
+                    *((wpt_uint32 *) pAddr2),
+                   *((wpt_uint32 *) pDestMacAddr),
+                    ucTid);
+
+        pBd->dpuRF = BMUWQ_FW_DPU_TX;
+    }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     pBd->tid           = ucTid; 
     // Clear the reserved field as this field is used for defining special 
@@ -551,6 +593,15 @@ WDI_FillTxBd
            pBd->bdRate = WDI_BDRATE_CTRL_FRAME;
         }
 #endif
+<<<<<<< HEAD
+=======
+
+        if(ucTxFlag & WDI_USE_BD_RATE_MASK)
+        {
+            pBd->bdRate = WDI_BDRATE_BCDATA_FRAME;
+        }
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         pBd->rmf    = WDI_RMF_DISABLED;     
 
         /* sanity: Might already be set by caller, but enforce it here again */
@@ -694,7 +745,11 @@ WDI_FillTxBd
                 return WDI_STATUS_E_NOT_ALLOWED;
            }
 #else
+<<<<<<< HEAD
             ucStaId = pWDICtx->ucSelfStaId;
+=======
+           ucStaId = pWDICtx->ucSelfStaId;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
         }
         else
@@ -821,7 +876,13 @@ WDI_FillTxBd
               }
               ucStaId = pBSSSes->bcastStaIdx;
            }
+<<<<<<< HEAD
          }    
+=======
+         }
+
+        WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_INFO,"StaId:%d and ucTxFlag:%02x", ucStaId, ucTxFlag);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
         pBd->staIndex = ucStaId;
         
@@ -922,8 +983,17 @@ WDI_FillTxBd
 #ifdef FEATURE_WLAN_TDLS
                   (ucSTAType == WDI_STA_ENTRY_TDLS_PEER ) &&
 #endif
+<<<<<<< HEAD
                   (ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK)))
        {
+=======
+                  (ucTxFlag & WDI_TRIGGER_ENABLED_AC_MASK)) || isEapol)
+       {
+          WPAL_TRACE(eWLAN_MODULE_DAL_DATA, eWLAN_PAL_TRACE_LEVEL_INFO,
+          "Sending EAPOL pakcet over WQ5 MAC S: %08x. MAC D: %08x.",
+                    *((wpt_uint32 *) pAddr2),
+                   *((wpt_uint32 *) pDestMacAddr));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
            pBd->dpuRF = BMUWQ_FW_DPU_TX;
        }
 #endif

@@ -73,7 +73,11 @@ if (pipe->src_fmt->is_yuv || (pipe->flags & MDP_BACKEND_COMPOSITION)) {
 		return 0;
 	}
 #else	
+<<<<<<< HEAD
 	if (i != 0 && n != i && !force_alloc) {
+=======
+	if (i != 0 && n != i) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pr_debug("Can't change mmb configuration in set call\n");
 		return 0;
 	}

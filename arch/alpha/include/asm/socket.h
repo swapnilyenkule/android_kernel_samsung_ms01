@@ -76,9 +76,17 @@
 /* Instruct lower device to use last 4-bytes of skb data as FCS */
 #define SO_NOFCS		43
 
+<<<<<<< HEAD
+=======
+#ifdef __KERNEL__
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* O_NONBLOCK clashes with the bits used for socket types.  Therefore we
  * have to define SOCK_NONBLOCK to a different value here.
  */
 #define SOCK_NONBLOCK	0x40000000
+<<<<<<< HEAD
+=======
+#endif /* __KERNEL__ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif /* _ASM_SOCKET_H */

@@ -42,6 +42,10 @@
 #include <linux/kd.h>
 #include <linux/slab.h>
 #include <linux/vt_kern.h>
+<<<<<<< HEAD
+=======
+#include <linux/sched.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/selection.h>
 #include <linux/spinlock.h>
 #include <linux/ioport.h>
@@ -1064,7 +1068,11 @@ static int vgacon_do_font_op(struct vgastate *state,char *arg,int set,int ch512)
 	unsigned short video_port_status = vga_video_port_reg + 6;
 	int font_select = 0x00, beg, i;
 	char *charmap;
+<<<<<<< HEAD
 	
+=======
+	bool clear_attribs = false;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (vga_video_type != VIDEO_TYPE_EGAM) {
 		charmap = (char *) VGA_MAP_MEM(colourmap, 0);
 		beg = 0x0e;
@@ -1124,11 +1132,23 @@ static int vgacon_do_font_op(struct vgastate *state,char *arg,int set,int ch512)
 
 	if (arg) {
 		if (set)
+<<<<<<< HEAD
 			for (i = 0; i < cmapsz; i++)
 				vga_writeb(arg[i], charmap + i);
 		else
 			for (i = 0; i < cmapsz; i++)
 				arg[i] = vga_readb(charmap + i);
+=======
+			for (i = 0; i < cmapsz; i++) {
+				vga_writeb(arg[i], charmap + i);
+				cond_resched();
+			}
+		else
+			for (i = 0; i < cmapsz; i++) {
+				arg[i] = vga_readb(charmap + i);
+				cond_resched();
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		/*
 		 * In 512-character mode, the character map is not contiguous if
@@ -1139,11 +1159,23 @@ static int vgacon_do_font_op(struct vgastate *state,char *arg,int set,int ch512)
 			charmap += 2 * cmapsz;
 			arg += cmapsz;
 			if (set)
+<<<<<<< HEAD
 				for (i = 0; i < cmapsz; i++)
 					vga_writeb(arg[i], charmap + i);
 			else
 				for (i = 0; i < cmapsz; i++)
 					arg[i] = vga_readb(charmap + i);
+=======
+				for (i = 0; i < cmapsz; i++) {
+					vga_writeb(arg[i], charmap + i);
+					cond_resched();
+				}
+			else
+				for (i = 0; i < cmapsz; i++) {
+					arg[i] = vga_readb(charmap + i);
+					cond_resched();
+				}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 
@@ -1169,12 +1201,15 @@ static int vgacon_do_font_op(struct vgastate *state,char *arg,int set,int ch512)
 
 	/* if 512 char mode is already enabled don't re-enable it. */
 	if ((set) && (ch512 != vga_512_chars)) {
+<<<<<<< HEAD
 		/* attribute controller */
 		for (i = 0; i < MAX_NR_CONSOLES; i++) {
 			struct vc_data *c = vc_cons[i].d;
 			if (c && c->vc_sw == &vga_con)
 				c->vc_hi_font_mask = ch512 ? 0x0800 : 0;
 		}
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		vga_512_chars = ch512;
 		/* 256-char: enable intensity bit
 		   512-char: disable intensity bit */
@@ -1185,8 +1220,27 @@ static int vgacon_do_font_op(struct vgastate *state,char *arg,int set,int ch512)
 		   it means, but it works, and it appears necessary */
 		inb_p(video_port_status);
 		vga_wattr(state->vgabase, VGA_AR_ENABLE_DISPLAY, 0);	
+<<<<<<< HEAD
 	}
 	raw_spin_unlock_irq(&vga_lock);
+=======
+		clear_attribs = true;
+	}
+	raw_spin_unlock_irq(&vga_lock);
+
+	if (clear_attribs) {
+		for (i = 0; i < MAX_NR_CONSOLES; i++) {
+			struct vc_data *c = vc_cons[i].d;
+			if (c && c->vc_sw == &vga_con) {
+				/* force hi font mask to 0, so we always clear
+				   the bit on either transition */
+				c->vc_hi_font_mask = 0x00;
+				clear_buffer_attributes(c);
+				c->vc_hi_font_mask = ch512 ? 0x0800 : 0;
+			}
+		}
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 

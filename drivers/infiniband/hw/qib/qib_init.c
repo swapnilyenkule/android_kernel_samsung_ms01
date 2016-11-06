@@ -765,7 +765,10 @@ static void qib_shutdown_device(struct qib_devdata *dd)
 		dd->f_quiet_serdes(ppd);
 	}
 
+<<<<<<< HEAD
 	qib_update_eeprom_log(dd);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**

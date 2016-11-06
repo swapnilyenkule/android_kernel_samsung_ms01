@@ -187,8 +187,13 @@ static int __devinit pcsp_probe(struct platform_device *dev)
 static int __devexit pcsp_remove(struct platform_device *dev)
 {
 	struct snd_pcsp *chip = platform_get_drvdata(dev);
+<<<<<<< HEAD
 	alsa_card_pcsp_exit(chip);
 	pcspkr_input_remove(chip->input_dev);
+=======
+	pcspkr_input_remove(chip->input_dev);
+	alsa_card_pcsp_exit(chip);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	platform_set_drvdata(dev, NULL);
 	return 0;
 }

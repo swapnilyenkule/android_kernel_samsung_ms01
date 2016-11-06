@@ -142,6 +142,7 @@ void syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
 			   unsigned int i, unsigned int n,
 			   const unsigned long *args);
 
+<<<<<<< HEAD
 /**
  * syscall_get_arch - return the AUDIT_ARCH for the current system call
  * @task:	task of interest, must be in system call entry tracing
@@ -156,4 +157,6 @@ void syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
  * provide an implementation of this.
  */
 int syscall_get_arch(struct task_struct *task, struct pt_regs *regs);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif	/* _ASM_SYSCALL_H */

@@ -86,13 +86,33 @@ cifs_readdir_lookup(struct dentry *parent, struct qstr *name,
 
 	dentry = d_lookup(parent, name);
 	if (dentry) {
+<<<<<<< HEAD
 		/* FIXME: check for inode number changes? */
 		if (dentry->d_inode != NULL)
 			return dentry;
+=======
+		inode = dentry->d_inode;
+		/* update inode in place if i_ino didn't change */
+		if (inode && CIFS_I(inode)->uniqueid == fattr->cf_uniqueid) {
+			cifs_fattr_to_inode(inode, fattr);
+			return dentry;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		d_drop(dentry);
 		dput(dentry);
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If we know that the inode will need to be revalidated immediately,
+	 * then don't create a new dentry for it. We'll end up doing an on
+	 * the wire call either way and this spares us an invalidation.
+	 */
+	if (fattr->cf_flags & CIFS_FATTR_NEED_REVAL)
+		return NULL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dentry = d_alloc(parent, name);
 	if (dentry == NULL)
 		return NULL;
@@ -219,6 +239,10 @@ int get_symlink_reparse_path(char *full_path, struct cifs_sb_info *cifs_sb,
 
 static int initiate_cifs_search(const int xid, struct file *file)
 {
+<<<<<<< HEAD
+=======
+	__u16 search_flags;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int rc = 0;
 	char *full_path = NULL;
 	struct cifsFileInfo *cifsFile;
@@ -270,8 +294,17 @@ ffirst_retry:
 		cifsFile->srch_inf.info_level = SMB_FIND_FILE_DIRECTORY_INFO;
 	}
 
+<<<<<<< HEAD
 	rc = CIFSFindFirst(xid, pTcon, full_path, cifs_sb->local_nls,
 		&cifsFile->netfid, &cifsFile->srch_inf,
+=======
+	search_flags = CIFS_SEARCH_CLOSE_AT_END | CIFS_SEARCH_RETURN_RESUME;
+	if (backup_cred(cifs_sb))
+		search_flags |= CIFS_SEARCH_BACKUP_SEARCH;
+
+	rc = CIFSFindFirst(xid, pTcon, full_path, cifs_sb->local_nls,
+		&cifsFile->netfid, search_flags, &cifsFile->srch_inf,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cifs_sb->mnt_cifs_flags &
 			CIFS_MOUNT_MAP_SPECIAL_CHR, CIFS_DIR_SEP(cifs_sb));
 	if (rc == 0)
@@ -502,11 +535,19 @@ static int cifs_save_resume_key(const char *current_entry,
 static int find_cifs_entry(const int xid, struct cifs_tcon *pTcon,
 	struct file *file, char **ppCurrentEntry, int *num_to_ret)
 {
+<<<<<<< HEAD
+=======
+	__u16 search_flags;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int rc = 0;
 	int pos_in_buf = 0;
 	loff_t first_entry_in_buffer;
 	loff_t index_to_find = file->f_pos;
 	struct cifsFileInfo *cifsFile = file->private_data;
+<<<<<<< HEAD
+=======
+	struct cifs_sb_info *cifs_sb = CIFS_SB(file->f_path.dentry->d_sb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* check if index in the buffer */
 
 	if ((cifsFile == NULL) || (ppCurrentEntry == NULL) ||
@@ -560,10 +601,21 @@ static int find_cifs_entry(const int xid, struct cifs_tcon *pTcon,
 						cifsFile);
 	}
 
+<<<<<<< HEAD
 	while ((index_to_find >= cifsFile->srch_inf.index_of_last_entry) &&
 	      (rc == 0) && !cifsFile->srch_inf.endOfSearch) {
 		cFYI(1, "calling findnext2");
 		rc = CIFSFindNext(xid, pTcon, cifsFile->netfid,
+=======
+	search_flags = CIFS_SEARCH_CLOSE_AT_END | CIFS_SEARCH_RETURN_RESUME;
+	if (backup_cred(cifs_sb))
+		search_flags |= CIFS_SEARCH_BACKUP_SEARCH;
+
+	while ((index_to_find >= cifsFile->srch_inf.index_of_last_entry) &&
+	      (rc == 0) && !cifsFile->srch_inf.endOfSearch) {
+		cFYI(1, "calling findnext2");
+		rc = CIFSFindNext(xid, pTcon, cifsFile->netfid, search_flags,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				  &cifsFile->srch_inf);
 		/* FindFirst/Next set last_entry to NULL on malformed reply */
 		if (cifsFile->srch_inf.last_entry)

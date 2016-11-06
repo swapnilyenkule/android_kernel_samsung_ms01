@@ -444,13 +444,23 @@ static bool radeon_atom_apply_quirks(struct drm_device *dev,
 	 */
 	if ((dev->pdev->device == 0x9498) &&
 	    (dev->pdev->subsystem_vendor == 0x1682) &&
+<<<<<<< HEAD
 	    (dev->pdev->subsystem_device == 0x2452)) {
+=======
+	    (dev->pdev->subsystem_device == 0x2452) &&
+	    (i2c_bus->valid == false) &&
+	    !(supported_device & (ATOM_DEVICE_TV_SUPPORT | ATOM_DEVICE_CV_SUPPORT))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		struct radeon_device *rdev = dev->dev_private;
 		*i2c_bus = radeon_lookup_i2c_gpio(rdev, 0x93);
 	}
 
 	/* Fujitsu D3003-S2 board lists DVI-I as DVI-D and VGA */
+<<<<<<< HEAD
 	if ((dev->pdev->device == 0x9802) &&
+=======
+	if (((dev->pdev->device == 0x9802) || (dev->pdev->device == 0x9806)) &&
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	    (dev->pdev->subsystem_vendor == 0x1734) &&
 	    (dev->pdev->subsystem_device == 0x11bd)) {
 		if (*connector_type == DRM_MODE_CONNECTOR_VGA) {
@@ -461,6 +471,16 @@ static bool radeon_atom_apply_quirks(struct drm_device *dev,
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/* Fujitsu D3003-S2 board lists DVI-I as DVI-I and VGA */
+	if ((dev->pdev->device == 0x9805) &&
+	    (dev->pdev->subsystem_vendor == 0x1734) &&
+	    (dev->pdev->subsystem_device == 0x11bd)) {
+		if (*connector_type == DRM_MODE_CONNECTOR_VGA)
+			return false;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return true;
 }
@@ -713,6 +733,7 @@ bool radeon_get_atom_connector_info_from_object_table(struct drm_device *dev)
 								(ATOM_SRC_DST_TABLE_FOR_ONE_OBJECT *)
 								(ctx->bios + data_offset +
 								 le16_to_cpu(router_obj->asObjects[k].usSrcDstTableOffset));
+<<<<<<< HEAD
 							int enum_id;
 
 							router.router_id = router_obj_id;
@@ -720,6 +741,18 @@ bool radeon_get_atom_connector_info_from_object_table(struct drm_device *dev)
 							     enum_id++) {
 								if (le16_to_cpu(path->usConnObjectId) ==
 								    le16_to_cpu(router_src_dst_table->usDstObjectID[enum_id]))
+=======
+							u8 *num_dst_objs = (u8 *)
+								((u8 *)router_src_dst_table + 1 +
+								 (router_src_dst_table->ucNumberOfSrc * 2));
+							u16 *dst_objs = (u16 *)(num_dst_objs + 1);
+							int enum_id;
+
+							router.router_id = router_obj_id;
+							for (enum_id = 0; enum_id < (*num_dst_objs); enum_id++) {
+								if (le16_to_cpu(path->usConnObjectId) ==
+								    le16_to_cpu(dst_objs[enum_id]))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 									break;
 							}
 
@@ -1620,7 +1653,13 @@ struct radeon_encoder_atom_dig *radeon_atombios_get_lvds_info(struct
 								kfree(edid);
 						}
 					}
+<<<<<<< HEAD
 					record += sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+=======
+					record += fake_edid_record->ucFakeEDIDLength ?
+						fake_edid_record->ucFakeEDIDLength + 2 :
+						sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					break;
 				case LCD_PANEL_RESOLUTION_RECORD_TYPE:
 					panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
@@ -1996,6 +2035,11 @@ static int radeon_atombios_parse_power_table_1_3(struct radeon_device *rdev)
 	num_modes = power_info->info.ucNumOfPowerModeEntries;
 	if (num_modes > ATOM_MAX_NUMBEROF_POWER_BLOCK)
 		num_modes = ATOM_MAX_NUMBEROF_POWER_BLOCK;
+<<<<<<< HEAD
+=======
+	if (num_modes == 0)
+		return state_index;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rdev->pm.power_state = kzalloc(sizeof(struct radeon_power_state) * num_modes, GFP_KERNEL);
 	if (!rdev->pm.power_state)
 		return state_index;
@@ -2394,6 +2438,11 @@ static int radeon_atombios_parse_power_table_4_5(struct radeon_device *rdev)
 	power_info = (union power_info *)(mode_info->atom_context->bios + data_offset);
 
 	radeon_atombios_add_pplib_thermal_controller(rdev, &power_info->pplib.sThermalController);
+<<<<<<< HEAD
+=======
+	if (power_info->pplib.ucNumStates == 0)
+		return state_index;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rdev->pm.power_state = kzalloc(sizeof(struct radeon_power_state) *
 				       power_info->pplib.ucNumStates, GFP_KERNEL);
 	if (!rdev->pm.power_state)
@@ -2476,6 +2525,10 @@ static int radeon_atombios_parse_power_table_6(struct radeon_device *rdev)
 	int index = GetIndexIntoMasterTable(DATA, PowerPlayInfo);
         u16 data_offset;
 	u8 frev, crev;
+<<<<<<< HEAD
+=======
+	u8 *power_state_offset;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!atom_parse_data_header(mode_info->atom_context, index, NULL,
 				   &frev, &crev, &data_offset))
@@ -2492,15 +2545,28 @@ static int radeon_atombios_parse_power_table_6(struct radeon_device *rdev)
 	non_clock_info_array = (struct _NonClockInfoArray *)
 		(mode_info->atom_context->bios + data_offset +
 		 le16_to_cpu(power_info->pplib.usNonClockInfoArrayOffset));
+<<<<<<< HEAD
+=======
+	if (state_array->ucNumEntries == 0)
+		return state_index;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rdev->pm.power_state = kzalloc(sizeof(struct radeon_power_state) *
 				       state_array->ucNumEntries, GFP_KERNEL);
 	if (!rdev->pm.power_state)
 		return state_index;
+<<<<<<< HEAD
 	for (i = 0; i < state_array->ucNumEntries; i++) {
 		mode_index = 0;
 		power_state = (union pplib_power_state *)&state_array->states[i];
 		/* XXX this might be an inagua bug... */
 		non_clock_array_index = i; /* power_state->v2.nonClockInfoIndex */
+=======
+	power_state_offset = (u8 *)state_array->states;
+	for (i = 0; i < state_array->ucNumEntries; i++) {
+		mode_index = 0;
+		power_state = (union pplib_power_state *)power_state_offset;
+		non_clock_array_index = power_state->v2.nonClockInfoIndex;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		non_clock_info = (struct _ATOM_PPLIB_NONCLOCK_INFO *)
 			&non_clock_info_array->nonClockInfo[non_clock_array_index];
 		rdev->pm.power_state[i].clock_info = kzalloc(sizeof(struct radeon_pm_clock_info) *
@@ -2512,9 +2578,12 @@ static int radeon_atombios_parse_power_table_6(struct radeon_device *rdev)
 		if (power_state->v2.ucNumDPMLevels) {
 			for (j = 0; j < power_state->v2.ucNumDPMLevels; j++) {
 				clock_array_index = power_state->v2.clockInfoIndex[j];
+<<<<<<< HEAD
 				/* XXX this might be an inagua bug... */
 				if (clock_array_index >= clock_info_array->ucNumEntries)
 					continue;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				clock_info = (union pplib_clock_info *)
 					&clock_info_array->clockInfo[clock_array_index * clock_info_array->ucEntrySize];
 				valid = radeon_atombios_parse_pplib_clock_info(rdev,
@@ -2536,6 +2605,10 @@ static int radeon_atombios_parse_power_table_6(struct radeon_device *rdev)
 								   non_clock_info);
 			state_index++;
 		}
+<<<<<<< HEAD
+=======
+		power_state_offset += 2 + power_state->v2.ucNumDPMLevels;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	/* if multiple clock modes, mark the lowest as no display */
 	for (i = 0; i < state_index; i++) {
@@ -2582,7 +2655,13 @@ void radeon_atombios_get_power_modes(struct radeon_device *rdev)
 		default:
 			break;
 		}
+<<<<<<< HEAD
 	} else {
+=======
+	}
+
+	if (state_index == 0) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		rdev->pm.power_state = kzalloc(sizeof(struct radeon_power_state), GFP_KERNEL);
 		if (rdev->pm.power_state) {
 			rdev->pm.power_state[0].clock_info =
@@ -2771,6 +2850,13 @@ void radeon_atom_initialize_bios_scratch_regs(struct drm_device *dev)
 	/* tell the bios not to handle mode switching */
 	bios_6_scratch |= ATOM_S6_ACC_BLOCK_DISPLAY_SWITCH;
 
+<<<<<<< HEAD
+=======
+	/* clear the vbios dpms state */
+	if (ASIC_IS_DCE4(rdev))
+		bios_2_scratch &= ~ATOM_S2_DEVICE_DPMS_STATE;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (rdev->family >= CHIP_R600) {
 		WREG32(R600_BIOS_2_SCRATCH, bios_2_scratch);
 		WREG32(R600_BIOS_6_SCRATCH, bios_6_scratch);

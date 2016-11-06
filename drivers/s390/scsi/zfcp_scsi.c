@@ -3,7 +3,11 @@
  *
  * Interface to Linux SCSI midlayer.
  *
+<<<<<<< HEAD
  * Copyright IBM Corporation 2002, 2010
+=======
+ * Copyright IBM Corp. 2002, 2013
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #define KMSG_COMPONENT "zfcp"
@@ -311,8 +315,17 @@ static struct scsi_host_template zfcp_scsi_host_template = {
 	.proc_name		 = "zfcp",
 	.can_queue		 = 4096,
 	.this_id		 = -1,
+<<<<<<< HEAD
 	.sg_tablesize		 = 1, /* adjusted later */
 	.max_sectors		 = 8, /* adjusted later */
+=======
+	.sg_tablesize		 = (((QDIO_MAX_ELEMENTS_PER_BUFFER - 1)
+				     * ZFCP_QDIO_MAX_SBALS_PER_REQ) - 2),
+				   /* GCD, adjusted later */
+	.max_sectors		 = (((QDIO_MAX_ELEMENTS_PER_BUFFER - 1)
+				     * ZFCP_QDIO_MAX_SBALS_PER_REQ) - 2) * 8,
+				   /* GCD, adjusted later */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.dma_boundary		 = ZFCP_QDIO_SBALE_LEN - 1,
 	.cmd_per_lun		 = 1,
 	.use_clustering		 = 1,

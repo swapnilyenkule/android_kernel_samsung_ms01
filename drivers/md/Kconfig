@@ -185,8 +185,17 @@ config MD_FAULTY
 
 	  In unsure, say N.
 
+<<<<<<< HEAD
 config BLK_DEV_DM
 	tristate "Device mapper support"
+=======
+config BLK_DEV_DM_BUILTIN
+	boolean
+
+config BLK_DEV_DM
+	tristate "Device mapper support"
+	select BLK_DEV_DM_BUILTIN
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	---help---
 	  Device-mapper is a low level volume manager.  It works by allowing
 	  people to specify mappings for ranges of logical sectors.  Various

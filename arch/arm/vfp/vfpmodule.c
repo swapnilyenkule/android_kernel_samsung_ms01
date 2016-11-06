@@ -22,7 +22,10 @@
 #include <linux/user.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
+<<<<<<< HEAD
 #include <linux/export.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <asm/cp15.h>
 #include <asm/cputype.h>
@@ -423,7 +426,11 @@ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
 	 * If there isn't a second FP instruction, exit now. Note that
 	 * the FPEXC.FP2V bit is valid only if FPEXC.EX is 1.
 	 */
+<<<<<<< HEAD
 	if (fpexc ^ (FPEXC_EX | FPEXC_FP2V))
+=======
+	if ((fpexc & (FPEXC_EX | FPEXC_FP2V)) != (FPEXC_EX | FPEXC_FP2V))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto exit;
 
 	/*
@@ -677,6 +684,7 @@ static const struct file_operations vfp_bounce_fops = {
 	.release	= single_release,
 };
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_KERNEL_MODE_NEON
 
 /*
@@ -722,6 +730,8 @@ void kernel_neon_end(void)
 EXPORT_SYMBOL(kernel_neon_end);
 
 #endif /* CONFIG_KERNEL_MODE_NEON */
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * VFP support code initialisation.
@@ -778,11 +788,22 @@ static int __init vfp_init(void)
 			elf_hwcap |= HWCAP_VFPv3;
 
 			/*
+<<<<<<< HEAD
 			 * Check for VFPv3 D16. CPUs in this configuration
 			 * only have 16 x 64bit registers.
 			 */
 			if (((fmrx(MVFR0) & MVFR0_A_SIMD_MASK)) == 1)
 				elf_hwcap |= HWCAP_VFPv3D16;
+=======
+			 * Check for VFPv3 D16 and VFPv4 D16.  CPUs in
+			 * this configuration only have 16 x 64bit
+			 * registers.
+			 */
+			if (((fmrx(MVFR0) & MVFR0_A_SIMD_MASK)) == 1)
+				elf_hwcap |= HWCAP_VFPv3D16; /* also v4-D16 */
+			else
+				elf_hwcap |= HWCAP_VFPD32;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 #endif
 		/*
@@ -812,4 +833,8 @@ static int __init vfp_init(void)
 	return 0;
 }
 
+<<<<<<< HEAD
 core_initcall(vfp_init);
+=======
+late_initcall(vfp_init);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

@@ -29,8 +29,13 @@
 		aips@70000000 { /* aips-1 */
 			spba@70000000 {
 				esdhc@70004000 { /* ESDHC1 */
+<<<<<<< HEAD
 					fsl,cd-internal;
 					fsl,wp-internal;
+=======
+					fsl,cd-controller;
+					fsl,wp-controller;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					status = "okay";
 				};
 

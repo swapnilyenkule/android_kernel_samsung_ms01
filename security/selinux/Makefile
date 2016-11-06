@@ -2,7 +2,11 @@
 # Makefile for building the SELinux module as part of the kernel tree.
 #
 
+<<<<<<< HEAD
 ifeq ($(TARGET_BUILD_VARIANT), user)
+=======
+ifeq ($(SEC_BUILD_OPTION_PRODUCT_SHIP), true)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ifeq ($(SEC_BUILD_OPTION_SELINUX_ENFORCE),true)
 EXTRA_CFLAGS += -DCONFIG_ALWAYS_ENFORCE=true
 endif

@@ -103,6 +103,12 @@ Parent node optional properties:
 - qcom,use-external-rsense		A boolean that controls whether BMS will use
 					an external sensor resistor instead of the default
 					RDS of the batfet.
+<<<<<<< HEAD
+=======
+- qcom,vbatdet-maxerr-mv		This property in mV is a hystersis value for the charge
+					resume voltage property qcom,vbatdet-delta-mv. If this
+					property is not defined it defaults to 50 mV.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 Sub node required structure:
 - A qcom,chg node must be a child of an SPMI node that has specified

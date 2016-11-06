@@ -304,6 +304,17 @@ static struct usbmix_name_map hercules_usb51_map[] = {
 	{ 0 }				/* terminator */
 };
 
+<<<<<<< HEAD
+=======
+/* some (all?) SCMS USB3318 devices are affected by a firmware lock up
+ * when anything attempts to access FU 10 (control)
+ */
+static const struct usbmix_name_map scms_usb3318_map[] = {
+	{ 10, NULL },
+	{ 0 }
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Control map entries
  */
@@ -371,6 +382,24 @@ static struct usbmix_ctl_map usbmix_ctl_maps[] = {
 		.map = scratch_live_map,
 		.ignore_ctl_error = 1,
 	},
+<<<<<<< HEAD
+=======
+	{
+		/* MAYA44 USB+ */
+		.id = USB_ID(0x2573, 0x0008),
+		.map = maya44_map,
+	},
+	{
+		/* KEF X300A */
+		.id = USB_ID(0x27ac, 0x1000),
+		.map = scms_usb3318_map,
+	},
+	{
+		/* Arcam rPAC */
+		.id = USB_ID(0x25c4, 0x0003),
+		.map = scms_usb3318_map,
+	},
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	{ 0 } /* terminator */
 };
 

@@ -6,6 +6,10 @@
 #include <linux/bio.h>
 #include <linux/blkdev.h>
 #include <linux/scatterlist.h>
+<<<<<<< HEAD
+=======
+#include <linux/security.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include "blk.h"
 
@@ -509,6 +513,13 @@ bool blk_rq_merge_ok(struct request *rq, struct bio *bio)
 	if (bio_integrity(bio) != blk_integrity_rq(rq))
 		return false;
 
+<<<<<<< HEAD
+=======
+	/* Don't merge bios of files with different encryption */
+	if (!security_allow_merge_bio(rq->bio, bio))
+		return false;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return true;
 }
 

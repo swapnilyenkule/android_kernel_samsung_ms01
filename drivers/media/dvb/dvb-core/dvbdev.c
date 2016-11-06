@@ -243,6 +243,10 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
 	if (minor == MAX_DVB_MINORS) {
 		kfree(dvbdevfops);
 		kfree(dvbdev);
+<<<<<<< HEAD
+=======
+		up_write(&minor_rwsem);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		mutex_unlock(&dvbdev_register_lock);
 		return -EINVAL;
 	}

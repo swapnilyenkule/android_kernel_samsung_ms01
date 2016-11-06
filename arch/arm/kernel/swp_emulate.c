@@ -109,10 +109,18 @@ static void set_segfault(struct pt_regs *regs, unsigned long addr)
 {
 	siginfo_t info;
 
+<<<<<<< HEAD
+=======
+	down_read(&current->mm->mmap_sem);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (find_vma(current->mm, addr) == NULL)
 		info.si_code = SEGV_MAPERR;
 	else
 		info.si_code = SEGV_ACCERR;
+<<<<<<< HEAD
+=======
+	up_read(&current->mm->mmap_sem);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	info.si_signo = SIGSEGV;
 	info.si_errno = 0;

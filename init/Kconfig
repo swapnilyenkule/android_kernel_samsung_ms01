@@ -560,6 +560,10 @@ config LOG_BUF_SHIFT
 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
 	range 12 21
 	default 17
+<<<<<<< HEAD
+=======
+	depends on PRINTK
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	help
 	  Select kernel log buffer size as a power of 2.
 	  Examples:

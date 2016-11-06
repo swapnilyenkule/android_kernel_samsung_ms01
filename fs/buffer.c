@@ -620,14 +620,24 @@ EXPORT_SYMBOL(mark_buffer_dirty_inode_sync);
 static void __set_page_dirty(struct page *page,
 		struct address_space *mapping, int warn)
 {
+<<<<<<< HEAD
 	spin_lock_irq(&mapping->tree_lock);
+=======
+	unsigned long flags;
+
+	spin_lock_irqsave(&mapping->tree_lock, flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (page->mapping) {	/* Race with truncate? */
 		WARN_ON_ONCE(warn && !PageUptodate(page));
 		account_page_dirtied(page, mapping);
 		radix_tree_tag_set(&mapping->page_tree,
 				page_index(page), PAGECACHE_TAG_DIRTY);
 	}
+<<<<<<< HEAD
 	spin_unlock_irq(&mapping->tree_lock);
+=======
+	spin_unlock_irqrestore(&mapping->tree_lock, flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	__mark_inode_dirty(mapping->host, I_DIRTY_PAGES);
 }
 
@@ -976,7 +986,12 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 		bh = page_buffers(page);
 		if (bh->b_size == size) {
 			end_block = init_page_buffers(page, bdev,
+<<<<<<< HEAD
 						index << sizebits, size);
+=======
+						(sector_t)index << sizebits,
+						size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto done;
 		}
 		if (!try_to_free_buffers(page))
@@ -997,7 +1012,12 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 	 */
 	spin_lock(&inode->i_mapping->private_lock);
 	link_dev_buffers(page, bh);
+<<<<<<< HEAD
 	end_block = init_page_buffers(page, bdev, index << sizebits, size);
+=======
+	end_block = init_page_buffers(page, bdev, (sector_t)index << sizebits,
+			size);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_unlock(&inode->i_mapping->private_lock);
 done:
 	ret = (block < end_block) ? 1 : -ENXIO;
@@ -1046,6 +1066,12 @@ grow_buffers(struct block_device *bdev, sector_t block, int size)
 static struct buffer_head *
 __getblk_slow(struct block_device *bdev, sector_t block, int size)
 {
+<<<<<<< HEAD
+=======
+	int ret;
+	struct buffer_head *bh;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Size must be multiple of hard sectorsize */
 	if (unlikely(size & (bdev_logical_block_size(bdev)-1) ||
 			(size < 512 || size > PAGE_SIZE))) {
@@ -1058,6 +1084,7 @@ __getblk_slow(struct block_device *bdev, sector_t block, int size)
 		return NULL;
 	}
 
+<<<<<<< HEAD
 	for (;;) {
 		struct buffer_head * bh;
 		int ret;
@@ -1072,6 +1099,23 @@ __getblk_slow(struct block_device *bdev, sector_t block, int size)
 		if (ret == 0)
 			free_more_memory();
 	}
+=======
+retry:
+	bh = __find_get_block(bdev, block, size);
+	if (bh)
+		return bh;
+
+	ret = grow_buffers(bdev, block, size);
+	if (ret == 0) {
+		free_more_memory();
+		goto retry;
+	} else if (ret > 0) {
+		bh = __find_get_block(bdev, block, size);
+		if (bh)
+			return bh;
+	}
+	return NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*
@@ -2051,6 +2095,10 @@ int generic_write_end(struct file *file, struct address_space *mapping,
 			struct page *page, void *fsdata)
 {
 	struct inode *inode = mapping->host;
+<<<<<<< HEAD
+=======
+	loff_t old_size = inode->i_size;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int i_size_changed = 0;
 
 	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
@@ -2070,6 +2118,11 @@ int generic_write_end(struct file *file, struct address_space *mapping,
 	unlock_page(page);
 	page_cache_release(page);
 
+<<<<<<< HEAD
+=======
+	if (old_size < pos)
+		pagecache_isize_extended(inode, old_size, pos);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * Don't mark the inode dirty under page lock. First, it unnecessarily
 	 * makes the holding time of page lock longer. Second, it forces lock
@@ -2290,6 +2343,14 @@ static int cont_expand_zero(struct file *file, struct address_space *mapping,
 		err = 0;
 
 		balance_dirty_pages_ratelimited(mapping);
+<<<<<<< HEAD
+=======
+
+		if (unlikely(fatal_signal_pending(current))) {
+			err = -EINTR;
+			goto out;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* page covers the boundary, find the boundary offset */

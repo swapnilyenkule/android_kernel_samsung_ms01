@@ -1,7 +1,11 @@
 /*
  * Header file of Broadcom Dongle Host Driver (DHD)
  * Prefered Network Offload code and Wi-Fi Location Service(WLS) code.
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,12 +25,20 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: dhd_pno.h 423669 2013-09-12 23:01:55Z $
+=======
+ * $Id: dhd_pno.h 423669 2013-09-18 13:01:55Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef __DHD_PNO_H__
 #define __DHD_PNO_H__
 
+<<<<<<< HEAD
+=======
+#if defined(PNO_SUPPORT)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define PNO_TLV_PREFIX			'S'
 #define PNO_TLV_VERSION			'1'
 #define PNO_TLV_SUBTYPE_LEGACY_PNO '2'
@@ -96,7 +108,11 @@ typedef struct cmd_tlv {
 } cmd_tlv_t;
 typedef enum dhd_pno_mode {
 	/* Wi-Fi Legacy PNO Mode */
+<<<<<<< HEAD
 	DHD_PNO_NONE_MODE 	= 0,
+=======
+	DHD_PNO_NONE_MODE = 0,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	DHD_PNO_LEGACY_MODE = (1 << (0)),
 	/* Wi-Fi Android BATCH SCAN Mode */
 	DHD_PNO_BATCH_MODE = (1 << (1)),
@@ -247,4 +263,9 @@ extern int dhd_pno_stop_for_hotlist(dhd_pub_t *dhd);
 extern int dhd_pno_event_handler(dhd_pub_t *dhd, wl_event_msg_t *event, void *event_data);
 extern int dhd_pno_init(dhd_pub_t *dhd);
 extern int dhd_pno_deinit(dhd_pub_t *dhd);
+<<<<<<< HEAD
+=======
+#endif 
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* __DHD_PNO_H__ */

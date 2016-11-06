@@ -35,7 +35,11 @@
 #define WME_AC_BK   3
 #define WME_NUM_AC  4
 
+<<<<<<< HEAD
 #define ATH_RSSI_DUMMY_MARKER   0x127
+=======
+#define ATH_RSSI_DUMMY_MARKER   127
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define ATH_RSSI_LPF_LEN 		10
 #define RSSI_LPF_THRESHOLD		-20
 #define ATH_RSSI_EP_MULTIPLIER     (1<<7)

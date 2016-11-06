@@ -47,7 +47,11 @@ static ssize_t stlog_write(struct file *file, const char __user *buf, size_t cou
 loff_t stlog_llseek(struct file *file, loff_t offset, int whence)
 {
 	return (loff_t)do_stlog(STLOG_ACTION_SIZE_BUFFER, 0, 0, STLOG_FROM_READER);
+<<<<<<< HEAD
 }	
+=======
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 
 
@@ -61,7 +65,11 @@ static const struct file_operations stlog_operations = {
 
 static int __init stlog_init(void)
 {
+<<<<<<< HEAD
 	proc_create("stlog", S_IRUSR, NULL, &stlog_operations);
+=======
+	proc_create("stlog", S_IRUGO, NULL, &stlog_operations);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 module_init(stlog_init);
@@ -95,6 +103,7 @@ module_param_named(pid, stlog_pid, bool, S_IRUGO | S_IWUSR);
 
 
 enum ringbuf_flags {
+<<<<<<< HEAD
 	RINGBUF_NOCONS	= 1,	
 	RINGBUF_NEWLINE	= 2,	
 	RINGBUF_PREFIX	= 4,	
@@ -118,6 +127,31 @@ struct ringbuf {
 
 /*
  * The ringbuf_lock protects smsg buffer, indices, counters. 
+=======
+	RINGBUF_NOCONS	= 1,
+	RINGBUF_NEWLINE	= 2,
+	RINGBUF_PREFIX	= 4,
+	RINGBUF_CONT	= 8,
+};
+
+struct ringbuf {
+	u64 ts_nsec;
+	u16 len;
+	u16 text_len;
+#ifdef CONFIG_STLOG_CPU_ID
+	u8 cpu_id;
+#endif
+#ifdef CONFIG_STLOG_PID
+	char comm[TASK_COMM_LEN];
+	pid_t pid;
+#endif
+	u8 flags:5;
+	u8 level:3;
+};
+
+/*
+ * The ringbuf_lock protects smsg buffer, indices, counters.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 static DEFINE_RAW_SPINLOCK(ringbuf_lock);
 
@@ -183,12 +217,20 @@ static void ringbuf_store(enum ringbuf_flags flags, const char *text, u16 text_l
 	struct ringbuf *msg;
 	u32 size, pad_len;
 
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	#ifdef	DEBUG_STLOG
 	printk("[STLOG] %s stlog_seq %llu stlog_idx %lu ringbuf_first_seq %llu ringbuf_first_idx %lu ringbuf_next_seq %llu ringbuf_next_idx %lu \n",
 			__func__,stlog_seq,stlog_idx,ringbuf_first_seq,ringbuf_first_idx,ringbuf_next_seq,ringbuf_next_idx);
 	#endif
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* number of '\0' padding bytes to next message */
 	size = sizeof(struct ringbuf) + text_len;
@@ -286,7 +328,11 @@ static size_t stlog_print_cpuid(const struct ringbuf *msg, char *buf)
 
 	if (!stlog_cpu_id)
 		return 0;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!buf)
 		return snprintf(NULL, 0, "C%d ", msg->cpu_id);
 
@@ -366,7 +412,11 @@ static int stlog_print(char __user *buf, int size)
 	printk("[STLOG] %s stlog_seq %llu stlog_idx %lu ringbuf_first_seq %llu ringbuf_first_idx %lu ringbuf_next_seq %llu ringbuf_next_idx %lu \n",
 			__func__,stlog_seq,stlog_idx,ringbuf_first_seq,ringbuf_first_idx,ringbuf_next_seq,ringbuf_next_idx);
 	#endif
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	text = kmalloc(RINGBUF_LINE_MAX + S_PREFIX_MAX, GFP_KERNEL);
 	if (!text)
 		return -ENOMEM;
@@ -489,7 +539,11 @@ static int stlog_print_all(char __user *buf, int size, bool clear)
 			else{
 				#ifdef	DEBUG_STLOG
 				printk("[STLOG] %s seq %llu text %s \n",__func__,seq,text);
+<<<<<<< HEAD
 				#endif				
+=======
+				#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				len += textlen;
 				}
 			raw_spin_lock_irq(&ringbuf_lock);
@@ -522,7 +576,11 @@ int do_stlog(int type, char __user *buf, int len, bool from_file)
 	case STLOG_ACTION_CLOSE:	/* Close log */
 		break;
 	case STLOG_ACTION_OPEN:	/* Open log */
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	#ifdef	DEBUG_STLOG
 		printk("[STLOG] %s OPEN stlog_seq %llu stlog_idx %lu ringbuf_first_seq %llu ringbuf_first_idx %lu ringbuf_next_seq %llu ringbuf_next_idx %lu \n",
 				__func__,stlog_seq,stlog_idx,ringbuf_first_seq,ringbuf_first_idx,ringbuf_next_seq,ringbuf_next_idx);
@@ -535,7 +593,11 @@ int do_stlog(int type, char __user *buf, int len, bool from_file)
 		#endif
 		error = -EINVAL;
 		if (!buf || len < 0)
+<<<<<<< HEAD
 			goto out;		
+=======
+			goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (!len)
 			goto out;
 		if (!access_ok(VERIFY_WRITE, buf, len)) {
@@ -568,7 +630,11 @@ int do_stlog(int type, char __user *buf, int len, bool from_file)
 			stlog_clear_idx=ringbuf_first_idx;
 			error=0;
 			goto out;
+<<<<<<< HEAD
 			}		
+=======
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		error = stlog_print_all(buf, len, true);
 		break;
 	/* Size of the log buffer */
@@ -595,7 +661,11 @@ int do_stlog_write(int type, const char __user *buf, int len, bool from_file)
 	char *line=0;
 
 	if (!buf || len < 0)
+<<<<<<< HEAD
 		goto out;		
+=======
+		goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!len)
 		goto out;
 	if (len > RINGBUF_LINE_MAX)
@@ -611,7 +681,11 @@ int do_stlog_write(int type, const char __user *buf, int len, bool from_file)
 			goto out;
 		}
 
+<<<<<<< HEAD
 	stlog("%s", line);		
+=======
+	stlog("%s", line);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 out:
 	kfree(kern_buf);
@@ -633,7 +707,10 @@ asmlinkage int vstlog(const char *fmt, va_list args)
 	local_irq_save(flags);
 	this_cpu = smp_processor_id();
 
+<<<<<<< HEAD
 	lockdep_off();
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	raw_spin_lock(&ringbuf_lock);
 	ringbuf_cpu = this_cpu;
 

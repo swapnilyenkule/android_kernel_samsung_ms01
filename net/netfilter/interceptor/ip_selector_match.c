@@ -160,7 +160,12 @@ ip_selector_match_debug_log_endpoint_list(
 
       DEBUG_LOW(
               dump,
+<<<<<<< HEAD
               "Selector %p: ip_version %d, ip_protocol %d, %pI6c - %pI6c, %d - %d.",
+=======
+              "Selector %p: "
+              "ip_version %d, ip_protocol %d, %pI6c - %pI6c, %d - %d.",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
               base,
               endpoint->ip_version,
               endpoint->ip_protocol,
@@ -433,7 +438,11 @@ debug_str_ip_selector_fields(
                    fields->destination_port);
     }
 
+<<<<<<< HEAD
   DEBUG_STRBUF_BUFFER_COMMIT(buf, p_len);
+=======
+  DEBUG_STRBUF_BUFFER_COMMIT(buf, offset + 1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
   return p;
 }
@@ -982,12 +991,28 @@ ip_selector_match_fields_to_group(
       if (ip_selector_match_selector_match(selector, fields))
         {
           match = true;
+<<<<<<< HEAD
           DEBUG_LOW(lookup, "Fields %p on selector %p: match.", fields, selector);
+=======
+          DEBUG_LOW(
+                  lookup,
+                  "Fields %p on selector %p: match.",
+                  fields,
+                  selector);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
           break;
         }
       else
         {
+<<<<<<< HEAD
           DEBUG_LOW(lookup, "Fields %p on selector %p: no match.", fields, selector);
+=======
+          DEBUG_LOW(
+                  lookup,
+                  "Fields %p on selector %p: no match.",
+                  fields,
+                  selector);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         }
 
       offset += selector->bytecount;

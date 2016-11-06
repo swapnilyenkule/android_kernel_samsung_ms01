@@ -425,6 +425,11 @@ struct mmc_host {
 		bool		enable;
 		bool		initialized;
 		bool		in_progress;
+<<<<<<< HEAD
+=======
+		/* freq. transitions are not allowed in invalid state */
+		bool		invalid_state;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		struct delayed_work work;
 		enum mmc_load	state;
 	} clk_scaling;

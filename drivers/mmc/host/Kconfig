@@ -297,6 +297,7 @@ config MMC_ATMELMCI
 
 endchoice
 
+<<<<<<< HEAD
 config MMC_ATMELMCI_DMA
 	bool "Atmel MCI DMA support"
 	depends on MMC_ATMELMCI && (AVR32 || ARCH_AT91SAM9G45) && DMA_ENGINE
@@ -307,6 +308,8 @@ config MMC_ATMELMCI_DMA
 
 	  If unsure, say N.
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 config MMC_IMX
 	tristate "Motorola i.MX Multimedia Card Interface support"
 	depends on ARCH_MX1

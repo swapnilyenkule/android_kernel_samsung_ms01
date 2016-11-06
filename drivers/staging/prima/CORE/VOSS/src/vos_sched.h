@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #if !defined( __VOS_SCHED_H )
@@ -85,11 +97,19 @@
   Include Files
   ------------------------------------------------------------------------*/
 #include <vos_event.h>
+<<<<<<< HEAD
+=======
+#include <vos_nvitem.h>
+#include <vos_mq.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include "i_vos_types.h"
 #include "i_vos_packet.h"
 #include <linux/wait.h>
 #include <linux/wakelock.h>
+<<<<<<< HEAD
 #include <vos_power.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define TX_POST_EVENT_MASK               0x001
 #define TX_SUSPEND_EVENT_MASK            0x002
@@ -174,6 +194,12 @@ typedef struct _VosSchedContext
    /* TL Message queue on the Tx thread */
    VosMqType           tlTxMq;
 
+<<<<<<< HEAD
+=======
+   /* TL Message queue on the Rx thread */
+   VosMqType           tlRxMq;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    /* SYS Message queue on the Tx thread */
    VosMqType           sysTxMq;
 
@@ -269,7 +295,11 @@ typedef struct _VosWatchdogContext
 
    v_BOOL_t resetInProgress;
 
+<<<<<<< HEAD
    vos_chip_reset_reason_type reason;
+=======
+   v_BOOL_t isFatalError;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    /* Lock for preventing multiple reset being triggered simultaneously */
    spinlock_t wdLock;
@@ -344,6 +374,12 @@ typedef struct _VosContextType
    /* SSR re-init in progress */
    volatile v_U8_t     isReInitInProgress;
 
+<<<<<<< HEAD
+=======
+   /* NV BIN Version */
+   eNvVersionType     nvVersion;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } VosContextType, *pVosContextType;
 
 
@@ -501,11 +537,20 @@ void vos_sched_deinit_mqs (pVosSchedContext pSchedContext);
 void vos_sched_flush_mc_mqs  (pVosSchedContext pSchedContext);
 void vos_sched_flush_tx_mqs  (pVosSchedContext pSchedContext);
 void vos_sched_flush_rx_mqs  (pVosSchedContext pSchedContext);
+<<<<<<< HEAD
 VOS_STATUS vos_watchdog_chip_reset ( vos_chip_reset_reason_type reason );
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void clearWlanResetReason(void);
 
 void vos_timer_module_init( void );
 VOS_STATUS vos_watchdog_wlan_shutdown(void);
 VOS_STATUS vos_watchdog_wlan_re_init(void);
+<<<<<<< HEAD
+=======
+v_BOOL_t isSsrPanicOnFailure(void);
+void vos_ssr_protect(const char *caller_func);
+void vos_ssr_unprotect(const char *caller_func);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif // #if !defined __VOSS_SCHED_H

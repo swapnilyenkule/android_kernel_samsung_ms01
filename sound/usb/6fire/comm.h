@@ -24,7 +24,11 @@ struct comm_runtime {
 	struct sfire_chip *chip;
 
 	struct urb receiver;
+<<<<<<< HEAD
 	u8 receiver_buffer[COMM_RECEIVER_BUFSIZE];
+=======
+	u8 *receiver_buffer;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	u8 serial; /* urb serial */
 

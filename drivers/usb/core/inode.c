@@ -211,7 +211,11 @@ static void update_bus(struct dentry *bus)
 
 	mutex_lock(&bus->d_inode->i_mutex);
 
+<<<<<<< HEAD
 	list_for_each_entry(dev, &bus->d_subdirs, d_u.d_child)
+=======
+	list_for_each_entry(dev, &bus->d_subdirs, d_child)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (dev->d_inode)
 			update_dev(dev);
 
@@ -228,7 +232,11 @@ static void update_sb(struct super_block *sb)
 
 	mutex_lock_nested(&root->d_inode->i_mutex, I_MUTEX_PARENT);
 
+<<<<<<< HEAD
 	list_for_each_entry(bus, &root->d_subdirs, d_u.d_child) {
+=======
+	list_for_each_entry(bus, &root->d_subdirs, d_child) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (bus->d_inode) {
 			switch (S_IFMT & bus->d_inode->i_mode) {
 			case S_IFDIR:
@@ -342,7 +350,11 @@ static int usbfs_empty (struct dentry *dentry)
 
 	spin_lock(&dentry->d_lock);
 	list_for_each(list, &dentry->d_subdirs) {
+<<<<<<< HEAD
 		struct dentry *de = list_entry(list, struct dentry, d_u.d_child);
+=======
+		struct dentry *de = list_entry(list, struct dentry, d_child);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		spin_lock_nested(&de->d_lock, DENTRY_D_LOCK_NESTED);
 		if (usbfs_positive(de)) {

@@ -54,7 +54,11 @@ int install_user_keyrings(void)
 
 	kenter("%p{%u}", user, user->uid);
 
+<<<<<<< HEAD
 	if (user->uid_keyring) {
+=======
+	if (user->uid_keyring && user->session_keyring) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		kleave(" = 0 [exist]");
 		return 0;
 	}

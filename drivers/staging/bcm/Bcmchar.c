@@ -1957,6 +1957,10 @@ cntrlEnd:
 
 		BCM_DEBUG_PRINT(Adapter, DBG_TYPE_OTHERS, OSAL_DBG, DBG_LVL_ALL, "Called IOCTL_BCM_GET_DEVICE_DRIVER_INFO\n");
 
+<<<<<<< HEAD
+=======
+		memset(&DevInfo, 0, sizeof(DevInfo));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		DevInfo.MaxRDMBufferSize = BUFFER_4K;
 		DevInfo.u32DSDStartOffset = EEPROM_CALPARAM_START;
 		DevInfo.u32RxAlignmentCorrection = 0;

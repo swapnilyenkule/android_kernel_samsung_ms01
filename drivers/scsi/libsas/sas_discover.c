@@ -446,6 +446,10 @@ static void sas_revalidate_domain(struct work_struct *work)
 	struct sas_discovery_event *ev = to_sas_discovery_event(work);
 	struct asd_sas_port *port = ev->port;
 	struct sas_ha_struct *ha = port->ha;
+<<<<<<< HEAD
+=======
+	struct domain_device *ddev = port->port_dev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* prevent revalidation from finding sata links in recovery */
 	mutex_lock(&ha->disco_mutex);
@@ -460,8 +464,14 @@ static void sas_revalidate_domain(struct work_struct *work)
 	SAS_DPRINTK("REVALIDATING DOMAIN on port %d, pid:%d\n", port->id,
 		    task_pid_nr(current));
 
+<<<<<<< HEAD
 	if (port->port_dev)
 		res = sas_ex_revalidate_domain(port->port_dev);
+=======
+	if (ddev && (ddev->dev_type == SAS_FANOUT_EXPANDER_DEVICE ||
+		     ddev->dev_type == SAS_EDGE_EXPANDER_DEVICE))
+		res = sas_ex_revalidate_domain(ddev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	SAS_DPRINTK("done REVALIDATING DOMAIN on port %d, pid:%d, res 0x%x\n",
 		    port->id, task_pid_nr(current), res);

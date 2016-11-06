@@ -151,6 +151,10 @@ static int ibnl_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 			{
 				struct netlink_dump_control c = {
 					.dump = client->cb_table[op].dump,
+<<<<<<< HEAD
+=======
+					.module = client->cb_table[op].module,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				};
 				return netlink_dump_start(nls, skb, nlh, &c);
 			}

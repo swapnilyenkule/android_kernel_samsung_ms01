@@ -48,7 +48,11 @@ bool regmap_readable(struct regmap *map, unsigned int reg)
 
 bool regmap_volatile(struct regmap *map, unsigned int reg)
 {
+<<<<<<< HEAD
 	if (!regmap_readable(map, reg))
+=======
+	if (!map->format.format_write && !regmap_readable(map, reg))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return false;
 
 	if (map->volatile_reg)
@@ -69,7 +73,11 @@ bool regmap_precious(struct regmap *map, unsigned int reg)
 }
 
 static bool regmap_volatile_range(struct regmap *map, unsigned int reg,
+<<<<<<< HEAD
 	unsigned int num)
+=======
+	size_t num)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	unsigned int i;
 
@@ -600,6 +608,14 @@ int regmap_bulk_write(struct regmap *map, unsigned int reg, const void *val,
 	if (val_bytes == 1) {
 		wval = (void *)val;
 	} else {
+<<<<<<< HEAD
+=======
+		if (!val_count) {
+			ret = -EINVAL;
+			goto out;
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		wval = kmemdup(val, val_count * val_bytes, GFP_KERNEL);
 		if (!wval) {
 			ret = -ENOMEM;
@@ -779,7 +795,11 @@ int regmap_bulk_read(struct regmap *map, unsigned int reg, void *val,
 			ret = regmap_read(map, reg + i, &ival);
 			if (ret != 0)
 				return ret;
+<<<<<<< HEAD
 			memcpy(val + (i * val_bytes), &ival, val_bytes);
+=======
+			map->format.format_val(val + (i * val_bytes), ival);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 

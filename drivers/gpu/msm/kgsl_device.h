@@ -28,7 +28,10 @@
 #define KGSL_TIMEOUT_NONE           0
 #define KGSL_TIMEOUT_DEFAULT        0xFFFFFFFF
 #define KGSL_TIMEOUT_PART           50 /* 50 msec */
+<<<<<<< HEAD
 #define KGSL_TIMEOUT_LONG_IB_DETECTION  2000 /* 2 sec*/
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define FIRST_TIMEOUT (HZ / 2)
 
@@ -174,9 +177,16 @@ struct kgsl_event {
  * @ibcount: Number of IBs in the command list
  * @ibdesc: Pointer to the list of IBs
  * @expires: Point in time when the cmdbatch is considered to be hung
+<<<<<<< HEAD
  * @refcount: kref structure to maintain the reference count
  * @synclist: List of context/timestamp tuples to wait for before issuing
  * @timer: a timer used to track possible sync timeouts for this cmdbatch
+=======
+ * @invalid:  non-zero if the dispatcher determines the command and the owning
+ * context should be invalidated
+ * @refcount: kref structure to maintain the reference count
+ * @synclist: List of context/timestamp tuples to wait for before issuing
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This struture defines an atomic batch of command buffers issued from
  * userspace.
@@ -193,9 +203,15 @@ struct kgsl_cmdbatch {
 	uint32_t ibcount;
 	struct kgsl_ibdesc *ibdesc;
 	unsigned long expires;
+<<<<<<< HEAD
 	struct kref refcount;
 	struct list_head synclist;
 	struct timer_list timer;
+=======
+	int invalid;
+	struct kref refcount;
+	struct list_head synclist;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /**
@@ -696,6 +712,30 @@ void kgsl_cmdbatch_destroy(struct kgsl_cmdbatch *cmdbatch);
 void kgsl_cmdbatch_destroy_object(struct kref *kref);
 
 /**
+<<<<<<< HEAD
+=======
+* kgsl_process_private_get() - increment the refcount on a kgsl_process_private
+*   struct
+* @process: Pointer to the KGSL process_private
+*
+* Returns 0 if the structure is invalid and a reference count could not be
+* obtained, nonzero otherwise.
+*/
+static inline int kgsl_process_private_get(struct kgsl_process_private *process)
+{
+	int ret = 0;
+	if (process != NULL)
+		ret = kref_get_unless_zero(&process->refcount);
+	return ret;
+}
+
+void kgsl_process_private_put(struct kgsl_process_private *private);
+
+
+struct kgsl_process_private *kgsl_process_private_find(pid_t pid);
+
+/**
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * kgsl_cmdbatch_put() - Decrement the refcount for a command batch object
  * @cmdbatch: Pointer to the command batch object
  */
@@ -706,6 +746,30 @@ static inline void kgsl_cmdbatch_put(struct kgsl_cmdbatch *cmdbatch)
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * kgsl_cmdbatch_sync_pending() - return true if the cmdbatch is waiting
+ * @cmdbatch: Pointer to the command batch object to check
+ *
+ * Return non-zero if the specified command batch is still waiting for sync
+ * point dependencies to be satisfied
+ */
+static inline int kgsl_cmdbatch_sync_pending(struct kgsl_cmdbatch *cmdbatch)
+{
+	int ret;
+
+	if (cmdbatch == NULL)
+		return 0;
+
+	spin_lock(&cmdbatch->lock);
+	ret = list_empty(&cmdbatch->synclist) ? 0 : 1;
+	spin_unlock(&cmdbatch->lock);
+
+	return ret;
+}
+
+/**
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * kgsl_sysfs_store() - parse a string from a sysfs store function
  * @buf: Incoming string to parse
  * @ptr: Pointer to an unsigned int to store the value

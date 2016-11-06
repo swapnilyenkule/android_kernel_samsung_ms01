@@ -458,7 +458,11 @@ struct nilfs_btree_node {
 /* level */
 #define NILFS_BTREE_LEVEL_DATA          0
 #define NILFS_BTREE_LEVEL_NODE_MIN      (NILFS_BTREE_LEVEL_DATA + 1)
+<<<<<<< HEAD
 #define NILFS_BTREE_LEVEL_MAX           14
+=======
+#define NILFS_BTREE_LEVEL_MAX           14	/* Max level (exclusive) */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /**
  * struct nilfs_palloc_group_desc - block group descriptor

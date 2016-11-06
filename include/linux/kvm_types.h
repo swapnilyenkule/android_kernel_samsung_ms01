@@ -71,6 +71,10 @@ struct gfn_to_hva_cache {
 	u64 generation;
 	gpa_t gpa;
 	unsigned long hva;
+<<<<<<< HEAD
+=======
+	unsigned long len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct kvm_memory_slot *memslot;
 };
 

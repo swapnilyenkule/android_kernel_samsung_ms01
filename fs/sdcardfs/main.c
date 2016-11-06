@@ -19,6 +19,10 @@
  */
 
 #include "sdcardfs.h"
+<<<<<<< HEAD
+=======
+#include "version.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/module.h>
 #include <linux/types.h>
 #include <linux/parser.h>
@@ -106,6 +110,11 @@ static int parse_options(struct super_block *sb, char *options, int silent,
 			break;
 		case Opt_derive:
 			string_option = match_strdup(&args[0]);
+<<<<<<< HEAD
+=======
+			if (!string_option)
+				return -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (!strcmp("none", string_option)) {
 				opts->derive = DERIVE_NONE;
 			} else if (!strcmp("legacy", string_option)) {
@@ -120,6 +129,11 @@ static int parse_options(struct super_block *sb, char *options, int silent,
 			break;
 		case Opt_lower_fs:
 			string_option = match_strdup(&args[0]);
+<<<<<<< HEAD
+=======
+			if (!string_option)
+				return -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (!strcmp("ext4", string_option)) {
 				opts->lower_fs = LOWER_FS_EXT4;
 			} else if (!strcmp("fat", string_option)) {
@@ -196,7 +210,11 @@ static int sdcardfs_read_super(struct super_block *sb, const char *dev_name,
 	struct sdcardfs_sb_info *sb_info;
 	void *pkgl_id;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "sdcardfs version 2.0\n");
+=======
+	printk(KERN_INFO "sdcardfs: version %s\n", SDCARDFS_VERSION);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!dev_name) {
 		printk(KERN_ERR
@@ -230,7 +248,11 @@ static int sdcardfs_read_super(struct super_block *sb, const char *dev_name,
 	/* parse options */
 	err = parse_options(sb, raw_data, silent, &debug, &sb_info->options);
 	if (err) {
+<<<<<<< HEAD
 		printk(KERN_ERR	"sdcardfs: invalid options\n");
+=======
+		printk(KERN_ERR	"sdcardfs: invalid options or out of memory\n");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		goto out_freesbi;
 	}
 
@@ -315,7 +337,15 @@ static int sdcardfs_read_super(struct super_block *sb, const char *dev_name,
 		}
 		fix_derived_permission(sb->s_root->d_inode);
 
+<<<<<<< HEAD
 		if (!silent)
+=======
+		sb_info->devpath = kzalloc(PATH_MAX, GFP_KERNEL);
+		if(sb_info->devpath && dev_name)
+			memcpy(sb_info->devpath, dev_name, PATH_MAX);
+		
+		if (!silent && !err)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			printk(KERN_INFO "sdcardfs: mounted on top of %s type %s\n",
 						dev_name, lower_sb->s_type->name);
 		goto out;
@@ -415,10 +445,16 @@ static void __exit exit_sdcardfs_fs(void)
 	pr_info("Completed sdcardfs module unload\n");
 }
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Erez Zadok, Filesystems and Storage Lab, Stony Brook University"
 	      " (http://www.fsl.cs.sunysb.edu/)");
 MODULE_DESCRIPTION("Wrapfs " SDCARDFS_VERSION
 		   " (http://wrapfs.filesystems.org/)");
+=======
+MODULE_AUTHOR("Woojoong Lee, Daeho Jeong, Kitae Lee, Yeongjin Gil"
+        " System Memory Lab., Samsung Electronics");
+MODULE_DESCRIPTION("Sdcardfs " SDCARDFS_VERSION);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 MODULE_LICENSE("GPL");
 
 module_init(init_sdcardfs_fs);

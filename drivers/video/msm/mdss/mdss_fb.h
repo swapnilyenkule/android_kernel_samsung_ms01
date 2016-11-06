@@ -229,8 +229,15 @@ struct msm_fb_data_type {
 	/* for non-blocking */
 	struct task_struct *disp_thread;
 	atomic_t commits_pending;
+<<<<<<< HEAD
 	wait_queue_head_t commit_wait_q;
 	wait_queue_head_t idle_wait_q;
+=======
+	atomic_t kickoff_pending;
+	wait_queue_head_t commit_wait_q;
+	wait_queue_head_t idle_wait_q;
+	wait_queue_head_t kickoff_wait_q;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	bool shutdown_pending;
 
 	wait_queue_head_t ioctl_q;
@@ -242,6 +249,10 @@ struct msm_fb_data_type {
 
 	u32 dcm_state;
 	struct list_head proc_list;
+<<<<<<< HEAD
+=======
+	u32 wait_for_kickoff;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	int blank_mode;
 };

@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /**=========================================================================
@@ -61,8 +73,13 @@
 #include "limDebug.h"
 #include "limSession.h"
 #include "limUtils.h"
+<<<<<<< HEAD
 #if defined(FEATURE_WLAN_CCX) && !defined(FEATURE_WLAN_CCX_UPLOAD)
 #include "ccxApi.h"
+=======
+#if defined(FEATURE_WLAN_ESE) && !defined(FEATURE_WLAN_ESE_UPLOAD)
+#include "eseApi.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 /*--------------------------------------------------------------------------
@@ -140,6 +157,10 @@ tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessi
             {
                 limLog(pMac, LOGE, FL("memory allocate failed!"));
                 vos_mem_free(pMac->lim.gpSession[i].dph.dphHashTable.pHashTable);
+<<<<<<< HEAD
+=======
+                pMac->lim.gpSession[i].dph.dphHashTable.pHashTable = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 return NULL;
             }
             pMac->lim.gpSession[i].dph.dphHashTable.size = numSta;
@@ -154,6 +175,11 @@ tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessi
                 PELOGE(limLog(pMac, LOGE, FL("memory allocate failed!"));)
                 vos_mem_free(pMac->lim.gpSession[i].dph.dphHashTable.pHashTable);
                 vos_mem_free(pMac->lim.gpSession[i].dph.dphHashTable.pDphNodeArray);
+<<<<<<< HEAD
+=======
+                pMac->lim.gpSession[i].dph.dphHashTable.pHashTable = NULL;
+                pMac->lim.gpSession[i].dph.dphHashTable.pDphNodeArray = NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 return NULL;
             }
             vos_mem_set(pMac->lim.gpSession[i].gpLimPeerIdxpool,
@@ -175,11 +201,19 @@ tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessi
             pMac->lim.gpSession[i].is11Rconnection = FALSE;
 #endif
 
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
             pMac->lim.gpSession[i].isCCXconnection = FALSE;
 #endif
 
 #if defined WLAN_FEATURE_VOWIFI_11R || defined FEATURE_WLAN_CCX || defined(FEATURE_WLAN_LFR)
+=======
+#ifdef FEATURE_WLAN_ESE
+            pMac->lim.gpSession[i].isESEconnection = FALSE;
+#endif
+
+#if defined WLAN_FEATURE_VOWIFI_11R || defined FEATURE_WLAN_ESE || defined(FEATURE_WLAN_LFR)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             pMac->lim.gpSession[i].isFastTransitionEnabled = FALSE;
 #endif
 #ifdef FEATURE_WLAN_LFR
@@ -195,9 +229,20 @@ tpPESession peCreateSession(tpAniSirGlobal pMac, tANI_U8 *bssid , tANI_U8* sessi
 #ifdef FEATURE_WLAN_TDLS
             vos_mem_set(pMac->lim.gpSession[i].peerAIDBitmap,
                   sizeof(pMac->lim.gpSession[i].peerAIDBitmap), 0);
+<<<<<<< HEAD
 #endif
             pMac->lim.gpSession[i].fWaitForProbeRsp = 0;
             pMac->lim.gpSession[i].fIgnoreCapsChange = 0;
+=======
+            pMac->lim.gpSession[i].tdlsChanSwitProhibited = 0;
+#endif
+            pMac->lim.gpSession[i].fWaitForProbeRsp = 0;
+            pMac->lim.gpSession[i].fIgnoreCapsChange = 0;
+            limLog(pMac, LOG1, FL("Create a new sessionId (%d) with BSSID: "
+               MAC_ADDRESS_STR " Max No. of STA %d"),
+               pMac->lim.gpSession[i].peSessionId,
+               MAC_ADDR_ARRAY(bssid), numSta);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             return(&pMac->lim.gpSession[i]);
         }
     }
@@ -352,7 +397,14 @@ void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry)
     tANI_U16 n;
     TX_TIMER *timer_ptr;
 
+<<<<<<< HEAD
     limLog(pMac, LOGW, FL("Trying to delete a session %d.\n "), psessionEntry->peSessionId);
+=======
+    limLog(pMac, LOGW, FL("Trying to delete a session %d Opmode %d BssIdx %d"
+           " BSSID: " MAC_ADDRESS_STR), psessionEntry->peSessionId,
+           psessionEntry->operMode, psessionEntry->bssIdx,
+           MAC_ADDR_ARRAY(psessionEntry->bssId));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     for (n = 0; n < pMac->lim.maxStation; n++)
     {
@@ -366,8 +418,24 @@ void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry)
             }
         }
     }
+<<<<<<< HEAD
     
     if(psessionEntry->pLimStartBssReq != NULL)
+=======
+
+#ifdef WLAN_FEATURE_11AC
+
+    /* Unblock the MuBF for other session if the MuBf session is deleted
+     */
+    if(psessionEntry->txMuBformee)
+    {
+        pMac->isMuBfsessionexist = FALSE;
+    }
+
+#endif
+
+    if (psessionEntry->pLimStartBssReq != NULL)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         vos_mem_free( psessionEntry->pLimStartBssReq );
         psessionEntry->pLimStartBssReq = NULL;
@@ -456,7 +524,11 @@ void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry)
         psessionEntry->limAssocResponseData = NULL;
     }
 
+<<<<<<< HEAD
 #if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_CCX) || defined(FEATURE_WLAN_LFR)
+=======
+#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     if (NULL != psessionEntry->pLimMlmReassocRetryReq)
     {
         vos_mem_free( psessionEntry->pLimMlmReassocRetryReq);
@@ -470,8 +542,13 @@ void peDeleteSession(tpAniSirGlobal pMac, tpPESession psessionEntry)
         psessionEntry->pLimMlmReassocReq = NULL;
     }
 
+<<<<<<< HEAD
 #if defined(FEATURE_WLAN_CCX) && !defined(FEATURE_WLAN_CCX_UPLOAD)
     limCleanupCcxCtxt(pMac, psessionEntry); 
+=======
+#if defined(FEATURE_WLAN_ESE) && !defined(FEATURE_WLAN_ESE_UPLOAD)
+    limCleanupEseCtxt(pMac, psessionEntry);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
     psessionEntry->valid = FALSE;

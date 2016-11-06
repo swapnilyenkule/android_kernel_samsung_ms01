@@ -339,6 +339,11 @@
 
 #define AR_PHY_CCA_NOM_VAL_9330_2GHZ          -118
 
+<<<<<<< HEAD
+=======
+#define AR9300_EXT_LNA_CTL_GPIO_AR9485 9
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * AGC Field Definitions
  */

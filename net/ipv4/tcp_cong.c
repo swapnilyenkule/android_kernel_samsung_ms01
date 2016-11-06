@@ -291,7 +291,12 @@ int tcp_is_cwnd_limited(const struct sock *sk, u32 in_flight)
 	left = tp->snd_cwnd - in_flight;
 	if (sk_can_gso(sk) &&
 	    left * sysctl_tcp_tso_win_divisor < tp->snd_cwnd &&
+<<<<<<< HEAD
 	    left * tp->mss_cache < sk->sk_gso_max_size)
+=======
+	    left * tp->mss_cache < sk->sk_gso_max_size &&
+	    left < sk->sk_gso_max_segs)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 1;
 	return left <= tcp_max_tso_deferred_mss(tp);
 }

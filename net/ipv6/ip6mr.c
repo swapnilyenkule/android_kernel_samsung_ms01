@@ -138,9 +138,18 @@ static struct mr6_table *ip6mr_get_table(struct net *net, u32 id)
 static int ip6mr_fib_lookup(struct net *net, struct flowi6 *flp6,
 			    struct mr6_table **mrt)
 {
+<<<<<<< HEAD
 	struct ip6mr_result res;
 	struct fib_lookup_arg arg = { .result = &res, };
 	int err;
+=======
+	int err;
+	struct ip6mr_result res;
+	struct fib_lookup_arg arg = {
+		.result = &res,
+		.flags = FIB_LOOKUP_NOREF,
+	};
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	err = fib_rules_lookup(net->ipv6.mr6_rules_ops,
 			       flowi6_to_flowi(flp6), 0, &arg);
@@ -256,10 +265,18 @@ static void __net_exit ip6mr_rules_exit(struct net *net)
 {
 	struct mr6_table *mrt, *next;
 
+<<<<<<< HEAD
+=======
+	rtnl_lock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	list_for_each_entry_safe(mrt, next, &net->ipv6.mr6_tables, list) {
 		list_del(&mrt->list);
 		ip6mr_free_table(mrt);
 	}
+<<<<<<< HEAD
+=======
+	rtnl_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fib_rules_unregister(net->ipv6.mr6_rules_ops);
 }
 #else
@@ -286,7 +303,14 @@ static int __net_init ip6mr_rules_init(struct net *net)
 
 static void __net_exit ip6mr_rules_exit(struct net *net)
 {
+<<<<<<< HEAD
 	ip6mr_free_table(net->ipv6.mrt6);
+=======
+	rtnl_lock();
+	ip6mr_free_table(net->ipv6.mrt6);
+	net->ipv6.mrt6 = NULL;
+	rtnl_unlock();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 #endif
 
@@ -690,7 +714,11 @@ static netdev_tx_t reg_vif_xmit(struct sk_buff *skb,
 	struct mr6_table *mrt;
 	struct flowi6 fl6 = {
 		.flowi6_oif	= dev->ifindex,
+<<<<<<< HEAD
 		.flowi6_iif	= skb->skb_iif ? : LOOPBACK_IFINDEX,
+=======
+		.flowi6_iif	= skb->skb_iif,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		.flowi6_mark	= skb->mark,
 	};
 	int err;

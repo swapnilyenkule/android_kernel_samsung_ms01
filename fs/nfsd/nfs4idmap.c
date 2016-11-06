@@ -581,7 +581,11 @@ numeric_name_to_id(struct svc_rqst *rqstp, int type, const char *name, u32 namel
 	/* Just to make sure it's null-terminated: */
 	memcpy(buf, name, namelen);
 	buf[namelen] = '\0';
+<<<<<<< HEAD
 	ret = kstrtouint(name, 10, id);
+=======
+	ret = kstrtouint(buf, 10, id);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return ret == 0;
 }
 

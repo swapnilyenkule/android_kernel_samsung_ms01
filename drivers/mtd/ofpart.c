@@ -121,7 +121,11 @@ static int parse_ofoldpart_partitions(struct mtd_info *master,
 	nr_parts = plen / sizeof(part[0]);
 
 	*pparts = kzalloc(nr_parts * sizeof(*(*pparts)), GFP_KERNEL);
+<<<<<<< HEAD
 	if (!pparts)
+=======
+	if (!*pparts)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return -ENOMEM;
 
 	names = of_get_property(dp, "partition-names", &plen);

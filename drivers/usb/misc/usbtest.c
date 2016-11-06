@@ -7,9 +7,16 @@
 #include <linux/moduleparam.h>
 #include <linux/scatterlist.h>
 #include <linux/mutex.h>
+<<<<<<< HEAD
 
 #include <linux/usb.h>
 
+=======
+#include <linux/timer.h>
+#include <linux/usb.h>
+
+#define SIMPLE_IO_TIMEOUT	10000	/* in milliseconds */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*-------------------------------------------------------------------------*/
 
@@ -355,6 +362,10 @@ static int simple_io(
 	int			max = urb->transfer_buffer_length;
 	struct completion	completion;
 	int			retval = 0;
+<<<<<<< HEAD
+=======
+	unsigned long		expire;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	urb->context = &completion;
 	while (retval == 0 && iterations-- > 0) {
@@ -367,9 +378,21 @@ static int simple_io(
 		if (retval != 0)
 			break;
 
+<<<<<<< HEAD
 		/* NOTE:  no timeouts; can't be broken out of by interrupt */
 		wait_for_completion(&completion);
 		retval = urb->status;
+=======
+		expire = msecs_to_jiffies(SIMPLE_IO_TIMEOUT);
+		if (!wait_for_completion_timeout(&completion, expire)) {
+			usb_kill_urb(urb);
+			retval = (urb->status == -ENOENT ?
+				  -ETIMEDOUT : urb->status);
+		} else {
+			retval = urb->status;
+		}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		urb->dev = udev;
 		if (retval == 0 && usb_pipein(urb->pipe))
 			retval = simple_check_buf(tdev, urb);
@@ -462,6 +485,17 @@ alloc_sglist(int nents, int max, int vary)
 	return sg;
 }
 
+<<<<<<< HEAD
+=======
+static void sg_timeout(unsigned long _req)
+{
+	struct usb_sg_request	*req = (struct usb_sg_request *) _req;
+
+	req->status = -ETIMEDOUT;
+	usb_sg_cancel(req);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int perform_sglist(
 	struct usbtest_dev	*tdev,
 	unsigned		iterations,
@@ -473,6 +507,12 @@ static int perform_sglist(
 {
 	struct usb_device	*udev = testdev_to_usbdev(tdev);
 	int			retval = 0;
+<<<<<<< HEAD
+=======
+	struct timer_list	sg_timer;
+
+	setup_timer_on_stack(&sg_timer, sg_timeout, (unsigned long) req);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	while (retval == 0 && iterations-- > 0) {
 		retval = usb_sg_init(req, udev, pipe,
@@ -483,7 +523,14 @@ static int perform_sglist(
 
 		if (retval)
 			break;
+<<<<<<< HEAD
 		usb_sg_wait(req);
+=======
+		mod_timer(&sg_timer, jiffies +
+				msecs_to_jiffies(SIMPLE_IO_TIMEOUT));
+		usb_sg_wait(req);
+		del_timer_sync(&sg_timer);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		retval = req->status;
 
 		/* FIXME check resulting data pattern */
@@ -1028,7 +1075,14 @@ test_ctrl_queue(struct usbtest_dev *dev, struct usbtest_param *param)
 		case 13:	/* short read, resembling case 10 */
 			req.wValue = cpu_to_le16((USB_DT_CONFIG << 8) | 0);
 			/* last data packet "should" be DATA1, not DATA0 */
+<<<<<<< HEAD
 			len = 1024 - udev->descriptor.bMaxPacketSize0;
+=======
+			if (udev->speed == USB_SPEED_SUPER)
+				len = 1024 - 512;
+			else
+				len = 1024 - udev->descriptor.bMaxPacketSize0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			expected = -EREMOTEIO;
 			break;
 		case 14:	/* short read; try to fill the last packet */
@@ -1132,6 +1186,14 @@ static int unlink1(struct usbtest_dev *dev, int pipe, int size, int async)
 	urb->context = &completion;
 	urb->complete = unlink1_callback;
 
+<<<<<<< HEAD
+=======
+	if (usb_pipeout(urb->pipe)) {
+		simple_fill_buf(urb);
+		urb->transfer_flags |= URB_ZERO_PACKET;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* keep the endpoint busy.  there are lots of hc/hcd-internal
 	 * states, and testing should get to all of them over time.
 	 *
@@ -1262,6 +1324,14 @@ static int unlink_queued(struct usbtest_dev *dev, int pipe, unsigned num,
 				unlink_queued_callback, &ctx);
 		ctx.urbs[i]->transfer_dma = buf_dma;
 		ctx.urbs[i]->transfer_flags = URB_NO_TRANSFER_DMA_MAP;
+<<<<<<< HEAD
+=======
+
+		if (usb_pipeout(ctx.urbs[i]->pipe)) {
+			simple_fill_buf(ctx.urbs[i]);
+			ctx.urbs[i]->transfer_flags |= URB_ZERO_PACKET;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* Submit all the URBs and then unlink URBs num - 4 and num - 2. */
@@ -1387,11 +1457,23 @@ static int test_halt(struct usbtest_dev *tdev, int ep, struct urb *urb)
 
 static int halt_simple(struct usbtest_dev *dev)
 {
+<<<<<<< HEAD
 	int		ep;
 	int		retval = 0;
 	struct urb	*urb;
 
 	urb = simple_alloc_urb(testdev_to_usbdev(dev), 0, 512);
+=======
+	int			ep;
+	int			retval = 0;
+	struct urb		*urb;
+	struct usb_device	*udev = testdev_to_usbdev(dev);
+
+	if (udev->speed == USB_SPEED_SUPER)
+		urb = simple_alloc_urb(udev, 0, 1024);
+	else
+		urb = simple_alloc_urb(udev, 0, 512);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (urb == NULL)
 		return -ENOMEM;
 

@@ -654,7 +654,17 @@ nouveau_connector_detect_depth(struct drm_connector *connector)
 	if (nv_connector->edid && connector->display_info.bpc)
 		return;
 
+<<<<<<< HEAD
 	/* if not, we're out of options unless we're LVDS, default to 8bpc */
+=======
+	/* EDID 1.4 is *supposed* to be supported on eDP, but, Apple... */
+	if (nv_connector->type == DCB_CONNECTOR_eDP) {
+		connector->display_info.bpc = 6;
+		return;
+	}
+
+	/* we're out of options unless we're LVDS, default to 8bpc */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (nv_encoder->dcb->type != OUTPUT_LVDS) {
 		connector->display_info.bpc = 8;
 		return;

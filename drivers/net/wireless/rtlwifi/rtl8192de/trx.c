@@ -529,7 +529,11 @@ bool rtl92de_rx_query_desc(struct ieee80211_hw *hw,	struct rtl_stats *stats,
 						   p_drvinfo);
 	}
 	/*rx_status->qual = stats->signal; */
+<<<<<<< HEAD
 	rx_status->signal = stats->rssi + 10;
+=======
+	rx_status->signal = stats->recvsignalpower + 10;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*rx_status->noise = -stats->noise; */
 	return true;
 }

@@ -330,7 +330,11 @@ static int wm831x_buckv_set_voltage(struct regulator_dev *rdev,
 	if (vsel > dcdc->dvs_vsel) {
 		ret = wm831x_set_bits(wm831x, dvs_reg,
 				      WM831X_DC1_DVS_VSEL_MASK,
+<<<<<<< HEAD
 				      dcdc->dvs_vsel);
+=======
+				      vsel);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret == 0)
 			dcdc->dvs_vsel = vsel;
 		else

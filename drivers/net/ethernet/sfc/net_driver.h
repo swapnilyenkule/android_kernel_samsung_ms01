@@ -68,6 +68,11 @@
 #define EFX_TXQ_TYPES		4
 #define EFX_MAX_TX_QUEUES	(EFX_TXQ_TYPES * EFX_MAX_CHANNELS)
 
+<<<<<<< HEAD
+=======
+struct efx_self_tests;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**
  * struct efx_special_buffer - An Efx special buffer
  * @addr: CPU base address of the buffer
@@ -194,6 +199,10 @@ struct efx_tx_queue {
 	/* Members shared between paths and sometimes updated */
 	unsigned int empty_read_count ____cacheline_aligned_in_smp;
 #define EFX_EMPTY_COUNT_VALID 0x80000000
+<<<<<<< HEAD
+=======
+	atomic_t flush_outstanding;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /**
@@ -203,6 +212,10 @@ struct efx_tx_queue {
  *	Will be %NULL if the buffer slot is currently free.
  * @page: The associated page buffer. Valif iff @flags & %EFX_RX_BUF_PAGE.
  *	Will be %NULL if the buffer slot is currently free.
+<<<<<<< HEAD
+=======
+ * @page_offset: Offset within page. Valid iff @flags & %EFX_RX_BUF_PAGE.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * @len: Buffer length, in bytes.
  * @flags: Flags for buffer and packet state.
  */
@@ -212,7 +225,12 @@ struct efx_rx_buffer {
 		struct sk_buff *skb;
 		struct page *page;
 	} u;
+<<<<<<< HEAD
 	unsigned int len;
+=======
+	u16 page_offset;
+	u16 len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u16 flags;
 };
 #define EFX_RX_BUF_PAGE		0x0001
@@ -887,6 +905,10 @@ static inline unsigned int efx_port_num(struct efx_nic *efx)
  * @remove_port: Free resources allocated by probe_port()
  * @handle_global_event: Handle a "global" event (may be %NULL)
  * @prepare_flush: Prepare the hardware for flushing the DMA queues
+<<<<<<< HEAD
+=======
+ * @finish_flush: Clean up after flushing the DMA queues
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * @update_stats: Update statistics not provided by event handling
  * @start_stats: Start the regular fetching of statistics
  * @stop_stats: Stop the regular fetching of statistics
@@ -899,7 +921,12 @@ static inline unsigned int efx_port_num(struct efx_nic *efx)
  * @get_wol: Get WoL configuration from driver state
  * @set_wol: Push WoL configuration to the NIC
  * @resume_wol: Synchronise WoL state between driver and MC (e.g. after resume)
+<<<<<<< HEAD
  * @test_registers: Test read/write functionality of control registers
+=======
+ * @test_chip: Test registers.  Should use efx_nic_test_registers(), and is
+ *	expected to reset the NIC.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * @test_nvram: Test validity of NVRAM contents
  * @revision: Hardware architecture revision
  * @mem_map_size: Memory BAR mapped size
@@ -933,6 +960,10 @@ struct efx_nic_type {
 	void (*remove_port)(struct efx_nic *efx);
 	bool (*handle_global_event)(struct efx_channel *channel, efx_qword_t *);
 	void (*prepare_flush)(struct efx_nic *efx);
+<<<<<<< HEAD
+=======
+	void (*finish_flush)(struct efx_nic *efx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	void (*update_stats)(struct efx_nic *efx);
 	void (*start_stats)(struct efx_nic *efx);
 	void (*stop_stats)(struct efx_nic *efx);
@@ -944,7 +975,11 @@ struct efx_nic_type {
 	void (*get_wol)(struct efx_nic *efx, struct ethtool_wolinfo *wol);
 	int (*set_wol)(struct efx_nic *efx, u32 type);
 	void (*resume_wol)(struct efx_nic *efx);
+<<<<<<< HEAD
 	int (*test_registers)(struct efx_nic *efx);
+=======
+	int (*test_chip)(struct efx_nic *efx, struct efx_self_tests *tests);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int (*test_nvram)(struct efx_nic *efx);
 
 	int revision;

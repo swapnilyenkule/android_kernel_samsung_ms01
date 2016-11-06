@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -40,6 +45,19 @@
  */
 /*
  * Airgo Networks, Inc proprietary. All rights reserved
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * aniGlobal.h: MAC Modules Adapter Definitions.
  * Author:      V. K. Kandarpa
  * Date:    10/25/2002
@@ -97,9 +115,15 @@ typedef struct sAniSirGlobal *tpAniSirGlobal;
 #include "smeRrmInternal.h"
 #include "rrmGlobal.h"
 #endif
+<<<<<<< HEAD
 #if defined(FEATURE_WLAN_CCX) && !defined(FEATURE_WLAN_CCX_UPLOAD)
 #include "ccxApi.h"
 #include "ccxGlobal.h"
+=======
+#if defined(FEATURE_WLAN_ESE) && !defined(FEATURE_WLAN_ESE_UPLOAD)
+#include "eseApi.h"
+#include "eseGlobal.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 #include "p2p_Api.h"
 
@@ -220,9 +244,12 @@ typedef struct sLimTimers
     // CNF_WAIT timer
     TX_TIMER            *gpLimCnfWaitTimer;
 
+<<<<<<< HEAD
     // Send Disassociate frame threshold parameters
     TX_TIMER            gLimSendDisassocFrameThresholdTimer;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     TX_TIMER       gLimAddtsRspTimer;   // max wait for a response
 
     // Update OLBC Cache Timer
@@ -242,10 +269,16 @@ typedef struct sLimTimers
     TX_TIMER           gLimFTPreAuthRspTimer;
 #endif
 
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
     TX_TIMER           gLimCcxTsmTimer;
 #endif
     TX_TIMER           gLimRemainOnChannelTimer;
+=======
+#ifdef FEATURE_WLAN_ESE
+    TX_TIMER           gLimEseTsmTimer;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef FEATURE_WLAN_TDLS_INTERNAL
     TX_TIMER           gLimTdlsDisRspWaitTimer;
     TX_TIMER           gLimTdlsLinkSetupRspTimeouTimer;
@@ -463,6 +496,11 @@ typedef struct sAniSirLim
 
     // Heart-Beat interval value
     tANI_U32   gLimHeartBeatCount;
+<<<<<<< HEAD
+=======
+    tSirMacAddr gLimHeartBeatApMac[2];
+    tANI_U8 gLimHeartBeatApMacIndex;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     // Statistics to keep track of no. beacons rcvd in heart beat interval
     tANI_U16            gLimHeartBeatBeaconStats[MAX_NO_BEACONS_PER_HEART_BEAT_INTERVAL];
@@ -671,6 +709,12 @@ typedef struct sAniSirLim
 #ifdef FEATURE_WLAN_TDLS
     tANI_U8 gLimTDLSBufStaEnabled;
     tANI_U8 gLimTDLSUapsdMask;
+<<<<<<< HEAD
+=======
+    tANI_U8 gLimTDLSOffChannelEnabled;
+    // TDLS WMM Mode
+    tANI_U8 gLimTDLSWmmMode;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 
@@ -714,10 +758,13 @@ typedef struct sAniSirLim
     // Place holder for Pre-authentication node list
     struct tLimPreAuthNode *  pLimPreAuthList;
 
+<<<<<<< HEAD
     // Send Disassociate frame threshold parameters
     tANI_U16            gLimDisassocFrameThreshold;
     tANI_U16            gLimDisassocFrameCredit;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     // Assoc or ReAssoc Response Data/Frame
     void                *gLimAssocResponseData;
 
@@ -916,7 +963,11 @@ tLimMlmOemDataRsp       *gpLimMlmOemDataRsp;
     tANI_U32    mgmtFrameSessionId;
     tSirBackgroundScanMode gLimBackgroundScanMode;
 
+<<<<<<< HEAD
 #if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_CCX) || defined(FEATURE_WLAN_LFR)
+=======
+#if  defined (WLAN_FEATURE_VOWIFI_11R) || defined (FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     tpPESession  pSessionEntry;
     tANI_U8 reAssocRetryAttempt;
 #endif
@@ -924,6 +975,21 @@ tLimMlmOemDataRsp       *gpLimMlmOemDataRsp;
     tANI_U8 deferredMsgCnt;
     tSirDFSChannelList    dfschannelList;
     tANI_U8 deauthMsgCnt;
+<<<<<<< HEAD
+=======
+    tANI_U8 gLimIbssStaLimit;
+    tANI_U8 probeCounter;
+    tANI_U8 maxProbe;
+    tANI_U8 retryPacketCnt;
+
+    // Flag to debug remain on channel
+    tANI_BOOLEAN gDebugP2pRemainOnChannel;
+    /* Sequence number to keep track of
+     * start and end of remain on channel
+     * debug marker frame.
+     */
+    tANI_U32 remOnChnSeqNum;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } tAniSirLim, *tpAniSirLim;
 
 typedef struct sLimMgmtFrameRegistration
@@ -1063,6 +1129,23 @@ typedef struct sAniSirGlobal
     v_BOOL_t isTdlsPowerSaveProhibited;
 #endif
     tANI_U8 fScanOffload;
+<<<<<<< HEAD
+=======
+    tANI_U8 isCoalesingInIBSSAllowed;
+    tANI_U32 fEnableDebugLog;
+    tANI_U32 fDeferIMPSTime;
+    tANI_BOOLEAN deferImps;
+
+#ifdef WLAN_FEATURE_11AC
+    /* Alow Mu BFormee session only if MU BF session doesnt exist.
+     */
+    v_BOOL_t isMuBfsessionexist;
+#endif
+
+    v_BOOL_t isCoexScoIndSet;
+    v_U8_t miracast_mode;
+    tANI_BOOLEAN miracastVendorConfig;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } tAniSirGlobal;
 
 #ifdef FEATURE_WLAN_TDLS

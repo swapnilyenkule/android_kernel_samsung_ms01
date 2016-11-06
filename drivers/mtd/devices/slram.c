@@ -240,7 +240,11 @@ static int parse_cmdline(char *devname, char *szstart, char *szlength)
 
 	if (*(szlength) != '+') {
 		devlength = simple_strtoul(szlength, &buffer, 0);
+<<<<<<< HEAD
 		devlength = handle_unit(devlength, buffer) - devstart;
+=======
+		devlength = handle_unit(devlength, buffer);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (devlength < devstart)
 			goto err_out;
 

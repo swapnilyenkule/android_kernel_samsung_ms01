@@ -28,6 +28,10 @@
 #include <linux/clockchips.h>
 #include <linux/io.h>
 #include <linux/export.h>
+<<<<<<< HEAD
+=======
+#include <linux/gpio.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include <mach/udc.h>
 #include <mach/hardware.h>
@@ -107,7 +111,11 @@ static signed char irq2gpio[32] = {
 	 7,  8,  9, 10, 11, 12, -1, -1,
 };
 
+<<<<<<< HEAD
 int gpio_to_irq(int gpio)
+=======
+static int ixp4xx_gpio_to_irq(struct gpio_chip *chip, unsigned gpio)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int irq;
 
@@ -117,7 +125,10 @@ int gpio_to_irq(int gpio)
 	}
 	return -EINVAL;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(gpio_to_irq);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int irq_to_gpio(unsigned int irq)
 {
@@ -383,12 +394,62 @@ static struct platform_device *ixp46x_devices[] __initdata = {
 unsigned long ixp4xx_exp_bus_size;
 EXPORT_SYMBOL(ixp4xx_exp_bus_size);
 
+<<<<<<< HEAD
+=======
+static int ixp4xx_gpio_direction_input(struct gpio_chip *chip, unsigned gpio)
+{
+	gpio_line_config(gpio, IXP4XX_GPIO_IN);
+
+	return 0;
+}
+
+static int ixp4xx_gpio_direction_output(struct gpio_chip *chip, unsigned gpio,
+					int level)
+{
+	gpio_line_set(gpio, level);
+	gpio_line_config(gpio, IXP4XX_GPIO_OUT);
+
+	return 0;
+}
+
+static int ixp4xx_gpio_get_value(struct gpio_chip *chip, unsigned gpio)
+{
+	int value;
+
+	gpio_line_get(gpio, &value);
+
+	return value;
+}
+
+static void ixp4xx_gpio_set_value(struct gpio_chip *chip, unsigned gpio,
+				  int value)
+{
+	gpio_line_set(gpio, value);
+}
+
+static struct gpio_chip ixp4xx_gpio_chip = {
+	.label			= "IXP4XX_GPIO_CHIP",
+	.direction_input	= ixp4xx_gpio_direction_input,
+	.direction_output	= ixp4xx_gpio_direction_output,
+	.get			= ixp4xx_gpio_get_value,
+	.set			= ixp4xx_gpio_set_value,
+	.to_irq			= ixp4xx_gpio_to_irq,
+	.base			= 0,
+	.ngpio			= 16,
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void __init ixp4xx_sys_init(void)
 {
 	ixp4xx_exp_bus_size = SZ_16M;
 
 	platform_add_devices(ixp4xx_devices, ARRAY_SIZE(ixp4xx_devices));
 
+<<<<<<< HEAD
+=======
+	gpiochip_add(&ixp4xx_gpio_chip);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (cpu_is_ixp46x()) {
 		int region;
 

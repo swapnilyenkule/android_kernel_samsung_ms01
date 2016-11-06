@@ -445,7 +445,10 @@ static long __ncp_ioctl(struct inode *inode, unsigned int cmd, unsigned long arg
 						result = -EIO;
 					}
 				}
+<<<<<<< HEAD
 				result = 0;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			mutex_unlock(&server->root_setup_lock);
 

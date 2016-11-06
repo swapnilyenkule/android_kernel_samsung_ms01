@@ -2,7 +2,11 @@
  * Broadcom SDIO/PCMCIA
  * Software-specific definitions shared between device and host side
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +26,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: bcmsdpcm.h 364353 2012-10-23 20:31:46Z $
+=======
+ * $Id: bcmsdpcm.h 414378 2013-07-24 15:58:50Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef	_bcmsdpcm_h_
@@ -270,7 +278,11 @@ typedef struct {
 	uint32  assert_line;
 	uint32	console_addr;		/* Address of hndrte_cons_t */
 	uint32  msgtrace_addr;
+<<<<<<< HEAD
 	uint32  brpt_addr;
+=======
+	uint32  fwid;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } sdpcm_shared_t;
 
 extern sdpcm_shared_t sdpcm_shared;

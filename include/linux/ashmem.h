@@ -14,7 +14,10 @@
 
 #include <linux/limits.h>
 #include <linux/ioctl.h>
+<<<<<<< HEAD
 #include <linux/types.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define ASHMEM_NAME_LEN		256
 

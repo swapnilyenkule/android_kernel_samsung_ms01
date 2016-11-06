@@ -170,7 +170,11 @@ void ttm_tt_destroy(struct ttm_tt *ttm)
 		ttm_tt_unbind(ttm);
 	}
 
+<<<<<<< HEAD
 	if (likely(ttm->pages != NULL)) {
+=======
+	if (ttm->state == tt_unbound) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		ttm->bdev->driver->ttm_tt_unpopulate(ttm);
 	}
 

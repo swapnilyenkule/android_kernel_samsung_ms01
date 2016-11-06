@@ -59,7 +59,13 @@
 
 #include <net/x25.h>
 #include <net/compat.h>
+<<<<<<< HEAD
 
+=======
+#ifdef KW_TAINT_ANALYSIS
+   extern void * get_tainted_stuff();
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int sysctl_x25_restart_request_timeout = X25_DEFAULT_T20;
 int sysctl_x25_call_request_timeout    = X25_DEFAULT_T21;
 int sysctl_x25_reset_request_timeout   = X25_DEFAULT_T22;
@@ -1343,10 +1349,16 @@ static int x25_recvmsg(struct kiocb *iocb, struct socket *sock,
 	if (sx25) {
 		sx25->sx25_family = AF_X25;
 		sx25->sx25_addr   = x25->dest_addr;
+<<<<<<< HEAD
 	}
 
 	msg->msg_namelen = sizeof(struct sockaddr_x25);
 
+=======
+		msg->msg_namelen = sizeof(*sx25);
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	x25_check_rbuf(sk);
 	rc = copied;
 out_free_dgram:
@@ -1586,11 +1598,19 @@ out_cud_release:
 	case SIOCX25CALLACCPTAPPRV: {
 		rc = -EINVAL;
 		lock_sock(sk);
+<<<<<<< HEAD
 		if (sk->sk_state != TCP_CLOSE)
 			break;
 		clear_bit(X25_ACCPT_APPRV_FLAG, &x25->flags);
 		release_sock(sk);
 		rc = 0;
+=======
+		if (sk->sk_state == TCP_CLOSE) {
+			clear_bit(X25_ACCPT_APPRV_FLAG, &x25->flags);
+			rc = 0;
+		}
+		release_sock(sk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	}
 
@@ -1598,6 +1618,7 @@ out_cud_release:
 		rc = -EINVAL;
 		lock_sock(sk);
 		if (sk->sk_state != TCP_ESTABLISHED)
+<<<<<<< HEAD
 			break;
 		/* must call accptapprv above */
 		if (test_bit(X25_ACCPT_APPRV_FLAG, &x25->flags))
@@ -1606,6 +1627,17 @@ out_cud_release:
 		x25->state = X25_STATE_3;
 		release_sock(sk);
 		rc = 0;
+=======
+			goto out_sendcallaccpt_release;
+		/* must call accptapprv above */
+		if (test_bit(X25_ACCPT_APPRV_FLAG, &x25->flags))
+			goto out_sendcallaccpt_release;
+		x25_write_internal(sk, X25_CALL_ACCEPTED);
+		x25->state = X25_STATE_3;
+		rc = 0;
+out_sendcallaccpt_release:
+		release_sock(sk);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	}
 
@@ -1625,7 +1657,11 @@ static const struct net_proto_family x25_family_ops = {
 
 #ifdef CONFIG_COMPAT
 static int compat_x25_subscr_ioctl(unsigned int cmd,
+<<<<<<< HEAD
 		struct compat_x25_subscrip_struct __user *x25_subscr32)
+=======
+		struct compat_x25_subscrip_struct __user *x25_subscr32_actual)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct compat_x25_subscrip_struct x25_subscr;
 	struct x25_neigh *nb;
@@ -1633,6 +1669,14 @@ static int compat_x25_subscr_ioctl(unsigned int cmd,
 	int rc = -EINVAL;
 
 	rc = -EFAULT;
+<<<<<<< HEAD
+=======
+	#ifdef KW_TAINT_ANALYSIS
+	struct compat_x25_subscrip_struct __user *x25_subscr32 = (struct compat_x25_subscrip_struct __user *)get_tainted_stuff();
+	#else
+	struct compat_x25_subscrip_struct __user *x25_subscr32 = x25_subscr32_actual;
+	#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (copy_from_user(&x25_subscr, x25_subscr32, sizeof(*x25_subscr32)))
 		goto out;
 
@@ -1675,7 +1719,15 @@ out_dev_put:
 static int compat_x25_ioctl(struct socket *sock, unsigned int cmd,
 				unsigned long arg)
 {
+<<<<<<< HEAD
 	void __user *argp = compat_ptr(arg);
+=======
+	#ifdef KW_TAINT_ANALYSIS
+	void __user *argp = (void __user *)get_tainted_stuff();
+	#else
+	void __user *argp = compat_ptr(arg);
+	#endif	
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct sock *sk = sock->sk;
 
 	int rc = -ENOIOCTLCMD;

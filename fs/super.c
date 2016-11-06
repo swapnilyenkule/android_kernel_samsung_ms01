@@ -69,6 +69,11 @@ static int prune_super(struct shrinker *shrink, struct shrink_control *sc)
 
 	total_objects = sb->s_nr_dentry_unused +
 			sb->s_nr_inodes_unused + fs_objects + 1;
+<<<<<<< HEAD
+=======
+	if (!total_objects)
+		total_objects = 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (sc->nr_to_scan) {
 		int	dentries;
@@ -298,6 +303,7 @@ EXPORT_SYMBOL(deactivate_super);
  *	and want to turn it into a full-blown active reference.  grab_super()
  *	is called with sb_lock held and drops it.  Returns 1 in case of
  *	success, 0 if we had failed (superblock contents was already dead or
+<<<<<<< HEAD
  *	dying when grab_super() had been called).
  */
 static int grab_super(struct super_block *s) __releases(sb_lock)
@@ -311,6 +317,21 @@ static int grab_super(struct super_block *s) __releases(sb_lock)
 	spin_unlock(&sb_lock);
 	/* wait for it to die */
 	down_write(&s->s_umount);
+=======
+ *	dying when grab_super() had been called).  Note that this is only
+ *	called for superblocks not in rundown mode (== ones still on ->fs_supers
+ *	of their type), so increment of ->s_count is OK here.
+ */
+static int grab_super(struct super_block *s) __releases(sb_lock)
+{
+	s->s_count++;
+	spin_unlock(&sb_lock);
+	down_write(&s->s_umount);
+	if ((s->s_flags & MS_BORN) && atomic_inc_not_zero(&s->s_active)) {
+		put_super(s);
+		return 1;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	up_write(&s->s_umount);
 	put_super(s);
 	return 0;
@@ -440,11 +461,14 @@ retry:
 				destroy_super(s);
 				s = NULL;
 			}
+<<<<<<< HEAD
 			down_write(&old->s_umount);
 			if (unlikely(!(old->s_flags & MS_BORN))) {
 				deactivate_locked_super(old);
 				goto retry;
 			}
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return old;
 		}
 	}
@@ -677,10 +701,17 @@ restart:
 		if (hlist_unhashed(&sb->s_instances))
 			continue;
 		if (sb->s_bdev == bdev) {
+<<<<<<< HEAD
 			if (grab_super(sb)) /* drops sb_lock */
 				return sb;
 			else
 				goto restart;
+=======
+			if (!grab_super(sb))
+				goto restart;
+			up_write(&sb->s_umount);
+			return sb;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 	spin_unlock(&sb_lock);
@@ -787,12 +818,20 @@ cancel_readonly:
 	return retval;
 }
 
+<<<<<<< HEAD
 static void do_emergency_remount(struct work_struct *work)
+=======
+void do_emergency_remount(struct work_struct *work)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct super_block *sb, *p = NULL;
 
 	spin_lock(&sb_lock);
+<<<<<<< HEAD
 	list_for_each_entry_reverse(sb, &super_blocks, s_list) {
+=======
+	list_for_each_entry(sb, &super_blocks, s_list) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (hlist_unhashed(&sb->s_instances))
 			continue;
 		sb->s_count++;

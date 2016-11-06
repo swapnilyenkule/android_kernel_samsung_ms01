@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -39,6 +44,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*============================================================================
 limLogDump.c
 
@@ -71,6 +88,10 @@ Qualcomm Confidential and Proprietary
 #endif
 #include "smeInside.h"
 #include "wlan_qct_wda.h"
+<<<<<<< HEAD
+=======
+#include "wlan_qct_wdi_dts.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 void WDA_TimerTrafficStatsInd(tWDA_CbContext *pWDA);
 #ifdef WLANTL_DEBUG
@@ -1755,6 +1776,7 @@ dump_sch_beacon_trigger( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI
     return p;
 }
 
+<<<<<<< HEAD
 
 static char* dump_lim_trace_cfg(tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
 {
@@ -1768,6 +1790,8 @@ static char* dump_lim_trace_dump(tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 ar
     return p;
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static char* dump_lim_set_scan_in_powersave( tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
 {
     p += log_sprintf( pMac,p, "logDump set scan in powersave to %d \n", arg1);
@@ -2392,6 +2416,35 @@ dump_lim_get_pkts_rcvd_per_rssi_values( tpAniSirGlobal pMac, tANI_U32 arg1, tANI
 }
 #endif
 
+<<<<<<< HEAD
+=======
+
+static char *
+dump_set_max_probe_req(tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2,
+             tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    if ((arg1 <= 0) || (arg1 > 4)){
+       limLog(pMac, LOGE,
+           FL("invalid number. valid range 1 - 4 \n"));
+       return p;
+    }
+    pMac->lim.maxProbe = arg1;
+    return p;
+}
+/* API to fill Rate Info based on mac efficiency
+ * arg 1: mac efficiency to be used to calculate mac thorughput for a given rate index
+ * arg 2: starting rateIndex to apply the macEfficiency to
+ * arg 3: ending rateIndex to apply the macEfficiency to
+ */
+static char *
+dump_limRateInfoBasedOnMacEff(tpAniSirGlobal pMac, tANI_U32 arg1, tANI_U32 arg2, tANI_U32 arg3, tANI_U32 arg4, char *p)
+{
+    limLog(pMac, LOGE, FL("arg1 %u, arg2 %u, arg3 %u"), arg1, arg2, arg3);
+    WDTS_FillRateInfo((tANI_U8)(arg1), (tANI_U16)(arg2), (tANI_U16)(arg3));
+    return p;
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static tDumpFuncEntry limMenuDumpTable[] = {
     {0,     "PE (300-499)",                                          NULL},
     {300,   "LIM: Dump state(s)/statistics <session id>",            dump_lim_info},
@@ -2414,8 +2467,11 @@ static tDumpFuncEntry limMenuDumpTable[] = {
      * be moved to logDump.c
      */
     {321,   "PE:LIM: Set Log Level <VOS Module> <VOS Log Level>",    dump_lim_update_log_level},
+<<<<<<< HEAD
     {322,   "PE.LIM: Enable/Disable PE Tracing",                     dump_lim_trace_cfg},
     {323,   "PE.LIM: Trace Dump if enabled",                           dump_lim_trace_dump},
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {331,   "PE.LIM: Send finish scan to LIM",                       dump_lim_finishscan_send},
     {332,   "PE.LIM: force probe rsp send from LIM",                 dump_lim_prb_rsp_send},
     {333,   "PE.SCH: Trigger to generate a beacon",                  dump_sch_beacon_trigger},
@@ -2467,6 +2523,11 @@ static tDumpFuncEntry limMenuDumpTable[] = {
     {369,   "PE.LIM: pkts/rateIdx: iwpriv wlan0 dump 368 <staId> <boolean to flush counter>",    dump_lim_get_pkts_rcvd_per_rate_idx},
     {370,   "PE.LIM: pkts/rssi: : iwpriv wlan0 dump 369 <staId> <boolean to flush counter>",    dump_lim_get_pkts_rcvd_per_rssi_values},
 #endif
+<<<<<<< HEAD
+=======
+    {374,   "PE.LIM: MAS RX stats MAC eff <MAC eff in percentage>",  dump_limRateInfoBasedOnMacEff},
+    {376,   "PE.LIM: max number of probe per scan", dump_set_max_probe_req },
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 

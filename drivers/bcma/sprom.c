@@ -432,13 +432,21 @@ int bcma_sprom_get(struct bcma_bus *bus)
 	if (!sprom)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	if (bus->chipinfo.id == 0x4331)
+=======
+	if (bus->chipinfo.id == 0x4331 || bus->chipinfo.id == 43431)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		bcma_chipco_bcm4331_ext_pa_lines_ctl(&bus->drv_cc, false);
 
 	pr_debug("SPROM offset 0x%x\n", offset);
 	bcma_sprom_read(bus, offset, sprom);
 
+<<<<<<< HEAD
 	if (bus->chipinfo.id == 0x4331)
+=======
+	if (bus->chipinfo.id == 0x4331 || bus->chipinfo.id == 43431)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		bcma_chipco_bcm4331_ext_pa_lines_ctl(&bus->drv_cc, true);
 
 	err = bcma_sprom_valid(sprom);

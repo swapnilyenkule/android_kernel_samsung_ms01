@@ -1039,7 +1039,12 @@ void w1_search(struct w1_master *dev, u8 search_type, w1_slave_found_callback cb
 			tmp64 = (triplet_ret >> 2);
 			rn |= (tmp64 << i);
 
+<<<<<<< HEAD
 			if (kthread_should_stop()) {
+=======
+			/* ensure we're called from kthread and not by netlink callback */
+			if (!dev->priv && kthread_should_stop()) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				dev_dbg(&dev->dev, "Abort w1_search\n");
 				return;
 			}

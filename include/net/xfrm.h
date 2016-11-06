@@ -269,6 +269,12 @@ struct xfrm_replay {
 	int	(*check)(struct xfrm_state *x,
 			 struct sk_buff *skb,
 			 __be32 net_seq);
+<<<<<<< HEAD
+=======
+	int	(*recheck)(struct xfrm_state *x,
+			   struct sk_buff *skb,
+			   __be32 net_seq);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	void	(*notify)(struct xfrm_state *x, int event);
 	int	(*overflow)(struct xfrm_state *x, struct sk_buff *skb);
 };
@@ -1055,7 +1061,11 @@ static inline int __xfrm_policy_check2(struct sock *sk, int dir,
 		return __xfrm_policy_check(sk, ndir, skb, family);
 
 	return	(!net->xfrm.policy_count[dir] && !skb->sp) ||
+<<<<<<< HEAD
 		(skb_dst(skb)->flags & DST_NOPOLICY) ||
+=======
+		((skb_dst(skb) != NULL) && (skb_dst(skb)->flags & DST_NOPOLICY)) ||
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		__xfrm_policy_check(sk, ndir, skb, family);
 }
 

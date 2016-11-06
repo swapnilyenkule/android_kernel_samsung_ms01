@@ -391,6 +391,7 @@ struct perf_event_mmap_page {
 	/*
 	 * Control data for the mmap() data buffer.
 	 *
+<<<<<<< HEAD
 	 * User-space reading the @data_head value should issue an rmb(), on
 	 * SMP capable platforms, after reading this value -- see
 	 * perf_event_wakeup().
@@ -398,6 +399,17 @@ struct perf_event_mmap_page {
 	 * When the mapping is PROT_WRITE the @data_tail value should be
 	 * written by userspace to reflect the last read data. In this case
 	 * the kernel will not over-write unread data.
+=======
+	 * User-space reading the @data_head value should issue an smp_rmb(),
+	 * after reading this value.
+	 *
+	 * When the mapping is PROT_WRITE the @data_tail value should be
+	 * written by userspace to reflect the last read data, after issueing
+	 * an smp_mb() to separate the data read from the ->data_tail store.
+	 * In this case the kernel will not over-write unread data.
+	 *
+	 * See perf_output_put_handle() for the data ordering.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 */
 	__u64   data_head;		/* head in the data section */
 	__u64	data_tail;		/* user-space written tail */
@@ -925,7 +937,11 @@ struct perf_event {
 	struct hw_perf_event		hw;
 
 	struct perf_event_context	*ctx;
+<<<<<<< HEAD
 	struct file			*filp;
+=======
+	atomic_long_t			refcount;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * These accumulate total time (in nanoseconds) that children
@@ -950,8 +966,12 @@ struct perf_event {
 	/* mmap bits */
 	struct mutex			mmap_mutex;
 	atomic_t			mmap_count;
+<<<<<<< HEAD
 	int				mmap_locked;
 	struct user_struct		*mmap_user;
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct ring_buffer		*rb;
 	struct list_head		rb_entry;
 
@@ -1064,7 +1084,11 @@ struct perf_cpu_context {
 	int				exclusive;
 	struct list_head		rotation_list;
 	int				jiffies_interval;
+<<<<<<< HEAD
 	struct pmu			*active_pmu;
+=======
+	struct pmu			*unique_pmu;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct perf_cgroup		*cgrp;
 };
 
@@ -1330,6 +1354,15 @@ static inline void perf_event_disable(struct perf_event *event)		{ }
 static inline void perf_event_task_tick(void)				{ }
 #endif
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+extern void perf_restore_debug_store(void);
+#else
+static inline void perf_restore_debug_store(void)			{ }
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define perf_output_put(handle, x) perf_output_copy((handle), &(x), sizeof(x))
 
 /*

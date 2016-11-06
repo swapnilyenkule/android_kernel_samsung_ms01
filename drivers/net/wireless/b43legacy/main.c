@@ -1511,9 +1511,23 @@ static void b43legacy_print_fw_helptext(struct b43legacy_wl *wl)
 		     "and download the correct firmware (version 3).\n");
 }
 
+<<<<<<< HEAD
 static int do_request_fw(struct b43legacy_wldev *dev,
 			 const char *name,
 			 const struct firmware **fw)
+=======
+static void b43legacy_fw_cb(const struct firmware *firmware, void *context)
+{
+	struct b43legacy_wldev *dev = context;
+
+	dev->fwp = firmware;
+	complete(&dev->fw_load_complete);
+}
+
+static int do_request_fw(struct b43legacy_wldev *dev,
+			 const char *name,
+			 const struct firmware **fw, bool async)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	char path[sizeof(modparam_fwpostfix) + 32];
 	struct b43legacy_fw_header *hdr;
@@ -1526,7 +1540,28 @@ static int do_request_fw(struct b43legacy_wldev *dev,
 	snprintf(path, ARRAY_SIZE(path),
 		 "b43legacy%s/%s.fw",
 		 modparam_fwpostfix, name);
+<<<<<<< HEAD
 	err = request_firmware(fw, path, dev->dev->dev);
+=======
+	b43legacyinfo(dev->wl, "Loading firmware %s\n", path);
+	if (async) {
+		init_completion(&dev->fw_load_complete);
+		err = request_firmware_nowait(THIS_MODULE, 1, path,
+					      dev->dev->dev, GFP_KERNEL,
+					      dev, b43legacy_fw_cb);
+		if (err) {
+			b43legacyerr(dev->wl, "Unable to load firmware\n");
+			return err;
+		}
+		/* stall here until fw ready */
+		wait_for_completion(&dev->fw_load_complete);
+		if (!dev->fwp)
+			err = -EINVAL;
+		*fw = dev->fwp;
+	} else {
+		err = request_firmware(fw, path, dev->dev->dev);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err) {
 		b43legacyerr(dev->wl, "Firmware file \"%s\" not found "
 		       "or load failed.\n", path);
@@ -1571,8 +1606,11 @@ static void b43legacy_request_firmware(struct work_struct *work)
 	const char *filename;
 	int err;
 
+<<<<<<< HEAD
 	/* do dummy read */
 	ssb_read32(dev->dev, SSB_TMSHIGH);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!fw->ucode) {
 		if (rev == 2)
 			filename = "ucode2";
@@ -1580,7 +1618,11 @@ static void b43legacy_request_firmware(struct work_struct *work)
 			filename = "ucode4";
 		else
 			filename = "ucode5";
+<<<<<<< HEAD
 		err = do_request_fw(dev, filename, &fw->ucode);
+=======
+		err = do_request_fw(dev, filename, &fw->ucode, true);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (err)
 			goto err_load;
 	}
@@ -1589,7 +1631,11 @@ static void b43legacy_request_firmware(struct work_struct *work)
 			filename = "pcm4";
 		else
 			filename = "pcm5";
+<<<<<<< HEAD
 		err = do_request_fw(dev, filename, &fw->pcm);
+=======
+		err = do_request_fw(dev, filename, &fw->pcm, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (err)
 			goto err_load;
 	}
@@ -1607,7 +1653,11 @@ static void b43legacy_request_firmware(struct work_struct *work)
 		default:
 			goto err_no_initvals;
 		}
+<<<<<<< HEAD
 		err = do_request_fw(dev, filename, &fw->initvals);
+=======
+		err = do_request_fw(dev, filename, &fw->initvals, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (err)
 			goto err_load;
 	}
@@ -1627,7 +1677,11 @@ static void b43legacy_request_firmware(struct work_struct *work)
 		default:
 			goto err_no_initvals;
 		}
+<<<<<<< HEAD
 		err = do_request_fw(dev, filename, &fw->initvals_band);
+=======
+		err = do_request_fw(dev, filename, &fw->initvals_band, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (err)
 			goto err_load;
 	}
@@ -3892,8 +3946,16 @@ static void b43legacy_remove(struct ssb_device *dev)
 	 * as the ieee80211 unreg will destroy the workqueue. */
 	cancel_work_sync(&wldev->restart_work);
 	cancel_work_sync(&wl->firmware_load);
+<<<<<<< HEAD
 
 	B43legacy_WARN_ON(!wl);
+=======
+	complete(&wldev->fw_load_complete);
+
+	B43legacy_WARN_ON(!wl);
+	if (!wldev->fw.ucode)
+		return;			/* NULL if fw never loaded */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (wl->current_dev == wldev)
 		ieee80211_unregister_hw(wl->hw);
 

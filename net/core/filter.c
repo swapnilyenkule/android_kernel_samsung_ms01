@@ -38,7 +38,10 @@
 #include <linux/filter.h>
 #include <linux/reciprocal_div.h>
 #include <linux/ratelimit.h>
+<<<<<<< HEAD
 #include <linux/seccomp.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* No hurry in this branch
  *
@@ -323,6 +326,11 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
@@ -339,11 +347,20 @@ load_b:
 
 			if (skb_is_nonlinear(skb))
 				return 0;
+<<<<<<< HEAD
+=======
+			if (skb->len < sizeof(struct nlattr))
+				return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (A > skb->len - sizeof(struct nlattr))
 				return 0;
 
 			nla = (struct nlattr *)&skb->data[A];
+<<<<<<< HEAD
 			if (nla->nla_len > A - skb->len)
+=======
+			if (nla->nla_len > skb->len - A)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				return 0;
 
 			nla = nla_find_nested(nla, X);
@@ -353,11 +370,14 @@ load_b:
 				A = 0;
 			continue;
 		}
+<<<<<<< HEAD
 #ifdef CONFIG_SECCOMP_FILTER
 		case BPF_S_ANC_SECCOMP_LD_W:
 			A = seccomp_bpf_load(fentry->k);
 			continue;
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		default:
 			WARN_RATELIMIT(1, "Unknown code:%u jt:%u tf:%u k:%u\n",
 				       fentry->code, fentry->jt,

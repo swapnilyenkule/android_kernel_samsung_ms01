@@ -828,6 +828,10 @@ pref_skip_coa:
 		if (val < 0 || val > 255)
 			goto e_inval;
 		np->min_hopcount = val;
+<<<<<<< HEAD
+=======
+		retv = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	case IPV6_DONTFRAG:
 		np->dontfrag = valbool;

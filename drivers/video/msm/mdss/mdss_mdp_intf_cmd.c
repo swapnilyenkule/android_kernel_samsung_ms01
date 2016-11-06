@@ -836,6 +836,7 @@ int mdss_mdp_cmd_stop(struct mdss_mdp_ctl *ctl)
 				pr_err("no panel data\n");
 			} else {
 				pinfo = &ctl->panel_data->panel_info;
+<<<<<<< HEAD
 
 				if (pinfo->panel_dead) {
 					mdss_mdp_irq_disable
@@ -843,6 +844,12 @@ int mdss_mdp_cmd_stop(struct mdss_mdp_ctl *ctl)
 								ctx->pp_num);
 					ctx->rdptr_enabled = 0;
 				}
+=======
+				mdss_mdp_irq_disable
+					(MDSS_MDP_IRQ_PING_PONG_RD_PTR,
+							ctx->pp_num);
+				ctx->rdptr_enabled = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 		}
 	}

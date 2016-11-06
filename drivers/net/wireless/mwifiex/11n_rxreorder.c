@@ -256,7 +256,12 @@ mwifiex_11n_create_rx_reorder_tbl(struct mwifiex_private *priv, u8 *ta,
 	else
 		last_seq = priv->rx_seq[tid];
 
+<<<<<<< HEAD
 	if (last_seq >= new_node->start_win)
+=======
+	if (last_seq != MWIFIEX_DEF_11N_RX_SEQ_NUM &&
+	    last_seq >= new_node->start_win)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		new_node->start_win = last_seq + 1;
 
 	new_node->win_size = win_size;
@@ -596,5 +601,9 @@ void mwifiex_11n_cleanup_reorder_tbl(struct mwifiex_private *priv)
 	spin_unlock_irqrestore(&priv->rx_reorder_tbl_lock, flags);
 
 	INIT_LIST_HEAD(&priv->rx_reorder_tbl_ptr);
+<<<<<<< HEAD
 	memset(priv->rx_seq, 0, sizeof(priv->rx_seq));
+=======
+	mwifiex_reset_11n_rx_seq_num(priv);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }

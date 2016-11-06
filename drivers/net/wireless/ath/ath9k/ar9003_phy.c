@@ -543,6 +543,7 @@ static void ar9003_hw_init_bb(struct ath_hw *ah,
 	udelay(synthDelay + BASE_ACTIVATE_DELAY);
 }
 
+<<<<<<< HEAD
 static void ar9003_hw_set_chain_masks(struct ath_hw *ah, u8 rx, u8 tx)
 {
 	switch (rx) {
@@ -572,6 +573,24 @@ static void ar9003_hw_set_chain_masks(struct ath_hw *ah, u8 rx, u8 tx)
 		REG_SET_BIT(ah, AR_PHY_ANALOG_SWAP,
 			    AR_PHY_SWAP_ALT_CHAIN);
 	}
+=======
+void ar9003_hw_set_chain_masks(struct ath_hw *ah, u8 rx, u8 tx)
+{
+	if (ah->caps.tx_chainmask == 5 || ah->caps.rx_chainmask == 5)
+		REG_SET_BIT(ah, AR_PHY_ANALOG_SWAP,
+			    AR_PHY_SWAP_ALT_CHAIN);
+
+	REG_WRITE(ah, AR_PHY_RX_CHAINMASK, rx);
+	REG_WRITE(ah, AR_PHY_CAL_CHAINMASK, rx);
+
+	if ((ah->caps.hw_caps & ATH9K_HW_CAP_APM) && (tx == 0x7))
+		tx = 3;
+	else if (AR_SREV_9462(ah))
+		/* xxx only when MCI support is enabled */
+		tx = 3;
+
+	REG_WRITE(ah, AR_SELFGEN_MASK, tx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*
@@ -1030,6 +1049,13 @@ static bool ar9003_hw_ani_control(struct ath_hw *ah,
 		 * is_on == 0 means MRC CCK is OFF (more noise imm)
 		 */
 		bool is_on = param ? 1 : 0;
+<<<<<<< HEAD
+=======
+
+		if (ah->caps.rx_chainmask == 1)
+			break;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		REG_RMW_FIELD(ah, AR_PHY_MRC_CCK_CTRL,
 			      AR_PHY_MRC_CCK_ENABLE, is_on);
 		REG_RMW_FIELD(ah, AR_PHY_MRC_CCK_CTRL,

@@ -80,6 +80,18 @@ struct attribute_group {
 
 #define __ATTR_NULL { .attr = { .name = NULL } }
 
+<<<<<<< HEAD
+=======
+#define ATTRIBUTE_GROUPS(name)					\
+static const struct attribute_group name##_group = {		\
+	.attrs = name##_attrs,					\
+};								\
+static const struct attribute_group *name##_groups[] = {	\
+	&name##_group,						\
+	NULL,							\
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define attr_name(_attr) (_attr).attr.name
 
 struct file;

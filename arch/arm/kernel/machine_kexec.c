@@ -139,3 +139,13 @@ void machine_kexec(struct kimage *image)
 
 	soft_restart(reboot_code_buffer_phys);
 }
+<<<<<<< HEAD
+=======
+
+void arch_crash_save_vmcoreinfo(void)
+{
+#ifdef CONFIG_ARM_LPAE
+	VMCOREINFO_CONFIG(ARM_LPAE);
+#endif
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

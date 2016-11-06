@@ -1122,7 +1122,11 @@ rds_send_pong(struct rds_connection *conn, __be16 dport)
 	rds_stats_inc(s_send_pong);
 
 	if (!test_bit(RDS_LL_SEND_FULL, &conn->c_flags))
+<<<<<<< HEAD
 		rds_send_xmit(conn);
+=======
+		queue_delayed_work(rds_wq, &conn->c_send_w, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	rds_message_put(rm);
 	return 0;

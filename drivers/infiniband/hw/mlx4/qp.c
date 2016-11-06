@@ -1670,8 +1670,12 @@ static int build_lso_seg(struct mlx4_wqe_lso_seg *wqe, struct ib_send_wr *wr,
 
 	memcpy(wqe->header, wr->wr.ud.header, wr->wr.ud.hlen);
 
+<<<<<<< HEAD
 	*lso_hdr_sz  = cpu_to_be32((wr->wr.ud.mss - wr->wr.ud.hlen) << 16 |
 				   wr->wr.ud.hlen);
+=======
+	*lso_hdr_sz  = cpu_to_be32(wr->wr.ud.mss << 16 | wr->wr.ud.hlen);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	*lso_seg_len = halign;
 	return 0;
 }

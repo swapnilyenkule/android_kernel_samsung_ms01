@@ -35,6 +35,10 @@
 #define LLONG_MAX	((long long)(~0ULL>>1))
 #define LLONG_MIN	(-LLONG_MAX - 1)
 #define ULLONG_MAX	(~0ULL)
+<<<<<<< HEAD
+=======
+#define SIZE_MAX	(~(size_t)0)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define STACK_MAGIC	0xdeadbeef
 

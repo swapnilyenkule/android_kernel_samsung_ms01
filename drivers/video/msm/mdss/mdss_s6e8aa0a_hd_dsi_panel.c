@@ -2178,7 +2178,11 @@ static ssize_t mipi_samsung_disp_acl_show(struct device *dev,
 {
 	int rc;
 
+<<<<<<< HEAD
 	rc = sprintf((char *)buf, "%d\n", msd.dstat.acl_on);
+=======
+	rc = snprintf((char *)buf, sizeof(buf), "%d\n", msd.dstat.acl_on);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	printk("acl status: %d\n", *buf);
 
 	return rc;
@@ -2299,7 +2303,11 @@ static ssize_t mdss_s6e8aa0a_auto_brightness_show(struct device *dev,
 {
 	int rc;
 
+<<<<<<< HEAD
 	rc = sprintf(buf, "%d\n",
+=======
+	rc = snprintf(buf, sizeof(buf), "%d\n",
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					msd.dstat.auto_brightness);
 	pr_info("%s : auto_brightness : %d\n", __func__, msd.dstat.auto_brightness);
 

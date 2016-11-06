@@ -201,7 +201,11 @@ int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst, u8 tos,
 	struct net *net;
 
 	fl4.flowi4_oif = 0;
+<<<<<<< HEAD
 	fl4.flowi4_iif = oif ? : LOOPBACK_IFINDEX;
+=======
+	fl4.flowi4_iif = oif;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fl4.daddr = src;
 	fl4.saddr = dst;
 	fl4.flowi4_tos = tos;

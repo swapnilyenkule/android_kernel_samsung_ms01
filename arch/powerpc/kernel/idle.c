@@ -113,6 +113,12 @@ void cpu_idle(void)
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void do_nothing(void *unused)
+{
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * cpu_idle_wait - Used to ensure that all the CPUs come out of the old
@@ -123,6 +129,7 @@ void cpu_idle(void)
  */
 void cpu_idle_wait(void)
 {
+<<<<<<< HEAD
 	int cpu;
 	smp_mb();
 
@@ -133,6 +140,11 @@ void cpu_idle_wait(void)
 			smp_send_reschedule(cpu);
 	}
 	put_online_cpus();
+=======
+	smp_mb();
+	/* kick all the CPUs so that they exit out of pm_idle */
+	smp_call_function(do_nothing, NULL, 1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 EXPORT_SYMBOL_GPL(cpu_idle_wait);
 

@@ -1,7 +1,11 @@
 /*
  * Expose some of the kernel scheduler routines
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: dhd_linux_sched.c 291086 2011-10-21 01:17:24Z $
+=======
+ * $Id: dhd_linux_sched.c 457596 2014-02-24 02:24:14Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 #include <linux/kernel.h>
 #include <linux/module.h>
@@ -37,3 +45,15 @@ int setScheduler(struct task_struct *p, int policy, struct sched_param *param)
 #endif /* LinuxVer */
 	return rc;
 }
+<<<<<<< HEAD
+=======
+
+int get_scheduler_policy(struct task_struct *p)
+{
+	int rc = SCHED_NORMAL;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0))
+	rc = p->policy;
+#endif /* LinuxVer */
+	return rc;
+}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

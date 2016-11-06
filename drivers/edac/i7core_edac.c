@@ -1365,6 +1365,7 @@ static int i7core_get_onedevice(struct pci_dev **prev,
 	 * is at addr 8086:2c40, instead of 8086:2c41. So, we need
 	 * to probe for the alternate address in case of failure
 	 */
+<<<<<<< HEAD
 	if (dev_descr->dev_id == PCI_DEVICE_ID_INTEL_I7_NONCORE && !pdev)
 		pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
 				      PCI_DEVICE_ID_INTEL_I7_NONCORE_ALT, *prev);
@@ -1373,6 +1374,21 @@ static int i7core_get_onedevice(struct pci_dev **prev,
 		pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
 				      PCI_DEVICE_ID_INTEL_LYNNFIELD_NONCORE_ALT,
 				      *prev);
+=======
+	if (dev_descr->dev_id == PCI_DEVICE_ID_INTEL_I7_NONCORE && !pdev) {
+		pci_dev_get(*prev);	/* pci_get_device will put it */
+		pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
+				      PCI_DEVICE_ID_INTEL_I7_NONCORE_ALT, *prev);
+	}
+
+	if (dev_descr->dev_id == PCI_DEVICE_ID_INTEL_LYNNFIELD_NONCORE &&
+	    !pdev) {
+		pci_dev_get(*prev);	/* pci_get_device will put it */
+		pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
+				      PCI_DEVICE_ID_INTEL_LYNNFIELD_NONCORE_ALT,
+				      *prev);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!pdev) {
 		if (*prev) {
@@ -1932,12 +1948,15 @@ static int i7core_mce_check_error(struct notifier_block *nb, unsigned long val,
 	if (mce->bank != 8)
 		return NOTIFY_DONE;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
 	/* Only handle if it is the right mc controller */
 	if (mce->socketid != pvt->i7core_dev->socket)
 		return NOTIFY_DONE;
 #endif
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	smp_rmb();
 	if ((pvt->mce_out + 1) % MCE_LOG_LEN == pvt->mce_in) {
 		smp_wmb();
@@ -2234,8 +2253,11 @@ static void i7core_unregister_mci(struct i7core_dev *i7core_dev)
 	if (pvt->enable_scrub)
 		disable_sdram_scrub_setting(mci);
 
+<<<<<<< HEAD
 	mce_unregister_decode_chain(&i7_mce_dec);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Disable EDAC polling */
 	i7core_pci_ctl_release(pvt);
 
@@ -2336,8 +2358,11 @@ static int i7core_register_mci(struct i7core_dev *i7core_dev)
 	/* DCLK for scrub rate setting */
 	pvt->dclk_freq = get_dclk_freq();
 
+<<<<<<< HEAD
 	mce_register_decode_chain(&i7_mce_dec);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 
 fail0:
@@ -2481,8 +2506,15 @@ static int __init i7core_init(void)
 
 	pci_rc = pci_register_driver(&i7core_driver);
 
+<<<<<<< HEAD
 	if (pci_rc >= 0)
 		return 0;
+=======
+	if (pci_rc >= 0) {
+		mce_register_decode_chain(&i7_mce_dec);
+		return 0;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	i7core_printk(KERN_ERR, "Failed to register device with error %d.\n",
 		      pci_rc);
@@ -2498,6 +2530,10 @@ static void __exit i7core_exit(void)
 {
 	debugf2("MC: " __FILE__ ": %s()\n", __func__);
 	pci_unregister_driver(&i7core_driver);
+<<<<<<< HEAD
+=======
+	mce_unregister_decode_chain(&i7_mce_dec);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 module_init(i7core_init);

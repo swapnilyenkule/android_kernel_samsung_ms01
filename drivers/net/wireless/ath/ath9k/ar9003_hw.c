@@ -33,9 +33,12 @@
  */
 static void ar9003_hw_init_mode_regs(struct ath_hw *ah)
 {
+<<<<<<< HEAD
 #define PCIE_PLL_ON_CREQ_DIS_L1_2P0 \
 		ar9462_pciephy_pll_on_clkreq_disable_L1_2p0
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define AR9462_BB_CTX_COEFJ(x)	\
 		ar9462_##x##_baseband_core_txfir_coeff_japan_2484
 
@@ -312,6 +315,7 @@ static void ar9003_hw_init_mode_regs(struct ath_hw *ah)
 
 		/* Awake -> Sleep Setting */
 		INIT_INI_ARRAY(&ah->iniPcieSerdes,
+<<<<<<< HEAD
 				PCIE_PLL_ON_CREQ_DIS_L1_2P0,
 				ARRAY_SIZE(PCIE_PLL_ON_CREQ_DIS_L1_2P0),
 				2);
@@ -319,6 +323,15 @@ static void ar9003_hw_init_mode_regs(struct ath_hw *ah)
 		INIT_INI_ARRAY(&ah->iniPcieSerdesLowPower,
 				PCIE_PLL_ON_CREQ_DIS_L1_2P0,
 				ARRAY_SIZE(PCIE_PLL_ON_CREQ_DIS_L1_2P0),
+=======
+				ar9462_pciephy_clkreq_disable_L1_2p0,
+				ARRAY_SIZE(ar9462_pciephy_clkreq_disable_L1_2p0),
+				2);
+		/* Sleep -> Awake Setting */
+		INIT_INI_ARRAY(&ah->iniPcieSerdesLowPower,
+				ar9462_pciephy_clkreq_disable_L1_2p0,
+				ARRAY_SIZE(ar9462_pciephy_clkreq_disable_L1_2p0),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				2);
 
 		/* Fast clock modal settings */
@@ -637,8 +650,13 @@ static void ar9003_rx_gain_table_mode0(struct ath_hw *ah)
 				2);
 	else if (AR_SREV_9485_11(ah))
 		INIT_INI_ARRAY(&ah->iniModesRxGain,
+<<<<<<< HEAD
 				ar9485Common_wo_xlna_rx_gain_1_1,
 				ARRAY_SIZE(ar9485Common_wo_xlna_rx_gain_1_1),
+=======
+			       ar9485_common_rx_gain_1_1,
+			       ARRAY_SIZE(ar9485_common_rx_gain_1_1),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				2);
 	else if (AR_SREV_9580(ah))
 		INIT_INI_ARRAY(&ah->iniModesRxGain,

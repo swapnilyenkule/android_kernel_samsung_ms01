@@ -979,6 +979,10 @@ config RELOCATABLE
 	  must live at a different physical address than the primary
 	  kernel.
 
+<<<<<<< HEAD
+=======
+# This value must have zeroes in the bottom 60 bits otherwise lots will break
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 config PAGE_OFFSET
 	hex
 	default "0xc000000000000000"

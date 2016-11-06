@@ -1426,7 +1426,11 @@ static int sata_fsl_probe(struct platform_device *ofdev)
 	host_priv->csr_base = csr_base;
 
 	irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
+<<<<<<< HEAD
 	if (irq < 0) {
+=======
+	if (!irq) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dev_err(&ofdev->dev, "invalid irq from platform\n");
 		goto error_exit_with_cleanup;
 	}

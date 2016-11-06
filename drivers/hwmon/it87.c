@@ -2157,7 +2157,11 @@ static void __devinit it87_init_device(struct platform_device *pdev)
 
 	/* Start monitoring */
 	it87_write_value(data, IT87_REG_CONFIG,
+<<<<<<< HEAD
 			 (it87_read_value(data, IT87_REG_CONFIG) & 0x36)
+=======
+			 (it87_read_value(data, IT87_REG_CONFIG) & 0x3e)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			 | (update_vbat ? 0x41 : 0x01));
 }
 

@@ -525,6 +525,10 @@ no_firmware:
 		"%s: please contact support@connecttech.com\n",
 		serial->type->description);
 	kfree(result);
+<<<<<<< HEAD
+=======
+	kfree(command);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return -ENODEV;
 
 no_command_private:
@@ -952,6 +956,13 @@ static void command_port_read_callback(struct urb *urb)
 		dbg("%s - command_info is NULL, exiting.", __func__);
 		return;
 	}
+<<<<<<< HEAD
+=======
+	if (!urb->actual_length) {
+		dev_dbg(&urb->dev->dev, "%s - empty response, exiting.\n", __func__);
+		return;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (status) {
 		dbg("%s - nonzero urb status: %d", __func__, status);
 		if (status != -ENOENT)
@@ -973,7 +984,12 @@ static void command_port_read_callback(struct urb *urb)
 		/* These are unsolicited reports from the firmware, hence no
 		   waiting command to wakeup */
 		dbg("%s - event received", __func__);
+<<<<<<< HEAD
 	} else if (data[0] == WHITEHEAT_GET_DTR_RTS) {
+=======
+	} else if ((data[0] == WHITEHEAT_GET_DTR_RTS) &&
+		(urb->actual_length - 1 <= sizeof(command_info->result_buffer))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		memcpy(command_info->result_buffer, &data[1],
 						urb->actual_length - 1);
 		command_info->command_finished = WHITEHEAT_CMD_COMPLETE;
@@ -1153,7 +1169,11 @@ static void firm_setup_port(struct tty_struct *tty)
 	struct whiteheat_port_settings port_settings;
 	unsigned int cflag = tty->termios->c_cflag;
 
+<<<<<<< HEAD
 	port_settings.port = port->number + 1;
+=======
+	port_settings.port = port->number - port->serial->minor + 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* get the byte size */
 	switch (cflag & CSIZE) {

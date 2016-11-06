@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 obj-$(CONFIG_INSIDESECURE_VPNCLIENT) := vpnclient.o
+=======
+obj-$(CONFIG_VPNCLIENT_SECURITY) := vpnclient.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 vpnclient-y := \
 	ip_selector_db.o \
@@ -6,18 +10,30 @@ vpnclient-y := \
 	kernelspd_main.o \
 	kernelspd_hooks.o \
 	kernelspd_procfs.o \
+<<<<<<< HEAD
 	spd_util.o \
+=======
+	ipsec_boundary.o \
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	debug_filter.o \
 	debug_strf.o \
 	debug_linux.o \
 	debug_strbuf_stack.o \
 
+<<<<<<< HEAD
 override EXTRA_CFLAGS += \
     -DKERNEL \
     -D_KERNEL \
     -DWITH_IPV6
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ifeq ($(DEBUG), 1)
 override EXTRA_CFLAGS += \
          -DDEBUG_LIGHT
 endif
+<<<<<<< HEAD
+=======
+
+override EXTRA_CFLAGS += ${EXTERNAL_CFLAGS}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

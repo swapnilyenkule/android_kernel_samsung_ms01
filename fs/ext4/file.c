@@ -80,7 +80,11 @@ ext4_unaligned_aio(struct inode *inode, const struct iovec *iov,
 	size_t count = iov_length(iov, nr_segs);
 	loff_t final_size = pos + count;
 
+<<<<<<< HEAD
 	if (pos >= inode->i_size)
+=======
+	if (pos >= i_size_read(inode))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 
 	if ((pos & blockmask) || (final_size & blockmask))

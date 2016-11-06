@@ -23,10 +23,17 @@
 
 int can_do_mlock(void)
 {
+<<<<<<< HEAD
 	if (rlimit(RLIMIT_MEMLOCK) != 0)
 		return 1;
 	if (capable(CAP_IPC_LOCK))
 		return 1;
+=======
+	if (capable(CAP_IPC_LOCK))
+		return 1;
+	if (rlimit(RLIMIT_MEMLOCK) != 0)
+		return 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 EXPORT_SYMBOL(can_do_mlock);
@@ -78,6 +85,10 @@ void __clear_page_mlock(struct page *page)
  */
 void mlock_vma_page(struct page *page)
 {
+<<<<<<< HEAD
+=======
+	/* Serialize with page migration */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	BUG_ON(!PageLocked(page));
 
 	if (!TestSetPageMlocked(page)) {
@@ -105,6 +116,10 @@ void mlock_vma_page(struct page *page)
  */
 void munlock_vma_page(struct page *page)
 {
+<<<<<<< HEAD
+=======
+	/* For try_to_munlock() and to serialize with page migration */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	BUG_ON(!PageLocked(page));
 
 	if (TestClearPageMlocked(page)) {

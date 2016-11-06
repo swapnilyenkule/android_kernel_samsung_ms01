@@ -212,8 +212,11 @@ static u64 scan_dispatch_log(u64 stop_tb)
 	if (i == vpa->dtl_idx)
 		return 0;
 	while (i < vpa->dtl_idx) {
+<<<<<<< HEAD
 		if (dtl_consumer)
 			dtl_consumer(dtl, i);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dtb = dtl->timebase;
 		tb_delta = dtl->enqueue_to_dispatch_time +
 			dtl->ready_to_enqueue_time;
@@ -226,6 +229,11 @@ static u64 scan_dispatch_log(u64 stop_tb)
 		}
 		if (dtb > stop_tb)
 			break;
+<<<<<<< HEAD
+=======
+		if (dtl_consumer)
+			dtl_consumer(dtl, i);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		stolen += tb_delta;
 		++i;
 		++dtl;
@@ -474,6 +482,10 @@ void timer_interrupt(struct pt_regs * regs)
 	struct pt_regs *old_regs;
 	u64 *next_tb = &__get_cpu_var(decrementers_next_tb);
 	struct clock_event_device *evt = &__get_cpu_var(decrementers);
+<<<<<<< HEAD
+=======
+	u64 now;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Ensure a positive value is written to the decrementer, or else
 	 * some CPUs will continue to take decrementer exceptions.
@@ -495,7 +507,11 @@ void timer_interrupt(struct pt_regs * regs)
 
 	__get_cpu_var(irq_stat).timer_irqs++;
 
+<<<<<<< HEAD
 #if defined(CONFIG_PPC32) && defined(CONFIG_PMAC)
+=======
+#if defined(CONFIG_PPC32) && defined(CONFIG_PPC_PMAC)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (atomic_read(&ppc_n_lost_interrupts) != 0)
 		do_IRQ(regs);
 #endif
@@ -508,9 +524,22 @@ void timer_interrupt(struct pt_regs * regs)
 		irq_work_run();
 	}
 
+<<<<<<< HEAD
 	*next_tb = ~(u64)0;
 	if (evt->event_handler)
 		evt->event_handler(evt);
+=======
+	now = get_tb_or_rtc();
+	if (now >= *next_tb) {
+		*next_tb = ~(u64)0;
+		if (evt->event_handler)
+			evt->event_handler(evt);
+	} else {
+		now = *next_tb - now;
+		if (now <= DECREMENTER_MAX)
+			set_dec((int)now);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #ifdef CONFIG_PPC64
 	/* collect purr register values often, for accurate calculations */
@@ -741,6 +770,7 @@ void update_vsyscall(struct timespec *wall_time, struct timespec *wtm,
 
 void update_vsyscall_tz(void)
 {
+<<<<<<< HEAD
 	/* Make userspace gettimeofday spin until we're done. */
 	++vdso_data->tb_update_count;
 	smp_mb();
@@ -748,6 +778,10 @@ void update_vsyscall_tz(void)
 	vdso_data->tz_dsttime = sys_tz.tz_dsttime;
 	smp_mb();
 	++vdso_data->tb_update_count;
+=======
+	vdso_data->tz_minuteswest = sys_tz.tz_minuteswest;
+	vdso_data->tz_dsttime = sys_tz.tz_dsttime;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void __init clocksource_init(void)

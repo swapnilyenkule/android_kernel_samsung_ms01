@@ -38,9 +38,17 @@ enum {
 	UNIX_DIAG_RQLEN,
 	UNIX_DIAG_MEMINFO,
 
+<<<<<<< HEAD
 	UNIX_DIAG_MAX,
 };
 
+=======
+	__UNIX_DIAG_MAX,
+};
+
+#define UNIX_DIAG_MAX (__UNIX_DIAG_MAX - 1)
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct unix_diag_vfs {
 	__u32	udiag_vfs_ino;
 	__u32	udiag_vfs_dev;

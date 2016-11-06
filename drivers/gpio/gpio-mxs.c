@@ -167,7 +167,12 @@ static void __init mxs_gpio_init_gc(struct mxs_gpio_port *port)
 	ct->regs.ack = PINCTRL_IRQSTAT(port->id) + MXS_CLR;
 	ct->regs.mask = PINCTRL_IRQEN(port->id);
 
+<<<<<<< HEAD
 	irq_setup_generic_chip(gc, IRQ_MSK(32), 0, IRQ_NOREQUEST, 0);
+=======
+	irq_setup_generic_chip(gc, IRQ_MSK(32), IRQ_GC_INIT_NESTED_LOCK,
+			       IRQ_NOREQUEST, 0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int mxs_gpio_to_irq(struct gpio_chip *gc, unsigned offset)

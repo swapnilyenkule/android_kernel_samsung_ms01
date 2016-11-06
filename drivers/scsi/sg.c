@@ -498,7 +498,11 @@ static ssize_t
 sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
 {
 	sg_io_hdr_t *hp = &srp->header;
+<<<<<<< HEAD
 	int err = 0;
+=======
+	int err = 0, err2;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int len;
 
 	if (count < SZ_SG_IO_HDR) {
@@ -527,8 +531,13 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
 		goto err_out;
 	}
 err_out:
+<<<<<<< HEAD
 	err = sg_finish_rem_req(srp);
 	return (0 == err) ? count : err;
+=======
+	err2 = sg_finish_rem_req(srp);
+	return err ? : err2 ? : count;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t

@@ -384,7 +384,11 @@ static void dm9601_set_multicast(struct net_device *net)
 		rx_ctl |= 0x02;
 	} else if (net->flags & IFF_ALLMULTI ||
 		   netdev_mc_count(net) > DM_MAX_MCAST) {
+<<<<<<< HEAD
 		rx_ctl |= 0x04;
+=======
+		rx_ctl |= 0x08;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else if (!netdev_mc_empty(net)) {
 		struct netdev_hw_addr *ha;
 
@@ -445,7 +449,16 @@ static int dm9601_bind(struct usbnet *dev, struct usb_interface *intf)
 	dev->net->ethtool_ops = &dm9601_ethtool_ops;
 	dev->net->hard_header_len += DM_TX_OVERHEAD;
 	dev->hard_mtu = dev->net->mtu + dev->net->hard_header_len;
+<<<<<<< HEAD
 	dev->rx_urb_size = dev->net->mtu + ETH_HLEN + DM_RX_OVERHEAD;
+=======
+
+	/* dm9620/21a require room for 4 byte padding, even in dm9601
+	 * mode, so we need +1 to be able to receive full size
+	 * ethernet frames.
+	 */
+	dev->rx_urb_size = dev->net->mtu + ETH_HLEN + DM_RX_OVERHEAD + 1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	dev->mii.dev = dev->net;
 	dev->mii.mdio_read = dm9601_mdio_read;
@@ -531,7 +544,11 @@ static int dm9601_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
 static struct sk_buff *dm9601_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
 				       gfp_t flags)
 {
+<<<<<<< HEAD
 	int len;
+=======
+	int len, pad;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* format:
 	   b1: packet length low
@@ -539,12 +556,32 @@ static struct sk_buff *dm9601_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
 	   b3..n: packet data
 	*/
 
+<<<<<<< HEAD
 	len = skb->len;
 
 	if (skb_headroom(skb) < DM_TX_OVERHEAD) {
 		struct sk_buff *skb2;
 
 		skb2 = skb_copy_expand(skb, DM_TX_OVERHEAD, 0, flags);
+=======
+	len = skb->len + DM_TX_OVERHEAD;
+
+	/* workaround for dm962x errata with tx fifo getting out of
+	 * sync if a USB bulk transfer retry happens right after a
+	 * packet with odd / maxpacket length by adding up to 3 bytes
+	 * padding.
+	 */
+	while ((len & 1) || !(len % dev->maxpacket))
+		len++;
+
+	len -= DM_TX_OVERHEAD; /* hw header doesn't count as part of length */
+	pad = len - skb->len;
+
+	if (skb_headroom(skb) < DM_TX_OVERHEAD || skb_tailroom(skb) < pad) {
+		struct sk_buff *skb2;
+
+		skb2 = skb_copy_expand(skb, DM_TX_OVERHEAD, pad, flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		dev_kfree_skb_any(skb);
 		skb = skb2;
 		if (!skb)
@@ -553,10 +590,17 @@ static struct sk_buff *dm9601_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
 
 	__skb_push(skb, DM_TX_OVERHEAD);
 
+<<<<<<< HEAD
 	/* usbnet adds padding if length is a multiple of packet size
 	   if so, adjust length value in header */
 	if ((skb->len % dev->maxpacket) == 0)
 		len++;
+=======
+	if (pad) {
+		memset(skb->data + skb->len, 0, pad);
+		__skb_put(skb, pad);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	skb->data[0] = len;
 	skb->data[1] = len >> 8;

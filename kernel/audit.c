@@ -637,7 +637,11 @@ static int audit_log_common_recv_msg(struct audit_buffer **ab, u16 msg_type,
 	char *ctx = NULL;
 	u32 len;
 
+<<<<<<< HEAD
 	if (!audit_enabled) {
+=======
+	if (!audit_enabled && msg_type != AUDIT_USER_AVC) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		*ab = NULL;
 		return rc;
 	}
@@ -696,6 +700,10 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 
 	switch (msg_type) {
 	case AUDIT_GET:
+<<<<<<< HEAD
+=======
+		status_set.mask		 = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		status_set.enabled	 = audit_enabled;
 		status_set.failure	 = audit_failure;
 		status_set.pid		 = audit_pid;
@@ -707,7 +715,11 @@ static int audit_receive_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 				 &status_set, sizeof(status_set));
 		break;
 	case AUDIT_SET:
+<<<<<<< HEAD
 		if (nlh->nlmsg_len < sizeof(struct audit_status))
+=======
+		if (nlmsg_len(nlh) < sizeof(struct audit_status))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return -EINVAL;
 		status_get   = (struct audit_status *)data;
 		if (status_get->mask & AUDIT_STATUS_ENABLED) {
@@ -1179,7 +1191,11 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
 
 			/* Wait for auditd to drain the queue a little */
 			DECLARE_WAITQUEUE(wait, current);
+<<<<<<< HEAD
 			set_current_state(TASK_INTERRUPTIBLE);
+=======
+			set_current_state(TASK_UNINTERRUPTIBLE);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			add_wait_queue(&audit_backlog_wait, &wait);
 
 			if (audit_backlog_limit &&

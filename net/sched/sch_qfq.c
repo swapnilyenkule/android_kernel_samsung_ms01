@@ -830,7 +830,14 @@ static void qfq_update_start(struct qfq_sched *q, struct qfq_class *cl)
 		if (mask) {
 			struct qfq_group *next = qfq_ffs(q, mask);
 			if (qfq_gt(roundedF, next->F)) {
+<<<<<<< HEAD
 				cl->S = next->F;
+=======
+				if (qfq_gt(limit, next->F))
+					cl->S = next->F;
+				else /* preserve timestamp correctness */
+					cl->S = limit;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				return;
 			}
 		}

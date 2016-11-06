@@ -23,16 +23,23 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
 					u32 *flag)
 {
 	struct devfreq_dev_status stat;
+<<<<<<< HEAD
 	int err;
+=======
+	int err = df->profile->get_dev_status(df->dev.parent, &stat);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned long long a, b;
 	unsigned int dfso_upthreshold = DFSO_UPTHRESHOLD;
 	unsigned int dfso_downdifferential = DFSO_DOWNDIFFERENCTIAL;
 	struct devfreq_simple_ondemand_data *data = df->data;
 	unsigned long max = (df->max_freq) ? df->max_freq : UINT_MAX;
 
+<<<<<<< HEAD
 	stat.private_data = NULL;
 
 	err = df->profile->get_dev_status(df->dev.parent, &stat);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err)
 		return err;
 

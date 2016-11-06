@@ -186,7 +186,11 @@ struct atl1e_tpd_desc {
 /* how about 0x2000 */
 #define MAX_TX_BUF_LEN      0x2000
 #define MAX_TX_BUF_SHIFT    13
+<<<<<<< HEAD
 /*#define MAX_TX_BUF_LEN  0x3000 */
+=======
+#define MAX_TSO_SEG_SIZE    0x3c00
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* rrs word 1 bit 0:31 */
 #define RRS_RX_CSUM_MASK	0xFFFF
@@ -438,7 +442,10 @@ struct atl1e_adapter {
 	struct atl1e_hw        hw;
 	struct atl1e_hw_stats  hw_stats;
 
+<<<<<<< HEAD
 	bool have_msi;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u32 wol;
 	u16 link_speed;
 	u16 link_duplex;

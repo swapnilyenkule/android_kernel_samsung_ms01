@@ -1024,8 +1024,11 @@ u32 ddl_check_reconfig(struct ddl_client_context *ddl)
 	if (decoder->cont_mode) {
 		if ((decoder->actual_output_buf_req.sz <=
 			 decoder->client_output_buf_req.sz) &&
+<<<<<<< HEAD
 			 decoder->frame_size.width <= decoder->adaptive_width &&
 			 decoder->frame_size.height <= decoder->adaptive_height &&
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			(decoder->actual_output_buf_req.actual_count <=
 			 decoder->client_output_buf_req.actual_count)) {
 			need_reconfig = false;
@@ -1065,6 +1068,7 @@ u32 ddl_check_reconfig(struct ddl_client_context *ddl)
 void ddl_handle_reconfig(u32 res_change, struct ddl_client_context *ddl)
 {
 	struct ddl_decoder_data *decoder = &ddl->codec_data.decoder;
+<<<<<<< HEAD
 	struct vidc_1080p_dec_disp_info *dec_disp_info =
 		&(decoder->dec_disp_info);
 
@@ -1082,6 +1086,10 @@ void ddl_handle_reconfig(u32 res_change, struct ddl_client_context *ddl)
 	if ((decoder->cont_mode) &&
 		(res_change == DDL_RESL_CHANGE_DECREASED) &&
 		width <= adaptive_width && height <= adaptive_height) {
+=======
+	if ((decoder->cont_mode) &&
+		(res_change == DDL_RESL_CHANGE_DECREASED)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		DDL_MSG_LOW("%s Resolution decreased, continue decoding\n",
 				 __func__);
 		vidc_sm_get_min_yc_dpb_sizes(

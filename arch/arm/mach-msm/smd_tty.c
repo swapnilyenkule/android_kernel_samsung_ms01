@@ -551,7 +551,11 @@ static int smd_tty_open(struct tty_struct *tty, struct file *f)
 
 static void smd_tty_close(struct tty_struct *tty, struct file *f)
 {
+<<<<<<< HEAD
 	struct smd_tty_info *info = smd_tty + tty->index;
+=======
+	struct smd_tty_info *info = tty->driver_data;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	tty_port_close(&info->port, tty, f);
 }

@@ -197,6 +197,12 @@ struct rds_message *rds_message_alloc(unsigned int extra_len, gfp_t gfp)
 {
 	struct rds_message *rm;
 
+<<<<<<< HEAD
+=======
+	if (extra_len > KMALLOC_MAX_SIZE - sizeof(struct rds_message))
+		return NULL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rm = kzalloc(sizeof(struct rds_message) + extra_len, gfp);
 	if (!rm)
 		goto out;

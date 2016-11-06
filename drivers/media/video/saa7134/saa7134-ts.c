@@ -197,8 +197,13 @@ int saa7134_ts_init1(struct saa7134_dev *dev)
 	/* sanitycheck insmod options */
 	if (tsbufs < 2)
 		tsbufs = 2;
+<<<<<<< HEAD
 	if (tsbufs > VIDEO_MAX_FRAME)
 		tsbufs = VIDEO_MAX_FRAME;
+=======
+	if (tsbufs > VB2_MAX_FRAME)
+		tsbufs = VB2_MAX_FRAME;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (ts_nr_packets < 4)
 		ts_nr_packets = 4;
 	if (ts_nr_packets > 312)

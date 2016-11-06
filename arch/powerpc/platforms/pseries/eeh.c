@@ -1029,7 +1029,11 @@ static void eeh_add_device_early(struct device_node *dn)
 {
 	struct pci_controller *phb;
 
+<<<<<<< HEAD
 	if (!dn || !of_node_to_eeh_dev(dn))
+=======
+	if (!of_node_to_eeh_dev(dn))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	phb = of_node_to_eeh_dev(dn)->phb;
 

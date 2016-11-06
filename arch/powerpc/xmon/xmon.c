@@ -285,10 +285,18 @@ static inline void disable_surveillance(void)
 	args.token = rtas_token("set-indicator");
 	if (args.token == RTAS_UNKNOWN_SERVICE)
 		return;
+<<<<<<< HEAD
 	args.nargs = 3;
 	args.nret = 1;
 	args.rets = &args.args[3];
 	args.args[0] = SURVEILLANCE_TOKEN;
+=======
+	args.token = cpu_to_be32(args.token);
+	args.nargs = cpu_to_be32(3);
+	args.nret = cpu_to_be32(1);
+	args.rets = &args.args[3];
+	args.args[0] = cpu_to_be32(SURVEILLANCE_TOKEN);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	args.args[1] = 0;
 	args.args[2] = 0;
 	enter_rtas(__pa(&args));
@@ -971,7 +979,11 @@ static int cpu_cmd(void)
 		/* print cpus waiting or in xmon */
 		printf("cpus stopped:");
 		count = 0;
+<<<<<<< HEAD
 		for (cpu = 0; cpu < NR_CPUS; ++cpu) {
+=======
+		for_each_possible_cpu(cpu) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (cpumask_test_cpu(cpu, &cpus_in_xmon)) {
 				if (count == 0)
 					printf(" %x", cpu);

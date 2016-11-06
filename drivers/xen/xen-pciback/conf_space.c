@@ -16,8 +16,13 @@
 #include "conf_space.h"
 #include "conf_space_quirks.h"
 
+<<<<<<< HEAD
 static bool permissive;
 module_param(permissive, bool, 0644);
+=======
+bool xen_pcibk_permissive;
+module_param_named(permissive, xen_pcibk_permissive, bool, 0644);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* This is where xen_pcibk_read_config_byte, xen_pcibk_read_config_word,
  * xen_pcibk_write_config_word, and xen_pcibk_write_config_byte are created. */
@@ -262,7 +267,11 @@ int xen_pcibk_config_write(struct pci_dev *dev, int offset, int size, u32 value)
 		 * This means that some fields may still be read-only because
 		 * they have entries in the config_field list that intercept
 		 * the write and do nothing. */
+<<<<<<< HEAD
 		if (dev_data->permissive || permissive) {
+=======
+		if (dev_data->permissive || xen_pcibk_permissive) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			switch (size) {
 			case 1:
 				err = pci_write_config_byte(dev, offset,

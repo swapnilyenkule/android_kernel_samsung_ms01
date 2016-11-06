@@ -105,12 +105,15 @@ static inline void assert_reg_lock(void)
 	lockdep_assert_held(&reg_mutex);
 }
 
+<<<<<<< HEAD
 static const struct ieee80211_regdomain *get_cfg80211_regdom(void)
 {
 	return rcu_dereference_protected(cfg80211_regdomain,
 					 lockdep_is_held(&reg_mutex));
 }
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* Used to queue up regulatory hints */
 static LIST_HEAD(reg_requests_list);
 static spinlock_t reg_requests_lock;
@@ -140,9 +143,14 @@ static const struct ieee80211_regdomain world_regdom = {
 	.reg_rules = {
 		/* IEEE 802.11b/g, channels 1..11 */
 		REG_RULE(2412-10, 2462+10, 40, 6, 20, 0),
+<<<<<<< HEAD
 		/* IEEE 802.11b/g, channels 12..13. No HT40
 		 * channel fits here. */
 		REG_RULE(2467-10, 2472+10, 20, 6, 20,
+=======
+		/* IEEE 802.11b/g, channels 12..13. */
+		REG_RULE(2467-10, 2472+10, 40, 6, 20,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			NL80211_RRF_PASSIVE_SCAN |
 			NL80211_RRF_NO_IBSS),
 		/* IEEE 802.11 channel 14 - Only JP enables
@@ -310,7 +318,11 @@ static bool is_user_regdom_saved(void)
 
 static bool is_cfg80211_regdom_intersected(void)
 {
+<<<<<<< HEAD
 	return is_intersected_alpha2(get_cfg80211_regdom()->alpha2);
+=======
+	return is_intersected_alpha2(cfg80211_regdomain->alpha2);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 			
 static int reg_copy_regd(const struct ieee80211_regdomain **dst_regd,
@@ -351,6 +363,12 @@ static void reg_regdb_search(struct work_struct *work)
 	struct reg_regdb_search_request *request;
 	const struct ieee80211_regdomain *curdom, *regdom;
 	int i, r;
+<<<<<<< HEAD
+=======
+	bool set_reg = false;
+
+	mutex_lock(&cfg80211_mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	mutex_lock(&reg_regdb_search_mutex);
 	while (!list_empty(&reg_regdb_search_list)) {
@@ -366,9 +384,13 @@ static void reg_regdb_search(struct work_struct *work)
 				r = reg_copy_regd(&regdom, curdom);
 				if (r)
 					break;
+<<<<<<< HEAD
 				mutex_lock(&cfg80211_mutex);
 				set_regdom(regdom);
 				mutex_unlock(&cfg80211_mutex);
+=======
+				set_reg = true;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 				break;
 			}
 		}
@@ -376,6 +398,14 @@ static void reg_regdb_search(struct work_struct *work)
 		kfree(request);
 	}
 	mutex_unlock(&reg_regdb_search_mutex);
+<<<<<<< HEAD
+=======
+
+	if (set_reg)
+		set_regdom(regdom);
+
+	mutex_unlock(&cfg80211_mutex);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static DECLARE_WORK(reg_regdb_work, reg_regdb_search);
@@ -399,7 +429,19 @@ static void reg_regdb_query(const char *alpha2)
 
 	schedule_work(&reg_regdb_work);
 }
+<<<<<<< HEAD
 #else
+=======
+
+/* Feel free to add any other sanity checks here */
+static void reg_regdb_size_check(void)
+{
+	/* We should ideally BUILD_BUG_ON() but then random builds would fail */
+	WARN_ONCE(!reg_regdb_size, "db.txt is empty, you should update it...");
+}
+#else
+static inline void reg_regdb_size_check(void) {}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static inline void reg_regdb_query(const char *alpha2) {}
 #endif /* CONFIG_CFG80211_INTERNAL_REGDB */
 
@@ -1198,7 +1240,11 @@ void regulatory_update(struct wiphy *wiphy,
 	if (last_request)
 		wiphy_update_regulatory(wiphy, last_request->initiator);
 	else
+<<<<<<< HEAD
 	wiphy_update_regulatory(wiphy, setby);
+=======
+		wiphy_update_regulatory(wiphy, setby);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_unlock(&reg_mutex);
 }
 
@@ -1392,12 +1438,21 @@ static int ignore_request(struct wiphy *wiphy,
 		 * Process user requests only after previous user/driver/core
 		 * requests have been processed
 		 */
+<<<<<<< HEAD
 		if (last_request->initiator == NL80211_REGDOM_SET_BY_CORE ||
 		    last_request->initiator == NL80211_REGDOM_SET_BY_DRIVER ||
 		    last_request->initiator == NL80211_REGDOM_SET_BY_USER) {
 			if (last_request->intersect) {
 				if (!is_cfg80211_regdom_intersected())
 				return -EAGAIN;
+=======
+		if ((last_request->initiator == NL80211_REGDOM_SET_BY_CORE ||
+		    last_request->initiator == NL80211_REGDOM_SET_BY_DRIVER ||
+		     last_request->initiator == NL80211_REGDOM_SET_BY_USER)) {
+			if (last_request->intersect) {
+				if (!is_cfg80211_regdom_intersected())
+					return -EAGAIN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			} else if (regdom_changes(last_request->alpha2)) {
 				return -EAGAIN;
 			}
@@ -1436,7 +1491,11 @@ static void reg_set_request_processed(void)
 	spin_unlock(&reg_requests_lock);
 
 	if (last_request->initiator == NL80211_REGDOM_SET_BY_USER)
+<<<<<<< HEAD
 		cancel_delayed_work_sync(&reg_timeout);
+=======
+		cancel_delayed_work(&reg_timeout);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (need_more_processing)
 		schedule_work(&reg_work);
@@ -1764,12 +1823,15 @@ void regulatory_hint_11d(struct wiphy *wiphy,
 	enum environment_cap env = ENVIRON_ANY;
 	struct regulatory_request *request;
 
+<<<<<<< HEAD
 	/* Driver does not want the CORE to change the channel
 	 * flags based on the country IE of connected BSS
 	 */
 	if (wiphy->flags & WIPHY_FLAG_DISABLE_11D_HINT_FROM_CORE)
 		return;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mutex_lock(&reg_mutex);
 
 	if (unlikely(!last_request))
@@ -2434,6 +2496,11 @@ int __init regulatory_init(void)
 	spin_lock_init(&reg_requests_lock);
 	spin_lock_init(&reg_pending_beacons_lock);
 
+<<<<<<< HEAD
+=======
+	reg_regdb_size_check();
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	cfg80211_regdomain = cfg80211_world_regdom;
 
 	user_alpha2[0] = '9';

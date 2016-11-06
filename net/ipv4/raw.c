@@ -131,6 +131,7 @@ found:
  *	0 - deliver
  *	1 - block
  */
+<<<<<<< HEAD
 static __inline__ int icmp_filter(struct sock *sk, struct sk_buff *skb)
 {
 	int type;
@@ -143,6 +144,22 @@ static __inline__ int icmp_filter(struct sock *sk, struct sk_buff *skb)
 		__u32 data = raw_sk(sk)->filter.data;
 
 		return ((1 << type) & data) != 0;
+=======
+static int icmp_filter(const struct sock *sk, const struct sk_buff *skb)
+{
+	struct icmphdr _hdr;
+	const struct icmphdr *hdr;
+
+	hdr = skb_header_pointer(skb, skb_transport_offset(skb),
+				 sizeof(_hdr), &_hdr);
+	if (!hdr)
+		return 1;
+
+	if (hdr->type < 32) {
+		__u32 data = raw_sk(sk)->filter.data;
+
+		return ((1U << hdr->type) & data) != 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* Do not block unknown ICMP types */
@@ -382,7 +399,11 @@ static int raw_send_hdrinc(struct sock *sk, struct flowi4 *fl4,
 		iph->check   = 0;
 		iph->tot_len = htons(length);
 		if (!iph->id)
+<<<<<<< HEAD
 			ip_select_ident(iph, &rt->dst, NULL);
+=======
+			ip_select_ident(skb, NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		iph->check = ip_fast_csum((unsigned char *)iph, iph->ihl);
 	}

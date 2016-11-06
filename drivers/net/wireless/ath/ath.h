@@ -143,6 +143,10 @@ struct ath_common {
 	u32 keymax;
 	DECLARE_BITMAP(keymap, ATH_KEYMAX);
 	DECLARE_BITMAP(tkip_keymap, ATH_KEYMAX);
+<<<<<<< HEAD
+=======
+	DECLARE_BITMAP(ccmp_keymap, ATH_KEYMAX);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	enum ath_crypt_caps crypt_caps;
 
 	unsigned int clockrate;

@@ -23,7 +23,11 @@ quiet_cmd_modules_install = INSTALL $@
 INSTALL_MOD_DIR ?= extra
 ext-mod-dir = $(INSTALL_MOD_DIR)$(subst $(patsubst %/,%,$(KBUILD_EXTMOD)),,$(@D))
 
+<<<<<<< HEAD
 modinst_dir ?= $(if $(KBUILD_EXTMOD),$(ext-mod-dir),kernel/$(@D))
+=======
+modinst_dir = $(if $(KBUILD_EXTMOD),$(ext-mod-dir),kernel/$(@D))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 $(modules):
 	$(call cmd,modules_install,$(MODLIB)/$(modinst_dir))

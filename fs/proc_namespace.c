@@ -17,18 +17,30 @@
 
 static unsigned mounts_poll(struct file *file, poll_table *wait)
 {
+<<<<<<< HEAD
 	struct proc_mounts *p = proc_mounts(file->private_data);
+=======
+	struct proc_mounts *p = file->private_data;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct mnt_namespace *ns = p->ns;
 	unsigned res = POLLIN | POLLRDNORM;
 
 	poll_wait(file, &p->ns->poll, wait);
 
+<<<<<<< HEAD
 	br_read_lock(&vfsmount_lock);
+=======
+	br_read_lock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (p->m.poll_event != ns->event) {
 		p->m.poll_event = ns->event;
 		res |= POLLERR | POLLPRI;
 	}
+<<<<<<< HEAD
 	br_read_unlock(&vfsmount_lock);
+=======
+	br_read_unlock(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return res;
 }
@@ -121,7 +133,11 @@ out:
 
 static int show_mountinfo(struct seq_file *m, struct vfsmount *mnt)
 {
+<<<<<<< HEAD
 	struct proc_mounts *p = proc_mounts(m);
+=======
+	struct proc_mounts *p = m->private;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct mount *r = real_mount(mnt);
 	struct super_block *sb = mnt->mnt_sb;
 	struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
@@ -268,6 +284,10 @@ static int mounts_open_common(struct inode *inode, struct file *file,
 	if (ret)
 		goto err_free;
 
+<<<<<<< HEAD
+=======
+	p->m.private = p;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	p->ns = ns;
 	p->root = root;
 	p->m.poll_event = ns->event;
@@ -287,7 +307,11 @@ static int mounts_open_common(struct inode *inode, struct file *file,
 
 static int mounts_release(struct inode *inode, struct file *file)
 {
+<<<<<<< HEAD
 	struct proc_mounts *p = proc_mounts(file->private_data);
+=======
+	struct proc_mounts *p = file->private_data;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	path_put(&p->root);
 	put_mnt_ns(p->ns);
 	return seq_release(inode, file);

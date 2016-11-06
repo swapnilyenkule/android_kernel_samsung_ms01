@@ -24,14 +24,22 @@
 
 #define NFSDBG_FACILITY		NFSDBG_PROC
 
+<<<<<<< HEAD
 /* A wrapper to handle the EJUKEBOX and EKEYEXPIRED error messages */
+=======
+/* A wrapper to handle the EJUKEBOX error messages */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int
 nfs3_rpc_wrapper(struct rpc_clnt *clnt, struct rpc_message *msg, int flags)
 {
 	int res;
 	do {
 		res = rpc_call_sync(clnt, msg, flags);
+<<<<<<< HEAD
 		if (res != -EJUKEBOX && res != -EKEYEXPIRED)
+=======
+		if (res != -EJUKEBOX)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		freezable_schedule_timeout_killable(NFS_JUKEBOX_RETRY_TIME);
 		res = -ERESTARTSYS;
@@ -44,7 +52,11 @@ nfs3_rpc_wrapper(struct rpc_clnt *clnt, struct rpc_message *msg, int flags)
 static int
 nfs3_async_handle_jukebox(struct rpc_task *task, struct inode *inode)
 {
+<<<<<<< HEAD
 	if (task->tk_status != -EJUKEBOX && task->tk_status != -EKEYEXPIRED)
+=======
+	if (task->tk_status != -EJUKEBOX)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return 0;
 	if (task->tk_status == -EJUKEBOX)
 		nfs_inc_stats(inode, NFSIOS_DELAY);
@@ -69,7 +81,11 @@ do_proc_get_root(struct rpc_clnt *client, struct nfs_fh *fhandle,
 	nfs_fattr_init(info->fattr);
 	status = rpc_call_sync(client, &msg, 0);
 	dprintk("%s: reply fsinfo: %d\n", __func__, status);
+<<<<<<< HEAD
 	if (!(info->fattr->valid & NFS_ATTR_FATTR)) {
+=======
+	if (status == 0 && !(info->fattr->valid & NFS_ATTR_FATTR)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		msg.rpc_proc = &nfs3_procedures[NFS3PROC_GETATTR];
 		msg.rpc_resp = info->fattr;
 		status = rpc_call_sync(client, &msg, 0);
@@ -644,7 +660,11 @@ nfs3_proc_readdir(struct dentry *dentry, struct rpc_cred *cred,
 		  u64 cookie, struct page **pages, unsigned int count, int plus)
 {
 	struct inode		*dir = dentry->d_inode;
+<<<<<<< HEAD
 	__be32			*verf = NFS_COOKIEVERF(dir);
+=======
+	__be32			*verf = NFS_I(dir)->cookieverf;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct nfs3_readdirargs	arg = {
 		.fh		= NFS_FH(dir),
 		.cookie		= cookie,

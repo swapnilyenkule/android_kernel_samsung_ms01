@@ -613,14 +613,34 @@ static int start_usb_playback(struct ua101 *ua)
 
 static void abort_alsa_capture(struct ua101 *ua)
 {
+<<<<<<< HEAD
 	if (test_bit(ALSA_CAPTURE_RUNNING, &ua->states))
 		snd_pcm_stop(ua->capture.substream, SNDRV_PCM_STATE_XRUN);
+=======
+	unsigned long flags;
+
+	if (test_bit(ALSA_CAPTURE_RUNNING, &ua->states)) {
+		snd_pcm_stream_lock_irqsave(ua->capture.substream, flags);
+		snd_pcm_stop(ua->capture.substream, SNDRV_PCM_STATE_XRUN);
+		snd_pcm_stream_unlock_irqrestore(ua->capture.substream, flags);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void abort_alsa_playback(struct ua101 *ua)
 {
+<<<<<<< HEAD
 	if (test_bit(ALSA_PLAYBACK_RUNNING, &ua->states))
 		snd_pcm_stop(ua->playback.substream, SNDRV_PCM_STATE_XRUN);
+=======
+	unsigned long flags;
+
+	if (test_bit(ALSA_PLAYBACK_RUNNING, &ua->states)) {
+		snd_pcm_stream_lock_irqsave(ua->playback.substream, flags);
+		snd_pcm_stop(ua->playback.substream, SNDRV_PCM_STATE_XRUN);
+		snd_pcm_stream_unlock_irqrestore(ua->playback.substream, flags);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int set_stream_hw(struct ua101 *ua, struct snd_pcm_substream *substream,

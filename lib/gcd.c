@@ -9,6 +9,12 @@ unsigned long gcd(unsigned long a, unsigned long b)
 
 	if (a < b)
 		swap(a, b);
+<<<<<<< HEAD
+=======
+
+	if (!b)
+		return a;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	while ((r = a % b) != 0) {
 		a = b;
 		b = r;

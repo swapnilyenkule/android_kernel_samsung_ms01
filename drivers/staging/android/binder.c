@@ -657,7 +657,11 @@ static int binder_update_page_range(struct binder_proc *proc, int allocate,
 		page = &proc->pages[(page_addr - proc->buffer) / PAGE_SIZE];
 
 		BUG_ON(*page);
+<<<<<<< HEAD
 		*page = alloc_page(GFP_KERNEL | __GFP_ZERO);
+=======
+		*page = alloc_page(GFP_KERNEL | __GFP_HIGHMEM | __GFP_ZERO);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (*page == NULL) {
 			binder_debug(BINDER_DEBUG_TOP_ERRORS,
 				     "binder: %d: binder_alloc_buf failed "
@@ -2006,8 +2010,15 @@ int binder_thread_write(struct binder_proc *proc, struct binder_thread *thread,
 				BUG_ON(!buffer->target_node->has_async_transaction);
 				if (list_empty(&buffer->target_node->async_todo))
 					buffer->target_node->has_async_transaction = 0;
+<<<<<<< HEAD
 				else
 					list_move_tail(buffer->target_node->async_todo.next, &thread->todo);
+=======
+				else {
+					list_move_tail(buffer->target_node->async_todo.next, &thread->proc->todo);
+					wake_up_interruptible(&thread->proc->wait);
+				}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			binder_transaction_buffer_release(proc, buffer, NULL);
 			binder_free_buf(proc, buffer);
@@ -2812,6 +2823,33 @@ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			goto err;
 		}
 		break;
+<<<<<<< HEAD
+=======
+
+	/* { System SW, SA_SAMP */
+	// SAMP : Service Process Management
+	case BINDER_GET_PROC_BINDERSTATS: {
+		//get proc stats,(bc_transactions/br_transactions)
+		//used for the binded service
+		int transactions;
+		if (size != sizeof(int)) {
+			ret = -EINVAL;
+			goto err;
+		}
+
+		//Only consider the called times now
+		transactions = proc->stats.br[_IOC_NR(BR_TRANSACTION)] /*+ proc->stats.bc[_IOC_NR(BC_TRANSACTION)] */;
+
+		binder_debug(BINDER_DEBUG_READ_WRITE,
+			"-- BINDER_GET_PROC_BINDERSTATS transactions = %d\n", transactions);
+		if (put_user(transactions, (uint32_t __user *)ubuf)) {
+			ret = -EINVAL;
+			goto err;
+		}
+		break;
+		}
+	/* System SW, SA_SAMP } */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		ret = -EINVAL;
 		goto err;
@@ -2852,9 +2890,21 @@ static void binder_vma_close(struct vm_area_struct *vma)
 	binder_defer_work(proc, BINDER_DEFERRED_PUT_FILES);
 }
 
+<<<<<<< HEAD
 static struct vm_operations_struct binder_vm_ops = {
 	.open = binder_vma_open,
 	.close = binder_vma_close,
+=======
+static int binder_vm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
+{
+	return VM_FAULT_SIGBUS;
+}
+
+static struct vm_operations_struct binder_vm_ops = {
+	.open = binder_vma_open,
+	.close = binder_vma_close,
+	.fault = binder_vm_fault,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static int binder_mmap(struct file *filp, struct vm_area_struct *vma)

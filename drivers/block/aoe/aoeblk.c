@@ -276,8 +276,11 @@ aoeblk_gdalloc(void *vp)
 		goto err_mempool;
 	blk_queue_make_request(d->blkq, aoeblk_make_request);
 	d->blkq->backing_dev_info.name = "aoe";
+<<<<<<< HEAD
 	if (bdi_init(&d->blkq->backing_dev_info))
 		goto err_blkq;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_lock_irqsave(&d->lock, flags);
 	gd->major = AOE_MAJOR;
 	gd->first_minor = d->sysminor * AOE_PARTITIONS;
@@ -298,9 +301,12 @@ aoeblk_gdalloc(void *vp)
 	aoedisk_add_sysfs(d);
 	return;
 
+<<<<<<< HEAD
 err_blkq:
 	blk_cleanup_queue(d->blkq);
 	d->blkq = NULL;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 err_mempool:
 	mempool_destroy(d->bufpool);
 err_disk:

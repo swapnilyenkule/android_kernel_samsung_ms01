@@ -3556,12 +3556,15 @@ static int btrfs_destroy_pinned_extent(struct btrfs_root *root,
 		if (ret)
 			break;
 
+<<<<<<< HEAD
 		/* opt_discard */
 		if (btrfs_test_opt(root, DISCARD))
 			ret = btrfs_error_discard_extent(root, start,
 							 end + 1 - start,
 							 NULL);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		clear_extent_dirty(unpin, start, end, GFP_NOFS);
 		btrfs_error_unpin_extent_range(root, start, end);
 		cond_resched();

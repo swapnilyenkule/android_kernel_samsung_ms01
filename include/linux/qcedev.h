@@ -3,6 +3,10 @@
 
 #include <linux/types.h>
 #include <linux/ioctl.h>
+<<<<<<< HEAD
+=======
+#include "fips_status.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define QCEDEV_MAX_SHA_BLOCK_SIZE	64
 #define QCEDEV_MAX_BEARER	31
@@ -217,6 +221,19 @@ struct	qcedev_sha_op_req {
 	enum qcedev_sha_alg_enum	alg;
 };
 
+<<<<<<< HEAD
+=======
+/**
+* struct qfips_verify_t - Holds data for FIPS Integrity test
+* @kernel_size  (IN):		Size of kernel Image
+* @kernel       (IN):		pointer to buffer containing the kernel Image
+*/
+struct qfips_verify_t {
+	unsigned kernel_size;
+	void *kernel;
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define QCEDEV_IOC_MAGIC	0x87
 
@@ -238,4 +255,11 @@ struct	qcedev_sha_op_req {
 	_IO(QCEDEV_IOC_MAGIC, 8)
 #define QCEDEV_IOCTL_GET_CMAC_REQ	\
 	_IOWR(QCEDEV_IOC_MAGIC, 9, struct qcedev_cipher_op_req)
+<<<<<<< HEAD
+=======
+#define QCEDEV_IOCTL_UPDATE_FIPS_STATUS		\
+	_IOWR(QCEDEV_IOC_MAGIC, 10, enum fips_status)
+#define QCEDEV_IOCTL_QUERY_FIPS_STATUS	\
+	_IOR(QCEDEV_IOC_MAGIC, 11, enum fips_status)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* _QCEDEV__H */

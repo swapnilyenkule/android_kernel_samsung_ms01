@@ -1279,6 +1279,7 @@ struct ion_handle *ion_import_dma_buf(struct ion_client *client, int fd)
 		mutex_unlock(&client->lock);
 		goto end;
 	}
+<<<<<<< HEAD
 
 	handle = ion_handle_create(client, buffer);
 	if (IS_ERR(handle)) {
@@ -1286,6 +1287,15 @@ struct ion_handle *ion_import_dma_buf(struct ion_client *client, int fd)
 		goto end;
 	}
 
+=======
+	mutex_unlock(&client->lock);
+
+	handle = ion_handle_create(client, buffer);
+	if (IS_ERR_OR_NULL(handle))
+		goto end;
+
+	mutex_lock(&client->lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = ion_handle_add(client, handle);
 	mutex_unlock(&client->lock);
 	if (ret) {

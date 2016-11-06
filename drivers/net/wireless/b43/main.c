@@ -1895,6 +1895,7 @@ static void b43_do_interrupt_thread(struct b43_wldev *dev)
 		}
 	}
 
+<<<<<<< HEAD
 	if (unlikely(merged_dma_reason & (B43_DMAIRQ_FATALMASK |
 					  B43_DMAIRQ_NONFATALMASK))) {
 		if (merged_dma_reason & B43_DMAIRQ_FATALMASK) {
@@ -1919,6 +1920,20 @@ static void b43_do_interrupt_thread(struct b43_wldev *dev)
 			       dma_reason[2], dma_reason[3],
 			       dma_reason[4], dma_reason[5]);
 		}
+=======
+	if (unlikely(merged_dma_reason & (B43_DMAIRQ_FATALMASK))) {
+		b43err(dev->wl,
+			"Fatal DMA error: 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X, 0x%08X\n",
+			dma_reason[0], dma_reason[1],
+			dma_reason[2], dma_reason[3],
+			dma_reason[4], dma_reason[5]);
+		b43err(dev->wl, "This device does not support DMA "
+			       "on your system. It will now be switched to PIO.\n");
+		/* Fall back to PIO transfers if we get fatal DMA errors! */
+		dev->use_pio = true;
+		b43_controller_restart(dev, "DMA error");
+		return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (unlikely(reason & B43_IRQ_UCODE_DEBUG))
@@ -1937,6 +1952,14 @@ static void b43_do_interrupt_thread(struct b43_wldev *dev)
 		handle_irq_noise(dev);
 
 	/* Check the DMA reason registers for received data. */
+<<<<<<< HEAD
+=======
+	if (dma_reason[0] & B43_DMAIRQ_RDESC_UFLOW) {
+		if (B43_DEBUG)
+			b43warn(dev->wl, "RX descriptor underrun\n");
+		b43_dma_handle_rx_overflow(dev->dma.rx_ring);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (dma_reason[0] & B43_DMAIRQ_RX_DONE) {
 		if (b43_using_pio_transfers(dev))
 			b43_pio_rx(dev->pio.rx_queue);
@@ -1994,7 +2017,11 @@ static irqreturn_t b43_do_interrupt(struct b43_wldev *dev)
 		return IRQ_NONE;
 
 	dev->dma_reason[0] = b43_read32(dev, B43_MMIO_DMA0_REASON)
+<<<<<<< HEAD
 	    & 0x0001DC00;
+=======
+	    & 0x0001FC00;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dev->dma_reason[1] = b43_read32(dev, B43_MMIO_DMA1_REASON)
 	    & 0x0000DC00;
 	dev->dma_reason[2] = b43_read32(dev, B43_MMIO_DMA2_REASON)
@@ -2068,6 +2095,10 @@ void b43_do_release_fw(struct b43_firmware_file *fw)
 
 static void b43_release_firmware(struct b43_wldev *dev)
 {
+<<<<<<< HEAD
+=======
+	complete(&dev->fw_load_complete);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	b43_do_release_fw(&dev->fw.ucode);
 	b43_do_release_fw(&dev->fw.pcm);
 	b43_do_release_fw(&dev->fw.initvals);
@@ -2088,11 +2119,26 @@ static void b43_print_fw_helptext(struct b43_wl *wl, bool error)
 		b43warn(wl, text);
 }
 
+<<<<<<< HEAD
 int b43_do_request_fw(struct b43_request_fw_context *ctx,
 		      const char *name,
 		      struct b43_firmware_file *fw)
 {
 	const struct firmware *blob;
+=======
+static void b43_fw_cb(const struct firmware *firmware, void *context)
+{
+	struct b43_request_fw_context *ctx = context;
+
+	ctx->blob = firmware;
+	complete(&ctx->dev->fw_load_complete);
+}
+
+int b43_do_request_fw(struct b43_request_fw_context *ctx,
+		      const char *name,
+		      struct b43_firmware_file *fw, bool async)
+{
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct b43_fw_header *hdr;
 	u32 size;
 	int err;
@@ -2131,11 +2177,38 @@ int b43_do_request_fw(struct b43_request_fw_context *ctx,
 		B43_WARN_ON(1);
 		return -ENOSYS;
 	}
+<<<<<<< HEAD
 	err = request_firmware(&blob, ctx->fwname, ctx->dev->dev->dev);
 	if (err == -ENOENT) {
 		snprintf(ctx->errors[ctx->req_type],
 			 sizeof(ctx->errors[ctx->req_type]),
 			 "Firmware file \"%s\" not found\n", ctx->fwname);
+=======
+	if (async) {
+		/* do this part asynchronously */
+		init_completion(&ctx->dev->fw_load_complete);
+		err = request_firmware_nowait(THIS_MODULE, 1, ctx->fwname,
+					      ctx->dev->dev->dev, GFP_KERNEL,
+					      ctx, b43_fw_cb);
+		if (err < 0) {
+			pr_err("Unable to load firmware\n");
+			return err;
+		}
+		wait_for_completion(&ctx->dev->fw_load_complete);
+		if (ctx->blob)
+			goto fw_ready;
+	/* On some ARM systems, the async request will fail, but the next sync
+	 * request works. For this reason, we fall through here
+	 */
+	}
+	err = request_firmware(&ctx->blob, ctx->fwname,
+			       ctx->dev->dev->dev);
+	if (err == -ENOENT) {
+		snprintf(ctx->errors[ctx->req_type],
+			 sizeof(ctx->errors[ctx->req_type]),
+			 "Firmware file \"%s\" not found\n",
+			 ctx->fwname);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return err;
 	} else if (err) {
 		snprintf(ctx->errors[ctx->req_type],
@@ -2144,14 +2217,25 @@ int b43_do_request_fw(struct b43_request_fw_context *ctx,
 			 ctx->fwname, err);
 		return err;
 	}
+<<<<<<< HEAD
 	if (blob->size < sizeof(struct b43_fw_header))
 		goto err_format;
 	hdr = (struct b43_fw_header *)(blob->data);
+=======
+fw_ready:
+	if (ctx->blob->size < sizeof(struct b43_fw_header))
+		goto err_format;
+	hdr = (struct b43_fw_header *)(ctx->blob->data);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	switch (hdr->type) {
 	case B43_FW_TYPE_UCODE:
 	case B43_FW_TYPE_PCM:
 		size = be32_to_cpu(hdr->size);
+<<<<<<< HEAD
 		if (size != blob->size - sizeof(struct b43_fw_header))
+=======
+		if (size != ctx->blob->size - sizeof(struct b43_fw_header))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			goto err_format;
 		/* fallthrough */
 	case B43_FW_TYPE_IV:
@@ -2162,7 +2246,11 @@ int b43_do_request_fw(struct b43_request_fw_context *ctx,
 		goto err_format;
 	}
 
+<<<<<<< HEAD
 	fw->data = blob;
+=======
+	fw->data = ctx->blob;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	fw->filename = name;
 	fw->type = ctx->req_type;
 
@@ -2172,7 +2260,11 @@ err_format:
 	snprintf(ctx->errors[ctx->req_type],
 		 sizeof(ctx->errors[ctx->req_type]),
 		 "Firmware file \"%s\" format error.\n", ctx->fwname);
+<<<<<<< HEAD
 	release_firmware(blob);
+=======
+	release_firmware(ctx->blob);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return -EPROTO;
 }
@@ -2223,7 +2315,11 @@ static int b43_try_request_fw(struct b43_request_fw_context *ctx)
 			goto err_no_ucode;
 		}
 	}
+<<<<<<< HEAD
 	err = b43_do_request_fw(ctx, filename, &fw->ucode);
+=======
+	err = b43_do_request_fw(ctx, filename, &fw->ucode, true);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err)
 		goto err_load;
 
@@ -2235,7 +2331,11 @@ static int b43_try_request_fw(struct b43_request_fw_context *ctx)
 	else
 		goto err_no_pcm;
 	fw->pcm_request_failed = false;
+<<<<<<< HEAD
 	err = b43_do_request_fw(ctx, filename, &fw->pcm);
+=======
+	err = b43_do_request_fw(ctx, filename, &fw->pcm, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err == -ENOENT) {
 		/* We did not find a PCM file? Not fatal, but
 		 * core rev <= 10 must do without hwcrypto then. */
@@ -2296,7 +2396,11 @@ static int b43_try_request_fw(struct b43_request_fw_context *ctx)
 	default:
 		goto err_no_initvals;
 	}
+<<<<<<< HEAD
 	err = b43_do_request_fw(ctx, filename, &fw->initvals);
+=======
+	err = b43_do_request_fw(ctx, filename, &fw->initvals, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err)
 		goto err_load;
 
@@ -2355,7 +2459,11 @@ static int b43_try_request_fw(struct b43_request_fw_context *ctx)
 	default:
 		goto err_no_initvals;
 	}
+<<<<<<< HEAD
 	err = b43_do_request_fw(ctx, filename, &fw->initvals_band);
+=======
+	err = b43_do_request_fw(ctx, filename, &fw->initvals_band, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (err)
 		goto err_load;
 
@@ -2392,6 +2500,10 @@ error:
 
 static int b43_one_core_attach(struct b43_bus_dev *dev, struct b43_wl *wl);
 static void b43_one_core_detach(struct b43_bus_dev *dev);
+<<<<<<< HEAD
+=======
+static int b43_rng_init(struct b43_wl *wl);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 static void b43_request_firmware(struct work_struct *work)
 {
@@ -2428,7 +2540,11 @@ static void b43_request_firmware(struct work_struct *work)
 	for (i = 0; i < B43_NR_FWTYPES; i++) {
 		errmsg = ctx->errors[i];
 		if (strlen(errmsg))
+<<<<<<< HEAD
 			b43err(dev->wl, errmsg);
+=======
+			b43err(dev->wl, "%s", errmsg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	b43_print_fw_helptext(dev->wl, 1);
 	goto out;
@@ -2438,6 +2554,13 @@ start_ieee80211:
 	if (err)
 		goto err_one_core_detach;
 	b43_leds_register(wl->current_dev);
+<<<<<<< HEAD
+=======
+
+	/* Register HW RNG driver */
+	b43_rng_init(wl);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	goto out;
 
 err_one_core_detach:
@@ -3094,7 +3217,11 @@ static int b43_chip_init(struct b43_wldev *dev)
 		b43_write32(dev, 0x018C, 0x02000000);
 	}
 	b43_write32(dev, B43_MMIO_GEN_IRQ_REASON, 0x00004000);
+<<<<<<< HEAD
 	b43_write32(dev, B43_MMIO_DMA0_IRQ_MASK, 0x0001DC00);
+=======
+	b43_write32(dev, B43_MMIO_DMA0_IRQ_MASK, 0x0001FC00);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	b43_write32(dev, B43_MMIO_DMA1_IRQ_MASK, 0x0000DC00);
 	b43_write32(dev, B43_MMIO_DMA2_IRQ_MASK, 0x0000DC00);
 	b43_write32(dev, B43_MMIO_DMA3_IRQ_MASK, 0x0001DC00);
@@ -3393,7 +3520,11 @@ static void b43_tx_work(struct work_struct *work)
 				break;
 			}
 			if (unlikely(err))
+<<<<<<< HEAD
 				dev_kfree_skb(skb); /* Drop it */
+=======
+				ieee80211_free_txskb(wl->hw, skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			err = 0;
 		}
 
@@ -3414,7 +3545,11 @@ static void b43_op_tx(struct ieee80211_hw *hw,
 
 	if (unlikely(skb->len < 2 + 2 + 6)) {
 		/* Too short, this can't be a valid frame. */
+<<<<<<< HEAD
 		dev_kfree_skb_any(skb);
+=======
+		ieee80211_free_txskb(hw, skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return;
 	}
 	B43_WARN_ON(skb_shinfo(skb)->nr_frags);
@@ -4210,8 +4345,17 @@ redo:
 
 	/* Drain all TX queues. */
 	for (queue_num = 0; queue_num < B43_QOS_QUEUE_NUM; queue_num++) {
+<<<<<<< HEAD
 		while (skb_queue_len(&wl->tx_queue[queue_num]))
 			dev_kfree_skb(skb_dequeue(&wl->tx_queue[queue_num]));
+=======
+		while (skb_queue_len(&wl->tx_queue[queue_num])) {
+			struct sk_buff *skb;
+
+			skb = skb_dequeue(&wl->tx_queue[queue_num]);
+			ieee80211_free_txskb(wl->hw, skb);
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	b43_mac_suspend(dev);
@@ -4558,9 +4702,12 @@ static void b43_wireless_core_exit(struct b43_wldev *dev)
 	if (!dev || b43_status(dev) != B43_STAT_INITIALIZED)
 		return;
 
+<<<<<<< HEAD
 	/* Unregister HW RNG driver */
 	b43_rng_exit(dev->wl);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	b43_set_status(dev, B43_STAT_UNINIT);
 
 	/* Stop the microcode PSM. */
@@ -4703,9 +4850,12 @@ static int b43_wireless_core_init(struct b43_wldev *dev)
 
 	b43_set_status(dev, B43_STAT_INITIALIZED);
 
+<<<<<<< HEAD
 	/* Register HW RNG driver */
 	b43_rng_init(dev->wl);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out:
 	return err;
 
@@ -5363,6 +5513,12 @@ static void b43_bcma_remove(struct bcma_device *core)
 
 	b43_one_core_detach(wldev->dev);
 
+<<<<<<< HEAD
+=======
+	/* Unregister HW RNG driver */
+	b43_rng_exit(wl);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	b43_leds_unregister(wl);
 
 	ieee80211_free_hw(wl->hw);
@@ -5430,6 +5586,11 @@ static void b43_ssb_remove(struct ssb_device *sdev)
 	cancel_work_sync(&wldev->restart_work);
 
 	B43_WARN_ON(!wl);
+<<<<<<< HEAD
+=======
+	if (!wldev->fw.ucode.data)
+		return;			/* NULL if firmware never loaded */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (wl->current_dev == wldev) {
 		/* Restore the queues count before unregistering, because firmware detect
 		 * might have modified it. Restoring is important, so the networking
@@ -5441,6 +5602,12 @@ static void b43_ssb_remove(struct ssb_device *sdev)
 
 	b43_one_core_detach(dev);
 
+<<<<<<< HEAD
+=======
+	/* Unregister HW RNG driver */
+	b43_rng_exit(wl);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (list_empty(&wl->devlist)) {
 		b43_leds_unregister(wl);
 		/* Last core on the chip unregistered.

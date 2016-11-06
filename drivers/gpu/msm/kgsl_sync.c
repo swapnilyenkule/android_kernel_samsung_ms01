@@ -118,7 +118,12 @@ int kgsl_add_fence_event(struct kgsl_device *device,
 	struct sync_pt *pt;
 	struct sync_fence *fence = NULL;
 	int ret = -EINVAL;
+<<<<<<< HEAD
 	char fence_name[sizeof(fence->name)] = {};
+=======
+
+	priv.fence_fd = -1;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (len != sizeof(priv))
 		return -EINVAL;
@@ -127,10 +132,19 @@ int kgsl_add_fence_event(struct kgsl_device *device,
 	if (event == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	context = kgsl_context_get_owner(owner, context_id);
 
 	if (context == NULL)
 		goto fail_pt;
+=======
+	kgsl_mutex_lock(&device->mutex, &device->mutex_owner);
+
+	context = kgsl_context_get_owner(owner, context_id);
+
+	if (context == NULL)
+		goto unlock;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	event->context = context;
 	event->timestamp = timestamp;
@@ -139,6 +153,7 @@ int kgsl_add_fence_event(struct kgsl_device *device,
 	if (pt == NULL) {
 		KGSL_DRV_ERR(device, "kgsl_sync_pt_create failed\n");
 		ret = -ENOMEM;
+<<<<<<< HEAD
 		goto fail_pt;
 	}
 	snprintf(fence_name, sizeof(fence_name),
@@ -148,16 +163,27 @@ int kgsl_add_fence_event(struct kgsl_device *device,
 
 
 	fence = sync_fence_create(fence_name, pt);
+=======
+		goto unlock;
+	}
+
+	fence = sync_fence_create("kgsl-fence", pt);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (fence == NULL) {
 		/* only destroy pt when not added to fence */
 		kgsl_sync_pt_destroy(pt);
 		KGSL_DRV_ERR(device, "sync_fence_create failed\n");
 		ret = -ENOMEM;
+<<<<<<< HEAD
 		goto fail_fence;
+=======
+		goto unlock;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	priv.fence_fd = get_unused_fd_flags(0);
 	if (priv.fence_fd < 0) {
+<<<<<<< HEAD
 		KGSL_DRV_ERR(device, "invalid fence fd\n");
 		ret = -EINVAL;
 		goto fail_fd;
@@ -167,12 +193,28 @@ int kgsl_add_fence_event(struct kgsl_device *device,
 	if (copy_to_user(data, &priv, sizeof(priv))) {
 		ret = -EFAULT;
 		goto fail_copy_fd;
+=======
+		KGSL_DRV_ERR(device, "Unable to get a file descriptor: %d\n",
+			priv.fence_fd);
+		ret = priv.fence_fd;
+		goto unlock;
+	}
+	sync_fence_install(fence, priv.fence_fd);
+
+	/* Unlock the mutex before copying to user */
+	kgsl_mutex_unlock(&device->mutex, &device->mutex_owner);
+
+	if (copy_to_user(data, &priv, sizeof(priv))) {
+		ret = -EFAULT;
+		goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/*
 	 * Hold the context ref-count for the event - it will get released in
 	 * the callback
 	 */
+<<<<<<< HEAD
 	ret = kgsl_add_event(device, context_id, timestamp,
 			kgsl_fence_event_cb, event, owner);
 	if (ret)
@@ -189,6 +231,31 @@ fail_fd:
 	sync_fence_put(fence);
 fail_fence:
 fail_pt:
+=======
+
+	kgsl_mutex_lock(&device->mutex, &device->mutex_owner);
+
+	ret = kgsl_add_event(device, context_id, timestamp,
+			kgsl_fence_event_cb, event, owner);
+
+	kgsl_mutex_unlock(&device->mutex, &device->mutex_owner);
+
+	if (ret)
+		goto out;
+
+	return 0;
+
+unlock:
+	kgsl_mutex_unlock(&device->mutex, &device->mutex_owner);
+
+out:
+	if (priv.fence_fd >= 0)
+		put_unused_fd(priv.fence_fd);
+
+	if (fence)
+		sync_fence_put(fence);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kgsl_context_put(context);
 	kfree(event);
 	return ret;

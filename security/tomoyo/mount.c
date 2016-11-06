@@ -71,8 +71,12 @@ static bool tomoyo_check_mount_acl(struct tomoyo_request_info *r,
  *
  * Caller holds tomoyo_read_lock().
  */
+<<<<<<< HEAD
 static int tomoyo_mount_acl(struct tomoyo_request_info *r,
 			    const char *dev_name,
+=======
+static int tomoyo_mount_acl(struct tomoyo_request_info *r, char *dev_name,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			    struct path *dir, const char *type,
 			    unsigned long flags)
 {
@@ -184,7 +188,11 @@ static int tomoyo_mount_acl(struct tomoyo_request_info *r,
  *
  * Returns 0 on success, negative value otherwise.
  */
+<<<<<<< HEAD
 int tomoyo_mount_permission(const char *dev_name, struct path *path,
+=======
+int tomoyo_mount_permission(char *dev_name, struct path *path,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			    const char *type, unsigned long flags,
 			    void *data_page)
 {

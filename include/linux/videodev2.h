@@ -1066,6 +1066,10 @@ struct v4l2_bt_timings {
 #define V4L2_DV_VSYNC_POS_POL	0x00000001
 #define V4L2_DV_HSYNC_POS_POL	0x00000002
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* DV timings */
 struct v4l2_dv_timings {
 	__u32 type;
@@ -1953,6 +1957,7 @@ enum v4l2_mpeg_vidc_video_ltrmode {
 #define V4L2_CID_MPEG_VIDC_VIDEO_BUFFER_SIZE_LIMIT \
 		(V4L2_CID_MPEG_MSM_VIDC_BASE + 48)
 
+<<<<<<< HEAD
 #define V4L2_CID_MPEG_VIDC_VIDEO_PRIORITY \
 		(V4L2_CID_MPEG_MSM_VIDC_BASE + 73)
 
@@ -1964,6 +1969,8 @@ enum v4l2_mpeg_vidc_video_priority {
 #define V4L2_CID_MPEG_VIDC_VIDEO_OPERATING_RATE \
 		(V4L2_CID_MPEG_MSM_VIDC_BASE + 75)
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*  Camera class control IDs */
 #define V4L2_CID_CAMERA_CLASS_BASE 	(V4L2_CTRL_CLASS_CAMERA | 0x900)
 #define V4L2_CID_CAMERA_CLASS 		(V4L2_CTRL_CLASS_CAMERA | 1)

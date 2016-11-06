@@ -711,7 +711,11 @@ int do_huge_pmd_anonymous_page(struct mm_struct *mm, struct vm_area_struct *vma,
 	if (haddr >= vma->vm_start && haddr + HPAGE_PMD_SIZE <= vma->vm_end) {
 		if (unlikely(anon_vma_prepare(vma)))
 			return VM_FAULT_OOM;
+<<<<<<< HEAD
 		if (unlikely(khugepaged_enter(vma)))
+=======
+		if (unlikely(khugepaged_enter(vma, vma->vm_flags)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return VM_FAULT_OOM;
 		page = alloc_hugepage_vma(transparent_hugepage_defrag(vma),
 					  vma, haddr, numa_node_id(), 0);
@@ -950,6 +954,11 @@ int do_huge_pmd_wp_page(struct mm_struct *mm, struct vm_area_struct *vma,
 		count_vm_event(THP_FAULT_FALLBACK);
 		ret = do_huge_pmd_wp_page_fallback(mm, vma, address,
 						   pmd, orig_pmd, page, haddr);
+<<<<<<< HEAD
+=======
+		if (ret & VM_FAULT_OOM)
+			split_huge_page(page);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		put_page(page);
 		goto out;
 	}
@@ -957,6 +966,10 @@ int do_huge_pmd_wp_page(struct mm_struct *mm, struct vm_area_struct *vma,
 
 	if (unlikely(mem_cgroup_newpage_charge(new_page, mm, GFP_KERNEL))) {
 		put_page(new_page);
+<<<<<<< HEAD
+=======
+		split_huge_page(page);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		put_page(page);
 		ret |= VM_FAULT_OOM;
 		goto out;
@@ -1502,7 +1515,11 @@ int hugepage_madvise(struct vm_area_struct *vma,
 		 * register it here without waiting a page fault that
 		 * may not happen any time soon.
 		 */
+<<<<<<< HEAD
 		if (unlikely(khugepaged_enter_vma_merge(vma)))
+=======
+		if (unlikely(khugepaged_enter_vma_merge(vma, *vm_flags)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return -ENOMEM;
 		break;
 	case MADV_NOHUGEPAGE:
@@ -1634,7 +1651,12 @@ int __khugepaged_enter(struct mm_struct *mm)
 	return 0;
 }
 
+<<<<<<< HEAD
 int khugepaged_enter_vma_merge(struct vm_area_struct *vma)
+=======
+int khugepaged_enter_vma_merge(struct vm_area_struct *vma,
+			       unsigned long vm_flags)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	unsigned long hstart, hend;
 	if (!vma->anon_vma)
@@ -1650,11 +1672,19 @@ int khugepaged_enter_vma_merge(struct vm_area_struct *vma)
 	 * If is_pfn_mapping() is true is_learn_pfn_mapping() must be
 	 * true too, verify it here.
 	 */
+<<<<<<< HEAD
 	VM_BUG_ON(is_linear_pfn_mapping(vma) || vma->vm_flags & VM_NO_THP);
 	hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
 	hend = vma->vm_end & HPAGE_PMD_MASK;
 	if (hstart < hend)
 		return khugepaged_enter(vma);
+=======
+	VM_BUG_ON(is_linear_pfn_mapping(vma) || vm_flags & VM_NO_THP);
+	hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+	hend = vma->vm_end & HPAGE_PMD_MASK;
+	if (hstart < hend)
+		return khugepaged_enter(vma, vm_flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 
@@ -1891,6 +1921,11 @@ static void collapse_huge_page(struct mm_struct *mm,
 		goto out;
 
 	vma = find_vma(mm, address);
+<<<<<<< HEAD
+=======
+	if (!vma)
+		goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
 	hend = vma->vm_end & HPAGE_PMD_MASK;
 	if (address < hstart || address + HPAGE_PMD_SIZE > hend)
@@ -1946,7 +1981,16 @@ static void collapse_huge_page(struct mm_struct *mm,
 		pte_unmap(pte);
 		spin_lock(&mm->page_table_lock);
 		BUG_ON(!pmd_none(*pmd));
+<<<<<<< HEAD
 		set_pmd_at(mm, address, pmd, _pmd);
+=======
+		/*
+		 * We can only use set_pmd_at when establishing
+		 * hugepmds and never for establishing regular pmds that
+		 * points to regular pagetables. Use pmd_populate for that
+		 */
+		pmd_populate(mm, pmd, pmd_pgtable(_pmd));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		spin_unlock(&mm->page_table_lock);
 		anon_vma_unlock(vma->anon_vma);
 		goto out;

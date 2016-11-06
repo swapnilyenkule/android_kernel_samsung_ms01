@@ -1300,10 +1300,13 @@ int ocfs2_local_release_dquot(handle_t *handle, struct dquot *dquot)
 	ocfs2_journal_dirty(handle, od->dq_chunk->qc_headerbh);
 
 out:
+<<<<<<< HEAD
 	/* Clear the read bit so that next time someone uses this
 	 * dquot he reads fresh info from disk and allocates local
 	 * dquot structure */
 	clear_bit(DQ_READ_B, &dquot->dq_flags);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return status;
 }
 

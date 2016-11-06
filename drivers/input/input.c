@@ -1791,6 +1791,13 @@ void input_set_capability(struct input_dev *dev, unsigned int type, unsigned int
 		break;
 
 	case EV_ABS:
+<<<<<<< HEAD
+=======
+		input_alloc_absinfo(dev);
+		if (!dev->absinfo)
+			return;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		__set_bit(code, dev->absbit);
 		break;
 

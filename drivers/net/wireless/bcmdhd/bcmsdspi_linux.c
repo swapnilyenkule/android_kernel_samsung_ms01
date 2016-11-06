@@ -1,7 +1,11 @@
 /*
  * Broadcom SPI Host Controller Driver - Linux Per-port
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: bcmsdspi_linux.c 373331 2012-12-07 04:46:22Z $
+=======
+ * $Id: bcmsdspi_linux.c 406045 2013-06-05 22:09:52Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #include <typedefs.h>
@@ -150,7 +158,11 @@ static struct spi_driver bcmsdh_spi_driver = {
 /*
  * module init
 */
+<<<<<<< HEAD
 int spi_function_init(void)
+=======
+int bcmsdh_register_client_driver(void)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int error = 0;
 	sd_trace(("bcmsdh_gspi: %s Enter\n", __FUNCTION__));
@@ -163,7 +175,11 @@ int spi_function_init(void)
 /*
  * module cleanup
 */
+<<<<<<< HEAD
 void spi_function_cleanup(void)
+=======
+void bcmsdh_unregister_client_driver(void)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	sd_trace(("%s Enter\n", __FUNCTION__));
 	spi_unregister_driver(&bcmsdh_spi_driver);

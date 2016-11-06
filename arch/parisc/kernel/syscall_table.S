@@ -395,7 +395,11 @@
 	ENTRY_COMP(vmsplice)
 	ENTRY_COMP(move_pages)		/* 295 */
 	ENTRY_SAME(getcpu)
+<<<<<<< HEAD
 	ENTRY_SAME(epoll_pwait)
+=======
+	ENTRY_COMP(epoll_pwait)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ENTRY_COMP(statfs64)
 	ENTRY_COMP(fstatfs64)
 	ENTRY_COMP(kexec_load)		/* 300 */

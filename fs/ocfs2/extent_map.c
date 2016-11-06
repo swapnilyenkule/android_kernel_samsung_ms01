@@ -782,7 +782,10 @@ int ocfs2_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 	cpos = map_start >> osb->s_clustersize_bits;
 	mapping_end = ocfs2_clusters_for_bytes(inode->i_sb,
 					       map_start + map_len);
+<<<<<<< HEAD
 	mapping_end -= cpos;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	is_last = 0;
 	while (cpos < mapping_end && !is_last) {
 		u32 fe_flags;
@@ -791,7 +794,11 @@ int ocfs2_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 						 &hole_size, &rec, &is_last);
 		if (ret) {
 			mlog_errno(ret);
+<<<<<<< HEAD
 			goto out;
+=======
+			goto out_unlock;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		if (rec.e_blkno == 0ULL) {

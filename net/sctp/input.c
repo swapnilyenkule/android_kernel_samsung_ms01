@@ -736,15 +736,22 @@ static void __sctp_unhash_endpoint(struct sctp_endpoint *ep)
 
 	epb = &ep->base;
 
+<<<<<<< HEAD
 	if (hlist_unhashed(&epb->node))
 		return;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	epb->hashent = sctp_ep_hashfn(epb->bind_addr.port);
 
 	head = &sctp_ep_hashtable[epb->hashent];
 
 	sctp_write_lock(&head->lock);
+<<<<<<< HEAD
 	__hlist_del(&epb->node);
+=======
+	hlist_del_init(&epb->node);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sctp_write_unlock(&head->lock);
 }
 
@@ -825,7 +832,11 @@ static void __sctp_unhash_established(struct sctp_association *asoc)
 	head = &sctp_assoc_hashtable[epb->hashent];
 
 	sctp_write_lock(&head->lock);
+<<<<<<< HEAD
 	__hlist_del(&epb->node);
+=======
+	hlist_del_init(&epb->node);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sctp_write_unlock(&head->lock);
 }
 

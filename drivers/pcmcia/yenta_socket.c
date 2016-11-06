@@ -445,7 +445,11 @@ static int yenta_set_mem_map(struct pcmcia_socket *sock, struct pccard_mem_map *
 	unsigned int start, stop, card_start;
 	unsigned short word;
 
+<<<<<<< HEAD
 	pcibios_resource_to_bus(socket->dev, &region, mem->res);
+=======
+	pcibios_resource_to_bus(socket->dev->bus, &region, mem->res);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	map = mem->map;
 	start = region.start;
@@ -709,7 +713,11 @@ static int yenta_allocate_res(struct yenta_socket *socket, int nr, unsigned type
 	region.start = config_readl(socket, addr_start) & mask;
 	region.end = config_readl(socket, addr_end) | ~mask;
 	if (region.start && region.end > region.start && !override_bios) {
+<<<<<<< HEAD
 		pcibios_bus_to_resource(dev, res, &region);
+=======
+		pcibios_bus_to_resource(dev->bus, res, &region);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (pci_claim_resource(dev, PCI_BRIDGE_RESOURCES + nr) == 0)
 			return 0;
 		dev_printk(KERN_INFO, &dev->dev,
@@ -1033,7 +1041,11 @@ static void yenta_config_init(struct yenta_socket *socket)
 	struct pci_dev *dev = socket->dev;
 	struct pci_bus_region region;
 
+<<<<<<< HEAD
 	pcibios_resource_to_bus(socket->dev, &region, &dev->resource[0]);
+=======
+	pcibios_resource_to_bus(socket->dev->bus, &region, &dev->resource[0]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	config_writel(socket, CB_LEGACY_MODE_BASE, 0);
 	config_writel(socket, PCI_BASE_ADDRESS_0, region.start);

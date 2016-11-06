@@ -23,7 +23,11 @@ static void node_prepare_for_write(struct dm_block_validator *v,
 				   struct dm_block *b,
 				   size_t block_size)
 {
+<<<<<<< HEAD
 	struct node *n = dm_block_data(b);
+=======
+	struct btree_node *n = dm_block_data(b);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct node_header *h = &n->header;
 
 	h->blocknr = cpu_to_le64(dm_block_location(b));
@@ -38,7 +42,11 @@ static int node_check(struct dm_block_validator *v,
 		      struct dm_block *b,
 		      size_t block_size)
 {
+<<<<<<< HEAD
 	struct node *n = dm_block_data(b);
+=======
+	struct btree_node *n = dm_block_data(b);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct node_header *h = &n->header;
 	size_t value_size;
 	__le32 csum_disk;
@@ -164,7 +172,11 @@ int ro_step(struct ro_spine *s, dm_block_t new_child)
 	return r;
 }
 
+<<<<<<< HEAD
 struct node *ro_node(struct ro_spine *s)
+=======
+struct btree_node *ro_node(struct ro_spine *s)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct dm_block *block;
 

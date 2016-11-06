@@ -508,7 +508,12 @@ static int aac_send_raw_srb(struct aac_dev* dev, void __user * arg)
 		goto cleanup;
 	}
 
+<<<<<<< HEAD
 	if (fibsize > (dev->max_fib_size - sizeof(struct aac_fibhdr))) {
+=======
+	if ((fibsize < (sizeof(struct user_aac_srb) - sizeof(struct user_sgentry))) ||
+	    (fibsize > (dev->max_fib_size - sizeof(struct aac_fibhdr)))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		rcode = -EINVAL;
 		goto cleanup;
 	}

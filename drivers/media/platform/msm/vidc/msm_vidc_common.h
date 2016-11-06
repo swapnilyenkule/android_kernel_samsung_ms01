@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -50,7 +54,11 @@ struct hal_buffer_requirements *get_buff_req_buffer(
 		V4L2_CTRL_DRIVER_PRIV(idx))
 
 int msm_comm_check_scaling_supported(struct msm_vidc_inst *inst);
+<<<<<<< HEAD
 int msm_comm_recover_from_session_error(struct msm_vidc_inst *inst);
+=======
+int msm_comm_kill_session(struct msm_vidc_inst *inst);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 enum multi_stream msm_comm_get_stream_output_mode(struct msm_vidc_inst *inst);
 enum hal_buffer msm_comm_get_hal_output_buffer(struct msm_vidc_inst *inst);
 struct msm_smem *msm_comm_smem_alloc(struct msm_vidc_inst *inst,

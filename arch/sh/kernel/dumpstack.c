@@ -80,7 +80,11 @@ static int print_trace_stack(void *data, char *name)
  */
 static void print_trace_address(void *data, unsigned long addr, int reliable)
 {
+<<<<<<< HEAD
 	printk(data);
+=======
+	printk("%s", (char *)data);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	printk_address(addr, reliable);
 }
 

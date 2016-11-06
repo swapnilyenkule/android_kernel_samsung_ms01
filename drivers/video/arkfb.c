@@ -1014,7 +1014,11 @@ static int __devinit ark_pci_probe(struct pci_dev *dev, const struct pci_device_
 
 	vga_res.flags = IORESOURCE_IO;
 
+<<<<<<< HEAD
 	pcibios_bus_to_resource(dev, &vga_res, &bus_reg);
+=======
+	pcibios_bus_to_resource(dev->bus, &vga_res, &bus_reg);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	par->state.vgabase = (void __iomem *) vga_res.start;
 

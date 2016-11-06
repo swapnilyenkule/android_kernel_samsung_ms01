@@ -76,6 +76,10 @@ struct c_can_priv {
 	unsigned int tx_next;
 	unsigned int tx_echo;
 	void *priv;		/* for board-specific data */
+<<<<<<< HEAD
+=======
+	u16 irqstatus;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 struct net_device *alloc_c_can_dev(void);

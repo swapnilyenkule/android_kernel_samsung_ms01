@@ -143,6 +143,10 @@ sd_store_cache_type(struct device *dev, struct device_attribute *attr,
 	char *buffer_data;
 	struct scsi_mode_data data;
 	struct scsi_sense_hdr sshdr;
+<<<<<<< HEAD
+=======
+	static const char temp[] = "temporary ";
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int len;
 
 	if (sdp->type != TYPE_DISK)
@@ -151,6 +155,16 @@ sd_store_cache_type(struct device *dev, struct device_attribute *attr,
 		 * it's not worth the risk */
 		return -EINVAL;
 
+<<<<<<< HEAD
+=======
+	if (strncmp(buf, temp, sizeof(temp) - 1) == 0) {
+		buf += sizeof(temp) - 1;
+		sdkp->cache_override = 1;
+	} else {
+		sdkp->cache_override = 0;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < ARRAY_SIZE(sd_cache_types); i++) {
 		len = strlen(sd_cache_types[i]);
 		if (strncmp(sd_cache_types[i], buf, len) == 0 &&
@@ -163,6 +177,16 @@ sd_store_cache_type(struct device *dev, struct device_attribute *attr,
 		return -EINVAL;
 	rcd = ct & 0x01 ? 1 : 0;
 	wce = ct & 0x02 ? 1 : 0;
+<<<<<<< HEAD
+=======
+
+	if (sdkp->cache_override) {
+		sdkp->WCE = wce;
+		sdkp->RCD = rcd;
+		return count;
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (scsi_mode_sense(sdp, 0x08, 8, buffer, sizeof(buffer), SD_TIMEOUT,
 			    SD_MAX_RETRIES, &data, NULL))
 		return -EINVAL;
@@ -660,10 +684,23 @@ static int scsi_setup_flush_cmnd(struct scsi_device *sdp, struct request *rq)
 
 static void sd_unprep_fn(struct request_queue *q, struct request *rq)
 {
+<<<<<<< HEAD
+=======
+	struct scsi_cmnd *SCpnt = rq->special;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (rq->cmd_flags & REQ_DISCARD) {
 		free_page((unsigned long)rq->buffer);
 		rq->buffer = NULL;
 	}
+<<<<<<< HEAD
+=======
+	if (SCpnt->cmnd != rq->cmd) {
+		mempool_free(SCpnt->cmnd, sd_cdb_pool);
+		SCpnt->cmnd = NULL;
+		SCpnt->cmd_len = 0;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -1393,6 +1430,10 @@ static unsigned int sd_completed_bytes(struct scsi_cmnd *scmd)
 {
 	u64 start_lba = blk_rq_pos(scmd->request);
 	u64 end_lba = blk_rq_pos(scmd->request) + (scsi_bufflen(scmd) / 512);
+<<<<<<< HEAD
+=======
+	u64 factor = scmd->device->sector_size / 512;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	u64 bad_lba;
 	int info_valid;
 	/*
@@ -1414,6 +1455,7 @@ static unsigned int sd_completed_bytes(struct scsi_cmnd *scmd)
 	if (scsi_bufflen(scmd) <= scmd->device->sector_size)
 		return 0;
 
+<<<<<<< HEAD
 	if (scmd->device->sector_size < 512) {
 		/* only legitimate sector_size here is 256 */
 		start_lba <<= 1;
@@ -1424,6 +1466,12 @@ static unsigned int sd_completed_bytes(struct scsi_cmnd *scmd)
 		do_div(start_lba, factor);
 		do_div(end_lba, factor);
 	}
+=======
+	/* be careful ... don't want any overflows */
+	factor = scmd->device->sector_size / 512;
+	do_div(start_lba, factor);
+	do_div(end_lba, factor);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* The bad lba was reported incorrectly, we have no idea where
 	 * the error is.
@@ -1516,6 +1564,7 @@ static int sd_done(struct scsi_cmnd *SCpnt)
 	if (rq_data_dir(SCpnt->request) == READ && scsi_prot_sg_count(SCpnt))
 		sd_dif_complete(SCpnt, good_bytes);
 
+<<<<<<< HEAD
 	if (scsi_host_dif_capable(sdkp->device->host, sdkp->protection_type)
 	    == SD_DIF_TYPE2_PROTECTION && SCpnt->cmnd != SCpnt->request->cmd) {
 
@@ -1531,6 +1580,8 @@ static int sd_done(struct scsi_cmnd *SCpnt)
 		SCpnt->cmd_len = 0;
 	}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return good_bytes;
 }
 
@@ -1969,8 +2020,12 @@ got_data:
 	if (sector_size != 512 &&
 	    sector_size != 1024 &&
 	    sector_size != 2048 &&
+<<<<<<< HEAD
 	    sector_size != 4096 &&
 	    sector_size != 256) {
+=======
+	    sector_size != 4096) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		sd_printk(KERN_NOTICE, sdkp, "Unsupported sector size %d.\n",
 			  sector_size);
 		/*
@@ -2019,8 +2074,11 @@ got_data:
 		sdkp->capacity <<= 2;
 	else if (sector_size == 1024)
 		sdkp->capacity <<= 1;
+<<<<<<< HEAD
 	else if (sector_size == 256)
 		sdkp->capacity >>= 1;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	blk_queue_physical_block_size(sdp->request_queue,
 				      sdkp->physical_block_size);
@@ -2118,6 +2176,13 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 	int old_rcd = sdkp->RCD;
 	int old_dpofua = sdkp->DPOFUA;
 
+<<<<<<< HEAD
+=======
+
+	if (sdkp->cache_override)
+		return;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	first_len = 4;
 	if (sdp->skip_ms_page_8) {
 		if (sdp->type == TYPE_RBC)
@@ -2206,6 +2271,7 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 			}
 		}
 
+<<<<<<< HEAD
 		if (modepage == 0x3F) {
 			sd_printk(KERN_ERR, sdkp, "No Caching mode page "
 				  "present\n");
@@ -2214,6 +2280,11 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 			sd_printk(KERN_ERR, sdkp, "Got wrong page\n");
 			goto defaults;
 		}
+=======
+		sd_printk(KERN_ERR, sdkp, "No Caching mode page found\n");
+		goto defaults;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	Page_found:
 		if (modepage == 8) {
 			sdkp->WCE = ((buffer[offset + 2] & 0x04) != 0);
@@ -2224,7 +2295,14 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
 		}
 
 		sdkp->DPOFUA = (data.device_specific & 0x10) != 0;
+<<<<<<< HEAD
 		if (sdkp->DPOFUA && !sdkp->device->use_10_for_rw) {
+=======
+		if (sdp->broken_fua) {
+			sd_printk(KERN_NOTICE, sdkp, "Disabling FUA\n");
+			sdkp->DPOFUA = 0;
+		} else if (sdkp->DPOFUA && !sdkp->device->use_10_for_rw) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			sd_printk(KERN_NOTICE, sdkp,
 				  "Uses READ/WRITE(6), disabling FUA\n");
 			sdkp->DPOFUA = 0;
@@ -2705,6 +2783,10 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
 	sdkp->capacity = 0;
 	sdkp->media_present = 1;
 	sdkp->write_prot = 0;
+<<<<<<< HEAD
+=======
+	sdkp->cache_override = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sdkp->WCE = 0;
 	sdkp->RCD = 0;
 	sdkp->ATO = 0;
@@ -3059,10 +3141,13 @@ static int __init init_sd(void)
 	if (err)
 		goto err_out;
 
+<<<<<<< HEAD
 	err = scsi_register_driver(&sd_template.gendrv);
 	if (err)
 		goto err_out_class;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sd_cdb_cache = kmem_cache_create("sd_ext_cdb", SD_EXT_CDB_SIZE,
 					 0, 0, NULL);
 	if (!sd_cdb_cache) {
@@ -3076,8 +3161,20 @@ static int __init init_sd(void)
 		goto err_out_cache;
 	}
 
+<<<<<<< HEAD
 	return 0;
 
+=======
+	err = scsi_register_driver(&sd_template.gendrv);
+	if (err)
+		goto err_out_driver;
+
+	return 0;
+
+err_out_driver:
+	mempool_destroy(sd_cdb_pool);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 err_out_cache:
 	kmem_cache_destroy(sd_cdb_cache);
 
@@ -3100,10 +3197,17 @@ static void __exit exit_sd(void)
 
 	SCSI_LOG_HLQUEUE(3, printk("exit_sd: exiting sd driver\n"));
 
+<<<<<<< HEAD
 	mempool_destroy(sd_cdb_pool);
 	kmem_cache_destroy(sd_cdb_cache);
 
 	scsi_unregister_driver(&sd_template.gendrv);
+=======
+	scsi_unregister_driver(&sd_template.gendrv);
+	mempool_destroy(sd_cdb_pool);
+	kmem_cache_destroy(sd_cdb_cache);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	class_unregister(&sd_disk_class);
 
 	for (i = 0; i < SD_MAJORS; i++)

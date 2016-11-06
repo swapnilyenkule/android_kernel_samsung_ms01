@@ -5525,7 +5525,11 @@ static void tapan_init_slim_slave_cfg(struct snd_soc_codec *codec)
 	pr_debug("%s: slimbus logical address 0x%llx\n", __func__, eaddr);
 }
 
+<<<<<<< HEAD
 extern unsigned int system_rev;
+=======
+extern int system_rev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void tapan_codec_init_reg(struct snd_soc_codec *codec)
 {
 	u32 i;

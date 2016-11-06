@@ -29,6 +29,10 @@ struct ceph_x_authorizer {
 	struct ceph_buffer *buf;
 	unsigned service;
 	u64 nonce;
+<<<<<<< HEAD
+=======
+	u64 secret_id;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	char reply_buf[128];  /* big enough for encrypted blob */
 };
 

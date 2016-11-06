@@ -642,7 +642,15 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 			status = STS_PCD;
 		}
 	}
+<<<<<<< HEAD
 	/* FIXME autosuspend idle root hubs */
+=======
+
+	/* If a resume is in progress, make sure it can finish */
+	if (ehci->resuming_ports)
+		mod_timer(&hcd->rh_timer, jiffies + msecs_to_jiffies(25));
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_unlock_irqrestore (&ehci->lock, flags);
 	return status ? retval : 0;
 }

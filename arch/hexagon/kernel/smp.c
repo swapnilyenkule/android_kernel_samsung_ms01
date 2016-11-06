@@ -1,7 +1,11 @@
 /*
  * SMP support for Hexagon
  *
+<<<<<<< HEAD
  * Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -196,7 +200,11 @@ void __cpuinit start_secondary(void)
  * maintains control until "cpu_online(cpu)" is set.
  */
 
+<<<<<<< HEAD
 int __cpuinit __cpu_up(unsigned int cpu, struct task_struct *tidle)
+=======
+int __cpuinit __cpu_up(unsigned int cpu)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct task_struct *idle;
 	struct thread_info *thread;

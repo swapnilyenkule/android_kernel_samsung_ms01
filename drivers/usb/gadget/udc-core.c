@@ -265,7 +265,11 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
 		udc->driver->disconnect(udc->gadget);
 		usb_gadget_disconnect(udc->gadget);
 		udc->driver->unbind(udc->gadget);
+<<<<<<< HEAD
 		usb_gadget_udc_stop(udc->gadget, udc->driver);
+=======
+		usb_gadget_udc_stop(udc->gadget, NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		usb_gadget_stop(udc->gadget, udc->driver);
 	}

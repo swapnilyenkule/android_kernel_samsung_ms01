@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -40,6 +45,15 @@
  */
 
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifndef WLAN_QCT_DXE_I_H
 #define WLAN_QCT_DXE_I_H
 
@@ -50,9 +64,12 @@
   @brief 
                
    This file contains the external API exposed by the wlan data transfer abstraction layer module.
+<<<<<<< HEAD
    Copyright (c) 2011 Qualcomm Technologies, Inc.
    All Rights Reserved.
    Qualcomm Technologies Confidential and Proprietary
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 ========================================================================*/
 
 /*===========================================================================
@@ -98,6 +115,7 @@ when           who        what, where, why
 /* Start with base address */
 
 #ifdef WCN_PRONTO
+<<<<<<< HEAD
 #define WLANDXE_CCU_DXE_INT_SELECT       0xfb2050dc
 #define WLANDXE_CCU_DXE_INT_SELECT_STAT  0xfb2050e0
 #define WLANDXE_CCU_ASIC_INT_ENABLE      0xfb2050e4
@@ -121,6 +139,22 @@ when           who        what, where, why
 #define WLANDXE_BMU_AVAILABLE_BD_PDU     (WLANDXE_WCNSS_BASE_ADDRESS + 0x80084)
 
 #define WLANDXE_REGISTER_BASE_ADDRESS    (WLANDXE_WCNSS_BASE_ADDRESS + 0x202000)
+=======
+#define WLANDXE_CCU_DXE_INT_SELECT        0x2050dc
+#define WLANDXE_CCU_DXE_INT_SELECT_STAT   0x2050e0
+#define WLANDXE_CCU_ASIC_INT_ENABLE       0x2050e4
+#define WLANDXE_CCU_SOFT_RESET            0x204010
+#define WLANDXE_BMU_AVAILABLE_BD_PDU_LOCAL 0x80260
+#else
+#define WLANDXE_CCU_DXE_INT_SELECT        0x200b10
+#define WLANDXE_CCU_DXE_INT_SELECT_STAT   0x200b14
+#define WLANDXE_CCU_ASIC_INT_ENABLE       0x200b18
+#endif
+
+#define WLANDXE_BMU_AVAILABLE_BD_PDU      0x80084
+
+#define WLANDXE_REGISTER_BASE_ADDRESS     0x202000
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /* Common over the channels register addresses */
 #define WALNDEX_DMA_CSR_ADDRESS          (WLANDXE_REGISTER_BASE_ADDRESS + 0x00)
@@ -414,6 +448,11 @@ when           who        what, where, why
 #define WLANDXE_CH_STAT_INT_DONE_MASK   0x00008000
 #define WLANDXE_CH_STAT_INT_ERR_MASK    0x00004000
 #define WLANDXE_CH_STAT_INT_ED_MASK     0x00002000
+<<<<<<< HEAD
+=======
+#define WLANDXE_CH_STAT_ERR_CODE_MASK   0x000007c0
+#define WLANDXE_CH_STAT_ERR_CODE_OFFSET (6)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define WLANDXE_CH_STAT_MASKED_MASK     0x00000008
 #define WLANDXE_CH_STAT_ENABLED_MASK    0x00000001
@@ -432,6 +471,40 @@ when           who        what, where, why
 
 #define WLANDXE_TX_LOW_RES_THRESHOLD     (5)
 
+<<<<<<< HEAD
+=======
+typedef enum {
+   WLANDXE_ERROR_NONE                = 0,
+   WLANDXE_ERROR_SAHB_ERR            = 1,
+   WLANDXE_ERROR_H2H_RD_BUS_ERR      = 2,
+   WLANDXE_ERROR_H2H_WR_BUS_ERR      = 3,
+   WLANDXE_ERROR_PRG_INV_XTYPE       = 4,
+   WLANDXE_ERROR_BERR_POPWQ          = 5,
+   WLANDXE_ERROR_BERR_PUSHWQ         = 6,
+   WLANDXE_ERROR_BERR_RLSS           = 7,
+   WLANDXE_ERROR_BERR_GETPDU         = 8,
+   WLANDXE_ERROR_PRG_INV_WQ          = 9,
+   WLANDXE_ERROR_PRG_INV_H2H_SRC_QID = 10,
+   WLANDXE_ERROR_PRG_INV_H2H_DST_QID = 11,
+   WLANDXE_ERROR_PRG_INV_B2H_SRC_QID = 12,
+   WLANDXE_ERROR_PRG_INV_B2H_DST_QID = 13,
+   WLANDXE_ERROR_PRG_INV_B2H_SRC_IDX = 14,
+   WLANDXE_ERROR_PRG_INV_H2B_SRC_QID = 15,
+   WLANDXE_ERROR_PRG_INV_H2B_DST_QID = 16,
+   WLANDXE_ERROR_PRG_INV_H2B_DST_IDX = 17,
+   WLANDXE_ERROR_PRG_INV_H2B_SZ      = 18,
+   WLANDXE_ERROR_PRG_INV_SADR        = 19,
+   WLANDXE_ERROR_PRG_INV_DADR        = 20,
+   WLANDXE_ERROR_PRG_INV_EDADR       = 21,
+   WLANDXE_ERROR_PRG_INV_SRC_WQID    = 22,
+   WLANDXE_ERROR_PRG_INV_DST_WQID    = 23,
+   WLANDXE_ERROR_PRG_XTYPE_MSMTCH    = 24,
+   WLANDXE_ERROR_PKT_ERR             = 25,
+   WLANDXE_ERROR_ABORT               = 26,
+   WLANDXE_ERROR_PDU_CNT_OVFL        = 27,
+}WLANDXE_ErrorCode;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* DXE Descriptor Endian swap macro */
 #ifdef WLANDXE_ENDIAN_SWAP_ENABLE
 #define WLANDXE_U32_SWAP_ENDIAN(a) (((a & 0x000000FF) << 24) |    \
@@ -538,7 +611,11 @@ typedef struct
    void                            *nextCtrlBlk;
    wpt_packet                      *xfrFrame;  
    WLANDXE_DescType                *linkedDesc;
+<<<<<<< HEAD
    unsigned int                    linkedDescPhyAddr;
+=======
+   wpt_uint32                       linkedDescPhyAddr;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    wpt_uint32                       ctrlBlkOrder;
 #ifdef FEATURE_R33D
    wpt_uint32                       shadowBufferVa;
@@ -625,7 +702,11 @@ typedef struct
    WLANDXE_DescType               *descriptorAllocation;
 #endif
    WLANDXE_DescType               *DescBottomLoc;
+<<<<<<< HEAD
    unsigned int                    descBottomLocPhyAddr;
+=======
+   wpt_uint32                      descBottomLocPhyAddr;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    wpt_uint32                      numDesc;
    wpt_uint32                      numFreeDesc;
    wpt_uint32                      numRsvdDesc;
@@ -633,6 +714,10 @@ typedef struct
    wpt_uint32                      numFragmentCurrentChain;
    wpt_uint32                      numFrameBeforeInt;
    wpt_uint32                      numTotalFrame;
+<<<<<<< HEAD
+=======
+   wpt_uint32                      doneIntDisabled;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
    wpt_mutex                       dxeChannelLock;
    wpt_boolean                     hitLowResource;
    WLANDXE_ChannelConfigType       channelConfig;
@@ -681,7 +766,15 @@ typedef struct
    wpt_boolean                     rxPalPacketUnavailable;
    wpt_boolean                     driverReloadInProcessing;
    wpt_boolean                     smsmToggled;
+<<<<<<< HEAD
    wpt_timer                       rxResourceAvailableTimer;
+=======
+   wpt_boolean                     txRingsEmpty;
+#ifdef WLAN_DXE_LOW_RESOURCE_TIMER
+   wpt_timer                       rxResourceAvailableTimer;
+#endif
+   wpt_timer                       dxeSSRTimer;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 } WLANDXE_CtrlBlkType;
 
 /*==========================================================================

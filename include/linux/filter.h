@@ -10,7 +10,10 @@
 
 #ifdef __KERNEL__
 #include <linux/atomic.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 
 /*
@@ -133,6 +136,7 @@ struct sock_fprog {	/* Required for SO_ATTACH_FILTER. */
 
 #ifdef __KERNEL__
 
+<<<<<<< HEAD
 #ifdef CONFIG_COMPAT
 /*
  * A struct sock_filter is architecture independent.
@@ -143,6 +147,8 @@ struct compat_sock_fprog {
 };
 #endif
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct sk_buff;
 struct sock;
 
@@ -239,7 +245,10 @@ enum {
 	BPF_S_ANC_HATYPE,
 	BPF_S_ANC_RXHASH,
 	BPF_S_ANC_CPU,
+<<<<<<< HEAD
 	BPF_S_ANC_SECCOMP_LD_W,
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 #endif /* __KERNEL__ */

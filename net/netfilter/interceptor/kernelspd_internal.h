@@ -1,6 +1,10 @@
 /**
    @copyright
+<<<<<<< HEAD
    Copyright (c) 2013, INSIDE Secure Oy. All rights reserved.
+=======
+   Copyright (c) 2013 - 2014, INSIDE Secure Oy. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 */
 
 
@@ -11,7 +15,11 @@
 
 #include "kernelspd_command.h"
 #include "ip_selector_db.h"
+<<<<<<< HEAD
 #include "spd_util.h"
+=======
+#include "ipsec_boundary.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include "implementation_defs.h"
 
@@ -38,4 +46,9 @@ extern struct IPSelectorDb spd;
 
 extern rwlock_t spd_lock;
 
+<<<<<<< HEAD
+=======
+extern char *ipsec_boundary;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif /* KERNELSPD_INTERNAL_H */

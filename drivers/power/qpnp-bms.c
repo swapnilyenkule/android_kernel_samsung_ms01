@@ -483,6 +483,15 @@ static int lock_output_data(struct qpnp_bms_chip *chip)
 		pr_err("couldnt lock bms output rc = %d\n", rc);
 		return rc;
 	}
+<<<<<<< HEAD
+=======
+	/*
+	 * Sleep for at least 60 microseconds here to make sure there has
+	 * been at least two cycles of the sleep clock so that the registers
+	 * are correctly locked.
+	 */
+	usleep_range(60, 2000);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 
@@ -662,12 +671,22 @@ static int get_battery_current(struct qpnp_bms_chip *chip, int *result_ua)
 	temp_current = div_s64((vsense_uv * 1000000LL),
 				(int)chip->r_sense_uohm);
 
+<<<<<<< HEAD
+=======
+	*result_ua = temp_current;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rc = qpnp_iadc_comp_result(chip->iadc_dev, &temp_current);
 	if (rc)
 		pr_debug("error compensation failed: %d\n", rc);
 
+<<<<<<< HEAD
 	*result_ua = temp_current;
 	pr_debug("err compensated ibat=%duA\n", *result_ua);
+=======
+	pr_debug("%d uA err compensated ibat=%llduA\n",
+			*result_ua, temp_current);
+	*result_ua = temp_current;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return 0;
 }
 
@@ -1121,7 +1140,11 @@ static int read_soc_params_raw(struct qpnp_bms_chip *chip,
 	}
 
 	rc = read_cc_raw(chip, &raw->cc, CC);
+<<<<<<< HEAD
 	rc = read_cc_raw(chip, &raw->shdw_cc, SHDW_CC);
+=======
+	rc |= read_cc_raw(chip, &raw->shdw_cc, SHDW_CC);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (rc) {
 		pr_err("Failed to read raw cc data, rc = %d\n", rc);
 		return rc;
@@ -2319,7 +2342,10 @@ skip_limits:
 	rc_new_uah = (params->fcc_uah * pc_new) / 100;
 	soc_new = (rc_new_uah - params->cc_uah - params->uuc_uah)*100
 					/ (params->fcc_uah - params->uuc_uah);
+<<<<<<< HEAD
 	soc_new = bound_soc(soc_new);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * if soc_new is ZERO force it higher so that phone doesnt report soc=0
@@ -2627,6 +2653,11 @@ static int calculate_state_of_charge(struct qpnp_bms_chip *chip,
     /* always clamp soc due to BMS hw/sw immaturities */
 	new_calculated_soc = clamp_soc_based_on_voltage(chip,
 					new_calculated_soc);
+<<<<<<< HEAD
+=======
+
+	new_calculated_soc = bound_soc(new_calculated_soc);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * If the battery is full, configure the cc threshold so the system
 	 * wakes up after SoC changes
@@ -2730,7 +2761,16 @@ static int recalculate_raw_soc(struct qpnp_bms_chip *chip)
 			batt_temp = (int)result.physical;
 
 			mutex_lock(&chip->last_ocv_uv_mutex);
+<<<<<<< HEAD
 			read_soc_params_raw(chip, &raw, batt_temp);
+=======
+			rc = read_soc_params_raw(chip, &raw, batt_temp);
+			if (rc) {
+				pr_err("Unable to read params, rc: %d\n", rc);
+				soc = 0;
+				goto done;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			calculate_soc_params(chip, &raw, &params, batt_temp);
 			if (!is_battery_present(chip)) {
 				pr_debug("battery gone\n");
@@ -2744,6 +2784,10 @@ static int recalculate_raw_soc(struct qpnp_bms_chip *chip)
 				soc = calculate_raw_soc(chip, &raw,
 							&params, batt_temp);
 			}
+<<<<<<< HEAD
+=======
+done:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			mutex_unlock(&chip->last_ocv_uv_mutex);
 		}
 	}
@@ -2801,8 +2845,19 @@ static int recalculate_soc(struct qpnp_bms_chip *chip)
 			batt_temp = (int)result.physical;
 
 			mutex_lock(&chip->last_ocv_uv_mutex);
+<<<<<<< HEAD
 			read_soc_params_raw(chip, &raw, batt_temp);
 			soc = calculate_state_of_charge(chip, &raw, batt_temp);
+=======
+			rc = read_soc_params_raw(chip, &raw, batt_temp);
+			if (rc) {
+				pr_err("Unable to read params, rc: %d\n", rc);
+				soc = chip->calculated_soc;
+			} else {
+				soc = calculate_state_of_charge(chip,
+						&raw, batt_temp);
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			mutex_unlock(&chip->last_ocv_uv_mutex);
 		}
 	}

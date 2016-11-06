@@ -188,6 +188,10 @@ static void speedstep_set_state(unsigned int state)
 		return;
 
 	/* Disable IRQs */
+<<<<<<< HEAD
+=======
+	preempt_disable();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	local_irq_save(flags);
 
 	command = (smi_sig & 0xffffff00) | (smi_cmd & 0xff);
@@ -198,9 +202,25 @@ static void speedstep_set_state(unsigned int state)
 
 	do {
 		if (retry) {
+<<<<<<< HEAD
 			pr_debug("retry %u, previous result %u, waiting...\n",
 					retry, result);
 			mdelay(retry * 50);
+=======
+			/*
+			 * We need to enable interrupts, otherwise the blockage
+			 * won't resolve.
+			 *
+			 * We disable preemption so that other processes don't
+			 * run. If other processes were running, they could
+			 * submit more DMA requests, making the blockage worse.
+			 */
+			pr_debug("retry %u, previous result %u, waiting...\n",
+					retry, result);
+			local_irq_enable();
+			mdelay(retry * 50);
+			local_irq_disable();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 		retry++;
 		__asm__ __volatile__(
@@ -217,6 +237,10 @@ static void speedstep_set_state(unsigned int state)
 
 	/* enable IRQs */
 	local_irq_restore(flags);
+<<<<<<< HEAD
+=======
+	preempt_enable();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (new_state == state)
 		pr_debug("change to %u MHz succeeded after %u tries "

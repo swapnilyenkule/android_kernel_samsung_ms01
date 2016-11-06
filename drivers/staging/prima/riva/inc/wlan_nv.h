@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
   * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
   *
   * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
@@ -23,6 +24,33 @@
 * All Rights Reserved.
 * Qualcomm Atheros Confidential and Proprietary.
 */
+=======
+ * Copyright (c) 2012 The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /** ------------------------------------------------------------------------- *
     ------------------------------------------------------------------------- *
@@ -36,8 +64,11 @@
 
     $Id$
 
+<<<<<<< HEAD
     Copyright (C) 2006 Airgo Networks, Incorporated
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    ========================================================================== */
 
@@ -111,9 +142,22 @@ typedef enum
 #define NV_VERSION_11N_11AC_COUPER_TYPE    0
 #define NV_VERSION_11N_11AC_FW_CONFIG      1
 #define NV_VERSION_LPDC_FW_CONFIG          2
+<<<<<<< HEAD
 
 #ifdef WCN_PRONTO
 #define WLAN_NV_VERSION     NV_VERSION_LPDC_FW_CONFIG
+=======
+#ifdef FEATURE_WLAN_CH144
+#define NV_VERSION_CH144_CONFIG            3
+#endif /* FEATURE_WLAN_CH144 */
+
+#ifdef WCN_PRONTO
+#ifdef FEATURE_WLAN_CH144
+#define WLAN_NV_VERSION     NV_VERSION_CH144_CONFIG
+#else
+#define WLAN_NV_VERSION     NV_VERSION_LPDC_FW_CONFIG
+#endif /* FEATURE_WLAN_CH144 */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #else //WCN_PRONTO
 #define WLAN_NV_VERSION     NV_VERSION_11N_11AC_FW_CONFIG
 #endif //WCN_PRONTO
@@ -227,6 +271,7 @@ typedef enum
 {
     //2.4GHz Band
     RF_CHAN_1                 = 0,
+<<<<<<< HEAD
     RF_CHAN_2                 = 1,
     RF_CHAN_3                 = 2,
     RF_CHAN_4                 = 3,
@@ -316,6 +361,102 @@ typedef enum
     RF_CHAN_BOND_155          = 77,
     RF_CHAN_BOND_159          = 78,
     RF_CHAN_BOND_163          = 79,
+=======
+    RF_CHAN_2,
+    RF_CHAN_3,
+    RF_CHAN_4,
+    RF_CHAN_5,
+    RF_CHAN_6,
+    RF_CHAN_7,
+    RF_CHAN_8,
+    RF_CHAN_9,
+    RF_CHAN_10,
+    RF_CHAN_11,
+    RF_CHAN_12,
+    RF_CHAN_13,
+    RF_CHAN_14,
+
+    //4.9GHz Band
+    RF_CHAN_240,
+    RF_CHAN_244,
+    RF_CHAN_248,
+    RF_CHAN_252,
+    RF_CHAN_208,
+    RF_CHAN_212,
+    RF_CHAN_216,
+
+    //5GHz Low & Mid U-NII Band
+    RF_CHAN_36,
+    RF_CHAN_40,
+    RF_CHAN_44,
+    RF_CHAN_48,
+    RF_CHAN_52,
+    RF_CHAN_56,
+    RF_CHAN_60,
+    RF_CHAN_64,
+
+    //5GHz Mid Band - ETSI & FCC
+    RF_CHAN_100,
+    RF_CHAN_104,
+    RF_CHAN_108,
+    RF_CHAN_112,
+    RF_CHAN_116,
+    RF_CHAN_120,
+    RF_CHAN_124,
+    RF_CHAN_128,
+    RF_CHAN_132,
+    RF_CHAN_136,
+    RF_CHAN_140,
+#ifdef FEATURE_WLAN_CH144
+    RF_CHAN_144,
+#endif /* FEATURE_WLAN_CH144 */
+    //5GHz High U-NII Band
+    RF_CHAN_149,
+    RF_CHAN_153,
+    RF_CHAN_157,
+    RF_CHAN_161,
+    RF_CHAN_165,
+
+    //CHANNEL BONDED CHANNELS
+    RF_CHAN_BOND_3,
+    RF_CHAN_BOND_4,
+    RF_CHAN_BOND_5,
+    RF_CHAN_BOND_6,
+    RF_CHAN_BOND_7,
+    RF_CHAN_BOND_8,
+    RF_CHAN_BOND_9,
+    RF_CHAN_BOND_10,
+    RF_CHAN_BOND_11,
+    RF_CHAN_BOND_242,    //4.9GHz Band
+    RF_CHAN_BOND_246,
+    RF_CHAN_BOND_250,
+    RF_CHAN_BOND_210,
+    RF_CHAN_BOND_214,
+    RF_CHAN_BOND_38,    //5GHz Low & Mid U-NII Band
+    RF_CHAN_BOND_42,
+    RF_CHAN_BOND_46,
+    RF_CHAN_BOND_50,
+    RF_CHAN_BOND_54,
+    RF_CHAN_BOND_58,
+    RF_CHAN_BOND_62,
+    RF_CHAN_BOND_102,    //5GHz Mid Band - ETSI & FCC
+    RF_CHAN_BOND_106,
+    RF_CHAN_BOND_110,
+    RF_CHAN_BOND_114,
+    RF_CHAN_BOND_118,
+    RF_CHAN_BOND_122,
+    RF_CHAN_BOND_126,
+    RF_CHAN_BOND_130,
+    RF_CHAN_BOND_134,
+    RF_CHAN_BOND_138,
+#ifdef FEATURE_WLAN_CH144
+    RF_CHAN_BOND_142,
+#endif /* FEATURE_WLAN_CH144 */
+    RF_CHAN_BOND_151,    //5GHz High U-NII Band
+    RF_CHAN_BOND_155,
+    RF_CHAN_BOND_159,
+    RF_CHAN_BOND_163,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     NUM_RF_CHANNELS,
 
@@ -366,7 +507,11 @@ typedef enum
 // The above params are used for scripts.
    NUM_2_4GHZ_CHANNELS,
 }eRfChannels_2_4GHz;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 enum
 {
    NV_CHANNEL_DISABLE,
@@ -414,6 +559,7 @@ typedef enum
 
 #define HW_CAL_VALUES_VALID_BMAP_UNUSED                             0   //Value
 //Bit mask
+<<<<<<< HEAD
 #define HW_VAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_2G_MASK        0x1
 #define HW_VAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_5G_MASK        0x2
 #define HW_VAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_xLNA_5G_MASK   0x4
@@ -421,6 +567,16 @@ typedef enum
 #define HW_VAL_VALUES_VALID_CUSTOM_TCXO_REG8_MASK                   0x10
 #define HW_VAL_VALUES_VALID_CUSTOM_TCXO_REG9_MASK                   0x20
 
+=======
+#define HW_CAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_2G_MASK        0x1
+#define HW_CAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_5G_MASK        0x2
+#define HW_CAL_VALUES_VALID_BMAP_SLEEP_TIME_OVERHEAD_xLNA_5G_MASK   0x4
+#define HW_CAL_VALUES_VALID_TXBBF_SEL_9MHZ_MASK                     0x8
+#define HW_CAL_VALUES_VALID_CUSTOM_TCXO_REG8_MASK                   0x10
+#define HW_CAL_VALUES_VALID_CUSTOM_TCXO_REG9_MASK                   0x20
+#define HW_CAL_VALUES_VALID_ANTENNA_DIVERSITY_ENABLED_MASK          0x40
+#define HW_CAL_VALUES_VALID_CUSTOM_RC_DELAY_MASK                    0x80
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 //From wlanfw/inc/halPhyCalMemory.h
 typedef PACKED_PRE struct PACKED_POST
@@ -695,6 +851,19 @@ typedef PACKED_PRE struct PACKED_POST
 #define EXT_PA_CTRL_POLARITY_ZERO      0X1
 #define EXT_PA_CTRL_POLARITY_ONE       0X2
 
+<<<<<<< HEAD
+=======
+#define GF_TX_PWR_ADJUST_2G_MASK          0XF0000
+#define GF_TX_PWR_ADJUST_2G_OFFSET        16
+#define GF_TX_PWR_ADJUST_5G_LOW_MASK      0XF00000
+#define GF_TX_PWR_ADJUST_5G_LOW_OFFSET    20
+#define GF_TX_PWR_ADJUST_5G_MID_MASK      0XF000000
+#define GF_TX_PWR_ADJUST_5G_MID_OFFSET    24
+#define GF_TX_PWR_ADJUST_5G_HIGH_MASK     0XF0000000
+#define GF_TX_PWR_ADJUST_5G_HIGH_OFFSET   28
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 typedef PACKED_PRE struct PACKED_POST
 {
     uint8 skuID; 

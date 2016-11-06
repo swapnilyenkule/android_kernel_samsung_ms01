@@ -1,7 +1,11 @@
 /*
  * DHD Protocol Module for CDC and BDC.
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: dhd_cdc.c 444875 2013-12-22 07:29:44Z $
+=======
+ * $Id: dhd_cdc.c 557250 2015-05-18 08:52:07Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * BDC is like CDC, except it includes a header for data packets to convey
  * packet priority over the bus, and flags (e.g. to indicate checksum status
@@ -239,15 +247,22 @@ dhdcdc_set_ioctl(dhd_pub_t *dhd, int ifidx, uint cmd, void *buf, uint len, uint8
 		return -EIO;
 	}
 
+<<<<<<< HEAD
 #if defined(CUSTOMER_HW4)
 	if (cmd == WLC_SET_PM) {
 #if defined(CONFIG_CONTROL_PM) || defined(CONFIG_PM_LOCK)
+=======
+#ifdef CUSTOMER_HW4
+	if (cmd == WLC_SET_PM) {
+#ifdef CONFIG_CONTROL_PM
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (g_pm_control == TRUE) {
 			DHD_ERROR(("%s: SET PM ignored!(Requested:%d)\n",
 				__FUNCTION__, *(char *)buf));
 			goto done;
 		}
 #endif /* CONFIG_CONTROL_PM */
+<<<<<<< HEAD
 #if defined(WLAIBSS)
 		if (dhd->op_mode == DHD_FLAG_IBSS_MODE) {
 			DHD_ERROR(("%s: SET PM ignored for IBSS!(Requested:%d)\n",
@@ -255,6 +270,8 @@ dhdcdc_set_ioctl(dhd_pub_t *dhd, int ifidx, uint cmd, void *buf, uint len, uint8
 			goto done;
 		}
 #endif
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		DHD_ERROR(("%s: SET PM to %d\n", __FUNCTION__, *(char *)buf));
 	}
 #endif /* CUSTOMER_HW4 */
@@ -380,8 +397,12 @@ dhd_prot_dump(dhd_pub_t *dhdp, struct bcmstrbuf *strbuf)
 {
 	bcm_bprintf(strbuf, "Protocol CDC: reqid %d\n", dhdp->prot->reqid);
 #ifdef PROP_TXSTATUS
+<<<<<<< HEAD
 	if (dhdp->wlfc_state)
 		dhd_wlfc_dump(dhdp, strbuf);
+=======
+	dhd_wlfc_dump(dhdp, strbuf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #endif
 }
 
@@ -449,11 +470,15 @@ dhd_prot_hdrpull(dhd_pub_t *dhd, int *ifidx, void *pktbuf, uchar *reorder_buf_in
 		goto exit;
 	}
 
+<<<<<<< HEAD
 	if ((*ifidx = BDC_GET_IF_IDX(h)) >= DHD_MAX_IFS) {
 		DHD_ERROR(("%s: rx data ifnum out of range (%d)\n",
 		           __FUNCTION__, *ifidx));
 		return BCME_ERROR;
 	}
+=======
+	*ifidx = BDC_GET_IF_IDX(h);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (((h->flags & BDC_FLAG_VER_MASK) >> BDC_FLAG_VER_SHIFT) != BDC_PROTO_VER) {
 		DHD_ERROR(("%s: non-BDC packet received, flags = 0x%x\n",
@@ -475,17 +500,24 @@ dhd_prot_hdrpull(dhd_pub_t *dhd, int *ifidx, void *pktbuf, uchar *reorder_buf_in
 	PKTPULL(dhd->osh, pktbuf, BDC_HEADER_LEN);
 #endif /* BDC */
 
+<<<<<<< HEAD
 #ifdef PROP_TXSTATUS
 	dhd_os_wlfc_block(dhd);
 	if (dhd->wlfc_state &&
 		((athost_wl_status_info_t*)dhd->wlfc_state)->proptxstatus_mode
 		!= WLFC_FCMODE_NONE &&
 		(!DHD_PKTTAG_PKTDIR(PKTTAG(pktbuf)))) {
+=======
+
+#ifdef PROP_TXSTATUS
+	if (!DHD_PKTTAG_PKTDIR(PKTTAG(pktbuf))) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/*
 		- parse txstatus only for packets that came from the firmware
 		*/
 		dhd_wlfc_parse_header_info(dhd, pktbuf, (data_offset << 2),
 			reorder_buf_info, reorder_info_len);
+<<<<<<< HEAD
 		((athost_wl_status_info_t*)dhd->wlfc_state)->stats.dhd_hdrpulls++;
 
 	}
@@ -512,17 +544,35 @@ dhd_wlfc_trigger_pktcommit(dhd_pub_t *dhd)
 }
 #endif
 
+=======
+
+	}
+#endif /* PROP_TXSTATUS */
+
+exit:
+	PKTPULL(dhd->osh, pktbuf, (data_offset << 2));
+	return 0;
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 int
 dhd_prot_attach(dhd_pub_t *dhd)
 {
 	dhd_prot_t *cdc;
 
+<<<<<<< HEAD
 	if (!(cdc = (dhd_prot_t *)DHD_OS_PREALLOC(dhd->osh, DHD_PREALLOC_PROT,
 		sizeof(dhd_prot_t)))) {
 			DHD_ERROR(("%s: kmalloc failed\n", __FUNCTION__));
 			goto fail;
 		}
+=======
+	if (!(cdc = (dhd_prot_t *)DHD_OS_PREALLOC(dhd, DHD_PREALLOC_PROT, sizeof(dhd_prot_t)))) {
+		DHD_ERROR(("%s: kmalloc failed\n", __FUNCTION__));
+		goto fail;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	memset(cdc, 0, sizeof(dhd_prot_t));
 
 	/* ensure that the msg buf directly follows the cdc msg struct */
@@ -539,10 +589,16 @@ dhd_prot_attach(dhd_pub_t *dhd)
 	return 0;
 
 fail:
+<<<<<<< HEAD
 #ifndef CONFIG_DHD_USE_STATIC_BUF
 	if (cdc != NULL)
 		MFREE(dhd->osh, cdc, sizeof(dhd_prot_t));
 #endif /* CONFIG_DHD_USE_STATIC_BUF */
+=======
+	if (cdc != NULL) {
+		DHD_OS_PREFREE(dhd, DHD_PREALLOC_PROT, cdc, sizeof(dhd_prot_t));
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return BCME_NOMEM;
 }
 
@@ -552,19 +608,28 @@ dhd_prot_detach(dhd_pub_t *dhd)
 {
 #ifdef PROP_TXSTATUS
 	dhd_wlfc_deinit(dhd);
+<<<<<<< HEAD
 	if (dhd->plat_deinit)
 		dhd->plat_deinit((void *)dhd);
 #endif
 #ifndef CONFIG_DHD_USE_STATIC_BUF
 	MFREE(dhd->osh, dhd->prot, sizeof(dhd_prot_t));
 #endif /* CONFIG_DHD_USE_STATIC_BUF */
+=======
+#endif
+	DHD_OS_PREFREE(dhd, DHD_PREALLOC_PROT, dhd->prot, sizeof(dhd_prot_t));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dhd->prot = NULL;
 }
 
 void
 dhd_prot_dstats(dhd_pub_t *dhd)
 {
+<<<<<<< HEAD
 	/* No stats from dongle added yet, copy bus stats */
+=======
+/* No stats from dongle added yet, copy bus stats */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	dhd->dstats.tx_packets = dhd->tx_packets;
 	dhd->dstats.tx_errors = dhd->tx_errors;
 	dhd->dstats.rx_packets = dhd->rx_packets;
@@ -590,6 +655,10 @@ dhd_prot_init(dhd_pub_t *dhd)
 
 
 	ret = dhd_preinit_ioctls(dhd);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Always assumes wl for now */
 	dhd->iswl = TRUE;
 
@@ -600,7 +669,11 @@ done:
 void
 dhd_prot_stop(dhd_pub_t *dhd)
 {
+<<<<<<< HEAD
 	/* Nothing to do for CDC */
+=======
+/* Nothing to do for CDC */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 
@@ -608,7 +681,10 @@ static void
 dhd_get_hostreorder_pkts(void *osh, struct reorder_info *ptr, void **pkt,
 	uint32 *pkt_count, void **pplast, uint8 start, uint8 end)
 {
+<<<<<<< HEAD
 	uint i;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	void *plast = NULL, *p;
 	uint32 pkt_cnt = 0;
 
@@ -619,6 +695,7 @@ dhd_get_hostreorder_pkts(void *osh, struct reorder_info *ptr, void **pkt,
 		*pkt = NULL;
 		return;
 	}
+<<<<<<< HEAD
 	if (start == end)
 		i = ptr->max_idx + 1;
 	else {
@@ -628,6 +705,9 @@ dhd_get_hostreorder_pkts(void *osh, struct reorder_info *ptr, void **pkt,
 			i = end - start;
 	}
 	while (i) {
+=======
+	do {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		p = (void *)(ptr->p[start]);
 		ptr->p[start] = NULL;
 
@@ -640,12 +720,22 @@ dhd_get_hostreorder_pkts(void *osh, struct reorder_info *ptr, void **pkt,
 			plast = p;
 			pkt_cnt++;
 		}
+<<<<<<< HEAD
 		i--;
 		if (start++ == ptr->max_idx)
 			start = 0;
 	}
 	*pplast = plast;
 	*pkt_count = (uint32)pkt_cnt;
+=======
+		start++;
+		if (start > ptr->max_idx)
+			start = 0;
+	} while (start != end);
+	*pplast = plast;
+	*pkt_count = pkt_cnt;
+	ptr->pend_pkts -= (uint8)pkt_cnt;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 int
@@ -793,7 +883,10 @@ dhd_process_pkt_reorder_info(dhd_pub_t *dhd, uchar *reorder_info_buf, uint reord
 
 			dhd_get_hostreorder_pkts(dhd->osh, ptr, pkt, &cnt, &plast,
 				cur_idx, exp_idx);
+<<<<<<< HEAD
 			ptr->pend_pkts -= (uint8)cnt;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			*pkt_count = cnt;
 			DHD_REORDER(("%s: freeing up buffers %d, still pending %d\n",
 				__FUNCTION__, cnt, ptr->pend_pkts));
@@ -850,7 +943,10 @@ dhd_process_pkt_reorder_info(dhd_pub_t *dhd, uchar *reorder_info_buf, uint reord
 			end_idx =  exp_idx;
 
 		dhd_get_hostreorder_pkts(dhd->osh, ptr, pkt, &cnt, &plast, ptr->exp_idx, end_idx);
+<<<<<<< HEAD
 		ptr->pend_pkts -= (uint8)cnt;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (plast)
 			PKTSETNEXT(dhd->osh, plast, cur_pkt);
 		else

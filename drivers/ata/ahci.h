@@ -320,6 +320,10 @@ extern struct device_attribute *ahci_sdev_attrs[];
 extern struct ata_port_operations ahci_ops;
 extern struct ata_port_operations ahci_pmp_retry_srst_ops;
 
+<<<<<<< HEAD
+=======
+unsigned int ahci_dev_classify(struct ata_port *ap);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void ahci_fill_cmd_slot(struct ahci_port_priv *pp, unsigned int tag,
 			u32 opts);
 void ahci_save_initial_config(struct device *dev,

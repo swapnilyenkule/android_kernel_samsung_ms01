@@ -223,7 +223,11 @@ static void encode_nlm_stat(struct xdr_stream *xdr,
 {
 	__be32 *p;
 
+<<<<<<< HEAD
 	BUG_ON(be32_to_cpu(stat) > NLM_LCK_DENIED_GRACE_PERIOD);
+=======
+	WARN_ON_ONCE(be32_to_cpu(stat) > NLM_LCK_DENIED_GRACE_PERIOD);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	p = xdr_reserve_space(xdr, 4);
 	*p = stat;
 }

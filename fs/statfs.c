@@ -87,7 +87,11 @@ int user_statfs(const char __user *pathname, struct kstatfs *st)
 
 int fd_statfs(int fd, struct kstatfs *st)
 {
+<<<<<<< HEAD
 	struct file *file = fget(fd);
+=======
+	struct file *file = fget_raw(fd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int error = -EBADF;
 	if (file) {
 		error = vfs_statfs(&file->f_path, st);

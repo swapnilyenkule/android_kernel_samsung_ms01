@@ -27,6 +27,10 @@
 
 #define DJ_MAX_PAIRED_DEVICES			6
 #define DJ_MAX_NUMBER_NOTIFICATIONS		8
+<<<<<<< HEAD
+=======
+#define DJ_RECEIVER_INDEX			0
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define DJ_DEVICE_INDEX_MIN 			1
 #define DJ_DEVICE_INDEX_MAX 			6
 
@@ -101,6 +105,10 @@ struct dj_receiver_dev {
 	struct work_struct work;
 	struct kfifo notif_fifo;
 	spinlock_t lock;
+<<<<<<< HEAD
+=======
+	bool querying_devices;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 struct dj_device {

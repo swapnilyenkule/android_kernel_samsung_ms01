@@ -18,6 +18,10 @@
 	
 		.section	".start", "ax"
 
+<<<<<<< HEAD
+=======
+		.arch armv4
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		b	__beginning
 	
 __ofw_data:	.long	0				@ the number of memory blocks

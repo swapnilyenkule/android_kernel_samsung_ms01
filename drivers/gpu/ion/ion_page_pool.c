@@ -22,7 +22,10 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/vmalloc.h>
+<<<<<<< HEAD
 #include <linux/swap.h>
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include "ion_priv.h"
 
 struct ion_page_pool_item {
@@ -154,10 +157,14 @@ int ion_page_pool_shrink(struct ion_page_pool *pool, gfp_t gfp_mask,
 	int i;
 	bool high;
 
+<<<<<<< HEAD
 	if (current_is_kswapd())
 		high = 1;
 	else
 		high = !!(gfp_mask & __GFP_HIGHMEM);
+=======
+	high = gfp_mask & __GFP_HIGHMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (nr_to_scan == 0)
 		return ion_page_pool_total(pool, high);
@@ -166,10 +173,17 @@ int ion_page_pool_shrink(struct ion_page_pool *pool, gfp_t gfp_mask,
 		struct page *page;
 
 		mutex_lock(&pool->mutex);
+<<<<<<< HEAD
 		if (pool->low_count) {
 			page = ion_page_pool_remove(pool, false);
 		} else if (high && pool->high_count) {
 			page = ion_page_pool_remove(pool, true);
+=======
+		if (high && pool->high_count) {
+			page = ion_page_pool_remove(pool, true);
+		} else if (pool->low_count) {
+			page = ion_page_pool_remove(pool, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		} else {
 			mutex_unlock(&pool->mutex);
 			break;

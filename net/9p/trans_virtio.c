@@ -39,6 +39,10 @@
 #include <linux/inet.h>
 #include <linux/idr.h>
 #include <linux/file.h>
+<<<<<<< HEAD
+=======
+#include <linux/highmem.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/slab.h>
 #include <net/9p/9p.h>
 #include <linux/parser.h>
@@ -192,10 +196,17 @@ static int pack_sg_list(struct scatterlist *sg, int start,
 		s = rest_of_page(data);
 		if (s > count)
 			s = count;
+<<<<<<< HEAD
 		sg_set_buf(&sg[index++], data, s);
 		count -= s;
 		data += s;
 		BUG_ON(index > limit);
+=======
+		BUG_ON(index > limit);
+		sg_set_buf(&sg[index++], data, s);
+		count -= s;
+		data += s;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	return index-start;
@@ -325,7 +336,11 @@ static int p9_get_mapped_pages(struct virtio_chan *chan,
 		int count = nr_pages;
 		while (nr_pages) {
 			s = rest_of_page(data);
+<<<<<<< HEAD
 			pages[index++] = virt_to_page(data);
+=======
+			pages[index++] = kmap_to_page(data);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			data += s;
 			nr_pages--;
 		}

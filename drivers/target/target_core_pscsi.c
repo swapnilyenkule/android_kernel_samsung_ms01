@@ -128,10 +128,17 @@ static int pscsi_pmode_enable_hba(struct se_hba *hba, unsigned long mode_flag)
 	 * pSCSI Host ID and enable for phba mode
 	 */
 	sh = scsi_host_lookup(phv->phv_host_id);
+<<<<<<< HEAD
 	if (IS_ERR(sh)) {
 		pr_err("pSCSI: Unable to locate SCSI Host for"
 			" phv_host_id: %d\n", phv->phv_host_id);
 		return PTR_ERR(sh);
+=======
+	if (!sh) {
+		pr_err("pSCSI: Unable to locate SCSI Host for"
+			" phv_host_id: %d\n", phv->phv_host_id);
+		return -EINVAL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	phv->phv_lld_host = sh;
@@ -562,11 +569,20 @@ static struct se_device *pscsi_create_virtdevice(
 			sh = phv->phv_lld_host;
 		} else {
 			sh = scsi_host_lookup(pdv->pdv_host_id);
+<<<<<<< HEAD
 			if (IS_ERR(sh)) {
 				pr_err("pSCSI: Unable to locate"
 					" pdv_host_id: %d\n", pdv->pdv_host_id);
 				return ERR_CAST(sh);
 			}
+=======
+			if (!sh) {
+				pr_err("pSCSI: Unable to locate"
+					" pdv_host_id: %d\n", pdv->pdv_host_id);
+				return ERR_PTR(-EINVAL);
+			}
+			pdv->pdv_lld_host = sh;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	} else {
 		if (phv->phv_mode == PHV_VIRTUAL_HOST_ID) {
@@ -653,6 +669,11 @@ static void pscsi_free_device(void *p)
 		if ((phv->phv_mode == PHV_LLD_SCSI_HOST_NO) &&
 		    (phv->phv_lld_host != NULL))
 			scsi_host_put(phv->phv_lld_host);
+<<<<<<< HEAD
+=======
+		else if (pdv->pdv_lld_host)
+			scsi_host_put(pdv->pdv_lld_host);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		if ((sd->type == TYPE_DISK) || (sd->type == TYPE_ROM))
 			scsi_device_put(sd);
@@ -1042,7 +1063,10 @@ static int pscsi_map_sg(struct se_task *task, struct scatterlist *task_sg,
 				bio = NULL;
 			}
 
+<<<<<<< HEAD
 			page++;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			len -= bytes;
 			data_len -= bytes;
 			off = 0;
@@ -1166,7 +1190,11 @@ static u32 pscsi_get_device_type(struct se_device *dev)
 	struct pscsi_dev_virt *pdv = dev->dev_ptr;
 	struct scsi_device *sd = pdv->pdv_sd;
 
+<<<<<<< HEAD
 	return sd->type;
+=======
+	return (sd) ? sd->type : TYPE_NO_LUN;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static sector_t pscsi_get_blocks(struct se_device *dev)

@@ -189,6 +189,12 @@ int ceph_debugfs_client_init(struct ceph_client *client)
 	snprintf(name, sizeof(name), "%pU.client%lld", &client->fsid,
 		 client->monc.auth->global_id);
 
+<<<<<<< HEAD
+=======
+	dout("ceph_debugfs_client_init %p %s\n", client, name);
+
+	BUG_ON(client->debugfs_dir);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	client->debugfs_dir = debugfs_create_dir(name, ceph_debugfs_dir);
 	if (!client->debugfs_dir)
 		goto out;
@@ -234,6 +240,10 @@ out:
 
 void ceph_debugfs_client_cleanup(struct ceph_client *client)
 {
+<<<<<<< HEAD
+=======
+	dout("ceph_debugfs_client_cleanup %p\n", client);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	debugfs_remove(client->debugfs_osdmap);
 	debugfs_remove(client->debugfs_monmap);
 	debugfs_remove(client->osdc.debugfs_file);

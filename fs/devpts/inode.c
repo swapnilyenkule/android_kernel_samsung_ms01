@@ -475,6 +475,10 @@ static void devpts_kill_sb(struct super_block *sb)
 {
 	struct pts_fs_info *fsi = DEVPTS_SB(sb);
 
+<<<<<<< HEAD
+=======
+	ida_destroy(&fsi->allocated_ptys);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(fsi);
 	kill_litter_super(sb);
 }

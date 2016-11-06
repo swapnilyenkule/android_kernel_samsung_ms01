@@ -716,7 +716,11 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 	unsigned long cpu_flags;
 	size_t copied = 0;
 	u32 peek_seq = 0;
+<<<<<<< HEAD
 	u32 *seq;
+=======
+	u32 *seq, skb_len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned long used;
 	int target;	/* Read at least this many bytes */
 	long timeo;
@@ -814,6 +818,10 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 		}
 		continue;
 	found_ok_skb:
+<<<<<<< HEAD
+=======
+		skb_len = skb->len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* Ok so how much can we use? */
 		used = skb->len - offset;
 		if (len < used)
@@ -846,7 +854,11 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 		}
 
 		/* Partial read */
+<<<<<<< HEAD
 		if (used + offset < skb->len)
+=======
+		if (used + offset < skb_len)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			continue;
 	} while (len > 0);
 
@@ -971,14 +983,21 @@ static int llc_ui_getname(struct socket *sock, struct sockaddr *uaddr,
 	struct sockaddr_llc sllc;
 	struct sock *sk = sock->sk;
 	struct llc_sock *llc = llc_sk(sk);
+<<<<<<< HEAD
 	int rc = 0;
+=======
+	int rc = -EBADF;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	memset(&sllc, 0, sizeof(sllc));
 	lock_sock(sk);
 	if (sock_flag(sk, SOCK_ZAPPED))
 		goto out;
 	*uaddrlen = sizeof(sllc);
+<<<<<<< HEAD
 	memset(uaddr, 0, *uaddrlen);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (peer) {
 		rc = -ENOTCONN;
 		if (sk->sk_state != TCP_ESTABLISHED)

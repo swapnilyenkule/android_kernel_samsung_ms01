@@ -268,7 +268,11 @@ static void _rtl92s_get_txpower_writeval_byregulatory(struct ieee80211_hw *hw,
 				    rtlefuse->pwrgroup_ht40
 				    [RF90_PATH_A][chnl - 1]) {
 					pwrdiff_limit[i] =
+<<<<<<< HEAD
 					  rtlefuse->pwrgroup_ht20
+=======
+					  rtlefuse->pwrgroup_ht40
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					  [RF90_PATH_A][chnl - 1];
 				}
 			} else {

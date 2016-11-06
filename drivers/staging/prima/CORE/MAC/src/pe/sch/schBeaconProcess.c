@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
   * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
   *
   * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
@@ -26,6 +27,35 @@
 
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
+ *
+ * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
+ *
+ *
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all
+ * copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+ * DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+ * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file schBeaconProcess.cc contains beacon processing related
  * functions
  *
@@ -135,11 +165,19 @@ ap_beacon_process(
                     (pBcnStruct->erpIEInfo.useProtection ||
                     pBcnStruct->erpIEInfo.nonErpPresent)))
                 {
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
                     if( psessionEntry->isCCXconnection )
                     {
                         VOS_TRACE (VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO, 
                             "%s: [INFOLOG]CCX 11g erpPresent=%d useProtection=%d nonErpPresent=%d", __func__,
+=======
+#ifdef FEATURE_WLAN_ESE
+                    if( psessionEntry->isESEconnection )
+                    {
+                        VOS_TRACE (VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO, 
+                            "%s: [INFOLOG]ESE 11g erpPresent=%d useProtection=%d nonErpPresent=%d", __func__,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                             pBcnStruct->erpPresent,
                             pBcnStruct->erpIEInfo.useProtection,
                             pBcnStruct->erpIEInfo.nonErpPresent);
@@ -162,11 +200,19 @@ ap_beacon_process(
                   (pBcnStruct->erpIEInfo.useProtection ||
                   pBcnStruct->erpIEInfo.nonErpPresent)))
               {
+<<<<<<< HEAD
 #ifdef FEATURE_WLAN_CCX
                   if( psessionEntry->isCCXconnection )
                   {
                       VOS_TRACE (VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO, 
                           "%s: [INFOLOG]CCX 11g erpPresent=%d useProtection=%d nonErpPresent=%d", __func__,
+=======
+#ifdef FEATURE_WLAN_ESE
+                  if( psessionEntry->isESEconnection )
+                  {
+                      VOS_TRACE (VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO, 
+                          "%s: [INFOLOG]ESE 11g erpPresent=%d useProtection=%d nonErpPresent=%d", __func__,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                           pBcnStruct->erpPresent,
                           pBcnStruct->erpIEInfo.useProtection,
                           pBcnStruct->erpIEInfo.nonErpPresent);
@@ -334,21 +380,39 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
     tUpdateBeaconParams beaconParams;
     tANI_U8 sendProbeReq = FALSE;
     tpDphHashNode pStaDs = NULL;
+<<<<<<< HEAD
+=======
+    tANI_U32   channelBondingMode;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef WLAN_FEATURE_11AC
     tpSirMacMgmtHdr    pMh = WDA_GET_RX_MAC_HEADER(pRxPacketInfo);
     tANI_U16  aid;
     tANI_U8  operMode;
     tANI_U8  chWidth = 0;
 #endif
+<<<<<<< HEAD
 #if defined FEATURE_WLAN_CCX || defined FEATURE_WLAN_VOWIFI
      tPowerdBm regMax = 0,maxTxPower = 0;
 #endif
 
+=======
+#if defined FEATURE_WLAN_ESE || defined WLAN_FEATURE_VOWIFI
+     tPowerdBm regMax = 0,maxTxPower = 0;
+#endif
+
+    vos_mem_zero(&beaconParams, sizeof(tUpdateBeaconParams));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     beaconParams.paramChangeBitmap = 0;
 
     if(eLIM_STA_IN_IBSS_ROLE == psessionEntry->limSystemRole )
     {
+<<<<<<< HEAD
         limHandleIBSScoalescing(pMac, pBeacon,  pRxPacketInfo, psessionEntry);
+=======
+        if( limHandleIBSScoalescing(pMac, pBeacon, pRxPacketInfo, psessionEntry)
+                                                               != eSIR_SUCCESS )
+            return;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
     else if(  (eLIM_STA_ROLE == psessionEntry->limSystemRole) || 
                   (eLIM_BT_AMP_STA_ROLE == psessionEntry->limSystemRole))
@@ -372,6 +436,19 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
                           psessionEntry->currentOperChannel, pBeacon->channelNumber);)
            goto fail;
         }
+<<<<<<< HEAD
+=======
+
+        if( RF_CHAN_14 >= psessionEntry->currentOperChannel )
+        {
+           channelBondingMode = pMac->roam.configParam.channelBondingMode24GHz;
+        }
+        else
+        {
+           channelBondingMode = pMac->roam.configParam.channelBondingMode5GHz;
+        }
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         limDetectChangeInApCapabilities(pMac, pBeacon, psessionEntry);
         if(limGetStaHashBssidx(pMac, DPH_STA_HASH_INDEX_PEER, &bssIdx, psessionEntry) != eSIR_SUCCESS)
             goto fail;
@@ -461,7 +538,11 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
           (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE) )
     {
         /* Channel Switch information element updated */
+<<<<<<< HEAD
         if(pBeacon->channelSwitchPresent || 
+=======
+        if(pBeacon->channelSwitchPresent ||
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             pBeacon->propIEinfo.propChannelSwitchPresent)
         {
             limUpdateChannelSwitch(pMac, pBeacon, psessionEntry);
@@ -470,13 +551,56 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
         {
             limCancelDot11hChannelSwitch(pMac, psessionEntry);
         }
+<<<<<<< HEAD
     }
 
+=======
+        // check for HT capability
+        pStaDs = dphLookupHashEntry(pMac, pMh->sa, &aid,
+                                    &psessionEntry->dph.dphHashTable);
+        /* Update the channel bonding mode only if channel bonding
+         * mode is enabled in INI.
+         */
+        if ( (pStaDs != NULL) &&
+              (WNI_CFG_CHANNEL_BONDING_MODE_DISABLE != channelBondingMode) )
+        {
+           /* Following check is related to HT40 on 2.4GHz mode*/
+           if ((pStaDs->htSecondaryChannelOffset !=
+                pBeacon->HTInfo.secondaryChannelOffset) &&
+                (IS_HT40_OBSS_SCAN_FEATURE_ENABLE) &&
+                (psessionEntry->currentOperChannel <= RF_CHAN_14))
+           {
+               VOS_TRACE( VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO,
+                        FL(" Current Secondarychanoffset %d received "
+                        " secondaryChannelOffset %d, staIdx = %d"),
+                        pStaDs->htSecondaryChannelOffset,
+                        pBeacon->HTInfo.secondaryChannelOffset,
+                        pStaDs->staIndex);
+              if (eANI_BOOLEAN_TRUE ==(limCheckHTChanBondModeChange(pMac,
+                                              psessionEntry,
+                                              pBeacon->HTInfo.secondaryChannelOffset,
+                                              pStaDs->htSecondaryChannelOffset,
+                                              pStaDs->staIndex)))
+              {
+                  pStaDs->htSupportedChannelWidthSet =
+                             pBeacon->HTInfo.recommendedTxWidthSet;
+                  pStaDs->htSecondaryChannelOffset =
+                             pBeacon->HTInfo.secondaryChannelOffset;
+              }
+           }
+        }
+        else
+           schLog(pMac, LOG1,
+                  FL("Self Entry missing in Hash Table or channel bonding mode is disabled"));
+    }
+    /* TODO : Below condition checks can be merged with the if */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef WLAN_FEATURE_11AC
     if ((psessionEntry->limSystemRole == eLIM_STA_ROLE) ||
         (psessionEntry->limSystemRole == eLIM_BT_AMP_STA_ROLE) ||
         (psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE))
     {
+<<<<<<< HEAD
         // check for VHT capability
         pStaDs = dphLookupHashEntry(pMac, pMh->sa, &aid,
                                     &psessionEntry->dph.dphHashTable);
@@ -587,11 +711,135 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
 #endif
 
 #if defined (FEATURE_WLAN_CCX) || defined (FEATURE_WLAN_VOWIFI)
+=======
+       // check for VHT capability
+       pStaDs = dphLookupHashEntry(pMac, pMh->sa, &aid,
+             &psessionEntry->dph.dphHashTable);
+
+       /* Update the channel bonding mode only if channel bonding
+        * mode is enabled in INI.
+        */
+       if ( (NULL != pStaDs)  &&
+            (WNI_CFG_CHANNEL_BONDING_MODE_DISABLE != channelBondingMode) )
+       {
+          if (psessionEntry->vhtCapability && pBeacon->OperatingMode.present )
+          {
+             operMode = pStaDs->vhtSupportedChannelWidthSet ?
+                eHT_CHANNEL_WIDTH_80MHZ :
+                pStaDs->htSupportedChannelWidthSet ?
+                eHT_CHANNEL_WIDTH_40MHZ: eHT_CHANNEL_WIDTH_20MHZ;
+             if (operMode != pBeacon->OperatingMode.chanWidth)
+             {
+                PELOG1(schLog(pMac, LOG1,
+                         FL(" received OpMode Chanwidth %d, staIdx = %d"),
+                         pBeacon->OperatingMode.chanWidth,
+                         pStaDs->staIndex);)
+                   PELOG1(schLog(pMac, LOG1, FL(" MAC - %0x:%0x:%0x:%0x:%0x:%0x"),
+                            pMh->sa[0],
+                            pMh->sa[1],
+                            pMh->sa[2],
+                            pMh->sa[3],
+                            pMh->sa[4],
+                            pMh->sa[5]);)
+
+                   if (pBeacon->OperatingMode.chanWidth == eHT_CHANNEL_WIDTH_80MHZ)
+                   {
+                      PELOG1(schLog(pMac, LOG1,
+                               FL("Updating the CH Width to 80MHz"));)
+                         pStaDs->vhtSupportedChannelWidthSet =
+                         WNI_CFG_VHT_CHANNEL_WIDTH_80MHZ;
+                      pStaDs->htSupportedChannelWidthSet = eHT_CHANNEL_WIDTH_40MHZ;
+                   }
+                   else if (pBeacon->OperatingMode.chanWidth == eHT_CHANNEL_WIDTH_40MHZ)
+                   {
+                      PELOG1(schLog(pMac, LOG1,
+                               FL("Updating the CH Width to 40MHz"));)
+                         pStaDs->vhtSupportedChannelWidthSet =
+                         WNI_CFG_VHT_CHANNEL_WIDTH_20_40MHZ;
+                      pStaDs->htSupportedChannelWidthSet = eHT_CHANNEL_WIDTH_40MHZ;
+                   }
+                   else if (pBeacon->OperatingMode.chanWidth ==
+                         eHT_CHANNEL_WIDTH_20MHZ)
+                   {
+                      PELOG1(schLog(pMac, LOG1,
+                               FL("Updating the CH Width to 20MHz"));)
+                         pStaDs->vhtSupportedChannelWidthSet =
+                         WNI_CFG_VHT_CHANNEL_WIDTH_20_40MHZ;
+                      pStaDs->htSupportedChannelWidthSet = eHT_CHANNEL_WIDTH_20MHZ;
+                   }
+                limCheckVHTOpModeChange(pMac, psessionEntry,
+                      pBeacon->OperatingMode.chanWidth,
+                      pStaDs->staIndex);
+             }
+          }
+          else if (psessionEntry->vhtCapability && pBeacon->VHTOperation.present)
+          {
+             operMode = pStaDs->vhtSupportedChannelWidthSet;
+             if (operMode != pBeacon->VHTOperation.chanWidth)
+             {
+                PELOG1(schLog(pMac, LOG1,
+                         FL(" received VHTOP CHWidth %d staIdx = %d"),
+                         pBeacon->VHTOperation.chanWidth,
+                         pStaDs->staIndex);)
+                   PELOG1(schLog(pMac, LOG1, FL(" MAC - %0x:%0x:%0x:%0x:%0x:%0x"),
+                            pMh->sa[0],
+                            pMh->sa[1],
+                            pMh->sa[2],
+                            pMh->sa[3],
+                            pMh->sa[4],
+                            pMh->sa[5]);)
+
+                   if (pBeacon->VHTOperation.chanWidth ==
+                         WNI_CFG_VHT_CHANNEL_WIDTH_80MHZ)
+                   {
+                      PELOG1(schLog(pMac, LOG1,
+                               FL("Updating the CH Width to 80MHz"));)
+                         pStaDs->vhtSupportedChannelWidthSet =
+                         WNI_CFG_VHT_CHANNEL_WIDTH_80MHZ;
+                      pStaDs->htSupportedChannelWidthSet = eHT_CHANNEL_WIDTH_40MHZ;
+                      chWidth = eHT_CHANNEL_WIDTH_80MHZ;
+                   }
+                   else if (pBeacon->VHTOperation.chanWidth ==
+                         WNI_CFG_VHT_CHANNEL_WIDTH_20_40MHZ)
+                   {
+                      pStaDs->vhtSupportedChannelWidthSet =
+                         WNI_CFG_VHT_CHANNEL_WIDTH_20_40MHZ;
+                      if (pBeacon->HTCaps.supportedChannelWidthSet)
+                      {
+                         PELOG1(schLog(pMac, LOG1,
+                                  FL("Updating the CH Width to 40MHz"));)
+                            pStaDs->htSupportedChannelWidthSet =
+                            eHT_CHANNEL_WIDTH_40MHZ;
+                         chWidth = eHT_CHANNEL_WIDTH_40MHZ;
+                      }
+                      else
+                      {
+                         PELOG1(schLog(pMac, LOG1,
+                                  FL("Updating the CH Width to 20MHz"));)
+                            pStaDs->htSupportedChannelWidthSet =
+                            eHT_CHANNEL_WIDTH_20MHZ;
+                         chWidth = eHT_CHANNEL_WIDTH_20MHZ;
+                      }
+                   }
+                limCheckVHTOpModeChange(pMac, psessionEntry,
+                      chWidth, pStaDs->staIndex);
+             }
+          }
+       }
+    }
+#endif
+
+#if defined (FEATURE_WLAN_ESE) || defined (WLAN_FEATURE_VOWIFI)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     /* Obtain the Max Tx power for the current regulatory  */
     regMax = cfgGetRegulatoryMaxTransmitPower( pMac, psessionEntry->currentOperChannel );
 #endif
 
+<<<<<<< HEAD
 #if defined FEATURE_WLAN_VOWIFI
+=======
+#if defined WLAN_FEATURE_VOWIFI
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         tPowerdBm  localRRMConstraint = 0;
         if ( pMac->rrm.rrmPEContext.rrmEnable && pBeacon->powerConstraintPresent )
@@ -604,6 +852,7 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
         }
         maxTxPower = VOS_MIN(regMax,(regMax - localRRMConstraint));
     }
+<<<<<<< HEAD
 #elif defined FEATURE_WLAN_CCX
     maxTxPower = regMax;
 #endif
@@ -622,6 +871,26 @@ static void __schBeaconProcessForSession( tpAniSirGlobal      pMac,
 #endif
 
 #if defined (FEATURE_WLAN_CCX) || defined (FEATURE_WLAN_VOWIFI)
+=======
+#elif defined FEATURE_WLAN_ESE
+    maxTxPower = regMax;
+#endif
+
+#if defined FEATURE_WLAN_ESE
+    if( psessionEntry->isESEconnection )
+    {
+        tPowerdBm  localESEConstraint = 0;
+        if (pBeacon->eseTxPwr.present)
+        {
+            localESEConstraint = pBeacon->eseTxPwr.power_limit;
+            maxTxPower = limGetMaxTxPower(maxTxPower, localESEConstraint, pMac->roam.configParam.nTxPowerCap);
+        }
+        schLog( pMac, LOG1, "RegMax = %d, localESECons = %d, MaxTx = %d", regMax, localESEConstraint, maxTxPower );
+    }
+#endif
+
+#if defined (FEATURE_WLAN_ESE) || defined (WLAN_FEATURE_VOWIFI)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         //If maxTxPower is increased or decreased
         if( maxTxPower != psessionEntry->maxTxPower )
@@ -658,8 +927,11 @@ fail:
 
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /**
  * schBeaconProcess
  *
@@ -681,6 +953,10 @@ void schBeaconProcess(tpAniSirGlobal pMac, tANI_U8* pRxPacketInfo, tpPESession p
     static tSchBeaconStruct beaconStruct;
     tUpdateBeaconParams beaconParams;
     tpPESession pAPSession = NULL;
+<<<<<<< HEAD
+=======
+    vos_mem_zero(&beaconParams, sizeof(tUpdateBeaconParams));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     beaconParams.paramChangeBitmap = 0;
 
     pMac->sch.gSchBcnRcvCnt++;
@@ -688,8 +964,17 @@ void schBeaconProcess(tpAniSirGlobal pMac, tANI_U8* pRxPacketInfo, tpPESession p
     // Convert the beacon frame into a structure
     if (sirConvertBeaconFrame2Struct(pMac, (tANI_U8 *) pRxPacketInfo, &beaconStruct)!= eSIR_SUCCESS)
     {
+<<<<<<< HEAD
         PELOGE(schLog(pMac, LOGE, FL("beacon parsing failed"));)
         pMac->sch.gSchBcnParseErrorCnt++;
+=======
+        schLog(pMac, LOGE, FL("beacon parsing failed"));
+        pMac->sch.gSchBcnParseErrorCnt++;
+
+        if ((NULL != psessionEntry) && (!psessionEntry->currentBssBeaconCnt))
+            limParseBeaconForTim(pMac, (tANI_U8 *) pRxPacketInfo, psessionEntry);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         return;
     }
 

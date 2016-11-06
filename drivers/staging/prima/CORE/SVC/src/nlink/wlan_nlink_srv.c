@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /******************************************************************************
@@ -56,6 +68,10 @@
 #include <net/sock.h>
 #include <wlan_nlink_srv.h>
 #include <vos_trace.h>
+<<<<<<< HEAD
+=======
+#include "vos_memory.h"
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 //Global variables
 static DEFINE_MUTEX(nl_srv_sem);
@@ -174,7 +190,11 @@ int nl_srv_unregister(tWlanNlModTypes msg_type, nl_srv_msg_callback msg_handler)
  * Unicast the message to the process in user space identfied
  * by the dst-pid
  */
+<<<<<<< HEAD
 int nl_srv_ucast(struct sk_buff *skb, int dst_pid)
+=======
+int nl_srv_ucast(struct sk_buff *skb, int dst_pid, int flag)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
    int err;
 
@@ -185,7 +205,11 @@ int nl_srv_ucast(struct sk_buff *skb, int dst_pid)
 #endif
    NETLINK_CB(skb).dst_group = 0; //not multicast
 
+<<<<<<< HEAD
    err = netlink_unicast(nl_srv_sock, skb, dst_pid, MSG_DONTWAIT);
+=======
+   err = netlink_unicast(nl_srv_sock, skb, dst_pid, flag);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
    if (err < 0)
       VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_WARN,
@@ -247,8 +271,13 @@ static void nl_srv_rcv_skb (struct sk_buff *skb)
 
       if (nlh->nlmsg_len < sizeof(*nlh) || skb->len < nlh->nlmsg_len) {
          VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_WARN, "NLINK: Invalid "
+<<<<<<< HEAD
             "Netlink message: skb[0x%X], len[%d], nlhdr[0x%X], nlmsg_len[%d]",
             (u32)skb, skb->len, (u32)nlh, nlh->nlmsg_len);
+=======
+            "Netlink message: skb[%p], len[%d], nlhdr[%p], nlmsg_len[%d]",
+            skb, skb->len, nlh, nlh->nlmsg_len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
          return;
       }
 
@@ -336,7 +365,11 @@ void nl_srv_nl_ready_indication
    nlh->nlmsg_flags = 0;
    nlh->nlmsg_seq = 0;
    nlh->nlmsg_len = sizeof(driverLoaded);
+<<<<<<< HEAD
    memcpy(((char *)nlh) + sizeof(struct nlmsghdr),
+=======
+   vos_mem_copy(((char *)nlh) + sizeof(struct nlmsghdr),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
           driverLoaded,
           sizeof(driverLoaded));
    skb_put(skb, NLMSG_SPACE(sizeof(driverLoaded)));
@@ -381,7 +414,11 @@ void nl_srv_nl_close_indication
    nlh->nlmsg_flags = 0;
    nlh->nlmsg_seq = 0;
    nlh->nlmsg_len = sizeof(driverUnLoaded);
+<<<<<<< HEAD
    memcpy(((char *)nlh) + sizeof(struct nlmsghdr),
+=======
+   vos_mem_copy(((char *)nlh) + sizeof(struct nlmsghdr),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
           driverUnLoaded,
           sizeof(driverUnLoaded));
    skb_put(skb, NLMSG_SPACE(sizeof(driverUnLoaded)));

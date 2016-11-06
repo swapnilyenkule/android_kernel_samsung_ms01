@@ -1341,6 +1341,10 @@ struct se_device *transport_add_device_to_core_hba(
 	dev->se_hba		= hba;
 	dev->se_sub_dev		= se_dev;
 	dev->transport		= transport;
+<<<<<<< HEAD
+=======
+	dev->dev_link_magic	= SE_DEV_LINK_MAGIC;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	INIT_LIST_HEAD(&dev->dev_list);
 	INIT_LIST_HEAD(&dev->dev_sep_list);
 	INIT_LIST_HEAD(&dev->dev_tmr_list);
@@ -1457,6 +1461,10 @@ static inline void transport_generic_prepare_cdb(
 	case VERIFY_16: /* SBC - VRProtect */
 	case WRITE_VERIFY: /* SBC - VRProtect */
 	case WRITE_VERIFY_12: /* SBC - VRProtect */
+<<<<<<< HEAD
+=======
+	case MAINTENANCE_IN: /* SPC - Parameter Data Format for SA RTPG */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	default:
 		cdb[1] &= 0x1f; /* clear logical unit number */
@@ -1750,7 +1758,12 @@ static void target_complete_tmr_failure(struct work_struct *work)
 
 	se_cmd->se_tmr_req->response = TMR_LUN_DOES_NOT_EXIST;
 	se_cmd->se_tfo->queue_tm_rsp(se_cmd);
+<<<<<<< HEAD
 	transport_generic_free_cmd(se_cmd, 0);
+=======
+
+	transport_cmd_check_stop_to_fabric(se_cmd);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /**
@@ -1978,6 +1991,10 @@ void transport_generic_request_failure(struct se_cmd *cmd)
 	case TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE:
 	case TCM_UNKNOWN_MODE_PAGE:
 	case TCM_WRITE_PROTECTED:
+<<<<<<< HEAD
+=======
+	case TCM_ADDRESS_OUT_OF_RANGE:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	case TCM_CHECK_CONDITION_ABORT_CMD:
 	case TCM_CHECK_CONDITION_UNIT_ATTENTION:
 	case TCM_CHECK_CONDITION_NOT_READY:
@@ -2812,7 +2829,11 @@ static int transport_generic_cmd_sequencer(
 			/*
 			 * Check for emulated MI_REPORT_TARGET_PGS.
 			 */
+<<<<<<< HEAD
 			if (cdb[1] == MI_REPORT_TARGET_PGS &&
+=======
+			if ((cdb[1] & 0x1f) == MI_REPORT_TARGET_PGS &&
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			    su_dev->t10_alua.alua_type == SPC3_ALUA_EMULATED) {
 				cmd->execute_task =
 					target_emulate_report_target_port_groups;
@@ -3171,15 +3192,29 @@ static int transport_generic_cmd_sequencer(
 			/* Returns CHECK_CONDITION + INVALID_CDB_FIELD */
 			goto out_invalid_cdb_field;
 		}
+<<<<<<< HEAD
 
+=======
+		/*
+		 * For the overflow case keep the existing fabric provided
+		 * ->data_length.  Otherwise for the underflow case, reset
+		 * ->data_length to the smaller SCSI expected data transfer
+		 * length.
+		 */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (size > cmd->data_length) {
 			cmd->se_cmd_flags |= SCF_OVERFLOW_BIT;
 			cmd->residual_count = (size - cmd->data_length);
 		} else {
 			cmd->se_cmd_flags |= SCF_UNDERFLOW_BIT;
 			cmd->residual_count = (cmd->data_length - size);
+<<<<<<< HEAD
 		}
 		cmd->data_length = size;
+=======
+			cmd->data_length = size;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (cmd->se_cmd_flags & SCF_SCSI_DATA_SG_IO_CDB &&
@@ -3280,8 +3315,12 @@ static void transport_complete_qf(struct se_cmd *cmd)
 
 	if (cmd->se_cmd_flags & SCF_TRANSPORT_TASK_SENSE) {
 		ret = cmd->se_tfo->queue_status(cmd);
+<<<<<<< HEAD
 		if (ret)
 			goto out;
+=======
+		goto out;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	switch (cmd->data_direction) {
@@ -3679,9 +3718,15 @@ transport_generic_get_mem(struct se_cmd *cmd)
 	return 0;
 
 out:
+<<<<<<< HEAD
 	while (i >= 0) {
 		__free_page(sg_page(&cmd->t_data_sg[i]));
 		i--;
+=======
+	while (i > 0) {
+		i--;
+		__free_page(sg_page(&cmd->t_data_sg[i]));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 	kfree(cmd->t_data_sg);
 	cmd->t_data_sg = NULL;
@@ -4661,6 +4706,18 @@ int transport_send_check_condition_and_sense(
 		/* WRITE PROTECTED */
 		buffer[offset+SPC_ASC_KEY_OFFSET] = 0x27;
 		break;
+<<<<<<< HEAD
+=======
+	case TCM_ADDRESS_OUT_OF_RANGE:
+		/* CURRENT ERROR */
+		buffer[offset] = 0x70;
+		buffer[offset+SPC_ADD_SENSE_LEN_OFFSET] = 10;
+		/* ILLEGAL REQUEST */
+		buffer[offset+SPC_SENSE_KEY_OFFSET] = ILLEGAL_REQUEST;
+		/* LOGICAL BLOCK ADDRESS OUT OF RANGE */
+		buffer[offset+SPC_ASC_KEY_OFFSET] = 0x21;
+		break;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	case TCM_CHECK_CONDITION_UNIT_ATTENTION:
 		/* CURRENT ERROR */
 		buffer[offset] = 0x70;
@@ -4689,7 +4746,11 @@ int transport_send_check_condition_and_sense(
 		/* ILLEGAL REQUEST */
 		buffer[offset+SPC_SENSE_KEY_OFFSET] = ILLEGAL_REQUEST;
 		/* LOGICAL UNIT COMMUNICATION FAILURE */
+<<<<<<< HEAD
 		buffer[offset+SPC_ASC_KEY_OFFSET] = 0x80;
+=======
+		buffer[offset+SPC_ASC_KEY_OFFSET] = 0x08;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 	}
 	/*

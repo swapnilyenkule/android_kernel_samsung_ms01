@@ -143,10 +143,20 @@ int rxrpc_recvmsg(struct kiocb *iocb, struct socket *sock,
 
 		/* copy the peer address and timestamp */
 		if (!continue_call) {
+<<<<<<< HEAD
 			if (msg->msg_name && msg->msg_namelen > 0)
 				memcpy(msg->msg_name,
 				       &call->conn->trans->peer->srx,
 				       sizeof(call->conn->trans->peer->srx));
+=======
+			if (msg->msg_name) {
+				size_t len =
+					sizeof(call->conn->trans->peer->srx);
+				memcpy(msg->msg_name,
+				       &call->conn->trans->peer->srx, len);
+				msg->msg_namelen = len;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			sock_recv_ts_and_drops(msg, &rx->sk, skb);
 		}
 
@@ -182,8 +192,12 @@ int rxrpc_recvmsg(struct kiocb *iocb, struct socket *sock,
 						      msg->msg_iov, copy);
 		} else {
 			ret = skb_copy_and_csum_datagram_iovec(skb, offset,
+<<<<<<< HEAD
 							       msg->msg_iov,
 							       copy);
+=======
+							       msg->msg_iov);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (ret == -EINVAL)
 				goto csum_copy_error;
 		}

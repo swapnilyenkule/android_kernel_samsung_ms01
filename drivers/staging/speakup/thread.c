@@ -23,8 +23,13 @@ int speakup_thread(void *data)
 		DEFINE_WAIT(wait);
 		while (1) {
 			spk_lock(flags);
+<<<<<<< HEAD
 			our_sound = unprocessed_sound;
 			unprocessed_sound.active = 0;
+=======
+			our_sound = spk_unprocessed_sound;
+			spk_unprocessed_sound.active = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			prepare_to_wait(&speakup_event, &wait,
 				TASK_INTERRUPTIBLE);
 			should_break = kthread_should_stop() ||

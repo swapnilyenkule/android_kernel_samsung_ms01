@@ -74,12 +74,20 @@ extern int cpuset_slab_spread_node(void);
 
 static inline int cpuset_do_page_mem_spread(void)
 {
+<<<<<<< HEAD
 	return current->flags & PF_SPREAD_PAGE;
+=======
+	return task_spread_page(current);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static inline int cpuset_do_slab_mem_spread(void)
 {
+<<<<<<< HEAD
 	return current->flags & PF_SPREAD_SLAB;
+=======
+	return task_spread_slab(current);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 extern int current_cpuset_is_being_rebound(void);

@@ -873,7 +873,12 @@ static int __devinit ad799x_probe(struct i2c_client *client,
 	return 0;
 
 error_free_irq:
+<<<<<<< HEAD
 	free_irq(client->irq, indio_dev);
+=======
+	if (client->irq > 0)
+		free_irq(client->irq, indio_dev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 error_cleanup_ring:
 	ad799x_ring_cleanup(indio_dev);
 error_disable_reg:

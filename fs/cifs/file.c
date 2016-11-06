@@ -265,6 +265,11 @@ cifs_new_fileinfo(__u16 fileHandle, struct file *file,
 	mutex_init(&pCifsFile->fh_mutex);
 	INIT_WORK(&pCifsFile->oplock_break, cifs_oplock_break);
 
+<<<<<<< HEAD
+=======
+	cifs_sb_active(inode->i_sb);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	spin_lock(&cifs_file_list_lock);
 	list_add(&pCifsFile->tlist, &(tlink_tcon(tlink)->openFileList));
 	/* if readable file instance put first in list*/
@@ -293,7 +298,12 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
 	struct inode *inode = cifs_file->dentry->d_inode;
 	struct cifs_tcon *tcon = tlink_tcon(cifs_file->tlink);
 	struct cifsInodeInfo *cifsi = CIFS_I(inode);
+<<<<<<< HEAD
 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+=======
+	struct super_block *sb = inode->i_sb;
+	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct cifsLockInfo *li, *tmp;
 
 	spin_lock(&cifs_file_list_lock);
@@ -345,6 +355,10 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
 
 	cifs_put_tlink(cifs_file->tlink);
 	dput(cifs_file->dentry);
+<<<<<<< HEAD
+=======
+	cifs_sb_deactive(sb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(cifs_file);
 }
 
@@ -882,7 +896,11 @@ cifs_push_mandatory_locks(struct cifsFileInfo *cfile)
 	if (!buf) {
 		mutex_unlock(&cinode->lock_mutex);
 		FreeXid(xid);
+<<<<<<< HEAD
 		return rc;
+=======
+		return -ENOMEM;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	for (i = 0; i < 2; i++) {
@@ -1539,10 +1557,18 @@ struct cifsFileInfo *find_readable_file(struct cifsInodeInfo *cifs_inode,
 struct cifsFileInfo *find_writable_file(struct cifsInodeInfo *cifs_inode,
 					bool fsuid_only)
 {
+<<<<<<< HEAD
 	struct cifsFileInfo *open_file;
 	struct cifs_sb_info *cifs_sb;
 	bool any_available = false;
 	int rc;
+=======
+	struct cifsFileInfo *open_file, *inv_file = NULL;
+	struct cifs_sb_info *cifs_sb;
+	bool any_available = false;
+	int rc;
+	unsigned int refind = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/* Having a null inode here (because mapping->host was set to zero by
 	the VFS or MM) should not happen but we had reports of on oops (due to
@@ -1562,12 +1588,20 @@ struct cifsFileInfo *find_writable_file(struct cifsInodeInfo *cifs_inode,
 
 	spin_lock(&cifs_file_list_lock);
 refind_writable:
+<<<<<<< HEAD
+=======
+	if (refind > MAX_REOPEN_ATT) {
+		spin_unlock(&cifs_file_list_lock);
+		return NULL;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	list_for_each_entry(open_file, &cifs_inode->openFileList, flist) {
 		if (!any_available && open_file->pid != current->tgid)
 			continue;
 		if (fsuid_only && open_file->uid != current_fsuid())
 			continue;
 		if (OPEN_FMODE(open_file->f_flags) & FMODE_WRITE) {
+<<<<<<< HEAD
 			cifsFileInfo_get(open_file);
 
 			if (!open_file->invalidHandle) {
@@ -1596,6 +1630,17 @@ refind_writable:
 			   racing to delete or lock the file we would not
 			   make progress if we restarted before the beginning
 			   of the loop here. */
+=======
+			if (!open_file->invalidHandle) {
+				/* found a good writable file */
+				cifsFileInfo_get(open_file);
+				spin_unlock(&cifs_file_list_lock);
+				return open_file;
+			} else {
+				if (!inv_file)
+					inv_file = open_file;
+			}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 	}
 	/* couldn't find useable FH with same pid, try any available */
@@ -1603,7 +1648,35 @@ refind_writable:
 		any_available = true;
 		goto refind_writable;
 	}
+<<<<<<< HEAD
 	spin_unlock(&cifs_file_list_lock);
+=======
+
+	if (inv_file) {
+		any_available = false;
+		cifsFileInfo_get(inv_file);
+	}
+
+	spin_unlock(&cifs_file_list_lock);
+
+	if (inv_file) {
+		rc = cifs_reopen_file(inv_file, false);
+		if (!rc)
+			return inv_file;
+		else {
+			spin_lock(&cifs_file_list_lock);
+			list_move_tail(&inv_file->flist,
+					&cifs_inode->openFileList);
+			spin_unlock(&cifs_file_list_lock);
+			cifsFileInfo_put(inv_file);
+			spin_lock(&cifs_file_list_lock);
+			++refind;
+			inv_file = NULL;
+			goto refind_writable;
+		}
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return NULL;
 }
 
@@ -2176,7 +2249,11 @@ cifs_iovec_write(struct file *file, const struct iovec *iov,
 		 unsigned long nr_segs, loff_t *poffset)
 {
 	unsigned long nr_pages, i;
+<<<<<<< HEAD
 	size_t copied, len, cur_len;
+=======
+	size_t bytes, copied, len, cur_len;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ssize_t total_written = 0;
 	loff_t offset;
 	struct iov_iter it;
@@ -2227,6 +2304,7 @@ cifs_iovec_write(struct file *file, const struct iovec *iov,
 
 		save_len = cur_len;
 		for (i = 0; i < nr_pages; i++) {
+<<<<<<< HEAD
 			copied = min_t(const size_t, cur_len, PAGE_SIZE);
 			copied = iov_iter_copy_from_user(wdata->pages[i], &it,
 							 0, copied);
@@ -2235,6 +2313,47 @@ cifs_iovec_write(struct file *file, const struct iovec *iov,
 		}
 		cur_len = save_len - cur_len;
 
+=======
+			bytes = min_t(const size_t, cur_len, PAGE_SIZE);
+			copied = iov_iter_copy_from_user(wdata->pages[i], &it,
+							 0, bytes);
+			cur_len -= copied;
+			iov_iter_advance(&it, copied);
+			/*
+			 * If we didn't copy as much as we expected, then that
+			 * may mean we trod into an unmapped area. Stop copying
+			 * at that point. On the next pass through the big
+			 * loop, we'll likely end up getting a zero-length
+			 * write and bailing out of it.
+			 */
+			if (copied < bytes)
+				break;
+		}
+		cur_len = save_len - cur_len;
+
+		/*
+		 * If we have no data to send, then that probably means that
+		 * the copy above failed altogether. That's most likely because
+		 * the address in the iovec was bogus. Set the rc to -EFAULT,
+		 * free anything we allocated and bail out.
+		 */
+		if (!cur_len) {
+			for (i = 0; i < nr_pages; i++)
+				put_page(wdata->pages[i]);
+			kfree(wdata);
+			rc = -EFAULT;
+			break;
+		}
+
+		/*
+		 * i + 1 now represents the number of pages we actually used in
+		 * the copy phase above. Bring nr_pages down to that, and free
+		 * any pages that we didn't use.
+		 */
+		for ( ; nr_pages > i + 1; nr_pages--)
+			put_page(wdata->pages[nr_pages - 1]);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		wdata->sync_mode = WB_SYNC_ALL;
 		wdata->nr_pages = nr_pages;
 		wdata->offset = (__u64)offset;

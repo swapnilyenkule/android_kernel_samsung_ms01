@@ -20,6 +20,10 @@
 #include <linux/input.h>
 #include <linux/uaccess.h>
 #include <linux/time.h>
+<<<<<<< HEAD
+=======
+#include <linux/kmemleak.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <asm/mach-types.h>
 #include <sound/apr_audio.h>
 #include <mach/qdsp6v2/usf.h>
@@ -555,6 +559,12 @@ static int config_xx(struct usf_xx_type *usf_xx, struct us_xx_info_type *config)
 	if (config->params_data_size > 0) { /* transparent data copy */
 		usf_xx->encdec_cfg.params = kzalloc(config->params_data_size,
 						    GFP_KERNEL);
+<<<<<<< HEAD
+=======
+		/* False memory leak here - pointer in packed struct *
+		* is undetected by kmemleak tool                    */
+		kmemleak_ignore(usf_xx->encdec_cfg.params);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (usf_xx->encdec_cfg.params == NULL) {
 			pr_err("%s: params memory alloc[%d] failure\n",
 				__func__,

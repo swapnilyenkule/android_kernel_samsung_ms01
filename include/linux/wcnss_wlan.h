@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2011-2013,2015 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -28,6 +32,10 @@ enum wcnss_hw_type {
 
 struct wcnss_wlan_config {
 	int		use_48mhz_xo;
+<<<<<<< HEAD
+=======
+	int	is_pronto_v3;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 enum {
@@ -40,10 +48,20 @@ enum {
 #define HAVE_WCNSS_SUSPEND_RESUME_NOTIFY 1
 #define HAVE_WCNSS_RESET_INTR 1
 #define HAVE_WCNSS_CAL_DOWNLOAD 1
+<<<<<<< HEAD
 #define HAVE_WCNSS_RX_BUFF_COUNT 1
 #define WLAN_MAC_ADDR_SIZE (6)
 #define CONFIG_WCNSS_REGISTER_DUMP_ON_BITE 1
 
+=======
+#define HAVE_CBC_DONE 1
+#define HAVE_WCNSS_RX_BUFF_COUNT 1
+#define WLAN_MAC_ADDR_SIZE (6)
+#define PRONTO_PMU_OFFSET       0x1004
+#define WCNSS_PMU_CFG_GC_BUS_MUX_SEL_TOP   BIT(5)
+
+void wcnss_get_monotonic_boottime(struct timespec *ts);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct device *wcnss_wlan_get_device(void);
 struct resource *wcnss_wlan_get_memory_map(struct device *dev);
 int wcnss_wlan_get_dxe_tx_irq(struct device *dev);
@@ -77,7 +95,13 @@ void wcnss_suspend_notify(void);
 void wcnss_resume_notify(void);
 void wcnss_riva_log_debug_regs(void);
 void wcnss_pronto_log_debug_regs(void);
+<<<<<<< HEAD
 int wcnss_device_ready(void);
+=======
+int wcnss_is_hw_pronto_ver3(void);
+int wcnss_device_ready(void);
+bool wcnss_cbc_complete(void);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 int wcnss_device_is_shutdown(void);
 void wcnss_riva_dump_pmic_regs(void);
 int wcnss_xo_auto_detect_enabled(void);
@@ -91,10 +115,17 @@ static inline void wcnss_log_debug_regs_on_bite(void)
 }
 #endif
 int wcnss_set_wlan_unsafe_channel(
+<<<<<<< HEAD
 						u16 *unsafe_ch_list, u16 ch_count);
 int wcnss_get_wlan_unsafe_channel(
 						u16 *unsafe_ch_list, u16 buffer_size,
 										u16 *ch_count);
+=======
+				u16 *unsafe_ch_list, u16 ch_count);
+int wcnss_get_wlan_unsafe_channel(
+				u16 *unsafe_ch_list, u16 buffer_size,
+				u16 *ch_count);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define wcnss_wlan_get_drvdata(dev) dev_get_drvdata(dev)
 #define wcnss_wlan_set_drvdata(dev, data) dev_set_drvdata((dev), (data))
 /* WLAN driver uses these names */

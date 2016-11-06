@@ -21,3 +21,7 @@ obj-$(CONFIG_TRACEPOINTS) += net-traces.o
 obj-$(CONFIG_NET_DROP_MONITOR) += drop_monitor.o
 obj-$(CONFIG_NETWORK_PHY_TIMESTAMPING) += timestamping.o
 obj-$(CONFIG_NETPRIO_CGROUP) += netprio_cgroup.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SOCKEV_NLMCAST) += sockev_nlmcast.o
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68

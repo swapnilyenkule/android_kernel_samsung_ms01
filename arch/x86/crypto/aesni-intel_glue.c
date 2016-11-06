@@ -1203,7 +1203,11 @@ static int __driver_rfc4106_decrypt(struct aead_request *req)
 		src = kmalloc(req->cryptlen + req->assoclen, GFP_ATOMIC);
 		if (!src)
 			return -ENOMEM;
+<<<<<<< HEAD
 		assoc = (src + req->cryptlen + auth_tag_len);
+=======
+		assoc = (src + req->cryptlen);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		scatterwalk_map_and_copy(src, req->src, 0, req->cryptlen, 0);
 		scatterwalk_map_and_copy(assoc, req->assoc, 0,
 			req->assoclen, 0);
@@ -1228,7 +1232,11 @@ static int __driver_rfc4106_decrypt(struct aead_request *req)
 		scatterwalk_done(&src_sg_walk, 0, 0);
 		scatterwalk_done(&assoc_sg_walk, 0, 0);
 	} else {
+<<<<<<< HEAD
 		scatterwalk_map_and_copy(dst, req->dst, 0, req->cryptlen, 1);
+=======
+		scatterwalk_map_and_copy(dst, req->dst, 0, tempCipherLen, 1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		kfree(src);
 	}
 	return retval;

@@ -2242,6 +2242,12 @@ struct usb_hcd *isp1760_register(phys_addr_t res_start, resource_size_t res_len,
 	hcd->rsrc_start = res_start;
 	hcd->rsrc_len = res_len;
 
+<<<<<<< HEAD
+=======
+	/* This driver doesn't support wakeup requests */
+	hcd->cant_recv_wakeups = 1;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = usb_add_hcd(hcd, irq, irqflags);
 	if (ret)
 		goto err_unmap;

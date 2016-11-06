@@ -133,8 +133,13 @@ ipv6:
 	if (poff >= 0) {
 		__be32 *ports, _ports;
 
+<<<<<<< HEAD
 		nhoff += poff;
 		ports = skb_header_pointer(skb, nhoff, sizeof(_ports), &_ports);
+=======
+		ports = skb_header_pointer(skb, nhoff + poff,
+					   sizeof(_ports), &_ports);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ports)
 			flow->ports = *ports;
 	}

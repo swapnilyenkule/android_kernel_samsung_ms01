@@ -50,11 +50,20 @@ extern int copy_mount_string(const void __user *, char **);
 extern struct vfsmount *lookup_mnt(struct path *);
 extern int finish_automount(struct vfsmount *, struct path *);
 
+<<<<<<< HEAD
+=======
+extern void mnt_make_longterm(struct vfsmount *);
+extern void mnt_make_shortterm(struct vfsmount *);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern int sb_prepare_remount_readonly(struct super_block *);
 
 extern void __init mnt_init(void);
 
+<<<<<<< HEAD
 extern struct lglock vfsmount_lock;
+=======
+DECLARE_BRLOCK(vfsmount_lock);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 
 /*

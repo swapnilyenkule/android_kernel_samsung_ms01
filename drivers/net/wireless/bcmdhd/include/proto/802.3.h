@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +25,11 @@
  *
  * Fundamental constants relating to 802.3
  *
+<<<<<<< HEAD
  * $Id: 802.3.h 417942 2013-08-13 07:53:57Z $
+=======
+ * $Id: 802.3.h 417943 2013-08-13 07:54:04Z $
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 #ifndef _802_3_h_

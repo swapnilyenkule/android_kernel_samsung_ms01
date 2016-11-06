@@ -66,6 +66,7 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 {
 	int rc;
 
+<<<<<<< HEAD
     // WTL_EDM_START
     /* MDM 3.1 START */
     struct inode *inode;
@@ -77,6 +78,19 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 	    size_t size;
 	    loff_t file_size = i_size_read(inode);
 	    pgoff_t end_page_index = file_size >> PAGE_CACHE_SHIFT;
+=======
+	// WTL_EDM_START
+	/* MDM 3.1 START */
+	struct inode *inode;
+	struct ecryptfs_crypt_stat *crypt_stat;
+
+	inode = page->mapping->host;
+	crypt_stat = &ecryptfs_inode_to_private(inode)->crypt_stat;
+	if (!(crypt_stat->flags & ECRYPTFS_ENCRYPTED)) {
+		size_t size;
+		loff_t file_size = i_size_read(inode);
+		pgoff_t end_page_index = file_size >> PAGE_CACHE_SHIFT;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (end_page_index < page->index)
 			size = 0;
 		else if (end_page_index == page->index)
@@ -91,9 +105,15 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 		} else
 			SetPageUptodate(page);
 		goto out;
+<<<<<<< HEAD
     }
     /* MDM 3.1 END */
     // WTL_EDM_END
+=======
+	}
+	/* MDM 3.1 END */
+	// WTL_EDM_END
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	rc = ecryptfs_encrypt_page(page);
 	if (rc) {
@@ -103,6 +123,10 @@ static int ecryptfs_writepage(struct page *page, struct writeback_control *wbc)
 		goto out;
 	}
 	SetPageUptodate(page);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out:
 	unlock_page(page);
 	return rc;
@@ -264,8 +288,14 @@ static int ecryptfs_readpage(struct file *file, struct page *page)
 out:
 	if (rc)
 		ClearPageUptodate(page);
+<<<<<<< HEAD
 	else
 		SetPageUptodate(page);
+=======
+	else {
+		SetPageUptodate(page);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ecryptfs_printk(KERN_DEBUG, "Unlocking page with index = [0x%.16lx]\n",
 			page->index);
 	unlock_page(page);
@@ -535,6 +565,10 @@ static int ecryptfs_write_end(struct file *file,
 			"zeros in page with index = [0x%.16lx]\n", index);
 		goto out;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	rc = ecryptfs_encrypt_page(page);
 	if (rc) {
 		ecryptfs_printk(KERN_WARNING, "Error encrypting page (upper "

@@ -834,18 +834,34 @@ static void clk_change_rate(struct clk *clk)
 {
 	struct clk *child;
 	unsigned long old_rate;
+<<<<<<< HEAD
+=======
+	unsigned long best_parent_rate = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	struct hlist_node *tmp;
 
 	old_rate = clk->rate;
 
+<<<<<<< HEAD
+=======
+	if (clk->parent)
+		best_parent_rate = clk->parent->rate;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (clk->ops->set_rate)
 		clk->ops->set_rate(clk->hw, clk->new_rate);
 
 	if (clk->ops->recalc_rate)
+<<<<<<< HEAD
 		clk->rate = clk->ops->recalc_rate(clk->hw,
 				clk->parent->rate);
 	else
 		clk->rate = clk->parent->rate;
+=======
+		clk->rate = clk->ops->recalc_rate(clk->hw, best_parent_rate);
+	else
+		clk->rate = best_parent_rate;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (clk->notifier_count && old_rate != clk->rate)
 		__clk_notify(clk, POST_RATE_CHANGE, old_rate, clk->rate);
@@ -997,7 +1013,11 @@ static struct clk *__clk_init_parent(struct clk *clk)
 
 	if (!clk->parents)
 		clk->parents =
+<<<<<<< HEAD
 			kmalloc((sizeof(struct clk*) * clk->num_parents),
+=======
+			kzalloc((sizeof(struct clk*) * clk->num_parents),
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					GFP_KERNEL);
 
 	if (!clk->parents)
@@ -1062,6 +1082,7 @@ static int __clk_set_parent(struct clk *clk, struct clk *parent)
 
 	old_parent = clk->parent;
 
+<<<<<<< HEAD
 	/* find index of new parent clock using cached parent ptrs */
 	for (i = 0; i < clk->num_parents; i++)
 		if (clk->parents[i] == parent)
@@ -1077,6 +1098,26 @@ static int __clk_set_parent(struct clk *clk, struct clk *parent)
 				clk->parents[i] = __clk_lookup(parent->name);
 				break;
 			}
+=======
+	if (!clk->parents)
+		clk->parents = kzalloc((sizeof(struct clk*) * clk->num_parents),
+								GFP_KERNEL);
+
+	/*
+	 * find index of new parent clock using cached parent ptrs,
+	 * or if not yet cached, use string name comparison and cache
+	 * them now to avoid future calls to __clk_lookup.
+	 */
+	for (i = 0; i < clk->num_parents; i++) {
+		if (clk->parents && clk->parents[i] == parent)
+			break;
+		else if (!strcmp(clk->parent_names[i], parent->name)) {
+			if (clk->parents)
+				clk->parents[i] = __clk_lookup(parent->name);
+			break;
+		}
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (i == clk->num_parents) {
 		pr_debug("%s: clock %s is not a possible parent of clock %s\n",
@@ -1447,6 +1488,10 @@ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb)
 		/* XXX the notifier code should handle this better */
 		if (!cn->notifier_head.head) {
 			srcu_cleanup_notifier_head(&cn->notifier_head);
+<<<<<<< HEAD
+=======
+			list_del(&cn->node);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			kfree(cn);
 		}
 

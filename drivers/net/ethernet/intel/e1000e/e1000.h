@@ -175,13 +175,22 @@ struct e1000_info;
 /*
  * in the case of WTHRESH, it appears at least the 82571/2 hardware
  * writes back 4 descriptors when WTHRESH=5, and 3 descriptors when
+<<<<<<< HEAD
  * WTHRESH=4, and since we want 64 bytes at a time written back, set
  * it to 5
+=======
+ * WTHRESH=4, so a setting of 5 gives the most efficient bus
+ * utilization but to avoid possible Tx stalls, set it to 1
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 #define E1000_TXDCTL_DMA_BURST_ENABLE                          \
 	(E1000_TXDCTL_GRAN | /* set descriptor granularity */  \
 	 E1000_TXDCTL_COUNT_DESC |                             \
+<<<<<<< HEAD
 	 (5 << 16) | /* wthresh must be +1 more than desired */\
+=======
+	 (1 << 16) | /* wthresh must be +1 more than desired */\
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 (1 << 8)  | /* hthresh */                             \
 	 0x1f)       /* pthresh */
 
@@ -309,6 +318,10 @@ struct e1000_adapter {
 	 */
 	struct e1000_ring *tx_ring /* One per active queue */
 						____cacheline_aligned_in_smp;
+<<<<<<< HEAD
+=======
+	u32 tx_fifo_limit;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	struct napi_struct napi;
 

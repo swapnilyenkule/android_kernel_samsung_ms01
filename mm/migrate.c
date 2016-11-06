@@ -140,13 +140,25 @@ static int remove_migration_pte(struct page *new, struct vm_area_struct *vma,
 
 	get_page(new);
 	pte = pte_mkold(mk_pte(new, vma->vm_page_prot));
+<<<<<<< HEAD
 	if (is_write_migration_entry(entry))
 		pte = pte_mkwrite(pte);
+=======
+
+	/* Recheck VMA as permissions can change since migration started  */
+	if (is_write_migration_entry(entry))
+		pte = maybe_mkwrite(pte, vma);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_HUGETLB_PAGE
 	if (PageHuge(new))
 		pte = pte_mkhuge(pte);
 #endif
+<<<<<<< HEAD
 	flush_cache_page(vma, addr, pte_pfn(pte));
+=======
+	flush_dcache_page(new);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	set_pte_at(mm, addr, ptep, pte);
 
 	if (PageHuge(new)) {
@@ -181,6 +193,7 @@ static void remove_migration_ptes(struct page *old, struct page *new)
  * get to the page and wait until migration is finished.
  * When we return from this function the fault will be retried.
  */
+<<<<<<< HEAD
 void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 				unsigned long address)
 {
@@ -190,6 +203,16 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 	struct page *page;
 
 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+=======
+static void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+				spinlock_t *ptl)
+{
+	pte_t pte;
+	swp_entry_t entry;
+	struct page *page;
+
+	spin_lock(ptl);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	pte = *ptep;
 	if (!is_swap_pte(pte))
 		goto out;
@@ -217,6 +240,23 @@ out:
 	pte_unmap_unlock(ptep, ptl);
 }
 
+<<<<<<< HEAD
+=======
+void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+				unsigned long address)
+{
+	spinlock_t *ptl = pte_lockptr(mm, pmd);
+	pte_t *ptep = pte_offset_map(pmd, address);
+	__migration_entry_wait(mm, ptep, ptl);
+}
+
+void migration_entry_wait_huge(struct mm_struct *mm, pte_t *pte)
+{
+	spinlock_t *ptl = &(mm)->page_table_lock;
+	__migration_entry_wait(mm, pte, ptl);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef CONFIG_BLOCK
 /* Returns true if all buffers are successfully locked */
 static bool buffer_migrate_lock_buffers(struct buffer_head *head,

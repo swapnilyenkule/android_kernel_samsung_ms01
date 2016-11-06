@@ -19,8 +19,13 @@
 
 struct mmc_cd_gpio {
 	unsigned int gpio;
+<<<<<<< HEAD
 	char label[0];
 	bool status;
+=======
+	bool status;
+	char label[0];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static int mmc_cd_get_status(struct mmc_host *host)

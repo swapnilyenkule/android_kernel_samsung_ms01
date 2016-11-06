@@ -44,7 +44,10 @@ extern bool pciehp_poll_mode;
 extern int pciehp_poll_time;
 extern bool pciehp_debug;
 extern bool pciehp_force;
+<<<<<<< HEAD
 extern struct workqueue_struct *pciehp_wq;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define dbg(format, arg...)						\
 do {									\
@@ -78,6 +81,10 @@ struct slot {
 	struct hotplug_slot *hotplug_slot;
 	struct delayed_work work;	/* work for button event */
 	struct mutex lock;
+<<<<<<< HEAD
+=======
+	struct workqueue_struct *wq;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 struct event_info {

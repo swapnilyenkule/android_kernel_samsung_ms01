@@ -171,6 +171,7 @@ static int metrousb_open(struct tty_struct *tty, struct usb_serial_port *port)
 	metro_priv->throttled = 0;
 	spin_unlock_irqrestore(&metro_priv->lock, flags);
 
+<<<<<<< HEAD
 	/*
 	 * Force low_latency on so that our tty_push actually forces the data
 	 * through, otherwise it is scheduled, and with high data rates (like
@@ -179,6 +180,8 @@ static int metrousb_open(struct tty_struct *tty, struct usb_serial_port *port)
 	if (tty)
 		tty->low_latency = 1;
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Clear the urb pipe. */
 	usb_clear_halt(serial->dev, port->interrupt_in_urb->pipe);
 

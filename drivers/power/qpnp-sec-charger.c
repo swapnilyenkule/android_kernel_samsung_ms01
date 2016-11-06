@@ -2987,7 +2987,11 @@ qpnp_batt_power_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_ONLINE:
 		switch (chip->cable_type) {
 		case CABLE_TYPE_NONE:
+<<<<<<< HEAD
 			val->intval = 0;
+=======
+			val->intval = POWER_SUPPLY_TYPE_BATTERY;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		case CABLE_TYPE_USB:
 			val->intval = POWER_SUPPLY_TYPE_USB;

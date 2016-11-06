@@ -412,7 +412,11 @@ static void print_digital_conv(struct snd_info_buffer *buffer,
 	if (digi1 & AC_DIG1_EMPHASIS)
 		snd_iprintf(buffer, " Preemphasis");
 	if (digi1 & AC_DIG1_COPYRIGHT)
+<<<<<<< HEAD
 		snd_iprintf(buffer, " Copyright");
+=======
+		snd_iprintf(buffer, " Non-Copyright");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (digi1 & AC_DIG1_NONAUDIO)
 		snd_iprintf(buffer, " Non-Audio");
 	if (digi1 & AC_DIG1_PROFESSIONAL)

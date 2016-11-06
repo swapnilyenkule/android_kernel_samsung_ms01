@@ -48,6 +48,7 @@ static int msm_csid_cid_lut(
 		return -EINVAL;
 	}
 	for (i = 0; i < csid_lut_params->num_cid && i < 16; i++) {
+<<<<<<< HEAD
 		if (csid_lut_params->vc_cfg[i]->cid >=
 			csid_lut_params->num_cid ||
 			csid_lut_params->vc_cfg[i]->cid < 0) {
@@ -55,6 +56,8 @@ static int msm_csid_cid_lut(
 					__func__, csid_lut_params->vc_cfg[i]->cid);
 				return -EINVAL;
 		}
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		CDBG("%s lut params num_cid = %d, cid = %d, dt = %x, df = %d\n",
 			__func__,
 			csid_lut_params->num_cid,

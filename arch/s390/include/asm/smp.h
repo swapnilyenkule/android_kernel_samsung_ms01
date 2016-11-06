@@ -16,7 +16,11 @@
 extern struct mutex smp_cpu_state_mutex;
 extern struct save_area *zfcpdump_save_areas[NR_CPUS + 1];
 
+<<<<<<< HEAD
 extern int __cpu_up(unsigned int cpu, struct task_struct *tidle);
+=======
+extern int __cpu_up(unsigned int cpu);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 extern void arch_send_call_function_single_ipi(int cpu);
 extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);

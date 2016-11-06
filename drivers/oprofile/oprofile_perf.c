@@ -25,7 +25,11 @@ static int oprofile_perf_enabled;
 static DEFINE_MUTEX(oprofile_perf_mutex);
 
 static struct op_counter_config *counter_config;
+<<<<<<< HEAD
 static struct perf_event **perf_events[nr_cpumask_bits];
+=======
+static struct perf_event **perf_events[NR_CPUS];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int num_counters;
 
 /*

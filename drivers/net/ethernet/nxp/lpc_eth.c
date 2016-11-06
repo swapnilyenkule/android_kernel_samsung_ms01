@@ -936,16 +936,28 @@ static void __lpc_handle_xmit(struct net_device *ndev)
 			/* Update stats */
 			ndev->stats.tx_packets++;
 			ndev->stats.tx_bytes += skb->len;
+<<<<<<< HEAD
 
 			/* Free buffer */
 			dev_kfree_skb_irq(skb);
 		}
+=======
+		}
+		dev_kfree_skb_irq(skb);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		txcidx = readl(LPC_ENET_TXCONSUMEINDEX(pldat->net_base));
 	}
 
+<<<<<<< HEAD
 	if (netif_queue_stopped(ndev))
 		netif_wake_queue(ndev);
+=======
+	if (pldat->num_used_tx_buffs <= ENET_TX_DESC/2) {
+		if (netif_queue_stopped(ndev))
+			netif_wake_queue(ndev);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int __lpc_handle_recv(struct net_device *ndev, int budget)
@@ -1310,6 +1322,10 @@ static const struct net_device_ops lpc_netdev_ops = {
 	.ndo_set_rx_mode	= lpc_eth_set_multicast_list,
 	.ndo_do_ioctl		= lpc_eth_ioctl,
 	.ndo_set_mac_address	= lpc_set_mac_address,
+<<<<<<< HEAD
+=======
+	.ndo_change_mtu		= eth_change_mtu,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static int lpc_eth_drv_probe(struct platform_device *pdev)
@@ -1522,6 +1538,10 @@ static int lpc_eth_drv_remove(struct platform_device *pdev)
 				  pldat->dma_buff_base_p);
 	free_irq(ndev->irq, ndev);
 	iounmap(pldat->net_base);
+<<<<<<< HEAD
+=======
+	mdiobus_unregister(pldat->mii_bus);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mdiobus_free(pldat->mii_bus);
 	clk_disable(pldat->clk);
 	clk_put(pldat->clk);

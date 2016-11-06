@@ -10,6 +10,10 @@
  */
 #include <linux/linkage.h>
 
+<<<<<<< HEAD
+=======
+	.arch	armv7-a
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * Debugging stuff
  *
@@ -699,6 +703,10 @@ __armv7_mmu_cache_on:
 		mcrne	p15, 0, r0, c8, c7, 0	@ flush I,D TLBs
 #endif
 		mrc	p15, 0, r0, c1, c0, 0	@ read control reg
+<<<<<<< HEAD
+=======
+		bic	r0, r0, #1 << 28	@ clear SCTLR.TRE
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		orr	r0, r0, #0x5000		@ I-cache enable, RR cache replacement
 		orr	r0, r0, #0x003c		@ write buffer
 #ifdef CONFIG_MMU

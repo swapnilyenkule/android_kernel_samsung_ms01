@@ -128,7 +128,11 @@ static int synth_probe(struct spk_synth *synth)
 {
 	int failed;
 
+<<<<<<< HEAD
 	failed = serial_synth_probe(synth);
+=======
+	failed = spk_serial_synth_probe(synth);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (failed == 0) {
 		spk_synth_immediate(synth, "\033=R\r");
 		mdelay(100);

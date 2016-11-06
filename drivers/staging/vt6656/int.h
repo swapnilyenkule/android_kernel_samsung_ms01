@@ -34,7 +34,10 @@
 #include "device.h"
 
 /*---------------------  Export Definitions -------------------------*/
+<<<<<<< HEAD
 #pragma pack(1)
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 typedef struct tagSINTData {
     BYTE    byTSR0;
     BYTE    byPkt0;

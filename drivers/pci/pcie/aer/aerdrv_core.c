@@ -637,6 +637,10 @@ static void aer_recover_work_func(struct work_struct *work)
 			continue;
 		}
 		do_recovery(pdev, entry.severity);
+<<<<<<< HEAD
+=======
+		pci_dev_put(pdev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 #endif

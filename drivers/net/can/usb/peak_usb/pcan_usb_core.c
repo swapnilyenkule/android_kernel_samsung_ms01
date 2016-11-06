@@ -737,7 +737,11 @@ static int peak_usb_create_dev(struct peak_usb_adapter *peak_usb_adapter,
 		dev_err(&intf->dev, "%s: couldn't alloc cmd buffer\n",
 			PCAN_USB_DRIVER_NAME);
 		err = -ENOMEM;
+<<<<<<< HEAD
 		goto lbl_set_intf_data;
+=======
+		goto lbl_free_candev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	dev->udev = usb_dev;
@@ -776,7 +780,11 @@ static int peak_usb_create_dev(struct peak_usb_adapter *peak_usb_adapter,
 	err = register_candev(netdev);
 	if (err) {
 		dev_err(&intf->dev, "couldn't register CAN device: %d\n", err);
+<<<<<<< HEAD
 		goto lbl_free_cmd_buf;
+=======
+		goto lbl_restore_intf_data;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	if (dev->prev_siblings)
@@ -789,14 +797,22 @@ static int peak_usb_create_dev(struct peak_usb_adapter *peak_usb_adapter,
 	if (dev->adapter->dev_init) {
 		err = dev->adapter->dev_init(dev);
 		if (err)
+<<<<<<< HEAD
 			goto lbl_free_cmd_buf;
+=======
+			goto lbl_unregister_candev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* set bus off */
 	if (dev->adapter->dev_set_bus) {
 		err = dev->adapter->dev_set_bus(dev, 0);
 		if (err)
+<<<<<<< HEAD
 			goto lbl_free_cmd_buf;
+=======
+			goto lbl_unregister_candev;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	/* get device number early */
@@ -808,11 +824,22 @@ static int peak_usb_create_dev(struct peak_usb_adapter *peak_usb_adapter,
 
 	return 0;
 
+<<<<<<< HEAD
 lbl_free_cmd_buf:
 	kfree(dev->cmd_buf);
 
 lbl_set_intf_data:
 	usb_set_intfdata(intf, dev->prev_siblings);
+=======
+lbl_unregister_candev:
+	unregister_candev(netdev);
+
+lbl_restore_intf_data:
+	usb_set_intfdata(intf, dev->prev_siblings);
+	kfree(dev->cmd_buf);
+
+lbl_free_candev:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	free_candev(netdev);
 
 	return err;

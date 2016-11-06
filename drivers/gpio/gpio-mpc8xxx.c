@@ -69,10 +69,21 @@ static int mpc8572_gpio_get(struct gpio_chip *gc, unsigned int gpio)
 	u32 val;
 	struct of_mm_gpio_chip *mm = to_of_mm_gpio_chip(gc);
 	struct mpc8xxx_gpio_chip *mpc8xxx_gc = to_mpc8xxx_gpio_chip(mm);
+<<<<<<< HEAD
 
 	val = in_be32(mm->regs + GPIO_DAT) & ~in_be32(mm->regs + GPIO_DIR);
 
 	return (val | mpc8xxx_gc->data) & mpc8xxx_gpio2mask(gpio);
+=======
+	u32 out_mask, out_shadow;
+
+	out_mask = in_be32(mm->regs + GPIO_DIR);
+
+	val = in_be32(mm->regs + GPIO_DAT) & ~out_mask;
+	out_shadow = mpc8xxx_gc->data & out_mask;
+
+	return (val | out_shadow) & mpc8xxx_gpio2mask(gpio);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int mpc8xxx_gpio_get(struct gpio_chip *gc, unsigned int gpio)
@@ -163,7 +174,12 @@ static void mpc8xxx_gpio_irq_cascade(unsigned int irq, struct irq_desc *desc)
 	if (mask)
 		generic_handle_irq(irq_linear_revmap(mpc8xxx_gc->irq,
 						     32 - ffs(mask)));
+<<<<<<< HEAD
 	chip->irq_eoi(&desc->irq_data);
+=======
+	if (chip->irq_eoi)
+		chip->irq_eoi(&desc->irq_data);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void mpc8xxx_irq_unmask(struct irq_data *d)

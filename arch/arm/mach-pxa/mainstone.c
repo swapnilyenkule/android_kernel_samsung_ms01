@@ -13,6 +13,10 @@
  *  published by the Free Software Foundation.
  */
 #include <linux/gpio.h>
+<<<<<<< HEAD
+=======
+#include <linux/gpio/machine.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #include <linux/init.h>
 #include <linux/platform_device.h>
 #include <linux/syscore_ops.h>
@@ -120,6 +124,7 @@ static unsigned long mainstone_pin_config[] = {
 	GPIO1_GPIO | WAKEUP_ON_EDGE_BOTH,
 };
 
+<<<<<<< HEAD
 static unsigned long mainstone_irq_enabled;
 
 static void mainstone_mask_irq(struct irq_data *d)
@@ -206,6 +211,8 @@ device_initcall(mainstone_irq_device_init);
 #endif
 
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static struct resource smc91x_resources[] = {
 	[0] = {
 		.start	= (MST_ETH_PHYS + 0x300),
@@ -483,11 +490,43 @@ static struct platform_device mst_gpio_keys_device = {
 	},
 };
 
+<<<<<<< HEAD
+=======
+static struct resource mst_cplds_resources[] = {
+	[0] = {
+		.start	= MST_FPGA_PHYS + 0xc0,
+		.end	= MST_FPGA_PHYS + 0xe0 - 1,
+		.flags	= IORESOURCE_MEM,
+	},
+	[1] = {
+		.start	= PXA_GPIO_TO_IRQ(0),
+		.end	= PXA_GPIO_TO_IRQ(0),
+		.flags	= IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
+	},
+	[2] = {
+		.start	= MAINSTONE_IRQ(0),
+		.end	= MAINSTONE_IRQ(15),
+		.flags	= IORESOURCE_IRQ,
+	},
+};
+
+static struct platform_device mst_cplds_device = {
+	.name		= "pxa_cplds_irqs",
+	.id		= -1,
+	.resource	= &mst_cplds_resources[0],
+	.num_resources	= 3,
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static struct platform_device *platform_devices[] __initdata = {
 	&smc91x_device,
 	&mst_flash_device[0],
 	&mst_flash_device[1],
 	&mst_gpio_keys_device,
+<<<<<<< HEAD
+=======
+	&mst_cplds_device,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 static struct pxaohci_platform_data mainstone_ohci_platform_data = {
@@ -618,7 +657,11 @@ MACHINE_START(MAINSTONE, "Intel HCDDBBVA0 Development Platform (aka Mainstone)")
 	.atag_offset	= 0x100,	/* BLOB boot parameter setting */
 	.map_io		= mainstone_map_io,
 	.nr_irqs	= MAINSTONE_NR_IRQS,
+<<<<<<< HEAD
 	.init_irq	= mainstone_init_irq,
+=======
+	.init_irq	= pxa27x_init_irq,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	.handle_irq	= pxa27x_handle_irq,
 	.timer		= &pxa_timer,
 	.init_machine	= mainstone_init,

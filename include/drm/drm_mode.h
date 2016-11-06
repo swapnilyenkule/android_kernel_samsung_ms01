@@ -223,6 +223,11 @@ struct drm_mode_get_connector {
 	__u32 connection;
 	__u32 mm_width, mm_height; /**< HxW in millimeters */
 	__u32 subpixel;
+<<<<<<< HEAD
+=======
+
+	__u32 pad;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 #define DRM_MODE_PROP_PENDING	(1<<0)
@@ -343,8 +348,14 @@ struct drm_mode_mode_cmd {
 	struct drm_mode_modeinfo mode;
 };
 
+<<<<<<< HEAD
 #define DRM_MODE_CURSOR_BO	(1<<0)
 #define DRM_MODE_CURSOR_MOVE	(1<<1)
+=======
+#define DRM_MODE_CURSOR_BO	0x01
+#define DRM_MODE_CURSOR_MOVE	0x02
+#define DRM_MODE_CURSOR_FLAGS	0x03
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*
  * depending on the value in flags different members are used.

@@ -223,6 +223,7 @@ ath5k_hw_setup_tx_queue(struct ath5k_hw *ah, enum ath5k_tx_queue queue_type,
 	} else {
 		switch (queue_type) {
 		case AR5K_TX_QUEUE_DATA:
+<<<<<<< HEAD
 			for (queue = AR5K_TX_QUEUE_ID_DATA_MIN;
 				ah->ah_txq[queue].tqi_type !=
 				AR5K_TX_QUEUE_INACTIVE; queue++) {
@@ -230,6 +231,9 @@ ath5k_hw_setup_tx_queue(struct ath5k_hw *ah, enum ath5k_tx_queue queue_type,
 				if (queue > AR5K_TX_QUEUE_ID_DATA_MAX)
 					return -EINVAL;
 			}
+=======
+			queue = queue_info->tqi_subtype;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 		case AR5K_TX_QUEUE_UAPSD:
 			queue = AR5K_TX_QUEUE_ID_UAPSD;

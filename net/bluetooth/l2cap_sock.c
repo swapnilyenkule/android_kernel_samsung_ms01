@@ -404,6 +404,10 @@ static int l2cap_sock_getname(struct socket *sock, struct sockaddr *addr, int *l
 
 	BT_DBG("sock %p, sk %p", sock, sk);
 
+<<<<<<< HEAD
+=======
+	memset(la, 0, sizeof(struct sockaddr_l2));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	addr->sa_family = AF_BLUETOOTH;
 	*len = sizeof(struct sockaddr_l2);
 

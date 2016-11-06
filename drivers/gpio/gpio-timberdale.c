@@ -116,7 +116,11 @@ static void timbgpio_irq_disable(struct irq_data *d)
 	unsigned long flags;
 
 	spin_lock_irqsave(&tgpio->lock, flags);
+<<<<<<< HEAD
 	tgpio->last_ier &= ~(1 << offset);
+=======
+	tgpio->last_ier &= ~(1UL << offset);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	iowrite32(tgpio->last_ier, tgpio->membase + TGPIO_IER);
 	spin_unlock_irqrestore(&tgpio->lock, flags);
 }
@@ -128,7 +132,11 @@ static void timbgpio_irq_enable(struct irq_data *d)
 	unsigned long flags;
 
 	spin_lock_irqsave(&tgpio->lock, flags);
+<<<<<<< HEAD
 	tgpio->last_ier |= 1 << offset;
+=======
+	tgpio->last_ier |= 1UL << offset;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	iowrite32(tgpio->last_ier, tgpio->membase + TGPIO_IER);
 	spin_unlock_irqrestore(&tgpio->lock, flags);
 }

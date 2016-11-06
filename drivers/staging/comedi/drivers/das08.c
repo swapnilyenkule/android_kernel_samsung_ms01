@@ -385,7 +385,11 @@ static const struct das08_board_struct das08_boards[] = {
 	 .ai = das08_ai_rinsn,
 	 .ai_nbits = 16,
 	 .ai_pg = das08_pg_none,
+<<<<<<< HEAD
 	 .ai_encoding = das08_encode12,
+=======
+	 .ai_encoding = das08_encode16,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	 .ao = das08jr_ao_winsn,
 	 .ao_nbits = 16,
 	 .di = das08jr_di_rbits,
@@ -653,7 +657,11 @@ static int das08jr_ao_winsn(struct comedi_device *dev,
 	int chan;
 
 	lsb = data[0] & 0xff;
+<<<<<<< HEAD
 	msb = (data[0] >> 8) & 0xf;
+=======
+	msb = (data[0] >> 8) & 0xff;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	chan = CR_CHAN(insn->chanspec);
 

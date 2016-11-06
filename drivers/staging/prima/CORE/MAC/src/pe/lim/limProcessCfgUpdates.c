@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -41,6 +46,16 @@
 
 /*
  * Airgo Networks, Inc proprietary. All rights reserved.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+/*
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * This file limProcessCfgUpdates.cc contains the utility functions
  * to handle various CFG parameter update events
  * Author:        Chandra Modumudi
@@ -381,7 +396,11 @@ limHandleCFGparamUpdate(tpAniSirGlobal pMac, tANI_U32 cfgId)
         status = limPostMsgApi(pMac, &msg);
 
         if (status != TX_SUCCESS)
+<<<<<<< HEAD
             PELOGE(limLog(pMac, LOGE, FL("Failed limPostMsgApi"), status);)
+=======
+            PELOGE(limLog(pMac, LOGE, FL("Failed limPostMsgApi %u"), status);)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         break;
     }
     case WNI_CFG_GREENFIELD_CAPABILITY:
@@ -610,6 +629,7 @@ limHandleCFGparamUpdate(tpAniSirGlobal pMac, tANI_U32 cfgId)
         pMac->lim.gLimAssocStaLimit = (tANI_U16)val1;
         break;
 
+<<<<<<< HEAD
     case WNI_CFG_DEL_ALL_RX_BA_SESSIONS_2_4_G_BTC:
         if (wlan_cfgGetInt
            (pMac, WNI_CFG_DEL_ALL_RX_BA_SESSIONS_2_4_G_BTC, &val1) !=
@@ -617,6 +637,15 @@ limHandleCFGparamUpdate(tpAniSirGlobal pMac, tANI_U32 cfgId)
         {
             limLog(pMac, LOGE,
                  FL( "Unable to get WNI_CFG_DEL_ALL_RX_BA_SESSIONS_2_4_G_BTC"));
+=======
+    case WNI_CFG_DEL_ALL_RX_TX_BA_SESSIONS_2_4_G_BTC:
+        if (wlan_cfgGetInt
+           (pMac, WNI_CFG_DEL_ALL_RX_TX_BA_SESSIONS_2_4_G_BTC, &val1) !=
+                 eSIR_SUCCESS)
+        {
+            limLog(pMac, LOGE,
+                 FL( "Unable to get WNI_CFG_DEL_ALL_RX_TX_BA_SESSIONS_2_4_G_BTC"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
         }
         if (val1)
@@ -628,7 +657,11 @@ limHandleCFGparamUpdate(tpAniSirGlobal pMac, tANI_U32 cfgId)
         else
         {
             limLog(pMac, LOGW,
+<<<<<<< HEAD
                 FL("Resetting the WNI_CFG_DEL_ALL_RX_BA_SESSIONS_2_4_G_BTC"));
+=======
+                FL("Resetting the WNI_CFG_DEL_ALL_RX_TX_BA_SESSIONS_2_4_G_BTC"));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
         }
         break;
 
@@ -677,7 +710,12 @@ limApplyConfiguration(tpAniSirGlobal pMac,tpPESession psessionEntry)
 
     limUpdateConfig(pMac,psessionEntry);
 
+<<<<<<< HEAD
     psessionEntry->shortSlotTimeSupported = limGetShortSlotFromPhyMode(pMac, psessionEntry, phyMode);
+=======
+    limGetShortSlotFromPhyMode(pMac, psessionEntry, phyMode,
+                               &psessionEntry->shortSlotTimeSupported);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     limSetCfgProtection(pMac, psessionEntry);    
 
@@ -745,7 +783,12 @@ limUpdateConfig(tpAniSirGlobal pMac,tpPESession psessionEntry)
     psessionEntry->beaconParams.fShortPreamble = (val) ? 1 : 0;
 
     /* In STA case this parameter is filled during the join request */
+<<<<<<< HEAD
     if (psessionEntry->limSystemRole == eLIM_AP_ROLE)
+=======
+    if (psessionEntry->limSystemRole == eLIM_AP_ROLE ||
+        psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE )
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         if (wlan_cfgGetInt(pMac, WNI_CFG_WME_ENABLED, &val) != eSIR_SUCCESS)
             limLog(pMac, LOGP, FL("cfg get wme enabled failed"));
@@ -762,7 +805,12 @@ limUpdateConfig(tpAniSirGlobal pMac,tpPESession psessionEntry)
         psessionEntry->limWsmEnabled = 0;
     }
     /* In STA , this parameter is filled during the join request */
+<<<<<<< HEAD
     if (psessionEntry->limSystemRole== eLIM_AP_ROLE)
+=======
+    if (psessionEntry->limSystemRole== eLIM_AP_ROLE ||
+        psessionEntry->limSystemRole == eLIM_STA_IN_IBSS_ROLE)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     {
         if (wlan_cfgGetInt(pMac, WNI_CFG_QOS_ENABLED, &val) != eSIR_SUCCESS)
             limLog(pMac, LOGP, FL("cfg get qos enabled failed"));

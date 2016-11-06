@@ -1062,7 +1062,11 @@ asmlinkage int syscall_trace_enter(struct pt_regs *regs)
 	int ret = 0;
 
 	/* do the secure computing check first */
+<<<<<<< HEAD
 	secure_computing_strict(regs->u_regs[UREG_G1]);
+=======
+	secure_computing(regs->u_regs[UREG_G1]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (test_thread_flag(TIF_SYSCALL_TRACE))
 		ret = tracehook_report_syscall_entry(regs);

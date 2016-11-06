@@ -2662,6 +2662,7 @@ static void NCR5380_dma_complete(NCR5380_instance * instance) {
  *
  * Purpose : abort a command
  *
+<<<<<<< HEAD
  * Inputs : cmd - the Scsi_Cmnd to abort, code - code to set the 
  *      host byte of the result field to, if zero DID_ABORTED is 
  *      used.
@@ -2670,6 +2671,16 @@ static void NCR5380_dma_complete(NCR5380_instance * instance) {
  *
  *	XXX - there is no way to abort the command that is currently 
  *	connected, you have to wait for it to complete.  If this is 
+=======
+ * Inputs : cmd - the Scsi_Cmnd to abort, code - code to set the
+ *      host byte of the result field to, if zero DID_ABORTED is
+ *      used.
+ *
+ * Returns : SUCCESS - success, FAILED on failure.
+ *
+ *	XXX - there is no way to abort the command that is currently
+ *	connected, you have to wait for it to complete.  If this is
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *	a problem, we could implement longjmp() / setjmp(), setjmp()
  *	called where the loop started in NCR5380_main().
  *
@@ -2719,7 +2730,11 @@ static int NCR5380_abort(Scsi_Cmnd * cmd) {
  * aborted flag and get back into our main loop.
  */
 
+<<<<<<< HEAD
 		return 0;
+=======
+		return SUCCESS;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 #endif
 

@@ -117,7 +117,11 @@ static inline void sock_diag_unlock_handler(struct sock_diag_handler *h)
 	mutex_unlock(&sock_diag_table_mutex);
 }
 
+<<<<<<< HEAD
 static int __sock_diag_cmd(struct sk_buff *skb, struct nlmsghdr *nlh)
+=======
+static int __sock_diag_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	int err;
 	struct sock_diag_req *req = NLMSG_DATA(nlh);
@@ -132,12 +136,17 @@ static int __sock_diag_cmd(struct sk_buff *skb, struct nlmsghdr *nlh)
 	hndl = sock_diag_lock_handler(req->sdiag_family);
 	if (hndl == NULL)
 		err = -ENOENT;
+<<<<<<< HEAD
 	else if (nlh->nlmsg_type == SOCK_DIAG_BY_FAMILY)
 		err = hndl->dump(skb, nlh);
 	else if (nlh->nlmsg_type == SOCK_DESTROY_BACKPORT && hndl->destroy)
 		err = hndl->destroy(skb, nlh);
 	else
 		err = -EOPNOTSUPP;
+=======
+	else
+		err = hndl->dump(skb, nlh);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	sock_diag_unlock_handler(hndl);
 
 	return err;
@@ -163,8 +172,12 @@ static int sock_diag_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 
 		return ret;
 	case SOCK_DIAG_BY_FAMILY:
+<<<<<<< HEAD
 	case SOCK_DESTROY_BACKPORT:
 		return __sock_diag_cmd(skb, nlh);
+=======
+		return __sock_diag_rcv_msg(skb, nlh);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	default:
 		return -EINVAL;
 	}
@@ -179,6 +192,7 @@ static void sock_diag_rcv(struct sk_buff *skb)
 	mutex_unlock(&sock_diag_mutex);
 }
 
+<<<<<<< HEAD
 int sock_diag_destroy(struct sock *sk, int err)
 {
 	if (!capable(CAP_NET_ADMIN))
@@ -191,6 +205,8 @@ int sock_diag_destroy(struct sock *sk, int err)
 }
 EXPORT_SYMBOL_GPL(sock_diag_destroy);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct sock *sock_diag_nlsk;
 EXPORT_SYMBOL_GPL(sock_diag_nlsk);
 

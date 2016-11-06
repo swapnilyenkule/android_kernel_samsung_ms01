@@ -152,6 +152,11 @@ static int gup_huge_pud(pud_t pud, unsigned long addr, unsigned long end,
 	do {
 		VM_BUG_ON(compound_head(page) != head);
 		pages[*nr] = page;
+<<<<<<< HEAD
+=======
+		if (PageTail(page))
+			get_huge_page_tail(page);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		(*nr)++;
 		page++;
 		refs++;

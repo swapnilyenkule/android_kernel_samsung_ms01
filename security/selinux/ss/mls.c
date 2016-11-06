@@ -517,8 +517,11 @@ int mls_compute_sid(struct context *scontext,
 {
 	struct range_trans rtr;
 	struct mls_range *r;
+<<<<<<< HEAD
 	struct class_datum *cladatum;
 	int default_range = 0;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (!policydb.mls_enabled)
 		return 0;
@@ -532,6 +535,7 @@ int mls_compute_sid(struct context *scontext,
 		r = hashtab_search(policydb.range_tr, &rtr);
 		if (r)
 			return mls_range_set(newcontext, r);
+<<<<<<< HEAD
 
 		if (tclass && tclass <= policydb.p_classes.nprim) {
 			cladatum = policydb.class_val_to_struct[tclass - 1];
@@ -554,6 +558,8 @@ int mls_compute_sid(struct context *scontext,
 			return mls_context_cpy(newcontext, tcontext);
 		}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/* Fallthrough */
 	case AVTAB_CHANGE:
 		if ((tclass == policydb.process_class) || (sock == true))

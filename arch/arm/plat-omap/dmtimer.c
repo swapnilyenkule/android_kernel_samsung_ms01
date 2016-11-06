@@ -238,7 +238,11 @@ EXPORT_SYMBOL_GPL(omap_dm_timer_enable);
 
 void omap_dm_timer_disable(struct omap_dm_timer *timer)
 {
+<<<<<<< HEAD
 	pm_runtime_put(&timer->pdev->dev);
+=======
+	pm_runtime_put_sync(&timer->pdev->dev);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 EXPORT_SYMBOL_GPL(omap_dm_timer_disable);
 

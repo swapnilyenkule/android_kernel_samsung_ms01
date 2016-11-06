@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -39,6 +44,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifndef WLAN_QCT_HAL_H
 #define WLAN_QCT_HAL_H
 #include "vos_status.h"
@@ -349,6 +366,14 @@ tANI_U8 WLANHAL_RxBD_GetFrameTypeSubType(v_PVOID_t _pvBDHeader, tANI_U16 usFrmCt
 #ifdef FEATURE_WLAN_TDLS
 #define HAL_TDLS_PEER_STA_MASK              0x80 //bit 7 set for TDLS peer station 
 #endif
+<<<<<<< HEAD
+=======
+
+#define HAL_RELIABLE_MCAST_REQUESTED_MASK   0x100
+
+#define HAL_USE_BD_RATE_MASK                0x1000
+#define HAL_USE_FW_IN_TX_PATH               0x200 //bit 9 to send via WQ5
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*==========================================================================
 
   FUNCTION    WLANHAL_FillTxBd
@@ -391,7 +416,11 @@ tANI_U8 WLANHAL_RxBD_GetFrameTypeSubType(v_PVOID_t _pvBDHeader, tANI_U16 usFrmCt
   
 ============================================================================*/
 VOS_STATUS WLANHAL_FillTxBd(void *pAdapter, tANI_U8 typeSubtype, void *pDestMacAddr, void *pAddr2,
+<<<<<<< HEAD
         tANI_U8* ptid, tANI_U8 disableFrmXtl, void *pTxBd, tANI_U8 txFlag, tANI_U32 timeStamp);
+=======
+        tANI_U8* ptid, tANI_U8 disableFrmXtl, void *pTxBd, tANI_U32 txFlag, tANI_U32 timeStamp);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 VOS_STATUS WLANHAL_FillFcTxBd(void *pVosGCtx, void *pFcParams, void *pFcTxBd);
 /** To swap the report part of FC RxBD */

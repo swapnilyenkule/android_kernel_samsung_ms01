@@ -1145,9 +1145,17 @@ static int e752x_get_devs(struct pci_dev *pdev, int dev_idx,
 	pvt->bridge_ck = pci_get_device(PCI_VENDOR_ID_INTEL,
 				pvt->dev_info->err_dev, pvt->bridge_ck);
 
+<<<<<<< HEAD
 	if (pvt->bridge_ck == NULL)
 		pvt->bridge_ck = pci_scan_single_device(pdev->bus,
 							PCI_DEVFN(0, 1));
+=======
+	if (pvt->bridge_ck == NULL) {
+		pvt->bridge_ck = pci_scan_single_device(pdev->bus,
+							PCI_DEVFN(0, 1));
+		pci_dev_get(pvt->bridge_ck);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (pvt->bridge_ck == NULL) {
 		e752x_printk(KERN_ERR, "error reporting device not found:"

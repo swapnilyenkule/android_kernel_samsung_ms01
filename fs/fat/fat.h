@@ -9,6 +9,15 @@
 #include <linux/ratelimit.h>
 #include <linux/msdos_fs.h>
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_FAT_SUPPORT_STLOG
+#include <linux/stlog.h>
+#else
+#define ST_LOG(fmt,...) 
+#endif
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * vfat shortname flags
  */
@@ -329,10 +338,21 @@ extern int fat_flush_inodes(struct super_block *sb, struct inode *i1,
 /* fat/misc.c */
 extern __printf(3, 4) __cold
 void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...);
+<<<<<<< HEAD
 #define fat_fs_error(sb, fmt, args...)		\
 	__fat_fs_error(sb, 1, fmt , ## args)
 #define fat_fs_error_ratelimit(sb, fmt, args...) \
 	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
+=======
+#define fat_fs_error_ratelimit(sb, fmt, args...) \
+	__fat_fs_error(sb, __ratelimit(&MSDOS_SB(sb)->ratelimit), fmt , ## args)
+/*
+ * If removable devices with a fat fs are removed without a unmount, further
+ * accesses to the device by applications causes a large number of error prints
+ * & in some cases leads to watchdog bark.
+ */
+#define fat_fs_error(sb, fmt, args...)	fat_fs_error_ratelimit(sb, fmt, ## args)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 __printf(3, 4) __cold
 void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...);
 extern int fat_clusters_flush(struct super_block *sb);
@@ -346,6 +366,17 @@ extern int fat_sync_bhs(struct buffer_head **bhs, int nr_bhs);
 int fat_cache_init(void);
 void fat_cache_destroy(void);
 
+<<<<<<< HEAD
+=======
+/* fat/xattr.c */
+extern int fat_setxattr(struct dentry *dentry, const char *name,
+					const void *value, size_t size, int flags);
+extern ssize_t fat_getxattr(struct dentry *dentry, const char *name,
+					void *value, size_t size);
+extern ssize_t fat_listxattr(struct dentry *dentry, char *list, size_t size);
+extern int fat_removexattr(struct dentry *dentry, const char *name);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /* helper for printk */
 typedef unsigned long long	llu;
 

@@ -445,7 +445,11 @@ static int wm8903_get_deemph(struct snd_kcontrol *kcontrol,
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm8903_priv *wm8903 = snd_soc_codec_get_drvdata(codec);
 
+<<<<<<< HEAD
 	ucontrol->value.enumerated.item[0] = wm8903->deemph;
+=======
+	ucontrol->value.integer.value[0] = wm8903->deemph;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return 0;
 }
@@ -455,7 +459,11 @@ static int wm8903_put_deemph(struct snd_kcontrol *kcontrol,
 {
 	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct wm8903_priv *wm8903 = snd_soc_codec_get_drvdata(codec);
+<<<<<<< HEAD
 	int deemph = ucontrol->value.enumerated.item[0];
+=======
+	int deemph = ucontrol->value.integer.value[0];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	int ret = 0;
 
 	if (deemph > 1)
@@ -1082,6 +1090,11 @@ static const struct snd_soc_dapm_route wm8903_intercon[] = {
 	{ "ROP", NULL, "Right Speaker PGA" },
 	{ "RON", NULL, "Right Speaker PGA" },
 
+<<<<<<< HEAD
+=======
+	{ "Charge Pump", NULL, "CLK_DSP" },
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	{ "Left Headphone Output PGA", NULL, "Charge Pump" },
 	{ "Right Headphone Output PGA", NULL, "Charge Pump" },
 	{ "Left Line Output PGA", NULL, "Charge Pump" },

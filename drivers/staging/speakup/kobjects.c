@@ -41,7 +41,11 @@ static ssize_t chars_chartab_show(struct kobject *kobj,
 			break;
 		if (strcmp("characters", attr->attr.name) == 0) {
 			len = scnprintf(buf_pointer, bufsize, "%d\t%s\n",
+<<<<<<< HEAD
 					i, characters[i]);
+=======
+					i, spk_characters[i]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		} else {	/* show chartab entry */
 			if (IS_TYPE(i, B_CTL))
 				cp = "B_CTL";
@@ -185,12 +189,21 @@ static ssize_t chars_chartab_store(struct kobject *kobj,
 		outptr[desc_length] = '\0';
 
 		if (do_characters) {
+<<<<<<< HEAD
 			if (characters[index] != default_chars[index])
 				kfree(characters[index]);
 			characters[index] = desc;
 			used++;
 		} else {
 			charclass = chartab_get_value(keyword);
+=======
+			if (spk_characters[index] != spk_default_chars[index])
+				kfree(spk_characters[index]);
+			spk_characters[index] = desc;
+			used++;
+		} else {
+			charclass = spk_chartab_get_value(keyword);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			if (charclass == 0) {
 				rejected++;
 				cp = linefeed + 1;
@@ -206,9 +219,15 @@ static ssize_t chars_chartab_store(struct kobject *kobj,
 
 	if (reset) {
 		if (do_characters)
+<<<<<<< HEAD
 			reset_default_chars();
 		else
 			reset_default_chartab();
+=======
+			spk_reset_default_chars();
+		else
+			spk_reset_default_chartab();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	spk_unlock(flags);
@@ -232,7 +251,11 @@ static ssize_t keymap_show(struct kobject *kobj, struct kobj_attribute *attr,
 	u_char ch;
 	unsigned long flags;
 	spk_lock(flags);
+<<<<<<< HEAD
 	cp1 = key_buf + SHIFT_TBL_SIZE;
+=======
+	cp1 = spk_key_buf + SHIFT_TBL_SIZE;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	num_keys = (int)(*cp1);
 	nstates = (int)cp1[1];
 	cp += sprintf(cp, "%d, %d, %d,\n", KEY_MAP_VER, num_keys, nstates);
@@ -271,7 +294,11 @@ static ssize_t keymap_store(struct kobject *kobj, struct kobj_attribute *attr,
 		return -ENOMEM;
 	}
 	if (strchr("dDrR", *in_buff)) {
+<<<<<<< HEAD
 		set_key_info(key_defaults, key_buf);
+=======
+		spk_set_key_info(spk_key_defaults, spk_key_buf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pr_info("keymap set to default values\n");
 		kfree(in_buff);
 		spk_unlock(flags);
@@ -282,14 +309,22 @@ static ssize_t keymap_store(struct kobject *kobj, struct kobj_attribute *attr,
 	cp = in_buff;
 	cp1 = (u_char *)in_buff;
 	for (i = 0; i < 3; i++) {
+<<<<<<< HEAD
 		cp = s2uchar(cp, cp1);
+=======
+		cp = spk_s2uchar(cp, cp1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cp1++;
 	}
 	i = (int)cp1[-2]+1;
 	i *= (int)cp1[-1]+1;
 	i += 2; /* 0 and last map ver */
 	if (cp1[-3] != KEY_MAP_VER || cp1[-1] > 10 ||
+<<<<<<< HEAD
 			i+SHIFT_TBL_SIZE+4 >= sizeof(key_buf)) {
+=======
+			i+SHIFT_TBL_SIZE+4 >= sizeof(spk_key_buf)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		pr_warn("i %d %d %d %d\n", i,
 				(int)cp1[-3], (int)cp1[-2], (int)cp1[-1]);
 		kfree(in_buff);
@@ -297,7 +332,11 @@ static ssize_t keymap_store(struct kobject *kobj, struct kobj_attribute *attr,
 		return -EINVAL;
 	}
 	while (--i >= 0) {
+<<<<<<< HEAD
 		cp = s2uchar(cp, cp1);
+=======
+		cp = spk_s2uchar(cp, cp1);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cp1++;
 		if (!(*cp))
 			break;
@@ -307,8 +346,13 @@ static ssize_t keymap_store(struct kobject *kobj, struct kobj_attribute *attr,
 		pr_warn("end %d %d %d %d\n", i,
 				(int)cp1[-3], (int)cp1[-2], (int)cp1[-1]);
 	} else {
+<<<<<<< HEAD
 		if (set_key_info(in_buff, key_buf)) {
 			set_key_info(key_defaults, key_buf);
+=======
+		if (spk_set_key_info(in_buff, spk_key_buf)) {
+			spk_set_key_info(spk_key_defaults, spk_key_buf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			ret = -EINVAL;
 			pr_warn("set key failed\n");
 		}
@@ -343,7 +387,11 @@ static ssize_t silent_store(struct kobject *kobj, struct kobj_attribute *attr,
 	spk_lock(flags);
 	if (ch&2) {
 		shut = 1;
+<<<<<<< HEAD
 		do_flush();
+=======
+		spk_do_flush();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		shut = 0;
 	}
@@ -388,7 +436,11 @@ static ssize_t synth_store(struct kobject *kobj, struct kobj_attribute *attr,
 	if (new_synth_name[len - 1] == '\n')
 		len--;
 	new_synth_name[len] = '\0';
+<<<<<<< HEAD
 	strlwr(new_synth_name);
+=======
+	spk_strlwr(new_synth_name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if ((synth != NULL) && (!strcmp(new_synth_name, synth->name))) {
 		pr_warn("%s already in use\n", new_synth_name);
 	} else if (synth_init(new_synth_name) != 0) {
@@ -417,7 +469,11 @@ static ssize_t synth_direct_store(struct kobject *kobj,
 		bytes = min_t(size_t, len, 250);
 		strncpy(tmp, ptr, bytes);
 		tmp[bytes] = '\0';
+<<<<<<< HEAD
 		xlate(tmp);
+=======
+		spk_xlate(tmp);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		synth_printf("%s", tmp);
 		ptr += bytes;
 		len -= bytes;
@@ -455,14 +511,22 @@ static ssize_t punc_show(struct kobject *kobj, struct kobj_attribute *attr,
 	short mask;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	p_header = var_header_by_name(attr->attr.name);
+=======
+	p_header = spk_var_header_by_name(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (p_header == NULL) {
 		pr_warn("p_header is null, attr->attr.name is %s\n",
 			attr->attr.name);
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	var = get_punc_var(p_header->var_id);
+=======
+	var = spk_get_punc_var(p_header->var_id);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (var == NULL) {
 		pr_warn("var is null, p_header->var_id is %i\n",
 				p_header->var_id);
@@ -470,7 +534,11 @@ static ssize_t punc_show(struct kobject *kobj, struct kobj_attribute *attr,
 	}
 
 	spk_lock(flags);
+<<<<<<< HEAD
 	pb = (struct st_bits_data *) &punc_info[var->value];
+=======
+	pb = (struct st_bits_data *) &spk_punc_info[var->value];
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	mask = pb->mask;
 	for (i = 33; i < 128; i++) {
 		if (!(spk_chartab[i]&mask))
@@ -497,14 +565,22 @@ static ssize_t punc_store(struct kobject *kobj, struct kobj_attribute *attr,
 	if (x < 1 || x > 99)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	p_header = var_header_by_name(attr->attr.name);
+=======
+	p_header = spk_var_header_by_name(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (p_header == NULL) {
 		pr_warn("p_header is null, attr->attr.name is %s\n",
 			attr->attr.name);
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	var = get_punc_var(p_header->var_id);
+=======
+	var = spk_get_punc_var(p_header->var_id);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (var == NULL) {
 		pr_warn("var is null, p_header->var_id is %i\n",
 				p_header->var_id);
@@ -520,9 +596,15 @@ static ssize_t punc_store(struct kobject *kobj, struct kobj_attribute *attr,
 	spk_lock(flags);
 
 	if (*punc_buf == 'd' || *punc_buf == 'r')
+<<<<<<< HEAD
 		x = set_mask_bits(0, var->value, 3);
 	else
 		x = set_mask_bits(punc_buf, var->value, 3);
+=======
+		x = spk_set_mask_bits(0, var->value, 3);
+	else
+		x = spk_set_mask_bits(punc_buf, var->value, 3);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	spk_unlock(flags);
 	return count;
@@ -542,7 +624,11 @@ ssize_t spk_var_show(struct kobject *kobj, struct kobj_attribute *attr,
 	char ch;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	param = var_header_by_name(attr->attr.name);
+=======
+	param = spk_var_header_by_name(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (param == NULL)
 		return -EINVAL;
 
@@ -599,13 +685,21 @@ ssize_t spk_var_store(struct kobject *kobj, struct kobj_attribute *attr,
 	int value;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	param = var_header_by_name(attr->attr.name);
+=======
+	param = spk_var_header_by_name(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (param == NULL)
 		return -EINVAL;
 	if (param->data == NULL)
 		return 0;
 	ret = 0;
+<<<<<<< HEAD
 	cp = xlate((char *) buf);
+=======
+	cp = spk_xlate((char *) buf);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	spk_lock(flags);
 	switch (param->var_type) {
@@ -618,7 +712,11 @@ ssize_t spk_var_store(struct kobject *kobj, struct kobj_attribute *attr,
 		else
 			len = E_SET;
 		speakup_s2i(cp, &value);
+<<<<<<< HEAD
 		ret = set_num_var(value, param, len);
+=======
+		ret = spk_set_num_var(value, param, len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret == E_RANGE) {
 			var_data = param->data;
 			pr_warn("value for %s out of range, expect %d to %d\n",
@@ -636,7 +734,11 @@ ssize_t spk_var_store(struct kobject *kobj, struct kobj_attribute *attr,
 		}
 		cp = (char *) buf;
 		cp[len] = '\0';
+<<<<<<< HEAD
 		ret = set_string_var(buf, param, len);
+=======
+		ret = spk_set_string_var(buf, param, len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (ret == E_TOOLONG)
 			pr_warn("value too long for %s\n",
 					attr->attr.name);
@@ -652,6 +754,7 @@ ssize_t spk_var_store(struct kobject *kobj, struct kobj_attribute *attr,
 	 */
 	if (strcmp(attr->attr.name, "voice") == 0) {
 		if (synth && synth->default_pitch) {
+<<<<<<< HEAD
 			param = var_header_by_name("pitch");
 			if (param)  {
 				set_num_var(synth->default_pitch[value], param,
@@ -665,6 +768,21 @@ ssize_t spk_var_store(struct kobject *kobj, struct kobj_attribute *attr,
 				set_num_var(synth->default_vol[value], param,
 					E_NEW_DEFAULT);
 				set_num_var(0, param, E_DEFAULT);
+=======
+			param = spk_var_header_by_name("pitch");
+			if (param)  {
+				spk_set_num_var(synth->default_pitch[value], param,
+					E_NEW_DEFAULT);
+				spk_set_num_var(0, param, E_DEFAULT);
+			}
+		}
+		if (synth && synth->default_vol) {
+			param = spk_var_header_by_name("vol");
+			if (param)  {
+				spk_set_num_var(synth->default_vol[value], param,
+					E_NEW_DEFAULT);
+				spk_set_num_var(0, param, E_DEFAULT);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 		}
 	}
@@ -694,7 +812,11 @@ static ssize_t message_show_helper(char *buf, enum msg_index_t first,
 		if (bufsize <= 1)
 			break;
 		printed = scnprintf(buf_pointer, bufsize, "%d\t%s\n",
+<<<<<<< HEAD
 			index, msg_get(cursor));
+=======
+			index, spk_msg_get(cursor));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		buf_pointer += printed;
 		bufsize -= printed;
 	}
@@ -788,7 +910,11 @@ static ssize_t message_store_helper(const char *buf, size_t count,
 			continue;
 		}
 
+<<<<<<< HEAD
 		msg_stored = msg_set(curmessage, temp, desc_length);
+=======
+		msg_stored = spk_msg_set(curmessage, temp, desc_length);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (msg_stored < 0) {
 			retval = msg_stored;
 			if (msg_stored == -ENOMEM)
@@ -802,7 +928,11 @@ static ssize_t message_store_helper(const char *buf, size_t count,
 	}
 
 	if (reset)
+<<<<<<< HEAD
 		reset_msg_group(group);
+=======
+		spk_reset_msg_group(group);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	report_msg_status(reset, received, used, rejected, group->name);
 	return retval;
@@ -812,7 +942,11 @@ static ssize_t message_show(struct kobject *kobj,
 	struct kobj_attribute *attr, char *buf)
 {
 	ssize_t retval = 0;
+<<<<<<< HEAD
 	struct msg_group_t *group = find_msg_group(attr->attr.name);
+=======
+	struct msg_group_t *group = spk_find_msg_group(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unsigned long flags;
 
 	BUG_ON(!group);
@@ -826,7 +960,11 @@ static ssize_t message_store(struct kobject *kobj, struct kobj_attribute *attr,
 	const char *buf, size_t count)
 {
 	ssize_t retval = 0;
+<<<<<<< HEAD
 	struct msg_group_t *group = find_msg_group(attr->attr.name);
+=======
+	struct msg_group_t *group = spk_find_msg_group(attr->attr.name);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	BUG_ON(!group);
 	retval = message_store_helper(buf, count, group);

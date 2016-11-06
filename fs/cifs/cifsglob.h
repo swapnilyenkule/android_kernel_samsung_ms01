@@ -38,11 +38,19 @@
 #define MAX_TREE_SIZE (2 + MAX_SERVER_SIZE + 1 + MAX_SHARE_SIZE + 1)
 #define MAX_SERVER_SIZE 15
 #define MAX_SHARE_SIZE 80
+<<<<<<< HEAD
+=======
+#define CIFS_MAX_DOMAINNAME_LEN 256 /* max domain name length */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define MAX_USERNAME_SIZE 256	/* reasonable maximum for current servers */
 #define MAX_PASSWORD_SIZE 512	/* max for windows seems to be 256 wide chars */
 
 #define CIFS_MIN_RCV_POOL 4
 
+<<<<<<< HEAD
+=======
+#define MAX_REOPEN_ATT	5 /* these many maximum attempts to reopen a file */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*
  * default attribute cache timeout (jiffies)
  */

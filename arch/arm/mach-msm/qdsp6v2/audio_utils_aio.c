@@ -1242,7 +1242,11 @@ long audio_aio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	}
 	case AUDIO_ASYNC_READ: {
 		mutex_lock(&audio->read_lock);
+<<<<<<< HEAD
 		if (audio->feedback)
+=======
+		if ((audio->feedback) && (audio->enabled))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			rc = audio_aio_buf_add(audio, 0,
 					(void __user *)arg);
 		else

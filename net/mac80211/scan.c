@@ -259,6 +259,12 @@ static bool ieee80211_prep_hw_scan(struct ieee80211_local *local)
 	enum ieee80211_band band;
 	int i, ielen, n_chans;
 
+<<<<<<< HEAD
+=======
+	if (test_bit(SCAN_HW_CANCELLED, &local->scanning))
+		return false;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	do {
 		if (local->hw_scan_band == IEEE80211_NUM_BANDS)
 			return false;
@@ -329,7 +335,11 @@ static void __ieee80211_scan_completed(struct ieee80211_hw *hw, bool aborted,
 	if (!was_hw_scan) {
 		ieee80211_configure_filter(local);
 		drv_sw_scan_complete(local);
+<<<<<<< HEAD
 		ieee80211_offchannel_return(local, true);
+=======
+		ieee80211_offchannel_return(local);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	ieee80211_recalc_idle(local);
@@ -374,7 +384,11 @@ static int ieee80211_start_sw_scan(struct ieee80211_local *local)
 	local->next_scan_state = SCAN_DECISION;
 	local->scan_channel_idx = 0;
 
+<<<<<<< HEAD
 	ieee80211_offchannel_stop_vifs(local, true);
+=======
+	ieee80211_offchannel_stop_vifs(local);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	ieee80211_configure_filter(local);
 
@@ -629,12 +643,17 @@ static void ieee80211_scan_state_suspend(struct ieee80211_local *local,
 	local->scan_channel = NULL;
 	ieee80211_hw_config(local, IEEE80211_CONF_CHANGE_CHANNEL);
 
+<<<<<<< HEAD
 	/*
 	 * Re-enable vifs and beaconing.  Leave PS
 	 * in off-channel state..will put that back
 	 * on-channel at the end of scanning.
 	 */
 	ieee80211_offchannel_return(local, false);
+=======
+	/* disable PS */
+	ieee80211_offchannel_return(local);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	*next_delay = HZ / 5;
 	/* afterwards, resume scan & go to next channel */
@@ -644,8 +663,12 @@ static void ieee80211_scan_state_suspend(struct ieee80211_local *local,
 static void ieee80211_scan_state_resume(struct ieee80211_local *local,
 					unsigned long *next_delay)
 {
+<<<<<<< HEAD
 	/* PS already is in off-channel mode */
 	ieee80211_offchannel_stop_vifs(local, false);
+=======
+	ieee80211_offchannel_stop_vifs(local);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (local->ops->flush) {
 		drv_flush(local, false);
@@ -761,9 +784,15 @@ int ieee80211_request_scan(struct ieee80211_sub_if_data *sdata,
 	return res;
 }
 
+<<<<<<< HEAD
 int ieee80211_request_internal_scan(struct ieee80211_sub_if_data *sdata,
 				    const u8 *ssid, u8 ssid_len,
 				    struct ieee80211_channel *chan)
+=======
+int ieee80211_request_ibss_scan(struct ieee80211_sub_if_data *sdata,
+				const u8 *ssid, u8 ssid_len,
+				struct ieee80211_channel *chan)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct ieee80211_local *local = sdata->local;
 	int ret = -EBUSY;
@@ -777,11 +806,17 @@ int ieee80211_request_internal_scan(struct ieee80211_sub_if_data *sdata,
 
 	/* fill internal scan request */
 	if (!chan) {
+<<<<<<< HEAD
 		int i, nchan = 0;
+=======
+		int i, max_n;
+		int n_ch = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		for (band = 0; band < IEEE80211_NUM_BANDS; band++) {
 			if (!local->hw.wiphy->bands[band])
 				continue;
+<<<<<<< HEAD
 			for (i = 0;
 			     i < local->hw.wiphy->bands[band]->n_channels;
 			     i++) {
@@ -793,6 +828,32 @@ int ieee80211_request_internal_scan(struct ieee80211_sub_if_data *sdata,
 
 		local->int_scan_req->n_channels = nchan;
 	} else {
+=======
+
+			max_n = local->hw.wiphy->bands[band]->n_channels;
+			for (i = 0; i < max_n; i++) {
+				struct ieee80211_channel *tmp_ch =
+				    &local->hw.wiphy->bands[band]->channels[i];
+
+				if (tmp_ch->flags & (IEEE80211_CHAN_NO_IBSS |
+						     IEEE80211_CHAN_DISABLED))
+					continue;
+
+				local->int_scan_req->channels[n_ch] = tmp_ch;
+				n_ch++;
+			}
+		}
+
+		if (WARN_ON_ONCE(n_ch == 0))
+			goto unlock;
+
+		local->int_scan_req->n_channels = n_ch;
+	} else {
+		if (WARN_ON_ONCE(chan->flags & (IEEE80211_CHAN_NO_IBSS |
+						IEEE80211_CHAN_DISABLED)))
+			goto unlock;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		local->int_scan_req->channels[0] = chan;
 		local->int_scan_req->n_channels = 1;
 	}
@@ -835,7 +896,27 @@ void ieee80211_scan_cancel(struct ieee80211_local *local)
 	if (!local->scan_req)
 		goto out;
 
+<<<<<<< HEAD
 	if (test_bit(SCAN_HW_SCANNING, &local->scanning)) {
+=======
+	/*
+	 * We have a scan running and the driver already reported completion,
+	 * but the worker hasn't run yet or is stuck on the mutex - mark it as
+	 * cancelled.
+	 */
+	if (test_bit(SCAN_HW_SCANNING, &local->scanning) &&
+	    test_bit(SCAN_COMPLETED, &local->scanning)) {
+		set_bit(SCAN_HW_CANCELLED, &local->scanning);
+		goto out;
+	}
+
+	if (test_bit(SCAN_HW_SCANNING, &local->scanning)) {
+		/*
+		 * Make sure that __ieee80211_scan_completed doesn't trigger a
+		 * scan on another band.
+		 */
+		set_bit(SCAN_HW_CANCELLED, &local->scanning);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (local->ops->cancel_hw_scan)
 			drv_cancel_hw_scan(local, local->scan_sdata);
 		goto out;

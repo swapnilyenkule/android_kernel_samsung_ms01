@@ -269,6 +269,17 @@ static int evtchn_bind_to_user(struct per_user_data *u, int port)
 				       u->name, (void *)(unsigned long)port);
 	if (rc >= 0)
 		rc = evtchn_make_refcounted(port);
+<<<<<<< HEAD
+=======
+	else {
+		/* bind failed, should close the port now */
+		struct evtchn_close close;
+		close.port = port;
+		if (HYPERVISOR_event_channel_op(EVTCHNOP_close, &close) != 0)
+			BUG();
+		set_port_user(port, NULL);
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	return rc;
 }
@@ -277,6 +288,11 @@ static void evtchn_unbind_from_user(struct per_user_data *u, int port)
 {
 	int irq = irq_from_evtchn(port);
 
+<<<<<<< HEAD
+=======
+	BUG_ON(irq < 0);
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	unbind_from_irqhandler(irq, (void *)(unsigned long)port);
 
 	set_port_user(port, NULL);
@@ -367,6 +383,7 @@ static long evtchn_ioctl(struct file *file,
 		if (unbind.port >= NR_EVENT_CHANNELS)
 			break;
 
+<<<<<<< HEAD
 		spin_lock_irq(&port_user_lock);
 
 		rc = -ENOTCONN;
@@ -379,6 +396,14 @@ static long evtchn_ioctl(struct file *file,
 
 		spin_unlock_irq(&port_user_lock);
 
+=======
+		rc = -ENOTCONN;
+		if (get_port_user(unbind.port) != u)
+			break;
+
+		disable_irq(irq_from_evtchn(unbind.port));
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		evtchn_unbind_from_user(u, unbind.port);
 
 		rc = 0;
@@ -478,15 +503,19 @@ static int evtchn_release(struct inode *inode, struct file *filp)
 	int i;
 	struct per_user_data *u = filp->private_data;
 
+<<<<<<< HEAD
 	spin_lock_irq(&port_user_lock);
 
 	free_page((unsigned long)u->ring);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	for (i = 0; i < NR_EVENT_CHANNELS; i++) {
 		if (get_port_user(i) != u)
 			continue;
 
 		disable_irq(irq_from_evtchn(i));
+<<<<<<< HEAD
 	}
 
 	spin_unlock_irq(&port_user_lock);
@@ -498,6 +527,12 @@ static int evtchn_release(struct inode *inode, struct file *filp)
 		evtchn_unbind_from_user(get_port_user(i), i);
 	}
 
+=======
+		evtchn_unbind_from_user(get_port_user(i), i);
+	}
+
+	free_page((unsigned long)u->ring);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	kfree(u->name);
 	kfree(u);
 

@@ -117,14 +117,28 @@ subsys_initcall(init_vdso);
 
 struct linux_binprm;
 
+<<<<<<< HEAD
 /* Put the vdso above the (randomized) stack with another randomized offset.
    This way there is no hole in the middle of address space.
    To save memory make sure it is still in the same PTE as the stack top.
    This doesn't give that many random bits */
+=======
+/*
+ * Put the vdso above the (randomized) stack with another randomized
+ * offset.  This way there is no hole in the middle of address space.
+ * To save memory make sure it is still in the same PTE as the stack
+ * top.  This doesn't give that many random bits.
+ *
+ * Note that this algorithm is imperfect: the distribution of the vdso
+ * start address within a PMD is biased toward the end.
+ *
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static unsigned long vdso_addr(unsigned long start, unsigned len)
 {
 	unsigned long addr, end;
 	unsigned offset;
+<<<<<<< HEAD
 	end = (start + PMD_SIZE - 1) & PMD_MASK;
 	if (end >= TASK_SIZE_MAX)
 		end = TASK_SIZE_MAX;
@@ -134,6 +148,27 @@ static unsigned long vdso_addr(unsigned long start, unsigned len)
 	addr = start + (offset << PAGE_SHIFT);
 	if (addr >= end)
 		addr = end;
+=======
+
+	/*
+	 * Round up the start address.  It can start out unaligned as a result
+	 * of stack start randomization.
+	 */
+	start = PAGE_ALIGN(start);
+
+	/* Round the lowest possible end address up to a PMD boundary. */
+	end = (start + len + PMD_SIZE - 1) & PMD_MASK;
+	if (end >= TASK_SIZE_MAX)
+		end = TASK_SIZE_MAX;
+	end -= len;
+
+	if (end > start) {
+		offset = get_random_int() % (((end - start) >> PAGE_SHIFT) + 1);
+		addr = start + (offset << PAGE_SHIFT);
+	} else {
+		addr = start;
+	}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	/*
 	 * page-align it here so that get_unmapped_area doesn't

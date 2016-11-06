@@ -574,9 +574,12 @@ send_layoutget(struct pnfs_layout_hdr *lo,
 	struct nfs_server *server = NFS_SERVER(ino);
 	struct nfs4_layoutget *lgp;
 	struct pnfs_layout_segment *lseg = NULL;
+<<<<<<< HEAD
 	struct page **pages = NULL;
 	int i;
 	u32 max_resp_sz, max_pages;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	dprintk("--> %s\n", __func__);
 
@@ -585,6 +588,7 @@ send_layoutget(struct pnfs_layout_hdr *lo,
 	if (lgp == NULL)
 		return NULL;
 
+<<<<<<< HEAD
 	/* allocate pages for xdr post processing */
 	max_resp_sz = server->nfs_client->cl_session->fc_attrs.max_resp_sz;
 	max_pages = nfs_page_array_len(0, max_resp_sz);
@@ -599,6 +603,8 @@ send_layoutget(struct pnfs_layout_hdr *lo,
 			goto out_err_free;
 	}
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lgp->args.minlength = PAGE_CACHE_SIZE;
 	if (lgp->args.minlength > range->length)
 		lgp->args.minlength = range->length;
@@ -607,20 +613,28 @@ send_layoutget(struct pnfs_layout_hdr *lo,
 	lgp->args.type = server->pnfs_curr_ld->id;
 	lgp->args.inode = ino;
 	lgp->args.ctx = get_nfs_open_context(ctx);
+<<<<<<< HEAD
 	lgp->args.layout.pages = pages;
 	lgp->args.layout.pglen = max_pages * PAGE_SIZE;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	lgp->lsegpp = &lseg;
 	lgp->gfp_flags = gfp_flags;
 
 	/* Synchronously retrieve layout information from server and
 	 * store in lseg.
 	 */
+<<<<<<< HEAD
 	nfs4_proc_layoutget(lgp);
+=======
+	nfs4_proc_layoutget(lgp, gfp_flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (!lseg) {
 		/* remember that LAYOUTGET failed and suspend trying */
 		set_bit(lo_fail_bit(range->iomode), &lo->plh_flags);
 	}
 
+<<<<<<< HEAD
 	/* free xdr pages */
 	for (i = 0; i < max_pages; i++)
 		__free_page(pages[i]);
@@ -640,6 +654,9 @@ out_err_free:
 	}
 	kfree(lgp);
 	return NULL;
+=======
+	return lseg;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /* Initiates a LAYOUTRETURN(FILE) */
@@ -1418,11 +1435,34 @@ static void pnfs_list_write_lseg(struct inode *inode, struct list_head *listp)
 
 	list_for_each_entry(lseg, &NFS_I(inode)->layout->plh_segs, pls_list) {
 		if (lseg->pls_range.iomode == IOMODE_RW &&
+<<<<<<< HEAD
 		    test_bit(NFS_LSEG_LAYOUTCOMMIT, &lseg->pls_flags))
+=======
+		    test_and_clear_bit(NFS_LSEG_LAYOUTCOMMIT, &lseg->pls_flags))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			list_add(&lseg->pls_lc_list, listp);
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void pnfs_list_write_lseg_done(struct inode *inode, struct list_head *listp)
+{
+	struct pnfs_layout_segment *lseg, *tmp;
+	unsigned long *bitlock = &NFS_I(inode)->flags;
+
+	/* Matched by references in pnfs_set_layoutcommit */
+	list_for_each_entry_safe(lseg, tmp, listp, pls_lc_list) {
+		list_del_init(&lseg->pls_lc_list);
+		put_lseg(lseg);
+	}
+
+	clear_bit_unlock(NFS_INO_LAYOUTCOMMITTING, bitlock);
+	smp_mb__after_clear_bit();
+	wake_up_bit(bitlock, NFS_INO_LAYOUTCOMMITTING);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 void pnfs_set_lo_fail(struct pnfs_layout_segment *lseg)
 {
 	if (lseg->pls_range.iomode == IOMODE_RW) {
@@ -1471,6 +1511,10 @@ void pnfs_cleanup_layoutcommit(struct nfs4_layoutcommit_data *data)
 
 	if (nfss->pnfs_curr_ld->cleanup_layoutcommit)
 		nfss->pnfs_curr_ld->cleanup_layoutcommit(data);
+<<<<<<< HEAD
+=======
+	pnfs_list_write_lseg_done(data->args.inode, &data->lseg_list);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 /*

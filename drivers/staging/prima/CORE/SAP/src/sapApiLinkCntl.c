@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2013 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -37,6 +42,13 @@
  * PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  */
 
 /*===========================================================================
@@ -157,10 +169,16 @@ WLANSAP_ScanCallback
     void *pTempHddCtx;
     tWLAN_SAPEvent sapEvent; /* State machine event */
     v_U8_t operChannel = 0;
+<<<<<<< HEAD
     VOS_STATUS sapstatus;
 #ifdef SOFTAP_CHANNEL_RANGE
     v_U32_t operatingBand;
 #endif
+=======
+    v_U8_t i = 0;
+    VOS_STATUS sapstatus;
+    v_U32_t event;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
     /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
@@ -184,10 +202,20 @@ WLANSAP_ScanCallback
             // Get scan results, Run channel selection algorithm, select channel and keep in pSapContext->Channel
             scanGetResultStatus = sme_ScanGetResult(halHandle, 0, NULL, &pResult);
 
+<<<<<<< HEAD
             if ((NULL == pResult) || (scanGetResultStatus != eHAL_STATUS_SUCCESS))
             {
                 // No scan results
                 VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR, "In %s, sme_ScanGetResult = NULL", __func__);
+=======
+            event = eSAP_MAC_SCAN_COMPLETE;
+
+            if ((scanGetResultStatus != eHAL_STATUS_SUCCESS)&& (scanGetResultStatus != eHAL_STATUS_E_NULL_VALUE))
+            {
+                // No scan results
+                VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR, "In %s, Get scan result failed! ret = %d",
+                                __func__, scanGetResultStatus);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 break;
             }
 
@@ -197,6 +225,7 @@ WLANSAP_ScanCallback
             break;
 
         default:
+<<<<<<< HEAD
             VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, CSR scanStatus = %s (%d)", __func__, "eCSR_SCAN_ABORT/FAILURE", scanStatus);
     }
     
@@ -219,6 +248,58 @@ WLANSAP_ScanCallback
               psapContext->channel = SAP_DEFAULT_5GHZ_CHANNEL;
          
        }
+=======
+            event = eSAP_CHANNEL_SELECTION_FAILED;
+            VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, CSR scanStatus = %s (%d)", __func__, "eCSR_SCAN_ABORT/FAILURE", scanStatus);
+    }
+
+    if (operChannel == SAP_CHANNEL_NOT_SELECTED)
+#ifdef SOFTAP_CHANNEL_RANGE
+    {
+        VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO,
+                "%s: No suitable channel selected", __func__);
+
+        if ( eCSR_BAND_ALL ==  psapContext->scanBandPreference ||
+                psapContext->allBandScanned == eSAP_TRUE)
+        {
+            if(psapContext->channelList != NULL)
+            {
+                 psapContext->channel = SAP_DEFAULT_CHANNEL;
+                 for ( i = 0 ; i < psapContext->numofChannel ; i++)
+                 {
+                    if (NV_CHANNEL_ENABLE ==
+                        vos_nv_getChannelEnabledState(psapContext->channelList[i]))
+                    {
+                        psapContext->channel = psapContext->channelList[i];
+                        break;
+                    }
+                 }
+            }
+            else
+            {
+                /* if the channel list is empty then there is no valid channel in
+                   the selected sub-band so select default channel in the
+                   BAND(2.4GHz) as 2.4 channels are available in all the
+                   countries*/
+                   psapContext->channel = SAP_DEFAULT_CHANNEL;
+            }
+        }
+        else
+        {
+            VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO,
+                    "%s: Has scan band preference",
+                    __func__);
+            if (eCSR_BAND_24 == psapContext->currentPreferredBand)
+                psapContext->currentPreferredBand = eCSR_BAND_5G;
+            else
+                psapContext->currentPreferredBand = eCSR_BAND_24;
+
+            psapContext->allBandScanned = eSAP_TRUE;
+            //go back to DISCONNECT state, scan next band
+            psapContext->sapsMachine = eSAP_DISCONNECTED;
+            event = eSAP_CHANNEL_SELECTION_FAILED;
+        }
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     }
 #else
        psapContext->channel = SAP_DEFAULT_CHANNEL;
@@ -244,7 +325,11 @@ WLANSAP_ScanCallback
     VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO_HIGH, "In %s, Channel selected = %d", __func__, psapContext->channel);
 
     /* Fill in the event structure */
+<<<<<<< HEAD
     sapEvent.event = eSAP_MAC_SCAN_COMPLETE;
+=======
+    sapEvent.event = event;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
     sapEvent.params = 0;        // pCsrRoamInfo;
     sapEvent.u1 = scanStatus;   // roamstatus
     sapEvent.u2 = 0;            // roamResult
@@ -411,8 +496,13 @@ WLANSAP_RoamCallback
         case eCSR_ROAM_SEND_ACTION_CNF:
             sapSignalHDDevent(sapContext, pCsrRoamInfo, 
                             eSAP_SEND_ACTION_CNF, 
+<<<<<<< HEAD
                             (v_PVOID_t)(( roamResult == eCSR_ROAM_RESULT_NONE) ?
                             eSAP_STATUS_SUCCESS : eSAP_STATUS_FAILURE));
+=======
+                            (v_PVOID_t)((eSapStatus)((roamResult == eCSR_ROAM_RESULT_NONE)
+                            ? eSAP_STATUS_SUCCESS : eSAP_STATUS_FAILURE)));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
             break;
 
        case eCSR_ROAM_DISCONNECT_ALL_P2P_CLIENTS:
@@ -464,6 +554,7 @@ WLANSAP_RoamCallback
                 vosStatus = sapSignalHDDevent( sapContext, pCsrRoamInfo, eSAP_STA_ASSOC_IND, (v_PVOID_t)eSAP_STATUS_SUCCESS);
                 if(!VOS_IS_STATUS_SUCCESS(vosStatus))
                 {
+<<<<<<< HEAD
                    VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR, 
                       "In %s, CSR roamResult = (%d) MAC"
                       "(%02X-%02X-%02X-%02X-%02X-%02X) fail",
@@ -471,17 +562,30 @@ WLANSAP_RoamCallback
                       pCsrRoamInfo->peerMac[1], pCsrRoamInfo->peerMac[2],
                       pCsrRoamInfo->peerMac[3], pCsrRoamInfo->peerMac[4],
                       pCsrRoamInfo->peerMac[5]);
+=======
+                   VOS_TRACE(VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR,
+                             "In %s, CSR roamResult = (%d) MAC ("
+                             MAC_ADDRESS_STR") fail", __func__, roamResult,
+                             MAC_ADDR_ARRAY(pCsrRoamInfo->peerMac));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                     halStatus = eHAL_STATUS_FAILURE;
                 }
             }
             else
             {
+<<<<<<< HEAD
                 VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_WARN, 
                    "In %s, CSR roamResult = (%d) MAC"
                    "(%02X-%02X-%02X-%02X-%02X-%02X) not allowed",
                    __func__, roamResult, pCsrRoamInfo->peerMac[0],
                    pCsrRoamInfo->peerMac[1], pCsrRoamInfo->peerMac[2],
                    pCsrRoamInfo->peerMac[3], pCsrRoamInfo->peerMac[4], pCsrRoamInfo->peerMac[5]);
+=======
+                VOS_TRACE(VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_WARN,
+                          "In %s, CSR roamResult = (%d) MAC ("
+                          MAC_ADDRESS_STR") not allowed", __func__, roamResult,
+                          MAC_ADDR_ARRAY(pCsrRoamInfo->peerMac));
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
                 halStatus = eHAL_STATUS_FAILURE;
             } 
 

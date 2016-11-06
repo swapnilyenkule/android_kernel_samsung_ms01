@@ -1303,13 +1303,23 @@ static void blkback_changed(struct xenbus_device *dev,
 	case XenbusStateReconfiguring:
 	case XenbusStateReconfigured:
 	case XenbusStateUnknown:
+<<<<<<< HEAD
 	case XenbusStateClosed:
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		break;
 
 	case XenbusStateConnected:
 		blkfront_connect(info);
 		break;
 
+<<<<<<< HEAD
+=======
+	case XenbusStateClosed:
+		if (dev->state == XenbusStateClosed)
+			break;
+		/* Missed the backend's Closing state -- fallthrough */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	case XenbusStateClosing:
 		blkfront_closing(info);
 		break;

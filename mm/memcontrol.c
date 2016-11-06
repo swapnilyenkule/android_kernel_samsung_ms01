@@ -1494,6 +1494,7 @@ static int mem_cgroup_count_children(struct mem_cgroup *memcg)
 u64 mem_cgroup_get_limit(struct mem_cgroup *memcg)
 {
 	u64 limit;
+<<<<<<< HEAD
 	u64 memsw;
 
 	limit = res_counter_read_u64(&memcg->res, RES_LIMIT);
@@ -1505,6 +1506,28 @@ u64 mem_cgroup_get_limit(struct mem_cgroup *memcg)
 	 * to this memcg, return that limit.
 	 */
 	return min(limit, memsw);
+=======
+
+	limit = res_counter_read_u64(&memcg->res, RES_LIMIT);
+
+	/*
+	 * Do not consider swap space if we cannot swap due to swappiness
+	 */
+	if (mem_cgroup_swappiness(memcg)) {
+		u64 memsw;
+
+		limit += total_swap_pages << PAGE_SHIFT;
+		memsw = res_counter_read_u64(&memcg->memsw, RES_LIMIT);
+
+		/*
+		 * If memsw is finite and limits the amount of swap space
+		 * available to this memcg, return that limit.
+		 */
+		limit = min(limit, memsw);
+	}
+
+	return limit;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static unsigned long mem_cgroup_reclaim(struct mem_cgroup *memcg,
@@ -4345,7 +4368,17 @@ static int compare_thresholds(const void *a, const void *b)
 	const struct mem_cgroup_threshold *_a = a;
 	const struct mem_cgroup_threshold *_b = b;
 
+<<<<<<< HEAD
 	return _a->threshold - _b->threshold;
+=======
+	if (_a->threshold > _b->threshold)
+		return 1;
+
+	if (_a->threshold < _b->threshold)
+		return -1;
+
+	return 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static int mem_cgroup_oom_notify_cb(struct mem_cgroup *memcg)
@@ -4512,17 +4545,28 @@ static void mem_cgroup_usage_unregister_event(struct cgroup *cgrp,
 swap_buffers:
 	/* Swap primary and spare array */
 	thresholds->spare = thresholds->primary;
+<<<<<<< HEAD
 
 	rcu_assign_pointer(thresholds->primary, new);
 
 	/* To be sure that nobody uses thresholds */
 	synchronize_rcu();
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* If all events are unregistered, free the spare array */
 	if (!new) {
 		kfree(thresholds->spare);
 		thresholds->spare = NULL;
 	}
+<<<<<<< HEAD
+=======
+
+	rcu_assign_pointer(thresholds->primary, new);
+
+	/* To be sure that nobody uses thresholds */
+	synchronize_rcu();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 unlock:
 	mutex_unlock(&memcg->thresholds_lock);
 }

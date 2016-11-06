@@ -369,6 +369,17 @@ static int period_to_usecs(struct snd_pcm_runtime *runtime)
 	return usecs;
 }
 
+<<<<<<< HEAD
+=======
+static void snd_pcm_set_state(struct snd_pcm_substream *substream, int state)
+{
+	snd_pcm_stream_lock_irq(substream);
+	if (substream->runtime->status->state != SNDRV_PCM_STATE_DISCONNECTED)
+		substream->runtime->status->state = state;
+	snd_pcm_stream_unlock_irq(substream);
+}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
 			     struct snd_pcm_hw_params *params)
 {
@@ -453,7 +464,11 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
 		runtime->boundary *= 2;
 
 	snd_pcm_timer_resolution_change(substream);
+<<<<<<< HEAD
 	runtime->status->state = SNDRV_PCM_STATE_SETUP;
+=======
+	snd_pcm_set_state(substream, SNDRV_PCM_STATE_SETUP);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (pm_qos_request_active(&substream->latency_pm_qos_req))
 		pm_qos_remove_request(&substream->latency_pm_qos_req);
@@ -465,7 +480,11 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
 	/* hardware might be unusable from this time,
 	   so we force application to retry to set
 	   the correct hardware parameter settings */
+<<<<<<< HEAD
 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
+=======
+	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (substream->ops->hw_free != NULL)
 		substream->ops->hw_free(substream);
 	return err;
@@ -513,7 +532,11 @@ static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
 		return -EBADFD;
 	if (substream->ops->hw_free)
 		result = substream->ops->hw_free(substream);
+<<<<<<< HEAD
 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
+=======
+	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	pm_qos_remove_request(&substream->latency_pm_qos_req);
 	return result;
 }
@@ -1322,7 +1345,11 @@ static void snd_pcm_post_prepare(struct snd_pcm_substream *substream, int state)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	runtime->control->appl_ptr = runtime->status->hw_ptr;
+<<<<<<< HEAD
 	runtime->status->state = SNDRV_PCM_STATE_PREPARED;
+=======
+	snd_pcm_set_state(substream, SNDRV_PCM_STATE_PREPARED);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static struct action_ops snd_pcm_action_prepare = {
@@ -1376,6 +1403,11 @@ static int snd_pcm_do_drain_init(struct snd_pcm_substream *substream, int state)
 			if (! snd_pcm_playback_empty(substream)) {
 				snd_pcm_do_start(substream, SNDRV_PCM_STATE_DRAINING);
 				snd_pcm_post_start(substream, SNDRV_PCM_STATE_DRAINING);
+<<<<<<< HEAD
+=======
+			} else {
+				runtime->status->state = SNDRV_PCM_STATE_SETUP;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			}
 			break;
 		case SNDRV_PCM_STATE_RUNNING:
@@ -1502,6 +1534,13 @@ static int snd_pcm_drain(struct snd_pcm_substream *substream,
 		down_read(&snd_pcm_link_rwsem);
 		snd_pcm_stream_lock_irq(substream);
 		remove_wait_queue(&to_check->sleep, &wait);
+<<<<<<< HEAD
+=======
+		if (card->shutdown) {
+			result = -ENODEV;
+			break;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (tout == 0) {
 			if (substream->runtime->status->state == SNDRV_PCM_STATE_SUSPENDED)
 				result = -ESTRPIPE;
@@ -2180,6 +2219,13 @@ static int snd_pcm_open(struct file *file, struct snd_pcm *pcm, int stream)
 		mutex_unlock(&pcm->open_mutex);
 		schedule();
 		mutex_lock(&pcm->open_mutex);
+<<<<<<< HEAD
+=======
+		if (pcm->card->shutdown) {
+			err = -ENODEV;
+			break;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (signal_pending(current)) {
 			err = -ERESTARTSYS;
 			break;
@@ -3207,7 +3253,11 @@ static const struct vm_operations_struct snd_pcm_vm_ops_data_fault = {
 
 #ifndef ARCH_HAS_DMA_MMAP_COHERENT
 /* This should be defined / handled globally! */
+<<<<<<< HEAD
 #ifdef CONFIG_ARM
+=======
+#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define ARCH_HAS_DMA_MMAP_COHERENT
 #endif
 #endif
@@ -3245,6 +3295,7 @@ EXPORT_SYMBOL_GPL(snd_pcm_lib_default_mmap);
 int snd_pcm_lib_mmap_iomem(struct snd_pcm_substream *substream,
 			   struct vm_area_struct *area)
 {
+<<<<<<< HEAD
 	long size;
 	unsigned long offset;
 
@@ -3257,6 +3308,12 @@ int snd_pcm_lib_mmap_iomem(struct snd_pcm_substream *substream,
 				size, area->vm_page_prot))
 		return -EAGAIN;
 	return 0;
+=======
+	struct snd_pcm_runtime *runtime = substream->runtime;;
+
+	area->vm_page_prot = pgprot_noncached(area->vm_page_prot);
+	return vm_iomap_memory(area, runtime->dma_addr, runtime->dma_bytes);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 EXPORT_SYMBOL(snd_pcm_lib_mmap_iomem);

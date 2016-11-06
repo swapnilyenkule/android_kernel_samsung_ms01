@@ -1,5 +1,8 @@
 
+<<<<<<< HEAD
 %name-prefix "parse_events_"
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 %parse-param {struct list_head *list_all}
 %parse-param {struct list_head *list_event}
 %parse-param {int *idx}

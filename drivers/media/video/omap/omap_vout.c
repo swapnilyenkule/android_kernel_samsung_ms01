@@ -206,6 +206,7 @@ static u32 omap_vout_uservirt_to_phys(u32 virtp)
 	struct vm_area_struct *vma;
 	struct mm_struct *mm = current->mm;
 
+<<<<<<< HEAD
 	vma = find_vma(mm, virtp);
 	/* For kernel direct-mapped memory, take the easy way */
 	if (virtp >= PAGE_OFFSET) {
@@ -214,11 +215,27 @@ static u32 omap_vout_uservirt_to_phys(u32 virtp)
 		/* this will catch, kernel-allocated, mmaped-to-usermode
 		   addresses */
 		physp = (vma->vm_pgoff << PAGE_SHIFT) + (virtp - vma->vm_start);
+=======
+	/* For kernel direct-mapped memory, take the easy way */
+	if (virtp >= PAGE_OFFSET)
+		return virt_to_phys((void *) virtp);
+
+	down_read(&current->mm->mmap_sem);
+	vma = find_vma(mm, virtp);
+	if (vma && (vma->vm_flags & VM_IO) && vma->vm_pgoff) {
+		/* this will catch, kernel-allocated, mmaped-to-usermode
+		   addresses */
+		physp = (vma->vm_pgoff << PAGE_SHIFT) + (virtp - vma->vm_start);
+		up_read(&current->mm->mmap_sem);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	} else {
 		/* otherwise, use get_user_pages() for general userland pages */
 		int res, nr_pages = 1;
 		struct page *pages;
+<<<<<<< HEAD
 		down_read(&current->mm->mmap_sem);
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 		res = get_user_pages(current, current->mm, virtp, nr_pages, 1,
 				0, &pages, NULL);

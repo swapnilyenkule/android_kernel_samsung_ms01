@@ -34,6 +34,10 @@
 #include <string.h>
 #include <ctype.h>
 #include <sched.h>
+<<<<<<< HEAD
+=======
+#include <cpuid.h>
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #define MSR_TSC	0x10
 #define MSR_NEHALEM_PLATFORM_INFO	0xCE
@@ -932,7 +936,11 @@ void check_cpuid()
 
 	eax = ebx = ecx = edx = 0;
 
+<<<<<<< HEAD
 	asm("cpuid" : "=a" (max_level), "=b" (ebx), "=c" (ecx), "=d" (edx) : "a" (0));
+=======
+	__get_cpuid(0, &max_level, &ebx, &ecx, &edx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (ebx == 0x756e6547 && edx == 0x49656e69 && ecx == 0x6c65746e)
 		genuine_intel = 1;
@@ -941,7 +949,11 @@ void check_cpuid()
 		fprintf(stderr, "%.4s%.4s%.4s ",
 			(char *)&ebx, (char *)&edx, (char *)&ecx);
 
+<<<<<<< HEAD
 	asm("cpuid" : "=a" (fms), "=c" (ecx), "=d" (edx) : "a" (1) : "ebx");
+=======
+	__get_cpuid(1, &fms, &ebx, &ecx, &edx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	family = (fms >> 8) & 0xf;
 	model = (fms >> 4) & 0xf;
 	stepping = fms & 0xf;
@@ -963,7 +975,11 @@ void check_cpuid()
 	 * This check is valid for both Intel and AMD.
 	 */
 	ebx = ecx = edx = 0;
+<<<<<<< HEAD
 	asm("cpuid" : "=a" (max_level), "=b" (ebx), "=c" (ecx), "=d" (edx) : "a" (0x80000000));
+=======
+	__get_cpuid(0x80000000, &max_level, &ebx, &ecx, &edx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (max_level < 0x80000007) {
 		fprintf(stderr, "CPUID: no invariant TSC (max_level 0x%x)\n", max_level);
@@ -974,7 +990,11 @@ void check_cpuid()
 	 * Non-Stop TSC is advertised by CPUID.EAX=0x80000007: EDX.bit8
 	 * this check is valid for both Intel and AMD
 	 */
+<<<<<<< HEAD
 	asm("cpuid" : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx) : "a" (0x80000007));
+=======
+	__get_cpuid(0x80000007, &eax, &ebx, &ecx, &edx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	has_invariant_tsc = edx & (1 << 8);
 
 	if (!has_invariant_tsc) {
@@ -987,7 +1007,11 @@ void check_cpuid()
 	 * this check is valid for both Intel and AMD
 	 */
 
+<<<<<<< HEAD
 	asm("cpuid" : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx) : "a" (0x6));
+=======
+	__get_cpuid(0x6, &eax, &ebx, &ecx, &edx);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	has_aperf = ecx & (1 << 0);
 	if (!has_aperf) {
 		fprintf(stderr, "No APERF MSR\n");

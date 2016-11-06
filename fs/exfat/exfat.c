@@ -1753,6 +1753,10 @@ void fs_error(struct super_block *sb)
 	else if ((opts->errors == EXFAT_ERRORS_RO) && !(sb->s_flags & MS_RDONLY)) {
 		sb->s_flags |= MS_RDONLY;
 		printk(KERN_ERR "[EXFAT] Filesystem has been set read-only\n");
+<<<<<<< HEAD
+=======
+		ST_LOG("[EXFAT] Filesystem has been set read-only\n");
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 }
 
@@ -2097,6 +2101,12 @@ INT32 exfat_count_used_clusters(struct super_block *sb)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	if ((p_fs->num_clusters - 2) < (UINT32)count)
+		count = p_fs->num_clusters - 2;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	return(count);
 }
 

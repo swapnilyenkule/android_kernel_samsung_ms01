@@ -195,6 +195,12 @@ xfs_fs_fh_to_parent(struct super_block *sb, struct fid *fid,
 	struct xfs_fid64	*fid64 = (struct xfs_fid64 *)fid;
 	struct inode		*inode = NULL;
 
+<<<<<<< HEAD
+=======
+	if (fh_len < xfs_fileid_length(fileid_type))
+		return NULL;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	switch (fileid_type) {
 	case FILEID_INO32_GEN_PARENT:
 		inode = xfs_nfs_get_inode(sb, fid->i32.parent_ino,

@@ -78,7 +78,11 @@ struct clk_pair clks[KGSL_MAX_CLKS] = {
 };
 
 static void kgsl_pwrctrl_clk(struct kgsl_device *device, int state,
+<<<<<<< HEAD
 					  int requested_state);
+=======
+					int requested_state);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 static void kgsl_pwrctrl_axi(struct kgsl_device *device, int state);
 static void kgsl_pwrctrl_pwrrail(struct kgsl_device *device, int state);
 
@@ -902,7 +906,11 @@ static void kgsl_pwrctrl_busy_time(struct kgsl_device *device, bool on_time)
 	}
 }
 
+<<<<<<< HEAD
 static void kgsl_pwrctrl_clk(struct kgsl_device *device, int state,
+=======
+void kgsl_pwrctrl_clk(struct kgsl_device *device, int state,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 					  int requested_state)
 {
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
@@ -1735,6 +1743,7 @@ static int _check_active_count(struct kgsl_device *device, int count)
 int kgsl_active_count_wait(struct kgsl_device *device, int count)
 {
 	int result = 0;
+<<<<<<< HEAD
 	long wait_jiffies = HZ;
 
 	BUG_ON(!mutex_is_locked(&device->mutex));
@@ -1750,6 +1759,18 @@ int kgsl_active_count_wait(struct kgsl_device *device, int count)
 			wait_jiffies = ret;
 		else
 			break;
+=======
+
+	BUG_ON(!mutex_is_locked(&device->mutex));
+
+	if (atomic_read(&device->active_cnt) > count) {
+		int ret;
+		kgsl_mutex_unlock(&device->mutex, &device->mutex_owner);
+		ret = wait_event_timeout(device->active_cnt_wq,
+			_check_active_count(device, count), HZ);
+		kgsl_mutex_lock(&device->mutex, &device->mutex_owner);
+		result = ret == 0 ? -ETIMEDOUT : 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	}
 
 	return result;

@@ -1685,9 +1685,12 @@ void __init kmem_cache_init_late(void)
 
 	g_cpucache_up = LATE;
 
+<<<<<<< HEAD
 	/* Annotate slab for lockdep -- annotate the malloc caches */
 	init_lock_keys();
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* 6) resize the head arrays to their final sizes */
 	mutex_lock(&cache_chain_mutex);
 	list_for_each_entry(cachep, &cache_chain, next)
@@ -1695,6 +1698,12 @@ void __init kmem_cache_init_late(void)
 			BUG();
 	mutex_unlock(&cache_chain_mutex);
 
+<<<<<<< HEAD
+=======
+	/* Annotate slab for lockdep -- annotate the malloc caches */
+	init_lock_keys();
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/* Done! */
 	g_cpucache_up = FULL;
 
@@ -3321,7 +3330,11 @@ static inline void *____cache_alloc(struct kmem_cache *cachep, gfp_t flags)
 
 #ifdef CONFIG_NUMA
 /*
+<<<<<<< HEAD
  * Try allocating on another node if PF_SPREAD_SLAB|PF_MEMPOLICY.
+=======
+ * Try allocating on another node if PFA_SPREAD_SLAB|PF_MEMPOLICY.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * If we are in_interrupt, then process context, including cpusets and
  * mempolicy, may not apply and should not be used for allocation policy.
@@ -3336,7 +3349,11 @@ static void *alternate_node_alloc(struct kmem_cache *cachep, gfp_t flags)
 	if (cpuset_do_slab_mem_spread() && (cachep->flags & SLAB_MEM_SPREAD))
 		nid_alloc = cpuset_slab_spread_node();
 	else if (current->mempolicy)
+<<<<<<< HEAD
 		nid_alloc = slab_node(current->mempolicy);
+=======
+		nid_alloc = slab_node();
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (nid_alloc != nid_here)
 		return ____cache_alloc_node(cachep, flags, nid_alloc);
 	return NULL;
@@ -3368,7 +3385,11 @@ static void *fallback_alloc(struct kmem_cache *cache, gfp_t flags)
 
 retry_cpuset:
 	cpuset_mems_cookie = get_mems_allowed();
+<<<<<<< HEAD
 	zonelist = node_zonelist(slab_node(current->mempolicy), flags);
+=======
+	zonelist = node_zonelist(slab_node(), flags);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 retry:
 	/*
@@ -3562,7 +3583,11 @@ __do_cache_alloc(struct kmem_cache *cache, gfp_t flags)
 {
 	void *objp;
 
+<<<<<<< HEAD
 	if (unlikely(current->flags & (PF_SPREAD_SLAB | PF_MEMPOLICY))) {
+=======
+	if (unlikely((current->flags & PF_MEMPOLICY) || cpuset_do_slab_mem_spread())) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		objp = alternate_node_alloc(cache, flags);
 		if (objp)
 			goto out;

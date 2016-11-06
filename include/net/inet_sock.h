@@ -212,6 +212,10 @@ static inline void inet_sk_copy_descendant(struct sock *sk_to,
 extern int inet_sk_rebuild_header(struct sock *sk);
 
 extern u32 inet_ehash_secret;
+<<<<<<< HEAD
+=======
+extern u32 ipv6_hash_secret;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 extern void build_ehash_secret(void);
 
 static inline unsigned int inet_ehashfn(struct net *net,

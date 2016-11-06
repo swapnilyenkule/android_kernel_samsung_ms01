@@ -17,7 +17,16 @@
 #include <linux/ctype.h>
 #include <linux/genhd.h>
 #include <linux/blktrace_api.h>
+<<<<<<< HEAD
 #include <linux/stlog.h>
+=======
+
+#ifdef CONFIG_BLOCK_SUPPORT_STLOG
+#include <linux/stlog.h>
+#else
+#define ST_LOG(fmt,...)
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #include "partitions/check.h"
 
@@ -212,6 +221,10 @@ static const struct attribute_group *part_attr_groups[] = {
 static void part_release(struct device *dev)
 {
 	struct hd_struct *p = dev_to_part(dev);
+<<<<<<< HEAD
+=======
+	blk_free_devt(dev->devt);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	free_part_stats(p);
 	free_part_info(p);
 	kfree(p);
@@ -254,9 +267,15 @@ void delete_partition(struct gendisk *disk, int partno)
 	struct disk_part_tbl *ptbl = disk->part_tbl;
 	struct hd_struct *part;
 
+<<<<<<< HEAD
 	#ifdef CONFIG_STLOG
 	struct device *dev;
 	#endif
+=======
+#ifdef CONFIG_BLOCK_SUPPORT_STLOG
+	struct device *dev;
+#endif
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	if (partno >= ptbl->len)
 		return;
@@ -265,6 +284,7 @@ void delete_partition(struct gendisk *disk, int partno)
 	if (!part)
 		return;
 
+<<<<<<< HEAD
 	blk_free_devt(part_devt(part));
 	rcu_assign_pointer(ptbl->part[partno], NULL);
 	rcu_assign_pointer(ptbl->last_lookup, NULL);
@@ -274,6 +294,16 @@ void delete_partition(struct gendisk *disk, int partno)
 	ST_LOG("<%s> KOBJ_REMOVE %d:%d %s",
 	__func__,MAJOR(dev->devt),MINOR(dev->devt),dev->kobj.name);
 	#endif	
+=======
+	rcu_assign_pointer(ptbl->part[partno], NULL);
+	rcu_assign_pointer(ptbl->last_lookup, NULL);
+	kobject_put(part->holder_dir);
+#ifdef CONFIG_BLOCK_SUPPORT_STLOG
+	dev = part_to_dev(part);
+	ST_LOG("<%s> KOBJ_REMOVE %d:%d %s",
+	__func__,MAJOR(dev->devt),MINOR(dev->devt),dev->kobj.name);
+#endif	
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	device_del(part_to_dev(part));
 
 	hd_struct_put(part);

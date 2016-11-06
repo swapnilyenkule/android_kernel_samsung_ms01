@@ -680,7 +680,11 @@ int iwl_alive_start(struct iwl_priv *priv)
 					 BT_COEX_PRIO_TBL_EVT_INIT_CALIB2);
 		if (ret)
 			return ret;
+<<<<<<< HEAD
 	} else {
+=======
+	} else if (priv->shrd->cfg->bt_params) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		/*
 		 * default is 2-wire BT coexexistence support
 		 */

@@ -4217,7 +4217,11 @@ static void update_global_block_rsv(struct btrfs_fs_info *fs_info)
 	spin_lock(&sinfo->lock);
 	spin_lock(&block_rsv->lock);
 
+<<<<<<< HEAD
 	block_rsv->size = num_bytes;
+=======
+	block_rsv->size = min_t(u64, num_bytes, 512 * 1024 * 1024);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	num_bytes = sinfo->bytes_used + sinfo->bytes_pinned +
 		    sinfo->bytes_reserved + sinfo->bytes_readonly +
@@ -4486,6 +4490,7 @@ int btrfs_delalloc_reserve_metadata(struct inode *inode, u64 num_bytes)
 		 * If the inodes csum_bytes is the same as the original
 		 * csum_bytes then we know we haven't raced with any free()ers
 		 * so we can just reduce our inodes csum bytes and carry on.
+<<<<<<< HEAD
 		 * Otherwise we have to do the normal free thing to account for
 		 * the case that the free side didn't free up its reserve
 		 * because of this outstanding reservation.
@@ -4494,6 +4499,51 @@ int btrfs_delalloc_reserve_metadata(struct inode *inode, u64 num_bytes)
 			calc_csum_metadata_size(inode, num_bytes, 0);
 		else
 			to_free = calc_csum_metadata_size(inode, num_bytes, 0);
+=======
+		 */
+		if (BTRFS_I(inode)->csum_bytes == csum_bytes) {
+			calc_csum_metadata_size(inode, num_bytes, 0);
+		} else {
+			u64 orig_csum_bytes = BTRFS_I(inode)->csum_bytes;
+			u64 bytes;
+
+			/*
+			 * This is tricky, but first we need to figure out how much we
+			 * free'd from any free-ers that occured during this
+			 * reservation, so we reset ->csum_bytes to the csum_bytes
+			 * before we dropped our lock, and then call the free for the
+			 * number of bytes that were freed while we were trying our
+			 * reservation.
+			 */
+			bytes = csum_bytes - BTRFS_I(inode)->csum_bytes;
+			BTRFS_I(inode)->csum_bytes = csum_bytes;
+			to_free = calc_csum_metadata_size(inode, bytes, 0);
+
+
+			/*
+			 * Now we need to see how much we would have freed had we not
+			 * been making this reservation and our ->csum_bytes were not
+			 * artificially inflated.
+			 */
+			BTRFS_I(inode)->csum_bytes = csum_bytes - num_bytes;
+			bytes = csum_bytes - orig_csum_bytes;
+			bytes = calc_csum_metadata_size(inode, bytes, 0);
+
+			/*
+			 * Now reset ->csum_bytes to what it should be.  If bytes is
+			 * more than to_free then we would have free'd more space had we
+			 * not had an artificially high ->csum_bytes, so we need to free
+			 * the remainder.  If bytes is the same or less then we don't
+			 * need to do anything, the other free-ers did the correct
+			 * thing.
+			 */
+			BTRFS_I(inode)->csum_bytes = orig_csum_bytes - num_bytes;
+			if (bytes > to_free)
+				to_free = bytes - to_free;
+			else
+				to_free = 0;
+		}
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		spin_unlock(&BTRFS_I(inode)->lock);
 		if (dropped)
 			to_free += btrfs_calc_trans_metadata_size(root, dropped);
@@ -4857,7 +4907,12 @@ void btrfs_prepare_extent_commit(struct btrfs_trans_handle *trans,
 	update_global_block_rsv(fs_info);
 }
 
+<<<<<<< HEAD
 static int unpin_extent_range(struct btrfs_root *root, u64 start, u64 end)
+=======
+static int unpin_extent_range(struct btrfs_root *root, u64 start, u64 end,
+			      const bool return_free_space)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 {
 	struct btrfs_fs_info *fs_info = root->fs_info;
 	struct btrfs_block_group_cache *cache = NULL;
@@ -4877,7 +4932,12 @@ static int unpin_extent_range(struct btrfs_root *root, u64 start, u64 end)
 
 		if (start < cache->last_byte_to_unpin) {
 			len = min(len, cache->last_byte_to_unpin - start);
+<<<<<<< HEAD
 			btrfs_add_free_space(cache, start, len);
+=======
+			if (return_free_space)
+				btrfs_add_free_space(cache, start, len);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		}
 
 		start += len;
@@ -4925,7 +4985,11 @@ int btrfs_finish_extent_commit(struct btrfs_trans_handle *trans,
 						   end + 1 - start, NULL);
 
 		clear_extent_dirty(unpin, start, end, GFP_NOFS);
+<<<<<<< HEAD
 		unpin_extent_range(root, start, end);
+=======
+		unpin_extent_range(root, start, end, true);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		cond_resched();
 	}
 
@@ -5902,12 +5966,20 @@ static int __btrfs_free_reserved_extent(struct btrfs_root *root,
 		return -ENOSPC;
 	}
 
+<<<<<<< HEAD
 	if (btrfs_test_opt(root, DISCARD))
 		ret = btrfs_discard_extent(root, start, len, NULL);
 
 	if (pin)
 		pin_down_extent(root, cache, start, len, 1);
 	else {
+=======
+	if (pin)
+		pin_down_extent(root, cache, start, len, 1);
+	else {
+		if (btrfs_test_opt(root, DISCARD))
+			ret = btrfs_discard_extent(root, start, len, NULL);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		btrfs_add_free_space(cache, start, len);
 		btrfs_update_reserved_bytes(cache, len, RESERVE_FREE);
 	}
@@ -6811,6 +6883,10 @@ int btrfs_drop_snapshot(struct btrfs_root *root,
 	int err = 0;
 	int ret;
 	int level;
+<<<<<<< HEAD
+=======
+	bool root_dropped = false;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 	path = btrfs_alloc_path();
 	if (!path) {
@@ -6868,6 +6944,10 @@ int btrfs_drop_snapshot(struct btrfs_root *root,
 		while (1) {
 			btrfs_tree_lock(path->nodes[level]);
 			btrfs_set_lock_blocking(path->nodes[level]);
+<<<<<<< HEAD
+=======
+			path->locks[level] = BTRFS_WRITE_LOCK_BLOCKING;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 			ret = btrfs_lookup_extent_info(trans, root,
 						path->nodes[level]->start,
@@ -6884,6 +6964,10 @@ int btrfs_drop_snapshot(struct btrfs_root *root,
 				break;
 
 			btrfs_tree_unlock(path->nodes[level]);
+<<<<<<< HEAD
+=======
+			path->locks[level] = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			WARN_ON(wc->refs[level] != 1);
 			level--;
 		}
@@ -6979,13 +7063,30 @@ int btrfs_drop_snapshot(struct btrfs_root *root,
 		free_extent_buffer(root->commit_root);
 		kfree(root);
 	}
+<<<<<<< HEAD
+=======
+	root_dropped = true;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 out_end_trans:
 	btrfs_end_transaction_throttle(trans, tree_root);
 out_free:
 	kfree(wc);
 	btrfs_free_path(path);
 out:
+<<<<<<< HEAD
 	if (err)
+=======
+	/*
+	 * So if we need to stop dropping the snapshot for whatever reason we
+	 * need to make sure to add it back to the dead root list so that we
+	 * keep trying to do the work later.  This also cleans up roots if we
+	 * don't have it in the radix (like when we recover after a power fail
+	 * or unmount) so we don't leak memory.
+	 */
+	if (root_dropped == false)
+		btrfs_add_dead_root(root);
+	if (err && err != -EAGAIN)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		btrfs_std_error(root->fs_info, err);
 	return err;
 }
@@ -7960,7 +8061,11 @@ out:
 
 int btrfs_error_unpin_extent_range(struct btrfs_root *root, u64 start, u64 end)
 {
+<<<<<<< HEAD
 	return unpin_extent_range(root, start, end);
+=======
+	return unpin_extent_range(root, start, end, false);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 int btrfs_error_discard_extent(struct btrfs_root *root, u64 bytenr,

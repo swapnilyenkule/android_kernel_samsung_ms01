@@ -2498,7 +2498,11 @@ static ssize_t show_waketime(struct device *dev,
 	if (!bamDmux_pkt_dev)
 		return 0;
 
+<<<<<<< HEAD
 	return sprintf(buf, "%u\n", wakelock_timeout);
+=======
+	return snprintf(buf, sizeof(buf), "%u\n", wakelock_timeout);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static ssize_t store_waketime(struct device *dev,

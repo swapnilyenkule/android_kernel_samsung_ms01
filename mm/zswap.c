@@ -46,9 +46,15 @@
 * statistics
 **********************************/
 /* Number of memory pages used by the compressed pool */
+<<<<<<< HEAD
 static atomic_t zswap_pool_pages = ATOMIC_INIT(0);
 /* The number of compressed pages currently stored in zswap */
 static atomic_t zswap_stored_pages = ATOMIC_INIT(0);
+=======
+atomic_t zswap_pool_pages = ATOMIC_INIT(0);
+/* The number of compressed pages currently stored in zswap */
+atomic_t zswap_stored_pages = ATOMIC_INIT(0);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #ifdef CONFIG_ZSWAP_ENABLE_WRITEBACK
 /* The number of outstanding pages awaiting writeback */

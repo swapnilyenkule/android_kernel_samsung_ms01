@@ -155,6 +155,13 @@ static void __cfg80211_clear_ibss(struct net_device *dev, bool nowext)
 	kfree(wdev->connect_keys);
 	wdev->connect_keys = NULL;
 
+<<<<<<< HEAD
+=======
+	if (rdev->ops->set_qos_map) {
+		rdev->ops->set_qos_map(&rdev->wiphy, dev, NULL);
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * Delete all the keys ... pairwise keys can't really
 	 * exist any more anyway, but default keys might.

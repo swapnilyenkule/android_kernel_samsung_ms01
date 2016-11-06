@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -43,6 +47,10 @@
 #define IOMMU_SECURE_CFG	2
 #define IOMMU_SECURE_PTBL_SIZE  3
 #define IOMMU_SECURE_PTBL_INIT  4
+<<<<<<< HEAD
+=======
+#define IOMMU_SET_CP_POOL_SIZE	5
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define IOMMU_SECURE_MAP	6
 #define IOMMU_SECURE_UNMAP      7
 #define IOMMU_SECURE_MAP2 0x0B
@@ -51,9 +59,27 @@
 
 /* commands for SCM_SVC_UTIL */
 #define IOMMU_DUMP_SMMU_FAULT_REGS 0X0C
+<<<<<<< HEAD
 
 static struct iommu_access_ops *iommu_access_ops;
 
+=======
+#define MAXIMUM_VIRT_SIZE	(300*SZ_1M)
+
+
+#define MAKE_CP_VERSION(major, minor, patch) \
+	(((major & 0x3FF) << 22) | ((minor & 0x3FF) << 12) | (patch & 0xFFF))
+
+
+static struct iommu_access_ops *iommu_access_ops;
+
+static const struct of_device_id msm_smmu_list[] = {
+	{ .compatible = "qcom,msm-smmu-v1", },
+	{ .compatible = "qcom,msm-smmu-v2", },
+	{ }
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct msm_scm_paddr_list {
 	unsigned int list;
 	unsigned int list_size;
@@ -78,6 +104,14 @@ struct msm_scm_unmap2_req {
 	unsigned int flags;
 };
 
+<<<<<<< HEAD
+=======
+struct msm_cp_pool_size {
+	uint32_t size;
+	uint32_t spare;
+};
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define NUM_DUMP_REGS 14
 /*
  * some space to allow the number of registers returned by the secure
@@ -282,15 +316,46 @@ static int msm_iommu_sec_ptbl_init(void)
 	int psize[2] = {0, 0};
 	unsigned int spare;
 	int ret, ptbl_ret = 0;
+<<<<<<< HEAD
 
 	for_each_compatible_node(np, NULL, "qcom,msm-smmu-v1")
 		if (of_find_property(np, "qcom,iommu-secure-id", NULL))
+=======
+	int version;
+
+	for_each_matching_node(np, msm_smmu_list)
+		if (of_find_property(np, "qcom,iommu-secure-id", NULL) &&
+				of_device_is_available(np))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			break;
 
 	if (!np)
 		return 0;
 
 	of_node_put(np);
+<<<<<<< HEAD
+=======
+
+	version = scm_get_feat_version(SCM_SVC_MP);
+
+	if (version >= MAKE_CP_VERSION(1, 1, 1)) {
+		struct msm_cp_pool_size psize;
+		int retval;
+
+		psize.size = MAXIMUM_VIRT_SIZE;
+		psize.spare = 0;
+
+		ret = scm_call(SCM_SVC_MP, IOMMU_SET_CP_POOL_SIZE, &psize,
+				sizeof(psize), &retval, sizeof(retval));
+
+		if (ret) {
+			pr_err("scm call IOMMU_SET_CP_POOL_SIZE failed\n");
+			goto fail;
+		}
+
+	}
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	ret = scm_call(SCM_SVC_MP, IOMMU_SECURE_PTBL_SIZE, &spare,
 			sizeof(spare), psize, sizeof(psize));
 	if (ret) {

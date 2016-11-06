@@ -67,12 +67,19 @@ enum {
 
 
 
+<<<<<<< HEAD
 #pragma pack(1)
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 typedef struct viawget_wpa_header {
 	u8 type;
 	u16 req_ie_len;
 	u16 resp_ie_len;
+<<<<<<< HEAD
 } viawget_wpa_header;
+=======
+} __packed viawget_wpa_header;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 struct viawget_wpa_param {
 	u32 cmd;
@@ -113,9 +120,14 @@ struct viawget_wpa_param {
 			u8 *buf;
 		} scan_results;
 	} u;
+<<<<<<< HEAD
 };
 
 #pragma pack(1)
+=======
+} __packed;
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 struct viawget_scan_result {
 	u8 bssid[6];
 	u8 ssid[32];
@@ -130,7 +142,11 @@ struct viawget_scan_result {
 	int noise;
 	int level;
 	int maxrate;
+<<<<<<< HEAD
 };
+=======
+} __packed;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 /*---------------------  Export Classes  ----------------------------*/
 

@@ -31,5 +31,9 @@
 #define IRQ_MASK_HIGH_OFF	0x0014
 
 #define TIMER_VIRT_BASE		(BRIDGE_VIRT_BASE | 0x0300)
+<<<<<<< HEAD
+=======
+#define TIMER_PHYS_BASE		(BRIDGE_PHYS_BASE | 0x0300)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 
 #endif

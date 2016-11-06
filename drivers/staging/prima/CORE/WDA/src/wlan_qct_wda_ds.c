@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+=======
+ * Copyright (c) 2012-2014 The Linux Foundation. All rights reserved.
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -18,6 +22,7 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
+<<<<<<< HEAD
 /*
  * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
@@ -39,6 +44,18 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+=======
+
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
+
+
+
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 /*===========================================================================
 
 
@@ -370,9 +387,15 @@ WDA_DS_FinishULA
              "Serializing WDA_DS_FinishULA event" );
 
   vos_mem_zero( &sMessage, sizeof(vos_msg_t) );
+<<<<<<< HEAD
 
   sMessage.bodyval  = (v_U32_t)callbackContext;
   sMessage.bodyptr  = callbackRoutine;
+=======
+  sMessage.bodyptr  = callbackContext;
+  sMessage.callback = callbackRoutine;
+  sMessage.bodyval  = 0;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   sMessage.type     = WDA_DS_FINISH_ULA;
 
   return vos_tx_mq_serialize(VOS_MQ_ID_TL, &sMessage);
@@ -432,7 +455,11 @@ WDA_DS_BuildTxPacketInfo
   v_U8_t          typeSubtype,
   v_PVOID_t       pAddr2,
   v_U8_t          uTid,
+<<<<<<< HEAD
   v_U8_t          txFlag,
+=======
+  v_U32_t          txFlag,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   v_U32_t         timeStamp,
   v_U8_t          ucIsEapol,
   v_U8_t          ucUP
@@ -514,7 +541,12 @@ WDA_DS_BuildTxPacketInfo
                     WLANTL_MAC_ADDR_ALIGN( ucDisableFrmXtl ),
                     (v_PVOID_t)pvDestMacAddr,
                     &usMacAddrSize );
+<<<<<<< HEAD
   if ( VOS_STATUS_SUCCESS != vosStatus )
+=======
+  if ((VOS_STATUS_SUCCESS != vosStatus) ||
+          (usMacAddrSize != VOS_MAC_ADDR_SIZE))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   {
     VOS_TRACE( VOS_MODULE_ID_TL, VOS_TRACE_LEVEL_ERROR,
                "WDA:Failed while attempting to extract MAC Addr %d",
@@ -523,8 +555,11 @@ WDA_DS_BuildTxPacketInfo
     return VOS_STATUS_E_FAULT;
   }
 
+<<<<<<< HEAD
   VOS_ASSERT(usMacAddrSize == VOS_MAC_ADDR_SIZE);
 
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
   vos_copy_macaddr( (v_MACADDR_t*)pTxMetaInfo->fSTAMACAddress, pvDestMacAddr );
 
   // ADDR2

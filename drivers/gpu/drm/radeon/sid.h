@@ -55,6 +55,15 @@
 
 #define DMIF_ADDR_CONFIG  				0xBD4
 
+<<<<<<< HEAD
+=======
+#define DMIF_ADDR_CALC  				0xC00
+
+#define	PIPE0_DMIF_BUFFER_CONTROL			  0x0ca0
+#       define DMIF_BUFFERS_ALLOCATED(x)                  ((x) << 0)
+#       define DMIF_BUFFERS_ALLOCATED_COMPLETED           (1 << 4)
+
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	SRBM_STATUS				        0xE50
 
 #define	CC_SYS_RB_BACKEND_DISABLE			0xe80
@@ -159,7 +168,11 @@
 #define		NOOFGROUPS_SHIFT				12
 #define		NOOFGROUPS_MASK					0x00001000
 
+<<<<<<< HEAD
 #define	MC_SEQ_TRAIN_WAKEUP_CNTL			0x2808
+=======
+#define	MC_SEQ_TRAIN_WAKEUP_CNTL			0x28e8
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define		TRAIN_DONE_D0      			(1 << 30)
 #define		TRAIN_DONE_D1      			(1 << 31)
 
@@ -413,6 +426,10 @@
 #       define RDERR_INT_ENABLE                         (1 << 0)
 #       define GUI_IDLE_INT_ENABLE                      (1 << 19)
 
+<<<<<<< HEAD
+=======
+#define	CP_STRMOUT_CNTL					0x84FC
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #define	SCRATCH_REG0					0x8500
 #define	SCRATCH_REG1					0x8504
 #define	SCRATCH_REG2					0x8508

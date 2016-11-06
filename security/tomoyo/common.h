@@ -971,7 +971,11 @@ int tomoyo_init_request_info(struct tomoyo_request_info *r,
 			     const u8 index);
 int tomoyo_mkdev_perm(const u8 operation, struct path *path,
 		      const unsigned int mode, unsigned int dev);
+<<<<<<< HEAD
 int tomoyo_mount_permission(const char *dev_name, struct path *path,
+=======
+int tomoyo_mount_permission(char *dev_name, struct path *path,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			    const char *type, unsigned long flags,
 			    void *data_page);
 int tomoyo_open_control(const u8 type, struct file *file);

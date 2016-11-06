@@ -1615,7 +1615,11 @@ out:
 static u32 *
 bfad_load_fwimg(struct pci_dev *pdev)
 {
+<<<<<<< HEAD
 	if (pdev->device == BFA_PCI_DEVICE_ID_CT2) {
+=======
+	if (bfa_asic_id_ct2(pdev->device)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (bfi_image_ct2_size == 0)
 			bfad_read_firmware(pdev, &bfi_image_ct2,
 				&bfi_image_ct2_size, BFAD_FW_FILE_CT2);
@@ -1625,12 +1629,21 @@ bfad_load_fwimg(struct pci_dev *pdev)
 			bfad_read_firmware(pdev, &bfi_image_ct,
 				&bfi_image_ct_size, BFAD_FW_FILE_CT);
 		return bfi_image_ct;
+<<<<<<< HEAD
 	} else {
+=======
+	} else if (bfa_asic_id_cb(pdev->device)) {
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		if (bfi_image_cb_size == 0)
 			bfad_read_firmware(pdev, &bfi_image_cb,
 				&bfi_image_cb_size, BFAD_FW_FILE_CB);
 		return bfi_image_cb;
 	}
+<<<<<<< HEAD
+=======
+
+	return NULL;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 
 static void

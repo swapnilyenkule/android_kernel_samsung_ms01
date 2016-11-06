@@ -40,12 +40,20 @@ long compat_keyctl_instantiate_key_iov(
 					   ARRAY_SIZE(iovstack),
 					   iovstack, &iov, 1);
 	if (ret < 0)
+<<<<<<< HEAD
 		return ret;
+=======
+		goto err;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (ret == 0)
 		goto no_payload_free;
 
 	ret = keyctl_instantiate_key_common(id, iov, ioc, ret, ringid);
+<<<<<<< HEAD
 
+=======
+err:
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	if (iov != iovstack)
 		kfree(iov);
 	return ret;

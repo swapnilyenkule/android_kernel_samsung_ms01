@@ -154,6 +154,10 @@ enum zfcp_dbf_hba_id {
 	ZFCP_DBF_HBA_RES	= 1,
 	ZFCP_DBF_HBA_USS	= 2,
 	ZFCP_DBF_HBA_BIT	= 3,
+<<<<<<< HEAD
+=======
+	ZFCP_DBF_HBA_BASIC	= 4,
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 /**

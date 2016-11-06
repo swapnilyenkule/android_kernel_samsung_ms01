@@ -242,7 +242,11 @@ size_t ksize(const void *);
  */
 static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
 {
+<<<<<<< HEAD
 	if (size != 0 && n > ULONG_MAX / size)
+=======
+	if (size != 0 && n > SIZE_MAX / size)
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 		return NULL;
 	return __kmalloc(n * size, flags);
 }

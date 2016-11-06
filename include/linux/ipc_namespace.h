@@ -42,8 +42,13 @@ struct ipc_namespace {
 
 	size_t		shm_ctlmax;
 	size_t		shm_ctlall;
+<<<<<<< HEAD
 	int		shm_ctlmni;
 	int		shm_tot;
+=======
+	unsigned long	shm_tot;
+	int		shm_ctlmni;
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 	/*
 	 * Defines whether IPC_RMID is forced for _all_ shm segments regardless
 	 * of shmctl()
@@ -65,8 +70,11 @@ struct ipc_namespace {
 
 	/* user_ns which owns the ipc ns */
 	struct user_namespace *user_ns;
+<<<<<<< HEAD
 
 	unsigned int	proc_inum;
+=======
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 };
 
 extern struct ipc_namespace init_ipc_ns;

@@ -625,6 +625,7 @@ static int kyrofb_ioctl(struct fb_info *info,
 		}
 		break;
 	case KYRO_IOCTL_UVSTRIDE:
+<<<<<<< HEAD
 		if (copy_to_user(argp, &deviceInfo.ulOverlayUVStride, sizeof(unsigned long)))
 			return -EFAULT;
 		break;
@@ -634,6 +635,17 @@ static int kyrofb_ioctl(struct fb_info *info,
 		break;
 	case KYRO_IOCTL_OVERLAY_OFFSET:
 		if (copy_to_user(argp, &deviceInfo.ulOverlayOffset, sizeof(unsigned long)))
+=======
+		if (copy_to_user(argp, &deviceInfo.ulOverlayUVStride, sizeof(deviceInfo.ulOverlayUVStride)))
+			return -EFAULT;
+		break;
+	case KYRO_IOCTL_STRIDE:
+		if (copy_to_user(argp, &deviceInfo.ulOverlayStride, sizeof(deviceInfo.ulOverlayStride)))
+			return -EFAULT;
+		break;
+	case KYRO_IOCTL_OVERLAY_OFFSET:
+		if (copy_to_user(argp, &deviceInfo.ulOverlayOffset, sizeof(deviceInfo.ulOverlayOffset)))
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 			return -EFAULT;
 		break;
 	}

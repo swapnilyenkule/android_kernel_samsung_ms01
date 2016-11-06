@@ -15,7 +15,11 @@
  * #include <packed_section_end.h>
  *
  *
+<<<<<<< HEAD
  * Copyright (C) 1999-2014, Broadcom Corporation
+=======
+ * Copyright (C) 1999-2015, Broadcom Corporation
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -38,7 +42,14 @@
  */
 
 
+<<<<<<< HEAD
 
+=======
+/* Error check - BWL_PACKED_SECTION is defined in packed_section_start.h
+ * and undefined in packed_section_end.h. If it is NOT defined at this
+ * point, then there is a missing include of packed_section_start.h.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #ifdef BWL_PACKED_SECTION
 	#undef BWL_PACKED_SECTION
 #else
@@ -48,6 +59,13 @@
 
 
 
+<<<<<<< HEAD
 
+=======
+/* Compiler-specific directives for structure packing are declared in
+ * packed_section_start.h. This marks the end of the structure packing section,
+ * so, undef them here.
+ */
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 #undef	BWL_PRE_PACKED_STRUCT
 #undef	BWL_POST_PACKED_STRUCT

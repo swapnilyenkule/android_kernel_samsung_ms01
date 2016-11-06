@@ -24,11 +24,19 @@
  */
 void p9_release_pages(struct page **pages, int nr_pages)
 {
+<<<<<<< HEAD
 	int i = 0;
 	while (pages[i] && nr_pages--) {
 		put_page(pages[i]);
 		i++;
 	}
+=======
+	int i;
+
+	for (i = 0; i < nr_pages; i++)
+		if (pages[i])
+			put_page(pages[i]);
+>>>>>>> 0b824330b77d5a6e25bd7e249c633c1aa5e3ea68
 }
 EXPORT_SYMBOL(p9_release_pages);
 
